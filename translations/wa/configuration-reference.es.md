@@ -31,6 +31,7 @@ Cinco, el valor predeterminado incorporado
 | `history_dialog_days` | `1095` | cuántos días atrás se guarda el historial de un chat individual que envía el teléfono, de 1 a 1095; al vincular se pide al teléfono el mayor entre este valor y `history_group_days` | `messages sync <chat> --full-history` |
 | `history_group_days` | `365` | cuántos días atrás se guarda el historial de un grupo de más de 2 personas, de 1 a 1095 | `messages sync <chat> --full-history` |
 | `history_group_members_max` | `50` | un grupo con más personas no guarda nada de su historial enviado; `store status` muestra lo que quedó fuera | `messages sync <chat> --full-history` |
+| `history_muted` | `false` | `messages sync --all` también lee los chats que silenciaste. Sin ella se dejan fuera y se cuentan en `limited.muted`. Un chat que nombras se lee en cualquier caso | `messages sync --all --with-muted` |
 | `search_catch_up` | `false` | preparar chats recién almacenados para búsqueda local: su gráfico y, cuando estén instalados, sus vectores | `--catch-up`, `--no-catch-up` |
 | `picture_search` | `false` | buscar imágenes almacenadas por lo que muestran, una vez descargado el modelo | ninguno |
 | `search_reranker` | `mmarco` | el modelo que reordena los primeros 50 resultados de `search messages --discover`: `mmarco` (136 MB), `bge-reranker-v2-m3` (588 MB) o `off`. Un reranker que no está descargado se omite, y el descubrimiento lo dice; `wa models download mmarco` lo descarga | ninguno |
@@ -38,6 +39,7 @@ Cinco, el valor predeterminado incorporado
 | `record_input` | `true` | mantener la línea de comando de una ejecución tal como se escribió, con los secretos ocultos; `failed` la mantiene solo en una ejecución fallida; `false` escribe `[redacted]` para cada valor escrito que pueda ser texto ([diagnóstico](./diagnostics.md#what-you-typed)) | ninguno |
 | `keep_runs_for_days` | `30` | las ejecuciones fallidas anteriores a esta se eliminan cuando se conserva la siguiente | ninguno |
 | `keep_successful_runs_for_days` | `7` | las ejecuciones que funcionaron, anteriores a esta, se eliminan cuando se conserva la siguiente | ninguno |
+| `keep_store_runs_for_days` | `3` | las ejecuciones que funcionaron y escribieron en el almacén se conservan estos días, incluso con `record` desactivado | ninguno |
 | `runs_size_limit_mb` | `200` | el límite de tamaño de la carpeta de ejecuciones; al superarlo, se eliminan primero las ejecuciones más antiguas que funcionaron | ninguno |
 | `permissions` | todo permitido, excepto eliminar y algunos otros cambios preguntar | qué puede hacer el perfil, por comando | ninguno; `--yes` solo responde `ask`, nunca levanta `deny` |
 | `sends_per_hour` | `30` | la mayor cantidad de envíos en cualquier hora | ninguno |

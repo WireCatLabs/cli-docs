@@ -31,7 +31,7 @@ Tu agente busca en tus notas, tu correo y tus mensajes a la vez y muestra de dó
 resultado. Cuando sabes dónde está algo, busca solo ahí:
 
 ```sh
-memo search all 'venue'               # messages, mail, notes and calendar events together
+memo search all 'venue'               # messages, mail, notes, events, CRM and meetings together
 memo search notes 'venue'             # notes only
 memo search mail 'from:kai invoice'   # mail only
 ```
@@ -247,3 +247,10 @@ personal work` la mueve en una sola escritura: la cuenta, luego el grupo que dej
 un bloqueo, un grupo es una comodidad y no un límite: las referencias (`msg:…`, `deal:5`) no se comprueban, y una
 ejecución sin el nombre del grupo lee todas las cuentas. Para fijar un proceso a un grupo, consulta
 [el bloqueo de MCP](./mcp.md#lock-an-agent-to-a-group).
+
+Cada cuenta es personal o de trabajo: las vistas de trabajo y la preparación de reuniones leen solo cuentas de trabajo.
+Toda cuenta es personal hasta que digas lo contrario, salvo la que añade un CLI de CRM como `b24`, que empieza como de
+trabajo. `memo groups update
+bitrix24:acme --scope work` mueve una, con lo que la búsqueda copió de su ámbito anterior, y `groups list` muestra el
+`scope` de cada cuenta. `--chat 7 --scope work` fija un chat de la cuenta, y `--scope account` hace que ese chat vuelva
+a seguir a su cuenta. Solo tú cambias un ámbito: un agente por MCP no ve el comando.

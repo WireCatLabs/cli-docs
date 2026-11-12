@@ -61,7 +61,7 @@ Prepare un chat una vez y luego haga tantas preguntas como desee.
 ```sh
 tg personal messages sync "Book club"              # 1. download the history, if it is not saved yet
 tg personal conversations links rebuild --chat "Book club"  # 2. separate the chat into conversations
-tg personal models download e5-small        # 3. once: download the model, 135 MB, shared with max
+tg personal models download embeddinggemma  # 3. once: download the model, 219 MB, shared with max
 tg personal conversations embed --chat "Book club"  # 4. compute a vector for each piece
 tg personal search conversations "where do we meet" --chat "Book club"  # 5. ask
 tg personal conversations show 91                # 6. read the conversation that was found
@@ -101,7 +101,7 @@ Un mensaje sin enlace inicia una nueva conversación. Una conversación puede om
 
 `tg personal search conversations` busca tu pregunta de dos maneras y une los resultados:
 
-- **Por significado.** La pregunta también se convierte en un vector. tg lo compara con los vectores de todas las piezas y clasifica cada conversación según su pieza más cercana. Con el modelo predeterminado `e5-small`, una coincidencia por significado debe ser lo suficientemente cercana: su puntuación de similitud debe ser superior a 0,80, en una escala donde 1 significa el mismo significado.
+- **Por significado.** La pregunta también se convierte en un vector. tg lo compara con los vectores de todas las piezas y clasifica cada conversación según su pieza más cercana. Con el modelo predeterminado `embeddinggemma`, cuenta cada coincidencia y se ordenan por similitud, en una escala donde 1 significa el mismo significado. Con `e5-small`, una coincidencia por significado debe ser lo suficientemente cercana: su puntuación de similitud debe ser superior a 0,80.
 - **Por palabras.** tg también busca cada palabra de tu pregunta en los mensajes guardados. Una palabra de tres o más letras también coincide con palabras más largas que comienzan con ella (`meet` busca `meeting`). Los errores tipográficos no se corrigen.
 
 Una conversación que se encuentra en ambos sentidos está por encima de una que se encuentra en un solo sentido. Cada resultado dice cómo se encontró: `"by": ["meaning"]`, `["words"]` o ambos. Sin un modelo descargado, la búsqueda aún se realiza solo por palabras y la respuesta dice `"meaning": "unavailable"`. Un chat que nunca se creó no se busca: constrúyalo primero.
@@ -217,12 +217,12 @@ Por defecto nada sale de tu equipo. El modelo se ejecuta aquí, y un modelo solo
 
 ```sh
 tg personal models list kind:text                     # the models, and which are downloaded
-tg personal models download embeddinggemma --accept-terms
+tg personal models download embeddinggemma
 ```
 
-`e5-small` es el predeterminado: pequeño y rápido, alrededor de 100 idiomas. `embeddinggemma` encuentra más, pero se ejecuta aproximadamente siete veces más lento y se descarga solo con `--accept-terms`, ya que está bajo los términos Gemma de Google. Los vectores de dos modelos nunca se mezclan: busque con el modelo con el que incrustó. Un chat integrado solo con otro modelo se nombra en stderr.
+`embeddinggemma` es el predeterminado: lee más de 100 idiomas y encuentra más, pero está sujeto a los términos de uso de Gemma de Google. No hace falta ningún flag para descargarlo. `--accept-terms` se sigue aceptando, pero no hace nada. `e5-small` es más pequeño y unas siete veces más rápido, con licencia MIT. Un equipo que solo tiene `e5-small` lo sigue usando hasta que se descarga `embeddinggemma`. Elige un modelo con `models set`. Los vectores de dos modelos nunca se mezclan: busque con el modelo con el que incrustó. Un chat integrado solo con otro modelo se nombra en stderr.
 
-En un portátil reciente, `e5-small` vectoriza unos 30 fragmentos por segundo; un grupo de 100 000 mensajes tarda algo más de 20 minutos, una sola vez. Las ejecuciones siguientes vectorizan solo lo que ha cambiado.
+En un portátil reciente, `embeddinggemma` vectoriza unos 8 fragmentos por segundo, y un grupo de 100 000 mensajes tarda alrededor de una hora y cuarto, una sola vez. `e5-small` vectoriza unos 30 por segundo y tarda algo más de 20 minutos. Las ejecuciones siguientes vectorizan solo lo que ha cambiado.
 
 Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 

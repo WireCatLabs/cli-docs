@@ -36,8 +36,34 @@ pbpaste | memo sources add - --subject person:12
 - **`--max-chars`** guarda como mucho esa cantidad de caracteres de texto, hasta 2.000.000 (por defecto 200.000). La
   respuesta dice `truncated: true` cuando solo se guardó la primera parte.
 
-Una imagen o un PDF escaneado no tienen texto que Memo pueda leer. Se guardan solo por su título y sus temas
-(`read: "no-text"`).
+Un PDF escaneado no tiene texto que Memo pueda leer. Se guarda solo por su título y sus temas (`read: "no-text"`).
+
+Una imagen (PNG, JPEG o WebP, hasta 4 MB) la lee tu modelo de IA cuando elegiste uno y aceptaste que las imágenes
+vayan a él:
+
+```sh
+memo models ai set anthropic --model claude-haiku-4-5 --allow-remote --secret-stdin < key.txt
+memo models ai check
+```
+
+La imagen se envía a ese proveedor, así que sale de este ordenador (la excepción es Ollama en este ordenador). El
+`image.read_by` de la respuesta nombra el modelo. Sin modelo, consentimiento o clave, o para un GIF o una imagen más
+grande, la imagen se guarda solo por su título, y `image.reason` dice por qué: `ai.not-set`, `ai.images-not-allowed`,
+`ai.key-missing`, `ai.owner-only` (la añadió un agente, y solo tu propio añadido envía una imagen),
+`ai.setting-invalid`, `image.unsupported` o `ai.failed`. Un cambio del modelo o de la dirección retira el
+consentimiento hasta que lo vuelvas a dar, y `memo models ai revoke` lo retira de inmediato.
+
+## Mirar una página antes de añadirla
+
+```sh
+memo sources preview https://example.org/release-notes --json
+```
+
+`sources preview` lee una página como lo haría `sources add`, rechaza lo que `sources add` rechaza (una dirección
+privada, una página que pide iniciar sesión, demasiadas redirecciones) y no guarda nada. Responde con el `title` y la
+`description` de la página, `site` (el host de la dirección que diste), los primeros 800 caracteres de su texto como
+`excerpt`, y los `kind`, `mime`, `read`, `chars` y `truncated` que respondería `sources add` con su `--max-chars`
+predeterminado. Solo acepta una dirección web. A los agentes por MCP no se les ofrece, porque descarga una dirección.
 
 ## Qué dice la respuesta
 
@@ -87,7 +113,7 @@ nada se convierte en hecho por sí solo.
 
 ```sh
 memo sources readers list
-memo sources readers set claude-code
+memo sources readers set ai-model
 memo sources suggest document:42 --subject person:12
 memo actions confirm 17 fact-1 fact-3 --fingerprint <fingerprint>
 ```
@@ -100,6 +126,7 @@ lectores.
 
 | Lector | Qué lee el texto | Sale de este ordenador | Modelo |
 |---|---|---|---|
+| `ai-model` | El modelo de IA que elegiste para todas las herramientas de WireCat (`memo models ai set`), con su única clave | Sí, salvo un modelo en este ordenador como Ollama | El que eligió `memo models ai set` |
 | `claude-code` | Tu Claude Code con sesión iniciada, con todas sus herramientas, servidores MCP, hooks y sesiones guardadas desactivados, en una carpeta vacía | Sí, a Anthropic | El suyo, o `--model` |
 | `codex` | Tu Codex CLI con sesión iniciada, en su sandbox de solo lectura, en una carpeta vacía. Es un agente que aun así podría leer archivos de este ordenador | Sí, a OpenAI | El suyo, o `--model` |
 | `ollama` | El Ollama que se ejecuta en este ordenador, solo en `127.0.0.1:11434` | No | Obligatorio, uno que muestre `ollama list` |

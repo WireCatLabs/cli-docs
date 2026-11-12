@@ -123,6 +123,7 @@ Only commands that need a terminal or a long-running process stay outside MCP:
 | `complete` | terminal completion |
 | `serve`, `watch`, `mcp`, `bot watch`, `bot mcp` | run until stopped; an agent call must finish |
 | `bot auth` | a person enters the token |
+| `account remove` | signing out of the account and removing the profile is the owner's decision, not the agent's |
 | `bot uploads put` | reads a file from your computer |
 
 ## Tools

@@ -1,14 +1,14 @@
 [
   {
     "name": "email",
-    "package": "@wirecat/cli-memo",
-    "docsRef": "v0.11.0",
+    "package": "@wirecat/mail-cli",
+    "docsRef": "v0.24.0",
     "pages": ["translations/pages/mail/email"]
   },
   {
     "name": "zoom",
     "package": "@wirecat/zoom-cli",
-    "docsRef": "v0.67.0",
+    "docsRef": "v0.71.0",
     "pages": ["translations/pages/zm/meetings"]
   }
 ]

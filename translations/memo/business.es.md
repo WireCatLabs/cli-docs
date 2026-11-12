@@ -92,6 +92,21 @@ memo records import erp.jsonl --account example-erp:demo
 memo review list kind:invoice,payment,order,contract
 ```
 
+También sirve una hoja de cálculo, un tipo por hoja. `memo records templates list` lista los tipos y sus columnas.
+`memo records templates show invoice --locale ru` escribe la fila de encabezados para rellenar con `;` entre celdas,
+como espera Excel en ruso o en español, y `--format json` escribe en su lugar un sobre de ejemplo. La hoja se comprueba
+y se importa con su tipo:
+
+```sh
+memo records templates show invoice --locale ru > invoices.csv
+memo records check invoices.csv --type invoice --account sheet:rentals
+memo records import invoices.csv --type invoice --account sheet:rentals
+```
+
+Un rol toma el id externo del destino (`wallet` = `W-1`), o `organization:C-1` donde puede ser una persona o una
+organización. Una fila que repite el `external_id` de una factura le añade una línea más. `10 000,50` y `09.11.2026` se
+leen como los escribe Excel. Cada rechazo nombra la línea y la columna de la hoja.
+
 El mismo archivo dos veces no cambia nada. Las personas y organizaciones que nombra se emparejan por un correo, un teléfono u
 otro identificador exacto, o se crean. Nunca por el nombre. Sus facturas, pagos, pedidos, contratos con importe, suscripciones y
 movimientos esperan tu decisión en `memo review`.

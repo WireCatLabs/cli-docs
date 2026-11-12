@@ -89,12 +89,14 @@ Ningún ajuste elige un perfil: lo nombra la primera palabra (`tg work …`) o `
 | `history_dialog_days` | `1095` | cuántos días atrás lee `messages sync` un chat individual, de 1 a 1095 | `messages sync --full-history` |
 | `history_group_days` | `365` | cuántos días atrás lee `messages sync` un grupo, de 1 a 1095 | `messages sync --full-history` |
 | `history_group_members_max` | `50` | `messages sync` no lee el historial de un grupo con más personas; `store status` muestra lo que quedó fuera. Los mensajes en directo de `serve` se guardan igualmente | `messages sync --full-history` |
+| `history_muted` | `false` | `messages sync --all` también lee los chats que silenciaste. Sin esta clave quedan fuera y se cuentan en `limited.muted`. Un chat que nombras, o que mantienes con `--full-history`, se lee igualmente | `messages sync --all --with-muted` |
 | `picture_search` | `false` | busca las imágenes guardadas por lo que muestran. `images embed` lee las imágenes guardadas una vez descargado el modelo, y entonces `search messages` también devuelve una lista `pictures` ([imágenes](./search.md#pictures-by-what-they-show)) | ninguno |
 | `search_reranker` | `mmarco` | el modelo que reordena los 50 primeros resultados de `search messages --discover`: `mmarco` (136 MB), `bge-reranker-v2-m3` (588 MB) u `off`. Un reordenador que no está descargado se omite, y el descubrimiento lo indica; `tg models download mmarco` lo descarga | ninguno |
 | `record` | `true` | mantener cada ejecución; `false` mantiene solo las ejecuciones fallidas ([diagnóstico](./diagnostics.md)) | `--record`, `--no-record` (no mantiene nada) |
 | `record_input` | `true` | mantener la línea de comandos de una ejecución tal como se escribió, con los secretos ocultos; `failed` la mantiene solo en una ejecución fallida; `false` escribe `[redacted]` en lugar de cada valor escrito que pueda ser texto ([diagnóstico](./diagnostics.md#what-you-typed)) | ninguno |
 | `keep_runs_for_days` | `30` | las ejecuciones fallidas anteriores a esta se eliminan cuando se conserva la siguiente ejecución | ninguno |
 | `keep_successful_runs_for_days` | `7` | las ejecuciones que funcionaron, anteriores a esta, se eliminan cuando se conserva la siguiente ejecución | ninguno |
+| `keep_store_runs_for_days` | `3` | las ejecuciones que funcionaron y escribieron en el almacén se conservan este número de días, incluso con `record` desactivado | ninguno |
 | `runs_size_limit_mb` | `200` | lo máximo que puede ocupar la carpeta de ejecuciones; al superarlo se eliminan primero las ejecuciones más antiguas que funcionaron | ninguno |
 | `permissions` | todo está permitido, excepto: eliminar, finalizar sesiones y algunos otros cambios solicitados; las reglas de respuesta pueden no enviarse | qué puede hacer el perfil, por comando ([abajo](#what-a-profile-may-do)) | ninguno; `--yes` y `--allow-dangerous` solo responden `ask`, nunca levantan `deny` |
 | `sends_per_hour` | `30`; un bot no tiene ninguno hasta que se configura en la sección `bot` | la mayor cantidad de envíos en cualquier hora ([el control de envío](./security.md#the-send-guard)) | ninguno |
@@ -283,11 +285,11 @@ Sin `MESSAGING_STORE`, lo que lea esa sesión seguirá guardándose en tu archiv
 
 | Clave | Tipo/valor aceptado | Alcance |
 |---|---|---|
-| `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
+| `limit`, `timeout_ms`, `keep_runs_for_days`, `keep_store_runs_for_days`, `sends_per_hour` | entero ≥ 1 | perfil |
 | `requests_per_minute` | entero ≥ 0 | perfil |
 | `history_dialog_days`, `history_group_days` | entero de 1 a 1095 | perfil |
 | `history_group_members_max` | entero ≥ 1 | perfil |
-| `color`, `sender_colors`, `search_catch_up`, `record`, `record_input` | booleano | perfil |
+| `color`, `sender_colors`, `search_catch_up`, `history_muted`, `record`, `record_input` | booleano | perfil |
 | `permissions` | objeto de rutas de comando y niveles `deny`, `readonly`, `ask`, `allow` | perfil |
 | `read_other_bots` | booleano o conjunto de nombres de perfil | solo bot |
 | `update_check`, `skill_hint` | booleano | raíz `defaults` solamente |

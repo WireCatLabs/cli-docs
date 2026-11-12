@@ -37,23 +37,23 @@ Sigue estos pasos con `--app browser`, o cuando `--app auto` falle. Se hace una 
 
 1. **Inicia sesión en [my.telegram.org](https://my.telegram.org/apps).** Elige tu país, escribe tu número de teléfono y pulsa **Next**.
 
-   ![La página de inicio de sesión de my.telegram.org con los campos de país y número de teléfono](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-1-sign-in.png)
+   ![La página de inicio de sesión de my.telegram.org con los campos de país y número de teléfono](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-1-sign-in.png)
 
    Telegram envía un código de confirmación como mensaje en tu aplicación de Telegram, no por SMS. Escríbelo en la página y pulsa **Sign in**. No le des este código a nadie y nunca lo escribas en un chat con el agente.
 
-   ![La página del código de confirmación de my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-2-code.png)
+   ![La página del código de confirmación de my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-2-code.png)
 
 2. **Abre Development Tools** y elige **Create new application**.
 
-   ![La página principal de my.telegram.org con la tarjeta Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-3-development-tools.png)
+   ![La página principal de my.telegram.org con la tarjeta Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-3-development-tools.png)
 
    Rellena el formulario. El título (title) necesita al menos 5 caracteres. El nombre corto (short name) solo admite letras y dígitos, de 5 a 32 caracteres. Evita la palabra "Telegram" en ambos. Elige una plataforma, por ejemplo **Desktop**. La URL y la descripción son opcionales. Después pulsa **Create application**.
 
-   ![El formulario Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-4-create-application.png)
+   ![El formulario Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-4-create-application.png)
 
 3. **Copia `api_id` y `api_hash`** de la sección Credentials. Mantén el hash en privado: quien lo tenga puede usar la cuota de tu aplicación.
 
-   ![La sección Credentials con App api_id y App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-app-5-credentials.png)
+   ![La sección Credentials con App api_id y App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-5-credentials.png)
 
 4. **Da ambos valores a `tg`** cuando pida `App api_id` y `App api_hash`. El hash no se muestra mientras escribes.
 
@@ -102,7 +102,7 @@ Telegram llama a esto vincular un dispositivo de escritorio. `tg` muestra un có
 2. Pulsa el botón para añadir un dispositivo (Add Device) y permite el acceso a la cámara si Telegram lo pide.
 3. Apunta la cámara al código QR de tu terminal.
 
-![Telegram para Android, Ajustes y Dispositivos, con el botón para añadir un dispositivo](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-android-add-device.png)
+![Telegram para Android, Ajustes y Dispositivos, con el botón para añadir un dispositivo](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-android-add-device.png)
 
 #### iPhone y iPad
 
@@ -114,7 +114,7 @@ Si tu cuenta tiene una contraseña de verificación en dos pasos (2FA), `tg` la 
 
 **Intentos de inicio de sesión incompletos.** Si escaneaste el código pero no introdujiste la contraseña 2FA, el intento aparece en **Dispositivos**, en la lista de intentos incompletos (Incomplete login attempts). No tiene acceso a tus mensajes. Termina el inicio de sesión en `tg` o cierra el intento en esa misma lista.
 
-![La lista de intentos de inicio de sesión incompletos en la pantalla Dispositivos de Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.117.0/docs/images/telegram-android-incomplete-login.png)
+![La lista de intentos de inicio de sesión incompletos en la pantalla Dispositivos de Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-android-incomplete-login.png)
 
 ## Comprobar la cuenta y cerrar sesión
 
@@ -126,6 +126,8 @@ tg personal session end      # log out on Telegram's side, and delete the sessio
 ```
 
 `tg personal session end` también cierra la sesión **en Telegram**: el dispositivo desaparece de la lista de la aplicación. No elimina el identificador ni el hash de la aplicación del llavero y deja intacto el archivo local.
+
+Para olvidar un perfil por completo, usa `tg personal account remove --keep-data` o `--delete-data`. Cierra la sesión de la misma forma y luego elimina el identificador y el hash de la aplicación del perfil, la contraseña de su proxy, las sesiones de historial de sus bots y lo que cli-core guarda para él. Con `--keep-data` sus mensajes siguen en el almacén y se pueden buscar. Con `--delete-data` se eliminan. El token de un perfil de bot con el mismo nombre se conserva: un bot es una cuenta aparte.
 
 ## Cuánto dura una sesión
 

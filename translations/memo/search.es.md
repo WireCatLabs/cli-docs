@@ -30,16 +30,27 @@ cada una con `memo notes show` o en la aplicación original.
 | Una persona, por nombre, usuario o alias | `memo search people kai` |
 | Facturas, contratos, productos y otros datos de negocio | `memo search all 'budget' --only business` |
 
-`search all` busca en mensajes, correo, notas, eventos de calendario, negociaciones y leads del CRM, y
-[datos de negocio](./business.md#find-it-again) a la vez. Las negociaciones y los leads se encuentran por las palabras
+`search all` busca en mensajes, correo, notas, eventos de calendario, negociaciones y leads del CRM,
+[datos de negocio](./business.md#find-it-again) y reuniones a la vez. Las negociaciones y los leads se encuentran por las palabras
 de su título, y `--only crm` busca solo en ellos. Cuando los [`permissions`](./configuration.md#permissions) de memo
 niegan `deals` o `leads`, `search all` los deja fuera y lo dice. Una pregunta sobre quién es alguien o cómo se
 relacionan las cosas se responde mejor primero con `memo context person:<id>`, `memo organizations context` o
 `memo relationships list`, y después buscas las pruebas. Los eventos vienen de cada calendario
 que gcal guardó; la respuesta nombra cada calendario que leyó, y `--only events` busca solo en ellos. El título, la descripción y el lugar de un evento
 los escribe quien envió la invitación, y `--json` nombra esos campos en `untrusted` del resultado. `memo events show <ref>` abre una referencia `event:`,
-y `memo events list` muestra los eventos de cada cuenta de calendario, también las llamadas de teléfono. No busca reuniones, personas, recuerdos, proyectos ni
-tareas; para eso usa `memo search people`, `memo context`, `memo search memories` y `memo tasks list`. Cuando sabes dónde
+y `memo events list` muestra los eventos de cada cuenta de calendario, también las llamadas de teléfono.
+
+Las reuniones vienen de cada cuenta de reuniones guardada, a través del índice de búsqueda de cada cuenta, y en un
+grupo, solo de las cuentas de reuniones del grupo. Una reunión da como máximo 3 resultados. Un resultado de una
+transcripción tiene `cue_ref`, y el `next` de la respuesta nombra el comando `memo meetings passage` que lo abre.
+Search all nunca construye el índice: cuando `missing` nombra una cuenta, `next` da
+`memo search meetings <query> --source <provider>:<account>`, que lo construye. `--source zoom:work,notes` lee solo las
+cuentas que nombra, y un tipo del que no nombra ninguna queda fuera. `--only meetings,crm` lee solo esos tipos. Cuando
+tus permisos ponen `search.meetings` o `meetings.passage` en `deny` o `ask`, search all deja fuera las reuniones y lo
+dice en `missing`.
+
+No busca personas, recuerdos, proyectos ni tareas; para eso usa `memo search people`, `memo context`, `memo search
+memories` y `memo tasks list`. Cuando sabes dónde
 está algo, su propia búsqueda es mejor, porque entiende más palabras de búsqueda.
 
 ## Palabras de búsqueda
@@ -246,6 +257,44 @@ trabajo de e5-small hasta que EmbeddingGemma haya leído más.
 
 `memo models add` añade un modelo tuyo de Hugging Face. `memo models add --help` muestra lo que
 necesita.
+
+## Buscar a fondo
+
+`memo search all --harder` pide a un modelo alojado que lea tu pregunta con los primeros 30 resultados y ponga primero
+los que la responden. Con datos sintéticos, sobre la búsqueda propia de Memo, subió la proporción de registros
+correctos entre los diez primeros de 0.79 a 0.88 en preguntas redactadas de otra forma que sus registros, y de 0.32 a
+0.39 en una muestra de 59 preguntas de LifeBench (Claude Haiku). Cuesta unos $0.0003 y un segundo o dos por búsqueda.
+
+Está desactivado hasta que lo permitas, porque envía tus palabras fuera de tu ordenador. Tú eliges el proveedor:
+
+```sh
+memo models search-consents set anthropic          # says what it sends; changes nothing
+memo models search-consents set anthropic --yes    # allow it: Claude Haiku
+memo models search-consents set openai --yes       # or OpenAI: gpt-4o-mini
+memo models keys set anthropic                     # the provider's API key, typed at a hidden prompt
+memo search all 'what did we agree about the server price?' --harder
+memo models search-consents revoke                 # stop it
+```
+
+Otro servicio compatible con OpenAI, como OpenRouter, toma su dirección y el nombre del modelo:
+`memo models search-consents set openai --base-url https://openrouter.ai/api/v1 --model deepseek/deepseek-chat --yes`.
+Si ya permitiste el enriquecimiento (`memo models consents`), `show` propone el mismo proveedor, pero este permiso lo
+das tú igualmente.
+
+**Qué se envía:** tu pregunta y los primeros 30 resultados: de cada uno su fecha, su título y el extracto corto que
+muestra el resultado (como máximo 400 caracteres). Van al proveedor que elegiste, solo en una búsqueda con `--harder`.
+Una búsqueda sin él no envía nada. El modelo responde solo con los números de los resultados que elige.
+
+Si el modelo no responde en 5 segundos, o algo más falla, Memo muestra los resultados en el orden habitual y dice por
+qué. Nunca hace fallar la búsqueda. Solo se reordena la primera página. Cuando un permiso oculta algunos tipos de
+resultados (un servidor MCP iniciado con `--permission`), `--harder` no envía nada. Un agente no puede permitirlo por
+ti.
+
+Con `--json`, `meta.ranking` dice qué pasó, para un programa como WireCat Desktop: `applied` (si se usó el orden del
+modelo), `reason_id` cuando no (`harder.no-consent`, `harder.timeout`, …), `provider`, `model`, `endpoint`, `sent`
+(resultados enviados), `cost_usd` (`null` para un modelo sin precio conocido), `usage` (tokens de entrada y salida,
+cuando el modelo respondió) y `ms`. Una búsqueda que los permisos apartaron del modelo no tiene `meta.ranking`, y su
+`missing` dice por qué.
 
 ## Qué muestra un resultado
 

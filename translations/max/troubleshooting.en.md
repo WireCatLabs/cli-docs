@@ -121,7 +121,7 @@ max shop bot messages list -100
 
 ### "no token found for profile "personal", although it has logged in on this machine"
 
-Return code `4`; for `max serve` and a scheduled run it is `12` with reason `credentials.unreachable`: they try again later. The profile on this computer has already been logged in, but the token is not readable. Almost always this is a password storage that `max` cannot reach: the command is launched from cron, via ssh, or from another environment without `XDG_RUNTIME_DIR`. **Do not log in again** - this will add another device to your account, and the next time from the same environment the token will not be read again. `max personal doctor` will show whether it sees the token; how to set up cron - in the section [run according to schedule](./recipes.md#как-запускать-по-расписанию).
+Return code `4`; for `max serve` and a scheduled run it is `12` with reason `credentials.unreachable`: they try again later. The profile on this computer has already been logged in, but the token is not readable. Almost always this is a password storage that is locked or that `max` cannot reach. Right after the computer starts, the storage opens only when you log in to the system, and a scheduled run waits for that by itself. From cron, via ssh or from another environment without `XDG_RUNTIME_DIR`, `max` cannot reach the storage. **Do not log in again** - this will add another device to your account, and the next time from the same environment the token will not be read again. `max personal doctor` will show whether it sees the token; how to set up cron - in the section [run according to schedule](./recipes.md#как-запускать-по-расписанию).
 
 ### “MAX refused this profile's last login for too many attempts”
 

@@ -58,8 +58,9 @@ Las palabras y frases sin campo coinciden con las formas de las palabras. `--exa
 | `text` | palabras del mensaje (el campo predeterminado) | `text:invoice` |
 | `exact` | la forma exacta de la palabra o frase | `exact:piso`, `exact:"invoice paid"` |
 | `body` | todo el texto original, distinguiendo entre mayúsculas y minúsculas | `body:/.*invoice.*/` |
-| `from` | el remitente, por nombre o id; `me` eres tú | `from:"Alice Synthetic"`, `from:"100000000000001@lid"` |
-| `chat` | el chat, por nombre o id | `chat:"Book club"`, `chat:120363000000000001@g.us` |
+| `from` | el remitente, por nombre o id; `me` eres tú; `*` y `?` coinciden con parte de un nombre | `from:"Alice Synthetic"`, `from:"100000000000001@lid"`, `from:Ali*` |
+| `chat` | el chat, por nombre o id; `*` y `?` coinciden con parte de un nombre | `chat:"Book club"`, `chat:120363000000000001@g.us`, `chat:*club*` |
+| `participants_count` | chats de este número de personas, según el tamaño que WhatsApp informó por última vez | `participants_count<10` |
 | `date` | cuando fue enviado | `date:today`, `date:7d`, `date:[2026-01-01 TO 2026-02-01}` |
 | `kind` | el tipo de chat: `private`, `group`, `channel`, `saved` y el resto compartido | `kind:private` |
 | `has` | `link` y los tipos de archivos del idioma compartido | `has:link` |
@@ -117,7 +118,11 @@ Un ajuste preestablecido informa a un candidato por su forma. No verifica una co
 
 ## Palabras, comodines y expresiones regulares
 
-El texto se pliega antes de indexarlo y buscarlo: minúsculas, sin acentos. Un efecto secundario: algunas palabras diferentes se vuelven iguales, como `año` y `ano`. `text:` Las expresiones regulares y los comodines se pliegan de la misma manera.
+El texto se pliega antes de indexarlo y buscarlo: minúsculas, sin acentos. Un efecto secundario: algunas palabras diferentes se vuelven iguales, como `año` y `ano`. Las expresiones regulares de `text:` y los comodines al final de una palabra (`invo*`) se pliegan de la misma manera.
+
+`*part*` encuentra una parte dentro de una palabra: `*contract*` encuentra «Contract» y «subcontractor». La parte necesita tres letras seguidas. Coincide tal como se escribe, salvo mayúsculas y ё/е, así que `*cafe*` no encuentra «café»: escribe la letra como la tiene el texto, o busca la palabra entera.
+
+En `from:` y `chat:`, un valor sin comillas con `*` o `?` es un patrón sobre nombres: `from:Ali*` encuentra «Alice» y «Alice Synthetic». Un patrón que no encaja con nadie falla con los nombres más cercanos. Uno que encaja con más de 50 se rechaza como `query.too-large`.
 
 `text:/pay/` coincide con la palabra pago completa, no pago. `body:/pay/` coincide sólo con un mensaje cuyo texto completo es pago, distingue entre mayúsculas y minúsculas; para encontrarlo en cualquier lugar utilice `body:/.*pay.*/`. Esta es la sintaxis de expresión regular de Lucene, sin búsquedas de JavaScript, referencias inversas, anclajes o banderas.
 

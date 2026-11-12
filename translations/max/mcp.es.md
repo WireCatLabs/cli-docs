@@ -125,6 +125,7 @@ Fuera de MCP solo quedan los comandos que necesitan un terminal o un proceso per
 | `complete` | autocompletado del terminal |
 | `serve`, `watch`, `mcp`, `bot watch`, `bot mcp` | funcionan hasta detenerlos; una llamada del agente debe terminar |
 | `bot auth` | una persona introduce el token |
+| `account remove` | cerrar la sesión de la cuenta y eliminar el perfil lo decide el propietario, no el agente |
 | `bot uploads put` | lee un archivo de tu equipo |
 
 ## Herramientas

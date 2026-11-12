@@ -105,9 +105,12 @@ nombrar otro.
   desactivados, en una carpeta vacía, con el texto por stdin. Codex se ejecuta en su sandbox de solo lectura, en una
   carpeta vacía. Ninguno recibe `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` ni las variables de un agente del entorno de
   Memo.
-- Una clave de API vive solo en el llavero del sistema. `memo models keys set` la recibe en una pregunta oculta o por
-  stdin, nunca como argumento, y nunca la lee del entorno. Ninguna respuesta, error o registro de ejecución la
-  contiene.
+- Una clave de API vive en el llavero del sistema, o en un archivo que solo tu usuario puede leer cuando el equipo
+  no tiene llavero. `memo models keys set` la recibe en una pregunta oculta o por stdin, nunca como argumento, y nunca
+  la lee del entorno. Ninguna respuesta, error o registro de ejecución la contiene. El lector `ai-model` y la lectura
+  de imágenes usan la clave que `memo models ai set --secret-stdin` guardó para la dirección del modelo. Si no hay
+  ninguna guardada, una dirección oficial (api.openai.com, api.anthropic.com) también toma `OPENAI_API_KEY` o
+  `ANTHROPIC_API_KEY` del entorno.
 - El texto se entrega como datos, con la instrucción de no seguir nunca lo que dice. Un hecho se propone solo con una
   cita que está en el texto, y solo tú confirmas el lote, incluso con `agent_decisions` activado.
 - Por MCP no se ofrecen `sources suggest`, `sources readers set` ni `models keys`.
@@ -118,6 +121,13 @@ nombrar otro.
 
 - `memo sources suggest` envía el texto de una fuente al lector que elegiste. `memo sources readers list` dice si
   sale de este ordenador.
+- `memo sources add` envía una imagen a tu modelo de IA solo después de `memo models ai set … --allow-remote`, y solo
+  a la dirección y el modelo que aceptaste. La clave de ese modelo se envía solo a su dirección. Cambiar cualquiera de
+  los dos retira el consentimiento. Solo tu propio `sources add` envía una: cuando la añade un agente, la imagen se
+  guarda por su nombre. Un agente no puede ejecutar ni `models ai set` ni `models ai check`.
+- El lector `ai-model` envía el texto de una fuente al modelo que `memo models ai set` haya elegido en el momento de
+  leer, no al que estaba elegido cuando escogiste el lector. Cambiar el modelo de IA cambia adónde envía el texto
+  `sources suggest`.
 - `memo answers create` prepara fuentes para tu agente. Solo las envía a un proveedor con `--analyze` y, si es externo al equipo, también `--allow-remote`. La respuesta generada debe comprobarse con las fuentes.
 - Lo que tu agente haga con el texto depende de él y su proveedor; Memo no puede controlarlo. Dale acceso solo a fuentes que quieras compartir.
 - Una vez al día Memo pregunta a npm si hay una versión nueva. Desactívalo con `"update_check": false` en los ajustes o con `MEMO_NO_UPDATE_CHECK=1`. Memo nunca se actualiza solo.

@@ -39,7 +39,11 @@ wa personal setup --agent claude --json
 wa personal session start qr
 ```
 
-El agente ejecuta el comando en segundo plano, ya que espera su análisis. WhatsApp envía un nuevo código después de 60 segundos y luego cada 20 segundos; el agente pega cada uno nuevo y dice que el anterior expiró. Con `--json`, cada código también es una línea en stderr: `{"event":"qr","qr":{"text":…,"expires_at":null,"scan":…}}`. El texto tiene aproximadamente 73 columnas de ancho. La vinculación no se ofrece a través de MCP: una aplicación que solo tiene MCP le solicita que ejecute el comando. Un código de emparejamiento es para que lo ejecutes en tu propio terminal: un agente nunca te pide tu número de teléfono ni un código en el chat.
+El agente ejecuta el comando en segundo plano, ya que espera su análisis. WhatsApp envía un nuevo código después de 60 segundos y luego cada 20 segundos; el agente pega cada uno nuevo y dice que el anterior expiró. Con `--json`, cada código también es una línea en stderr: `{"event":"qr","qr":{"text":…,"expires_at":…,"scan":…}}`, donde `expires_at` es cuándo WhatsApp sustituye ese código. El texto tiene aproximadamente 73 columnas de ancho. La vinculación no se ofrece a través de MCP: una aplicación que solo tiene MCP le solicita que ejecute el comando. Un código de emparejamiento es para que lo ejecutes en tu propio terminal: un agente nunca te pide tu número de teléfono ni un código en el chat.
+
+### Cuando una ventana ejecuta el enlace
+
+Una aplicación que muestra el enlace en su propia ventana, como WireCat Desktop, ejecuta `wa personal session start phone --json --answer-stdin`. `wa` pide el número con una línea en stderr, `{"event":"needs","field":"phone",…}`, y lee la respuesta, una línea, de stdin. El código de emparejamiento llega después como `{"event":"pairing_code","code":…,"where":…,"expires_at":null}`. Con `--json`, la espera del historial del teléfono se informa como `{"event":"progress","step":"history",…}` y, cuando tarda, `"step":"waiting"`. `wa` deja de esperar cuando el teléfono informa de que la sincronización del historial terminó. Si el teléfono nunca lo hace, `wa` se rinde tras cinco minutos sin noticias y lo dice en una línea `"step":"waiting"` más: mantén WhatsApp abierto en el teléfono hasta que termine de vincularse.
 
 ## Comprobar y desvincular
 
@@ -60,6 +64,8 @@ wa personal account update --photo ~/me.jpg                     # the profile ph
 El nombre va al teléfono y a sus otros dispositivos a la vez. Otras personas probablemente lo vean solo la próxima vez que el teléfono se conecte: un dispositivo le dice a WhatsApp su nombre cuando dice que está en línea, y `wa` nunca lo hace (aún no verificado). Es posible que un dispositivo vinculado hace unos minutos aún no tenga las claves de configuración de WhatsApp; Mantén `serve` ejecutándose por un tiempo e inténtelo nuevamente.`wa` toma la foto como un JPEG cuadrado de 190 a 720 píxeles por lado, los lados que toma para un grupo; No se comprueba si WhatsApp toma otros lados de su propia foto. `wa` no convierte ni recorta uno, y su contenido rechaza un PNG o WebP, antes de que algo cambie. En conjunto, primero va el nombre, luego acerca de y luego la foto; si falla uno posterior, el error dice cuál cambió. La eliminación de la foto se realiza en el teléfono.
 
 `wa personal session end` elimina el dispositivo **también del lado de WhatsApp**: desaparece de la lista de dispositivos vinculados del teléfono. Deja el almacén local como está. Mientras `serve` se ejecuta para el perfil, se niega (código de salida `12`): detenga primero `serve` con `wa personal server stop`, o Ctrl+C donde se ejecuta.
+
+Para olvidar un perfil por completo, usa `wa personal account remove --keep-data` o `--delete-data`. Desvincula el dispositivo de la misma manera y luego borra las claves del dispositivo del perfil y lo que cli-core guarda para él. `--keep-data` deja sus mensajes en el almacén, donde se pueden seguir buscando. `--delete-data` los borra.
 
 ## Una conexión por dispositivo
 

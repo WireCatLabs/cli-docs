@@ -24,7 +24,7 @@ Esto no es una espera: `wa` no pone en cola el segundo comando. Detén el proces
 
 ## El ritmo
 
-Cada solicitud que `wa` realiza para un perfil (desde un comando, `wa personal mcp serve` o `wa personal serve`) toma un turno en un ritmo para ese perfil. La cola se guarda en la carpeta de estado, por lo que dos terminales se alinean una detrás de la otra en lugar de ir cada una a toda velocidad. Los distintos perfiles tienen su propio ritmo cada uno.
+Cada solicitud que `wa` realiza para un perfil (desde un comando, `wa personal mcp serve` o `wa personal serve`) toma un turno en un ritmo para ese perfil: 20 solicitudes por minuto, de las cuales 10 pueden ir a la vez. La cola se guarda en la carpeta de estado, por lo que dos terminales se alinean una detrás de la otra en lugar de ir cada una a toda velocidad. Los distintos perfiles tienen su propio ritmo cada uno.
 
 Un comando que tiene que esperar más de 5 segundos para su turno lo dice en stderr. Un turno que tardaría más de 5 minutos se rechaza de inmediato con el código de salida `8` (`rate_limited`).
 
@@ -53,4 +53,4 @@ WA_REQUESTS_PER_MINUTE=30 wa personal messages send 100000000000001@lid "on my w
 
 ## Sin lecturas masivas
 
-WhatsApp no guarda ningún historial en sus servidores, por lo que `wa` no realiza una descarga masiva de historial que deba regular. El teléfono envía tu historial reciente una vez, justo después de vincularlo, y `serve` sigue recibiendo después de eso ([el almacén local](./archive.md)). Cada lectura y búsqueda responde del almacén local y no envía nada a WhatsApp. Los mensajes más antiguos solo pueden solicitarse al teléfono, 50 a la vez, con al menos 2 segundos entre solicitudes, mediante `messages sync <chat>` ([cómo](./archive.md#older-history-from-your-phone)).
+WhatsApp no guarda ningún historial en sus servidores, por lo que `wa` no realiza una descarga masiva de historial que deba regular. El teléfono envía tu historial reciente una vez, justo después de vincularlo, y `serve` sigue recibiendo después de eso ([el almacén local](./archive.md)). Cada lectura y búsqueda responde del almacén local y no envía nada a WhatsApp. Los mensajes más antiguos solo pueden solicitarse al teléfono, 50 a la vez y con 5 a 10 segundos entre solicitudes, mediante `messages sync <chat>`, dentro de [el ritmo](#the-pace) ([cómo](./archive.md#older-history-from-your-phone)).

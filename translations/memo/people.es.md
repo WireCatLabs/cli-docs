@@ -20,6 +20,50 @@ cuando su nombre, su usuario o el alias que le diste contiene todas las palabras
 acentos. Cada resultado muestra el `person:<id>` de la persona, que acepta `memo projects evidence --contact`, y las
 cuentas que tiene detrás.
 
+## Las personas que conoces
+
+```sh
+memo people list                          # people, the ones who write to you most first
+memo people list kind:organization        # companies, shops, airlines
+memo people list kind:all --sort recent --page 2
+memo people list name:ivan --json
+memo people check ivan petrov             # before adding a person: who already has this name
+```
+
+`people list` muestra un tipo cada vez. Lo decide la primera regla que se cumple, y `kind_signals` dice cuál:
+
+1. **person**: tú, las personas que añadiste a mano y cualquiera con una tarea asignada, siempre.
+2. **automated**: un bot, una dirección no-reply, un remitente cuyo correo está casi todo en la bandeja de envíos
+   masivos o a cuyo correo nunca respondes, o un nombre como «Notifications» o «Рассылка».
+3. **organization**: una cuenta que posee una organización, una dirección compartida como `info@`, o una forma
+   jurídica o una palabra de empresa en el nombre (ООО, LLC, Airlines, Hotel, Team…).
+4. **person**: un nombre legible y un lazo contigo: un chat uno a uno o un grupo de 10 personas como máximo en el que
+   está o escribió, correo que le escribiste, una reunión, una oportunidad o un lead del CRM cuyo propietario es tu
+   usuario del CRM (vincula ese usuario contigo con `memo people link`), los propios usuarios de un CRM, o la agenda de
+   tu teléfono.
+5. **stranger**: un nombre legible y ningún lazo, como autores que solo se ven en grupos grandes y contactos del CRM
+   sin ninguna oportunidad tuya.
+6. **unsorted**: ningún nombre legible.
+
+`kind:person` es el predeterminado, y `kind:all` lista todos los tipos. El paso `next` de la respuesta `people.kinds`
+dice cuántas hay en cada uno de los otros tipos. Cada persona tiene `display_name` (el nombre sin comillas ni espacios
+alrededor. Un marcador como «Без имени» cede su lugar al usuario, el teléfono o el correo, y `name` queda como está
+guardado), `contact` (el teléfono, si no el correo, si no el usuario. `username_source` nombra el servicio de mensajería
+al que pertenece el usuario), `messages_from` (los mensajes y correos que envió), `last_contact` y `ties`. `--sort` es
+`interactions` (el predeterminado), `recent`, `name` o `tasks`. Ejecuta `contacts sync` una vez en cada servicio de
+mensajería, o nadie tendrá el lazo de la agenda.
+
+`people check` lista las personas cuyos nombres empiezan como las palabras que escribes, en cualquier orden y en
+alfabeto latino o cirílico, primero el mismo nombre (`same_name`): «Светлана» encuentra también Svetlana. Las búsquedas
+`name:` también encuentran un nombre en cualquiera de los dos alfabetos. Memo nunca une personas solo por el nombre:
+vincúlalas como se explica abajo.
+
+Memo nunca une a nadie contigo por su cuenta. Una cuenta que conectas a nombre de otra persona, como el buzón de tu
+pareja o el mensajero de tu cónyuge que lees, espera en `people review` como coincidencia con la señal `account`, igual
+que cualquiera cuyo teléfono o dirección también es tuyo. El teléfono de una empresa y el número de un bot no unen ni
+proponen a nadie. Un buzón compartido como `info@` no une a nadie, pero sugiere cada par de sus personas, como se
+explica abajo.
+
 ## Todo sobre una persona
 
 **Lo más fácil: pídeselo a tu agente.**
@@ -74,7 +118,8 @@ Una persona puede tener una cuenta de Telegram, una cuenta de MAX, un contacto d
 Memo las trata como una sola persona cuando:
 
 - tienen la **misma dirección de correo**, en cualquier cuenta, de trabajo o personal, y ninguna tercera persona la
-  tiene. Una dirección de rol como `info@` o `support@` solo sugiere un vínculo.
+  tiene. Un buzón compartido (una dirección de rol como `info@` o `support@`, o la dirección de una empresa) solo
+  sugiere un vínculo.
 - tienen el **mismo número de teléfono**, nadie más lo tiene, y una de ellas lo tiene en Telegram, MAX o WhatsApp.
 
 Las une `memo sync`, y también `memo people scan`. Un nombre, un usuario o un dominio de correo que coinciden nunca
@@ -88,9 +133,48 @@ coincidencias:
 
 ```sh
 memo people review
-memo review kind:identity_link
-memo review confirm 17090
+memo people confirm 17090
+memo people reject 17091 --reason "two people"
 ```
+`memo people confirm` y `memo people reject` toman ids y rangos (`17090-17095`) tal como los lista `people review`, o
+`all`: todo lo que `people review` lista con el mismo `--kind` (`link`, `split` o `all`) y `--limit`. `all` muestra lo
+que haría y no cambia nada hasta que añades `--yes`. Cada propuesta se decide por separado, así que una que cambió
+desde entonces se rechaza y las demás se deciden igualmente. `memo review` lista y decide las mismas propuestas entre
+todo lo demás.
+
+`people review` lista primero el `score` más alto, y después las coincidencias sin puntuación y las separaciones, las
+más nuevas primero. Una coincidencia por un buzón compartido muestra `shared` (`role` para una dirección como `info@`,
+`line` para la de una empresa) y la dirección como `mailbox`. Su puntuación es 0.1 solo por el buzón y sube cuando las
+dos personas también tienen un nombre, un teléfono u otra dirección que solo ellas tienen, o un chat o un dominio de
+empresa. Cuando el buzón es de una empresa y no de ninguna de las dos, dilo:
+
+```sh
+memo people resolve 17092 company                    # the company that has the address or its domain, else a new one
+memo people resolve 17092 company organization:12    # this organization
+memo people resolve 17092 company --name "Shop Ltd"  # a company of this name; needed for a free mailbox such as gmail.com
+memo people resolve 17092 company --all              # and every other match waiting on that mailbox
+```
+
+La dirección pasa a la organización, las dos personas no se unen, y ese par no se vuelve a sugerir por esa dirección.
+Con `--all`, cada coincidencia que espera por el mismo buzón se cierra en esa misma respuesta, y `closed` las lista.
+Cada coincidencia lleva `mailbox` y, cuando tres o más personas lo comparten, todas ellas en `candidates`. Solo tú la
+respondes, como con `confirm` y `reject`.
+
+Cuando las dos «personas» de una coincidencia son buzones de la empresa (dos contactos con el nombre de la empresa, en
+su dominio), dáselos todos a ella:
+
+```sh
+memo people resolve 17094 organization                    # the company with an address or the domain, else a new one
+memo people resolve 17094 organization organization:12    # this organization
+memo people resolve 17094 organization --name "Shop Ltd"  # a company of this name; needed for free mail (gmail.com)
+```
+
+Cada dirección de la coincidencia pasa a esa organización. Sin nombre, una nueva recibe el nombre compartido de las
+personas, si no el dominio. Una persona que solo es esas direcciones pasa a ser de la empresa y sale de la lista de
+personas (`people list kind:organization` las muestra). Una que también tiene una cuenta de Telegram o un teléfono los
+conserva y sigue siendo una persona, y solo la dirección la deja. Nadie se une, la coincidencia se cierra, `--all`
+cierra cada coincidencia que espera por esas direcciones, y la respuesta lista `mailboxes`, `people` (quién pasó a ser
+de la empresa) y `closed`.
 
 Enlaza tú mismo dos cuentas o mira a una persona:
 
@@ -100,21 +184,57 @@ memo people show telegram:Kai
 ```
 
 `memo people show` lista las identidades de la persona por fuente, las cuentas que vieron cada una, las fusiones que
-las unieron (`merge:12-34`) y las coincidencias que esperan. `memo context` para cualquiera de las cuentas muestra
-todo lo de todas ellas.
+las unieron (`merge:12-34`, con cómo, quién y cuándo) y las coincidencias que esperan. `memo people show person:me`
+te muestra a ti. `memo context` para cualquiera de las cuentas muestra todo lo de todas ellas.
+
+### Personas que parecen incorrectas
+
+```sh
+memo people links check
+memo people links check --page 2 --json
+```
+
+`memo people links check` lista las personas de todo el almacén que pueden estar mal, tú primero, con el porqué y el
+comando que corregiría cada una:
+
+- **owner-other-name**: tu propia persona tiene una identidad con otro nombre, como el buzón de tu pareja o el
+  mensajero de tu cónyuge que lees. La ortografía y el alfabeto no cuentan: «Алексей Иванов» es Aleksei Ivanov.
+- **test-data**: las personas de una prueba, o una dirección en un dominio reservado como `.test` o `example.com`.
+- **shared-address**: una identidad unida por una dirección que tiene una persona de otro nombre, como un buzón
+  compartido o de empresa.
+- **mixed-names**: una persona con nombres distintos y ningún teléfono ni dirección en común.
+
+Quedan fuera lo que vinculaste tú, las identidades que una persona ya tenía cuando le vinculaste otra, y las
+identidades que mantuviste juntas al rechazar una separación.
+
+Cuando una duda es errónea (un apodo junto a un nombre completo, por ejemplo), dile a memo que la persona está bien
+como está:
+
+```sh
+memo people links resolve person:42 keep
+```
+
+Las identidades en duda dejan de listarse hasta que una de ellas pase a otra persona. Una identidad que se une a la
+persona más tarde se comprueba de nuevo, y una separación de las mantenidas hecha por un agente se rechaza. Solo lo
+ejecutas tú, en un terminal o en WireCat Desktop.
 
 ### Deshacer un vínculo
 
 - `memo people unmerge merge:12-34` devuelve las identidades de una fusión a la persona de la que venían.
-- `memo people unlink telegram:12345` vuelve a dar a una identidad una persona propia.
-- `memo people unlink email:kai@example.com max:6789` mueve varias identidades de una persona a una sola persona
-  nueva.
+- `memo people unlink telegram:12345 --from person:me` vuelve a dar a una identidad tuya una persona propia.
+- `memo people unlink email:kai@example.com max:6789 --from person:42` mueve varias identidades de una persona a una
+  sola persona nueva.
 
-`unlink` toma cada identidad por su id exacto, tal como lo lista `memo people show`, nunca por un nombre.
+`unlink` toma cada identidad por su id exacto, tal como lo lista `memo people show`, nunca por un nombre. `--from`
+nombra la persona que dejan, como `person:<uid>` o `person:me`, y es obligatorio. Cuando una identidad está en otra
+persona, nada cambia: el rechazo (`identity.held-elsewhere`) nombra a la persona que la tiene, para que lo compruebes
+antes de ejecutarlo de nuevo con esa persona.
 
-Solo tú puedes hacerlo, en un terminal o en WireCat Desktop. Después, ninguna coincidencia automática vuelve a unir a
-esas personas. Un agente solo puede proponer un vínculo con `memo people link … --reason`. Tú lo confirmas o lo
-rechazas en `memo review`.
+Lo tuyo se aplica al momento, en un terminal o en WireCat Desktop. Después, ninguna coincidencia automática vuelve a
+unir a esas personas. Un `unlink` o `unmerge` de un agente necesita `--reason` y solo propone la separación: espera en
+`memo people review` con el motivo, y solo tu `memo people confirm` la lleva a cabo. Una separación que rechazas no se
+vuelve a proponer mientras esas identidades sigan en esa persona, y `people links check` deja de listarlas. Un
+`memo people link … --reason` de un agente espera igual.
 
 Para elegir la nota principal sobre la persona, consulta [la nota sobre una persona](./notes.md#the-note-about-a-person).
 
@@ -211,10 +331,13 @@ vigente. `memo relationships end <id> --end-date <date>` dice que ya no está vi
 Tipos: `member-of`, `reports-to`, `customer-of` (leído al revés, proveedor de), `partner-of` y `related-to`. Un rol
 sale de una lista. En una organización `employee`, `contractor`, `founder`, `owner`, `manager`, `adviser`, `contact`.
 En un proyecto `owner`, `manager`, `contributor`, `client-contact`, `approver`. En una oportunidad o un lead `owner`,
-`contact`, `decision-maker`, `influencer`. Un cargo no es un rol, indícalo con `--position`.
+`contact`, `decision-maker`, `influencer`. Entre personas y organizaciones (`related-to`) se ofrecen `colleague`,
+`adviser`, `investor`, `mentor`, `family`, `friend` (otra palabra se guarda, como `custom`). Un cargo no es un rol, indícalo con `--position`.
 `memo relationships roles list` muestra las listas. `memo relationships roles add organization board-member --label 'Board member'`
 añade un rol tuyo, y `remove` lo quita mientras ninguna relación lo use. Solo tú cambias las listas. Un rol guardado
-antes de estas listas se queda como estaba escrito, y `relationships list` lo marca como `custom`.
+antes de estas listas se queda como estaba escrito, y `relationships list` lo marca como `custom`. `role_list` en cada
+fila nombra la lista de la que viene su rol. Una fila con un documento en un extremo lleva `from_document` o
+`to_document`: título, ruta de la carpeta, el enlace que lo abre y cuándo cambió por última vez.
 
 `relationships list` filtra por `kind:`, `role:`, `standing:`, `from:`, `to:` y `at:<day>` (vigente ese día), y pagina
 con `--limit` y `--page`. `at:<day>` significa vigente al inicio de ese día UTC. Deja fuera las que terminaron salvo

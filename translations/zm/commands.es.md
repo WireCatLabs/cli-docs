@@ -337,6 +337,18 @@ zm config migrate
 
 **Example:** `zm config migrate`
 
+## `zm app`
+
+what to enter when you make the Zoom app zm signs in with
+
+```sh
+zm app
+```
+
+**Returns:** zoom app setup — marketplace_url, guide_url, app_type, management, oauth, redirect_url, allow_list, scopes, and 1 more; every field: zm commands info app
+
+**Example:** `zm app`, `zm app --json`
+
 ## `zm meetings`
 
 stored meetings and their records
@@ -452,7 +464,7 @@ zm meetings export <meeting> [options]
 |---|---|
 | `--format <format>` | export format. One of: `markdown`, `vtt`. Default: `markdown`. |
 | `--transcript-id <id>` | export a specific transcript version. |
-| `--output <file>` | write content to a file through the host's writer. |
+| `--output <file>` | write content to a new file through the host's writer. |
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
@@ -487,7 +499,7 @@ zm meetings people <query> [options]
 
 ### `zm meetings sync`
 
-bring the stored meetings up to date from the connected account
+bring the stored meetings up to date from the connected account, oldest first; a run that stops before its deadline keeps what it saved and the next one goes on from there
 
 **Changes local data.**
 
@@ -500,7 +512,8 @@ zm meetings sync [options]
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 | `--since-time <time>` | fetch meetings starting at or after this ISO 8601 date or time. |
-| `--lookback-days <days>` | revisit recent occurrences for late transcripts (0–31). Default: `0`. |
+| `--lookback-days <days>` | revisit recent occurrences for late transcripts (0–31). |
+| `--rescan` | read the last 30 days again, not only what came after the last sync. |
 
 **Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: zm commands info meetings sync
 
@@ -985,6 +998,20 @@ zm session start [options]
 
 **Example:** `zm personal session start`
 
+### `zm session end`
+
+delete this profile's saved Zoom login; the stored meetings stay
+
+**Changes local data.**
+
+```sh
+zm session end
+```
+
+**Returns:** delete this profile's saved Zoom login; the stored meetings stay
+
+**Example:** `zm personal session end`
+
 ## `zm upgrade`
 
 upgrade zm with the package manager that installed it; --check only looks
@@ -1019,7 +1046,7 @@ zm models list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: zm commands info models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: zm commands info models list
 
 **Next usually:** `zm models download <model>`
 
@@ -1042,11 +1069,35 @@ zm models download <model> [options]
 | Option | What it does |
 |---|---|
 | `--offline` | refuse a download that needs the network. |
-| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
+| `--accept-terms` | no longer needed; kept so older scripts still run. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: zm commands info models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: zm commands info models download
 
 **Example:** `zm models download parakeet-v3`
+
+## `zm account`
+
+the profile's login and data on this computer
+
+### `zm account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes remote Zoom data.**
+
+```sh
+zm account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: zm commands info account remove
+
+**Example:** `zm personal account remove --keep-data --dry-run`, `zm personal account remove --delete-data --yes`
 
 ## `zm watch`
 
@@ -1659,10 +1710,9 @@ zm search all <query> [options]
 | `--only <resources>` | comma-separated meetings,messages,mail,notes (default meetings). |
 | `--limit <n>` | how many results, 1 through 1000 (default 100). Default: `100`. |
 | `--page <n>` | which page, starting at 1. |
-| `--max-meetings <n>` | most meetings to look through, newest first, or all (default 100). |
 | `--exact` | request exact matching; unsupported meeting queries are reported as skipped. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: zm commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 17 more; every field: zm commands info search all
 
 **Example:** `zm personal search all "example plan" --json`
 
@@ -1725,7 +1775,7 @@ zm search recordings <directory> <query> [options]
 |---|---|
 | `--limit <n>` | how many hits, 1 through 1000 (default 100). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: zm commands info search recordings
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 17 more; every field: zm commands info search recordings
 
 **Example:** `zm personal search recordings ./zoom-archive "example plan" --limit 100 --offline --json`
 

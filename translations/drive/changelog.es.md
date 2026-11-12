@@ -4,6 +4,87 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.65.0 — 10.11.2026
+
+### Added
+
+- **`drive documents add <url> --profiles <a,b|all>`** keeps one Drive document's text in the shared store as a
+  source added by hand, for memo's "Add to memory". It tries the named profiles in order, at most five (the
+  `max_add_profiles` setting changes that), and says which one opened the document and what refused the others;
+  `drive <profile> documents add <url>` reads with that profile only. `--title` and `--subject` name it and what it
+  is about. A file a sync already imported is answered as `duplicate_of`. Not available over MCP.
+  - Known limit: adding the same file again after it changed keeps a second copy; the first is not replaced yet.
+- **A pull request adds its changelog entries as a fragment, `changes/<branch>.md`.** Open pull requests no longer
+  conflict under `## Unreleased`. `pnpm docs:check` checks each fragment, and `bin/release` collects them into the
+  version's section. An entry under `## Unreleased` still works during the move.
+
+### Changed — may break callers
+
+- **Built on cli-core 0.634.0** (was 0.614.0). The store moves to version 64 on first open (people ties, stored
+  person kinds, faster deal-link triggers; additive). With it, a document owner's link is filed as Drive's report.
+  What changed in between is in [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`schedule pause <name>` and `schedule resume <name>`** take a schedule off its timer and keep it; `schedule run`
+  still runs it. `--at` repeats: `--at 08:30 --at 18:00` runs twice a day.
+
+### Fixed
+
+- **A document's owner and last editor no longer land in your memory or its review.** `sync` links a document to the
+  owner Drive names as Drive's report (`reported`, the way a CRM's links are), not as a proposal and not as your own
+  confirmed memory, with the reason in words ("Google Drive lists this person as the document's owner, version 68,
+  changed 2026-11-02") instead of the raw Drive record. The last editor gets no link and stays in the document's
+  metadata. Each import replaces every owner and last-editor link the document had, proposed or confirmed, so the next
+  `sync` (or `drive <profile> catalog import --offline`) clears the ones already stored. `relationships list
+  confirmed:true` no longer lists a document's owner.
+- **A spent Google quota (`dailyLimitExceeded`, `quotaExceeded`) is a rate limit, not a permission refusal.**
+  `sync` and every other command now answer it as `rate_limited`, which says to retry, instead of
+  `permission_error`.
+
+## 0.64.0 — 08.11.2026
+
+### Added
+
+- **`drive <profile> account remove --keep-data|--delete-data`** removes a profile from this computer: it revokes the
+  Google sign-in at Google, deletes the saved sign-in, forgets the profile in the settings and, with `--delete-data`,
+  deletes its document snapshots and exports. `--keep-data` leaves them searchable. Your mirror folders are never
+  touched, and other profiles stay as they are. `session end` still only forgets the local sign-in.
+
+### Fixed
+
+- Updated cli-base to 0.82.0, which names `browse` as a verb, so `folders browse` needs no naming exception.
+
+## 0.63.0 — 08.11.2026
+
+### Changed — may break callers
+
+- **drive now writes the shared store at version 57, and an older WireCat CLI refuses it until it is upgraded.**
+  A memo, mail or other WireCat CLI on the same store reads it again once it is updated too: run `<cli> upgrade`
+  for each. The other way round matters more: a memo already on the new store version stopped this drive from
+  opening it, and this release reads it again.
+- **`memories add --supersedes` retires the old memory only once the owner confirms the correction.** drive writes
+  every memory `proposed`, so the old memory stays in effect until then.
+
+### Fixed
+
+- Updated cli-core to 0.608.0.
+
+## 0.62.0 — 08.11.2026
+
+### Added
+
+- **`folders browse [--parent <id>]` lists your Google Drive folders one level at a time**, so you can pick one for
+  `folders add` without copying its URL. With no `--parent` it lists My Drive, Shared with me and every shared drive;
+  with one it lists the folders directly inside. Each folder says where it lives, how many folders it holds and
+  whether sync already imports it. It only reads Drive, with the read-only sign-in you already have.
+
+### Changed — may break callers
+
+- **A profile with no saved sign-in now fails with `oauth.missing`** instead of `oauth.expired`, so a caller can tell
+  "sign in" from "sign in again". Both still say to run `session start`.
+
+### Fixed
+
+- Updated cli-core to 0.604.0.
+
 ## 0.61.0 — 06.11.2026
 
 ### Added

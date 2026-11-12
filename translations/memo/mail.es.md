@@ -93,8 +93,9 @@ Qué hace, en cada buzón:
 2. Conserva los correos que te piden algo, llevan una fecha o responden a un hilo con una tarea abierta.
 3. Lee contexto solo para esos, a través de los vínculos que ya tiene el almacén: el hilo y `memo context` del remitente.
 4. Prepara un lote: `memo mail findings add '<json>' --key <key> --source email:<account>`, con el JSON como un solo
-   argumento (también sirven un archivo o `-` para stdin) y la clave que dio la revisión en su paso `mail-findings.add`. Los
-   remitentes nuevos siempre reciben un vínculo a una persona conocida o una propuesta de contacto nuevo. Después de
+   argumento (también sirven un archivo o `-` para stdin) y la clave que dio la revisión en su paso `mail-findings.add`. Un
+   remitente nuevo recibe un vínculo a una persona conocida, o una propuesta de contacto nuevo solo cuando el texto del
+   correo da un nombre mejor que la línea del remitente. Después de
    `messages reset` la clave termina en `-r<n>`, así que una ejecución sobre correo leído de nuevo prepara su lote junto a uno
    que aún espera tu decisión.
 5. Después, y solo entonces, `memo messages acknowledge --holder mail-triage --cursor <cursor> --source email:<account>`

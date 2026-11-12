@@ -57,9 +57,9 @@ después a personas son remitentes y destinatarios, no cuentas adicionales en la
 El texto de un adjunto legible se guarda con su correo y se encuentra con él. Memo también prepara el correo nuevo para
 la búsqueda por significado, así que `tg personal search conversations` y `max personal search conversations` pueden encontrarlo.
 
-Memo aún puede importar correo con Himalaya, un programa de correo independiente. Esa importación antigua se conserva
-para configuraciones existentes y se eliminará; para cuentas nuevas usa `mail` y consulta la
-[importación antigua](../memo/mail.md) solo si ya dependes de ella.
+Memo ya no importa correo por sí mismo. Sus antiguos comandos de correo no cambian nada y nombran el comando `mail`
+que hay que ejecutar en su lugar. El correo que Memo importó antes sigue en el almacén y se sigue encontrando. Consulta
+[los comandos que pasaron a mail](../memo/mail.md#commands-that-moved-to-mail).
 
 ## Outlook.com y Microsoft 365
 
@@ -125,7 +125,8 @@ memo search mail 'quote subject:budget mailbox:important' --json
 `search mail` busca en el correo importado. Además de palabras, admite `from:`, `to:`, `cc:` y `bcc:`
 para una persona, `subject:` para palabras solo del asunto y `mailbox:` para una carpeta o etiqueta de Gmail. Los resultados pueden pertenecer a varios buzones;
 comprueba sus referencias y pide al agente que conserve los de la dirección que elijas.
-`search all` también busca mensajes y notas; `skipped` indica qué tipo no se pudo buscar.
+`search all` también busca mensajes, notas, eventos de calendario, negociaciones y leads del CRM, datos de negocio y
+reuniones. El campo `missing` de la respuesta nombra lo que no pudo buscar.
 Que falten resultados fuera del periodo importado no demuestra que no exista correo allí.
 
 ## Detecta spam y remitentes que se hacen pasar por otros

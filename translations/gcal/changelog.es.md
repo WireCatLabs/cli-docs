@@ -4,6 +4,63 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.23.0 — 08.11.2026
+
+### Añadido
+
+- **`gcal <profile> account remove --keep-data|--delete-data`** quita un perfil de este ordenador: revoca el inicio
+  de sesión en Google desde Google, borra el inicio de sesión guardado y los feeds de calendario guardados, olvida el
+  perfil y sus puntos de sincronización y, con `--delete-data`, borra del almacén los calendarios y eventos de la
+  cuenta. `--keep-data` los deja disponibles para buscar. Los demás perfiles quedan como estaban, y un `events remind`
+  en marcha detiene la eliminación.
+- **`gcal models set` y `gcal models add`** de cli-core 0.609.0: eligen el modelo local de embeddings que usa cada CLI
+  de WireCat y añaden uno propio desde Hugging Face. Una pregunta con una hora (`HH:MM`, `10:30`) vuelve a buscarse
+  por sus palabras.
+- **gcal incluye `contracts/wirecat.json`, que dice con qué hosts se comunica.** WireCat Desktop lo lee para mostrarte,
+  antes de instalar, a qué accede gcal: `accounts.google.com`, `oauth2.googleapis.com`,
+  `openidconnect.googleapis.com` y `www.googleapis.com`, además de las direcciones de feeds de calendario (ICS) que
+  añadas.
+
+### Cambios — pueden romper scripts
+
+- **gcal escribe ahora el almacén compartido en la versión 59, y un CLI de WireCat más antiguo lo rechaza hasta que
+  se actualice.** Ejecuta `<cli> upgrade` en cada CLI de WireCat que use el mismo almacén. De cli-core 0.615.0, que
+  guarda en el almacén sus plantillas de mensajes.
+
+### Seguridad
+
+- **Las peticiones de gcal a Google solo llegan a los hosts que declara.** El inicio de sesión, la renovación del
+  token, la comprobación de la cuenta y cada llamada a Calendar API pasan por `hostFetch` de cli-base. Rechaza
+  cualquier otro host antes de enviar un byte, comprueba cada redirección, quita la cabecera `Authorization` en una
+  redirección a otro sitio y se rinde a los 30 segundos. Los feeds de calendario (ICS) los sigue leyendo cli-core,
+  desde la dirección que añadiste. De cli-base 0.87.0 (antes 0.80.8) y cli-core 0.615.0 (antes 0.614.0).
+
+## 0.22.0 — 08.11.2026
+
+### Cambios — pueden romper scripts
+
+- **gcal escribe ahora el almacén compartido en la versión 57, y un CLI de WireCat más antiguo lo rechaza hasta que
+  se actualice.** Ejecuta `<cli> upgrade` en cada CLI de WireCat que use el mismo almacén. Importa más el caso
+  contrario: un memo ya en la nueva versión del almacén impedía que este gcal lo abriera, y esta versión vuelve a
+  leerlo. De cli-core 0.608.0 (antes 0.600.0).
+- **`upgrade --offline` y `calendars busy --offline` responden `permission_error` con el motivo `offline.refused`
+  (código de salida 5)**, como ya hacían los comandos propios de gcal que necesitan Google. Antes respondían
+  `validation_error` (código de salida 2) y `busy.offline`.
+- **`events prepare` lee solo las cuentas del ámbito de la cuenta pedida**: una cuenta de trabajo ya no trae el
+  correo ni los mensajes de una persona vinculada desde cuentas personales, ni al revés.
+- **La búsqueda trata un `?` al final de una palabra como signo de interrogación, y un `word:` que no es un campo de
+  búsqueda como palabras.** `budget?` encuentra «budget», y `meeting at 10:30` encuentra lo que lo contiene en lugar
+  de una respuesta vacía.
+
+### Corregido
+
+- **`ё` y `е` coinciden en los nombres**, así que una persona o un calendario escrito con `е` encuentra el que se
+  escribe con `ё`.
+- **Las notas de 0.21.0 decían que las guías avisan de una página de «aplicación no verificada» y de un límite de 100
+  usuarios para la aplicación de Google de WireCat.** No es así: las guías dicen que Google puede rechazar un inicio
+  de sesión con la aplicación de WireCat, y que tu propia aplicación siempre tiene prioridad y es la salida. La página
+  de aplicación no verificada y el límite de 100 usuarios se describen solo para tu propia aplicación.
+
 ## 0.21.0 — 07.11.2026
 
 ### Añadido

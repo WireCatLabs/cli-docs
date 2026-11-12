@@ -9,7 +9,7 @@
       "ru": "MAX в терминале: боты через официальный Bot API и ваш личный аккаунт.",
       "es": "MAX Messenger desde la terminal: bots con la Bot API oficial y tu cuenta personal."
     },
-    "docsRef": "v0.103.0"
+    "docsRef": "v0.111.0"
   },
   {
     "name": "tg",
@@ -21,7 +21,7 @@
       "ru": "Клиент Telegram для терминала и ИИ-агентов, с вашим собственным аккаунтом.",
       "es": "Un cliente de Telegram para la terminal y para agentes de IA, con tu propia cuenta."
     },
-    "docsRef": "v0.117.0"
+    "docsRef": "v0.123.0"
   },
   {
     "name": "wa",
@@ -29,7 +29,7 @@
     "repo": "WireCatLabs/whatsapp-cli",
     "package": "@wirecat/whatsapp-cli",
     "lang": "en",
-    "docsRef": "v0.30.0",
+    "docsRef": "v0.38.0",
     "summary": {
       "en": "Your WhatsApp chats, files and group context from the terminal and through your AI agent.",
       "ru": "Ваши чаты WhatsApp, файлы и контекст групп — в терминале и через ИИ-агента.",
@@ -42,7 +42,7 @@
     "repo": "WireCatLabs/drive-cli",
     "package": "@wirecat/drive-cli",
     "lang": "en",
-    "docsRef": "v0.61.0",
+    "docsRef": "v0.65.0",
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
@@ -55,8 +55,10 @@
     "repo": "WireCatLabs/gcal-cli",
     "package": "@wirecat/gcal-cli",
     "lang": "en",
-    "docsRef": "v0.21.0",
-    "guideRefs": { "roadmap": "8167d1659ab0085b097d8da4c94818f1e4b6aac0" },
+    "docsRef": "v0.23.0",
+    "guideRefs": {
+      "roadmap": "8167d1659ab0085b097d8da4c94818f1e4b6aac0"
+    },
     "summary": {
       "en": "Keep your Google Calendar on your computer, search meetings offline and know who the attendees are in your other chats.",
       "ru": "Храните Google Календарь на своём компьютере, ищите встречи без интернета и узнавайте участников из других ваших чатов.",
@@ -69,7 +71,7 @@
     "repo": "WireCatLabs/mail-cli",
     "package": "@wirecat/mail-cli",
     "lang": "en",
-    "docsRef": "v0.23.1",
+    "docsRef": "v0.24.0",
     "summary": {
       "en": "Sync your mailbox over IMAP into the shared WireCat store, search it offline, and organise it on the server (flags, moves, Trash with undo, folders), keep drafts, and send mail over SMTP.",
       "ru": "Синхронизируйте почтовый ящик по IMAP в общее хранилище WireCat, ищите по нему без интернета и наводите порядок на сервере: флаги, перемещение, корзина с отменой, папки, храните черновики и отправляйте письма по SMTP.",
@@ -82,7 +84,7 @@
     "repo": "WireCatLabs/zoom-cli",
     "package": "@wirecat/zoom-cli",
     "lang": "en",
-    "docsRef": "v0.67.0",
+    "docsRef": "v0.71.0",
     "summary": {
       "en": "Keep Zoom transcripts and recordings, search meeting evidence and give your agent context for the next call.",
       "ru": "Сохраняйте расшифровки и записи Zoom, ищите обсуждения и давайте агенту контекст для следующего созвона.",
@@ -100,7 +102,7 @@
       "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
       "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.131.72",
+    "docsRef": "v0.131.87",
     "profile": false
   },
   {

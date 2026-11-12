@@ -8,7 +8,366 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
-## Unreleased
+## 0.131.87 — 12.11.2026
+
+### Added
+
+- **`memo people resolve <id> organization` makes both "people" on a match a company's mailboxes.** For a match such
+  as two contacts named after a company at its domain: every address on the match goes to one organization (the one
+  named, else one with an address or the domain, else `--name`, else a new one named after the people's shared name
+  or the domain; free mail needs `--name` or the organization). People who are only those addresses leave the people
+  list as the company's; people with other identities keep them. The match closes; `--json` gives `organization`,
+  `mailboxes`, `people` and `closed`. See [people](./people.md).
+- **The `proposals` skill topic says how an agent sorts the owner's matches.** "Sorting the owner's matches for him":
+  gather evidence, sort each match into one person, different people, one company or unsure, and hand the owner at
+  most three commands to run.
+
+## 0.131.86 — 12.11.2026
+
+### Added
+
+- **`memo actions edit <id> <finding> --fingerprint <hash> --set field=value`** changes a finding still waiting in a findings batch before you confirm it: its text and the fields its kind allows; `field=null` empties an optional one. Only the owner runs it; it answers the batch with its new fingerprint.
+- **`memo groups rename <group> <name>` and `memo groups delete <group>`.** Rename keeps the members; delete removes the group and its memberships only. Both refuse a built-in, missing or taken name and answer with the groups. A later run in the old name is refused with the groups there are.
+- **`memo people resolve <id> company --mailbox <address>`** marks an address as the company's on a match by name, not only on a shared mailbox. The answer names the `mailbox`.
+- **`memo tasks list 'related:"deal:7"'`** (also `lead:` and `organization:`) lists the tasks of a deal, a lead or a client company: those `deals context` and `organizations context` count.
+- **The digest reads Google Drive, Google Calendar and the CRM.** `review agenda` gains the parts `calendar` (events added, moved or cancelled, and those starting within a day), `drive` (documents edited) and `crm` (deals and leads the CRM changed, with the stage they moved to). A digest's sources take `drive`, `calendar` and `crm`.
+- **Your coding agent can read a picture you add.** With `memo models picture-reading set request --agent claude`
+  (or `--agent codex`, with an optional `--model`), `memo sources add <picture>` gives the picture to that agent and
+  keeps the text it read, with the extractor `agent:claude` or `agent:codex/<model>`; this comes before the AI model.
+  The default is `never`; only you turn it on. The picture goes to the agent's provider unless it runs a local model.
+  The same setting lets `images read` in the messenger CLIs read a chat picture (cli-core).
+
+### Changed — may break callers
+
+- **On cli-core 0.643.0 and cli-base 0.97.0.** Agents in a scheduled run see other people's text marked as untrusted, and under the read-only lock an output file goes only into the run's own folder (`read-only.output-outside`). Lists and searches come back in one shape.
+- **`memo digest add|edit --agent` takes the agents a schedule may start** (cli-core 0.643.0): claude, gemini and opencode, and codex with `--allow-dangerous`, your consent that it may run any program inside its sandbox. The others are refused (`agent.unrestricted`, with `restricted_reason`). A new digest with no `--agent` takes the one agent installed; with none or several it is refused (`digest.agent-unchosen`) and the error lists the choices. Before, it took claude. `--max-cost` and `--max-cost-per-day` for an agent that reports no cost are refused (`agent.cost-unknown`).
+- **Your digests are saved again once, by themselves.** cli-core 0.643.0 runs a schedule only from the agent it keeps, never from the saved command, so a digest saved before stops. At your first memo command after the update, memo saves each old claude digest again when its command is exactly the one memo made. Any other one, and every codex one, waits: `memo digest list` shows `needs` with the command to run. Never in an agent's run or under the read-only lock.
+- **`memo actions confirm <id> <findings...>` leaves the findings not named waiting.** Before, it rejected them. With no names it creates every finding still waiting; `reject` rejects only what waits.
+- **`memo_tools_search` ranks by the words it matches** (cli-core). A task phrase in an agent's words finds its command; the help's examples count. See [the measurement](https://github.com/WireCatLabs/cli-testing/tree/main/performance/agents/tools-search).
+
+### Fixed
+
+- **Contacts** (cli-core): one name in private chats on two messengers is proposed as one person; a person in a two-way private chat is no longer `automated`; a person on one of your own accounts no longer takes that profile's label as their name; a person's phone, address and username come from the identity that wrote the most; `hr@` scores below `info@`, and the same company in the CRM counts as a trace.
+- **A picture the AI model answers nothing to says so.** `memo sources add` gives `image.reason: "ai.empty-answer"`
+  and a hint to choose a vision model, instead of `ai.failed`; with cli-core's fix, moondream on Ollama reads pictures.
+
+## 0.131.85 — 12.11.2026
+
+### Added
+
+- **`memo models local-only set on|off` and `show`.** One switch that keeps every model call on this computer, in
+  every WireCat tool, and a list of each feature with where its data goes. Off until you turn it on; only you turn it
+  off (cli-core's local only).
+- **The Ollama reader takes another address on this computer.** `memo sources readers set ollama --model <model>
+  --base-url http://127.0.0.1:<port>` keeps it as `sources.base_url`; an address on another computer is refused
+  (`reader.address-refused`).
+- **`memo answers create --analyze` uses the AI model chosen with `memo models ai set`** when
+  `MEMO_MODELS_ANALYSIS_PROVIDER` and `MEMO_MODELS_ANALYSIS_MODEL` are not set, with the key kept for its address.
+- **A digest can run codex, with a model.** `memo digest add|edit --agent claude|codex --model <model>`; an edit that
+  changes the agent drops the old agent's model unless `--model` names one. `memo digest list` and `show` give
+  `harness` and `model`.
+
+### Changed — may break callers
+
+- **Plain http to another computer is refused for every model call**, and voice messages are heard by the downloaded
+  model first (cli-core 0.642.0).
+
+## 0.131.84 — 11.11.2026
+
+### Added
+
+- **Search takes part of a name.** On cli-core 0.640.0, `from:`, `to:`, `cc:`, `bcc:` and `chat:` take `*` and `?`:
+  `from:Ярослав*` or `from:*Мила*` matches every person whose name, @username or alias fits, and a name that fits
+  nobody lists the nearest ones. `subject:`, `content:` and `transcript:` take a word's start (`subject:отчет*`), and
+  `mailbox:`, `label:` and `tag:` take patterns anywhere.
+- **`memo people links resolve <who> test` hides a person as test data.** They leave every list, search and count, on
+  every computer that reads the store; `memo people list kind:test` lists them, and `resolve <who> keep` brings one
+  back as a real contact. Sure test data, a seed id or an address at a reserved domain such as `example.com` or
+  `.test`, is hidden without asking.
+- **`memo people show` lists every phone and address of an account** as `phones` and `emails`, as a CRM contact holds
+  several.
+
+### Fixed
+
+- **Check the links no longer doubts a short form of a name or a name that repeats its mailbox.** Ярик and Ярослав,
+  Bob and Robert, or a Drive account named after its own address no longer make a "shared address" doubt.
+- **`memo search people` leaves out people hidden as test data.**
+
+## 0.131.83 — 11.11.2026
+
+### Changed — may break callers
+
+- **A task found in a message takes the fields of a project task.** `memo tasks update` gives it `--priority`,
+  `--agent`, `--status todo` or `in_progress`, another message kind with `--type`, and `--project` moves it into a
+  project under that project's key, keeping its source message ([tasks](./tasks.md#moving-a-task-to-another-project)).
+- **`memo tasks list` with any board field lists found tasks too.** `assignee:`, `priority:`, words and the other
+  fields, `--sort` and `--cursor` no longer need `project:`: they list every task, project and found, and each item
+  carries its `assignments`. `project:*` still lists project tasks only. `memo tasks counts` counts found tasks too.
+
+### Fixed
+
+- **`memo actions confirm` decides a meeting findings batch by the findings it names.** As for mail findings, the
+  named finding IDs are accepted and the rest rejected, with `--fingerprint` checked when given; it used to refuse and
+  point to `meetings actions confirm`.
+
+## 0.131.82 — 11.11.2026
+
+### Added
+
+- **`memo people resolve <id> company --all` closes every match on the same mailbox in one answer.** The answer's
+  `closed` lists every match it closed; without `--all` it is only the match named, as before
+  ([people.md](./people.md)).
+- **`memo people links resolve <who> keep` says a person `people links check` doubts is right as they are.** The
+  identities in doubt stop being listed until one of them moves to another person; an identity that joins later is
+  checked again, and an agent's split of the kept ones is refused. Only the owner runs it; WireCat Desktop passes
+  `--from-app`. `--json` answers `{ "person": "person:<uid>", "kept": ["<provider>:<id>", …] }`.
+- **`memo people show --json` gives `display_name`**, the name `people list` shows for the person: their own, else the
+  first readable account name, a username, phone or address.
+
+### Changed — may break callers
+
+- **`memo people unlink` names the person the identities leave, with `--from person:<uid>` or `--from person:me`.**
+  It is required, and an identity that sits on someone else is refused with `identity.held-elsewhere`; the message
+  names who holds it and nothing changes. Before, a script that meant to take a colleague's mailbox off your card
+  took it off the colleague. A run without `--from` is refused with `person.from-required`. The `fix` of
+  `memo people links check` ends in the `--from` it needs.
+
+### Fixed
+
+- **`memo people links check` no longer lists a person you linked by hand under mixed names.** The identities the
+  person held when you linked another to them count as seen by you; one that joins later is still checked.
+- **Mail triage proposes a new contact only when the email's text gives a better name than the sender line.** A name copied from the sender line is metadata, so it no longer waits for your review ([mail.md](./mail.md)).
+
+## 0.131.81 — 10.11.2026
+
+### Added
+
+- **`memo groups update <source> --scope personal|work` sets an account's scope**, which decides whether work views
+  and meeting preparation read it; what search copied of the old scope moves with it. `--chat <chat>` pins one chat
+  of the account instead, and `--scope account` takes the chat's own scope off. Only the owner runs it: a read-only
+  lock refuses it and an agent over MCP does not see it. `groups list` shows each account's `scope`
+  ([usage](./usage.md#groups-of-accounts)).
+- **`memo people resolve <id> company [organization]` says a match's shared mailbox is a company's.** The address goes to the
+  organization you name, else to the one that has the address or its company domain, else to a company of `--name`,
+  else to a new company named after the domain. The two people are not joined and are not suggested again on that
+  address. Only the owner answers it, as with `people confirm` and `people reject`
+  ([people.md](./people.md)).
+
+- **`memo people review --json` shows `shared` and `mailbox` on a match.** `shared` is `role` for an address such as
+  `info@` and `line` for a company's address; `mailbox` is that address. Both are `null` on other matches.
+
+### Changed — may break callers
+
+- **`memo people review` lists the highest score first.** Matches with no score and splits follow, newest first, as
+  before.
+
+## 0.131.80 — 10.11.2026
+
+### Added
+
+- **`relationships list --json` says what a document at either end is**: `from_document` / `to_document` with its
+  title, its folder path (`Clients/Acme/Contract`), the link that opens it (Drive's web link), when it last changed and
+  its type, so a review of a document's relationship needs no second lookup. `path` and `url` are `null` when the
+  source keeps no catalog entry for the document. Each row also says in `role_list` which role list its role comes
+  from (`null` where the role is free text).
+- **`relationships roles list` shows the `contract` and `related` lists**, and each built-in role's `labels` in
+  English, Russian and Spanish. `related` is offered for what a person or an organization is to another: `colleague`,
+  `adviser`, `investor`, `mentor`, `family`, `friend`; `relationships roles add related <role>` adds your own. Any
+  other word is still kept, marked `custom` (cli-core 0.634.0).
+- **`memo stats projects show` says how busy each project is, for all projects in one call**: the chats linked to it
+  or its child projects, how many are muted, messages and yours in the period (`--since-time 30d` by default, or
+  `all`), the newest message and the three busiest chats, busiest project first. A muted chat's messages are not
+  counted. `--limit`, `--page` and `--json`. It is a light read for a dashboard; `memo projects status <project>`
+  still says where one project stands.
+
+## 0.131.79 — 10.11.2026
+
+### Added
+
+- **`memo people links check` lists people that may be wrong**, you first: your own person holding an identity under
+  another name (a partner's mailbox, a spouse's messenger), test data, an identity joined by an address a person of
+  another name has, and one person with different names and nothing in common. Each says why, the evidence, and the
+  `unlink` or `unmerge` that would fix it. `--limit`, `--page` and `--json`. See [People](./people.md#people-that-look-wrong).
+- **An agent's `memo people unlink` and `memo people unmerge` propose instead of being refused.** They need
+  `--reason` and wait in `memo people review` (and `memo review`) as a split; only you carry one out. MCP now offers
+  both commands to agents, as proposals.
+- **`memo people confirm` and `memo people reject`** answer matches and splits by id or range, or `all` that
+  `people review` lists; `all` shows what it would do until `--yes`. Only you; MCP does not offer them.
+- `memo people review` lists splits beside matches, each row with its `kind`, and takes `--kind link|split|all`. A
+  split row names one `person`, never a `persons` pair.
+
+### Fixed
+
+- **`memo people show person:me` shows you**, instead of saying nobody matches.
+- **`memo people show` prints how, by whom and when each merge was made**, as its JSON already said.
+- **`memo stats tasks show` counts every stored account when you name none.** It used to stop with "give --source"
+  and a list of accounts. The answer now names the accounts it read in `accounts`, and each chat row keeps its own
+  account. `--source` narrows it to one account, and `--chat` still asks for `--source`, since a chat belongs to one
+  account.
+- **On `@wirecat/cli-core` 0.633.0.** Search takes `muted:true` and `muted:false`, for the chats you muted.
+
+## 0.131.78 — 10.11.2026
+
+### Added
+
+- **`people list` rows carry `username_source`**, the messenger the username belongs to, and each identity of
+  `people show` its `phone` and `email`.
+
+### Fixed
+
+- **The owner's partner, a spouse's account and a company's phone no longer end up on the owner's person.** cli-core
+  no longer merges anyone into you by a rule: an account you connect under another person's name waits in
+  `people review` with the signal `account`, and a shared phone or address with you is not offered at all. A shared
+  address such as `info@`, a company's phone and a bot's number join and propose no one. Undoing such a merge with `people unmerge` gives you your own name back.
+- **Telegram and WhatsApp contacts are `person` again.** Whoever wrote to you one to one, or in a group of at most 10,
+  has a tie. A CRM contact counts only through a deal or lead of yours; the rest of a CRM is `stranger`.
+- **Names are found in either script.** `people list name:Светлана` finds Svetlana, and `people check` puts a
+  transliterated name first as the same name.
+- **`sources suggest --provider=ai-model` names what is missing.** With no AI model chosen it answers the reason
+  `reader.ai-not-set`, and with no key `reader.no-key` (an `authentication_error`), where both answered
+  `config.invalid`.
+
+## 0.131.77 — 10.11.2026
+
+### Added
+
+- **`memo sources add` reads an image with your AI model.** After `memo models ai set <provider> --model <m>
+  --allow-remote`, a PNG, JPEG or WebP image up to 4 MB is sent to that model, and its text (or a short description when it
+  has little text) is kept and searchable. The answer's `image` says `read_by`, or why the image is kept by its name
+  only: `ai.not-set`, `ai.images-not-allowed`, `ai.key-missing`, `ai.owner-only` (an agent added it),
+  `ai.setting-invalid`, `image.unsupported` or `ai.failed`. The image leaves
+  this computer, except with Ollama. `memo models ai show|set|unset|remove|revoke|check` come from cli-core.
+
+- **`memo sources readers set ai-model` reads sources with the same AI model and key.** One key and one model now
+  serve images and facts: the reader uses what `memo models ai set` chose, and `leaves_computer` follows it (false for
+  Ollama on this computer), and `model` names the one it read with. It takes no `--model`. WireCat Desktop offers it
+  in «Чтение фактов» in place of its own key form.
+
+### Fixed
+
+- **`memo sources readers` works on a computer with no system keyring.** The reader keys fell back to nothing; they
+  now use the 0600 file that `memo models keys set` writes there.
+- cli-core 0.628.0.
+- **`memo commands --serve` answers two requests of one command at once each with its own options.** Every request
+  shared one program, and commander keeps parsed options on the command, so `people list kind:person --limit 1` and
+  `people list kind:organization --limit 2` sent together both answered organizations, two per page. WireCat Desktop's
+  People tabs showed pairs of equal counts. Each request now builds its own program.
+
+## 0.131.76 — 10.11.2026
+
+### Added
+
+- **`memories list`, `facts list`, `actions list` and `agents list` take `--page`.** They stopped at 500 rows, so
+  WireCat Desktop's Memory page could not show more of a kind. `--limit 500 --page 2` gives the next 500 in the same
+  order, newest first, each row once, and `page.next_page` says when there is one, as `relationships list` does. A
+  page at the 500 cap now says `has_more: false` when nothing follows, where it used to say `true`.
+
+- **cli-core 0.627.0: `memo models ai` and a command server that answers 8 requests at once.** `models ai
+  show|set|off|forget|check` picks the one AI model every WireCat tool uses. `memo commands --serve` now says
+  `"concurrent":8` and answers several requests from WireCat Desktop together, each with its own output and exit
+  code.
+- **`records import` and `records check` take a CSV sheet of one type** (`--type invoice`): `;` or `,`, a byte-order
+  mark, `10 000,50` and `09.11.2026` as Excel writes them in Russian or Spanish. Each refusal names the sheet's line
+  and column. **`records templates show <type>`** writes the header row to fill (`--locale ru` puts `;` between cells)
+  or an example envelope (`--format json`); **`records templates list`** lists the types and their columns. WireCat Desktop's Storage import uses both.
+- **`memo sources preview <url>`: a web page as `sources add` would read it, with nothing kept.** It answers the
+  title, site, description, the first lines of the text and its size, and refuses what `sources add` refuses. WireCat
+  Desktop shows it in "Add to memory" before you save ([Sources you add by hand](./sources.md#look-at-a-page-before-adding-it)).
+
+### Changed — may break callers
+
+- **memo is built on cli-core 0.625.0** (was 0.624.0): records templates and CSV sheets, and a `stranger` kind in
+  `people list` for a named person with no tie.
+
+### Fixed
+
+- **A failed `sync`, `doctor`, `digest run` or `digest backfill` under `commands --serve` keeps its exit code to
+  itself.** The server answers several requests at once, and these four wrote the one process exit code, so the code
+  went to whichever request ended next. They now set it for their own request.
+
+## 0.131.75 — 09.11.2026
+
+### Added
+
+- **Digests by name: `memo digest list|add|edit|run|pause|resume|remove`.** Each digest has a title, its times
+  (`--at 08:30 --at 18:00`, or `--at 'mon,fri 09:00'` on those days), the sources it reads (`--source telegram,mail`;
+  `all` reads everything), its routes (`--deliver-to telegram-bot:<profile>/<chat>`, `email:<profile>/<address>`;
+  `none` sends nowhere), its brief (`--text`) and its cost caps; `--paused` makes it off its timer. A daily digest reads a day, a weekly one the week, and
+  one that runs more than once a day reads since its previous time. `digest run` builds one now: along its routes,
+  only along the ones `--deliver-to` names, or with `--no-notify` nowhere. `digest list --json` gives each digest's
+  last and next run. The morning digest is listed first, and its schedule, brief and templates stay where they were.
+  Only the owner changes or runs a digest; each run is a paid model call.
+- `digest brief show|edit|reset`, `digest backfill` and `templates` take a digest's name (`report/<name>`); a
+  digest without its own template uses the morning digest's.
+- `review agenda --source <sources>` reads only the sources given; a digest's run reads the digest's own sources
+  without it.
+- **`memo people check <name...>`**: people whose names start like the typed words, in any order, the same name
+  first (`same_name`), so a form can show likely duplicates before adding a person.
+
+### Changed — may break callers
+
+- **`memo people list` lists one kind of person at a time**, people by default, the ones who write to you most first.
+  `kind:` is `person`, `organization`, `automated`, `unsorted` or `all`. A person is you, someone you added by hand or
+  assigned a task, or a named person with a tie to you: a one-to-one chat, a group of at most 10, mail you wrote, a
+  meeting, a CRM or your address book. Bots, newsletters and notifications are `automated`; companies (an
+  organization's account, `info@`, ООО, LLC, Airlines…) are `organization`; the rest, such as authors seen only in big
+  groups and accounts with no name, is `unsorted`. The answer's `next` step `people.kinds` says how many each other
+  kind holds. Each person now has `display_name` (no wrapping quotes; «Без имени» or a name with no letter shows the
+  username, phone or email; `name` stays as stored), `kind`, `kind_signals`, `contact`, `phone`, `email`, `username`,
+  `messages_from`, `last_contact` and `ties`. The list pages (`--page`) with an exact total, sorts by
+  `--sort interactions|recent|name|tasks` and searches by `name:<text>` (3 characters at least). Run
+  `<messenger> <profile> contacts sync` once per messenger account: until then nobody has the address-book tie.
+- **`memo search people`** lists people with a tie first; each hit has `ties`, empty for someone with none.
+
+## 0.131.74 — 09.11.2026
+
+### Added
+
+- **`memo search all --harder`: a hosted model reorders the first 30 results.** The model reads the question with the
+  results and puts the ones that answer it first. It is off until you allow it with
+  `memo models search-consents set <provider> --yes` (Anthropic, OpenAI or an OpenAI-compatible service such as
+  OpenRouter), and then only a search with `--harder` sends anything: the question and the first 30 results (date,
+  title, up to 400 characters each) go to that provider. A missing key, a wait of more than 5 seconds or any error
+  keeps the usual order and says why. On synthetic data it raised recall in the first ten from 0.79 to 0.88 (reworded
+  questions) and from 0.32 to 0.39 (LifeBench sample) over Memo's own search. With `--json`, `meta.ranking` gives the same as data: whether the
+  model's order was used, why not, the provider, model, endpoint, results sent, cost, tokens and time. See
+  [Search harder](./search.md#search-harder).
+
+### Changed — may break callers
+
+- **memo is built on cli-core 0.623.0** (was 0.620.0). Desktop's pages can keep one memo process running
+  (`commands --serve`) instead of starting memo for every call; `relationships list include:ended` answers in a
+  fraction of a second on a store with a busy person, not minutes; the store file's `-wal` is capped at 64 MiB.
+- **A Drive document's owner and last editor show once in `memo context`, under its files.** Google's own record
+  of who owns a document is a fact the source reports, not a suggestion waiting for review, so it would also have
+  appeared among the relationships.
+
+### Security
+
+- `search all` run by an agent from a shell leaves out the deals and leads memo's saved permissions deny (`deals`,
+  `deals.list`, `leads`, `leads.list`), as an MCP client's search and `deals context` already did, and its `issues`
+  say which key. Before, such a run still showed the titles of denied deals. The owner at a terminal still finds
+  everything.
+
+## 0.131.73 — 09.11.2026
+
+### Added
+
+- **`memo search all` finds meetings, from every meeting account, personal and work.** It reads each account's
+  search index and ranks meeting passages with messages, mail, notes, events, CRM and business data, at most 3 per
+  meeting. A transcript hit's `next` step is `memo meetings passage <cue_ref> --source <provider>:<account>`.
+  `missing` names an account whose index is not built yet, and `next` gives
+  `memo search meetings <query> --source <provider>:<account>`, which builds it. `missing` also names a meeting account
+  that could not be read. `--source zoom:work,notes` reads only the accounts it names; `--only` takes `meetings` too.
+  In a group, meetings come from the group's meeting accounts only. Unless the permissions let `search.meetings` and
+  `meetings.passage` go ahead (`allow` or `readonly`), meetings are left out and `missing` says so; `ask` leaves them
+  out too.
+
+### Changed — may break callers
+
+- **`memo digest backfill` takes `--since-time <date> --until-time <date>`, no longer `--from` and `--to`.** Across
+  WireCat CLIs `--to` names a recipient (a chat or an address), so the date range now uses the pair memo's other
+  commands already read. WireCat Desktop's Digests screen sends the new flags, and the old ones to an older memo.
 
 ## 0.131.72 — 09.11.2026
 

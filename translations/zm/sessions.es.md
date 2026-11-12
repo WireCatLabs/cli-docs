@@ -102,7 +102,7 @@ hacer falta un `--since-time` anterior explícito.
 
 ## Retirar el acceso
 
-No hay orden de cierre de sesión. Retira la autorización desde la gestión de apps de Zoom App Marketplace.
+`zm <profile> session end` elimina el inicio de sesión de Zoom guardado del perfil del llavero y del archivo privado. Las reuniones guardadas se quedan. Ni este comando ni `zm <profile> account remove` revocan el inicio de sesión en Zoom. Retira la autorización desde la gestión de apps de Zoom App Marketplace.
 Para borrar el token local, abre el almacén de contraseñas del sistema y elimina la entrada cuyo servicio es
 `zoom-cli:<configuration directory>` (por ejemplo `zoom-cli:/home/you/.config/zm`; `zm doctor --json` muestra
 el directorio) y cuya cuenta es `<Public Client ID>:<profile>`.

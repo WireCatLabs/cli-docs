@@ -97,7 +97,8 @@ memo sync
 | `reader.model-missing` | У Ollama или читателя API нет модели, или у Ollama ее нет | `memo sources readers set <reader> --model <model>`, для Ollama еще `ollama pull <model>` |
 | `reader.unavailable` | Claude Code или Codex не установлен | Установите его или выберите другого читателя |
 | `reader.failed` | Читатель не сработал. Нет входа, старая версия, ключ отклонен или на счете нет денег | `memo sources readers list` называет проблему. Войдите, обновите или выполните `memo models keys set <provider>` |
-| `reader.no-key` | Для читателя API нет ключа | `memo models keys set <provider>` |
+| `reader.no-key` | Для читателя API или для модели ИИ, через которую читает `ai-model`, нет ключа | `memo models keys set <provider>`, а для `ai-model` `memo models ai set <provider> --model <m> --secret-stdin` |
+| `reader.ai-not-set` | Выбран `ai-model`, но модель ИИ не выбрана | `memo models ai set <provider> --model <m>` |
 | `reader.not-running` | Ollama не запущен на этом компьютере | `ollama serve`, затем попробуйте снова |
 | `reader.limit` | Достигнут лимит провайдера | Попробуйте позже |
 | `reader.timeout` | Читатель не ответил за 10 минут | Попробуйте снова или добавьте часть источника поменьше |
