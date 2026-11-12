@@ -70,6 +70,9 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Scheduled local prompt for a task | reminder | напоминание | recordatorio | Kept on the computer and handed to a program that asks for it; never sent to a messenger or mailbox. |
 | Company, team, family or community | organization | организация | organización | The owner's record, not tied to one messenger account. |
 | Stated tie between records | relationship | связь | relación | A person belongs to or relates to an organization or project. It never joins two accounts into one person. |
+| Company phone exchange | phone system; PBX where the reader needs the term | телефония; АТС | centralita | The system a company's numbers run through, in the cloud or in the office. Name the product (Beeline Cloud PBX, Asterisk) when the behavior is particular to it. |
+| A recorded phone call | call | звонок | llamada | One call the phone system recorded. A tool keeps it as a meeting with two people, the manager and the client. Not a Zoom meeting. |
+| Speech of a call or meeting as text | transcript | расшифровка | transcripción | The text made from a recording, line by line with the speaker. On the phone call pages, made on the reader's computer. |
 | Owner's own stage list for deals or leads | base stage | базовая стадия | etapa base | One list for deals and one for leads, the columns of a board across every pipeline and CRM. Another pipeline's stage (стадия, etapa) is mapped onto a base stage; a pipeline is воронка / embudo, as on the b24 pages. |
 | Version number of a note | revision | ревизия | revisión | Increases with each edit; an edit names the current revision so a newer change is not lost. |
 | The one import format | records envelope | конверт записей | sobre de registros | The JSON format (`schema_version: 1`, JSON or JSONL) every import into the local store uses. Developer pages only. |

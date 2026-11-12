@@ -5,6 +5,7 @@
   "globs": [
     "content/docs/*.{md,mdx}",
     "content/docs/desktop/*.{md,mdx}",
+    "content/docs/voip/*.{md,mdx}",
     "content/blog/**/*.md",
     "docs/AUTHORING.md",
     "docs/README.md",

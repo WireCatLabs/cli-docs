@@ -1,0 +1,60 @@
+---
+title: Llamadas
+description: "Las llamadas grabadas de la centralita de tu empresa como texto en tu ordenador: un diálogo entre el gestor y el cliente, con búsqueda sin conexión y acceso para tu agente de IA dentro de los límites que tú pones."
+---
+
+Tus gestores hablan con los clientes por teléfono, y la centralita de la empresa graba las llamadas. WireCat convierte
+esas grabaciones en texto en tu ordenador, así tú o tu agente de IA encontráis lo que pidió un cliente o lo que
+prometió un gestor sin volver a escuchar las llamadas. Aquí ves cómo funciona, qué centralitas admite hoy y por dónde
+empezar. Una centralita (PBX) es el sistema por el que pasan los números de la empresa, en la nube o en la oficina.
+
+**En esta página:** [Cómo funciona](#cómo-funciona) · [Centralitas](#centralitas) ·
+[Qué se queda en tu ordenador](#qué-se-queda-en-tu-ordenador)
+
+## Cómo funciona
+
+Cada centralita tiene su propia herramienta de línea de comandos, un programa que tú o tu agente ejecutáis en una
+terminal. Los pasos son los mismos para todas las centralitas.
+
+1. **Copia la lista de llamadas.** La herramienta copia las llamadas grabadas en el almacén local, un archivo en tu
+   ordenador que comparten todas las herramientas de WireCat. Cada llamada guarda su hora, dirección y duración, el
+   gestor y el cliente.
+2. **Pasa la voz a texto en tu ordenador.** La herramienta descarga cada grabación y la transcribe con un modelo de
+   reconocimiento de voz que funciona en tu ordenador. La transcripción es un diálogo, las frases del gestor y del
+   cliente en el orden en que se dijeron. La grabación no va a ningún servicio de reconocimiento de voz.
+3. **Busca sin conexión.** Después de copiar, la lista, la lectura, la búsqueda y la exportación responden desde el
+   almacén local. `search all` en cualquier herramienta de WireCat encuentra las llamadas junto a tus chats, tu correo
+   y tus reuniones.
+4. **Deja que tu agente de IA trabaje con las llamadas.** Un agente con terminal, como Claude Code, Codex o Gemini
+   CLI, ejecuta la herramienta por sí mismo. Una aplicación sin terminal, como Claude Desktop o Cursor, se conecta a
+   ella por MCP, una forma estándar de que una aplicación de IA use herramientas de tu ordenador. Los permisos deciden
+   qué puede ejecutar el agente. El texto de una llamada le llega al agente como datos, nunca como instrucciones.
+
+Una petición a tu agente puede ser así de sencilla:
+
+```text prompt
+Usa beeline CLI. ¿Qué llamadas de ayer duraron más de cinco minutos? Dime qué pidió cada cliente y enséñame las llamadas.
+```
+
+## Centralitas
+
+| Centralita | Estado | Guía |
+|---|---|---|
+| Beeline Cloud PBX (Облачная АТС Билайн) | Disponible | [Beeline Cloud PBX](./beeline.mdx), en ruso |
+| Asterisk | Próximamente | Sin fecha todavía |
+
+La guía de Beeline es un ejemplo real de todo el recorrido, desde la primera copia de llamadas hasta la respuesta del
+agente. Asterisk tendrá los mismos pasos. Si tu empresa usa otra centralita, cuéntanoslo en el
+[Discord de WireCat](https://discord.gg/DebENqbRrJ). Con estas peticiones decidimos qué viene después.
+
+## Qué se queda en tu ordenador
+
+Así funciona hoy la herramienta de Beeline.
+
+- Solo lee de la centralita. Nunca borra una grabación ni hace una llamada.
+- Las transcripciones y la lista de llamadas se quedan en el almacén local de tu ordenador.
+- La grabación está en memoria mientras se transcribe. No se guarda en el disco.
+- El almacén guarda el teléfono del cliente y el nombre del gestor. Trátalo como tratas las propias llamadas.
+
+Empieza por la [guía de Beeline Cloud PBX](./beeline.mdx). Cómo guarda WireCat los datos y los permisos en todas las
+herramientas está en la [página de seguridad](../security.mdx).

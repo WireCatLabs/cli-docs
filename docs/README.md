@@ -54,6 +54,8 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I check questions and activity in my group? | `group-analytics.mdx` (Group admins) | Task guide | Start with a request and sources; inspect coverage before changes |
 | How do I get a full report on a Telegram channel? | `group-analytics.mdx` | Task guide | Recipe with an example report; privacy of readers before publishing |
 | What does a channel report look like? | `group-analytics.mdx` (Example channel report) | Example | The full example report, rendered inside the docs layout; readers counted, never named |
+| What can WireCat do with my company's phone calls? | `voip/index.mdx` (Phone calls) | Explanation and provider hub | Keep the provider table to what ships; no dates or features for a provider that is coming |
+| How do I set up Beeline Cloud PBX? | `voip/beeline.mdx` | Task guide, in Russian only (`contentLanguage: "ru"`, no `.ru`/`.es` files: every locale shows it with a note) | Check facts against the beeline-cli repository; add a translation only if the owner asks |
 | How do I save or override settings? | `configuration.mdx` | Configuration guide | Explain when settings matter and how to verify the effective value |
 | What may the agent change? | `configuration.mdx` (Permissions) | Access guide | Distinguish terminal confirmation, MCP permissions and app approval |
 | Which account or bot will run the task? | `configuration.mdx` (Profiles and bots) | Account selection | Explain named profiles before configuration syntax |
