@@ -16,6 +16,16 @@ import { ShareLinks } from "./blog-share"
 import { BlogToc } from "./blog-toc"
 import { FollowLinks, NewsletterBlock } from "./blog-widgets"
 
+function Table({ lang, ...props }: ComponentProps<"table"> & { lang: string }) {
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: A named group keeps tables out of landmark navigation.
+    // biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard focus lets a reader scroll a wide table.
+    <div className="blog-table" role="group" tabIndex={0} aria-label={blogWords(lang).table}>
+      <table {...props} />
+    </div>
+  )
+}
+
 function Figure({ src, alt, title, width, height }: ComponentProps<"img">) {
   const image = src as unknown as string | { src: string; width: number; height: number }
   const file = typeof image === "string" ? { src: image, width, height } : image
@@ -127,7 +137,7 @@ export function BlogPostPage({ lang, post }: { lang: string; post: BlogPost }) {
         </figure>
       )}
       <article className="blog-prose" lang={lang}>
-        <Body components={{ pre: BlogCode, img: Figure }} />
+        <Body components={{ pre: BlogCode, img: Figure, table: (props) => <Table lang={lang} {...props} /> }} />
       </article>
       <footer className="blog-post-end">
         <div className="blog-share-row">
