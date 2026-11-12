@@ -37,6 +37,7 @@ const docsScreens = [
   "storage",
   "settings",
   "contacts",
+  "contacts-matches",
   "clients",
   "digests",
   "memory-add",

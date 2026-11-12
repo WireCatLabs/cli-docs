@@ -102,9 +102,31 @@ The ways in, by tool:
 | Zoom | Your browser. The first time, a checklist walks you through making your own Zoom app |
 | Google Drive, Google Calendar | Your browser |
 | Email | Your mail address first. Gmail signs in with Google (**Sign in with Google**, recommended), with no Google Cloud setup of your own. A Microsoft account opens Microsoft's sign-in. Other mail servers, and Gmail under **Other ways**, use an app password, a password made only for this program, with guided steps. [Prepare the mailbox](../mail/providers.md) shows how each provider makes one |
-| Bitrix24 | A webhook address from your portal |
+| Bitrix24 | An incoming webhook or a local application from your portal. See [Bitrix24: a webhook or a local application](#bitrix24-a-webhook-or-a-local-application) |
 
 Where a tool has no sign-in window, **Open terminal** opens a terminal that runs the tool's own setup.
+
+### Bitrix24: a webhook or a local application
+
+Bitrix24 asks for your portal's address first, such as `mycompany.bitrix24.ru`. Then, under **How to sign in**, choose
+one of two ways:
+
+- **Incoming webhook** is the quickest. It acts with the rights of the employee who makes it in Bitrix24.
+- **Local application** acts with the rights of the employee who signs in, and its sign-in renews by itself. Choose
+  it when each employee should sign in as themselves.
+
+To sign in with a local application:
+
+1. Choose **Local application**. The window lists what to do in Bitrix24, with the handler address and the three
+   permissions to copy. You make the application once, under Developer resources, then Other, then Local
+   application. [With a local application](../b24/usage.md#with-a-local-application) has the Bitrix24 steps in full.
+2. Paste the **Application ID (client_id)** and the **Application key (client_secret)** that Bitrix24 shows.
+3. Click **Sign in in the browser**. The portal's sign-in opens in the browser. Allow the application, and the
+   browser hands the sign-in back to WireCat.
+
+The key stays on this computer, in the system keyring. Signing in this way replaces the profile's webhook, and a new
+webhook replaces the application's sign-in. If the browser does not come back to WireCat, click **Sign in again**.
+Some Bitrix24 plans give applications no access: the window then says so, and the incoming webhook still works.
 
 ## What you can do in the app
 
@@ -182,8 +204,8 @@ such as Zoom, is left out of the check.
 
 **Remove account** in an account's menu removes one account and keeps the tool. Choose **Remove, keep its data
 (search still finds it)** or **Remove and delete its data**. The dialog then lists what goes and what stays, and
-nothing happens until you confirm. **Keep the account** cancels. This works for MAX, WhatsApp, Email, Google Drive,
-Zoom and Google Calendar. A Telegram account is only signed out for now.
+nothing happens until you confirm. **Keep the account** cancels. This works for every tool
+with accounts: Telegram, MAX, WhatsApp, Email, Google Drive, Zoom, Google Calendar and Bitrix24.
 
 <DesktopShot
   shot="connect"

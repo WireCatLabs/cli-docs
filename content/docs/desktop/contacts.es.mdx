@@ -1,7 +1,7 @@
 ---
 title: Contactos en WireCat Desktop
 sidebarTitle: "Contactos"
-description: Ve quién es quién en Telegram, MAX, WhatsApp, el correo, las reuniones y Bitrix24, une las cuentas de una persona, deshaz una unión equivocada y responde a las dudas de tus agentes.
+description: Ve quién es quién en Telegram, MAX, WhatsApp, el correo, las reuniones y Bitrix24, une las cuentas de una persona, deja que tu agente ordene las coincidencias, deshaz una unión equivocada y responde a las dudas de tus agentes.
 ---
 
 La misma persona a menudo te escribe por Telegram, WhatsApp y correo, y además está en tu CRM. La página **Contactos**
@@ -23,7 +23,7 @@ las reglas.
   shot="contacts"
   folder="desktop/docs"
   lang="es"
-  alt="La página Contactos: coincidencias que te esperan, pestañas por tipo con sus recuentos y una tabla de personas con sus contactos y recuentos de mensajes"
+  alt="La página Contactos: coincidencias que te esperan, con botones para pasarlas a tu agente, pestañas por tipo con sus recuentos y una tabla de personas con sus contactos y recuentos de mensajes"
   caption="Contactos: una fila por persona, con las coincidencias que te esperan arriba."
 />
 
@@ -62,23 +62,54 @@ Pulsa un nombre para abrir la ficha de la persona:
 ## Revisar coincidencias
 
 Cuando WireCat encuentra personas que pueden ser la misma, una franja arriba dice cuántas coincidencias te esperan.
-Pulsa **Revisar coincidencias**. La pantalla **Posibles duplicados** muestra una tarjeta por grupo:
+Tiene tres botones. **Copiar el prompt para un agente** y **Ejecutar en un terminal** pasan las coincidencias a tu
+agente: mira [Deja que tu agente ordene las coincidencias](#deja-que-tu-agente-ordene-las-coincidencias).
+**Revisar coincidencias** abre la pantalla **Posibles duplicados**, con una tarjeta por grupo:
 
 - La tarjeta lista lo que coincidió, con el valor: el nombre, la empresa, el dominio, el teléfono o el correo. Un
   número de teléfono que ninguna cuenta muestra dice «número oculto: las cuentas guardan solo su huella».
 - **Misma persona** las une. Marca antes algunas para unir solo esas.
 - **No es la misma** pregunta por qué, y luego **Mantener separadas**. WireCat deja de sugerir esta coincidencia.
+- **Una empresa** sirve para dos contactos que son buzones de una misma empresa, como `sales@` y `support@`. Sus
+  direcciones pasan a la empresa, y ellos salen de tus contactos. La tarjeta dice qué direcciones pasaron a qué
+  empresa. Si Memo no sabe qué empresa es, la tarjeta pregunta su nombre o cuál es. Ninguno de los dos puede ser tú.
 - **Detalles** abre **Detalles de la coincidencia**: las personas una junto a otra, con de dónde viene cada una, su
   teléfono, correo y servicios de mensajería, empresa, negocios, tareas y últimos mensajes. **Unir** junta dos, y
   **Unir a los** con el número junta a todas.
 
-**Todos los contactos** vuelve a la lista.
+<DesktopShot
+  shot="contacts-matches"
+  folder="desktop/docs"
+  lang="es"
+  alt="Posibles duplicados: dos tarjetas de coincidencias, cada una con Detalles, Misma persona, No es la misma y Una empresa"
+  caption="Cada coincidencia es una tarjeta: una persona, personas distintas o una empresa."
+/>
+
+Cuando decides, la tarjeta se queda en su sitio de la lista y dice qué pasó. **Todos los contactos** vuelve a la
+lista.
+
+### Deja que tu agente ordene las coincidencias
+
+Con muchas coincidencias, tu agente de IA puede hacer la primera pasada. Lee cada coincidencia, mira a las dos
+personas y sus mensajes, y la pone en uno de cuatro grupos: una persona, personas distintas, una empresa o no seguro.
+No decide la coincidencia él mismo, porque Memo solo te deja decidir a ti. Trata el texto de tus mensajes como datos y
+no sigue ninguna instrucción que haya en él.
+
+- **Copiar el prompt para un agente** copia la petición. Pégala en el chat con el agente.
+- **Ejecutar en un terminal** abre tu agente en una terminal con esa petición. La flecha de al lado elige otro agente.
+
+Al final el agente te da como mucho tres comandos para ejecutar tú: uno para las coincidencias que son una persona,
+uno para las personas distintas y uno para las empresas. Después lista las coincidencias de las que no está seguro,
+cada una con un breve por qué. Lee los comandos, ejecútalos en una terminal y decide las dudosas en las tarjetas. Cada
+vez ordena hasta 100 coincidencias. Ejecútalo de nuevo para el resto.
 
 ### Buzones compartidos
 
 Varias personas pueden escribir desde una dirección, como `info@` o `sales@` de una empresa. Esa tarjeta lleva la
 marca **buzón compartido**. **Buzón de la empresa** da la dirección a una empresa, que eliges o escribes. Después
-WireCat deja de sugerir unir a las personas que escriben desde ella.
+WireCat deja de sugerir unir a las personas que escriben desde ella. No es lo mismo que **Una empresa**: un buzón
+compartido es una dirección desde la que escriben varias personas, y **Una empresa** es para dos contactos que son
+buzones propios de la empresa.
 
 Dos personas con el mismo nombre también pueden compartir el dominio de una empresa. **Dirección de la empresa** en esa
 tarjeta pregunta cuál de sus direcciones es de la empresa. La dirección pasa a la empresa, y las dos personas siguen
@@ -94,6 +125,10 @@ juntas; el agente lee tu respuesta.
 distintos. Cada persona es una tarjeta con **Abrir**, **Separar** y **El vínculo es correcto**. Cuando todo en una
 tarjeta está bien, **El vínculo es correcto** lo deja resuelto, y la persona no vuelve a aparecer. **Ocultar** pliega
 la lista.
+
+También puede aparecer tu propia ficha, cuando una de tus cuentas tiene otro nombre, por ejemplo tu bot o un buzón
+compartido. Suele estar bien. **El vínculo es correcto** la deja como tuya: sus mensajes cuentan como tuyos en la
+búsqueda y los resúmenes, y no se vuelve a preguntar. **Separar** la convierte en un contacto propio.
 
 ## Siguiente paso
 

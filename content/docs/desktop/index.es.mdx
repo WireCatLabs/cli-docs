@@ -112,10 +112,34 @@ Cómo entra cada herramienta:
 | Zoom | Tu navegador. La primera vez, una lista de pasos te guía para crear tu propia app de Zoom |
 | Google Drive, Google Calendar | Tu navegador |
 | Correo | Primero tu dirección de correo. Gmail entra con Google (**Entrar con Google**, recomendado), sin configurar nada tuyo en Google Cloud. Una cuenta de Microsoft abre el inicio de sesión de Microsoft. Otros servidores de correo, y Gmail en **Otras formas**, usan una contraseña de aplicación, una contraseña creada solo para este programa, con pasos guiados. [Preparar el buzón](../mail/providers.md) muestra cómo la crea cada proveedor |
-| Bitrix24 | Una dirección de webhook de tu portal |
+| Bitrix24 | Un webhook entrante o una aplicación local de tu portal. Mira [Bitrix24: un webhook o una aplicación local](#bitrix24-un-webhook-o-una-aplicación-local) |
 
 Si una herramienta no tiene ventana de inicio de sesión, **Abrir terminal** abre una terminal que ejecuta la
 configuración propia de la herramienta.
+
+### Bitrix24: un webhook o una aplicación local
+
+Bitrix24 pide primero la dirección de tu portal, como `mycompany.bitrix24.es`. Después, en **Cómo iniciar sesión**,
+elige una de dos formas:
+
+- **Webhook entrante** es lo más rápido. Actúa con los permisos del empleado que lo crea en Bitrix24.
+- **Aplicación local** actúa con los permisos del empleado que inicia sesión, y su sesión se renueva sola. Elígela
+  cuando cada empleado deba entrar como sí mismo.
+
+Para iniciar sesión con una aplicación local:
+
+1. Elige **Aplicación local**. La ventana lista qué hacer en Bitrix24, con la dirección del controlador y los tres
+   permisos para copiar. La aplicación se crea una sola vez, en Recursos para desarrolladores, luego Otro, luego
+   Aplicación local. [Con una aplicación local](../b24/usage.md#con-una-aplicación-local) tiene los pasos de Bitrix24
+   completos.
+2. Pega el **ID de la aplicación (client_id)** y la **Clave de la aplicación (client_secret)** que muestra Bitrix24.
+3. Pulsa **Iniciar sesión en el navegador**. El inicio de sesión del portal se abre en el navegador. Permite la
+   aplicación y el navegador devuelve la sesión a WireCat.
+
+La clave se queda en este ordenador, en el llavero del sistema. Entrar así sustituye el webhook del perfil, y un
+webhook nuevo sustituye la sesión de la aplicación. Si el navegador no vuelve a WireCat, pulsa **Iniciar sesión de
+nuevo**. Algunos planes de Bitrix24 no dan acceso a aplicaciones: la ventana lo dice, y el webhook entrante sigue
+funcionando.
 
 ## Qué puedes hacer en la aplicación
 
@@ -199,8 +223,8 @@ formato lee, como Zoom, queda fuera de la comprobación.
 
 **Quitar cuenta**, en el menú de una cuenta, quita una cuenta y conserva la herramienta. Elige **Quitar y conservar
 sus datos (la búsqueda los sigue encontrando)** o **Quitar y borrar sus datos**. Después el diálogo lista qué se va y
-qué se queda, y no pasa nada hasta que confirmas. **Conservar la cuenta** cancela. Funciona para MAX, WhatsApp, Email,
-Google Drive, Zoom y Google Calendar. Una cuenta de Telegram, por ahora, solo cierra la sesión.
+qué se queda, y no pasa nada hasta que confirmas. **Conservar la cuenta** cancela. Funciona para toda herramienta con
+cuentas: Telegram, MAX, WhatsApp, Email, Google Drive, Zoom, Google Calendar y Bitrix24.
 
 <DesktopShot
   shot="connect"
