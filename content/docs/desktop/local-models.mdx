@@ -100,8 +100,8 @@ Both helpers are off by default. They are in Memo's details: on the Tools page, 
 
 **Search harder** reorders the top results of one search when you press the button. Click **Allow**, choose
 **OpenAI**, type your local model's name in **Model**, and enter `http://127.0.0.1:11434/v1` in **Address of another
-OpenAI-compatible service**. Then agree with the button that names the provider. It waits only 5 seconds for an answer, so a model that runs without a graphics card will likely
-run out of time, and the search keeps its own order.
+OpenAI-compatible service**. Then agree with the button that names the provider. It waits up to 60 seconds for a model on this computer and 5 seconds for a hosted one. A model that runs without a
+graphics card may still run out of time, and then the search keeps its own order.
 
 **Rewrite records for better search** adds other words to your notes, documents and emails. Click **Turn on** and
 choose **Another model at an address**. Type the model's name as your server names it, for example `llama3.1:8b`, and
@@ -182,6 +182,7 @@ the mail agent off, or check where your agent's model runs before you turn them 
 When the steps above are done, open **Settings**, **Only this computer**, and turn on **Keep every model call on this
 computer**. Then every WireCat tool sends text only to a model on this computer, and refuses a model on another
 computer before anything is sent. An agent may turn it on, but only you can turn it off.
+Today memo and max follow it. tg, whatsapp, mail and zoom follow it from their next versions.
 
 Under the switch, **Where each feature sends data now** lists each feature with **This computer**, **Another
 computer**, **Through your agent** or **Off**. Fix each row that says **Another computer**. What runs **Through your
@@ -196,8 +197,8 @@ provider. Only this computer does not stop it. Leave it at **Never** if no pictu
 1. Ollama or another model server runs on this computer, and Ollama's cloud models are off.
 2. **Settings**, **AI model** is Ollama or an address on this computer.
 3. **Reading for facts** uses the AI model or Ollama.
-4. **Search harder** is off, or points at your local server. **Rewrite records for better search** is off, or set from
-   a terminal to your local server.
+4. **Search harder** is off, or points at your local server. **Rewrite records for better search** is off, or points at your
+   local server.
 5. Voice messages are transcribed with `--local`.
 6. Your agent runs on a local model, or you connect no agent.
 7. Digests and the mail agent are off, or their agent runs a model on this computer.

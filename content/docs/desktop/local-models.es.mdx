@@ -107,9 +107,9 @@ Las dos ayudas están apagadas por defecto. Están en los detalles de Memo: en l
 
 **Buscar a fondo** reordena los primeros resultados de una búsqueda cuando pulsas el botón. Pulsa **Permitir**, elige
 **OpenAI**, escribe el nombre de tu modelo local en **Modelo** y pon `http://127.0.0.1:11434/v1` en **Dirección de otro
-servicio compatible con OpenAI**. Después acepta con el botón que nombra el proveedor. Espera la respuesta solo 5
-segundos, así que un modelo sin tarjeta gráfica probablemente se quedará sin tiempo, y la búsqueda mantendrá su propio
-orden.
+servicio compatible con OpenAI**. Después acepta con el botón que nombra el proveedor. Espera hasta 60
+segundos a un modelo en este ordenador y 5 a uno en la nube. Un modelo sin tarjeta gráfica puede quedarse sin tiempo
+igualmente, y entonces la búsqueda mantiene su propio orden.
 
 **Reescribir registros para buscar mejor** añade otras palabras a tus notas, documentos y correos. Pulsa **Activar** y
 elige **Otro modelo en una dirección**. Escribe el nombre del modelo como lo nombra tu servidor, por ejemplo
@@ -194,6 +194,7 @@ antes de activarlos.
 Cuando termines los pasos de arriba, abre **Ajustes**, **Solo este ordenador**, y activa **Todas las llamadas a
 modelos en este ordenador**. Así cada herramienta de WireCat envía texto solo a un modelo en este ordenador, y rechaza
 un modelo en otro ordenador antes de enviar nada. Un agente puede activarlo, pero solo tú puedes desactivarlo.
+Hoy lo siguen memo y max. tg, whatsapp, el correo y zoom lo seguirán desde sus próximas versiones.
 
 Bajo el interruptor, **Adónde envía datos cada función ahora** lista cada función con **Este ordenador**, **Otro
 ordenador**, **A través de tu agente** o **Desactivado**. Arregla cada fila que dice **Otro ordenador**. Lo que va **A
@@ -209,7 +210,7 @@ Solo este ordenador no lo impide. Déjalo en **Nunca** si ninguna imagen debe sa
 2. **Ajustes**, **Modelo de IA** es Ollama o una dirección en este ordenador.
 3. **Lectura de hechos** usa el modelo de IA u Ollama.
 4. **Buscar a fondo** está apagado o apunta a tu servidor local. **Reescribir registros para buscar mejor** está
-   apagado o configurado desde una terminal con tu servidor local.
+   apagado o apunta a tu servidor local.
 5. Los mensajes de voz se transcriben con `--local`.
 6. Tu agente usa un modelo local, o no conectas ningún agente.
 7. Los resúmenes y el agente de correo están apagados, o su agente usa un modelo en este ordenador.
