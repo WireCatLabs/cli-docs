@@ -5,9 +5,9 @@
     "initials": "VP",
     "avatar": "/author-viacheslav-ptsarev.jpg",
     "role": {
-      "en": "Software engineer, AI enthusiast",
-      "ru": "Разработчик, энтузиаст ИИ",
-      "es": "Ingeniero de software, entusiasta de la IA"
+      "en": "AI Engineer, WireCat author",
+      "ru": "AI Engineer, WireCat author",
+      "es": "AI Engineer, WireCat author"
     },
     "bio": {
       "en": "Helps startups automate workflows and improve conversion rates. Builds bots and knowledge graphs — and WireCat, the open-source tools that give AI agents your messages, mail and notes.",
