@@ -3,6 +3,8 @@ title: "WireCat Desktop 0.6: añade cualquier herramienta, deja tu modelo de IA 
 description: Ahora cualquiera puede crear una herramienta para WireCat y añadirla a la app, con una revisión antes de instalarla. Puedes elegir un modelo de IA que funciona en tu propio ordenador. También puedes ver a todas las personas con las que hablas en una lista, mover negociaciones del CRM en un tablero, recibir un resumen cada mañana y decidir qué recuerdan tus agentes con la fuente delante.
 date: 2026-11-12
 tags: [release-notes]
+cover: ./cover.es.jpg
+coverAlt: "WireCat Desktop 0.6 junto a la página Contactos en modo oscuro. Un panel dice 6 coincidencias te esperan, con el botón Revisar coincidencias, y debajo están Añadir una persona y las pestañas Personas, Empresas, Boletines y avisos, Desconocidos y Sin clasificar."
 author: viacheslav-ptsarev
 draft: false
 ---

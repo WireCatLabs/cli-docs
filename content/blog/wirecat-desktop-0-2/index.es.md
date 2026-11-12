@@ -3,6 +3,8 @@ title: "WireCat Desktop 0.2: mira lo que recuerda tu agente"
 description: La app de escritorio ya tiene Búsqueda, Memoria, Tareas y Guías, así que puedes ver lo que guardaron tus herramientas y tus agentes sin abrir una terminal.
 date: 2026-11-01
 tags: [ai-agents, release-notes]
+cover: ./cover.es.jpg
+coverAlt: "WireCat Desktop 0.2 junto a la página Memoria en modo oscuro. La pestaña Revisar muestra lo que guardaron los agentes, agrupado por proyecto y persona, como una decisión sobre Northbridge Bench y que Kai Sato prefiere las llamadas los viernes por la tarde, cada una con los botones Rechazar y Aprobar."
 author: viacheslav-ptsarev
 draft: false
 ---

@@ -3,6 +3,8 @@ title: "WireCat Desktop 0.2: see what your agent remembers"
 description: The desktop app now has Search, Memory, Tasks and Guides pages, so you can look at what your tools stored and what your agents saved without opening a terminal.
 date: 2026-11-01
 tags: [ai-agents, release-notes]
+cover: ./cover.jpg
+coverAlt: "WireCat Desktop 0.2 next to the Memory page in dark mode. The Review tab lists what agents saved, grouped by project and person, such as a decision about Northbridge Bench and Kai Sato's preference for calls on Friday afternoons, each with Reject and Approve buttons."
 author: viacheslav-ptsarev
 draft: false
 ---

@@ -3,6 +3,8 @@ title: "WireCat Desktop 0.4: see what you keep, and change your mind"
 description: A new Analytics page shows what WireCat keeps and how you use it. Approved memories can be edited or taken back, installs show real progress, and settings repairs never leave your computer.
 date: 2026-11-04
 tags: [release-notes, ai-agents, security]
+cover: ./cover.jpg
+coverAlt: "WireCat Desktop 0.4 next to four tiles from the Analytics page in dark mode: 544 messages received, 5% more than the same days last week, an emails received count that stays empty until a Memo update, 2.4 meeting hours, and tasks made and closed."
 author: viacheslav-ptsarev
 draft: false
 ---

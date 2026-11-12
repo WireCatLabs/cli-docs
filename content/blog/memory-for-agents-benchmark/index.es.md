@@ -3,6 +3,8 @@ title: Comparé memorias para agentes de IA y los archivos normales no lo hicier
 description: "Motores de memoria de terceros, WireCat Memo y una simple carpeta con archivos sobre las mismas preguntas. Qué responde el agente, qué registro cita y cuánto cuesta, más el LifeBench público."
 date: 2026-11-12
 tags: [ai-agents, benchmarks, search]
+cover: ./cover.jpg
+coverAlt: "Cinco formas de guardar registros sobre una mesa oscura: un fichero de madera, una caja gris sellada, un corcho con hilo rojo, una libreta negra y una carpeta de cartón sencilla en el centro. Delante de cada una hay un montón de tarjetas de preguntas con una marca verde, y los montones más altos son los de la carpeta y el fichero."
 author: viacheslav-ptsarev
 draft: false
 ---
@@ -30,9 +32,9 @@ En mi conjunto el agente funciona con Claude Sonnet 5.5 en todas las ejecuciones
 
 Empecé con un conjunto pequeño, 2.000 registros sobre 10 proyectos: mensajes, correos, notas, etc. Casi todo es ruido, y cada proyecto tiene unos pocos registros importantes, por ejemplo una fecha de entrega fijada en un chat y luego movida por correo. 50 preguntas, 5 por proyecto, y 10 de ellas sobre un presupuesto que no está en los registros, donde la respuesta correcta es "desconocido". Un script comprueba las respuestas con una clave, sin juez de IA.
 
-Enseguida resultó que, para una pregunta escrita como una frase normal, la búsqueda por palabras de Memo no encontraba nada, 50 resultados vacíos de 50. Quería que todas las palabras de la pregunta estuvieran en un mismo registro, y claro, no hay ningún registro con "what", "is", "current" y el nombre del proyecto a la vez. Con la búsqueda por significado, el registro correcto entraba en el top 10 solo en el 30% de las preguntas. Además, correo y notas salían por turnos, y la búsqueda por significado nunca devolvió un correo. OpenClaw, Supermemory y Mem0 manejaban las mismas preguntas sin problema.
+Primero probé solo la búsqueda, sin agente, mandando cada pregunta tal cual, como la escribiría una persona. Así funcionan los otros motores, pero la búsqueda por palabras de Memo no encontró nada, 50 resultados vacíos de 50. Era un bug nuestro - quería que todas las palabras de la pregunta estuvieran en un mismo registro, y claro, no hay ningún registro con "what", "is", "current" y el nombre del proyecto a la vez. Con la búsqueda por significado, el registro correcto entraba en el top 10 solo en el 30% de las preguntas. Además, correo y notas salían por turnos, y la búsqueda por significado nunca devolvió un correo. OpenClaw, Supermemory y Mem0 manejaban las mismas preguntas sin problema.
 
-Aun así, el agente con Memo respondió 50 de 50, porque Sonnet reescribía la pregunta en palabras clave él mismo. O sea, con 2.000 registros cortos un modelo fuerte lo saca todo sin nosotros, y con WireCat costaba unas 1.8 veces más que con archivos.
+Aun así, el agente con Memo respondió 50 de 50, porque el skill de memo le decía que buscara con un par de palabras clave, y Sonnet reescribía la pregunta él mismo. O sea, con 2.000 registros cortos un modelo fuerte lo saca todo sin nosotros. Y con WireCat costaba unas 1.8 veces más que con archivos, porque antes de cada pregunta el agente leía entera la instrucción de memo, y las respuestas de memo también eran largas.
 
 Arreglé la búsqueda (la pregunta tal cual, una lista común para todas las fuentes, el correo por significado), pero el coste no bajó, incluso subió. Lo gracioso es que la mayor parte del dinero no se iba en la búsqueda sino en las instrucciones. El skill que el agente lee antes de trabajar con memo pesaba 22 KB, unos 8.100 tokens, y el agente lo leía entero antes de cada pregunta. Lo recorté a 3 KB, y el resto el agente lo pide si lo necesita (nunca lo pidió, por cierto).
 
@@ -45,7 +47,7 @@ OpenClaw calcula su propio coste, el de Hermes está calculado por tokens, así 
 
 ## 10.000 registros, y por qué Supermemory acertó 16 de 50
 
-Con 2.000 registros todos responden todo, así que después hice un conjunto más pesado: 10.000 registros, los mismos 10 proyectos más 2 parecidos para confundir. Cada fecha se mueve 2-4 veces, en los resúmenes de reuniones vuelve a salir la fecha vieja, y los nombres se parecen (Ari Vale y Ari Vail, Amber Kite y Amber Kitchen). Mem0 recibió 6.500 registros de 10.000, el plan gratuito no daba para todos, pero todos los registros con respuestas entraron en esa parte.
+Con 2.000 registros el agente respondió las 50 preguntas tanto con archivos como con Memo, no se veía ninguna diferencia, así que después hice un conjunto más pesado: 10.000 registros, los mismos 10 proyectos más 2 parecidos para confundir. Cada fecha se mueve 2-4 veces, en los resúmenes de reuniones vuelve a salir la fecha vieja, y los nombres se parecen (Ari Vale y Ari Vail, Amber Kite y Amber Kitchen). Mem0 recibió 6.500 registros de 10.000, el plan gratuito no daba para todos, pero todos los registros con respuestas entraron en esa parte.
 
 Primero solo la búsqueda, sin agente. Memo con búsqueda por palabras y por significado puso el registro correcto primero en el 72% de las preguntas y en el top 5 en las 40 preguntas que tienen ese registro. Supermemory 20% y 70%, Mem0 10% y 53%. Además, el tiempo de carga: Memo lo indexó todo en local en unos 2.5 minutos (con el modelo e5-small), Supermemory construyó su memoria durante unas 14 horas, Mem0 procesó sus 6.500 registros durante 19 horas. Son planes gratuitos, no comprobé si los de pago son más rápidos.
 
