@@ -7,7 +7,20 @@ author: viacheslav-ptsarev
 draft: false
 ---
 
-A principios de noviembre estuve corriendo benchmarks de memoria para agentes. Hago WireCat como el contexto local de una persona para cualquier agente (chats, correo, notas, reuniones), y quería ver con qué responde mejor un agente: con nuestro Memo, con un motor de memoria de terceros como Supermemory o Mem0, o sin memoria, con los registros simplemente como archivos en una carpeta.
+Últimamente han aparecido un montón de memorias para agentes de IA, y casi todas prometen que tu agente por fin dejará de olvidarse de las cosas. Necesitaba saber si mi idea de la memoria iba bien encaminada. Tomé las soluciones más populares, se las di a los mismos agentes e hice las mismas preguntas. Miré qué responde el agente, qué registro cita y cuánto cuesta.
+
+Quién participó:
+
+- [Mem0](https://mem0.ai) - un servicio en la nube, un modelo saca hechos de tus mensajes y guarda eso en lugar de los mensajes.
+- [Supermemory](https://supermemory.ai) - también en la nube, corta los documentos en trozos para buscar y encima un modelo arma un grafo de hechos. Busca en los dos.
+- [Honcho](https://honcho.dev) - open source, en segundo plano saca conclusiones sobre cada persona de la conversación y guarda esas conclusiones.
+- [Hindsight](https://github.com/vectorize-io/hindsight) - open source, un modelo saca hechos, personas y cómo se relacionan, y busca a la vez por significado, por palabras, por el grafo y por tiempo.
+- WireCat Memo - el nuestro, funciona en local, guarda los registros tal cual y busca por palabras y por significado.
+- Y una carpeta con archivos normales, donde el agente busca solo con comandos de terminal.
+
+Los agentes son los asistentes [OpenClaw](https://openclaw.ai) y [Hermes](https://github.com/NousResearch/hermes-agent) porque son lo primero que alguien instala cuando quiere un asistente personal de IA, así que es justo ahí donde hace falta memoria. Además, Hermes trae de serie plugins para los cuatro motores, así que cada uno está conectado a su manera, no con mis apaños.
+
+Eso es lo que estuve corriendo a principios de noviembre. Hago WireCat como el contexto local de una persona para cualquier agente (chats, correo, notas, reuniones), así que para mí no es una pregunta académica - si nuestro Memo tiene sentido o al agente le basta con una carpeta de archivos.
 
 Resulta que los archivos normales no lo hicieron peor. En la versión más difícil de mi conjunto, OpenClaw con Memo respondió 50 preguntas de 50 y citó el registro correcto en 46, y con archivos también 50 de 50 y 47 citas. Con Memo salió un poco más barato ($1.92 frente a $2.19), pero es 1 ejecución. En cambio, los motores que guardan un resumen hecho por un modelo en lugar de los registros pierden o los datos o la fuente.
 
