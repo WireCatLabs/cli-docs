@@ -206,7 +206,7 @@
   {
     "id": "crm-connect",
     "pages": ["b24/installation.md", "b24/usage.md", "b24/security.md"],
-    "families": { "b24": ["session", "skill", "mcp"] }
+    "families": { "b24": ["session", "skill", "guide", "mcp"] }
   },
   {
     "id": "crm-read-change",
@@ -214,6 +214,7 @@
     "families": {
       "b24": [
         "sync",
+        "schedule",
         "store",
         "deals",
         "leads",

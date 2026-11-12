@@ -8,14 +8,17 @@ para algo que falta: puede que ya esté en camino. El orden es aproximado y pued
 
 ## Qué funciona hoy
 
-`b24` inicia sesión en un portal de Bitrix24 con un webhook entrante. Lee y cambia negociaciones, prospectos,
+`b24` inicia sesión en un portal de Bitrix24 con un webhook entrante, o con una aplicación local que creas en el
+portal. Lee y cambia negociaciones, prospectos,
 contactos (`people`) y empresas (`organizations`), mueve y cierra negociaciones y prospectos, y lee embudos, etapas,
 productos y empleados (`users`). `fields list` muestra los campos propios del portal con sus opciones. `sync` copia
 embudos, empresas, contactos, negociaciones y prospectos al almacén local de WireCat, así que `deals`, `leads`,
-`pipelines` y `stages` también funcionan sin conexión, y `search all` busca en ellos. `pipelines show` es el tablero
+`pipelines` y `stages` también funcionan sin conexión, y `search all` busca en ellos. También guarda quién es quién:
+los contactos como miembros de sus empresas, los contactos y responsables de las negociaciones, y los empleados de tu
+propia empresa con su línea jerárquica. `pipelines show` es el tablero
 del embudo de ventas: las negociaciones o los prospectos de cada etapa, con su número y su total en cada moneda.
 `deals list`, `leads list`, `people list` y `organizations list` imprimen una página como tabla CSV para una hoja de
-cálculo con `--format csv`. `b24 api` llega a cualquier método del portal por su nombre. Todos los comandos están en
+cálculo con `--format csv`. `schedule` ejecuta `sync` con un temporizador. `b24 api` llega a cualquier método del portal por su nombre. Todos los comandos están en
 la [referencia de comandos](./commands.md).
 
 ## Siguiente
@@ -27,8 +30,7 @@ la [referencia de comandos](./commands.md).
 
 ## Más adelante
 
-- **Inicio de sesión con una aplicación local.** Un inicio de sesión OAuth en lugar de un webhook, y una cola de
-  eventos del portal, para que `b24` sepa qué cambió sin una pasada completa.
+- **Eventos del portal.** Una cola de eventos del portal, para que `b24` sepa qué cambió sin una pasada completa.
 - **Actividades, tareas pendientes y comentarios del historial** en negociaciones, prospectos, contactos y empresas.
 - **Presupuestos, facturas inteligentes y procesos inteligentes.**
 - **Una comprobación de duplicados antes de crear.** `b24` avisa cuando ya existe un contacto, una empresa o un

@@ -8,7 +8,7 @@ title: "Comandos b24"
 Todos los comandos, opciones y códigos de salida, generados a partir del propio programa. Para obtener la misma lista en
 JSON, ejecuta `b24 commands --json`. Las descripciones conservan el idioma de la ayuda.
 
-**La primera palabra es el perfil**, un nombre que eliges tú: `b24 personal config show`. `B24_PROFILE`
+**La primera palabra es el perfil**, un nombre que eliges tú: `b24 work config show`. `B24_PROFILE`
 hace lo mismo para toda una sesión de la terminal. Nunca se da un perfil por supuesto: un comando que usa una cuenta
 se detiene si no lo tiene y muestra los perfiles de este ordenador.
 
@@ -58,11 +58,11 @@ b24 commands info [path]
 
 ## `b24 session`
 
-keep this profile's Bitrix24 webhook in the OS keyring
+keep this profile's Bitrix24 webhook or app sign-in in the OS keyring
 
 ### `b24 session start`
 
-sign this profile in: the incoming webhook's address (Bitrix24 → Developer resources → Other → Incoming webhook) is asked hidden or read from stdin, checked against the portal, and only then kept in the keyring, or in a private file when the keyring fails; the webhook acts with the rights of the employee who made it
+sign this profile in: the incoming webhook's address (Bitrix24 → Developer resources → Other → Incoming webhook) is asked hidden or read from stdin, checked against the portal, and only then kept in the keyring, or in a private file when the keyring fails; the webhook acts with the rights of the employee who made it. With --portal and --client-id it signs in through a local application in the browser instead: its key is asked hidden or read from stdin, and its tokens act with the rights of the employee who signs in
 
 **Changes something on this computer only.**
 
@@ -72,15 +72,17 @@ b24 session start [options]
 
 | Option | What it does |
 |---|---|
-| `--credential-storage <storage>` | where the address is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
+| `--credential-storage <storage>` | where the sign-in is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
+| `--portal <host>` | sign in through a local application on this portal, such as example.bitrix24.ru. |
+| `--client-id <id>` | the local application's Application ID (client_id), or B24_BITRIX24_CLIENT_ID; its key comes from B24_BITRIX24_CLIENT_SECRET, a hidden prompt or stdin. |
 
-**Returns:** sign in with a Bitrix24 incoming webhook
+**Returns:** sign in with a Bitrix24 incoming webhook, or with a local application
 
-**Example:** `b24 work session start`, `b24 work session start --json`
+**Example:** `b24 work session start`, `b24 work session start --json`, `b24 work session start --portal example.bitrix24.ru --client-id local.0123abcd.45678901`
 
 ### `b24 session status`
 
-show where this profile's webhook address comes from: B24_TOKEN, the keyring or a file; never the address. --check asks the portal whose rights it carries: the user's id, name and whether they are an admin
+show how this profile signs in, with a webhook or a local application, and where that comes from: B24_TOKEN, the keyring or a file; never the address, the key or a token
 
 ```sh
 b24 session status [options]
@@ -88,15 +90,15 @@ b24 session status [options]
 
 | Option | What it does |
 |---|---|
-| `--check` | ask the portal whether the webhook still works, and as whom. |
+| `--check` | ask the portal whether the sign-in still works and whose it is: the user's id, name and admin rights. |
 
-**Returns:** show where the webhook comes from, and with --check as whom it acts
+**Returns:** show how this profile signs in, and with --check as whom it acts
 
 **Example:** `b24 work session status`, `b24 work session status --check --json`
 
 ### `b24 session end`
 
-forget this profile's webhook address on this computer; the webhook itself stays in Bitrix24
+forget this profile's webhook address, or its local application's key and tokens, on this computer; the webhook and the application stay in Bitrix24, which has no call that revokes a token: delete them there to stop them
 
 **Changes something on this computer only.**
 
@@ -104,13 +106,13 @@ forget this profile's webhook address on this computer; the webhook itself stays
 b24 session end
 ```
 
-**Returns:** forget this profile's webhook address on this computer
+**Returns:** forget this profile's webhook address or application sign-in on this computer
 
 **Example:** `b24 work session end`
 
 ### `b24 session list`
 
-list the profiles on this computer and whether each has a webhook; picks none
+list the profiles on this computer and whether each has a webhook or an application sign-in; picks none
 
 ```sh
 b24 session list
@@ -135,7 +137,7 @@ b24 sync [options]
 | `--rescan` | list everything again, every id too, dropping a round in progress. |
 | `--max-pages <pages>` | at most this many requests to the CRM in this run. |
 
-**Returns:** crm sync — provider, account, pipelines, skipped_owner_rejected, synced, issues, complete, state, and 4 more; every field: b24 commands info sync
+**Returns:** crm sync — provider, account, scope, pipelines, skipped_owner_rejected, synced, issues, complete, and 7 more; every field: b24 commands info sync
 
 **Example:** `b24 work sync`, `b24 work sync --rescan`, `b24 work sync --max-pages 20`
 
@@ -151,9 +153,23 @@ how far each kind's sync is: rows saved, partial or complete, when it last moved
 b24 store status
 ```
 
-**Returns:** crm sync progress — kind, round, id_pass, stored, job, profile, done, total, and 5 more; every field: b24 commands info store status
+**Returns:** crm sync progress — kind, round, id_pass, stored, job, profile, done, total, and 6 more; every field: b24 commands info store status
 
 **Example:** `b24 work store status --json`
+
+### `b24 store apply`
+
+apply scope mine to the contacts already stored: remove those no deal or lead of the chosen users and no kept company names, and the people they leave empty; counts only unless --yes, under scope all too. A sync that narrows the scope, or sync --rescan under mine, does this itself
+
+**Changes something on this computer only.**
+
+```sh
+b24 store apply
+```
+
+**Returns:** crm contacts removed — contacts, persons, persons_kept, names, applied; every field: b24 commands info store apply
+
+**Example:** `b24 work store apply`, `b24 work store apply --yes`
 
 ## `b24 deals`
 
@@ -177,7 +193,7 @@ b24 deals list [query] [options]
 | `--page <n>` | which page, starting at 1. Default: `1`. |
 | `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: b24 commands info deals list
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 25 more; every field: b24 commands info deals list
 
 **Example:** `b24 work deals list status:open --json`, `b24 work deals list stage:"Quote sent"`, `b24 work deals list status:open --format csv > deals.csv`
 
@@ -186,14 +202,14 @@ b24 deals list [query] [options]
 one deal with its pipeline, stage, status, amount and the people on it
 
 ```sh
-b24 deals show <ref>
+b24 deals show <deal>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | deal:<id>, as a list shows it. |
+| `deal` | required | deal:<id>, as a list shows it. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: b24 commands info deals show
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 25 more; every field: b24 commands info deals show
 
 **Example:** `b24 work deals show deal:12`
 
@@ -229,12 +245,12 @@ change a deal in the CRM; what is left out keeps its value; the CRM's copy is st
 **Changes something in the service.**
 
 ```sh
-b24 deals update <ref> [options]
+b24 deals update <deal> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | deal:<id>, as a list shows it. |
+| `deal` | required | deal:<id>, as a list shows it. |
 
 | Option | What it does |
 |---|---|
@@ -258,17 +274,17 @@ move a deal to another stage of its pipeline; a won or lost stage checks the clo
 **Changes something in the service.**
 
 ```sh
-b24 deals move <ref> <stage>
+b24 deals move <deal> <stage>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | deal:<id>, as a list shows it. |
-| `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has. |
+| `deal` | required | deal:<id>, as a list shows it. |
+| `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has; or a stage:<id>, of its pipeline or of the owner's base set, which moves it to the one stage of its pipeline mapped there and refuses several (with the candidates) or none. |
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: b24 commands info deals move
 
-**Example:** `b24 work deals move deal:12 "Quote sent"`
+**Example:** `b24 work deals move deal:12 "Quote sent"`, `b24 work deals move deal:12 stage:5`
 
 ### `b24 deals close`
 
@@ -277,12 +293,12 @@ mark a deal won or lost, the CRM's own way
 **Changes something in the service.**
 
 ```sh
-b24 deals close <ref> <outcome> [options]
+b24 deals close <deal> <outcome> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | deal:<id>, as a list shows it. |
+| `deal` | required | deal:<id>, as a list shows it. |
 | `outcome` | required | how it ended. One of: `won`, `lost`. |
 
 | Option | What it does |
@@ -300,12 +316,12 @@ delete a deal in the CRM; asks first unless allowed
 **Changes something in the service.**
 
 ```sh
-b24 deals delete <ref>
+b24 deals delete <deal>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | deal:<id>, as a list shows it. |
+| `deal` | required | deal:<id>, as a list shows it. |
 
 **Returns:** crm removal — operation_id, ref, removed; every field: b24 commands info deals delete
 
@@ -333,7 +349,7 @@ b24 leads list [query] [options]
 | `--page <n>` | which page, starting at 1. Default: `1`. |
 | `--format <format>` | csv: this page as a table for a spreadsheet; --json=a,b picks its columns. One of: `csv`. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: b24 commands info leads list
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 25 more; every field: b24 commands info leads list
 
 **Example:** `b24 work leads list status:open --json`, `b24 work leads list stage:"Quote sent"`, `b24 work leads list status:open --format csv > leads.csv`
 
@@ -342,14 +358,14 @@ b24 leads list [query] [options]
 one lead with its pipeline, stage, status, amount and the people on it
 
 ```sh
-b24 leads show <ref>
+b24 leads show <lead>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | lead:<id>, as a list shows it. |
+| `lead` | required | lead:<id>, as a list shows it. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 24 more; every field: b24 commands info leads show
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 25 more; every field: b24 commands info leads show
 
 **Example:** `b24 work leads show lead:12`
 
@@ -385,12 +401,12 @@ change a lead in the CRM; what is left out keeps its value; the CRM's copy is st
 **Changes something in the service.**
 
 ```sh
-b24 leads update <ref> [options]
+b24 leads update <lead> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | lead:<id>, as a list shows it. |
+| `lead` | required | lead:<id>, as a list shows it. |
 
 | Option | What it does |
 |---|---|
@@ -414,17 +430,17 @@ move a lead to another stage of its pipeline; a won or lost stage checks the clo
 **Changes something in the service.**
 
 ```sh
-b24 leads move <ref> <stage>
+b24 leads move <lead> <stage>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | lead:<id>, as a list shows it. |
-| `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has. |
+| `lead` | required | lead:<id>, as a list shows it. |
+| `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has; or a stage:<id>, of its pipeline or of the owner's base set, which moves it to the one stage of its pipeline mapped there and refuses several (with the candidates) or none. |
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: b24 commands info leads move
 
-**Example:** `b24 work leads move lead:12 "Quote sent"`
+**Example:** `b24 work leads move lead:12 "Quote sent"`, `b24 work leads move lead:12 stage:5`
 
 ### `b24 leads close`
 
@@ -433,12 +449,12 @@ mark a lead won or lost, the CRM's own way
 **Changes something in the service.**
 
 ```sh
-b24 leads close <ref> <outcome> [options]
+b24 leads close <lead> <outcome> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | lead:<id>, as a list shows it. |
+| `lead` | required | lead:<id>, as a list shows it. |
 | `outcome` | required | how it ended. One of: `won`, `lost`. |
 
 | Option | What it does |
@@ -456,12 +472,12 @@ delete a lead in the CRM; asks first unless allowed
 **Changes something in the service.**
 
 ```sh
-b24 leads delete <ref>
+b24 leads delete <lead>
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `ref` | required | lead:<id>, as a list shows it. |
+| `lead` | required | lead:<id>, as a list shows it. |
 
 **Returns:** crm removal — operation_id, ref, removed; every field: b24 commands info leads delete
 
@@ -556,7 +572,7 @@ search what the local store holds
 
 ### `b24 search all`
 
-search the CRM's deals and leads by the words of their title, and messages, notes and calendar events other WireCat tools stored — best match first. Use it when you do not know where something was written
+search the CRM's deals and leads by the words of their title, and messages, notes, calendar events and meetings other WireCat tools stored — best match first. Use it when you do not know where something was written
 
 ```sh
 b24 search all <query> [options]
@@ -568,15 +584,14 @@ b24 search all <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: crm, messages, notes, events; meetings when --source names a meeting account. |
-| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
-| `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
+| `--only <resources>` | only these resources, separated by commas: crm, messages, notes, events, meetings. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind. |
 | `--limit <n>` | how many. |
 | `--page <n>` | which page, starting at 1. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 15 more; every field: b24 commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 17 more; every field: b24 commands info search all
 
 **Example:** `b24 work search all Example LLC`, `b24 work search all website --only crm --json`
 
@@ -640,7 +655,7 @@ b24 people create [options]
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
 
-**Returns:** create one person on the portal
+**Returns:** crm record created — operation_id, id, created; every field: b24 commands info people create
 
 **Example:** `b24 work people create --first-name Anna --last-name Ivanova`
 
@@ -665,7 +680,7 @@ b24 people update <person> [options]
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
 
-**Returns:** change one person on the portal; options left out keep their values
+**Returns:** crm record updated — operation_id, id, updated; every field: b24 commands info people update
 
 **Example:** `b24 work people update 4 --body '{"post":"Buyer"}'`
 
@@ -728,7 +743,7 @@ b24 organizations create [options]
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
 
-**Returns:** create one organization on the portal
+**Returns:** crm record created — operation_id, id, created; every field: b24 commands info organizations create
 
 **Example:** `b24 work organizations create --name "Acme"`
 
@@ -752,7 +767,7 @@ b24 organizations update <organization> [options]
 | `--body <json>` | the other fields to set, as JSON with Bitrix24's own field names, such as {"post":"Buyer","assignedById":7}; naming another employee as the one responsible checks crm.assign-others. |
 | `--field <key=value>` | a custom field, by its label or code as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field. Over --body for the same field; --dry-run does not look the names up. |
 
-**Returns:** change one organization on the portal; options left out keep their values
+**Returns:** crm record updated — operation_id, id, updated; every field: b24 commands info organizations update
 
 **Example:** `b24 work organizations update 9 --name "Acme Ltd"`
 
@@ -858,7 +873,7 @@ b24 api list [query]
 
 **Returns:** api method — name, rest, effect, scope, permission, default_level, also_checks; every field: b24 commands info api list
 
-**Example:** `b24 personal api list`, `b24 personal api list scope:crm effect:write`
+**Example:** `b24 work api list`, `b24 work api list scope:crm effect:write`
 
 ### `b24 api show`
 
@@ -874,7 +889,7 @@ b24 api show <method>
 
 **Returns:** show a method's REST version and permissions; calls nothing
 
-**Example:** `b24 personal api show crm.deal.update --json`
+**Example:** `b24 work api show crm.deal.update --json`
 
 ### `b24 api call`
 
@@ -898,6 +913,179 @@ b24 api call <method> [options]
 **Returns:** call one Bitrix24 method by name with JSON parameters
 
 **Example:** `b24 work api call crm.deal.list --body '{"select":["id","title"],"pagination":{"limit":5}}'`, `b24 work api call crm.status.list --body '{"filter":{"ENTITY_ID":"STATUS"}}'`
+
+## `b24 schedule`
+
+run a b24 command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
+
+### `b24 schedule command`
+
+run b24 <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+
+**Changes something on this computer only.**
+
+```sh
+b24 schedule command <name> <args> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the b24 command after its name, e.g. -- messages list <chat> --limit 50. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+
+**Returns:** run b24 <args…> on a timer — reads save what they read, so this is how a…
+
+**Example:** `b24 personal schedule command health --every 1h -- doctor`, `b24 personal schedule command morning-check --at 08:00 -- doctor`
+
+### `b24 schedule agent`
+
+start an agent (claude or codex) with a prompt on a timer; it runs with B24_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
+
+**Changes something on this computer only.**
+
+```sh
+b24 schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`. |
+| `prompt` | required | what to do, e.g. "summarize what came in during the last day: b24 personal search messages 'date>1d' --newest --limit 20". |
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the harness's default (default sonnet for claude, codex's own for codex, or the config file's). |
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+
+**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
+
+**Example:** `b24 personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `b24 personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`, `b24 personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
+
+### `b24 schedule list`
+
+the schedules, when they run and how their last run went
+
+```sh
+b24 schedule list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, spent_today_usd, and 2 more; every field: b24 commands info schedule list
+
+**Example:** `b24 personal schedule list`, `b24 personal schedule list kind:agent`
+
+### `b24 schedule run`
+
+run a schedule now, as its timer would, and wait for it; a paused one runs too
+
+**Changes something in the service.**
+
+```sh
+b24 schedule run <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+| Option | What it does |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
+
+**Returns:** run a schedule now, as its timer would, and wait for it; a paused one runs too
+
+**Example:** `b24 personal schedule run health`
+
+### `b24 schedule remove`
+
+stop a schedule and remove its timer; its past output stays
+
+**Changes something on this computer only.**
+
+```sh
+b24 schedule remove <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** stop a schedule and remove its timer; its past output stays
+
+**Example:** `b24 personal schedule remove health`
+
+### `b24 schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Changes something on this computer only.**
+
+```sh
+b24 schedule pause <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Example:** `b24 personal schedule pause health`
+
+### `b24 schedule resume`
+
+put a paused schedule back on its timer
+
+**Changes something on this computer only.**
+
+```sh
+b24 schedule resume <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** put a paused schedule back on its timer
+
+**Example:** `b24 personal schedule resume health`
+
+### `b24 schedule exec`
+
+what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Changes something in the service.**
+
+```sh
+b24 schedule exec <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
+
+**Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Example:** `b24 personal schedule exec ~/.local/share/bitrix24-cli/schedules/health/schedule.json`
 
 ## `b24 doctor`
 
@@ -964,6 +1152,22 @@ b24 skill status
 **Returns:** whether the installed instructions for AI agents match this version
 
 **Example:** `b24 skill status`, `b24 skill status --json`
+
+## `b24 guide`
+
+scenarios: the commands for a common task, in order, and why each
+
+```sh
+b24 guide [name]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | optional | one scenario; without it, the list. |
+
+**Returns:** scenarios: the commands for a common task, in order, and why each
+
+**Example:** `b24 guide`, `b24 guide first-sync --json`
 
 ## `b24 mcp`
 
@@ -1170,7 +1374,7 @@ b24 config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1193,7 +1397,7 @@ b24 config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self. |
 
 | Option | What it does |
 |---|---|
