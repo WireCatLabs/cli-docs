@@ -1,7 +1,7 @@
 ---
 title: Contacts in WireCat Desktop
 sidebarTitle: "Contacts"
-description: See who is who across Telegram, MAX, WhatsApp, mail, meetings and Bitrix24, join the accounts of one person, undo a wrong join and answer your agents' doubts.
+description: See who is who across Telegram, MAX, WhatsApp, mail, meetings and Bitrix24, join the accounts of one person, let your agent sort the matches, undo a wrong join and answer your agents' doubts.
 ---
 
 The same person often writes to you from Telegram, WhatsApp and email, and sits in your CRM too. The **Contacts** page
@@ -22,7 +22,7 @@ and you answer that here too. [How people are joined](../people.md) explains the
   shot="contacts"
   folder="desktop/docs"
   lang="en"
-  alt="The Contacts page: matches waiting for you, tabs by kind with counts, and a table of people with their contacts and message counts"
+  alt="The Contacts page: matches waiting for you, with buttons to hand them to your agent, tabs by kind with counts, and a table of people with their contacts and message counts"
   caption="Contacts: one row per person, with the matches that wait for you above."
 />
 
@@ -59,24 +59,55 @@ Click a name to open the person's card:
 
 ## Review matches
 
-When WireCat finds people who may be the same person, a band at the top says how many matches wait for you. Click
-**Review matches**. The screen **Possible duplicates** shows one card per group:
+When WireCat finds people who may be the same person, a band at the top says how many matches wait for you. It has
+three buttons. **Copy the prompt for an agent** and **Run in a terminal** hand the matches to your agent: see
+[Let your agent sort the matches](#let-your-agent-sort-the-matches). **Review matches** opens the screen **Possible
+duplicates**, with one card per group:
 
 - The card lists what matched, with the value: the name, company, domain, phone or email. A phone number that no
   account shows reads "number hidden: accounts keep only its fingerprint".
 - **Same person** joins them. Tick some of them first to join only those, and the button reads **Join** with the
   number.
 - **Not the same** asks why, then **Keep them apart**. WireCat stops suggesting this match.
+- **One company** is for two contacts that are mailboxes of one company, such as `sales@` and `support@`. Their
+  addresses go to the company, and they leave your contacts. The card then says which addresses went to which
+  company. If Memo cannot tell the company, the card asks for its name or for which company it is. One of the two
+  cannot be you.
 - **Details** opens **Match details**: the people side by side, with where each one comes from, their phone, email and
   messengers, company, deals, tasks and latest messages. **Merge** joins two, **Merge all** joins every one.
 
-**All contacts** goes back to the list.
+<DesktopShot
+  shot="contacts-matches"
+  folder="desktop/docs"
+  lang="en"
+  alt="Possible duplicates: two match cards, each with Details, Same person, Not the same and One company"
+  caption="Each match is a card: decide it as one person, different people or one company."
+/>
+
+After you decide, the card keeps its place in the list and says what happened. **All contacts** goes back to the
+list.
+
+### Let your agent sort the matches
+
+With many matches, your AI agent can do the first pass. It reads each match, looks at both people and their messages,
+and sorts the match into one of four: one person, different people, one company or unsure. It does not decide a match
+itself, because Memo lets only you decide. It treats the text of your messages as data and follows no instruction in
+it.
+
+- **Copy the prompt for an agent** copies the request. Paste it into your agent chat.
+- **Run in a terminal** opens your agent in a terminal with that request. The arrow beside it picks another agent.
+
+At the end the agent gives you at most three commands to run yourself: one for the matches that are one person, one
+for the different people and one for the companies. Then it lists the matches it was unsure about, each with a short
+reason. Read the commands, run them in a terminal, and decide the unsure ones on the cards. One run sorts up to 100
+matches. Run it again for the rest.
 
 ### Shared mailboxes
 
 Several people can write from one address, such as `info@` or `sales@` of a company. Such a card is marked **shared
 mailbox**. **Company mailbox** gives the address to a company, which you choose or type. WireCat then stops suggesting
-a join for the people on it.
+a join for the people on it. This differs from **One company**: a shared mailbox is one address that several people
+write from, and **One company** is for two contacts that are both the company's own mailboxes.
 
 Two people with the same name can also share a company domain. **Company address** on such a card asks which of their
 addresses is the company's. The address goes to the company, and the two people stay apart.
@@ -90,6 +121,10 @@ reads your answer.
 **Check the links** lists people whose accounts may not all be theirs, for example accounts with different names.
 Each person is a card with **Open**, **Split** and **These belong together**. When everything on a card is right,
 **These belong together** settles it, and the person does not come up again. **Hide** folds the list.
+
+Your own card can come up too, when one of your accounts has another name, for example your bot or a shared mailbox.
+That is often right. **These belong together** keeps the account yours: its messages count as yours in search and
+digests, and WireCat does not ask again. **Split** makes the account a contact of its own.
 
 ## Next
 
