@@ -391,39 +391,37 @@ his `decision-maker` role from you stays as it was. `memo review confirm 2` make
 
 ### Whose deals are copied
 
-In a sales team's CRM most deals belong to other people. So a sync copies only your own deals and leads: those whose
-responsible person is the CRM user the tool signs in as (in Bitrix24, the webhook's user). Contacts and companies are
-always copied whole. A manager who wants every deal sets the account's `scope` to `all`, and `mine` goes back.
+In a sales team's CRM most deals belong to other people, and a webhook is often a colleague's. So a sync copies only
+the deals and leads of the CRM users you choose, and the clients on them: the contacts and companies assigned to
+those users or named on the deals and leads it copies. No one is chosen for you, the sync's own user included. Until
+you choose, a sync copies nothing and says how (`bitrix.scope-users-unchosen`). No sync copies the whole CRM, an
+administrator's either, and any other client stays on the portal, where `b24 work people list` still finds it.
 [Whose deals and leads](./b24/usage.md#whose-deals-and-leads) has the Bitrix24 details:
 
 ```sh
-b24 work config set crm.bitrix24:example.bitrix24.com.scope all
-b24 work config set crm.bitrix24:example.bitrix24.com.scope mine
+b24 work users list                                                     # who is who on the portal
+b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 3327   # copy the deals and leads of user 3327
 ```
 
-A deal can also belong to nobody yet, for example one that a website form creates. Bitrix24 has no such deals: every
+The list can hold several users, such as yourself and the user your website form creates deals as. Every Bitrix24
 deal has a responsible person, by default the user who created it
-([Bitrix24 REST docs](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)).
-So you name the users whose deals count as nobody's, such as the user your website form creates them as, and the
-sync copies their deals and leads too:
+([Bitrix24 REST docs](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)),
+so a form's deals come only when you choose that user. A Bitrix24 administrator's webhook may choose anyone. Anyone
+else's may choose only themselves, a dismissed user or a user who is not an employee, such as an extranet or bot
+user. The sync checks the list every time, and a user it may not take is left out with the reason in its `issues`
+(`crm.unassigned-dropped`).
 
-```sh
-b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 15,31
-```
+What happens when the choice changes:
 
-What happens when the scope changes:
-
-- A deal given to another user leaves the copy at the next sync, and comes back if it is given back to you.
-- Switching to `all` reads every deal and lead again. Switching to `mine` works from the copy alone and asks the CRM
-  nothing.
-- A deal outside the scope leaves your lists and search, in `b24` and in `memo`. Its earlier copy still stays in the
+- A deal given to a user you did not choose leaves the copy at the next sync, and one given to a chosen user arrives.
+- A `scope` of `all` set before is refused at the next sync, which says to set `mine`. Once set, the deals and leads
+  of users you did not choose are marked deleted here, from the copy alone, without asking the CRM.
+- A deal outside the copy leaves your lists and search, in `b24` and in `memo`. Its earlier copy still stays in the
   store file on your computer.
-- If you never set `scope`, and the first narrowing to `mine` would remove more than half of the stored deals or
-  leads, the sync keeps them and says so (`crm.narrowing-held`). This happens when the sync's user holds few deals.
-  The copy stays as it is until you set `scope` to `mine` or `all`.
+- If you never set `scope`, and `mine` would remove more than half of the stored deals or leads, the sync keeps them
+  and says so (`crm.narrowing-held`). The copy stays as it is until you set `scope` to `mine`.
 
-`b24 work store status` shows, for deals and for leads, the saved `scope`, whether you set it, the scope the last
-sync applied, and whether a narrowing is held.
+`b24 work store status` shows how far each kind is and how many are stored.
 
 One account's copy belongs to one CRM user. The first sync remembers that user in `crm.<provider>:<account>.self`, and
 a sync that signs in as another user is refused. To hand the copy over, unset it, and the next sync remembers the new

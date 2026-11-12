@@ -402,41 +402,42 @@ y su rol `decision-maker`, que le diste tú, sigue igual. `memo review confirm 2
 
 ### De quién son las negociaciones que se copian
 
-En el CRM de un equipo de ventas, la mayoría de las negociaciones son de otras personas. Por eso una sincronización
-copia solo tus negociaciones y prospectos: aquellos cuyo responsable es el usuario del CRM con el que entra la
-herramienta (en Bitrix24, el usuario del webhook). Los contactos y las empresas se copian siempre enteros. Un jefe de
-ventas que quiere todas las negociaciones pone el `scope` de la cuenta en `all`, y `mine` vuelve atrás. Los detalles
-de Bitrix24 están en la [guía de `b24`](./b24/usage.md):
+En el CRM de un equipo de ventas, la mayoría de las negociaciones son de otras personas, y un webhook suele ser de un
+compañero. Por eso una sincronización copia solo las negociaciones y los prospectos de los usuarios del CRM que eliges,
+y los clientes que aparecen en ellos: los contactos y las empresas asignados a esos usuarios o nombrados en las
+negociaciones y los prospectos que copia. Nadie se elige por ti, ni siquiera el usuario de la propia sincronización.
+Hasta que eliges, una sincronización no copia nada y dice cómo hacerlo (`bitrix.scope-users-unchosen`). Ninguna
+sincronización copia todo el CRM, tampoco la de un administrador, y el resto de los clientes sigue en el portal, donde
+`b24 work people list` los encuentra. Los detalles de Bitrix24 están en
+[de quién son las negociaciones y los prospectos](./b24/usage.md#whose-deals-and-leads):
 
 ```sh
-b24 work config set crm.bitrix24:example.bitrix24.com.scope all
-b24 work config set crm.bitrix24:example.bitrix24.com.scope mine
+b24 work users list                                                     # who is who on the portal
+b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 3327   # copy the deals and leads of user 3327
 ```
 
-Una negociación también puede no ser de nadie todavía, por ejemplo una que crea un formulario de tu web. Bitrix24 no
-tiene negociaciones así: cada una tiene un responsable, por defecto el usuario que la creó
-([documentación REST de Bitrix24](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)).
-Así que nombras tú a los usuarios cuyas negociaciones cuentan como de nadie, como el usuario con el que las crea el
-formulario de tu web, y la sincronización copia también sus negociaciones y prospectos:
+La lista puede tener varios usuarios, por ejemplo tú y el usuario con el que el formulario de tu web crea
+negociaciones. Cada negociación de Bitrix24 tiene un responsable, por defecto el usuario que la creó
+([documentación REST de Bitrix24](https://github.com/bitrix24/b24restdocs/blob/833b39804f03dd4eb0ab758cbf7c1ddf1fac4663/api-reference/crm/universal/crm-item-add.md#L186-L189)),
+así que las negociaciones del formulario llegan solo si eliges a ese usuario. El webhook de un administrador de
+Bitrix24 puede elegir a cualquiera. El de cualquier otro solo puede elegirse a sí mismo, a un usuario dado de baja o a
+un usuario que no es empleado, como uno de extranet o un bot. La sincronización revisa la lista cada vez, y deja fuera
+a un usuario que no puede tomar, con el motivo en `issues` (`crm.unassigned-dropped`).
 
-```sh
-b24 work config set crm.bitrix24:example.bitrix24.com.unassigned 15,31
-```
+Qué pasa cuando cambia la elección:
 
-Qué pasa cuando cambia el alcance:
-
-- Una negociación que se da a otro usuario sale de la copia en la siguiente sincronización, y vuelve si te la
-  devuelven.
-- Pasar a `all` vuelve a leer todas las negociaciones y prospectos. Pasar a `mine` trabaja solo con la copia y no
-  pregunta nada al CRM.
-- Una negociación fuera del alcance sale de tus listas y de la búsqueda, en `b24` y en `memo`. Su copia anterior
+- Una negociación que se da a un usuario que no elegiste sale de la copia en la siguiente sincronización, y una que se
+  da a un usuario elegido llega.
+- Un `scope` en `all` puesto antes se rechaza en la siguiente sincronización, que pide poner `mine`. Después, las
+  negociaciones y los prospectos de los usuarios que no elegiste se marcan como borrados aquí, solo con la copia y sin
+  preguntar al CRM.
+- Una negociación fuera de la copia sale de tus listas y de la búsqueda, en `b24` y en `memo`. Su copia anterior
   sigue en el archivo del almacén de tu ordenador.
-- Si nunca pusiste `scope` y el primer paso a `mine` quitaría más de la mitad de las negociaciones o prospectos
-  guardados, la sincronización los mantiene y lo dice (`crm.narrowing-held`). Pasa cuando el usuario de la
-  sincronización tiene pocas negociaciones. La copia sigue igual hasta que pongas `scope` en `mine` o `all`.
+- Si nunca pusiste `scope` y `mine` quitaría más de la mitad de las negociaciones o prospectos guardados, la
+  sincronización los mantiene y lo dice (`crm.narrowing-held`). La copia sigue igual hasta que pongas `scope` en
+  `mine`.
 
-`b24 work store status` muestra, para las negociaciones y para los prospectos, el `scope` guardado, si lo pusiste
-tú, el alcance que aplicó la última sincronización y si hay un paso a `mine` retenido.
+`b24 work store status` muestra cuánto avanzó cada tipo y cuántos hay guardados.
 
 La copia de una cuenta pertenece a un usuario del CRM. La primera sincronización lo recuerda en
 `crm.<provider>:<account>.self`, y una sincronización que entra con otro usuario se rechaza. Para pasar la copia a
