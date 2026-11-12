@@ -7,7 +7,20 @@ author: viacheslav-ptsarev
 draft: false
 ---
 
-In early November I was running memory benchmarks for agents. I'm building WireCat as local context about a person for any agent (chats, mail, notes, meetings), and I wanted to see what helps an agent answer better - our Memo, a third-party memory engine like Supermemory or Mem0, or no memory at all, with the records just sitting as files in a folder.
+There are a lot of memory tools for AI agents now, and almost every one promises your agent will finally stop forgetting things. I took a few popular ones, put the same agent on top of each and asked the same questions. I looked at what the agent answers, which record it cites and how much it costs.
+
+Here's who took part:
+
+- [Mem0](https://mem0.ai) - a cloud service, a model pulls facts out of your messages and keeps those instead of the messages.
+- [Supermemory](https://supermemory.ai) - also cloud, it chunks documents for search and a model builds a graph of facts on top. Search goes over both.
+- [Honcho](https://honcho.dev) - open source, it draws conclusions about each person in the conversation in the background and stores those.
+- [Hindsight](https://github.com/vectorize-io/hindsight) - open source, a model pulls out facts, people and how they connect, and search runs by meaning, by keywords, over the graph and by time all at once.
+- WireCat Memo - ours, runs locally, keeps the records as they are and searches by keywords and by meaning.
+- And a plain folder of files that the agent searches on its own with ordinary shell commands.
+
+Two agents, both open source - [OpenClaw](https://openclaw.ai) and [Hermes](https://github.com/NousResearch/hermes-agent) from Nous Research.
+
+That's what I was running in early November. I'm building WireCat as local context about a person for any agent (chats, mail, notes, meetings), so for me this isn't an academic question - does our Memo make sense at all, or is a folder of files enough for an agent.
 
 Turns out plain files were no worse. On the hardest version of my set OpenClaw with Memo answered 50 questions out of 50 and cited the right record in 46, and with files it was also 50 out of 50 with 47 citations. Memo came out a bit cheaper ($1.92 vs $2.19), but that's 1 run. The engines that store a model's summary instead of the records themselves lose either the facts or the source.
 
