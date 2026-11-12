@@ -7,7 +7,7 @@ author: viacheslav-ptsarev
 draft: false
 ---
 
-A lot of memory tools for AI agents have shown up lately, and almost every one promises your agent will finally stop forgetting things. I needed to know how right my own idea of memory was. So I took the most popular ones, gave them to the same agents and asked the same questions. I looked at what the agent answers, which record it cites and how much it costs.
+A lot of memory tools for AI agents have shown up lately, and almost every one promises your agent will finally stop forgetting things. I needed to know how right my own idea of memory was. So I took the most popular solutions, gave them to the same agents and asked the same questions. I looked at what the agent answers, which record it cites and how much it costs.
 
 Here's who took part:
 
@@ -18,7 +18,7 @@ Here's who took part:
 - WireCat Memo - ours, runs locally, keeps the records as they are and searches by keywords and by meaning.
 - And a plain folder of files that the agent searches on its own with ordinary shell commands.
 
-The agents are the assistants [OpenClaw](https://openclaw.ai) and [Hermes](https://github.com/NousResearch/hermes-agent) from Nous Research, both open source. They're what people install first when they want a personal AI assistant, so that's exactly where memory matters. Plus Hermes ships plugins for all four engines out of the box, so each one is connected its own native way, not through my duct tape.
+The agents are the assistants [OpenClaw](https://openclaw.ai) and [Hermes](https://github.com/NousResearch/hermes-agent) because they're what people install first when they want a personal AI assistant, so that's exactly where memory matters. Plus Hermes ships plugins for all four engines out of the box, so each one is connected its own native way, not through my duct tape.
 
 That's what I was running in early November. I'm building WireCat as local context about a person for any agent (chats, mail, notes, meetings), so for me this isn't an academic question - does our Memo make sense at all, or is a folder of files enough for an agent.
 
