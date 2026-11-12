@@ -4,7 +4,17 @@ sidebarTitle: "Search logs"
 description: Find why a tool failed, how often it happens and which command, profile or error it involves, with filters, groups and the record of each run.
 ---
 
-The **Logs** page in WireCat Desktop shows what each command-line tool recorded about its own runs. A **run** is one start of a tool, such as `tg personal messages send`, from start to exit. Use this page when a tool failed and you want to know why, how often it happens, or which command, profile or error it involves. You will learn to filter runs, group them, open one run and copy its record for a bug report.
+A tool failed, or an agent says a command did not work, and you want to know why. The **Logs** page in WireCat Desktop shows what each command-line tool recorded about its own runs. A **run** is one start of a tool, such as `tg personal messages send`, from start to exit. Here you find how often a failure happens and which command, profile, agent or error it involves. Then you can open one run and copy its record for a bug report or for your agent.
+
+**On this page:** [Why most runs are failures](#why-most-runs-are-failures) · [Search runs](#search-runs) · [Facets](#filter-with-facets) · [Group runs](#group-runs) · [Open a run](#open-a-run) · [Logs in a terminal](#logs-in-a-terminal) · [Privacy](#privacy)
+
+<DesktopShot
+  shot="logs"
+  folder="desktop/docs"
+  lang="en"
+  alt="The Logs page: the search box, the time range buttons, facets on the left and a table of runs with their tool, profile, command, agent and status"
+  caption="Logs: every run the tools kept, with facets on the left."
+/>
 
 ## What the page shows
 
@@ -14,13 +24,13 @@ Every WireCat tool keeps run logs: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`)
 
 A tool keeps every run: successful runs for 7 days, failed runs for 30. A tool set to keep only failed runs, or an older tool version, lists mostly failures. This is expected. It does not mean that everything is broken.
 
-To keep every run of Telegram, MAX or WhatsApp, choose **Keep every run** for the tool at the top of the Logs page, or set it yourself:
+To keep every run of Telegram, MAX, WhatsApp or Email, open **Log settings** at the top of the Logs page and choose **Every run** for the tool, or set it yourself:
 
 ```sh
 tg config set record true --defaults
 ```
 
-This applies to every profile of that tool. For MAX or WhatsApp, write `max` or `wa` instead of `tg`. The page does not offer the switch for the other three tools; set it yourself:
+This applies to every profile of that tool. For MAX or WhatsApp, write `max` or `wa` instead of `tg`. The page does not offer the switch for Zoom, Google Drive and Memo. Set it yourself:
 
 - Zoom: `zm config set record true`.
 - Google Drive: `drive personal config set record true --defaults`. Write any of your profiles in place of `personal`; with `--defaults` the setting applies to all of them.
@@ -31,6 +41,8 @@ A tool deletes runs that are older than `keep_runs_for_days` days. The default i
 ## Search runs
 
 Type in the search box above the list. A search has terms that are separated by spaces. A run must match every term.
+
+The search box starts with `-no_command:true`. It hides runs that started without a command, usually a typo or a missing profile. To see them, remove the term or click **Show them** above the list.
 
 | Write | Meaning | Example |
 | --- | --- | --- |
@@ -87,7 +99,7 @@ A run can have more fields. Open a run to see them all: every field in its recor
 
 ## Filter with facets
 
-The column on the left shows **facets**: the values of Tool, Status, Command, Profile and Error code, with the number of runs for each. Click a value to show only those runs, and click it again to remove the filter. Alt-click a value, or use its minus button, to hide those runs. Each click adds a term to the search box, so you can see and edit the search. The counts include all the other terms of the search. Thus you can still choose a second value of the same facet.
+The column on the left shows **facets**: the values of fields such as Tool, Status, Command, Profile, Agent, Started through and Error code, with the number of runs for each. Click a value to show only those runs, and click it again to remove the filter. Alt-click a value, or use its minus button, to hide those runs. Each click adds a term to the search box, so you can see and edit the search. The counts include all the other terms of the search. Thus you can still choose a second value of the same facet.
 
 On a narrow window, open the facets with the **Facets** button.
 

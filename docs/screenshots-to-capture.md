@@ -70,6 +70,15 @@ see its CLAUDE.md), with the sample data of `?showcase`. The language comes from
 | `storage` | Storage page with folders, backups and tables | `?showcase&section=storage` | Missing |
 | `settings` | Settings page: language, interface size, a tool's settings | `?showcase&section=settings` | Missing |
 
+The guides beside the walkthrough use three more shots, captured from Desktop main at `ddc7fa3f` (0.6.1) at 1440x900
+with `capture.mjs --lang en|ru|es [--dark]`, then `node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`:
+
+| Shot | Page | Query | Before the capture |
+| --- | --- | --- | --- |
+| `settings-agents` | AI model | `?showcase&section=settings&agent=claude` | Scroll the heading Agent for background jobs to the top |
+| `digest-editor` | Digests | `?showcase&section=digests&agent=claude` | Click Set up on Daily digest, then scroll the Agent field to the middle |
+| `logs` | Logs | `?showcase&section=logs` | |
+
 Own tools (`own-name`, `own-review`, `own-confirm`, `own-tools-list`, `own-refused`): English only, copied from
 wirecat-desktop `docs/images/own-*.webp` (1280 wide, not 16:10). Russian and Spanish pages show the English capture
 until `{shot}-{light,dark}-{ru,es}.webp` exist. `own-settings` has all six: `capture.mjs` at `--width 1280 --height 400`

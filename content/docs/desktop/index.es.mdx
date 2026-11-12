@@ -3,13 +3,17 @@ title: Instalar y usar WireCat Desktop
 description: La aplicación para macOS, Windows y Linux que instala, actualiza y comprueba las herramientas de WireCat, las conecta a tus agentes de IA y te guía al iniciar sesión, sin terminal. Un recorrido por cada página.
 ---
 
-WireCat Desktop es una aplicación para quien quiere que su agente de IA trabaje con sus mensajes,
-reuniones, documentos y notas, pero no quiere instalar y mantener a mano herramientas de línea de comandos.
-Instala las herramientas de WireCat, da a tus agentes de IA las instrucciones para usarlas, abre el inicio de
-sesión de cada herramienta y muestra lo que las herramientas guardan en tu ordenador. Esta página sigue la
-aplicación en el orden en que la vas conociendo: instalación, primer arranque y luego cada página de la
-ventana. La aplicación es opcional: cada herramienta se sigue instalando y funcionando desde una terminal
-sin ella.
+Quieres que tu agente de IA trabaje con tus mensajes, reuniones, documentos y notas, pero no quieres instalar y
+mantener a mano herramientas de línea de comandos. WireCat Desktop lo hace por ti. Instala las herramientas de WireCat,
+da a tus agentes de IA las instrucciones para usarlas, abre el inicio de sesión de cada herramienta y muestra lo que
+las herramientas guardan en tu ordenador. Lee desde arriba para instalar la aplicación y terminar su configuración en
+unos minutos. Después, cada sección explica una página de la ventana. La aplicación es opcional: cada herramienta se
+sigue instalando y funcionando desde una terminal sin ella.
+
+**En esta página:** [Descargar e instalar](#descargar-e-instalar) · [El primer arranque](#el-primer-arranque) ·
+[Iniciar sesión en una herramienta](#iniciar-sesión-en-una-herramienta) ·
+[Páginas de la aplicación](#qué-puedes-hacer-en-la-aplicación) · [Ajustes](#ajustes) ·
+[Actualizar y desinstalar](#actualizar-y-desinstalar) · [Problemas frecuentes](#problemas-frecuentes)
 
 ## Descargar e instalar
 
@@ -181,9 +185,11 @@ formato lee, como Zoom, queda fuera de la comprobación.
   sesión**. WhatsApp además necesita el teléfono conectado.
 - **Servidor MCP (o conectar la web):** deja que ChatGPT o Claude en el navegador usen la herramienta. La guía de
   [Tailscale Funnel](./tailscale-funnel.mdx) publica el servidor, o puedes usar un túnel de Cloudflare.
-- **Agente de correo** (solo Email): un interruptor que activa el agente de correo de Memo. Lee el correo nuevo cada
-  5 minutos y propone tareas, facturas, pedidos y hechos para que los aceptes en la página [Memoria](./memory.mdx), y
-  nunca envía nada. Una ejecución cuesta como mucho 1 $. Necesita Memo y Claude Code.
+- **Agente de correo** (solo Email): un interruptor que activa el agente de correo de Memo. Lee el correo nuevo según
+  un horario y propone tareas, facturas, pedidos y hechos para que los aceptes en la página [Memoria](./memory.mdx), y
+  nunca envía nada. Necesita Memo, y se ejecuta en el agente que eliges en Ajustes, en
+  [Agente para tareas en segundo plano](./ai-model.mdx#agente-para-tareas-en-segundo-plano). Con Claude Code, una
+  ejecución cuesta como mucho 1 $.
 - **Configura tus notas**, **Reescribir registros para buscar mejor** y **Buscar a fondo** (solo Memo): mira
   [Modelo de IA y mejor búsqueda](./ai-model.mdx).
 - **Desinstalar:** quita la herramienta. Sus datos se quedan en este ordenador hasta que los borres, y el
@@ -270,7 +276,8 @@ proyecto: una nota junto a cada uno dice por qué. En el tablero, suéltala en H
 ### Resúmenes
 
 Un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o
-por correo, con un límite de gasto que tú fijas. [Resúmenes](./digests.mdx) muestra cómo configurar uno.
+por correo. Lo escribe un agente de programación que eliges, como Claude Code. [Resúmenes](./digests.mdx) muestra cómo
+configurar uno.
 
 ### Clientes
 
@@ -380,6 +387,12 @@ comandos y lo que imprimen las herramientas no se traducen. De arriba abajo, la 
 - **Modelo de IA** y **Lectura de hechos**: un modelo y una clave para las funciones que los necesitan. Mira
   [Modelo de IA y mejor búsqueda](./ai-model.mdx), y [Usar WireCat con modelos locales](./local-models.mdx) para que
   todo se quede en tu ordenador.
+- **Agente para tareas en segundo plano:** el agente de programación que ejecuta el agente de correo y los resúmenes
+  según un horario. Mira [Agente para tareas en segundo plano](./ai-model.mdx#agente-para-tareas-en-segundo-plano).
+- **Solo este ordenador:** un interruptor que mantiene cada llamada a un modelo en este ordenador, con una lista de
+  adónde envía datos cada función ahora. Mira [Solo este ordenador](./ai-model.mdx#solo-este-ordenador).
+- **Leer imágenes:** si tu agente de programación puede leer el texto de una imagen que eliges. Mira
+  [Leer imágenes](./ai-model.mdx#leer-imágenes).
 - **Herramientas:** los ajustes de cada herramienta y de WireCat, como lista o como **JSON**. La aplicación los lee
   de la herramienta y los guarda con el comando `config` de la propia herramienta, así que la herramienta comprueba
   cada valor antes de escribirlo.
@@ -447,7 +460,7 @@ quedan.
 
 ## Problemas frecuentes
 
-Busca el mensaje que ves y sigue la solución. Si ninguno encaja, [Informar de un problema](#informar-de-un-problema) en la app reúne lo que necesita el soporte.
+Busca el mensaje que ves y sigue la solución. Un error en la tarjeta de una herramienta se explica en [Errores y cómo resolverlos](./troubleshooting.mdx). Si ninguno encaja, [Informar de un problema](#informar-de-un-problema) en la app reúne lo que necesita el soporte.
 
 ### Windows dice «Windows protegió su PC»
 

@@ -6,10 +6,17 @@ description: Paso a paso, mantén tus mensajes, correo, notas e imágenes lejos 
 
 WireCat guarda tus mensajes, correo, notas y archivos en tu ordenador. Algunas funciones además envían texto, imágenes
 o una pregunta de búsqueda a un modelo de IA, y lo mismo hace el agente que conectas a WireCat. Cuando ese modelo es un
-servicio en la nube, tu texto privado llega a esa empresa. Esta guía muestra paso a paso cómo poner un modelo en tu
-propio ordenador y apuntar a él cada función y tu agente, para que lo que leen se quede contigo. Necesitas un ordenador
-que pueda mover un modelo, mejor con tarjeta gráfica. Algunas partes de WireCat aún no pueden usar un modelo local, y
-el final de la página las enumera.
+servicio en la nube, tu texto privado llega a esa empresa. Sigue estos pasos para poner un modelo en tu propio
+ordenador y apuntar a él cada función y tu agente, para que lo que leen se quede contigo. Al final, un interruptor en
+Ajustes comprueba que nada va a otro ordenador. Necesitas un ordenador que pueda mover un modelo, mejor con tarjeta
+gráfica. Algunas partes de WireCat aún envían datos fuera cuando se ejecutan, y
+[el final de la página](#lo-que-aún-sale-de-tu-ordenador) las enumera.
+
+**Pasos:** [1. Pon un modelo](#1-pon-un-modelo-en-tu-ordenador) · [2. Ya local](#2-lo-que-ya-es-local) ·
+[3. El modelo de IA](#3-el-modelo-de-ia-en-ajustes) · [4. Lectura de hechos](#4-lectura-de-hechos) ·
+[5. Ayudas de búsqueda](#5-buscar-a-fondo-y-reescribir-registros-para-buscar) · [6. Voz](#6-mensajes-de-voz) ·
+[7. Tu agente](#7-tu-agente-con-un-modelo-local) · [8. Resúmenes](#8-resúmenes-y-el-agente-de-correo) ·
+[9. Solo este ordenador](#9-activa-solo-este-ordenador) · [Lista](#lista-todo-local)
 
 ## 1. Pon un modelo en tu ordenador
 
@@ -54,11 +61,13 @@ No tienes que cambiar nada para esto:
 - La **búsqueda por significado** y la **búsqueda de imágenes** usan modelos que WireCat descarga en tu ordenador.
 - Las **grabaciones de reuniones** se transcriben en tu ordenador.
 - **Enlazar chats, los borradores de respuesta y leer el texto de los adjuntos con un modelo de IA** siguen apagados
-  hasta que tú les asignas un modelo.
+  hasta que los activas. Cuando funcionan, usan el modelo de IA del paso 3, salvo que un perfil de mensajería fije un
+  modelo propio.
 
 ## 3. El modelo de IA en Ajustes
 
-Este modelo lee el texto de las imágenes que añades a la memoria, y puede leer fuentes para proponer hechos. En
+Este modelo lee el texto de las imágenes que añades a la memoria, puede leer fuentes para proponer hechos, y sirve para
+enlazar chats, los borradores de respuesta y el texto de los adjuntos. En
 WireCat Desktop, abre **Ajustes**, **Modelo de IA**. [Modelo de IA y mejor búsqueda](./ai-model.mdx) explica cada
 campo.
 
@@ -81,8 +90,8 @@ memo models ai set ollama --model llava --allow-remote
 1. Como **Proveedor**, elige **OpenAI o compatible**.
 2. En **Dirección (base URL)**, escribe la dirección de tu servidor de la tabla de arriba.
 3. Escribe el nombre del modelo tal como lo muestra tu servidor.
-4. En **Clave de API**, escribe cualquier valor. WireCat pide una clave incluso para un servidor en tu ordenador, y el
-   servidor la ignora.
+4. Deja vacía la **Clave de API**. Un modelo en este ordenador no suele necesitar clave. Escribe una solo si tu
+   servidor la pide.
 5. Guarda y pulsa **Comprobar**.
 
 ## 4. Lectura de hechos
@@ -102,9 +111,10 @@ servicio compatible con OpenAI**. Después acepta con el botón que nombra el pr
 segundos, así que un modelo sin tarjeta gráfica probablemente se quedará sin tiempo, y la búsqueda mantendrá su propio
 orden.
 
-**Reescribir registros para buscar mejor** añade otras palabras a tus notas, documentos y correos. WireCat Desktop solo
-ofrece modelos en la nube para esto, así que déjalo apagado ahí. Desde una terminal puedes apuntarlo a tu servidor
-local:
+**Reescribir registros para buscar mejor** añade otras palabras a tus notas, documentos y correos. Pulsa **Activar** y
+elige **Otro modelo en una dirección**. Escribe el nombre del modelo como lo nombra tu servidor, por ejemplo
+`llama3.1:8b`, y en **Dirección (base URL)** escribe la dirección de tu servidor, como `http://localhost:11434/v1`.
+**Qué se envía al activarlo** dice entonces que el texto se queda en este ordenador. Lo mismo desde una terminal:
 
 ```sh
 memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
@@ -172,9 +182,26 @@ pequeño en un portátil responde despacio y se equivoca más con los comandos d
 
 ## 8. Resúmenes y el agente de correo
 
-Los [resúmenes](./digests.mdx) y el agente de correo de WireCat Desktop ejecutan Claude Code con el modelo de
-Anthropic. Arrancan sin tus ajustes de Claude Code, así que los pasos de arriba no les llegan. Hoy envían a Anthropic el
-correo y los mensajes que leen. Si quieres que todo sea local, no los actives.
+Los [resúmenes](./digests.mdx) y el agente de correo los escribe un agente de programación en este ordenador: el que
+eliges en **Ajustes**, **Agente para tareas en segundo plano**, o el **Agente** propio de un resumen. Ese agente envía
+el correo y los mensajes que lee a su propio modelo. Claude Code y Codex arrancan estas tareas sin tus ajustes propios
+para ellos, así que la configuración local del paso 7 no les llega, y usan el modelo de su proveedor. Si quieres que
+todo sea local, deja apagados los resúmenes y el agente de correo, o comprueba dónde funciona el modelo de tu agente
+antes de activarlos.
+
+## 9. Activa Solo este ordenador
+
+Cuando termines los pasos de arriba, abre **Ajustes**, **Solo este ordenador**, y activa **Todas las llamadas a
+modelos en este ordenador**. Así cada herramienta de WireCat envía texto solo a un modelo en este ordenador, y rechaza
+un modelo en otro ordenador antes de enviar nada. Un agente puede activarlo, pero solo tú puedes desactivarlo.
+
+Bajo el interruptor, **Adónde envía datos cada función ahora** lista cada función con **Este ordenador**, **Otro
+ordenador**, **A través de tu agente** o **Desactivado**. Arregla cada fila que dice **Otro ordenador**. Lo que va **A
+través de tu agente** (el resumen, leer imágenes y los agentes por MCP) funciona fuera de WireCat: sus datos se quedan
+aquí solo si tu agente usa un modelo en este ordenador.
+
+**Leer imágenes**, debajo en Ajustes, envía una imagen que eliges a Claude Code o Codex y de ahí a su proveedor.
+Solo este ordenador no lo impide. Déjalo en **Nunca** si ninguna imagen debe salir de este ordenador.
 
 ## Lista: todo local
 
@@ -185,16 +212,17 @@ correo y los mensajes que leen. Si quieres que todo sea local, no los actives.
    apagado o configurado desde una terminal con tu servidor local.
 5. Los mensajes de voz se transcriben con `--local`.
 6. Tu agente usa un modelo local, o no conectas ningún agente.
-7. Los resúmenes y el agente de correo están apagados.
+7. Los resúmenes y el agente de correo están apagados, o su agente usa un modelo en este ordenador.
+8. **Leer imágenes** está en **Nunca**.
+9. **Solo este ordenador** está activado, y ninguna fila dice **Otro ordenador**.
 
 ## Lo que aún sale de tu ordenador
 
-- Los resúmenes y el agente de correo, que ejecutan Claude Code con el modelo de Anthropic.
+- Los resúmenes y el agente de correo, cuando el agente que los escribe usa un modelo en la nube.
+- Una imagen que pides leer a un agente, cuando **Leer imágenes** está activado.
 - Todo lo que lee tu agente, cuando el agente usa un modelo en la nube.
-
-WireCat está preparando un solo interruptor que mantenga todas las funciones en tu ordenador y muestre qué es local y
-qué no.
 
 ## Siguiente paso
 
-[Modelo de IA y mejor búsqueda](./ai-model.mdx) explica cada ajuste con más detalle.
+[Modelo de IA y mejor búsqueda](./ai-model.mdx) explica cada ajuste con más detalle, también
+[Solo este ordenador](./ai-model.mdx#solo-este-ordenador).

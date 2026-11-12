@@ -1,14 +1,14 @@
 ---
 title: Resúmenes en WireCat Desktop
 sidebarTitle: "Resúmenes"
-description: Recibe un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o por correo, con un límite de gasto que tú fijas.
+description: Recibe un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o por correo, escrito por el agente de IA que elijas.
 ---
 
-Un resumen es una página breve que dice qué llegó y qué te espera, hecha a partir de tus chats, correo, reuniones y
-tareas. La página **Resúmenes** de WireCat Desktop los configura: cuándo se ejecuta cada uno, qué lee, adónde lo envía
-y cuánto puede gastar. Una vez configurado, recibes un resumen cada mañana o cada semana sin pedírselo a tu agente.
-Claude Code escribe cada resumen, así que la página necesita Memo y Claude Code. Si falta Claude Code, la página
-ofrece **Instalarlo en Agentes**.
+Tienes muchos chats, correos y reuniones, y no tienes tiempo de leerlos todos cada mañana. Un resumen es una página
+breve que dice qué llegó y qué te espera. En la página **Resúmenes** de WireCat Desktop lo configuras una vez: cuándo
+se ejecuta, qué lee, adónde se envía y qué agente de IA lo escribe. Después, recibes un resumen cada mañana o cada
+semana sin pedirlo. La página necesita Memo, que guarda tus fuentes, y un agente de programación en este ordenador,
+como Claude Code, Gemini CLI u OpenCode.
 
 Resúmenes está marcada como beta: ves una β junto a su nombre. La sección es nueva y está poco probada.
 
@@ -20,6 +20,17 @@ Resúmenes está marcada como beta: ves una β junto a su nombre. La sección es
   caption="Resúmenes: una fila por resumen, con cuándo se ejecutó y cuándo se ejecuta la próxima vez."
 />
 
+## Antes de empezar
+
+- **Memo** está instalado en la página Herramientas. Sin él, la página ofrece instalarlo.
+- **Un agente que pueda escribir resúmenes.** El resumen lo escribe un agente de programación en este ordenador. Claude
+  Code, Gemini CLI y OpenCode pueden hacerlo. Codex puede hacerlo después de que aceptes un aviso, mira
+  [Elegir el agente](#elegir-el-agente). La lista de **Ajustes**, **Agente para tareas en segundo plano**, dice por qué
+  cualquier otro agente no puede. Si ningún agente está listo, la página lo dice y ofrece **Elegirlo en Ajustes**.
+- **Opcional, un sitio adonde enviarlo.** Para recibir resúmenes en Telegram o por correo, conecta antes un bot de
+  Telegram o una cuenta de correo en la página Herramientas. Sin uno, un resumen solo se ve en la aplicación y como
+  notificación.
+
 ## Crear un resumen
 
 En **Nuevo resumen**, elige **Resumen diario**, **Resumen semanal** o **Crear el tuyo**, y pulsa **Configurar**. El
@@ -28,24 +39,55 @@ diálogo **Crear resumen** pide:
 - **Nombre.** Un segundo resumen de la misma plantilla recibe su propio nombre, como «Resumen semanal 2».
 - **Horas** y **Días:** una o más horas al día, cada día o los días que elijas. La tabla dice entonces, por ejemplo,
   «Dos veces al día: 08:30 y 18:00» o «Entre semana a las 09:00».
-- **De dónde toma:** las fuentes que lee. Sin ninguna elegida, lee todas las fuentes conectadas.
-- **Instrucciones** (opcional): qué buscar, con tus palabras.
+- **De dónde toma:** las fuentes que lee: Telegram, MAX, WhatsApp, Correo, Reuniones, Tareas, Google Drive, Google
+  Calendar y CRM. Sin ninguna elegida, lee todas las fuentes conectadas.
+- **Dónde:** adónde enviarlo, un **Bot de Telegram** o **Correo**. Elige la cuenta que lo envía y quién lo recibe, y
+  pulsa **Añadir**.
+- **Instrucciones** (opcional): qué buscar y qué saltar, con tus palabras.
+- **Agente** y **Modelo:** quién lo escribe. Mira [Elegir el agente](#elegir-el-agente).
 - **Límites de gasto:** como mucho esta cantidad por ejecución, y por día.
 - **Ejecutar según el horario.**
 
 Pulsa **Crear**.
 
+<DesktopShot
+  shot="digest-editor"
+  folder="desktop/docs"
+  lang="es"
+  alt="El diálogo Crear resumen: adónde enviarlo, las instrucciones, la lista Agente con Claude Code elegido, el campo Modelo y los límites de gasto"
+  caption="Crear resumen: el agente que lo escribe, su modelo y cuánto puede costar una ejecución."
+/>
+
+### Elegir el agente
+
+**Agente** es el agente de programación que escribe el resumen. Cada ejecución es una llamada de pago a su proveedor,
+así que lo que lee el resumen también va a ese proveedor. Un resumen nuevo empieza con Claude Code si está listo. Si no,
+empieza con el agente que elegiste en **Ajustes**, **Agente para tareas en segundo plano**.
+
+- **Modelo** es opcional. Escribe un alias como `sonnet` o el nombre de un modelo. Vacío es el modelo por defecto del
+  agente.
+- **Límites de gasto** solo funcionan con un agente que dice cuánto cuesta una ejecución. Hoy es Claude Code. Con
+  cualquier otro agente, el diálogo dice que un límite de gasto no puede pararlo.
+- **Codex** sigue sus propios límites, no la lista de comandos permitidos de WireCat. Para usarlo, marca la casilla que
+  dice que Codex puede ejecutar cualquier programa de este ordenador mientras escribe este resumen. Sin la marca,
+  **Crear** y **Guardar** esperan.
+- Los agentes que Memo nunca ejecuta según un horario aparecen bajo el campo, con el motivo.
+
+[Agente para tareas en segundo plano](./ai-model.mdx#agente-para-tareas-en-segundo-plano) explica la elección en
+Ajustes, que también usa el agente de correo.
+
 ## La tabla
 
 Cada resumen muestra su **Nombre**, **Con qué frecuencia**, **De dónde toma**, **Adónde envía**, su última
-**Ejecución** con lo que costó y la siguiente, y un interruptor **Programado**. **Otros horarios**, debajo, lista
-otras tareas que Memo ejecuta según un horario, como el agente de correo, y dónde se cambia cada una.
+**Ejecución** con lo que costó y la siguiente, y un interruptor **Programado**. Un resumen que no puede ejecutarse
+hasta que actúes muestra **Te espera**. **Otros horarios**, debajo, lista otras tareas que Memo ejecuta según un
+horario, como el agente de correo, y dónde se cambia cada una.
 
 ## Un resumen
 
 Pulsa un resumen para abrirlo.
 
-- **Obtener ahora** hace uno al momento. Antes dice cuánto costará más o menos. Su menú puede mostrarlo solo aquí o
+- **Obtener ahora** escribe uno al momento. Antes dice cuánto costará más o menos. Su menú puede mostrarlo solo aquí o
   enviarlo a un único destino.
 - **Programar** o **Quitar de la programación**.
 - **Ajustes:** los mismos campos que al crearlo, más **Lo envía a** (un bot de Telegram o el correo) y lo que gastó
@@ -64,7 +106,16 @@ Los días que tienes aparecen al lado. Pulsa uno para leerlo.
 Mientras WireCat está abierto, un resumen nuevo muestra una notificación. Un enlace `wirecat://` a un resumen, por
 ejemplo en un mensaje que te envió un agente, lo abre en esta página.
 
+## Si un resumen no llega
+
+- **La ejecución falló porque el agente no tiene saldo, llegó a un límite o no tiene la sesión iniciada.** La página
+  del resumen nombra el agente y el motivo. Si hay otro agente listo, ofrece **Cambiar a** ese agente.
+- **Ningún agente está listo o elegido.** Abre **Ajustes**, **Agente para tareas en segundo plano**, y elige uno.
+- **Se ve aquí, pero no en Telegram ni en el correo.** Abre los **Ajustes** del resumen y revisa **Lo envía a**.
+
+Para cualquier otro error, [Errores y cómo resolverlos](./troubleshooting.mdx) muestra dónde leerlo completo.
+
 ## Siguiente paso
 
-Conecta un bot de Telegram o el correo en la página Herramientas para recibir ahí los resúmenes, y después configura
-**Lo envía a**.
+Pregúntale a tu agente por algo que listó el resumen, por ejemplo «¿Qué quiere Anna de mí?». Para que lo que lee el
+resumen se quede en tu ordenador, mira [Usar WireCat con modelos locales](./local-models.mdx#8-resúmenes-y-el-agente-de-correo).

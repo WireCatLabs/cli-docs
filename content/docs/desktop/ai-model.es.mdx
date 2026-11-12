@@ -1,12 +1,26 @@
 ---
 title: Modelo de IA y mejor búsqueda
-description: Configura un modelo de IA y una clave para WireCat Desktop, elige quién lee tus fuentes para proponer hechos y activa las dos ayudas de búsqueda que solo envían datos después de que aceptes.
+description: Configura un modelo de IA y una clave para WireCat Desktop, elige el agente de los resúmenes y del agente de correo, mantén cada llamada a un modelo en este ordenador y activa las dos ayudas de búsqueda que solo envían datos después de que aceptes.
 ---
 
 Algunas funciones de WireCat necesitan un modelo de IA: leer el texto de una imagen, proponer hechos a partir de un
-documento y dos ayudas opcionales de búsqueda. Esta página muestra cómo configurar un modelo y una clave para todas
-ellas en WireCat Desktop, y qué envía cada función fuera de tu ordenador. Todo lo de aquí está desactivado hasta que lo
-activas. Sin un modelo, tu propio agente de IA hace este trabajo cuando se lo pides.
+documento, escribir resúmenes y dos ayudas opcionales de búsqueda. En **Ajustes** eliges qué modelo o agente hace cada
+trabajo, y ves qué envía cada uno fuera de tu ordenador. Al terminar, las funciones usan el modelo que elegiste, y
+sabes adónde van tus datos. Todo lo de aquí está desactivado hasta que lo activas. Sin un modelo, tu propio agente de
+IA hace este trabajo cuando se lo pides.
+
+**En esta página:** [Modelo de IA](#configurar-el-modelo-de-ia) ·
+[Agente para tareas en segundo plano](#agente-para-tareas-en-segundo-plano) ·
+[Solo este ordenador](#solo-este-ordenador) · [Leer imágenes](#leer-imágenes) ·
+[Lectura de hechos](#lectura-de-hechos) · [Mejor búsqueda](#mejor-búsqueda)
+
+<DesktopShot
+  shot="settings"
+  folder="desktop/docs"
+  lang="es"
+  alt="La página Ajustes: idioma, tamaño de la interfaz, los dos interruptores de herramientas, el modelo de IA y la lectura de hechos"
+  caption="Ajustes: el modelo de IA está debajo de los interruptores de herramientas."
+/>
 
 ## Configurar el modelo de IA
 
@@ -18,13 +32,14 @@ Abre **Ajustes**. La sección **Modelo de IA** está debajo de los interruptores
    [Mantenerlo en tu ordenador](#mantenerlo-en-tu-ordenador) para otras direcciones.
 2. Elige el **Modelo**. Ollama y OpenRouter listan sus modelos. Anthropic y OpenAI muestran su lista solo con tu
    clave, así que escribe el nombre del modelo como lo escribe el proveedor.
-3. Escribe la **Clave de API**. Se guarda en el almacén de contraseñas del sistema y no
-   se vuelve a mostrar. Donde no hay almacén de contraseñas, se guarda en un archivo que solo tu usuario puede leer.
-   La sección dice cuál.
+3. Escribe la **Clave de API**. Se guarda en el almacén de contraseñas del sistema y no se vuelve a mostrar. Donde no
+   hay almacén de contraseñas, se guarda en un archivo que solo tu usuario puede leer. La sección dice cuál. Un modelo
+   en este ordenador no suele necesitar clave.
 4. Guarda y pulsa **Comprobar**. Envía una petición corta, que cobra tu proveedor, y dice con palabras sencillas si
-   funciona, con el modelo y lo rápido que respondió, o qué arreglar. Ollama tiene que
-escuchar en su dirección habitual, `127.0.0.1:11434`. [Usar WireCat con modelos locales](./local-models.mdx)
-repasa cada función.
+   funciona, con el modelo y lo rápido que respondió, o qué arreglar.
+
+Enlazar chats, los borradores de respuesta y leer el texto de los adjuntos también usan este modelo, salvo que un
+perfil de mensajería fije un modelo propio para ellos.
 
 **Leer imágenes con este modelo** deja que **Añadir a la memoria** envíe imágenes a este modelo para leer su texto. La
 nota de debajo dice qué lee las imágenes ahora. Un modelo en tu ordenador suele ser más lento y menos preciso. Un
@@ -36,45 +51,99 @@ cambio vale solo para las imágenes que añadas después.
 servicio alojado, como OpenRouter en `https://openrouter.ai/api/v1`, o un modelo que ejecutas tú. Ejecuta un modelo en
 este ordenador con un servidor que hable la interfaz de OpenAI y escribe su dirección, por ejemplo
 `http://localhost:8080/v1`. Así las imágenes y los textos que lee el modelo nunca salen de tu ordenador. Un modelo en
-un servidor de tu empresa los mantiene dentro de la empresa. La dirección debe empezar por `https://`; `http://` sin
-más solo funciona para un servidor en este ordenador. Escribe una clave incluso para
-un servidor en este ordenador: si tu servidor no pide ninguna, vale cualquier valor. Tu clave se envía solo a esta dirección.
+un servidor de tu empresa los mantiene dentro de la empresa. La dirección debe empezar por `https://`. `http://` sin
+más solo funciona para un servidor en este ordenador. Tu clave se envía solo a esta dirección.
 
 **Ollama en este ordenador (beta)** también lo mantiene todo en tu ordenador, y lista los modelos que descargaste.
+Ollama tiene que escuchar en su dirección habitual, `127.0.0.1:11434`.
+[Usar WireCat con modelos locales](./local-models.mdx) repasa cada función.
 
-### Lectura de hechos
+## Agente para tareas en segundo plano
 
-**Lectura de hechos**, más abajo, elige quién lee una fuente cuando pides a
+El agente de correo y los resúmenes se ejecutan según un horario, sin ti. Un agente de programación en este ordenador
+hace ese trabajo, y **Agente para tareas en segundo plano** elige cuál. Elige un agente y pulsa **Usar este agente**.
+
+<DesktopShot
+  shot="settings-agents"
+  folder="desktop/docs"
+  lang="es"
+  alt="Ajustes: Agente para tareas en segundo plano con Claude Code listo, y después Solo este ordenador con su interruptor y la lista de adónde envía datos cada función"
+  caption="Agente para tareas en segundo plano y Solo este ordenador, debajo del modelo de IA."
+/>
+
+- Claude Code, Gemini CLI y OpenCode se ciñen a los comandos de WireCat mientras ejecutan una tarea, y muestran
+  **Listo** cuando están instalados.
+- Codex muestra **Listo tras un aviso**. Memo no puede limitar los comandos que ejecuta Codex, y una tarea lee tu
+  correo y tus mensajes. Elígelo, y un diálogo pregunta antes **¿Ejecutar las tareas en segundo plano en Codex?**. Se
+  pregunta una sola vez.
+- Los demás agentes aparecen en gris, con el motivo, como **No instalado** o **Sus comandos no se pueden limitar**.
+- Si hay varios agentes listos, nada se ejecuta hasta que elijas. Si solo hay uno listo, las tareas en segundo plano
+  se ejecutan en él.
+
+Cada tarea envía lo que lee al modelo del agente que la ejecuta. Un resumen también puede tener su propio agente: mira
+[Elegir el agente](./digests.mdx#elegir-el-agente). Cuando una ejecución falla porque el agente no tiene saldo, llegó a
+su límite de uso o no tiene la sesión iniciada, el agente de correo y el resumen nombran el agente y ofrecen
+**Cambiar a** otro que esté listo.
+
+## Solo este ordenador
+
+**Todas las llamadas a modelos en este ordenador** hace que cada herramienta de WireCat envíe texto solo a un modelo
+en este ordenador. Un modelo en otro ordenador se rechaza antes de enviar nada. Un agente puede activarlo, pero solo
+tú puedes desactivarlo.
+
+**Adónde envía datos cada función ahora** lista cada función, como el modelo de IA, las ayudas de búsqueda, enlazar
+chats, los mensajes de voz y el resumen, con **Este ordenador**, **Otro ordenador**, **A través de tu agente** o
+**Desactivado**. Mientras el interruptor está activado, una función que apunta a otro sitio se marca como
+**Rechazado** y no envía nada hasta que le des un modelo en este ordenador.
+
+Lo que va a través de tu agente (el resumen, leer imágenes, los agentes por MCP) funciona fuera de WireCat. Sus datos
+se quedan aquí solo si tu agente usa un modelo en este ordenador.
+
+## Leer imágenes
+
+WireCat no lee ninguna imagen por sí mismo. Con **Leer imágenes** en **Cuando lo pidas**, tu agente de programación lee
+el texto de una imagen que eliges, y desde entonces la búsqueda lo encuentra. Elige **Agente que lee**, Claude Code o
+Codex, y si quieres un **Modelo**, y pulsa **Activar**. Solo tú puedes activarlo.
+
+La imagen que pides leer va a ese agente y de ahí a su proveedor, salvo que el agente use un modelo en este ordenador.
+**Solo este ordenador** no lo impide. **Nunca** mantiene todas las imágenes aquí.
+
+## Lectura de hechos
+
+**Lectura de hechos** elige quién lee una fuente cuando pides a
 [Añadir a la memoria](./memory.mdx#añadir-a-la-memoria) que proponga hechos. **Modelo de IA (recomendado)** usa el
-modelo y la clave de arriba. Elige un lector y pulsa **Usar este lector**.
+modelo y la clave de arriba. Cada lector dice si el texto sale de este ordenador. Elige un lector y pulsa **Usar este
+lector**.
 
 ## Mejor búsqueda
 
 Dos ayudas pueden hacer que la búsqueda encuentre más. Las dos están desactivadas por defecto, y las dos envían datos
-al proveedor que elijas, así que cada una pregunta antes. Están en los detalles de Memo: en la página Herramientas,
+al modelo que elijas, así que cada una pregunta antes. Están en los detalles de Memo: en la página Herramientas,
 pulsa **Gestionar** en la fila de Memo.
 
 Antes de activarlas, configura tus notas en el mismo panel. La tarjeta **Configura tus notas** tiene tres pasos: elegir
 tus carpetas de notas, leer tus notas y **Búsqueda por significado (opcional)**. El último paso ofrece los modelos de
-búsqueda locales; el recomendado lleva la etiqueta **Mejor modelo local**. Funciona en tu ordenador y no envía nada.
+búsqueda locales. El recomendado lleva la etiqueta **Mejor modelo local**. Funciona en tu ordenador y no envía nada.
 
 ### Reescribir registros para buscar mejor
 
 A tus notas, documentos y correos se les añaden otras palabras, para que una pregunta hecha con otras palabras los
-siga encontrando. Pulsa **Activar**. **Qué se envía al activarlo** muestra qué registros se envían, a qué proveedor y
-modelo, el precio, y que al desactivarlo se borra el texto añadido. Aceptas con el botón que nombra el número de
-registros y el proveedor. Después, cada sincronización envía también los registros nuevos. **Desactivar** pregunta
-antes y luego borra el texto añadido.
+siga encontrando. Pulsa **Activar** y elige un modelo: uno alojado, u **Otro modelo en una dirección** para un
+servidor en este ordenador u otro servicio compatible con OpenAI. **Qué se envía al activarlo** muestra qué registros
+se envían, adónde, el precio, y que al desactivarlo se borra el texto añadido. Aceptas con el botón que nombra el
+número de registros y el proveedor. Después, cada sincronización envía también los registros nuevos. **Desactivar**
+pregunta antes y luego borra el texto añadido.
 
 ### Buscar a fondo
 
-Un modelo alojado reordena los primeros resultados de una búsqueda, cuando se lo pides. Pulsa **Permitir**. **Qué
-envía buscar a fondo** muestra el proveedor, el modelo y el precio, y que solo se envían tu pregunta y sus primeros
-resultados, y solo cuando pulsas el botón. Una búsqueda sin él no envía nada.
+Un modelo reordena los primeros resultados de una búsqueda, cuando se lo pides. Pulsa **Permitir**. **Qué envía buscar
+a fondo** muestra el proveedor, el modelo y el precio, y que solo se envían tu pregunta y sus primeros resultados, y
+solo cuando pulsas el botón. Una búsqueda sin él no envía nada.
 
 Después, en la página [Buscar](./index.mdx#buscar), una búsqueda en Memo con dos o más resultados muestra **Buscar a
 fondo**. Púlsalo para reordenar esa búsqueda.
 
 ## Siguiente paso
 
-[Añade una nota o una imagen a la memoria](./memory.mdx#añadir-a-la-memoria) y pregúntale a tu agente sobre ella.
+[Añade una nota o una imagen a la memoria](./memory.mdx#añadir-a-la-memoria) y pregúntale a tu agente sobre ella, o
+[configura un resumen](./digests.mdx) que escriba el agente que elegiste.

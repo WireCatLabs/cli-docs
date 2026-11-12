@@ -6,9 +6,16 @@ description: Step by step, keep your messages, mail, notes and pictures away fro
 
 WireCat keeps your messages, mail, notes and files on your computer. Some features also send text, pictures or a
 search question to an AI model, and so does the agent you connect to WireCat. When that model is a cloud service, your
-private text goes to that company. This guide shows how to run a model on your own computer and point every feature
-and your agent at it, step by step, so that what they read stays with you. You need a computer that can run a model,
-ideally with a graphics card. A few parts of WireCat cannot use a local model yet, and the end of the page lists them.
+private text goes to that company. Follow these steps to run a model on your own computer and point every feature and
+your agent at it, so that what they read stays with you. At the end, one switch in Settings checks that nothing goes
+to another computer. You need a computer that can run a model, ideally with a graphics card. A few parts of WireCat
+still send data out when they run, and [the end of the page](#what-still-leaves-your-computer-today) lists them.
+
+**Steps:** [1. Run a model](#1-run-a-model-on-your-computer) · [2. Already local](#2-what-is-already-local) ·
+[3. The AI model](#3-the-ai-model-in-settings) · [4. Reading for facts](#4-reading-for-facts) ·
+[5. Search helpers](#5-search-harder-and-rewriting-records-for-search) · [6. Voice](#6-voice-messages) ·
+[7. Your agent](#7-your-coding-agent-on-a-local-model) · [8. Digests](#8-digests-and-the-mail-agent) ·
+[9. Only this computer](#9-turn-on-only-this-computer) · [Checklist](#checklist-everything-local)
 
 ## 1. Run a model on your computer
 
@@ -50,12 +57,13 @@ You do not need to change anything for these:
 
 - **Search by meaning** and **picture search** run on models that WireCat downloads to your computer.
 - **Meeting recordings** are transcribed on your computer.
-- **Chat linking, reply drafts and reading text in attachments with an AI model** stay off until you set a model for
-  them yourself.
+- **Chat linking, reply drafts and reading text in attachments with an AI model** stay off until you turn them on.
+  When they run, they use the AI model from step 3, unless a messenger profile sets a model of its own.
 
 ## 3. The AI model in Settings
 
-This model reads the text in pictures you add to memory, and can read sources for facts. In WireCat Desktop open
+This model reads the text in pictures you add to memory, can read sources for facts, and serves chat linking, reply
+drafts and the text in attachments. In WireCat Desktop open
 **Settings**, **AI model**. See [AI model and better search](./ai-model.mdx) for every field.
 
 **With Ollama:**
@@ -77,8 +85,7 @@ memo models ai set ollama --model llava --allow-remote
 1. As **Provider**, choose **OpenAI or compatible**.
 2. In **Address (base URL)**, enter your server's address from the table above.
 3. Type the model's name as your server shows it.
-4. In **API key**, type any value. WireCat asks for a key even for a server on your computer, and the server ignores
-   it.
+4. Leave **API key** empty. A model on this computer usually needs no key. Type one only if your server asks for it.
 5. Save and click **Check**.
 
 ## 4. Reading for facts
@@ -96,8 +103,10 @@ Both helpers are off by default. They are in Memo's details: on the Tools page, 
 OpenAI-compatible service**. Then agree with the button that names the provider. It waits only 5 seconds for an answer, so a model that runs without a graphics card will likely
 run out of time, and the search keeps its own order.
 
-**Rewrite records for better search** adds other words to your notes, documents and emails. WireCat Desktop offers only
-cloud models for it, so leave it off there. From a terminal you can point it at your local server:
+**Rewrite records for better search** adds other words to your notes, documents and emails. Click **Turn on** and
+choose **Another model at an address**. Type the model's name as your server names it, for example `llama3.1:8b`, and
+in **Address (base URL)** enter your server's address, such as `http://localhost:11434/v1`. **What turning it on
+sends** then says that the text stays on this computer. The same from a terminal:
 
 ```sh
 memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
@@ -162,9 +171,25 @@ on a laptop answers slowly and makes more mistakes with WireCat's commands than 
 
 ## 8. Digests and the mail agent
 
-[Digests](./digests.mdx) and the mail agent in WireCat Desktop run Claude Code on Anthropic's model. They start
-without your Claude Code settings, so the steps above do not reach them. Today they send the mail and messages they
-read to Anthropic. If you want everything local, do not turn them on.
+[Digests](./digests.mdx) and the mail agent are written by a coding agent on this computer: the one you choose in
+**Settings**, **Agent for background jobs**, or a digest's own **Agent**. That agent sends the mail and messages it
+reads to its own model. Claude Code and Codex start these jobs without your own settings for them, so the local setup
+from step 7 does not reach them, and they use their provider's model. If you want everything local, keep digests and
+the mail agent off, or check where your agent's model runs before you turn them on.
+
+## 9. Turn on Only this computer
+
+When the steps above are done, open **Settings**, **Only this computer**, and turn on **Keep every model call on this
+computer**. Then every WireCat tool sends text only to a model on this computer, and refuses a model on another
+computer before anything is sent. An agent may turn it on, but only you can turn it off.
+
+Under the switch, **Where each feature sends data now** lists each feature with **This computer**, **Another
+computer**, **Through your agent** or **Off**. Fix each row that says **Another computer**. What runs **Through your
+agent** (the digest, reading pictures and agents over MCP) is outside WireCat: its data stays here only if your agent
+runs a model on this computer.
+
+**Reading pictures**, below it in Settings, sends a picture you choose to Claude Code or Codex and from there to its
+provider. Only this computer does not stop it. Leave it at **Never** if no picture should leave this computer.
 
 ## Checklist: everything local
 
@@ -175,15 +200,17 @@ read to Anthropic. If you want everything local, do not turn them on.
    a terminal to your local server.
 5. Voice messages are transcribed with `--local`.
 6. Your agent runs on a local model, or you connect no agent.
-7. Digests and the mail agent are off.
+7. Digests and the mail agent are off, or their agent runs a model on this computer.
+8. **Reading pictures** is **Never**.
+9. **Only this computer** is on, and no row says **Another computer**.
 
 ## What still leaves your computer today
 
-- Digests and the mail agent, which run Claude Code on Anthropic's model.
+- Digests and the mail agent, when the agent that writes them runs on a cloud model.
+- A picture you ask an agent to read, when **Reading pictures** is on.
 - Anything your agent reads, when the agent runs on a cloud model.
-
-WireCat is working on one switch that keeps every feature on your computer and shows what is local and what is not.
 
 ## Next
 
-[AI model and better search](./ai-model.mdx) explains each setting in more detail.
+[AI model and better search](./ai-model.mdx) explains each setting in more detail, including
+[Only this computer](./ai-model.mdx#only-this-computer).

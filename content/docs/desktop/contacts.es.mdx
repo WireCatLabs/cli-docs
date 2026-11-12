@@ -6,9 +6,9 @@ description: Ve quién es quién en Telegram, MAX, WhatsApp, el correo, las reun
 
 La misma persona a menudo te escribe por Telegram, WhatsApp y correo, y además está en tu CRM. La página **Contactos**
 de WireCat Desktop muestra a cada persona una sola vez, con todas sus cuentas. Úsala para comprobar quién es quién,
-para unir dos entradas que son una persona y para deshacer una unión equivocada. Tus agentes leen la misma lista, así
-que una lista correcta les da mejores respuestas sobre las personas con las que hablas. La página necesita Memo, que
-guarda la lista; sin él, la página lo dice y ofrece **Instalar Memo**.
+para unir dos entradas que son una persona, para deshacer una unión equivocada y para añadir a alguien por su nombre.
+Tus agentes leen la misma lista, así que una lista correcta les da mejores respuestas sobre las personas con las que
+hablas. La página necesita Memo, que guarda la lista. Sin él, la página lo dice y ofrece **Instalar Memo**.
 
 Contactos está marcada como beta: ves una β junto a su nombre. La sección es nueva y está poco probada.
 
@@ -33,19 +33,27 @@ Las pestañas reparten a todos en **Personas**, **Empresas**, **Boletines y avis
 clasificar**. Cada pestaña muestra su recuento. Un recuento con un más, como «5.002+», aún no es exacto.
 
 La tabla muestra **Nombre**, **Contacto**, **Mensajes suyos**, **Último contacto** y **Tareas**, 50 filas por página.
-El paginador de abajo lo cambia a 25 o 100. Una persona con teléfono y correo muestra el primero y «+1». Una persona
-con solo una cuenta de WhatsApp o MAX muestra ese servicio. Los bots llevan la marca **bot**. Encima de la tabla puedes
-buscar por nombre, teléfono o dirección, ordenar con **Orden** (más mensajes, contacto reciente, nombre o más tareas)
-y dejar solo a las personas con tareas o con nombre.
+El paginador de abajo lo cambia a 25 o 100. Una persona con teléfono y correo muestra los dos, uno debajo del otro.
+Una persona con solo una cuenta de WhatsApp o MAX muestra ese servicio. Los bots llevan una marca de bot. Encima de la
+tabla puedes buscar por nombre, teléfono o dirección, ordenar con **Orden** (más mensajes, contacto reciente, nombre o
+más tareas) y dejar solo a las personas con tareas o con nombre.
+
+### Añadir una persona
+
+**Añadir una persona**, encima de la tabla, añade a alguien que conoces solo por su nombre, por ejemplo para darle una
+tarea antes de que un mensaje lo nombre. Escribe el nombre y pulsa **Añadir**. Mientras escribes, el formulario lista
+las personas con un nombre parecido, cada una con un botón para abrirla. Si el mismo nombre ya está, el formulario
+pregunta una vez más, y **Añadir de todos modos** añade una segunda persona.
 
 ## Abrir una persona
 
 Pulsa un nombre para abrir la ficha de la persona:
 
-- **Cuentas:** cada cuenta con su servicio, los perfiles tuyos en los que se vio y una marca **bot** o **trabajo**.
-  **Desvincular**, junto a una cuenta, la quita de esta persona. Pregunta antes.
+- **Cuentas:** cada cuenta con su servicio, los perfiles tuyos en los que se vio, y si es un bot, una cuenta personal
+  o una cuenta de trabajo. **Desvincular**, junto a una cuenta, la quita de esta persona. Pregunta antes.
 - **Mover cuentas a una persona nueva:** marca las cuentas que son de otra persona y confirma. Al menos una cuenta se
-  queda con esta persona. El diálogo nombra a la persona de la que salen las cuentas, así que WireCat nunca quita una
+  queda con esta persona. En **Nombre de la persona nueva**, elige uno de los nombres de las cuentas marcadas. El
+  diálogo nombra a la persona de la que salen las cuentas, así que WireCat nunca quita una
   cuenta a otra persona.
 - **Unido a esta persona:** cada unión, con **Deshacer**. **Deshacer la unión** nombra a la persona y lista cada
   cuenta que vuelve.
@@ -71,6 +79,10 @@ Pulsa **Revisar coincidencias**. La pantalla **Posibles duplicados** muestra una
 Varias personas pueden escribir desde una dirección, como `info@` o `sales@` de una empresa. Esa tarjeta lleva la
 marca **buzón compartido**. **Buzón de la empresa** da la dirección a una empresa, que eliges o escribes. Después
 WireCat deja de sugerir unir a las personas que escriben desde ella.
+
+Dos personas con el mismo nombre también pueden compartir el dominio de una empresa. **Dirección de la empresa** en esa
+tarjeta pregunta cuál de sus direcciones es de la empresa. La dirección pasa a la empresa, y las dos personas siguen
+separadas.
 
 ## Responder a tus agentes
 

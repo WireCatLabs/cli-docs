@@ -3,12 +3,15 @@ title: Install and set up WireCat Desktop
 description: The app for macOS, Windows and Linux that installs, updates and checks the WireCat tools, connects them to your AI agents and signs you in, with no terminal. A walkthrough of every screen.
 ---
 
-WireCat Desktop is an app for people who want their AI agent to work with their messages, meetings,
-documents and notes, but do not want to install and maintain command-line tools by hand. It installs the
-WireCat tools, gives your AI agents the instructions to use them, opens each tool's sign-in and shows what
-the tools keep on your computer. This page follows the app in the order you meet it: install, first start,
-then each page of the window. The app is optional: every tool still installs and works from a terminal
-without it.
+You want your AI agent to work with your messages, meetings, documents and notes, but you do not want to install
+and maintain command-line tools by hand. WireCat Desktop does that for you. It installs the WireCat tools, gives your
+AI agents the instructions to use them, opens each tool's sign-in and shows what the tools keep on your computer.
+Read from the top to install the app and finish its setup in a few minutes. After that, each section explains one
+page of the window. The app is optional: every tool still installs and works from a terminal without it.
+
+**On this page:** [Download and install](#download-and-install) · [The first start](#the-first-start) ·
+[Sign in to a tool](#sign-in-to-a-tool) · [Pages of the app](#what-you-can-do-in-the-app) ·
+[Settings](#settings) · [Updates and removal](#updates-and-removal) · [Common issues](#common-issues)
 
 ## Download and install
 
@@ -166,9 +169,10 @@ such as Zoom, is left out of the check.
   needs your phone online.
 - **MCP server (or connect web):** lets ChatGPT or Claude in the browser use the tool. The
   [Tailscale Funnel](./tailscale-funnel.mdx) guide publishes the server, or you use a Cloudflare tunnel.
-- **Mail agent** (Email only): a switch that starts Memo's mail agent. It reads new mail every 5 minutes and proposes
+- **Mail agent** (Email only): a switch that starts Memo's mail agent. It reads new mail on a schedule and proposes
   tasks, invoices, orders and facts for you to accept on the [Memory](./memory.mdx) page, and it never sends anything.
-  One run costs at most $1. It needs Memo and Claude Code.
+  It needs Memo, and it runs in the agent you choose in Settings, under
+  [Agent for background jobs](./ai-model.mdx#agent-for-background-jobs). With Claude Code, one run costs at most $1.
 - **Set up your notes**, **Rewrite records for better search** and **Search harder** (Memo only): see
   [AI model and better search](./ai-model.mdx).
 - **Uninstall:** removes the tool. Its data stays on this computer until you delete it, and the dialog
@@ -255,7 +259,7 @@ note beside each says why. On the board, drop it on Done or Dismissed to close i
 ### Digests
 
 One short summary of your chats, mail, meetings and tasks every morning or every week, in the app, in Telegram or by
-mail, with a cost limit you set. [Digests](./digests.mdx) shows how to set one up.
+mail. A coding agent you choose, such as Claude Code, writes it. [Digests](./digests.mdx) shows how to set one up.
 
 ### Clients
 
@@ -361,6 +365,12 @@ From the top, the page has:
 - **AI model** and **Reading for facts**: one model and key for the features that need one. See
   [AI model and better search](./ai-model.mdx), and [Run WireCat on local models](./local-models.mdx) to keep it on
   your computer.
+- **Agent for background jobs:** the coding agent that runs the mail agent and the digests on a schedule. See
+  [Agent for background jobs](./ai-model.mdx#agent-for-background-jobs).
+- **Only this computer:** one switch that keeps every model call on this computer, with a list of where each feature
+  sends data now. See [Only this computer](./ai-model.mdx#only-this-computer).
+- **Reading pictures:** whether your coding agent may read the text of a picture you choose. See
+  [Reading pictures](./ai-model.mdx#reading-pictures).
 - **Tools:** the settings of each tool and of WireCat itself, as a list or as **JSON**. The app reads them from the
   tool and saves them through the tool's own `config` command, so the tool checks every value before it is written.
 - **Account groups:** a board that sorts your accounts into groups, such as personal and work. Drag an account to a
@@ -420,7 +430,7 @@ Prefer a terminal? [Install a tool by hand or with your agent](../installation.m
 
 ## Common issues
 
-Find the message you see, then follow the fix. If none fits, [Report a problem](#report-a-problem) in the app collects what the support team needs.
+Find the message you see, then follow the fix. An error on a tool's card is explained in [Errors and how to fix them](./troubleshooting.mdx). If none fits, [Report a problem](#report-a-problem) in the app collects what the support team needs.
 
 ### Windows says "Windows protected your PC"
 
