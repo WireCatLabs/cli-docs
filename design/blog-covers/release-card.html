@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: Onest; src: url("../../public/fonts/gNMKW3F-SZuj7xmf-HY.woff2") format("woff2"); font-weight: 400 900; }
+  html, body { margin: 0; }
+  body {
+    width: 1600px; height: 900px; overflow: hidden; position: relative;
+    font-family: "Onest", system-ui, sans-serif; color: #fff;
+    background:
+      radial-gradient(900px 700px at 25% 55%, #1a1d3a 0%, transparent 70%),
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0 / 28px 28px,
+      #0b0c14;
+  }
+  .brand { position: absolute; left: 88px; top: 92px; display: flex; align-items: center; gap: 18px; font-size: 44px; font-weight: 700; }
+  .brand svg { width: 64px; height: 64px; }
+  .title { position: absolute; left: 88px; top: 490px; line-height: 1; }
+  .title .word { font-size: 84px; font-weight: 700; }
+  .title .ver { font-size: 210px; font-weight: 700; color: #8d93ff; margin-top: 18px; letter-spacing: -4px; }
+  .shot { position: absolute; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.55); }
+  .shot img { display: block; width: 100%; }
+  .box { left: 540px; width: 1000px; border: 2px solid #3a3f8f; border-radius: 22px; }
+  .bleed { left: 562px; top: 150px; width: 1100px; border-top: 2px solid #3a3f8f; border-left: 2px solid #3a3f8f; border-top-left-radius: 22px; }
+</style>
+</head>
+<body>
+  <div class="brand">
+    <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#4b53f0"/><path d="M7.25 22.25 V9.75 l5 5 3.75 -5 3.75 5 5 -5 v12.5" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    WireCat
+  </div>
+  <div class="title"><div class="word">Desktop</div><div class="ver" id="ver"></div></div>
+  <div class="shot" id="frame"><img id="shot" src=""></div>
+</body>
+</html>
