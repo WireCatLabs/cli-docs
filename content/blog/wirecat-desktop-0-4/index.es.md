@@ -3,6 +3,8 @@ title: "WireCat Desktop 0.4: ver lo que guarda y poder cambiar de opinión"
 description: Una página nueva, Analítica, muestra lo que guarda WireCat y cómo lo usas. Las memorias aprobadas se pueden editar o retirar, las instalaciones muestran el progreso real y las reparaciones de ajustes nunca salen de tu ordenador.
 date: 2026-11-04
 tags: [release-notes, ai-agents, security]
+cover: ./cover.es.jpg
+coverAlt: "WireCat Desktop 0.4 junto a cuatro recuadros de la página Analítica en modo oscuro: 544 mensajes recibidos, un 5% más que los mismos días de la semana pasada, un recuento de correos recibidos vacío hasta una actualización de Memo, 2,4 horas de reuniones y tareas creadas y cerradas."
 author: viacheslav-ptsarev
 draft: false
 ---

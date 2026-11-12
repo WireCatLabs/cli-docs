@@ -3,6 +3,8 @@ title: Comparé memorias para agentes de IA y los archivos normales no lo hicier
 description: "Motores de memoria de terceros, WireCat Memo y una simple carpeta con archivos sobre las mismas preguntas. Qué responde el agente, qué registro cita y cuánto cuesta, más el LifeBench público."
 date: 2026-11-12
 tags: [ai-agents, benchmarks, search]
+cover: ./cover.jpg
+coverAlt: "Cinco formas de guardar registros sobre una mesa oscura: un fichero de madera, una caja gris sellada, un corcho con hilo rojo, una libreta negra y una carpeta de cartón sencilla en el centro. Delante de cada una hay un montón de tarjetas de preguntas con una marca verde, y los montones más altos son los de la carpeta y el fichero."
 author: viacheslav-ptsarev
 draft: false
 ---

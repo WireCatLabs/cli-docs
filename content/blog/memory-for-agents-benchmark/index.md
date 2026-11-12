@@ -3,6 +3,8 @@ title: I benchmarked memory for AI agents, and plain files did just as well
 description: "Third-party memory engines, WireCat Memo and a plain folder of files on the same questions. What the agent answers, which record it cites and what it costs, plus the public LifeBench."
 date: 2026-11-12
 tags: [ai-agents, benchmarks, search]
+cover: ./cover.jpg
+coverAlt: "Five ways to keep records on a dark desk: a wooden card index box, a sealed grey box, a cork board with red thread, a black notebook and a plain manila folder in the middle. In front of each lies a stack of question cards with a green tick, and the stacks by the folder and the card index are the tallest."
 author: viacheslav-ptsarev
 draft: false
 ---
