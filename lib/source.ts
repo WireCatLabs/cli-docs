@@ -19,7 +19,11 @@ import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
 const docs = defineDocs({
   dir: "content/docs",
   docs: {
-    schema: pageSchema.extend({ contentLanguage: pageSchema.shape.title.optional() }),
+    schema: pageSchema.extend({
+      contentLanguage: pageSchema.shape.title.optional(),
+      // The page keeps its full title, the menu shows this shorter one.
+      sidebarTitle: pageSchema.shape.title.optional(),
+    }),
     // The tools' pages use fences Shiki has no grammar for (`cron`); those show as plain text.
     mdxOptions: applyMdxPreset({
       remarkPlugins: [remarkDisclosures, remarkAnchorAliases, remarkDocUsability, remarkMermaid],
@@ -44,7 +48,17 @@ export const source = loader({
   i18n,
   baseUrl: docsRoute,
   source: docs.toFumadocsSource(),
-  plugins: [],
+  plugins: [
+    {
+      transformPageTree: {
+        file(node, filePath) {
+          const file = filePath ? this.storage.read(filePath) : undefined
+          const short = file?.format === "page" ? (file.data as { sidebarTitle?: string }).sidebarTitle : undefined
+          return short ? { ...node, name: short } : node
+        },
+      },
+    },
+  ],
 })
 
 const markdownUrls = new Map(
