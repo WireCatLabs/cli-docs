@@ -1,0 +1,154 @@
+---
+title: Errors and how to fix them
+description: How to read a tool's error, where to find its full text and logs, what to give your agent and how to report a problem.
+---
+
+When a tool fails in WireCat Desktop, the app shows a short error right on the tool's card. This page explains how to
+read it, where to find the full text, what to give your agent, and how to report the problem when your agent could not
+help.
+
+## The error on the tool's card
+
+A sync or sign-in error shows on the account's card on the **Tools** page. The first line says in plain words what
+happened and what to do. Click **Details** to see the error code and the **Open the run on Logs** button.
+
+<DesktopShot
+  shot="sync-error"
+  folder="desktop/docs"
+  lang="en"
+  alt="Telegram's card with an error that another sync is running; under Details the code provider_unavailable · profile.locked and the Open the run on Logs button"
+  caption="An error on the account's card. Details shows its code and reason, and the button below opens that run on Logs."
+/>
+
+The line under **Details** has two parts, for example `provider_unavailable · profile.locked`:
+
+- The **code** (`provider_unavailable`) says what kind of error it is. There are 15 codes, the same in every WireCat
+  tool. The table is below.
+- The **reason** (`profile.locked`) says more exactly what happened. Here, another run is using the profile right now.
+
+The card leaves out the error's full text, since it can name chats and people. The text is on Logs and in the
+terminal, as described below.
+
+### When the reason is a general one
+
+The reasons `config.invalid`, `input.invalid`, `auth.failed`, `access.denied` and `item.not-found` are general ones.
+A tool puts them in when it named no exact reason. They only say what kind of error it is. What happened and which
+command fixes it are in the error's full text, so open the run on Logs.
+
+### Error codes
+
+| Code | What it means | What to do | Exit code |
+| --- | --- | --- | --- |
+| `validation_error` | The command or its input is wrong | Read the error's text, it names what is wrong | 2 |
+| `configuration_error` | A setting is missing, or the settings file is broken | The error's text names the command that fixes it. `doctor` checks the settings | 3 |
+| `authentication_error` | The sign-in no longer works: the session expired or the key was revoked | Sign in again on the account's card | 4 |
+| `permission_error` | The account may not do this, or you denied it to agents | Check the account's rights in the service, or the permissions on the tool's page | 5 |
+| `not_found` | No such chat, record or profile | Check the name or id, and the profile | 6 |
+| `confirmation_required` | The command changes something and waits for you to confirm | Confirm if you agree with the change | 7 |
+| `rate_limited` | The service asks to wait | Wait. A sync goes on by itself | 8 |
+| `timeout` | The service did not answer in time | Try again later | 9 |
+| `network_error` | No connection to the service | Check the internet, VPN or proxy | 10 |
+| `provider_error` | The service answered with an error | Try again. If it keeps happening, report it | 11 |
+| `provider_unavailable` | The service or the profile is not available right now, for example another sync is running | Wait and click **Sync again** | 12 |
+| `invalid_response` | The service answered in a way the tool did not expect | Report it | 13 |
+| `outcome_unknown` | It is not known whether the change went through | Check the result in the service first, and only then try again, so nothing is sent twice | 14 |
+| `conflict` | The current state is in the way, for example the item already exists | Read the error's text | 15 |
+| `cancelled` | The run was stopped | Nothing, if you stopped it | 130 |
+
+The exit code matters in a terminal and in scripts: the tool exits with that number.
+
+## The full error on Logs
+
+**Open the run on Logs** opens the run on the **Logs** page. **What went wrong** shows the error's full text, the
+request it happened on and what the service answered.
+
+<DesktopShot
+  shot="failed-run"
+  folder="desktop/docs"
+  lang="en"
+  alt="Logs: a failed tg messages read run is open, What went wrong shows rate_limited and Telegram asks to wait 27 s before the next request"
+  caption="A run opened on Logs. What went wrong gives the full error, and Copy JSON below copies the whole run record."
+/>
+
+**Copy JSON** copies the whole run record. Give it to your agent or attach it to a report. Personal data in it is
+already hidden. How to search runs and what they keep is on the [Logs](./logs.mdx) page.
+
+## The error and the logs in a terminal
+
+**Open terminal** on the tool's card opens a terminal where the tool is ready to run. There you can see the full error
+in two ways.
+
+Run the failed command again. For a sync that is `sync`, for example Bitrix24 with the profile `Anna`:
+
+```sh
+b24 Anna sync
+```
+
+Or read the record of an earlier run with the `runs` commands, which every tool has:
+
+```sh
+b24 Anna runs list status:failed --limit 5
+b24 Anna runs show 20261112T095912Z-sync-54a1a4 --problems
+b24 Anna runs path 20261112T095912Z-sync-54a1a4
+```
+
+- `runs list` shows the latest runs. The search after it is the same as on the **Logs** page.
+- `runs show <id>` shows one run with all its steps. With `--problems`, only the errors and warnings.
+- `runs path <id>` prints the folder that holds the run's files.
+
+Put your own tool and profile in place of `b24` and `Anna`: `tg personal runs list`, `mail work runs list`. Zoom and
+Memo have no profile: `zm runs list`, `memo runs list`.
+
+`doctor` checks the whole tool, for example `tg personal doctor` or `memo doctor`. It checks the sign-in, the
+settings, the store and the file permissions, and says what to fix.
+
+## What to give your agent
+
+An agent such as Claude Code or Codex can read the tools' logs itself and often finds the cause faster. Give it:
+
+- the error line from the card, for example `configuration_error · config.invalid`, and the tool with its profile;
+- the run record from **Copy JSON**, or the output of `runs show`;
+- the output of the tool's `doctor`.
+
+You can write:
+
+```text
+WireCat: the Bitrix24 sync for the profile Anna fails
+with configuration_error · config.invalid. Find the cause in b24's logs
+(b24 Anna runs list status:failed) and tell me what to do.
+```
+
+Do not give your agent sign-in codes, passwords or keys. It does not need them to look into an error.
+
+## How to report a problem
+
+If your agent could not help, click **Report a problem** at the top of the app's window, or **Report this** next to the
+error.
+
+<DesktopShot
+  shot="report"
+  folder="desktop/docs"
+  lang="en"
+  alt="The Report a problem window: Summary, Area, What were you doing?, What happened?, What did you expect? and the Send report button"
+  caption="The report window. The steps and the error's exact text help the most."
+/>
+
+- The report becomes a public issue on GitHub, so you can follow it. Email addresses, phone numbers and tokens in the
+  text are hidden on your computer first.
+- The latest error logs of your tools go with the report. They are never published: they stay on WireCat's server for
+  90 days and are then deleted. More in the [privacy policy](/en/privacy#bug-reports).
+- Nothing is sent until you click **Send report**.
+
+Or write in the [Telegram support chat](https://t.me/wirecatdev), topic Help, or on
+[Discord](https://discord.gg/DebENqbRrJ), channel #help. Copy the example and fill in your own:
+
+```text
+What I did: connected Bitrix24, clicked Sync again
+Expected: deals to show on the Clients page
+Got: configuration_error · config.invalid, screenshot below
+Versions: from the ? button, About WireCat, Copy version details
+System: Windows 11
+My agent said: no CRM users are chosen
+```
+
+Do not send sign-in codes, passwords, keys or other people's messages.

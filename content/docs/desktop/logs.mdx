@@ -8,7 +8,7 @@ The **Logs** page in WireCat Desktop shows what each command-line tool recorded 
 
 ## What the page shows
 
-All six tools keep run logs: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`) and Memo (`memo`). The app reads them with each tool's own `runs list` and `runs show` commands. An older Zoom, Google Drive or Memo has no run logs; update it to see them. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
+Every WireCat tool keeps run logs: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`), Memo (`memo`), Email (`mail`), Google Calendar (`gcal`) and Bitrix24 (`b24`). The app reads them with each tool's own `runs list` and `runs show` commands. An older Zoom, Google Drive or Memo has no run logs; update it to see them. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
 
 ## Why most runs are failures
 
@@ -101,6 +101,14 @@ Choose **Last 1h**, **Last 24h**, **Last 7d**, **Last 30d** or **All**. The rang
 
 ## Open a run
 
+<DesktopShot
+  shot="failed-run"
+  folder="desktop/docs"
+  lang="en"
+  alt="Logs: a failed run is open, What went wrong shows the full error"
+  caption="An open run: the full error, its steps and the Copy JSON button."
+/>
+
 Click a run to open it. You see:
 
 - **Events**: the requests that the tool made to the service and the important steps of the run, with the time, the result and how long each one took. Click an event to see all its fields.
@@ -108,6 +116,26 @@ Click a run to open it. You see:
 - **Copy JSON**: copies the full run record. Attach it to a bug report or give it to your agent.
 
 **Copy run id** copies the run's identifier. You can use it with the tool's `runs show` command.
+
+## Logs in a terminal
+
+The tool's `runs` commands read the same runs. They help when the app does not open, or when you want to give the
+output to an agent. **Open terminal** on the tool's card opens a terminal where the tool is ready to run.
+
+```sh
+tg personal runs list status:failed --limit 10
+tg personal runs show 20261025T100000Z-sync-a1b2c3 --problems
+tg personal runs path 20261025T100000Z-sync-a1b2c3
+```
+
+- `runs list` shows the latest runs, newest first. The search after it is the same as on this page, and `--limit`
+  and `--page` page through the list.
+- `runs show <id>` shows one run with all its steps. With `--problems`, only the errors, warnings and crashes.
+- `runs path <id>` prints the folder that holds the run's files. Open it, or attach it to a report.
+
+Put in your own tool and profile, for example `b24 Anna runs list` or `mail work runs list`. Zoom and Memo have no
+profile: `zm runs list`, `memo runs list`. What to do with the error you find is on
+[Errors and how to fix them](./troubleshooting.mdx).
 
 ## Privacy
 

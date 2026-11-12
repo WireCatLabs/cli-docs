@@ -10,6 +10,7 @@
     "local-models",
     "own-tools",
     "logs",
+    "troubleshooting",
     "tailscale-funnel"
   ]
 }
