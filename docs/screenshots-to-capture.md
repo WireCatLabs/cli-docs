@@ -75,8 +75,21 @@ wirecat-desktop `docs/images/own-*.webp` (1280 wide, not 16:10). Russian and Spa
 until `{shot}-{light,dark}-{ru,es}.webp` exist. `own-settings` has all six: `capture.mjs` at `--width 1280 --height 400`
 with `?showcase&section=settings&community=1&own=on`, saved as WebP without resizing.
 
-Existing and used: `tools`, `agents`, `search-hit`, `tasks`, `memory`, `connect`. At least `tools` and `memory`
-predate 0.4: the sidebar has no Analytics, and Memory has no Edit or More menu. Recapture them when convenient
-with `?showcase`, `?showcase&section=agents`, `?showcase&search=tg`, `?showcase&view=board`,
-`?showcase&section=memory` and `?showcase&connect=called`. The queries come from the flags in
-wirecat-desktop's CLAUDE.md; none was run for this list.
+## Landing and download page shots
+
+The home page's Desktop section shows `tools`, `memory` and `digests`. The download page's gallery
+(`components/desktop-gallery.tsx`) shows all eight below. Their text is in
+`design/homepage-chat-treatments/release-{source,locales}.json` (after a change run `pnpm landing:export`, then `pnpm exec biome format --write lib/editorial/editorial.css`) and in
+`lib/download.ts`. All 48 files were captured from Desktop main at `2a6d79d9` (0.6.0) at 1440x900 with
+`--lang en|ru|es` and `--dark`, then cropped with `node scripts/crop-desktop-screenshots.mjs <folder>`.
+
+| Shot | Query | Before the capture |
+| --- | --- | --- |
+| `tools` | `?showcase` | |
+| `agents` | `?showcase&section=agents` | |
+| `search-hit` | `?showcase&search=tg` | Open the first result, then its messages around it, and scroll the search box to the top |
+| `tasks` | `?showcase&view=board` | |
+| `memory` | `?showcase&section=memory` | |
+| `connect` | `?showcase&connect=called` | Scroll the MCP server heading to about 70 px below the top bar |
+| `digests` | `?showcase&section=digests` | |
+| `analytics` | `?showcase&section=analytics&analytics=real` | |
