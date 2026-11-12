@@ -1,7 +1,7 @@
 ---
 title: "WireCat Desktop 0.6: add any tool, keep your AI model at home, and see who is who"
 description: Anyone can now build a tool for WireCat and add it to the app, with a review before it installs. You can choose an AI model that runs on your own computer. You can also see everyone you talk to in one list, move CRM deals on a board, get a digest every morning, and decide what your agents remember with the source in front of you.
-date: 2026-11-11
+date: 2026-11-12
 tags: [release-notes]
 author: viacheslav-ptsarev
 draft: false
@@ -82,7 +82,7 @@ looks with a preview, and build the digests of past days to read in the app.
 
 ![The Digests page with a daily, a weekly and an evening digest, their schedules and last runs](./digests-en.webp "Each digest says when it ran, what it cost and when it runs next.")
 
-Claude Code writes the digests, so you need it installed. This is the **Digests** page.
+One of your agents writes the digests, and you pick which one: Claude Code, Gemini CLI, OpenCode, or Codex after a warning. This is the **Digests** page.
 
 ## Decide what your agents remember, with the source in front of you
 

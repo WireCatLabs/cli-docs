@@ -1,7 +1,7 @@
 ---
 title: "WireCat Desktop 0.6: añade cualquier herramienta, deja tu modelo de IA en casa y ve quién es quién"
 description: Ahora cualquiera puede crear una herramienta para WireCat y añadirla a la app, con una revisión antes de instalarla. Puedes elegir un modelo de IA que funciona en tu propio ordenador. También puedes ver a todas las personas con las que hablas en una lista, mover negociaciones del CRM en un tablero, recibir un resumen cada mañana y decidir qué recuerdan tus agentes con la fuente delante.
-date: 2026-11-11
+date: 2026-11-12
 tags: [release-notes]
 author: viacheslav-ptsarev
 draft: false
@@ -87,7 +87,7 @@ cambiar qué recoge y cómo se ve con una vista previa, y crear los resúmenes d
 
 ![La página Resúmenes con un resumen diario, uno semanal y uno de tarde, sus horarios y sus últimas ejecuciones](./digests-es.webp "Cada resumen dice cuándo se ejecutó, cuánto costó y cuándo se ejecuta la próxima vez.")
 
-Claude Code escribe los resúmenes, así que necesitas tenerlo instalado. Es la página **Resúmenes**.
+Los resúmenes los escribe uno de tus agentes, y tú eliges cuál: Claude Code, Gemini CLI, OpenCode o Codex tras un aviso. Es la página **Resúmenes**.
 
 ## Decide qué recuerdan tus agentes, con la fuente delante
 
