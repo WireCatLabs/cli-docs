@@ -14,6 +14,7 @@ import {
   CalendarDays,
   ChartColumn,
   ContactRound,
+  Cpu,
   Database,
   Download,
   FileChartColumn,
@@ -45,7 +46,9 @@ import {
   Mic,
   Monitor,
   Network,
+  Newspaper,
   NotebookPen,
+  PackagePlus,
   Paperclip,
   PenLine,
   Reply,
@@ -161,6 +164,13 @@ export const sidebarIcons = {
   desktop: Monitor,
   logs: ScrollText,
   "tailscale-funnel": GlobeLock,
+  contacts: ContactRound,
+  clients: Handshake,
+  digests: Newspaper,
+  memory: Brain,
+  "ai-model": BrainCircuit,
+  "own-tools": PackagePlus,
+  "local-models": Cpu,
 }
 
 const folderIcons = {

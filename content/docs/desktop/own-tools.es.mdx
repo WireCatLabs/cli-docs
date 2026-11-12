@@ -1,0 +1,298 @@
+---
+title: Añadir tu propia herramienta a WireCat Desktop
+description: Instala una herramienta que WireCat no hace, de la lista de la comunidad o por su nombre en npm, lee la revisión antes de que se instale y descubre qué necesita una herramienta para que WireCat pueda añadirla.
+---
+
+WireCat ya no son solo las herramientas propias de WireCat. Cualquiera puede crear una herramienta de línea de comandos
+con las bibliotecas de WireCat, para un CRM, un servicio de soporte o un sistema interno, y añadirla a WireCat Desktop.
+Después la aplicación la instala, inicia su sesión, la sincroniza y se la da a tus agentes de IA como cualquier otra
+herramienta. Esta página tiene dos partes. La primera es para ti, cuando añades una herramienta así: cómo activarlo, qué
+muestra la pantalla de revisión antes de instalar nada y cuál es el riesgo. La segunda es para el autor de una
+herramienta: qué necesita la herramienta para que WireCat pueda añadirla y mostrarla bien.
+
+## Tres tipos de herramienta
+
+Una herramienta que añades puede ser tuya, de un colega o de un repositorio privado. La página Herramientas puede
+mostrar tres tipos:
+
+| Tipo | De dónde viene | Etiqueta |
+| --- | --- | --- |
+| Las de WireCat | Incluidas en la aplicación | ninguna |
+| De la comunidad | Una lista que WireCat revisa y firma | **Comunidad** |
+| Las tuyas | Añadidas por ti, por su nombre en npm | **Sin verificar** |
+
+El segundo y el tercer tipo están desactivados por defecto. Ajustes tiene un interruptor para cada uno, uno junto al
+otro en una ventana ancha: **Activar herramientas de la comunidad** y **Permitir herramientas que WireCat no ha
+revisado**. **Activar herramientas de la comunidad** vale desde el próximo inicio, y la página ofrece **Reiniciar
+ahora**. **Permitir herramientas que WireCat no ha revisado** vale al momento.
+
+<DesktopShot
+  shot="own-settings"
+  folder="desktop/docs"
+  lang="es"
+  alt="Ajustes: los interruptores de herramientas de la comunidad y de herramientas que WireCat no ha revisado, los dos activados"
+  caption="Dos interruptores, los dos desactivados por defecto."
+/>
+
+## El riesgo, sin rodeos
+
+Una herramienta que añades es un programa que se ejecuta como tú en este ordenador. Puede leer todo lo que guarda
+WireCat: tus mensajes, correo, notas y archivos. WireCat no la ha revisado, y la revisión no puede demostrar lo que
+hace. La revisión muestra datos que te ayudan a decidir: quién la publicó, dónde la compiló npm, qué dice que hace y
+lo que conviene revisar. Añade una herramienta solo si confías por completo en sus autores. WireCat no se hace
+responsable de lo que haga una herramienta así.
+
+## Herramientas de la comunidad
+
+Activa **Activar herramientas de la comunidad**. La aplicación lee entonces la lista que firma WireCat y muestra sus
+herramientas con la etiqueta **Comunidad**. Se instalan con su botón **Instalar**, como cualquier herramienta. La
+aplicación instala una versión solo cuando npm la compiló desde el propio repositorio de la herramienta. La revisión
+comprueba cómo se construye y publica una herramienta, no todo lo que hace. Todavía no hay ninguna herramienta en la
+lista. Los autores piden entrar en ella como dice
+[Añade tu herramienta a WireCat](../build-list-tool.md).
+
+La lista firmada vale 30 días, y la aplicación descarga una nueva cada día. Si no lo consigue, un aviso arriba en la
+aplicación dice cuándo caduca la lista, en cuanto quedan siete días o menos. Cuando la lista caduca, el aviso dice
+«La lista de herramientas de la comunidad está desactualizada, así que no se pueden instalar ni actualizar
+herramientas de la comunidad. Las instaladas siguen funcionando.» Hasta que llega una lista nueva, la fila de una
+herramienta de la comunidad explica por qué **Instalar** o **Actualizar** no funciona. Desinstalar sí funciona. Tus
+propias herramientas y las de WireCat no usan la lista. El aviso solo aparece mientras las herramientas de la comunidad
+están activadas.
+
+## Añadir una herramienta por su nombre en npm
+
+1. En Ajustes, activa **Permitir herramientas que WireCat no ha revisado**. Se abre un aviso: una herramienta añadida
+   así se ejecuta como tú en este equipo, así que puede leer todo lo que guarda WireCat; añade solo herramientas de
+   autores en quienes confíes por completo, y WireCat no se hace responsable de lo que hagan. Confírmalo con
+   **Permitir**.
+2. En la página Herramientas, pulsa **Añadir tu propia herramienta**, arriba junto a **Comprobar de nuevo**. Escribe
+   el nombre en npm, como `@scope/name`, y pulsa **Comprobar paquete**. WireCat solo lee npm. No se instala nada y no
+   se ejecuta ningún código del paquete.
+3. Lee la pantalla de revisión (abajo) y pulsa **Añadir**.
+4. WireCat pregunta «¿Revisar `@scope/name` antes de instalarla?» y ofrece primero tu agente de IA. Hay un botón por
+   cada agente que puede abrir, como **Revisarla con Claude Code** o **Revisarla con Codex**. El agente se abre en un
+   terminal con una petición preparada: descargar exactamente el archivo del paquete que revisaste, comprobar su
+   sha512, leer el código, compararlo con el repositorio en el commit de la versión e informar de los servidores con
+   los que conecta, lo que lee y escribe en este equipo y cualquier cosa sospechosa. Nunca instala ni ejecuta el
+   paquete. **Qué se le pide a tu agente** muestra la petición completa. Si no encuentra ningún agente, pulsa
+   **Copiar la revisión** y pégala en el tuyo. Lee el informe del agente y pulsa **Continuar a la instalación**, u
+   **Omitir e instalar** sin la revisión.
+5. Una segunda pregunta dice: «¿Instalar y ejecutar `@scope/name`? Sus scripts de instalación y su primera ejecución
+   usan tus permisos.» Solo **Instalar y ejecutar** instala el paquete. **Atrás** vuelve a la revisión.
+6. Tras la instalación, WireCat comprueba que el programa se describe igual que en la revisión. La herramienta aparece
+   al momento en la página Herramientas con la etiqueta **Sin verificar**. No hace falta reiniciar.
+
+No vale cualquier paquete. El paquete debe tener ámbito (`@scope/name`, no `@wirecat/`), estar escrito en TypeScript
+sobre [cli-base](https://github.com/WireCatLabs/cli-base) e incluir su manifiesto `contracts/wirecat.json`: un archivo
+que describe los comandos de la herramienta ante WireCat. Un programa de tu PATH o un paquete sin ámbito no se pueden
+añadir. Cómo construye un autor una herramienta así lo explica
+[Crea tu CLI](../build-create-cli.md#prepárala-para-wirecat-desktop).
+
+<DesktopShot
+  shot="own-name"
+  folder="desktop/docs"
+  lang="es"
+  alt="Añadir tu propia herramienta: el aviso en rojo y el nombre del paquete en npm"
+  caption="El nombre. WireCat solo lee npm."
+/>
+
+## La pantalla de revisión
+
+Cuando se abre, todavía no hay nada instalado. De arriba abajo:
+
+- **Sin verificar**, junto al nombre de la herramienta.
+- **Un aviso en rojo**, cierto para cualquier herramienta que añadas: se ejecuta como tú en este equipo, así que puede
+  leer todo lo que guarda WireCat (tus mensajes, correo, notas y archivos). Si la herramienta está hecha con cli-core,
+  la biblioteca propia de WireCat, el aviso añade que abre esos datos directamente. Añádela solo si confías por
+  completo en sus autores.
+- **Publicado por**, **Repositorio**, **Versión** y **Dónde lo compiló npm**. Cada uno es un enlace que se abre en tu
+  navegador: el perfil de quien lo publica en npm, el repositorio, la página de la versión (**En npm**) y, cuando npm
+  registró dónde compiló el paquete, **Commit de la versión**, **Ejecución del flujo de publicación** y **Entrada en
+  el registro de transparencia**. «No hay registro de dónde la compiló npm» significa que nada vincula el paquete con
+  código público.
+- **Qué conviene revisar**: cada punto con una frase sobre por qué importa. Salen de npm (publicada por primera vez
+  hace menos de 30 días, pocas versiones, la publica una sola cuenta de npm, no hay registro de dónde la compiló npm),
+  de su repositorio de GitHub (creado hace poco, sin cambios desde hace mucho, archivado, pocas estrellas, flujos de
+  trabajo que no ejecutan las comprobaciones estándar de WireCat), de si usa las bibliotecas de WireCat, y de su código
+  (abre conexiones de red, nombra servidores que no declara, puede iniciar otros programas, oculta llamadas o incluye
+  código nativo en archivos `.node` o `.wasm`). Si GitHub no responde o se agotaron las consultas, el punto dice «No
+  se pudo revisar su repositorio de GitHub», y las demás comprobaciones siguen valiendo. Si no hay nada que mostrar,
+  dice «Nada llamó la atención. Eso no la hace segura.»
+- **Servidores con los que conecta**: los servidores que declara la herramienta, «Dice que no conecta con ningún
+  servidor» o «No lo dice». También aparece un servidor que eliges tú, como tu propio servidor de correo.
+- **Qué dice que hace**: una tabla con los datos con los que trabaja la herramienta (Contact, Deal…), con sus campos
+  cuando la herramienta los nombra. Para cada uno, **En** el servicio y **En este equipo**: **Lee**, **Cambia** o
+  **Guarda**, o **Nada**. Después, qué copia su sincronización al almacén de WireCat y los **Comandos estándar de
+  WireCat** en palabras sencillas (inicia sesión, comprueba que funciona, instala instrucciones para tus agentes de
+  IA…). Los comandos exactos están plegados bajo **Comandos**; púlsalo para abrir la lista.
+
+Qué significa:
+
+- **«Qué conviene revisar» son señales, no un veredicto.** Ninguna te impide añadir la herramienta, y una lista vacía
+  no la hace segura. Lo que WireCat encuentra en el código del paquete está «encontrado en el código, no demostrado»:
+  se saltan las bibliotecas que el paquete incluye, y el código puede escribirse para esconderse de esa lectura.
+- **«Dónde lo compiló npm» no es una comprobación de seguridad.** npm registra qué repositorio compiló el paquete. Eso
+  muestra de dónde viene el código, no que sea seguro.
+- **«Qué dice que hace» es lo que la herramienta dice de sí misma.** WireCat no puede demostrar que haga solo eso.
+- **Instalar ejecuta su código.** npm ejecuta los scripts de instalación del paquete con tus permisos. Por eso primero
+  llega la revisión con tu agente de IA, y por eso hay dos confirmaciones.
+
+<DesktopShot
+  shot="own-review"
+  folder="desktop/docs"
+  lang="es"
+  alt="La pantalla de revisión: Sin verificar, el aviso en rojo, los datos del paquete enlazados, qué conviene revisar y qué dice que hace"
+  caption="La revisión. Todavía no hay nada instalado."
+/>
+
+<DesktopShot
+  shot="own-review-risky"
+  folder="desktop/docs"
+  lang="es"
+  alt="Una revisión con muchos puntos: paquete nuevo, una sola cuenta lo publica, sin registro de dónde se compiló, servidores en su código que no declara"
+  caption="Qué conviene revisar, cada punto con su motivo. Ninguno bloquea la herramienta."
+/>
+
+<DesktopShot
+  shot="own-check"
+  folder="desktop/docs"
+  lang="es"
+  alt="Después de Añadir: revisarla con Claude Code o Codex, copiar la revisión u omitir e instalar"
+  caption="La revisión con tu agente de IA, antes de instalar."
+/>
+
+<DesktopShot
+  shot="own-confirm"
+  folder="desktop/docs"
+  lang="es"
+  alt="La segunda pregunta: ¿instalar y ejecutar @leemour/acme-crm-cli?"
+  caption="La segunda pregunta. Solo este botón instala."
+/>
+
+## Úsala con tu agente de IA
+
+Una herramienta añadida funciona como cualquier otra. Abre **Gestionar** en su fila para añadir una cuenta, iniciar
+sesión, sincronizar y comprobar su estado. Si tiene instrucciones para agentes de IA o un servidor MCP, la página
+[Agentes](./index.mdx#agentes) se las da a tus agentes con **Conectar**, como a una herramienta de WireCat.
+
+<DesktopShot
+  shot="own-tools-list"
+  folder="desktop/docs"
+  lang="es"
+  alt="La página Herramientas con Acme CRM, añadida por ti, marcada Sin verificar"
+  caption="Una herramienta añadida en la página Herramientas, marcada Sin verificar."
+/>
+
+## Actualízala
+
+El botón **Actualizar a** abre la revisión de nuevo para la versión nueva, cada vez. También lista qué cambió desde
+la versión que confirmaste: el repositorio, dónde lo compiló npm, los editores, comandos nuevos, nuevo acceso de
+escritura y partes nuevas o cambiadas. Si algo cambió, o la herramienta no describe qué pide, marca **Acepto estos
+cambios** para poder seguir. Después llegan la revisión con tu agente de IA y la segunda pregunta, como con una
+herramienta nueva.
+
+## Quítala
+
+- **Quitar de WireCat**, en los detalles de la herramienta (pulsa su nombre), borra su entrada, y la herramienta sale
+  de la página Herramientas al momento. No hace falta reiniciar. Si el programa está instalado, la pregunta ofrece
+  **Desinstalarla antes**; si no, el programa sigue instalado, y la página Herramientas dice qué queda en el equipo.
+- **Desinstalar** quita el programa. **Desinstalar y borrar datos** borra además las carpetas de datos propias de la
+  herramienta: solo las que llevan el nombre de su paquete (`@scope/name` → `scope-name`). Nunca borra el almacén que
+  comparten tus otras herramientas. Una carpeta con ese nombre que ya existía antes de añadir la herramienta aparece
+  con «Esta carpeta ya existía antes de que WireCat añadiera la herramienta, así que WireCat no la toca», y nunca se
+  borra.
+
+## Sin internet
+
+Comprobar, añadir y actualizar un paquete leen npm, así que necesitan internet. Sin él, el diálogo dice «No se pudo
+conectar con npm». Una herramienta ya añadida sigue en la página Herramientas sin conexión: WireCat guarda su
+entrada en este ordenador y no vuelve a preguntar a npm al iniciar. Que la propia herramienta funcione sin conexión
+depende de la herramienta y de su servicio.
+
+## Si no funciona
+
+### «La lista de herramientas de la comunidad está desactualizada»
+
+La lista de
+[herramientas de la comunidad](#herramientas-de-la-comunidad) que firma WireCat ha caducado, y la aplicación no pudo
+descargar una nueva. Hasta que lo consiga, no se pueden instalar ni actualizar herramientas de la comunidad. Las
+instaladas siguen funcionando, y tus propias herramientas no se ven afectadas. Revisa tu conexión a internet o tu
+proxy. La aplicación lo vuelve a intentar cada día, y el aviso desaparece en cuanto llega una lista nueva.
+
+### WireCat rechaza una herramienta que añades
+
+Cuando [añades tu propia herramienta](#añadir-una-herramienta-por-su-nombre-en-npm), el diálogo nombra el problema en un título,
+como **Herramienta no encontrada**, y luego dice qué falló y qué hacer. **Intentar de nuevo** vuelve al campo del
+nombre, con el nombre conservado y seleccionado, para que lo corrijas. Si no se pudo conectar con npm, el paquete es
+demasiado grande o algo salió mal, **Intentar de nuevo** lee otra vez el mismo nombre. Antes de la segunda pregunta no
+se instala nada, salvo en las dos últimas filas.
+
+| El diálogo dice | Qué hacer |
+| --- | --- |
+| Herramienta no encontrada: npm no tiene ningún paquete llamado … | Revisa cómo está escrito, ámbito incluido: `@scope/name`. |
+| Aquí solo valen nombres con ámbito, como @scope/name. | Pide al autor el nombre completo del paquete en npm. |
+| Este nombre pertenece a las herramientas propias de WireCat. | Las herramientas de WireCat ya están en la página Herramientas. Instálalas allí. |
+| Esta herramienta no se describe ante WireCat. | Pega su objeto `desktop` de la documentación de la herramienta en el campo bajo el mensaje y pulsa **Comprobar con este objeto**. O pide a su autor que publique una versión con manifiesto. |
+| Lo que la herramienta dice a WireCat tiene un problema en «…»: … | Las comillas nombran la parte, y después viene la regla que incumple. Pide al autor que lo corrija y publique una versión nueva. |
+| … ya usa el nombre, el programa o la carpeta de datos de esta herramienta. | Dos herramientas no pueden compartirlos. Pide al autor que le cambie el nombre. |
+| …, de la lista de la comunidad de WireCat, ya usa el nombre o las carpetas de esta herramienta. | Esta herramienta ya está en la lista. Quita tu propia entrada para usar la de la lista. |
+| Según npm se compiló desde …, pero el paquete indica …. | No la añadas. Avisa al autor. |
+| WireCat no pudo conectar con npm. | Revisa tu conexión a internet o tu proxy y vuelve a intentarlo. |
+| «…» es más grande de lo que WireCat lee. | Pide al autor que haga el paquete más pequeño. |
+| Algo falló al leer npm: … | Vuelve a intentarlo. Si se repite, informa del problema. |
+| WireCat no puede mostrar esta herramienta: … | Pide al autor que lo corrija y publique una versión nueva. |
+| El paquete está instalado, pero WireCat no lo añadió. | El programa no coincide con la revisión. Pulsa **Desinstalarlo**. |
+| bun installed this tool, and bun cannot be told which registry your own tools come from. | La aplicación muestra este mensaje solo en inglés por ahora, al actualizar una herramienta tuya que instaló bun. Desinstálala y añádela de nuevo: WireCat la instala con npm. |
+
+<DesktopShot
+  shot="own-refused"
+  folder="desktop/docs"
+  lang="es"
+  alt="Un rechazo: herramienta no encontrada, npm no tiene ningún paquete llamado @leemour/acme-crm-clis, y el botón Intentar de nuevo"
+  caption="Un rechazo nombra el motivo y qué hacer."
+/>
+
+## Para autores de herramientas
+
+Una herramienta que WireCat Desktop puede añadir es un paquete de npm hecho con
+[cli-base](https://github.com/WireCatLabs/cli-base), la biblioteca de WireCat para herramientas de línea de comandos,
+escrito en TypeScript. La forma más rápida de empezar es la plantilla: [Crea tu CLI](../build-create-cli.md) crea una
+herramienta con todo lo de abajo ya preparado.
+[Prepárala para WireCat Desktop](../build-create-cli.md#prepárala-para-wirecat-desktop) tiene los pasos exactos.
+
+Empieza con la [plantilla](https://github.com/WireCatLabs/cli-template):
+
+```sh
+npx @wirecat/cli-template new <name>-cli --command <word> --package <npm name> --owner <github owner>
+```
+
+Te da una herramienta que funciona, con almacenamiento local, búsqueda, la habilidad para agentes de IA y un servidor
+MCP, y que pasa todas las comprobaciones de los estándares de WireCat desde el principio. Después añades los comandos
+de tu servicio.
+
+Lo que comprueba WireCat antes de añadir una herramienta:
+
+- **Un nombre de npm con ámbito** propio, como `@scope/name`. No se pueden usar el ámbito `@wirecat` ni los nombres
+  que WireCat reserva para sus propias herramientas.
+- **El manifiesto `contracts/wirecat.json`** dentro del paquete: los comandos, qué lee y escribe cada uno, y los
+  comandos que Desktop ejecuta para comprobar la herramienta, iniciar sesión, sincronizarla y conectarla. Se genera a
+  partir del programa compilado, nunca se escribe a mano, y una comprobación falla cuando ya no coincide.
+- **Una carpeta de datos con el nombre del paquete:** `@scope/name` guarda sus datos en `scope-name`. **Desinstalar y
+  borrar datos** borra solo esa carpeta.
+- **La misma respuesta después de instalarla.** Desktop ejecuta una vez el programa instalado y rechaza la herramienta
+  si no se describe igual que en la revisión.
+
+Lo que hace que la revisión se lea bien:
+
+- **Tus propias palabras** para el lema breve, lo que da y lo que pide el inicio de sesión, y lo que copia una
+  sincronización. La plantilla escribe una primera versión; reescríbela.
+- **Los servidores con los que conecta**, declarados en el manifiesto. Sin ellos, la revisión dice «No lo dice».
+- **Un repositorio público y la publicación de confianza de npm.** Así npm registra dónde compiló cada versión, y la
+  revisión enlaza el commit de la versión y la ejecución del flujo. Sin ese registro, la revisión señala «No hay
+  registro de dónde la compiló npm».
+- **Las comprobaciones estándar de WireCat** en tus flujos de trabajo, como las tiene la plantilla. Los flujos sin
+  ellas se señalan.
+
+Cuando la herramienta te funcione a ti y a otros, pide que entre en la lista:
+[Añade tu herramienta a WireCat](../build-list-tool.md) dice qué revisamos. Una herramienta de la lista aparece en
+wirecat.dev, y en WireCat Desktop con la etiqueta **Comunidad**.

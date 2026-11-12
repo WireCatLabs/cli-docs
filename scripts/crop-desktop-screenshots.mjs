@@ -1,7 +1,7 @@
 /**
  * Crop WireCat Desktop showcase captures (1440×900 PNG, from wirecat-desktop's `?showcase` build) into the
- * 16:10 WebP files under public/screenshots/desktop/. Each crop keeps the sidebar edge and the left-to-centre
- * content, and leaves out the window controls.
+ * 16:10 WebP files under public/screenshots/desktop/. Tools keeps the sidebar, the other screens show the page
+ * itself, and no crop shows the window controls.
  *
  *   node scripts/crop-desktop-screenshots.mjs <folder with wirecat-<screen>-<theme>-<lang>-1440x900.png> [screen…] [--docs]
  */
@@ -12,12 +12,14 @@ import { createRequire } from "node:module"
 const sharp = createRequire(createRequire(import.meta.url).resolve("next/package.json"))("sharp")
 
 const crops = {
-  tools: { box: { left: 0, top: 0, width: 1008, height: 630 } },
-  agents: { box: { left: 0, top: 100, width: 1040, height: 650 } },
-  "search-hit": { box: { left: 0, top: 90, width: 1040, height: 650 } },
-  tasks: { box: { left: 208, top: 120, width: 1232, height: 770 } },
-  memory: { box: { left: 0, top: 100, width: 1040, height: 650 } },
-  connect: { box: { left: 200, top: 100, width: 1200, height: 750 } },
+  tools: { box: { left: 0, top: 118, width: 1216, height: 760 } },
+  agents: { box: { left: 208, top: 60, width: 1232, height: 770 } },
+  "search-hit": { box: { left: 208, top: 50, width: 1232, height: 770 } },
+  tasks: { box: { left: 208, top: 60, width: 1232, height: 770 } },
+  memory: { box: { left: 208, top: 60, width: 1232, height: 770 } },
+  connect: { box: { left: 208, top: 100, width: 1232, height: 770 } },
+  digests: { box: { left: 240, top: 40, width: 1152, height: 720 } },
+  analytics: { box: { left: 208, top: 60, width: 1232, height: 770 } },
 }
 
 // The docs page shows the whole window. `--docs` writes every screen, uncropped, to public/screenshots/desktop/docs/.
@@ -34,6 +36,10 @@ const docsScreens = [
   "analytics",
   "storage",
   "settings",
+  "contacts",
+  "clients",
+  "digests",
+  "memory-add",
 ]
 const docs = process.argv.includes("--docs")
 const full = { left: 0, top: 0, width: 1440, height: 900 }

@@ -1,0 +1,69 @@
+---
+title: Resúmenes en WireCat Desktop
+description: Recibe un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o por correo, con un límite de gasto que tú fijas.
+---
+
+Un resumen es una página breve que dice qué llegó y qué te espera, hecha a partir de tus chats, correo, reuniones y
+tareas. La página **Resúmenes** de WireCat Desktop los configura: cuándo se ejecuta cada uno, qué lee, adónde lo envía
+y cuánto puede gastar. Una vez configurado, recibes un resumen cada mañana o cada semana sin pedírselo a tu agente.
+Claude Code escribe cada resumen, así que la página necesita Memo y Claude Code. Si falta Claude Code, la página
+ofrece **Instalarlo en Agentes**.
+
+Resúmenes está marcada como beta: ves una β junto a su nombre. La sección es nueva y está poco probada.
+
+<DesktopShot
+  shot="digests"
+  folder="desktop/docs"
+  lang="es"
+  alt="La página Resúmenes: Resumen diario, Resumen semanal y Crear el tuyo sobre una tabla de tres resúmenes con su horario, fuentes, destinos y última ejecución"
+  caption="Resúmenes: una fila por resumen, con cuándo se ejecutó y cuándo se ejecuta la próxima vez."
+/>
+
+## Crear un resumen
+
+En **Nuevo resumen**, elige **Resumen diario**, **Resumen semanal** o **Crear el tuyo**, y pulsa **Configurar**. El
+diálogo **Crear resumen** pide:
+
+- **Nombre.** Un segundo resumen de la misma plantilla recibe su propio nombre, como «Resumen semanal 2».
+- **Horas** y **Días:** una o más horas al día, cada día o los días que elijas. La tabla dice entonces, por ejemplo,
+  «Dos veces al día: 08:30 y 18:00» o «Entre semana a las 09:00».
+- **De dónde toma:** las fuentes que lee. Sin ninguna elegida, lee todas las fuentes conectadas.
+- **Instrucciones** (opcional): qué buscar, con tus palabras.
+- **Límites de gasto:** como mucho esta cantidad por ejecución, y por día.
+- **Ejecutar según el horario.**
+
+Pulsa **Crear**.
+
+## La tabla
+
+Cada resumen muestra su **Nombre**, **Con qué frecuencia**, **De dónde toma**, **Adónde envía**, su última
+**Ejecución** con lo que costó y la siguiente, y un interruptor **Programado**. **Otros horarios**, debajo, lista
+otras tareas que Memo ejecuta según un horario, como el agente de correo, y dónde se cambia cada una.
+
+## Un resumen
+
+Pulsa un resumen para abrirlo.
+
+- **Obtener ahora** hace uno al momento. Antes dice cuánto costará más o menos. Su menú puede mostrarlo solo aquí o
+  enviarlo a un único destino.
+- **Programar** o **Quitar de la programación**.
+- **Ajustes:** los mismos campos que al crearlo, más **Lo envía a** (un bot de Telegram o el correo) y lo que gastó
+  hoy.
+- **Qué recoger:** tus instrucciones sobre lo que entra.
+- **Cómo se ve:** la plantilla para **Telegram**, **Correo** y **Texto sin formato**, con una **Vista previa** de lo
+  que se enviaría. **Volver a la predeterminada** recupera la original.
+- **Crear días pasados** crea los resúmenes de días anteriores a la configuración, para que los leas en la
+  aplicación. Antes dice el precio. Esos días no se envían a ningún sitio, y la lista los marca como «creado después».
+- **Más** tiene **Eliminar resumen**.
+
+Los días que tienes aparecen al lado. Pulsa uno para leerlo.
+
+## Cuando un resumen está listo
+
+Mientras WireCat está abierto, un resumen nuevo muestra una notificación. Un enlace `wirecat://` a un resumen, por
+ejemplo en un mensaje que te envió un agente, lo abre en esta página.
+
+## Siguiente paso
+
+Conecta un bot de Telegram o el correo en la página Herramientas para recibir ahí los resúmenes, y después configura
+**Lo envía a**.

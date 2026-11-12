@@ -107,7 +107,7 @@ with a `desktop` entry also appears in WireCat Desktop, with the **Community** b
 ## Make it addable in WireCat Desktop
 
 WireCat Desktop can add a tool that WireCat has not checked, by its npm name
-([Add your own tool](./desktop/index.mdx#add-your-own-tool); coming in the next WireCat Desktop release). Before it
+([Add your own tool](./desktop/own-tools.mdx)). Before it
 installs anything, it reads three things from npm: the package's details, the record of where npm built it, and the
 file `contracts/wirecat.json` out of the package. It never runs the package to find out what the tool is. So your
 tool needs that file, a data folder named after its package, and a release npm can tie to your repository.
@@ -174,7 +174,7 @@ names WireCat reserves for its tools, such as `tg`, `mail` or `wcat`, stay ours.
 ### Add it in Desktop, then list it
 
 1. **Add it on your own computer.** In WireCat Desktop, turn on **Allow tools WireCat has not checked** in Settings,
-   then use **Add your own tool** on the Tools page with your npm name. Your tool appears with the **Not checked**
+   then use **Add your own tool** on the Tools page with your npm name. Your tool appears with the **Not verified**
    badge. A tool from a private repository can only be added this way.
 2. **Ask for a listing,** if you want everyone to find it. A listed tool shows on wirecat.dev and, with the
    **Community** badge, in WireCat Desktop. Listing is for approved publishers:

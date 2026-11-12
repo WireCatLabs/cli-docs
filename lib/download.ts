@@ -55,7 +55,10 @@ type Words = {
     previous: string
     next: string
     close: string
-    shots: Record<"tools" | "agents" | "search-hit" | "tasks" | "memory" | "connect", { alt: string; caption: string }>
+    shots: Record<
+      "tools" | "agents" | "search-hit" | "tasks" | "memory" | "connect" | "digests" | "analytics",
+      { alt: string; caption: string }
+    >
   }
 }
 
@@ -171,8 +174,8 @@ Before you overwrite or delete any file that already exists, show it to me and a
     close: "Close",
     shots: {
       tools: {
-        alt: "The Tools page: Telegram synced and WhatsApp opened with its signed-in account",
-        caption: "Every messenger, meeting and file tool, installed, signed in and synced.",
+        alt: "The Tools page: messengers, Zoom, Drive, Calendar, notes, email and Bitrix24, all current",
+        caption: "Every tool installed, signed in and synced, with no terminal.",
       },
       agents: {
         alt: "The Agents page: Claude Code with a current skill for every tool",
@@ -184,15 +187,23 @@ Before you overwrite or delete any file that already exists, show it to me and a
       },
       tasks: {
         alt: "The Tasks board with open, in-progress and done tasks shared with agents",
-        caption: "One task list that you and your agents share.",
+        caption: "One task list that you and your agents share, with tasks found in your chats.",
       },
       memory: {
-        alt: "The Memory page: facts and decisions from your agents waiting for your approval",
-        caption: "Nothing an agent remembers counts until you approve it.",
+        alt: "The Memory page: what agents suggested, waiting for you to approve or reject",
+        caption: "An agent suggests, you check the source, and agents use only what you approve.",
       },
       connect: {
         alt: "Connecting ChatGPT to Telegram: every step checked and the first call received",
         caption: "ChatGPT can now use your Telegram, set up in a few clicks.",
+      },
+      digests: {
+        alt: "The Digests page: a morning digest, an evening wrap-up and a weekly digest with their schedules",
+        caption: "Get your chats, mail and meetings on one page, in Telegram or by email.",
+      },
+      analytics: {
+        alt: "The Analytics page: messages, emails, meeting hours and tasks against last week",
+        caption: "See who you hear from most and how this week compares to the last.",
       },
     },
   },
@@ -316,8 +327,8 @@ const ru: Words = {
     close: "Закрыть",
     shots: {
       tools: {
-        alt: "Страница «Инструменты»: Telegram и MAX синхронизированы, у WhatsApp открыт подключённый аккаунт",
-        caption: "Все инструменты установлены, вход выполнен, данные синхронизированы.",
+        alt: "Страница «Инструменты»: мессенджеры, Zoom, Drive, Календарь, заметки, почта и Битрикс24, все актуальны",
+        caption: "Все инструменты установлены, вход выполнен, данные синхронизированы, без терминала.",
       },
       agents: {
         alt: "Страница «Агенты»: у Claude Code актуальный навык для каждого инструмента",
@@ -329,15 +340,23 @@ const ru: Words = {
       },
       tasks: {
         alt: "Доска задач: открытые, текущие и выполненные задачи, общие с агентами",
-        caption: "Общий список задач для вас и ваших агентов.",
+        caption: "Общий список задач для вас и ваших агентов, с задачами из ваших чатов.",
       },
       memory: {
-        alt: "Страница «Память»: факты и решения от агентов ждут вашего одобрения",
-        caption: "Ничто из того, что запомнил агент, не считается, пока вы не одобрите.",
+        alt: "Страница «Память»: то, что предложили агенты, ждет вашего решения",
+        caption: "Агент предлагает, вы проверяете источник, и агенты берут только то, что вы одобрили.",
       },
       connect: {
         alt: "Подключение ChatGPT к Telegram: все шаги пройдены, первый вызов получен",
-        caption: "ChatGPT теперь работает с вашим Telegram — настройка в пару кликов.",
+        caption: "ChatGPT теперь работает с вашим Telegram, настройка в пару кликов.",
+      },
+      digests: {
+        alt: "Страница «Сводки»: утренняя сводка, вечерний итог и недельная сводка с расписанием",
+        caption: "Получайте чаты, почту и встречи на одной странице, в Telegram или на почту.",
+      },
+      analytics: {
+        alt: "Страница «Аналитика»: сообщения, письма, часы встреч и задачи по сравнению с прошлой неделей",
+        caption: "Смотрите, кто пишет вам чаще всего и чем эта неделя отличается от прошлой.",
       },
     },
   },
@@ -455,8 +474,8 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
     close: "Cerrar",
     shots: {
       tools: {
-        alt: "La página Herramientas: Telegram sincronizado y WhatsApp abierto con su cuenta conectada",
-        caption: "Todas tus herramientas instaladas, con sesión iniciada y sincronizadas.",
+        alt: "La página Herramientas: mensajería, Zoom, Drive, Calendar, notas, correo y Bitrix24, todo al día",
+        caption: "Todas tus herramientas instaladas, con sesión iniciada y sincronizadas, sin terminal.",
       },
       agents: {
         alt: "La página Agentes: Claude Code con una skill al día para cada herramienta",
@@ -468,15 +487,23 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
       },
       tasks: {
         alt: "El tablero de tareas con tareas abiertas, en curso y hechas, compartidas con los agentes",
-        caption: "Una lista de tareas que compartes con tus agentes.",
+        caption: "Una lista de tareas que compartes con tus agentes, con las tareas encontradas en tus chats.",
       },
       memory: {
-        alt: "La página Memoria: hechos y decisiones de tus agentes esperan tu aprobación",
-        caption: "Nada de lo que recuerda un agente cuenta hasta que lo apruebas.",
+        alt: "La página Memoria: lo que sugirieron los agentes, esperando que lo apruebes o lo rechaces",
+        caption: "Un agente sugiere, tú compruebas la fuente y los agentes usan solo lo que apruebas.",
       },
       connect: {
         alt: "Conectar ChatGPT con Telegram: todos los pasos comprobados y la primera llamada recibida",
         caption: "ChatGPT ya puede usar tu Telegram, configurado en unos clics.",
+      },
+      digests: {
+        alt: "La página Resúmenes: un resumen de la mañana, un cierre de la tarde y un resumen semanal con sus horarios",
+        caption: "Recibe tus chats, correo y reuniones en una página, en Telegram o por correo.",
+      },
+      analytics: {
+        alt: "La página Analítica: mensajes, correos, horas de reunión y tareas frente a la semana pasada",
+        caption: "Mira de quién recibes más mensajes y cómo va esta semana frente a la anterior.",
       },
     },
   },

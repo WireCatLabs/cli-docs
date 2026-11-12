@@ -47,7 +47,7 @@ configuración; **Terminar la configuración** en la barra lateral la abre de nu
 2. **Tu ordenador:** la aplicación comprueba el sistema, Node.js y npm. **Comprobar de nuevo** repite la
    comprobación cuando arreglas algo.
 3. **Herramientas:** marca los servicios a los que debe llegar tu agente: Telegram, MAX, WhatsApp,
-   Zoom, Google Drive, Memo o el correo. Puedes añadir o quitar herramientas más tarde en la página
+   Zoom, Google Drive, Google Calendar, Memo, el correo o Bitrix24. Puedes añadir o quitar herramientas más tarde en la página
    **Herramientas**.
 4. **Instalación:** cada herramienta se instala desde npm y se comprueba que arranca. Las instalaciones van de
    una en una. Una barra muestra el avance: buscar paquetes, descargar, desempaquetar, preparar en el ordenador
@@ -63,20 +63,14 @@ configuración; **Terminar la configuración** en la barra lateral la abre de nu
    skill le pides las cosas a tu agente con palabras normales, por ejemplo «¿Qué me envió Ana ayer?», y el
    agente sabe qué herramienta puede responder.
 6. **Inicio de sesión:** iniciar sesión conecta una herramienta con tu cuenta, para que tu agente llegue a
-   ella. La aplicación lo hace en su propia ventana para Telegram (un código QR o tu número de teléfono), MAX y
-   WhatsApp (un código QR), y abre el navegador para Zoom y Google Drive. Si una herramienta no tiene ventana
-   de inicio de sesión, **Iniciar sesión en la terminal** abre una terminal que ejecuta la configuración propia
-   de la herramienta. El correo te pide tu dirección en su propia ventana. Para una cuenta de Microsoft abre
-   después el inicio de sesión de Microsoft en el navegador. Para Gmail y otros servidores de correo pide una
-   contraseña de aplicación, una contraseña creada solo para este programa; [Preparar el buzón](../mail/providers.md)
-   muestra cómo la crea cada proveedor. Memo no necesita iniciar sesión.
-7. **Listo:** la aplicación muestra lo que está instalado y propone tres pasos siguientes: dejar que ChatGPT o
-   Claude usen una herramienta, ver qué agentes las usan o probar tu primera guía. **Llega en la próxima versión de
-   WireCat Desktop:** cada herramienta que configures tendrá una tarjeta plegada, «Qué puedes hacer con» esa
-   herramienta. Ábrela para ver los pasos siguientes; cada uno abre el sitio exacto en la aplicación: **Añadir otra
-   cuenta**, **Sincronizar ahora**, **Mantenerlo en segundo plano**, **Dar su habilidad a tus agentes**, **Conectar
-   ChatGPT o Claude en el navegador**, **Ver lo que ejecutó** y **Leer su documentación**. Una tarjeta muestra solo lo
-   que admite su herramienta.
+   ella. Mira [Iniciar sesión en una herramienta](#iniciar-sesión-en-una-herramienta). **Añadir un bot** también
+   está aquí, para Telegram, MAX y WhatsApp. Memo no necesita iniciar sesión.
+7. **Listo:** cada herramienta que configuraste tiene una tarjeta plegada, «Qué puedes hacer con» esa herramienta.
+   Ábrela para ver los pasos siguientes; cada uno abre el sitio exacto en la aplicación: **Añadir una cuenta** (o
+   **Añadir otra cuenta**), **Sincronizar ahora**, **Mantenerlo en segundo plano**, **Dar su habilidad a tus
+   agentes**, **Conectar ChatGPT o Claude en el navegador**, **Ver lo que ejecutó** y **Leer su documentación**. Una
+   tarjeta muestra solo lo que admite su herramienta. **Enséñame la ventana** inicia una visita guiada breve por la
+   ventana, y **Abrir Herramientas** va a la página Herramientas.
 
 <DesktopShot
   shot="onboarding-install"
@@ -89,16 +83,48 @@ configuración; **Terminar la configuración** en la barra lateral la abre de nu
 Las terminales y las aplicaciones de IA que ya estaban abiertas ven las herramientas nuevas solo después de
 reiniciarlas.
 
-El signo de interrogación de la parte superior (**Ayuda**) tiene **Hacer el recorrido**, una visita guiada
-breve por la ventana, y **Ver de nuevo la bienvenida**. El número de versión de abajo a la izquierda abre el
-mismo menú.
+El signo de interrogación de la parte superior (**Ayuda**) tiene **Documentación de WireCat**, **Hacer el
+recorrido**, una visita guiada breve por la ventana, **Ver de nuevo la bienvenida**, **Privacidad**, **Buscar
+actualizaciones** y **Acerca de WireCat**. El número de versión de abajo a la izquierda abre el mismo menú.
+
+## Iniciar sesión en una herramienta
+
+Iniciar sesión da a este ordenador acceso a una de tus cuentas. Todas las herramientas inician sesión igual, en una
+ventana guiada:
+
+- **Antes de empezar** dice qué tener a mano, como tu teléfono o un navegador con la sesión del servicio abierta.
+- Los pasos aparecen a la izquierda, con **Atrás** bajo cada paso después del primero. Cada enlace tiene al lado un
+  botón para copiarlo.
+- Un fallo dice qué pasó, la causa probable y un solo arreglo, como **Reintentar** o **Mostrar un código nuevo**. El
+  texto de la propia herramienta está en **Detalles**.
+
+Cómo entra cada herramienta:
+
+| Herramienta | Cómo inicia sesión |
+| --- | --- |
+| Telegram | Un código QR o tu número de teléfono |
+| MAX | Un código QR, o un token copiado de la versión web de MAX |
+| WhatsApp | Un código QR, o tu número de teléfono y un código que escribes en el teléfono |
+| Zoom | Tu navegador. La primera vez, una lista de pasos te guía para crear tu propia app de Zoom |
+| Google Drive, Google Calendar | Tu navegador |
+| Correo | Primero tu dirección de correo. Gmail entra con Google (**Entrar con Google**, recomendado), sin configurar nada tuyo en Google Cloud. Una cuenta de Microsoft abre el inicio de sesión de Microsoft. Otros servidores de correo, y Gmail en **Otras formas**, usan una contraseña de aplicación, una contraseña creada solo para este programa, con pasos guiados. [Preparar el buzón](../mail/providers.md) muestra cómo la crea cada proveedor |
+| Bitrix24 | Una dirección de webhook de tu portal |
+
+Si una herramienta no tiene ventana de inicio de sesión, **Abrir terminal** abre una terminal que ejecuta la
+configuración propia de la herramienta.
 
 ## Qué puedes hacer en la aplicación
 
 La barra lateral enumera las páginas en este orden: **Herramientas**, **Agentes**, **Buscar**, **Tareas**,
-**Guías**, **Memoria** y **Analítica**. Debajo, aparte, están **Almacenamiento**, **Registros** y **Ajustes**,
-que tratan de los datos y de la propia aplicación. La parte superior de la ventana tiene **Informar de un
-problema**, **Avisos** (arreglos de seguridad, actualizaciones y noticias de WireCat) y **Ayuda**; cuando hay una
+**Resúmenes**, **Clientes**, **Guías**, **Memoria**, **Contactos** y **Analítica**. Debajo, aparte, están
+**Almacenamiento**, **Registros** y **Ajustes**, que tratan de los datos y de la propia aplicación. Tareas,
+Resúmenes, Clientes, Memoria y Contactos están marcadas como beta: una β junto al nombre significa que la sección es
+nueva y está poco probada.
+
+Cuando una página necesita una herramienta que falta, es demasiado antigua o no tiene la sesión iniciada, lo dice con
+las mismas palabras en todas partes, con un botón que lleva al arreglo, como **Instalar Memo** o **Actualizar Memo**.
+Un botón que necesita un valor que no has rellenado sigue activo: púlsalo y el campo dice qué falta. La parte superior
+de la ventana tiene **Informar de un problema**, **Avisos** (arreglos de seguridad, actualizaciones y noticias de WireCat) y **Ayuda**; cuando hay una
 versión nueva, se suma un botón de actualización. **Ayuda** también contiene **Privacidad**, **Acerca de WireCat**
 y los ajustes del Node.js que instaló WireCat.
 
@@ -107,7 +133,8 @@ y los ajustes del Node.js que instaló WireCat.
 Aquí instalas las herramientas y conectas cada una a tu cuenta. Cada herramienta tiene un indicador de estado.
 Verde significa instalada y al día, ámbar que hay una actualización, rojo que está instalada pero no
 arranca, y un anillo vacío que no está instalada. Cada fila tiene un botón: **Instalar**, **Actualizar a** una
-versión, **Arreglar** o **Gestionar**.
+versión, **Arreglar** o **Gestionar**, y una herramienta que sincroniza tiene además un botón para sincronizar. Cada
+servicio muestra su logo, con su nombre en una descripción emergente.
 
 Todas las herramientas guardan tus mensajes y notas en un almacenamiento compartido, y una versión nueva de una
 herramienta puede pasarlo a un formato más nuevo. Antes de **Instalar** o **Actualizar a**, la aplicación lo
@@ -128,26 +155,46 @@ formato lee, como Zoom, queda fuera de la comprobación.
 **Gestionar** abre los detalles de la herramienta:
 
 - **Cuentas:** añade una cuenta con un nombre, como `personal` o `work`, e inicia sesión con **Iniciar sesión
-  aquí** o **Abrir terminal**. La aplicación nunca elige una cuenta por ti.
-- **Comprobar estado:** ejecuta la comprobación propia de la herramienta para el perfil y explica cada problema
-  con palabras sencillas. Si el archivo de ajustes de la herramienta está roto, por ejemplo por una coma que
-  falta, **Reparar el archivo** pide a la herramienta que lo arregle. La herramienta conserva el archivo tal como
-  estaba y no cambia nada que no pueda arreglar con seguridad.
-- **Sincronizar ahora:** copia a este ordenador los mensajes, archivos o reuniones nuevos de un perfil.
+  aquí** o **Abrir terminal**. La aplicación nunca elige una cuenta por ti. Cada cuenta es una fila, igual en todas
+  partes: su estado, cuándo se sincronizó por última vez y **Sincronizar ahora**. **Sincronizar con horario** la
+  sincroniza cada cierto tiempo mientras tienes la sesión abierta, incluso con WireCat cerrado; cuando está activo,
+  el botón dice **Cambiar horario**. El menú de la fila tiene:
+  - **Comprobar:** ejecuta la comprobación propia de la herramienta para la cuenta y explica cada problema con
+    palabras sencillas. Si el archivo de ajustes de la herramienta está roto, por ejemplo por una coma que falta,
+    **Reparar el archivo** pide a la herramienta que lo arregle. La herramienta conserva el archivo tal como estaba y
+    no cambia nada que no pueda arreglar con seguridad. Si el almacén de mensajes de la herramienta está dañado, la
+    comprobación muestra qué pasó y los pasos para arreglarlo, con **Ejecutar** junto a cada paso seguro.
+  - **Elegir carpetas** (Google Drive): qué carpetas copiar, también después de iniciar sesión.
+  - **Ajustes:** los ajustes propios de la cuenta.
+  - **Iniciar sesión** o **Reconectar**: cuando una sesión ha terminado, la fila lo dice y ofrece **Reconectar**. El
+    texto de la propia herramienta está en **Detalles**.
+  - **Quitar cuenta:** mira [Quitar una cuenta](#quitar-una-cuenta).
+- **Bots** (Telegram, MAX y WhatsApp): **Añadir un bot** conecta un bot con su token; el paso del token de Telegram
+  tiene **Bot nuevo** y **Bot existente**. Cada bot muestra si su token funciona, con **Reconectar** y **Eliminar el
+  bot**, que pregunta antes. En una ventana ancha, los bots están en una columna junto a las cuentas.
 - **Permisos:** lo que los agentes pueden hacer con cada grupo de comandos, por perfil: **Permitir**,
   **Preguntar antes**, **Solo lectura** o **Bloquear**.
 - **Servicio en segundo plano** (Telegram, MAX y WhatsApp): la herramienta recibe mensajes nuevos solo mientras su
   servicio funciona. Cada cuenta muestra si funciona y si se inicia al entrar en tu sesión. **Iniciar y mantener**
-  lo inicia y hace que arranque al entrar, **Detener** lo detiene y **No iniciar al entrar** lo quita del inicio.
-  Si falla, una frase dice por qué y ofrece un solo arreglo, como **Iniciar sesión**. WhatsApp
-  además necesita el teléfono conectado.
+  lo inicia y hace que arranque al entrar, **Detener** lo detiene y **No iniciar al entrar**, que aparece cuando
+  arranca al entrar, lo quita del inicio. Si falla, una frase dice por qué y ofrece un solo arreglo, como **Iniciar
+  sesión**. WhatsApp además necesita el teléfono conectado.
 - **Servidor MCP (o conectar la web):** deja que ChatGPT o Claude en el navegador usen la herramienta. La guía de
   [Tailscale Funnel](./tailscale-funnel.mdx) publica el servidor, o puedes usar un túnel de Cloudflare.
-- **Ejecutar con horario** (solo Email): activa el agente de correo de Memo. Lee el correo nuevo cada 5 minutos
-  y propone tareas, facturas, pedidos y hechos para que los aceptes, y nunca envía nada. Necesita Memo y
-  Claude Code.
+- **Agente de correo** (solo Email): un interruptor que activa el agente de correo de Memo. Lee el correo nuevo cada
+  5 minutos y propone tareas, facturas, pedidos y hechos para que los aceptes en la página [Memoria](./memory.mdx), y
+  nunca envía nada. Una ejecución cuesta como mucho 1 $. Necesita Memo y Claude Code.
+- **Configura tus notas**, **Reescribir registros para buscar mejor** y **Buscar a fondo** (solo Memo): mira
+  [Modelo de IA y mejor búsqueda](./ai-model.mdx).
 - **Desinstalar:** quita la herramienta. Sus datos se quedan en este ordenador hasta que los borres, y el
   diálogo ofrece **Desinstalar y borrar datos**.
+
+#### Quitar una cuenta
+
+**Quitar cuenta**, en el menú de una cuenta, quita una cuenta y conserva la herramienta. Elige **Quitar y conservar
+sus datos (la búsqueda los sigue encontrando)** o **Quitar y borrar sus datos**. Después el diálogo lista qué se va y
+qué se queda, y no pasa nada hasta que confirmas. **Conservar la cuenta** cancela. Funciona para MAX, WhatsApp, Email,
+Google Drive, Zoom y Google Calendar. Una cuenta de Telegram, por ahora, solo cierra la sesión.
 
 <DesktopShot
   shot="connect"
@@ -177,9 +224,14 @@ encuentra y pregunta antes de cambiar nada.
 ### Buscar
 
 Aquí buscas en lo que una herramienta guarda en este ordenador. Elige una **Herramienta** y un **Perfil** y escribe
-qué buscar. La búsqueda solo lee la copia local y nunca consulta el servicio, así que lo que nunca se sincronizó
-no aparece. Abre un resultado para ver los mensajes de alrededor, el hilo completo de un correo o la transcripción
-de la reunión.
+qué buscar. La barra de búsqueda vacía sugiere primero los filtros más usados y después consultas listas. La
+búsqueda solo lee la copia local y nunca consulta el servicio, así que lo que nunca se sincronizó no aparece. Una
+línea bajo los resultados dice cuánto se buscó. Abre un resultado para ver los mensajes de alrededor, el hilo
+completo de un correo o la transcripción de la reunión.
+
+Una búsqueda en Telegram, MAX o WhatsApp puede tardar hasta 30 segundos. Si se queda sin tiempo, dice que la consulta
+está bien y ofrece **Reintentar**. Para Memo, **Buscar a fondo** puede reordenar los primeros resultados con un modelo
+de IA, cuando lo permites en [Modelo de IA y mejor búsqueda](./ai-model.mdx#buscar-a-fondo).
 
 <DesktopShot
   shot="search-hit"
@@ -192,10 +244,20 @@ de la reunión.
 ### Tareas
 
 Lo que tú y tus agentes pensáis hacer. Los agentes leen y cambian la misma lista, así que una tarea que pides en el
-chat con tu agente aparece aquí. Cambia entre la vista **Tabla** y la vista **Tablero**, añade una con **Nueva
-tarea** y busca con filtros como `project:HRB priority:high when:overdue`. Cada columna del tablero es un estado:
-**Abiertas**, **Por hacer**, **En curso**, **Hechas** o **Descartadas**. Memo guarda las tareas; la página lo
-indica si Memo no está instalado.
+chat con tu agente aparece aquí. Cambia entre la vista **Tabla** y la vista **Tablero**, y busca con filtros como
+`project:HRB priority:high when:overdue`, o con **Solo mías**, proyecto, responsable, prioridad, fecha límite y
+agente. Cada columna del tablero es un estado: **Abiertas**, **Por hacer**, **En curso**, **Hechas** o
+**Descartadas**. Una columna muestra sus primeras tarjetas; **Mostrar más** muestra el resto, y Hechas y Descartadas
+muestran los últimos 14 días. Memo guarda las tareas; la página lo indica si Memo no está instalado.
+
+**Nueva tarea** abre un diálogo: un título, un proyecto, una prioridad, una fecha límite y un responsable, que buscas
+por su nombre. Abre una tarea para cambiarla. **Guardar** dice Guardado, y al cerrar o seguir un enlace avisa antes de
+perder lo que escribiste. Si la tarea cambió mientras la editabas, tu texto se queda, y eliges guardar o cancelar.
+
+Memo también encuentra tareas en tus chats y tu correo. Aparecen con «De los mensajes» y el servicio, y **Origen** las
+separa de tus proyectos. Una tarea así muestra el mensaje del que viene, con **Abrir en el chat** o **Abrir el
+correo**. Solo tiene tres estados, **Abiertas**, **Hechas** y **Descartadas**, y no tiene prioridad, tipo, agente ni
+proyecto: una nota junto a cada uno dice por qué. En el tablero, suéltala en Hechas o Descartadas para cerrarla.
 
 <DesktopShot
   shot="tasks"
@@ -204,6 +266,16 @@ indica si Memo no está instalado.
   alt="El tablero de tareas con tareas abiertas, en curso y hechas, compartidas con los agentes"
   caption="Una lista de tareas que compartes con tus agentes."
 />
+
+### Resúmenes
+
+Un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o
+por correo, con un límite de gasto que tú fijas. [Resúmenes](./digests.mdx) muestra cómo configurar uno.
+
+### Clientes
+
+Las negociaciones y los prospectos de tu CRM como tabla o como tablero por etapas. Un cambio a otra etapa llega
+también a Bitrix24. [Clientes](./clients.mdx) muestra cómo importarlos y asignar las etapas de cada CRM a las tuyas.
 
 ### Guías
 
@@ -223,40 +295,37 @@ con la aplicación funcionan sin conexión, y las nuevas llegan cuando la tengas
 
 ### Memoria
 
-Aquí decides qué pueden recordar tus agentes sobre ti y las personas con las que hablas. Un agente conectado a
-WireCat guarda lo que aprende, por ejemplo «Kai prefiere las llamadas del viernes», con los mensajes que lo
-muestran. Nada de lo que escribe cuenta, y nada de lo que propone ocurre, hasta que lo apruebas. Memo guarda la
-memoria.
-
-Las pestañas son **Revisar**, **En uso**, **Rechazado** y **Todo**. Cada entrada muestra los mensajes y notas en
-los que se basa. Con cada entrada puedes:
-
-- **Aprobarla** o **Rechazarla**.
-- **Editarla**, con el lápiz o desde **Más**. Tu corrección se guarda como tuya y aprobada; la versión del agente
-  queda en **Rechazado**.
-- Deshacer lo que decidiste. **Más** tiene el paso atrás que corresponde a la entrada: **Rechazar**, **Ya no es
-  cierto** o **Deshacer aprobación**. **Deshacer aprobación** sirve para una decisión y para un hecho que escribió
-  un agente, que vuelve a **Revisar**. Un hecho que escribiste tú tiene **Editar** y **Borrar…** en su lugar.
-- **Borrar…** la entrada, también en **Más**. WireCat la borra de este ordenador y los agentes dejan de
-  encontrarla. Los mensajes, notas y reuniones en los que se basa se quedan, y una copia de seguridad hecha antes
-  aún la conserva.
+Aquí decides qué pueden tomar como cierto tus agentes sobre ti y las personas con las que hablas. Un agente
+conectado a WireCat guarda lo que aprende, por ejemplo «Kai prefiere las llamadas del viernes», con los mensajes que
+lo muestran. Nada de lo que sugiere cuenta hasta que lo apruebas. **Añadir a la memoria** guarda una nota, un enlace,
+un archivo o una imagen que le das, y los hechos que marcas. [Memoria](./memory.mdx) recorre la página.
 
 <DesktopShot
   shot="memory"
   folder="desktop/docs"
   lang="es"
-  alt="La página Memoria: hechos y decisiones de tus agentes esperan tu aprobación"
+  alt="La página Memoria: los tres pasos, las pestañas Pendiente, En uso, Rechazado y Todo, y sugerencias agrupadas por sobre quién son"
   caption="Nada de lo que recuerda un agente cuenta hasta que lo apruebas."
 />
+
+### Contactos
+
+Quién es quién en tus servicios de mensajería, correo, reuniones y CRM, una fila por persona. Une dos entradas que son
+una persona, deshaz una unión equivocada y responde a las dudas de tus agentes. [Contactos](./contacts.mdx) muestra
+cómo.
 
 ### Analítica
 
 Lo que WireCat guarda y cómo se usa. La página es de solo lectura. Elige un periodo (**7 días**, **30 días**,
 **90 días** o **Todo**) y lee: **Lo que guarda WireCat** (mensajes, chats, correos, documentos, reuniones,
 adjuntos y cuentas, con el espacio en disco), los mensajes en el tiempo, **Quién te escribe**, proyectos, tareas,
-memoria y **Cómo ayuda WireCat**, que cuenta lo que tus agentes hicieron con las herramientas. **Explorar** crea tu
-propio gráfico. **Ocultar nombres** oculta los nombres de personas y chats, por ejemplo antes de compartir la
-pantalla.
+horas de reuniones, memoria y **Cómo ayuda WireCat**, que cuenta lo que tus agentes hicieron con las herramientas. El
+gráfico de cuándo hablas muestra a todos o solo a ti, y todos los servicios de mensajería o uno. Un chat silenciado
+cuenta como chat, pero sus mensajes no cuentan. **Explorar** crea tu propio gráfico. **Ocultar nombres** oculta los
+nombres de personas y chats, por ejemplo antes de compartir la pantalla.
+
+Cuando un número no se puede mostrar, su tarjeta dice por qué y ofrece el arreglo: instalar o actualizar una
+herramienta, iniciar sesión o reintentar.
 
 <DesktopShot
   shot="analytics"
@@ -278,6 +347,12 @@ hay dentro.
 - **Vaciar el almacenamiento…:** borra todos los mensajes, chats, correos, documentos y reuniones del
   almacenamiento compartido. Los ajustes y las sesiones se quedan. El diálogo hace antes una copia, salvo que
   desmarques la casilla.
+- **Importar desde un archivo:** añade registros de una hoja de cálculo o de otro sistema, como facturas, pagos u
+  organizaciones, desde un archivo CSV o JSON. Elige el tipo y el formato, luego **Descargar plantilla** y rellénala.
+  Pon nombre a la **Fuente**, como `sheet:rentals`: importar de nuevo la misma fuente actualiza sus registros en lugar
+  de añadir copias. **Elegir archivo** y después **Comprobar**: cuenta lo que es nuevo, actualizado, sin cambios y
+  rechazado, y lista cada registro rechazado con su línea y su columna. **Importar** los añade. Los cambios que
+  necesitan tu revisión esperan en la página [Memoria](./memory.mdx).
 - **Borrar:** quita las carpetas de una herramienta cuando ninguna herramienta instalada las usa. **Borrar todos
   los datos sobrantes** las quita todas. Los tokens de inicio de sesión del llavero del sistema no se tocan.
 
@@ -291,22 +366,34 @@ hay dentro.
 
 ### Registros
 
-[Busca lo que las herramientas registraron de sus ejecuciones](./logs.mdx) cuando algo falló.
+[Busca lo que las herramientas registraron de sus ejecuciones](./logs.mdx) cuando algo falló. Los filtros incluyen la
+herramienta, el estado, el comando, el perfil, el tipo de ejecución y la tabla del almacén.
 
 ### Ajustes
 
 Arriba están el **Idioma** y el **Tamaño de la interfaz** de la aplicación: Ctrl y + o − cambian el tamaño en
 cualquier parte de la aplicación, y Ctrl y 0 lo restablecen (Cmd en macOS). Los nombres de las herramientas, los
-comandos y lo que imprimen las herramientas no se traducen. Debajo, **Herramientas** muestra los ajustes de cada
-herramienta y de WireCat, como lista o como **JSON**. La aplicación los lee de la herramienta y los guarda con
-el comando `config` de la propia herramienta, así que la herramienta comprueba cada valor antes de escribirlo.
+comandos y lo que imprimen las herramientas no se traducen. De arriba abajo, la página tiene:
+
+- **Activar herramientas de la comunidad** y **Permitir herramientas que WireCat no ha revisado**: mira
+  [Añadir tu propia herramienta](#añadir-tu-propia-herramienta).
+- **Modelo de IA** y **Lectura de hechos**: un modelo y una clave para las funciones que los necesitan. Mira
+  [Modelo de IA y mejor búsqueda](./ai-model.mdx), y [Usar WireCat con modelos locales](./local-models.mdx) para que
+  todo se quede en tu ordenador.
+- **Herramientas:** los ajustes de cada herramienta y de WireCat, como lista o como **JSON**. La aplicación los lee
+  de la herramienta y los guarda con el comando `config` de la propia herramienta, así que la herramienta comprueba
+  cada valor antes de escribirlo.
+- **Grupos de cuentas:** un tablero que reparte tus cuentas en grupos, como personal y trabajo. Arrastra una cuenta a
+  un grupo; mantén Alt o Ctrl al soltarla para copiarla allí. **Grupo nuevo** añade uno. Cada cuenta tiene además un
+  interruptor **Personal** o **Trabajo**: las vistas de trabajo, los agentes de trabajo y la marca de trabajo en los
+  contactos leen solo las cuentas de trabajo. Los grupos de cuentas necesitan Memo.
 
 <DesktopShot
   shot="settings"
   folder="desktop/docs"
   lang="es"
-  alt="La página Ajustes: idioma, tamaño de la interfaz, los dos interruptores de herramientas y qué lee una fuente para proponer hechos"
-  caption="Ajustes: cómo se ve la aplicación y qué herramientas puede mostrar."
+  alt="La página Ajustes: idioma, tamaño de la interfaz, los dos interruptores de herramientas, el modelo de IA y Lectura de hechos"
+  caption="Ajustes: cómo se ve la aplicación, qué herramientas puede mostrar y el modelo de IA."
 />
 
 ### Informar de un problema
@@ -317,197 +404,10 @@ fallidas, con los datos personales ocultos. No se envía nada hasta que lo enví
 
 ## Añadir tu propia herramienta
 
-**Llega en la próxima versión de WireCat Desktop:** todo lo que describe esta sección. La versión actual muestra solo
-las herramientas de WireCat.
-
-Sirve para añadir una herramienta que WireCat no hace: la tuya, la de un colega o una de un repositorio privado. La
-página Herramientas puede mostrar tres tipos de herramienta:
-
-| Tipo | De dónde viene | Etiqueta |
-| --- | --- | --- |
-| Las de WireCat | Incluidas en la aplicación | ninguna |
-| De la comunidad | Una lista que WireCat revisa y firma | **Comunidad** |
-| Las tuyas | Añadidas por ti, por su nombre en npm | **Sin verificar** |
-
-El segundo y el tercer tipo están desactivados por defecto. Ajustes tiene un interruptor para cada uno, uno junto al
-otro en una ventana ancha: **Activar herramientas de la comunidad** y **Permitir herramientas que WireCat no ha
-revisado**. **Activar herramientas de la comunidad** vale desde el próximo inicio, y la página ofrece **Reiniciar
-ahora**. **Permitir herramientas que WireCat no ha revisado** vale al momento.
-
-<DesktopShot
-  shot="own-settings"
-  folder="desktop/docs"
-  lang="es"
-  alt="Ajustes: los interruptores de herramientas de la comunidad y de herramientas que WireCat no ha revisado, los dos activados"
-  caption="Dos interruptores, los dos desactivados por defecto."
-/>
-
-### Herramientas de la comunidad
-
-Activa **Activar herramientas de la comunidad**. La aplicación lee entonces la lista que firma WireCat y muestra sus
-herramientas con la etiqueta **Comunidad**. Se instalan con su botón **Instalar**, como cualquier herramienta. La
-aplicación instala una versión solo cuando npm la compiló desde el propio repositorio de la herramienta. La revisión
-comprueba cómo se construye y publica una herramienta, no todo lo que hace. Todavía no hay ninguna herramienta en la
-lista. Los autores piden entrar en ella como dice
-[Añade tu herramienta a WireCat](../build-list-tool.md).
-
-La lista firmada vale 30 días, y la aplicación descarga una nueva cada día. Si no lo consigue, un aviso arriba en la
-aplicación dice cuándo caduca la lista, en cuanto quedan siete días o menos. Cuando la lista caduca, el aviso dice
-«La lista de herramientas de la comunidad está desactualizada, así que no se pueden instalar ni actualizar
-herramientas de la comunidad. Las instaladas siguen funcionando.» Hasta que llega una lista nueva, la fila de una
-herramienta de la comunidad explica por qué **Instalar** o **Actualizar** no funciona. Desinstalar sí funciona. Tus
-propias herramientas y las de WireCat no usan la lista. El aviso solo aparece mientras las herramientas de la comunidad
-están activadas.
-
-### Añadir una herramienta por su nombre en npm
-
-1. En Ajustes, activa **Permitir herramientas que WireCat no ha revisado**. Se abre un aviso: una herramienta añadida
-   así se ejecuta como tú en este equipo, así que puede leer todo lo que guarda WireCat; añade solo herramientas de
-   autores en quienes confíes por completo, y WireCat no se hace responsable de lo que hagan. Confírmalo con
-   **Permitir**.
-2. En la página Herramientas, pulsa **Añadir tu propia herramienta**, arriba junto a **Comprobar de nuevo**. Escribe
-   el nombre en npm, como `@scope/name`, y pulsa **Comprobar paquete**. WireCat solo lee npm. No se instala nada y no
-   se ejecuta ningún código del paquete.
-3. Lee la pantalla de revisión (abajo) y pulsa **Añadir**.
-4. WireCat pregunta «¿Revisar `@scope/name` antes de instalarla?» y ofrece primero tu agente de IA. Hay un botón por
-   cada agente que puede abrir, como **Revisarla con Claude Code** o **Revisarla con Codex**. El agente se abre en un
-   terminal con una petición preparada: descargar exactamente el archivo del paquete que revisaste, comprobar su
-   sha512, leer el código, compararlo con el repositorio en el commit de la versión e informar de los servidores con
-   los que conecta, lo que lee y escribe en este equipo y cualquier cosa sospechosa. Nunca instala ni ejecuta el
-   paquete. **Qué se le pide a tu agente** muestra la petición completa. Si no encuentra ningún agente, pulsa
-   **Copiar la revisión** y pégala en el tuyo. Lee el informe del agente y pulsa **Continuar a la instalación**, u
-   **Omitir e instalar** sin la revisión.
-5. Una segunda pregunta dice: «¿Instalar y ejecutar `@scope/name`? Sus scripts de instalación y su primera ejecución
-   usan tus permisos.» Solo **Instalar y ejecutar** instala el paquete. **Atrás** vuelve a la revisión.
-6. Tras la instalación, WireCat comprueba que el programa se describe igual que en la revisión. La herramienta aparece
-   al momento en la página Herramientas con la etiqueta **Sin verificar**. No hace falta reiniciar.
-
-No vale cualquier paquete. El paquete debe tener ámbito (`@scope/name`, no `@wirecat/`), estar escrito en TypeScript
-sobre [cli-base](https://github.com/WireCatLabs/cli-base) e incluir su manifiesto `contracts/wirecat.json`: un archivo
-que describe los comandos de la herramienta ante WireCat. Un programa de tu PATH o un paquete sin ámbito no se pueden
-añadir. Cómo construye un autor una herramienta así lo explica
-[Crea tu CLI](../build-create-cli.md#prepárala-para-wirecat-desktop).
-
-<DesktopShot
-  shot="own-name"
-  folder="desktop/docs"
-  lang="es"
-  alt="Añadir tu propia herramienta: el aviso en rojo y el nombre del paquete en npm"
-  caption="El nombre. WireCat solo lee npm."
-/>
-
-### La pantalla de revisión
-
-Cuando se abre, todavía no hay nada instalado. De arriba abajo:
-
-- **Sin verificar**, junto al nombre de la herramienta.
-- **Un aviso en rojo**, cierto para cualquier herramienta que añadas: se ejecuta como tú en este equipo, así que puede
-  leer todo lo que guarda WireCat (tus mensajes, correo, notas y archivos). Si la herramienta está hecha con cli-core,
-  la biblioteca propia de WireCat, el aviso añade que abre esos datos directamente. Añádela solo si confías por
-  completo en sus autores.
-- **Publicado por**, **Repositorio**, **Versión** y **Dónde lo compiló npm**. Cada uno es un enlace que se abre en tu
-  navegador: el perfil de quien lo publica en npm, el repositorio, la página de la versión (**En npm**) y, cuando npm
-  registró dónde compiló el paquete, **Commit de la versión**, **Ejecución del flujo de publicación** y **Entrada en
-  el registro de transparencia**. «No hay registro de dónde la compiló npm» significa que nada vincula el paquete con
-  código público.
-- **Qué conviene revisar**: cada punto con una frase sobre por qué importa. Salen de npm (publicada por primera vez
-  hace menos de 30 días, pocas versiones, la publica una sola cuenta de npm, no hay registro de dónde la compiló npm),
-  de su repositorio de GitHub (creado hace poco, sin cambios desde hace mucho, archivado, pocas estrellas, flujos de
-  trabajo que no ejecutan las comprobaciones estándar de WireCat), de si usa las bibliotecas de WireCat, y de su código
-  (abre conexiones de red, nombra servidores que no declara, puede iniciar otros programas, oculta llamadas o incluye
-  código nativo en archivos `.node` o `.wasm`). Si GitHub no responde o se agotaron las consultas, el punto dice «No
-  se pudo revisar su repositorio de GitHub», y las demás comprobaciones siguen valiendo. Si no hay nada que mostrar,
-  dice «Nada llamó la atención. Eso no la hace segura.»
-- **Servidores con los que conecta**: los servidores que declara la herramienta, «Dice que no conecta con ningún
-  servidor» o «No lo dice». También aparece un servidor que eliges tú, como tu propio servidor de correo.
-- **Qué dice que hace**: una tabla con los datos con los que trabaja la herramienta (Contact, Deal…), con sus campos
-  cuando la herramienta los nombra. Para cada uno, **En** el servicio y **En este equipo**: **Lee**, **Cambia** o
-  **Guarda**, o **Nada**. Después, qué copia su sincronización al almacén de WireCat y los **Comandos estándar de
-  WireCat** en palabras sencillas (inicia sesión, comprueba que funciona, instala instrucciones para tus agentes de
-  IA…). Los comandos exactos están plegados bajo **Comandos**; púlsalo para abrir la lista.
-
-Qué significa:
-
-- **«Qué conviene revisar» son señales, no un veredicto.** Ninguna te impide añadir la herramienta, y una lista vacía
-  no la hace segura. Lo que WireCat encuentra en el código del paquete está «encontrado en el código, no demostrado»:
-  se saltan las bibliotecas que el paquete incluye, y el código puede escribirse para esconderse de esa lectura.
-- **«Dónde lo compiló npm» no es una comprobación de seguridad.** npm registra qué repositorio compiló el paquete. Eso
-  muestra de dónde viene el código, no que sea seguro.
-- **«Qué dice que hace» es lo que la herramienta dice de sí misma.** WireCat no puede demostrar que haga solo eso.
-- **Instalar ejecuta su código.** npm ejecuta los scripts de instalación del paquete con tus permisos. Por eso primero
-  llega la revisión con tu agente de IA, y por eso hay dos confirmaciones.
-
-<DesktopShot
-  shot="own-review"
-  folder="desktop/docs"
-  lang="es"
-  alt="La pantalla de revisión: Sin verificar, el aviso en rojo, los datos del paquete enlazados, qué conviene revisar y qué dice que hace"
-  caption="La revisión. Todavía no hay nada instalado."
-/>
-
-<DesktopShot
-  shot="own-review-risky"
-  folder="desktop/docs"
-  lang="es"
-  alt="Una revisión con muchos puntos: paquete nuevo, una sola cuenta lo publica, sin registro de dónde se compiló, servidores en su código que no declara"
-  caption="Qué conviene revisar, cada punto con su motivo. Ninguno bloquea la herramienta."
-/>
-
-<DesktopShot
-  shot="own-check"
-  folder="desktop/docs"
-  lang="es"
-  alt="Después de Añadir: revisarla con Claude Code o Codex, copiar la revisión u omitir e instalar"
-  caption="La revisión con tu agente de IA, antes de instalar."
-/>
-
-<DesktopShot
-  shot="own-confirm"
-  folder="desktop/docs"
-  lang="es"
-  alt="La segunda pregunta: ¿instalar y ejecutar @leemour/acme-crm-cli?"
-  caption="La segunda pregunta. Solo este botón instala."
-/>
-
-### Úsala con tu agente de IA
-
-Una herramienta añadida funciona como cualquier otra. Abre **Gestionar** en su fila para añadir una cuenta, iniciar
-sesión, sincronizar y comprobar su estado. Si tiene instrucciones para agentes de IA o un servidor MCP, la página
-[Agentes](#agentes) se las da a tus agentes con **Conectar**, como a una herramienta de WireCat.
-
-<DesktopShot
-  shot="own-tools-list"
-  folder="desktop/docs"
-  lang="es"
-  alt="La página Herramientas con Acme CRM, añadida por ti, marcada Sin verificar"
-  caption="Una herramienta añadida en la página Herramientas, marcada Sin verificar."
-/>
-
-### Actualízala
-
-El botón **Actualizar a** abre la revisión de nuevo para la versión nueva, cada vez. También lista qué cambió desde
-la versión que confirmaste: el repositorio, dónde lo compiló npm, los editores, comandos nuevos, nuevo acceso de
-escritura y partes nuevas o cambiadas. Si algo cambió, o la herramienta no describe qué pide, marca **Acepto estos
-cambios** para poder seguir. Después llegan la revisión con tu agente de IA y la segunda pregunta, como con una
-herramienta nueva.
-
-### Quítala
-
-- **Quitar de WireCat**, en los detalles de la herramienta (pulsa su nombre), borra su entrada, y la herramienta sale
-  de la página Herramientas al momento. No hace falta reiniciar. Si el programa está instalado, la pregunta ofrece
-  **Desinstalarla antes**; si no, el programa sigue instalado, y la página Herramientas dice qué queda en el equipo.
-- **Desinstalar** quita el programa. **Desinstalar y borrar datos** borra además las carpetas de datos propias de la
-  herramienta: solo las que llevan el nombre de su paquete (`@scope/name` → `scope-name`). Nunca borra el almacén que
-  comparten tus otras herramientas. Una carpeta con ese nombre que ya existía antes de añadir la herramienta aparece
-  con «Esta carpeta ya existía antes de que WireCat añadiera la herramienta, así que WireCat no la toca», y nunca se
-  borra.
-
-### Sin internet
-
-Comprobar, añadir y actualizar un paquete leen npm, así que necesitan internet. Sin él, el diálogo dice «No se pudo
-conectar con npm». Una herramienta ya añadida sigue en la página Herramientas sin conexión: WireCat guarda su
-entrada en este ordenador y no vuelve a preguntar a npm al iniciar. Que la propia herramienta funcione sin conexión
-depende de la herramienta y de su servicio.
+WireCat Desktop puede instalar herramientas que WireCat no hace: una herramienta de la comunidad de la lista que revisa
+WireCat, o cualquier herramienta hecha con las bibliotecas de WireCat, añadida por su nombre en npm.
+[Añadir tu propia herramienta](./own-tools.mdx) muestra cómo, qué te dice la pantalla de revisión antes de instalar
+nada y qué necesita el autor de una herramienta para que WireCat pueda añadirla.
 
 ## Las herramientas siguen siendo de línea de comandos
 
@@ -521,10 +421,21 @@ Tus datos se quedan donde los guardan las herramientas, en este ordenador. La ap
 internet para instalar herramientas desde npm, descargar Node.js cuando instala su propia copia, comprobar
 en GitHub si hay una versión nueva de sí misma y enviar un informe de error cuando lo envías.
 
+## Abrir WireCat desde un enlace
+
+Un enlace `wirecat://` abre su elemento en la aplicación abierta: un chat o un mensaje, una tarea, una lista de
+tareas, un recuerdo por revisar o un resumen. Los agentes y los resúmenes escriben esos enlaces. Un chat o un mensaje
+se abre en una pantalla de solo lectura, con el mensaje enlazado marcado; WireCat no envía nada desde ella. Un enlace a
+algo que no está en este ordenador lo dice, con **Copiar la referencia**. Cuando un enlace web no se puede abrir en tu
+navegador, un diálogo muestra la dirección para copiarla. Haz clic derecho en cualquier enlace web de la aplicación
+para copiarlo.
+
 ## Actualizar y desinstalar
 
 En macOS, Windows y con el AppImage, la aplicación se actualiza sola: ofrece la versión nueva en la parte
-superior de la ventana, la instala y se reinicia. Una copia instalada desde .deb o
+superior de la ventana, la instala y se reinicia. Para comprobarlo en cualquier momento, elige **Buscar
+actualizaciones** en el menú **Ayuda**. Dice que WireCat está al día, ofrece la versión nueva o dice por qué falló la
+comprobación, con **Reintentar**. Una copia instalada desde .deb o
 .rpm descarga sola el paquete nuevo y abre el instalador del sistema, y también muestra el comando de `apt` o `dnf`.
 **Abrir en la terminal** ejecuta ese comando en tu terminal: escribe ahí tu contraseña y reinicia WireCat cuando
 termine la instalación.
@@ -564,7 +475,8 @@ La luz de la herramienta está en rojo y su botón dice **Arreglar**. Abre **Arr
 
 ### El inicio de sesión no termina
 
-**Iniciar sesión aquí** espera a que termines en el navegador o en el teléfono. Un código o un QR caduca a los pocos segundos y aparece uno nuevo solo; usa el último. Un mensajero puede tardar un minuto en enviar su historial: déjalo abierto en el teléfono o pulsa **Detener y conservar lo recibido**. Si el mensaje dice que la versión todavía no puede iniciar sesión aquí, actualiza la herramienta en la página Herramientas o usa **Abrir terminal**. Si WireCat no encuentra ningún terminal, ejecuta tú el comando que muestra y pulsa **Comprobar sesión**.
+**Iniciar sesión aquí** espera a que termines en el navegador o en el teléfono. Si el navegador no vuelve solo a
+WireCat, copia la dirección o el código que muestra el navegador y pégalo en el campo que ofrece el inicio de sesión. Un código o un QR caduca a los pocos segundos y aparece uno nuevo solo; usa el último. Un mensajero puede tardar un minuto en enviar su historial: déjalo abierto en el teléfono o pulsa **Detener y conservar lo recibido**. Si el mensaje dice que la versión todavía no puede iniciar sesión aquí, actualiza la herramienta en la página Herramientas o usa **Abrir terminal**. Si WireCat no encuentra ningún terminal, ejecuta tú el comando que muestra y pulsa **Comprobar sesión**.
 
 ### Comprobar estado muestra un archivo de ajustes roto
 
@@ -577,47 +489,6 @@ Otra herramienta de WireCat pasó el almacenamiento compartido a un formato más
 ### «No se ha podido instalar la actualización»
 
 Pulsa **Reintentar** o descarga WireCat en la [página de descargas](/es/download). Si el mensaje dice que la descarga no coincide con la firma de WireCat, no se ha abierto y no se guardó nada. Una copia .deb o .rpm abre el instalador de tu sistema, que pide tu contraseña. Una copia que WireCat no reconoce no puede actualizarse sola: instala la versión nueva como instalaste esta. Tus cuentas y tus datos no se borran. Más en [Actualizar y desinstalar](#actualizar-y-desinstalar).
-
-### «La lista de herramientas de la comunidad está desactualizada»
-
-**Llega en la próxima versión de WireCat Desktop.** La lista de
-[herramientas de la comunidad](#herramientas-de-la-comunidad) que firma WireCat ha caducado, y la aplicación no pudo
-descargar una nueva. Hasta que lo consiga, no se pueden instalar ni actualizar herramientas de la comunidad. Las
-instaladas siguen funcionando, y tus propias herramientas no se ven afectadas. Revisa tu conexión a internet o tu
-proxy. La aplicación lo vuelve a intentar cada día, y el aviso desaparece en cuanto llega una lista nueva.
-
-### WireCat rechaza una herramienta que añades
-
-Cuando [añades tu propia herramienta](#añadir-tu-propia-herramienta), el diálogo nombra el problema en un título,
-como **Herramienta no encontrada**, y luego dice qué falló y qué hacer. **Intentar de nuevo** vuelve al campo del
-nombre, con el nombre conservado y seleccionado, para que lo corrijas. Si no se pudo conectar con npm, el paquete es
-demasiado grande o algo salió mal, **Intentar de nuevo** lee otra vez el mismo nombre. Antes de la segunda pregunta no
-se instala nada, salvo en las dos últimas filas.
-
-| El diálogo dice | Qué hacer |
-| --- | --- |
-| Herramienta no encontrada: npm no tiene ningún paquete llamado … | Revisa cómo está escrito, ámbito incluido: `@scope/name`. |
-| Aquí solo valen nombres con ámbito, como @scope/name. | Pide al autor el nombre completo del paquete en npm. |
-| Este nombre pertenece a las herramientas propias de WireCat. | Las herramientas de WireCat ya están en la página Herramientas. Instálalas allí. |
-| Esta herramienta no se describe ante WireCat. | Pega su objeto `desktop` de la documentación de la herramienta en el campo bajo el mensaje y pulsa **Comprobar con este objeto**. O pide a su autor que publique una versión con manifiesto. |
-| Lo que la herramienta dice a WireCat tiene un problema en «…»: … | Las comillas nombran la parte, y después viene la regla que incumple. Pide al autor que lo corrija y publique una versión nueva. |
-| … ya usa el nombre, el programa o la carpeta de datos de esta herramienta. | Dos herramientas no pueden compartirlos. Pide al autor que le cambie el nombre. |
-| …, de la lista de la comunidad de WireCat, ya usa el nombre o las carpetas de esta herramienta. | Esta herramienta ya está en la lista. Quita tu propia entrada para usar la de la lista. |
-| Según npm se compiló desde …, pero el paquete indica …. | No la añadas. Avisa al autor. |
-| WireCat no pudo conectar con npm. | Revisa tu conexión a internet o tu proxy y vuelve a intentarlo. |
-| «…» es más grande de lo que WireCat lee. | Pide al autor que haga el paquete más pequeño. |
-| Algo falló al leer npm: … | Vuelve a intentarlo. Si se repite, informa del problema. |
-| WireCat no puede mostrar esta herramienta: … | Pide al autor que lo corrija y publique una versión nueva. |
-| El paquete está instalado, pero WireCat no lo añadió. | El programa no coincide con la revisión. Pulsa **Desinstalarlo**. |
-| bun installed this tool, and bun cannot be told which registry your own tools come from. | La aplicación muestra este mensaje solo en inglés por ahora, al actualizar una herramienta tuya que instaló bun. Desinstálala y añádela de nuevo: WireCat la instala con npm. |
-
-<DesktopShot
-  shot="own-refused"
-  folder="desktop/docs"
-  lang="es"
-  alt="Un rechazo: herramienta no encontrada, npm no tiene ningún paquete llamado @leemour/acme-crm-clis, y el botón Intentar de nuevo"
-  caption="Un rechazo nombra el motivo y qué hacer."
-/>
 
 ### ChatGPT o Claude en el navegador no llegan a la herramienta
 

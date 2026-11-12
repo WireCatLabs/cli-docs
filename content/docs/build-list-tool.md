@@ -148,8 +148,7 @@ The review checks how your tool is built and released. It does not check everyth
 - **Each install is checked.** Before it installs your tool, the app checks that npm built that release from your
   repository's `release.yml` on `main`.
 
-The site already builds and signs the desktop list. WireCat Desktop starts reading it in an upcoming release. Until
-then a listed tool appears on the site only.
+The site builds and signs the desktop list, and WireCat Desktop reads it while **Enable community tools** is on.
 
 ## Updates
 
@@ -171,8 +170,7 @@ the next deploy publishes a list without it.
 
 ## Try it before listing
 
-You can add your tool in WireCat Desktop before anyone reviews it. It then carries a **Not checked** badge. This is
-coming in the next WireCat Desktop release.
+You can add your tool in WireCat Desktop before anyone reviews it. It then carries a **Not verified** badge.
 
 1. In Settings, turn on **Allow tools WireCat has not checked** and confirm the warning with **Allow**.
 2. On the Tools page, click **Add your own tool**, at the top next to **Check again**. Type your package's npm name
@@ -182,7 +180,7 @@ coming in the next WireCat Desktop release.
 
 Desktop reads the tool's manifest, `contracts/wirecat.json`, out of the npm package, so your tool must ship it
 ([Create your CLI](./build-create-cli.md)). A tool from a private repository can be added this way, but never listed.
-The [WireCat Desktop page](./desktop/index.mdx#add-your-own-tool) shows every screen and what each refusal means.
+[Add your own tool](./desktop/own-tools.mdx) shows every screen and what each refusal means.
 
 ## Where to go next
 

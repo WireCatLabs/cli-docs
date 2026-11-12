@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react"
 import { downloadWords } from "@/lib/download"
 import { bindScreenshotLightbox } from "@/lib/screenshot-lightbox"
 
-const shots = ["tools", "agents", "search-hit", "tasks", "memory", "connect"] as const
+const shots = ["tools", "agents", "search-hit", "tasks", "memory", "connect", "digests", "analytics"] as const
 
 export function DesktopGallery({ lang }: { lang: string }) {
   const words = downloadWords(lang).gallery

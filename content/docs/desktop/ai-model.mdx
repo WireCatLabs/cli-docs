@@ -1,0 +1,74 @@
+---
+title: AI model and better search
+description: Set one AI model and key for WireCat Desktop, choose who reads your sources for facts, and turn on the two search helpers that send data out only after you agree.
+---
+
+Some WireCat features need an AI model: reading the text in a picture, suggesting facts from a document, and two
+optional search helpers. This page shows how to set one model and one key for all of them in WireCat Desktop, and what
+each feature sends out of your computer. Everything here is off until you turn it on. Without a model, your own AI
+agent does this work when you ask it.
+
+## Set the AI model
+
+Open **Settings**. The **AI model** section is below the tool switches.
+
+1. Choose the provider: **Anthropic (Claude)**, **OpenAI or compatible**, or **Ollama on this computer**, which is in
+   beta. **No model (use your agent)** turns it off. With **OpenAI or compatible**, **Address (base URL)** is where
+   WireCat sends its requests. Leave it empty for OpenAI itself, or see
+   [Keep it on your computer](#keep-it-on-your-computer) for other addresses.
+2. Choose the **Model**. Ollama and OpenRouter list their models. Anthropic and OpenAI show their list only with your
+   key, so type the model's name as the provider writes it.
+3. Enter the **API key**. It is kept in your system's password store and never shown again. Where there is no
+   password store, it is kept in a file only your user can read. The section says which.
+4. Save, then click **Check**. It sends one short request, billed by your provider, and says in plain words whether it
+   works, with the model and how fast it answered, or what to fix.
+
+**Read pictures with this model** lets **Add to memory** send pictures to this model to read their text. The note
+under it says what reads pictures now. A model on your computer is usually slower and less accurate. A change applies
+only to pictures you add after it.
+
+### Keep it on your computer
+
+**Address (base URL)** takes the address of any server that speaks the OpenAI interface. That can be a hosted service,
+such as OpenRouter at `https://openrouter.ai/api/v1`, or a model you run yourself. Run a model on this computer with a
+server that speaks the OpenAI interface, and enter its address, for example `http://localhost:8080/v1`. Then the
+pictures and texts the model reads never leave your computer. A model on your company's server keeps them inside the
+company. The address must start with `https://`; plain `http://` works only for a server on this computer. Type a key even
+for a server on this computer: any value works when your server asks for none. Your key is sent only to this address.
+
+**Ollama on this computer** also keeps everything on your computer, and lists the models you downloaded. Ollama must
+run at its usual address, `127.0.0.1:11434`. [Run WireCat on local models](./local-models.mdx) covers every feature.
+
+### Reading for facts
+
+**Reading for facts**, below, chooses who reads a source when you ask [Add to memory](./memory.mdx#add-to-memory) to
+suggest facts. **AI model (recommended)** uses the model and key above. Choose a reader and click **Use this reader**.
+
+## Better search
+
+Two helpers can make search find more. Both are off by default, and both send data to the provider of your choice, so
+each asks first. They live in Memo's details: on the Tools page, click **Manage** on Memo's row.
+
+Before turning them on, set up your notes on the same panel. The card **Set up your notes** has three steps: choose
+your notes folders, read your notes, and **Search by meaning (optional)**. The last step offers the local search
+models; the recommended one is labelled **Best local model**. It runs on your computer and sends nothing.
+
+### Rewrite records for better search
+
+Your notes, documents and emails get other words added, so a question asked in other words still finds them. Click
+**Turn on**. **What turning it on sends** shows which records go, to which provider and model, the price, and that
+turning it off deletes the added text. You agree with the button that names the number of records and the provider.
+After that, each sync sends new records too. **Turn off** asks first, then deletes the added text.
+
+### Search harder
+
+A hosted model reorders the top results of one search, when you ask for it. Click **Allow**. **What searching harder
+sends** shows the provider, the model and the price, and that only your question and its first results go, only when
+you press the button. A search without it sends nothing.
+
+Then, on the [Search](./index.mdx#search) page, a Memo search with two or more results shows **Search harder**. Press
+it to reorder that one search.
+
+## Next
+
+[Add a note or a picture to memory](./memory.mdx#add-to-memory) and ask your agent about it.

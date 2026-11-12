@@ -1,0 +1,88 @@
+---
+title: Contactos en WireCat Desktop
+description: Ve quién es quién en Telegram, MAX, WhatsApp, el correo, las reuniones y Bitrix24, une las cuentas de una persona, deshaz una unión equivocada y responde a las dudas de tus agentes.
+---
+
+La misma persona a menudo te escribe por Telegram, WhatsApp y correo, y además está en tu CRM. La página **Contactos**
+de WireCat Desktop muestra a cada persona una sola vez, con todas sus cuentas. Úsala para comprobar quién es quién,
+para unir dos entradas que son una persona y para deshacer una unión equivocada. Tus agentes leen la misma lista, así
+que una lista correcta les da mejores respuestas sobre las personas con las que hablas. La página necesita Memo, que
+guarda la lista; sin él, la página lo dice y ofrece **Instalar Memo**.
+
+Contactos está marcada como beta: ves una β junto a su nombre. La sección es nueva y está poco probada.
+
+## Cómo une WireCat a las personas
+
+WireCat une dos cuentas en una persona por sí solo solo cuando comparten una dirección de correo, o un número de
+teléfono que nadie más tiene. Lo que es menos seguro te espera en esta página. Los agentes también pueden sugerir que
+una persona son en realidad dos, y eso también lo respondes aquí. [Cómo se une a las personas](../people.md) explica
+las reglas.
+
+<DesktopShot
+  shot="contacts"
+  folder="desktop/docs"
+  lang="es"
+  alt="La página Contactos: coincidencias que te esperan, pestañas por tipo con sus recuentos y una tabla de personas con sus contactos y recuentos de mensajes"
+  caption="Contactos: una fila por persona, con las coincidencias que te esperan arriba."
+/>
+
+## La lista
+
+Las pestañas reparten a todos en **Personas**, **Empresas**, **Boletines y avisos**, **Desconocidos** y **Sin
+clasificar**. Cada pestaña muestra su recuento. Un recuento con un más, como «5.002+», aún no es exacto.
+
+La tabla muestra **Nombre**, **Contacto**, **Mensajes suyos**, **Último contacto** y **Tareas**, 50 filas por página.
+El paginador de abajo lo cambia a 25 o 100. Una persona con teléfono y correo muestra el primero y «+1». Una persona
+con solo una cuenta de WhatsApp o MAX muestra ese servicio. Los bots llevan la marca **bot**. Encima de la tabla puedes
+buscar por nombre, teléfono o dirección, ordenar con **Orden** (más mensajes, contacto reciente, nombre o más tareas)
+y dejar solo a las personas con tareas o con nombre.
+
+## Abrir una persona
+
+Pulsa un nombre para abrir la ficha de la persona:
+
+- **Cuentas:** cada cuenta con su servicio, los perfiles tuyos en los que se vio y una marca **bot** o **trabajo**.
+  **Desvincular**, junto a una cuenta, la quita de esta persona. Pregunta antes.
+- **Mover cuentas a una persona nueva:** marca las cuentas que son de otra persona y confirma. Al menos una cuenta se
+  queda con esta persona. El diálogo nombra a la persona de la que salen las cuentas, así que WireCat nunca quita una
+  cuenta a otra persona.
+- **Unido a esta persona:** cada unión, con **Deshacer**. **Deshacer la unión** nombra a la persona y lista cada
+  cuenta que vuelve.
+- **Tareas:** las tareas asignadas a esta persona. Cada una se abre en la página [Tareas](./index.mdx#tareas).
+
+## Revisar coincidencias
+
+Cuando WireCat encuentra personas que pueden ser la misma, una franja arriba dice cuántas coincidencias te esperan.
+Pulsa **Revisar coincidencias**. La pantalla **Posibles duplicados** muestra una tarjeta por grupo:
+
+- La tarjeta lista lo que coincidió, con el valor: el nombre, la empresa, el dominio, el teléfono o el correo. Un
+  número de teléfono que ninguna cuenta muestra dice «número oculto: las cuentas guardan solo su huella».
+- **Misma persona** las une. Marca antes algunas para unir solo esas.
+- **No es la misma** pregunta por qué, y luego **Mantener separadas**. WireCat deja de sugerir esta coincidencia.
+- **Detalles** abre **Detalles de la coincidencia**: las personas una junto a otra, con de dónde viene cada una, su
+  teléfono, correo y servicios de mensajería, empresa, negocios, tareas y últimos mensajes. **Unir** junta dos, y
+  **Unir a los** con el número junta a todas.
+
+**Todos los contactos** vuelve a la lista.
+
+### Buzones compartidos
+
+Varias personas pueden escribir desde una dirección, como `info@` o `sales@` de una empresa. Esa tarjeta lleva la
+marca **buzón compartido**. **Buzón de la empresa** da la dirección a una empresa, que eliges o escribes. Después
+WireCat deja de sugerir unir a las personas que escriben desde ella.
+
+## Responder a tus agentes
+
+Los agentes pueden pedir que una persona se separe en dos. Una franja dice cuántas personas piden separar. Cada
+tarjeta dice qué piensa el agente y por qué. **Separar** quita las cuentas. **Mantener juntas** pregunta por qué van
+juntas; el agente lee tu respuesta.
+
+**Revisar los vínculos** lista personas cuyas cuentas quizá no son todas suyas, por ejemplo cuentas con nombres
+distintos. Cada persona es una tarjeta con **Abrir**, **Separar** y **El vínculo es correcto**. Cuando todo en una
+tarjeta está bien, **El vínculo es correcto** lo deja resuelto, y la persona no vuelve a aparecer. **Ocultar** pliega
+la lista.
+
+## Siguiente paso
+
+Pregunta a tu agente por una persona: ahora ve todas sus cuentas como una. [Personas en tus mensajes](../people.md)
+muestra peticiones para probar.
