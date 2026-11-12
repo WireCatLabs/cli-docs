@@ -44,13 +44,14 @@ La agenda, el plan y la ficha son los mismos comandos de tg y max. Cada uno lee 
 memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
 memo tasks update 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
 memo tasks show 1a2b3c4d --source telegram:1
-memo stats tasks show --source telegram:1       # open tasks per chat
+memo stats tasks show                           # open tasks per chat, every account
 memo tasks agenda --source notes                # tasks from your notes folder
 ```
 
 Usa `tasks update` para cambiar los campos de una tarea.
 
-Sin `--source` ni `--account`, el comando enumera las cuentas guardadas. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
+Sin `--source` ni `--account`, el comando enumera las cuentas guardadas, y `stats tasks show` sin ellos cuenta todas
+las cuentas guardadas y las nombra en `accounts`. tg y max abren estas tareas al sincronizar; memo lee el mismo almacén.
 
 ## Tareas en un proyecto
 
@@ -65,7 +66,9 @@ memo tasks update HRB-1 --priority critical --description 'Call before Friday'
 ```
 
 Un `memo tasks list` sin más muestra solo las tareas de tus cuentas; las tareas de un proyecto se listan con
-`project:` y la clave del proyecto, su nombre o un alias, y las de todos los proyectos con `project:*`.
+`project:` y la clave del proyecto, su nombre o un alias, y las de todos los proyectos con `project:*`. Cualquier otro campo
+(`assignee:`, `priority:`, palabras…), `--sort` o `--cursor` lista todas las tareas: las de proyecto y las encontradas en
+mensajes, cada encontrada con su `account`.
 
 | Opción | Significado |
 |---|---|
@@ -78,6 +81,11 @@ Un `memo tasks list` sin más muestra solo las tareas de tus cuentas; las tareas
 Para crear antes el proyecto, consulta [organizaciones y proyectos](./people.md#organizations-and-projects).
 
 ### Mover una tarea a otro proyecto
+
+Una tarea encontrada en un mensaje pasa a un proyecto igual, con su cuenta:
+`memo tasks update Q-9 --project HRB --account telegram:1`. Toma la siguiente clave del proyecto (`HRB-12`). `Q-9`
+y su id la siguen encontrando, y conserva el mensaje del que vino. Desde entonces es una tarea de proyecto: sale de la
+lista de su cuenta, y `--type` en el mismo comando puede hacerla `bug`, `feature` o `chore`.
 
 ```sh
 memo tasks update HRB-1 --project OPS
@@ -114,30 +122,32 @@ columna de forma uniforme y nombra las tareas que renumeró.
 Una tarea de proyecto es `open` (nueva), `todo` (decidida), `in_progress`, `done` o `dismissed`. Cámbiala con
 `tasks update --status`, también de vuelta desde `done` o `dismissed`; cada cambio queda en su historial. `todo` y
 `in_progress` cuentan como trabajo abierto en todas partes: una tarea que espera a una de ellas no está lista, y un agente puede reclamar una.
-Una tarea de un mensaje es solo `open`, `done` o `dismissed`.
+Una tarea encontrada en un mensaje toma los mismos estados, y también una prioridad, un agente y personas asignadas.
+Conserva un tipo de mensaje (`question`, `request`, `mention`, `promise`) hasta que pasa a un proyecto. La lista de una
+cuenta lee `state:open` como toda tarea aún no cerrada.
 
 ```sh
 memo tasks update HRB-1 --status in_progress
 memo tasks history HRB-1 --json      # who changed what, and when
 ```
 
-## Buscar tareas de proyecto
+## Buscar tareas
 
-`memo tasks list` con `project:` acepta una consulta: campos unidos con AND, OR dentro de un campo, NOT y palabras
-sueltas, que buscan en el título y la descripción:
+`memo tasks list` acepta una consulta: campos unidos con AND, OR dentro de un campo, NOT y palabras sueltas, que buscan
+en el título y la descripción. Sin `project:` también cubre las tareas encontradas en mensajes:
 
 ```sh
-memo tasks list project:* 'assignee:"person:3"' priority:[high TO critical] invoice
+memo tasks list 'assignee:"person:3"' priority:[high TO critical] invoice
 memo tasks list project:(HRB OR OPS) state:(done OR dismissed) closed:>=14d
 memo tasks list project:* overdue:true --sort due
 memo tasks list project:* NOT due:* NOT priority:*
-memo tasks counts project:* --json   # how many per project, assignee, priority and state
+memo tasks counts --json             # how many per project, assignee, priority and state, found tasks too
 ```
 
 | Campo | Significado |
 |---|---|
 | `state:` | `open`, `todo`, `in_progress`, `done`, `dismissed`; sin él, los tres estados abiertos |
-| `project:` | una clave, un nombre, `project:<id>` o `*` para todos los proyectos |
+| `project:` | una clave, un nombre, `project:<id>` o `*` para todos los proyectos, sin las tareas encontradas |
 | `assignee:` | `any`, `none` o una persona: `"person:3"` entre comillas, o `3` |
 | `priority:` | una etiqueta, `none` o un rango de etiquetas o números |
 | `agent:` | el agente que trabaja en ella, `none` o `any` |
@@ -171,7 +181,7 @@ vuelve obsoleta tu copia.
 memo tasks assign HRB-1 PERSON_UID
 memo tasks assign HRB-1 PERSON_UID --role reviewer
 memo tasks assign HRB-1 PERSON_UID --clear     # take them off it
-memo people list                               # you, and everyone tasks already name
+memo people list                               # you, and the people who write to you most
 memo tasks update HRB-1 --agent hermes         # the agent working on it; --agent none clears it
 ```
 

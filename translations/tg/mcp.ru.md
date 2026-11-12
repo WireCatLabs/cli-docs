@@ -156,6 +156,8 @@ tg agent config set permissions.messages.send allow
 - **Вход и настройка**: `setup`, `session start|end`, `complete`, `mcp config|add|check|revoke`,
   `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.
   `mcp` и `bot mcp` сами по себе только печатают справку.
+- **Удаление аккаунта**: `account remove` завершает сессию профиля и забывает его на этом компьютере, поэтому её
+  запускаете только вы.
 - **Долгие команды**: `watch`, `serve` и `bot watch` работают, пока вы их не остановите, а вызов агента должен
   завершиться. Сам сервер MCP (`mcp serve`, `bot mcp serve`) не предлагается по той же причине, как и
   `mcp server` и `mcp server start|stop|status`, которые запускают его в фоне.

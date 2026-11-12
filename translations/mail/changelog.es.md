@@ -4,6 +4,16 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.24.0 — 10.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Construido sobre cli-core 0.630.0** (antes 0.618.0). El almacén pasa a la versión 63 al abrirse por primera vez.
+  Un buzón que conectas a nombre de otra persona ya no se une a ti: te espera como propuesta. Lo que cambió entre
+  medias está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`schedule pause <name>` y `schedule resume <name>`** quitan una programación de su temporizador y la conservan.
+  `schedule run` sigue ejecutándola. `--at` se repite: `--at 08:30 --at 18:00` la ejecuta dos veces al día.
+
 ## 0.23.1 — 08.11.2026
 
 ### Añadido

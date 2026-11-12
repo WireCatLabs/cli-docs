@@ -2687,36 +2687,24 @@
   {
     "tool": "memo",
     "slug": "people",
-    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64. The same holds for review list kind:identity_link in 0.131.72.",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64.",
     "replacements": {
       "en": [
         {
           "before": "memo review kind:relationship\n",
           "after": "memo review list kind:relationship\n"
-        },
-        {
-          "before": "memo review kind:identity_link\n",
-          "after": "memo review list kind:identity_link\n"
         }
       ],
       "ru": [
         {
           "before": "memo review kind:relationship\n",
           "after": "memo review list kind:relationship\n"
-        },
-        {
-          "before": "memo review kind:identity_link\n",
-          "after": "memo review list kind:identity_link\n"
         }
       ],
       "es": [
         {
           "before": "memo review kind:relationship\n",
           "after": "memo review list kind:relationship\n"
-        },
-        {
-          "before": "memo review kind:identity_link\n",
-          "after": "memo review list kind:identity_link\n"
         }
       ]
     }
@@ -2784,26 +2772,16 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "troubleshooting",
-    "reason": "memo 0.131.72 points a sign-in page to `drive documents add`, which is not in a drive release yet (drive-cli CHANGELOG, Unreleased). Until it ships, the page gives the released way: save the page as a file and add it with memo sources add.",
+    "tool": "zm",
+    "slug": "sessions",
+    "phase": "before-translation",
+    "source": "https://github.com/WireCatLabs/zoom-cli/blob/v0.71.0/CHANGELOG.md",
+    "reason": "Released 0.70.0 adds session end (deletes the saved Zoom login, keeps the meetings) and account remove (CHANGELOG, Added). docs/sessions.md at v0.71.0 still says there is no logout command.",
     "replacements": {
       "en": [
         {
-          "before": "Add it through your signed-in Google account: `drive documents add <url> --profiles <names\\|all>` (or `drive <profile> documents add <url>`)",
-          "after": "Save the page as a file and add that file with `memo sources add <path>`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Добавьте ее через ваш аккаунт Google, где вы вошли: `drive documents add <url> --profiles <names\\|all>` (или `drive <profile> documents add <url>`)",
-          "after": "Сохраните страницу в файл и добавьте этот файл командой `memo sources add <path>`"
-        }
-      ],
-      "es": [
-        {
-          "before": "Añádela con tu cuenta de Google con la sesión iniciada: `drive documents add <url> --profiles <names\\|all>` (o `drive <profile> documents add <url>`)",
-          "after": "Guarda la página como archivo y añade ese archivo con `memo sources add <path>`"
+          "before": "There is no logout command. To withdraw the app's account access,",
+          "after": "`zm <profile> session end` deletes the profile's saved Zoom login from the keyring and the private file. The stored meetings stay. Neither it nor `zm <profile> account remove` revokes the login at Zoom. To withdraw the app's account access,"
         }
       ]
     }

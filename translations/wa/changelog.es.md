@@ -5,6 +5,98 @@ title: "Historial de cambios"
 Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest first; versions follow
 [semantic versioning](https://semver.org), so before `1.0.0` the command interface may still change.
 
+## 0.38.0 — 11.11.2026
+
+### Added
+
+- **Parte de un nombre en `from:` y `chat:`, desde `@wirecat/cli-core` 0.640.0.** Un valor sin comillas con `*` o `?` es un patrón sobre nombres: `from:Ana*` encuentra «Ana» y «Ana Lopez», y `chat:*club*` cada chat que lo tiene en el nombre. Un patrón que no encaja con nadie falla con los nombres más cercanos. Uno que encaja con más de 50 se rechaza como `query.too-large`.
+- **Una parte dentro de una palabra en el texto del mensaje, desde `@wirecat/cli-core` 0.641.0.** `*contract*` encuentra «Contract», «contracts» y «subcontractor», también en un almacén grande y dentro de `AND`, `OR` y `NOT`. La parte necesita tres letras seguidas.
+- **`participants_count` en las consultas, desde `@wirecat/cli-core` 0.638.0.** `participants_count<10` encuentra mensajes en chats de menos de diez personas, según el tamaño que WhatsApp informó por última vez.
+- **El registro de una ejecución guarda el progreso de `messages sync`** como eventos `sync.progress`, así que `runs show` dice hasta dónde llegó y cuándo.
+
+### Changed — may break callers
+
+- **`wa` pide a WhatsApp como mucho 20 veces por minuto por perfil, 10 a la vez** (antes 60 por minuto, 20 a la vez). Cuenta cada solicitud, en todos los procesos del perfil y en `serve`: envíos, ediciones, reacciones, sincronizaciones de contactos y solicitudes de historial antiguo. Un script que envía más de 10 mensajes seguidos ahora espera unos 3 segundos antes de cada uno de los demás. `requests_per_minute` o `WA_REQUESTS_PER_MINUTE` lo cambian ([el ritmo](./limits.md#the-pace)).
+- **Basado en cli-core 0.641.0** (antes 0.633.0). El almacén pasa a la versión 66 al abrirse por primera vez. Lo que cambió entre medias está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`contacts unlink` necesita `--from person:<uid>` o `--from person:me`**, la persona de la que sale la cuenta. Sin él, el comando se rechaza, y el error dice quién tiene la cuenta y con qué `--from` volver a ejecutarlo.
+- **La `--pause` de `messages download --all`, `attachments download` y `store gaps repair` es de 5 segundos por defecto** (antes 2), la misma pausa que `messages sync`, así que estos comandos tardan aproximadamente el doble.
+- **`*part*` en el texto del mensaje coincide tal como se escribe, salvo mayúsculas y ё/е.** Ya no encuentra «café» para `*cafe*`. Escribe la letra como la tiene el texto, o busca la palabra entera, que sigue ignorando los acentos.
+
+### Fixed
+
+- **El historial antiguo llega del teléfono más despacio.** `messages sync <chat>` pide una página cada 5 a 10 segundos en lugar de cada 2 a 4, porque WhatsApp puede bloquear un número que lee rápido ([límites](./limits.md#no-bulk-reads)).
+- **Un reloj atrasado ya no detiene `wa` durante horas.** Un ordenador que arrancó con el reloj adelantado rechazaba cada solicitud a WhatsApp hasta que el reloj corregido lo alcanzaba. Ahora la espera se corrige según el tamaño del salto.
+- **El motor se compila con Go 1.26.11**, que corrige GO-2026-6859 en `net/http` de Go. El motor llega a él a través de la conexión y las solicitudes de medios de whatsmeow. Nada cambia en cómo se comporta `wa`.
+
+## 0.37.0 — 10.11.2026
+
+### Added
+
+- **`muted:` en la búsqueda y las estadísticas, desde `@wirecat/cli-core` 0.633.0.** `muted:false` deja fuera los chats que silenciaste, así que `stats messages show -- 'date>=30d muted:false'` cuenta solo lo que la sincronización sigue leyendo. `stats messages responses` y `stats messages waiting` también lo aceptan.
+- **`store import`, desde `@wirecat/cli-core` 0.633.0.** Carga chats, personas y mensajes inventados desde un archivo marcado como sintético en un almacén de prueba, como el sandbox de Desktop. Rechaza el almacén real del propietario.
+
+### Changed — may break callers
+
+- **Basado en cli-core 0.624.0** (antes 0.618.0). El almacén pasa a la versión 61 al abrirse por primera vez (vínculos de personas, solo añade). Lo que cambió entre medias está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`search messages --timeout 30s` puede buscar hasta unos 29 segundos.** Se detenía a los 2 segundos fuera cual fuera el tiempo dado a la ejecución, así que una consulta válida sobre un almacén grande fallaba en WireCat Desktop. Sin `--timeout` siguen siendo 2 segundos, también para agentes y MCP.
+- **`schedule pause <name>` y `schedule resume <name>`** quitan una programación de su temporizador y la conservan. `schedule run` sigue ejecutándola. `--at` se puede repetir: `--at 08:30 --at 18:00` ejecuta dos veces al día.
+
+## 0.36.0 — 09.11.2026
+
+### Added
+
+- **Un pull request añade sus entradas del historial de cambios como fragmento, `changes/<branch>.md`.** Los pull requests abiertos ya no entran en conflicto bajo `## Unreleased`. `pnpm docs:check` revisa cada fragmento, y `bin/release` los reúne en la sección de la versión. Una entrada bajo `## Unreleased` sigue funcionando durante el cambio.
+
+### Fixed
+
+- **`wa serve` termina cuando la compilación que ejecuta está desactualizada, para que su servicio arranque la nueva.** Cada minuto comprueba si el almacén compartido pasó a un formato que esta compilación ya no puede escribir, o si hay instalada una versión más nueva de wa. Si es así, registra `serve.outdated` y termina con el código 3, y la unidad de systemd (`Restart=on-failure`) arranca la versión instalada. Antes, un serve siguió en 0.30.0 durante un día después de instalar 0.33.0 y no guardó nada.
+- **Después de `wa store recover run`, el almacén marca como no obtenido lo que tenía desde un día antes de la última comprobación profunda superada.** A WhatsApp no se le pueden pedir sus chats, así que solo vuelve lo que el teléfono envía mientras `wa serve` está en marcha. Desde cli-core 0.618.0 (antes 0.616.0).
+
+## 0.35.0 — 09.11.2026
+
+### Added
+
+- **`wa account remove --keep-data|--delete-data` desvincula un perfil y lo olvida en este ordenador.** Quita el dispositivo del lado de WhatsApp y luego borra las claves del dispositivo del perfil, su carpeta y lo que cli-core guarda para él. `--keep-data` deja los mensajes en el almacén, donde la búsqueda los sigue encontrando. `--delete-data` los borra. Los demás perfiles se quedan. Un perfil cuyo dispositivo WhatsApp ya quitó se olvida igualmente. El token de Business API de un perfil de bot se queda: es una cuenta aparte. Mientras `wa serve` tiene el perfil, el comando se niega, como `session end`. Una ejecución con carpetas movidas solo borra sus propias claves y no desvincula nada.
+
+## 0.34.0 — 08.11.2026
+
+### Added
+
+- **`contacts add` y `contacts rename` guardan a una persona en tus contactos de WhatsApp.** `add` usa el nombre que WhatsApp muestra para ella, y `rename` el nombre que tú le das. Es un nombre de contacto de WhatsApp: se ve en cada dispositivo de la cuenta, y a la persona no se le envía nada. Para alguien guardado en la app Contactos del teléfono, el teléfono sigue mostrando el nombre de esa app. wa rechaza el número propio de la cuenta. `contacts remove` e `import` siguen rechazados.
+
+## 0.33.0 — 08.11.2026
+
+### Fixed
+
+- **`session start` espera hasta que el teléfono dice que la sincronización del historial terminó.** Antes se detenía tras 45 segundos sin recibir nada, así que una cuenta grande que hacía una pausa más larga se cortaba mientras el teléfono aún se vinculaba, y el teléfono acababa mostrando «couldn't link device» aunque wa había informado de éxito. Ahora wa termina la espera con la propia señal de fin del teléfono. Solo cuando el teléfono nunca la envía, wa se rinde tras cinco minutos sin noticias, lo dice en una línea de progreso `waiting` y pide mantener WhatsApp abierto en el teléfono hasta que termine de vincularse.
+- **La guía dice que una foto y un vídeo se agrupan en un solo álbum solo con texto.** Sin pie de foto, un teléfono puede mostrarlos como dos mensajes. Con uno, se vieron como un solo álbum en un teléfono.
+
+## 0.32.0 — 08.11.2026
+
+### Changed — may break callers
+
+- **`--offline` en un comando que necesita la red se rechaza con `offline.refused`, código de salida 5**, antes de que el comando se ejecute. `upgrade`, `topics`, `chats inspect` y `chats send-as` respondían antes `validation_error`, código de salida 2.
+- **`contacts context` lee solo cuentas del mismo ámbito que la cuenta consultada.** Una cuenta personal ya no muestra los mensajes de una persona vinculada desde cuentas de trabajo, y una cuenta de trabajo no muestra ninguno de las personales.
+
+### Fixed
+
+- **wa vuelve a abrir el almacén después de que otra CLI de WireCat lo actualizara.** Una CLI con un cli-core más nuevo pasa el almacén compartido a la versión 56 o posterior, que un wa anterior a esta versión rechaza. cli-core actualizado a 0.608.0.
+
+## 0.31.0 — 08.11.2026
+
+### Added
+
+- **`wa session start phone --json --answer-stdin` pide el número de teléfono por stdin.** Imprime la pregunta como una línea `{"event":"needs","field":"phone",…}` en stderr y lee la respuesta, una línea, de stdin, así que una aplicación como WireCat Desktop puede vincular con un código de emparejamiento en su propia ventana. Sin el flag, vincular por número sigue necesitando una terminal.
+- **La línea `{"event":"qr"}` de cada código QR dice cuándo caduca** (`expires_at`, una hora ISO), así que una ventana puede hacer la cuenta atrás y esperar el siguiente código. Antes era `null`.
+
+### Changed — may break callers
+
+- **Con `--json`, `session start` y `setup` informan del código de emparejamiento y de la espera del historial como líneas JSON.** El código de emparejamiento es `{"event":"pairing_code",…}` en lugar de la nota `pairing code: …`, y la espera del historial del teléfono es `{"event":"progress","step":"history"}`, luego `"step":"waiting"` cuando tarda, en lugar de las dos notas. Quien leía esas notas lee ahora los eventos. La salida de la terminal sin `--json` no cambia.
+
+### Fixed
+
+- cli-core actualizado a 0.604.0.
+
 ## 0.30.0 — 07.11.2026
 
 ### Fixed

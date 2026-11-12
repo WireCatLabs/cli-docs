@@ -4,6 +4,139 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.123.0 — 10.11.2026
+
+### Added
+
+- **`muted:` en la búsqueda y las estadísticas, de `@wirecat/cli-core` 0.633.0.** `muted:false` deja fuera los chats que silenciaste, así que
+  `stats messages show -- 'date>=30d muted:false'` cuenta solo lo que la sincronización sigue leyendo. `stats messages responses`
+  y `stats messages waiting` también lo aceptan.
+- **`store import`, de `@wirecat/cli-core` 0.633.0.** Carga chats, personas y mensajes inventados desde un archivo marcado como synthetic en un almacén de prueba, como el sandbox de Desktop. Rechaza el almacén real del propietario.
+
+## 0.122.0 — 10.11.2026
+
+### Changed — may break callers
+
+- **Basado en cli-core 0.630.0** (antes 0.624.0). El almacén pasa a la versión 63 al abrirlo por primera vez. El tipo de cada persona
+  se guarda en la propia persona, y guardar los miembros de un chat conserva las filas de los miembros que siguen, así que los filtros de `people list` de memo
+  cuentan y paginan en SQL. Las personas que escribieron en un chat uno a uno o en un grupo pequeño ahora cuentan como personas del propietario,
+  ninguna regla une a nadie con la persona del propietario, y un nombre se reconoce entre cirílico y latín. Una herramienta con un
+  cli-core anterior que guarda miembros borra los tipos guardados, así que tg, max y memo se actualizan juntos. Lo que cambió
+  entre versiones está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.121.0 — 09.11.2026
+
+### Changed — may break callers
+
+- **Basado en cli-core 0.624.0** (antes 0.619.0). El almacén pasa a la versión 61 al abrirlo por primera vez (vínculos entre personas, solo añade).
+  Lo que cambió entre versiones está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`search messages --timeout 30s` puede buscar hasta unos 29 segundos.** Antes se detenía a los 2 segundos fuera cual fuera el tiempo dado a la
+  ejecución, así que una consulta válida sobre un almacén grande fallaba en WireCat Desktop. Sin `--timeout` siguen siendo 2 segundos,
+  también para agentes y MCP.
+- **`schedule pause <name>` y `schedule resume <name>`** quitan una programación de su temporizador y la conservan. `schedule run`
+  la sigue ejecutando. `--at` se puede repetir: `--at 08:30 --at 18:00` la ejecuta dos veces al día.
+
+## 0.120.0 — 09.11.2026
+
+### Changed — may break callers
+
+- **`tg messages sync --all` deja fuera los chats que silenciaste.** Una cuenta con muchos grupos silenciados ya no los descarga
+  todos. La respuesta los cuenta en `limited.muted`, y una nota explica cómo leerlos. Los mensajes ya guardados se quedan,
+  y un chat que nombras (`tg messages sync <chat>`) o que mantienes con `--full-history` se lee como antes. Para volver a leer los chats silenciados,
+  pasa `--with-muted` en una ejecución o configura `tg config set history_muted true`. De cli-core 0.619.0 (antes
+  0.618.0).
+- **EmbeddingGemma es el modelo de texto predeterminado para la búsqueda por significado**, en lugar de e5-small. Un equipo que ya tiene
+  e5-small y no EmbeddingGemma sigue con e5-small. `tg models download` ya no pide aceptar sus términos.
+  `--accept-terms` se ignora.
+- **`tg contacts link` ejecutado por un agente propone el vínculo en lugar de crearlo, y necesita `--reason`.** Solo el
+  propietario decide. Un `tg contacts unlink` de un agente se rechaza.
+
+### Fixed
+
+- **`bin/release` publica cuando main solo tiene fragmentos en `changes/` y no tiene `## Unreleased`.** Con la versión ya ocupada en
+  npm buscaba `## Unreleased` para poner debajo la siguiente versión, no lo encontraba y se detenía antes de publicar. Ahora añade
+  el encabezado de la nueva versión encima de la más reciente y reúne en él los fragmentos.
+
+## 0.119.0 — 09.11.2026
+
+### Added
+
+- **`tg account remove --keep-data|--delete-data`** cierra la sesión del perfil en Telegram y luego lo olvida en este
+  equipo: sus archivos de sesión, el identificador y el hash de su aplicación y la contraseña del proxy en el llavero, las sesiones de historial de sus bots y
+  lo que cli-core guarda para él. `--keep-data` deja sus mensajes disponibles para la búsqueda. `--delete-data` los elimina. El token de un bot
+  se conserva, igual que todos los demás perfiles. Una ejecución con carpetas movidas olvida su propia copia y nunca cierra la sesión del propietario.
+- **`tg models set` y `tg models add`** de cli-core 0.609.0: eligen el modelo local de vectores que usa cada WireCat
+  CLI y añaden uno propio desde Hugging Face. Una pregunta con una hora (`HH:MM`, `10:30`) vuelve a buscarse por
+  sus palabras.
+- **tg incluye `contracts/wirecat.json`, que dice con qué hosts se comunica por HTTP.** WireCat Desktop lo lee para
+  mostrarte, antes de instalar, a qué accede tg: `api.telegram.org` (bots) y `my.telegram.org` (registro de tu
+  aplicación), además del proxy que configures. La conexión propia de tu cuenta con Telegram (MTProto) no es HTTP y no está en esa
+  lista.
+- **Un pull request añade sus entradas del historial de cambios como un fragmento, `changes/<branch>.md`.** Los pull requests abiertos ya no
+  entran en conflicto bajo `## Unreleased`. `pnpm docs:check` comprueba cada fragmento, y `bin/release` los reúne en la sección de la
+  versión. Una entrada bajo `## Unreleased` sigue funcionando durante la transición.
+
+### Changed — may break callers
+
+- **tg ahora escribe el almacén compartido en la versión 59, y un WireCat CLI más antiguo lo rechaza hasta que se actualiza.** Ejecuta
+  `<cli> upgrade` para cada WireCat CLI sobre el mismo almacén. De cli-core 0.615.0, cuyas plantillas de mensajes viven en el
+  almacén.
+
+### Fixed
+
+- **`tg serve` termina cuando la compilación que ejecuta está desactualizada, para que su servicio inicie la nueva.** Cada minuto
+  comprueba si el almacén compartido pasó a un formato que esta compilación ya no puede escribir, o si hay instalado un tg más nuevo.
+  En ese caso registra `serve.outdated` y termina con el código 3, y la unidad de systemd (`Restart=on-failure`)
+  inicia la versión instalada. Antes, un serve podía funcionar un día con la compilación antigua sin guardar nada.
+- **Después de `tg store recover run`, la siguiente sincronización normal vuelve a descargar lo que el daño pudo haberse llevado.** La recuperación
+  marca como no descargado lo que cada chat guardaba desde un día antes de la última comprobación profunda superada, así que una sincronización ya no
+  salta un hueco dentro de un chat. De cli-core 0.618.0 (antes 0.616.0).
+
+### Security
+
+- **El chat con BotFather queda fuera de la búsqueda.** Contiene cada token de bot que envió BotFather, así que la búsqueda en todos los chats
+  (también `memo search`), la búsqueda por significado y `memo context` lo dejan fuera. `tg messages list` y una búsqueda que nombra
+  el chat lo siguen leyendo. Entra en vigor con la versión de cli-core que lee `Chat.searchable`, en la siguiente sincronización de la
+  lista de chats. Esa versión también oculta los tokens de bot en todos los chats.
+- **El HTTP de tg solo llega a los hosts que declara.** Cada llamada a la Bot API y cada paso del registro de la aplicación pasa
+  por `hostFetch` de cli-base. Rechaza cualquier otro host antes de enviar un byte, comprueba cada redirección y quita
+  la cabecera `Authorization` en una redirección a otro sitio. A través de un proxy SOCKS5 o HTTP la comprobación se mantiene.
+  No cubre MTProto, que GramJS envía por sus propios sockets a los centros de datos de Telegram, ni un MTProxy.
+  De cli-base 0.87.0 (antes 0.80.8) y cli-core 0.615.0 (antes 0.609.0).
+
+## 0.118.0 — 08.11.2026
+
+### Added
+
+- **`tg config set` acepta `crm.<provider>:<account>.links` y `crm.<provider>:<account>.company-types`**, los
+  ajustes del almacén que lee la sincronización de una herramienta de CRM (cli-core 0.606.0).
+
+### Changed — may break callers
+
+- **tg abre el almacén que memo y las demás herramientas de WireCat migran ahora, y lo pasa a la versión 57.** Un almacén
+  en la versión 56 o posterior lo rechazan tg 0.117.0 y anteriores, y cada herramienta basada en un cli-core anterior a 0.606.0,
+  con una petición de actualizar. Actualiza tg, max y memo juntos (cli-core 0.606.0, 0.607.0).
+- **`--offline` en un comando que necesita Telegram responde `permission_error` (`offline.refused`), código de salida 5.**
+  `chats inspect`, `chats send-as`, `topics` y `upgrade` respondían `validation_error`, código de salida 2. Un script que
+  comprueba ahí el código de salida 2 necesita el nuevo código (cli-core 0.607.0).
+- **`contacts context` y `contacts prepare` leen solo las cuentas del ámbito del propio perfil.** Un perfil personal ya
+  no muestra el correo, los mensajes, los eventos ni las reuniones de una persona vinculada desde cuentas de trabajo, y un perfil de trabajo no muestra nada de
+  las personales. El nuevo campo `accounts` de la respuesta lista cada cuenta leída, con su ámbito (cli-core 0.605.0).
+- **Un nombre escrito con е encuentra el chat o la persona cuyo nombre lleva ё.** Un nombre que coincidía exactamente con un chat o una persona ahora
+  puede coincidir con dos (`Алена` y `Алёна`). Entonces tg lo rechaza y lista ambos, como con cualquier otro nombre ambiguo
+  (cli-core 0.601.0).
+- **Las búsquedas leen más consultas como palabras normales.** Un `?` al final de una palabra es un signo de interrogación, así que `invoice?` encuentra
+  "invoice". Un texto con dos puntos, una URL, un corchete o una comilla sin cerrar (`meeting at 10:30`) se busca como palabras
+  donde antes se rechazaba (cli-core 0.602.0, 0.604.0).
+
+### Fixed
+
+- **Un archivo del almacén dañado detiene las escrituras y nombra `tg store recover`.** Una ejecución que encontraba el error de SQLite "database disk image is
+  malformed" fallaba como `internal_error`. Ahora responde `configuration_error` (`store.damaged`), y los comandos posteriores
+  que escriben se niegan hasta que pase una comprobación profunda o una recuperación. Las lecturas siguen funcionando (cli-core 0.605.0).
+- **Las personas que separaste siguen separadas.** Una tercera identidad con la misma dirección de correo podía volver a unir a dos personas
+  después de que las separaras (cli-core 0.605.0).
+
 ## 0.117.0 — 07.11.2026
 
 ### Changed — may break callers

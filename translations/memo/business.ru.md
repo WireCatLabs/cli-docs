@@ -95,6 +95,21 @@ memo records import erp.jsonl --account example-erp:demo
 memo review list kind:invoice,payment,order,contract
 ```
 
+Подойдёт и таблица, по одному типу на лист. `memo records templates list` перечисляет типы и их столбцы.
+`memo records templates show invoice --locale ru` выводит строку заголовков для заполнения с `;` между ячейками, как
+ждёт Excel на русском или испанском, а `--format json` вместо этого выводит пример конверта. Лист проверяется и
+импортируется со своим типом:
+
+```sh
+memo records templates show invoice --locale ru > invoices.csv
+memo records check invoices.csv --type invoice --account sheet:rentals
+memo records import invoices.csv --type invoice --account sheet:rentals
+```
+
+Роль принимает внешний идентификатор цели (`wallet` = `W-1`) или `organization:C-1`, где это может быть человек или
+организация. Строка, которая повторяет `external_id` счёта, добавляет к нему ещё одну позицию. `10 000,50` и
+`09.11.2026` читаются так, как их пишет Excel. Каждый отказ называет строку и столбец листа.
+
 Тот же файл второй раз ничего не меняет. Люди и организации, которых он называет, сопоставляются по одному точному
 адресу e-mail, телефону или другому идентификатору либо создаются заново. По имени они не сопоставляются никогда.
 Счета, платежи, заказы, договоры с суммой, подписки и операции из файла ждут вас в `memo review`.

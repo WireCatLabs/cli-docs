@@ -156,6 +156,8 @@ ofrecen nunca, y los ejecutas en una terminal:
 - **Inicio de sesión y configuración**: `setup`, `session start|end`, `complete`, `mcp config|add|check|revoke`,
   `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.
   `mcp` y `bot mcp` solos solo muestran su ayuda.
+- **Eliminar una cuenta**: `account remove` cierra la sesión de un perfil y lo olvida en este ordenador, así que solo
+  tú lo inicias.
 - **Comandos de larga duración**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del
   agente debe terminar. El propio servidor MCP (`mcp serve`, `bot mcp serve`) queda fuera por la misma razón, igual que
   `mcp server` y `mcp server start|stop|status`, que lo ejecutan en segundo plano.

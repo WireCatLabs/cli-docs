@@ -17,9 +17,23 @@ que solicitas; no hace falta para buscar.
 | --- | --- | --- | --- |
 | Examinar antes de importar | `drive personal files list --parent FOLDER_ID` | Google, al momento | No importa documentos |
 | Leer un Google Doc ahora | `drive personal documents get DOC_ID` | Google, al momento | No importa; imprime JSON Docs |
+| Guardar en memoria un documento de Drive fuera de las carpetas sincronizadas | `drive documents add DOC_URL --profiles work,personal` | Google, con el primer perfil nombrado que lo abra | Su texto, como fuente añadida a mano. No se vuelve a sincronizar |
 | Mantener una carpeta buscable | `drive personal folders add FOLDER_ID`, luego `drive personal sync` | Carpeta Google y descendientes | Índice, copias y punto de sincronización |
 | Leer una fuente importada | `drive personal documents show DOC_ID` | Copia local | Nada nuevo |
 | Dar Markdown a otra herramienta | `drive personal documents export DOC_ID --output ./decision.md` | Copia local | El archivo solicitado |
+
+`documents add` acepta un Google Doc, una hoja, un PDF o cualquier otro archivo que lea sync. Prueba los perfiles en el
+orden en que los nombras (`all` son todos los perfiles, en orden alfabético), como máximo cinco (`drive personal config set max_add_profiles 8
+--defaults` cambia ese número). Responde con el perfil que abrió el documento y lo que respondieron los demás. Solo un
+rechazo de acceso (no encontrado, denegado, sesión cerrada) pasa al siguiente perfil. Una cuota agotada o un fallo de
+red lo detiene, y nombra el perfil en el que se detuvo. Nada elige un perfil por ti: sin palabra de perfil y sin
+`--profiles` lista los perfiles entre los que elegir, y una palabra de perfil junto con `--profiles` se rechaza. Solo
+funciona en una terminal, no por MCP.
+
+Guarda la dirección propia del archivo en Google, no los parámetros de uso compartido del enlace. A un archivo que ya
+importó una sincronización, de cualquier perfil, responde con `duplicate_of`, y nada se guarda dos veces. Si añades el
+mismo archivo otra vez después de que cambió, se guarda una segunda copia junto a la primera: la primera aún no se
+reemplaza.
 
 Redirigir la salida a un archivo también la guarda. Examinar o leer contenido en Google no lo
 incluye en la búsqueda local. La búsqueda necesita importar; exportar es opcional.

@@ -119,14 +119,16 @@ JSON devuelve `items`, `page` y pasos `next` opcionales. JSONL emite cada reuni�
 seguido de un registro end con la página y si el resultado está completo. Continúa con `--page`.
 La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;
 esos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.
-`search all` usa el servicio común y busca solo reuniones por defecto. Devuelve una lista de coincidencias,
-como en tg: una coincidencia de reunión tiene `scope` (transcripción, chat o resumen) y el `id` de la línea
-guardada. Continúa con `--page`; si `missing` indica que el examen se detuvo en `--max-meetings`, repite con
-`--max-meetings all`. `meetings evidence` y `meetings context` identifican cada línea con `ref`, su inicio con
+`search all` usa el servicio común y busca solo reuniones por defecto, las de la propia cuenta de Zoom del perfil. Las lee
+a través del índice de búsqueda de reuniones y las ordena junto con las demás fuentes. Devuelve una lista de coincidencias,
+como en tg: una coincidencia de reunión tiene `scope` (transcripción, chat o resumen), el `id` de la línea
+guardada y, en una coincidencia de transcripción, `cue_ref`, que abre `meetings passage`. Una reunión da como máximo 3
+coincidencias. Continúa con `--page`. La búsqueda general nunca construye el índice: cuando `missing` nombra la cuenta,
+`zm <profile> search meetings` lo construye. `meetings evidence` y `meetings context` identifican cada línea con `ref`, su inicio con
 `offset_ms` y los ID como cadenas, igual que `meetings prepare`:
 
 ```sh
-zm personal search all "example plan" --limit 100 --max-meetings 100 --json
+zm personal search all "example plan" --limit 100 --json
 zm personal meetings evidence meeting:3/15/20/0 --cues 100 --bytes 65536 --json
 zm personal meetings context person:7 --meetings 10 --scan-limit 1000 --json
 zm personal meetings task-proposal meeting:3/15/20/0 --type promise --json

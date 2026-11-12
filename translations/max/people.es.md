@@ -185,8 +185,10 @@ max personal chats members check "Книжный клуб" --deep 10
 
 ```sh
 max personal contacts link 20000002 telegram:1000001
-max personal contacts unlink 20000002
+max personal contacts unlink 20000002 --from person:<uid>
 ```
+
+`--from` indica la persona de la que se desvincula la cuenta: `contacts link` muestra su `uid`.
 
 Luego de esto, `contacts context` sin `--chat` recopila ambas cuentas: chats generales y mensajes de MAX y de Telegram. `contacts show` y `contacts context --chat` todavía solo muestran la cuenta que nombraste. La conexión es solo lo que anotaste: el mismo nombre en dos servicios de mensajería nunca se considera una sola persona. Esta entrada no cambia la libreta de direcciones MAX.
 

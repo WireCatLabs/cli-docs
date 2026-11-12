@@ -120,18 +120,20 @@ JSON возвращает `items`, `page` и необязательные шаг
 затем запись end со страницей и полнотой. Для продолжения используйте `--page`.
 Запрос по дате заменяет прежние параметры списка `--since-time` и `--until-time`;
 эти параметры сохраняются в поиске расшифровок и загрузке встреч. `search all` использует общий сервис
-и по умолчанию ищет только встречи:
+и по умолчанию ищет только встречи, причём только встречи собственного аккаунта Zoom профиля. Он читает их через
+поисковый индекс встреч и ранжирует вместе с другими источниками:
 
 ```sh
-zm personal search all "example plan" --limit 100 --max-meetings 100 --json
+zm personal search all "example plan" --limit 100 --json
 zm personal meetings evidence meeting:3/15/20/0 --cues 100 --bytes 65536 --json
 zm personal meetings context person:7 --meetings 10 --scan-limit 1000 --json
 zm personal meetings task-proposal meeting:3/15/20/0 --type promise --json
 ```
 
 `search all` возвращает список найденных элементов. У результата встречи есть `scope`
-(расшифровка, чат или резюме) и ID сохранённой строки `id`. Продолжайте с `--page`; если `missing`
-сообщает, что обход остановился на `--max-meetings`, повторите с `--max-meetings all`.
+(расшифровка, чат или резюме) и ID сохранённой строки `id`, а у результата из расшифровки есть `cue_ref`, который открывает `meetings passage`.
+Одна встреча даёт не больше 3 результатов. Продолжайте с `--page`. Общий поиск никогда не строит индекс: если `missing`
+называет аккаунт, индекс строит `zm <profile> search meetings`.
 `meetings evidence` и `meetings context` называют строки через `ref`, смещение через `offset_ms`,
 а идентификаторы возвращают строками, как `meetings prepare`.
 

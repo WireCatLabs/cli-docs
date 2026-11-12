@@ -19,6 +19,7 @@ Los siguientes comandos agregan `--offline` donde el comando podría preguntar a
 | Lee lo que dijeron, en cada chat o en los chats que nombras | `wa personal contacts context` |
 | Registra que una cuenta de WhatsApp y una cuenta de Telegram o MAX son una sola persona | `wa personal contacts link` |
 | Mantén su propio nombre y notas para una persona | `wa personal contacts aliases`, `wa personal contacts notes` |
+| Guarda a una persona en tus contactos de WhatsApp o cámbiale el nombre allí | `wa personal contacts add`, `wa personal contacts rename` |
 
 Cada opción de estos comandos se encuentra en la [referencia de comando](./commands.md).
 
@@ -54,10 +55,15 @@ WhatsApp, Telegram y MAX comparten un almacén local en esta computadora. Cuando
 
 ```sh
 wa personal contacts link 100000000000001@lid max:"Example User"
-wa personal contacts unlink 100000000000001@lid
 ```
 
 Después de eso, `contacts context` sin `--chat` reúne ambas cuentas. `contacts context --chat` todavía muestra solo la cuenta que nombraste. El enlace es sólo lo que registras: el mismo nombre en dos mensajeros nunca se toma como la misma persona.
+
+Para deshacer un enlace, nombra la cuenta y la persona de la que sale. Sin `--from` el comando se rechaza, y el error nombra a la persona que tiene la cuenta:
+
+```sh
+wa personal contacts unlink 100000000000001@lid --from person:12
+```
 
 ## Sus propios nombres y notas: `contacts aliases`, `contacts notes`
 
@@ -80,6 +86,8 @@ Estos se conectan; Mientras se ejecuta `serve`, pasan por la conexión de `serve
 wa personal contacts show 100000000000001@lid        # their name, about line and whether they show a photo
 wa personal contacts block 100000000000001@lid
 wa personal contacts unblock 100000000000001@lid
+wa personal contacts add 100000000000001@lid          # save them under the name WhatsApp shows
+wa personal contacts rename 100000000000001@lid Ana Lima   # save them under your name for them
 wa personal contacts lookup < number.txt                # whether this number has WhatsApp, and its id
 wa personal contacts sync                                # the phone's address book into the local store
 ```
@@ -88,7 +96,8 @@ Para `contacts lookup`, primero escriba el número a `number.txt`, en una línea
 
 - `contacts show` no le dice nada a la persona. No muestra ningún número de teléfono, así que `--hide-phone` no cambia nada aquí. `--offline` responde solo desde el almacén local.
 - `contacts lookup` lee el número desde la entrada estándar, nunca desde la línea de comando, y no le envía nada. Se necesita un número, como máximo uno cada 10 segundos para el perfil: muchas búsquedas seguidas son el motivo por el que WhatsApp prohíbe los scrapers.
-- WhatsApp mantiene su libreta de direcciones en el teléfono, por lo que se rechazan `contacts add`, `remove`, `rename` y `import`.
+- `contacts add` guarda a una persona con el nombre que WhatsApp muestra para ella, y `contacts rename` con el nombre que tú le das. Es un nombre de contacto de WhatsApp: se ve en cada dispositivo de la cuenta, y a la persona no se le envía nada. Para alguien guardado en la app Contactos del teléfono, el teléfono sigue mostrando el nombre de esa app, que wa no toca. wa rechaza el número propio de la cuenta.
+- `contacts remove` e `import` se rechazan: un dispositivo vinculado no puede quitar un contacto de WhatsApp, y una importación masiva es motivo por el que WhatsApp bloquea a quienes recopilan contactos.
 
 ## Siguiente paso
 

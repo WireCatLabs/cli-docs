@@ -211,6 +211,26 @@ max account sessions end [options]
 
 **Example:** `max personal account sessions end --others`
 
+### `max account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Cambia algo fuera de este equipo: en MAX o en un servicio externo.**
+
+```sh
+max account remove [options]
+```
+
+| Opción | Qué hace |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: max commands info account remove
+
+**Example:** `max personal account remove --keep-data --dry-run`, `max personal account remove --delete-data --yes`
+
 ### `max account privacy`
 
 who may find, call or add the account
@@ -1569,7 +1589,7 @@ max contacts import <file>
 
 ### `max contacts context`
 
-what the store holds about one person, in every messenger linked to them: shared chats, the last messages each way, their recent messages, where others mentioned them — never connects
+what the store holds about one person, in every messenger linked to them, read only in accounts of this account's scope (personal or work): shared chats, the last messages each way, their recent messages, where others mentioned them — never connects
 
 ```sh
 max contacts context <person> [options]
@@ -1586,7 +1606,7 @@ max contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: max commands info contacts context
+**Returns:** contact context — person, accounts, shared, last, recent, mentions, limits, complete, and 3 more; every field: max commands info contacts context
 
 **Example:** `max personal contacts context "Alex Example" --limit 10`
 
@@ -1607,13 +1627,13 @@ max contacts prepare <person> [options]
 | `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
 | `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
 
-**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: max commands info contacts prepare
+**Returns:** contact preparation — person, accounts, shared, last, recent, mentions, limits, complete, and 3 more; every field: max commands info contacts prepare
 
 **Example:** `max personal contacts prepare Ana`
 
 ### `max contacts events`
 
-everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; only in this account's scope, personal or work, and scope: of the other one is refused; never connects
 
 ```sh
 max contacts events <person> [query] [options]
@@ -1660,7 +1680,7 @@ record that two people in the store are one person — the same name is never en
 **Cambia algo solo en este equipo.**
 
 ```sh
-max contacts link <person> <other>
+max contacts link <person> <other> [options]
 ```
 
 | Argumento | | Qué es |
@@ -1668,7 +1688,11 @@ max contacts link <person> <other>
 | `person` | obligatorio | their id, @username, or part of their name. |
 | `other` | obligatorio | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
 
-**Returns:** linked person — uid, name, identities; every field: max commands info contacts link
+| Opción | Qué hace |
+|---|---|
+| `--reason <text>` | why they are one person; an agent's link is a proposal and needs it. |
+
+**Returns:** linked person — uid, name, identities, display_name, proposal; every field: max commands info contacts link
 
 **Example:** `max personal contacts link "Alex Example" zoom:101`
 
@@ -1679,16 +1703,20 @@ undo contacts link for one identity: it is a person of its own again
 **Cambia algo solo en este equipo.**
 
 ```sh
-max contacts unlink <person>
+max contacts unlink <person> [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `person` | obligatorio | their id, @username, or part of their name; <messenger>:<person> for another messenger. |
 
-**Returns:** linked person — uid, name, identities; every field: max commands info contacts unlink
+| Opción | Qué hace |
+|---|---|
+| `--from <person>` | the person it leaves, person:<uid> or person:me; refused when it sits on another. |
 
-**Example:** `max personal contacts unlink "Alex Example"`
+**Returns:** linked person — uid, name, identities, display_name, proposal; every field: max commands info contacts unlink
+
+**Example:** `max personal contacts unlink "Alex Example" --from person:me`
 
 ## `max messages`
 
@@ -1866,7 +1894,7 @@ max messages sync [chat] [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last. |
+| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last; muted chats only with --with-muted or history_muted true. |
 | `--limit <n>` | at most this many messages in this run, per chat with --all; 1200 if not given. |
 | `--page-size <n>` | how many messages one request asks for; 30 if not given. |
 | `--pause <duration>` | the least pause between pages, to stay under the provider's limits; each is up to twice that. Por defecto: `5s`. |
@@ -1878,6 +1906,7 @@ max messages sync [chat] [options]
 | `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
 | `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
 | `--full-history` | read and keep this chat's history in full from now on, past the history limits (history_* settings). |
+| `--with-muted` | with --all: also read the chats the owner muted, as history_muted true does. |
 | `--background` | run as a job that outlives this command; `store jobs show` follows it. |
 | `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
@@ -2328,6 +2357,24 @@ max store clear [options]
 
 **Example:** `max personal store clear --left --dry-run`
 
+### `max store import`
+
+load a JSON file marked "synthetic": true (account, people, chats, members, messages) into this profile's account in the local store, as a sync would save them; the same file twice adds nothing and a changed message is updated in place. Refuses the owner's real store. Without --yes, says what it would load and changes nothing
+
+**Cambia algo solo en este equipo.**
+
+```sh
+max store import <file>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `file` | obligatorio | the JSON file to load. |
+
+**Returns:** store import — store, profile, account, imported, file, added; every field: max commands info store import
+
+**Example:** `max personal store import ./synthetic-chats.json --yes`
+
 ### `max store info`
 
 the store file: where it is, its size, its schema against the one this tool speaks, which tools used it and how many rows it holds, by provider, chat kind, account, year (UTC) and attachment kind, over every account; changes nothing
@@ -2696,7 +2743,7 @@ max stats messages responses [query] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | opcional | date:, chat: and kind: terms, AND-ed — date>=30d, date:[60d TO 30d]; none reads all time. |
+| `query` | opcional | date:, chat:, kind: and muted: terms, AND-ed — date>=30d, date:[60d TO 30d], muted:false; none reads all time. |
 
 | Opción | Qué hace |
 |---|---|
@@ -2719,7 +2766,7 @@ max stats messages waiting [query] [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `query` | opcional | date:, chat: and kind: terms, AND-ed — date>=30d, date:[60d TO 30d]; none reads all time. |
+| `query` | opcional | date:, chat:, kind: and muted: terms, AND-ed — date>=30d, date:[60d TO 30d], muted:false; none reads all time. |
 
 | Opción | Qué hace |
 |---|---|
@@ -3576,7 +3623,7 @@ max conversations related <chat> <message> [options]
 | Opción | Qué hace |
 |---|---|
 | `--limit <n>` | how many. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3596,7 +3643,7 @@ max conversations status [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | only this chat: a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3724,7 +3771,7 @@ max conversations embeddings status [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3746,7 +3793,7 @@ max conversations embeddings clear [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3827,7 +3874,7 @@ max conversations embed [options]
 | Opción | Qué hace |
 |---|---|
 | `--chat <chat>` | a chat: its id, or part of its title. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -4296,7 +4343,7 @@ max mentions confirm <id> [person] [options]
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** mention decision — kind, value, status, target, mentions; every field: max commands info mentions confirm
+**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: max commands info mentions confirm
 
 **Example:** `max personal mentions confirm 12 person:7`, `max personal mentions confirm 15`, `max personal mentions confirm 31 person:7 --all-in-chat`
 
@@ -4319,7 +4366,7 @@ max mentions reject <id> [options]
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** mention decision — kind, value, status, target, mentions; every field: max commands info mentions reject
+**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: max commands info mentions reject
 
 **Example:** `max personal mentions reject 12`
 
@@ -4380,9 +4427,9 @@ max images models list [query]
 |---|---|---|
 | `query` | opcional | field:value terms; this list filters by none yet. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands info images models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: max commands info images models list
 
-**Next usually:** `max models download <model>`, `max images models download <model>`
+**Next usually:** `max models download <model>`, `max models set <model>`, `max images models download <model>`
 
 **Example:** `max personal images models list`
 
@@ -4400,9 +4447,9 @@ max images models download <model>
 |---|---|---|
 | `model` | obligatorio | a model id from `images models list`. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands info images models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: max commands info images models download
 
-**Next usually:** `max models download <model>`
+**Next usually:** `max models download <model>`, `max models set <model>`
 
 **Example:** `max personal images models download clip-b32`
 
@@ -4452,7 +4499,7 @@ find things by text: one resource when you know it (messages, notes), or search 
 
 ### `max search all`
 
-search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes and events are local only; --backend archive or --offline keeps it to the local store), calendar events when the store holds a calendar, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
+search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes and events are local only; --backend archive or --offline keeps it to the local store), calendar events when the store holds a calendar, and meeting transcripts, chat and summaries when it holds a meeting account — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 max search all <query> [options]
@@ -4464,9 +4511,8 @@ max search all <query> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
-| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
-| `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events, meetings. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind. |
 | `--limit <n>` | how many. |
 | `--page <n>` | which page, starting at 1. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
@@ -4474,7 +4520,7 @@ max search all <query> [options]
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server (default: both; message discovery uses archive only), or both. |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: max commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 17 more; every field: max commands info search all
 
 **Example:** `max personal search all draft`
 
@@ -4560,7 +4606,7 @@ max search conversations <query> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -4794,9 +4840,9 @@ max models list [query]
 |---|---|---|
 | `query` | opcional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands info models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: max commands info models list
 
-**Next usually:** `max models download <model>`, `max images models download <model>`
+**Next usually:** `max models download <model>`, `max models set <model>`, `max images models download <model>`
 
 **Example:** `max personal models list`, `max personal models list kind:audio`
 
@@ -4816,13 +4862,57 @@ max models download <model> [options]
 
 | Opción | Qué hace |
 |---|---|
-| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
+| `--accept-terms` | no longer needed; kept so older scripts still run. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: max commands info models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: max commands info models download
 
-**Next usually:** `max images models download <model>`
+**Next usually:** `max models set <model>`, `max images models download <model>`
 
-**Example:** `max personal models download e5-small`, `max personal models download mmarco`
+**Example:** `max personal models download embeddinggemma`, `max personal models download mmarco`
+
+### `max models set`
+
+make a downloaded text model the one every embed and every search by meaning uses, in every WireCat CLI. Each model keeps its own vectors: the next syncs embed what the new one lacks, and switching back is instant
+
+**Cambia algo solo en este equipo.**
+
+```sh
+max models set <model>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `model` | obligatorio | a downloaded text model id from models list. |
+
+**Returns:** model chosen — id, kind, title, languages, size_bytes, downloaded, default, path, and 9 more; every field: max commands info models set
+
+**Next usually:** `max models download <model>`, `max images models download <model>`
+
+**Example:** `max personal models set e5-large`
+
+### `max models add`
+
+add an ONNX embedding model from Hugging Face, pinned and checked by sha256
+
+**Lee de un servicio externo.**
+
+```sh
+max models add <id> [options]
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `id` | obligatorio | the id to give it: a-z, 0-9, . _ -. |
+
+| Opción | Qué hace |
+|---|---|
+| `--payload <json>` | where the model is and how to run it, as JSON (below). |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: max commands info models add
+
+**Next usually:** `max models download <model>`, `max models set <model>`, `max images models download <model>`
+
+**Example:** `max personal models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
 
 ## `max polls`
 
@@ -5525,7 +5615,7 @@ max schedule command <name> <args> [options]
 | Opción | Qué hace |
 |---|---|
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). Uno de: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
@@ -5556,7 +5646,7 @@ max schedule agent <name> <harness> <prompt> [options]
 | `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
 | `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). Uno de: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
@@ -5577,25 +5667,30 @@ max schedule list [query]
 |---|---|---|
 | `query` | opcional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: max commands info schedule list
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, spent_today_usd, and 2 more; every field: max commands info schedule list
 
 **Example:** `max personal schedule list`, `max personal schedule list kind:agent`
 
 ### `max schedule run`
 
-run a schedule now, as its timer would, and wait for it
+run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Cambia algo fuera de este equipo: en MAX o en un servicio externo.**
 
 ```sh
-max schedule run <name>
+max schedule run <name> [options]
 ```
 
 | Argumento | | Qué es |
 |---|---|---|
 | `name` | obligatorio | the schedule's name, as `schedule list` shows it. |
 
-**Returns:** run a schedule now, as its timer would, and wait for it
+| Opción | Qué hace |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
+
+**Returns:** run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Example:** `max personal schedule run health`
 
@@ -5616,6 +5711,42 @@ max schedule remove <name>
 **Returns:** stop a schedule and remove its timer; its past output stays
 
 **Example:** `max personal schedule remove health`
+
+### `max schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Cambia algo solo en este equipo.**
+
+```sh
+max schedule pause <name>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Example:** `max personal schedule pause health`
+
+### `max schedule resume`
+
+put a paused schedule back on its timer
+
+**Cambia algo solo en este equipo.**
+
+```sh
+max schedule resume <name>
+```
+
+| Argumento | | Qué es |
+|---|---|---|
+| `name` | obligatorio | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** put a paused schedule back on its timer
+
+**Example:** `max personal schedule resume health`
 
 ### `max schedule exec`
 
@@ -5683,7 +5814,7 @@ max config set <setting> <value> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, search_reranker, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
+| `setting` | obligatorio | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, search_reranker, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 | `value` | obligatorio | a number, true or false, or a list like shop,news. |
 
 | Opción | Qué hace |
@@ -5708,7 +5839,7 @@ max config unset <setting> [options]
 
 | Argumento | | Qué es |
 |---|---|---|
-| `setting` | obligatorio | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, search_reranker, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
+| `setting` | obligatorio | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, search_reranker, sends_per_hour, requests_per_minute, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, sender_colors, search_catch_up, serve, read_other_bots, update_check, skill_hint, transcribe_model, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat. |
 
 | Opción | Qué hace |
 |---|---|
@@ -6510,6 +6641,7 @@ max bot messages send <chat> [text] [options]
 | `--silent` | deliver without a notification. |
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
+| `--button <text=data>` | an inline button, as <text>=<data>; repeat for more in one row; the data (1 to 64 bytes) goes back to the bot. |
 | `--file <file>` | attach a file; the text becomes its caption. |
 | `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
 | `--as-file` | send the --file as a file to download, a video included. |
@@ -6562,7 +6694,7 @@ max bot messages show <chat> <message>
 
 #### `max bot messages edit`
 
-replace the text of a message the bot sent
+replace the text of a message the bot sent; --button replaces its buttons, --no-buttons takes them off
 
 **Cambia algo fuera de este equipo: en MAX o en un servicio externo.**
 
@@ -6580,8 +6712,10 @@ max bot messages edit <chat> <message> <text> [options]
 |---|---|
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
+| `--button <text=data>` | a button under the message, as <text>=<data>; replaces its buttons; repeat for more in one row. |
+| `--no-buttons` | take the buttons off the message. |
 
-**Returns:** replace the text of a message the bot sent
+**Returns:** replace the text or buttons of a message the bot sent
 
 **Example:** `max sales bot messages edit Team 101 "Doors open at 10"`
 
@@ -6721,7 +6855,7 @@ max bot search messages [query] [options]
 | `--limit <n>` | how many. |
 | `--page <n>` | which page, starting at 1. |
 | `--newest` | newest first instead of best first. |
-| `--from <who>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
+| `--from <person>` | only what this person wrote — an id, @username or part of a name; repeat it for any of several. |
 
 **Returns:** search the messages this bot has seen, in the local copy, by text
 

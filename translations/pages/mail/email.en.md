@@ -57,9 +57,9 @@ senders and recipients, not additional accounts you must log into.
 The text of a readable attachment is kept with its email and found with it. Memo also prepares new mail for search by
 meaning, so `tg personal search conversations` and `max personal search conversations` can find it.
 
-Memo can still import mail through Himalaya, a separate mail program. That older import is kept for existing
-setups and will be removed; use `mail` for new accounts and see [the older import](../memo/mail.md) only if you
-already rely on it.
+Memo no longer imports mail itself. Its old mail commands change nothing and name the `mail` command to run instead.
+Mail that Memo imported before stays in the store and is still found. See
+[the commands that moved to mail](../memo/mail.md#commands-that-moved-to-mail).
 
 ## Outlook.com and Microsoft 365
 
@@ -122,7 +122,8 @@ memo search mail 'quote subject:budget mailbox:important' --json
 `search mail` searches imported email. Besides words, it takes `from:`, `to:`, `cc:` and `bcc:` for a
 person, `subject:` for words of the subject only and `mailbox:` for a folder or Gmail label. Results can include more than one mailbox; check each
 source reference and ask your agent to keep the results from the address you choose.
-`search all` also searches messages and notes; `skipped` identifies any kind it could not search.
+`search all` also searches messages, notes, calendar events, CRM deals and leads, business data and meetings. Its
+answer's `missing` names what it could not search.
 Missing hits outside the imported date window do not establish that no email exists there.
 
 ## Spot spam and look-alike senders

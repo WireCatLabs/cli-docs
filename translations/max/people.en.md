@@ -181,8 +181,10 @@ max personal chats members check "Книжный клуб" --deep 10
 
 ```sh
 max personal contacts link 20000002 telegram:1000001
-max personal contacts unlink 20000002
+max personal contacts unlink 20000002 --from person:<uid>
 ```
+
+`--from` names the person the account is unlinked from: `contacts link` prints their `uid`.
 
 After linking, `contacts context` without `--chat` combines both accounts: shared chats and messages from MAX and Telegram. `contacts show` and `contacts context --chat` still show only the account you named. A link is your explicit record: matching names in two messengers never establish that they are one person. This record does not change the MAX address book.
 

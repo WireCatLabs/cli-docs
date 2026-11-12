@@ -1484,7 +1484,7 @@ mail config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1507,7 +1507,7 @@ mail config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self. |
 
 | Option | What it does |
 |---|---|
@@ -1632,7 +1632,7 @@ mail schedule command <name> <args> [options]
 | Option | What it does |
 |---|---|
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
@@ -1663,7 +1663,7 @@ mail schedule agent <name> <harness> <prompt> [options]
 | `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
 | `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
@@ -1684,25 +1684,30 @@ mail schedule list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: mail commands info schedule list
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, spent_today_usd, and 2 more; every field: mail commands info schedule list
 
 **Example:** `mail personal schedule list`, `mail personal schedule list kind:agent`
 
 ### `mail schedule run`
 
-run a schedule now, as its timer would, and wait for it
+run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Changes something in the service.**
 
 ```sh
-mail schedule run <name>
+mail schedule run <name> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | the schedule's name, as `schedule list` shows it. |
 
-**Returns:** run a schedule now, as its timer would, and wait for it
+| Option | What it does |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
+
+**Returns:** run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Example:** `mail personal schedule run health`
 
@@ -1723,6 +1728,42 @@ mail schedule remove <name>
 **Returns:** stop a schedule and remove its timer; its past output stays
 
 **Example:** `mail personal schedule remove health`
+
+### `mail schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Changes something on this computer only.**
+
+```sh
+mail schedule pause <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Example:** `mail personal schedule pause health`
+
+### `mail schedule resume`
+
+put a paused schedule back on its timer
+
+**Changes something on this computer only.**
+
+```sh
+mail schedule resume <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** put a paused schedule back on its timer
+
+**Example:** `mail personal schedule resume health`
 
 ### `mail schedule exec`
 

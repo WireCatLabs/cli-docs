@@ -89,12 +89,14 @@ tg shop config show --bot
 | `history_dialog_days` | `1095` | на сколько дней назад `messages sync` читает личный чат, от 1 до 1095 | `messages sync --full-history` |
 | `history_group_days` | `365` | на сколько дней назад `messages sync` читает группу, от 1 до 1095 | `messages sync --full-history` |
 | `history_group_members_max` | `50` | `messages sync` не читает историю группы, где людей больше; `store status` показывает, что пропущено. Новые сообщения от `serve` сохраняются в любом случае | `messages sync --full-history` |
+| `history_muted` | `false` | `messages sync --all` читает и чаты, в которых вы отключили уведомления. Без этого ключа они пропускаются и учитываются в `limited.muted`. Чат, который вы называете или читаете с `--full-history`, читается в любом случае | `messages sync --all --with-muted` |
 | `picture_search` | `false` | поиск сохранённых картинок по тому, что на них изображено. `images embed` читает сохранённые картинки, когда модель загружена, и тогда `search messages` также возвращает список `pictures` ([картинки](./search.md#pictures-by-what-they-show)) | нет |
 | `search_reranker` | `mmarco` | модель, которая переупорядочивает первые 50 результатов `search messages --discover`: `mmarco` (136 МБ), `bge-reranker-v2-m3` (588 МБ) или `off`. Незагруженная модель пропускается, и поиск об этом сообщает; `tg models download mmarco` загружает её | нет |
 | `record` | `true` | сохранять каждый запуск; `false` сохраняет только неудачные запуски ([диагностика](./diagnostics.md)) | `--record`, `--no-record` (не сохраняет ничего) |
 | `record_input` | `true` | сохранять командную строку запуска в том виде, в каком её ввели, со скрытыми секретами; `failed` сохраняет её только в неудачном запуске; `false` записывает `[redacted]` вместо каждого введённого значения, которое может быть текстом ([диагностика](./diagnostics.md#what-you-typed)) | нет |
 | `keep_runs_for_days` | `30` | неудачные запуски старше этого удаляются при сохранении следующего запуска | нет |
 | `keep_successful_runs_for_days` | `7` | удачные запуски старше этого удаляются при сохранении следующего запуска | нет |
+| `keep_store_runs_for_days` | `3` | удачные запуски, которые записывали в хранилище, хранятся столько дней, даже если `record` выключен | нет |
 | `runs_size_limit_mb` | `200` | наибольший размер папки запусков; сверх него первыми удаляются самые старые удачные запуски | нет |
 | `permissions` | разрешено все, кроме: спрашивают удаление, завершение сессий и некоторые другие изменения; автоответы не могут отправляться | что профиль может делать по команде ([ниже](#what-a-profile-may-do)) | нет; `--yes` и `--allow-dangerous` отвечают только на `ask`, они никогда не отменяют `deny` |
 | `sends_per_hour` | `30`; у бота его нет, пока он не установлен в разделе `bot` | наибольшее количество отправок за час ([защита отправки](./security.md#the-send-guard)) | нет |
@@ -284,11 +286,11 @@ tg personal setup
 
 | Ключ | Принятый тип/значение | Область применения |
 |---|---|---|
-| `limit`, `timeout_ms`, `keep_runs_for_days`, `sends_per_hour` | целое число ≥ 1 | профиль |
+| `limit`, `timeout_ms`, `keep_runs_for_days`, `keep_store_runs_for_days`, `sends_per_hour` | целое число ≥ 1 | профиль |
 | `requests_per_minute` | целое число ≥ 0 | профиль |
 | `history_dialog_days`, `history_group_days` | целое число от 1 до 1095 | профиль |
 | `history_group_members_max` | целое число ≥ 1 | профиль |
-| `color`, `sender_colors`, `search_catch_up`, `record`, `record_input` | логическое | профиль |
+| `color`, `sender_colors`, `search_catch_up`, `history_muted`, `record`, `record_input` | логическое | профиль |
 | `permissions` | объект путей команд и уровней `deny`, `readonly`, `ask`, `allow` | профиль |
 | `read_other_bots` | логическое значение или массив имен профилей | только бот |
 | `update_check`, `skill_hint` | логическое | только корневые `defaults` |

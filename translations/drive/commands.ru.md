@@ -316,6 +316,30 @@ drive <profile> session end
 
 **Example:** `drive personal session end`
 
+## `drive account`
+
+remove this profile from this computer
+
+### `drive account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: drive commands info account remove
+
+**Example:** `drive personal account remove --keep-data --dry-run`, `drive personal account remove --delete-data --yes`
+
 ## `drive folders`
 
 choose the Google Drive folders that sync imports
@@ -353,6 +377,22 @@ drive <profile> folders list [query]
 **Returns:** drive selected folder — id; every field: drive commands info folders list
 
 **Example:** `drive personal folders list`
+
+### `drive folders browse`
+
+list Google Drive folders one level at a time, to choose one for folders add
+
+```sh
+drive <profile> folders browse [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--parent <id>` | folder id or URL to list inside, or shared-with-me; the top level without it. |
+
+**Returns:** drive remote folder — id, name, kind, parent, location, drive_id, child_folders, added; every field: drive commands info folders browse
+
+**Example:** `drive personal folders browse`, `drive personal folders browse --parent FOLDER_ID --json`, `drive personal folders browse --parent shared-with-me`
 
 ### `drive folders remove`
 
@@ -522,6 +562,30 @@ drive <profile> documents export <document> [options]
 **Returns:** write an imported document to a new Markdown file
 
 **Example:** `drive personal documents export DOC_ID --output notes.md`
+
+### `drive documents add`
+
+keep a Drive document's text in memory, read by the first profile that opens it
+
+This command changes local state.
+
+```sh
+drive <profile> documents add <url> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `url` | required | Google Drive or Docs URL, or file id. |
+
+| Option | What it does |
+|---|---|
+| `--profiles <names\|all>` | profiles to try in this order, comma-separated, or all; at most max_add_profiles, in place of a profile word. |
+| `--title <title>` | title to keep it under; the document's name when omitted. |
+| `--subject <ref>` | a person, organization, project, task or meeting it is about; repeat to add more. |
+
+**Returns:** keep a Drive document's text in memory, read by the first profile that opens it
+
+**Example:** `drive documents add https://docs.google.com/document/d/DOC_ID/edit --profiles work,personal`, `drive personal documents add DOC_ID --subject person:PERSON_UID`
 
 ### `drive documents context`
 
@@ -1103,7 +1167,7 @@ drive <profile> memories list <document> [query] [options]
 |---|---|
 | `--limit <n>` | how many memories to return. Default: `50`. |
 
-**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 12 more; every field: drive commands info memories list
+**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 13 more; every field: drive commands info memories list
 
 **Example:** `drive personal memories list DOC_ID scope:work`, `drive personal memories list DOC_ID kind:preference status:confirmed`
 
@@ -1175,7 +1239,7 @@ drive <profile> memories search <document> <query>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | required | words to look for, and scope:personal or scope:work — the fields are below. |
 
-**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 12 more; every field: drive commands info memories search
+**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 13 more; every field: drive commands info memories search
 
 **Example:** `drive personal memories search DOC_ID reviews scope:work`, `drive personal memories search DOC_ID "async reviews"`
 
@@ -1250,7 +1314,7 @@ drive <profile> facts list <document> [query] [options]
 |---|---|
 | `--limit <n>` | how many facts to return. Default: `50`. |
 
-**Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 13 more; every field: drive commands info facts list
+**Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 14 more; every field: drive commands info facts list
 
 **Example:** `drive personal facts list DOC_ID status:proposed`, `drive personal facts list DOC_ID kind:decision`
 
@@ -4441,7 +4505,7 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | max_text_chars, picture_search, google_client_id, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, google_client_id, max_add_profiles, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
@@ -4541,7 +4605,7 @@ drive models list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: drive commands info models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: drive commands info models list
 
 **Next usually:** `drive models download <model>`, `drive images models download <model>`
 
@@ -4564,13 +4628,38 @@ drive models download <model> [options]
 | Option | What it does |
 |---|---|
 | `--offline` | refuse a download that needs the network. |
-| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
+| `--accept-terms` | no longer needed; kept so older scripts still run. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: drive commands info models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: drive commands info models download
 
 **Next usually:** `drive images models download <model>`
 
-**Example:** `drive models download e5-small`
+**Example:** `drive models download embeddinggemma`
+
+### `drive models add`
+
+add an ONNX embedding model from Hugging Face, pinned and checked by sha256
+
+This command changes local state.
+
+```sh
+drive <profile> models add <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the id to give it: a-z, 0-9, . _ -. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | where the model is and how to run it, as JSON (below). |
+| `--offline` | refuse a call that needs the network. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: drive commands info models add
+
+**Next usually:** `drive models download <model>`, `drive images models download <model>`
+
+**Example:** `drive personal models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
 
 ## `drive images`
 
@@ -4594,7 +4683,7 @@ drive images models download <model>
 |---|---|---|
 | `model` | required | model id, such as clip-b32. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: drive commands info images models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: drive commands info images models download
 
 **Next usually:** `drive models download <model>`
 

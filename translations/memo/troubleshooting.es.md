@@ -95,7 +95,8 @@ Un PDF escaneado o una imagen no se rechazan. Se guardan por su título y sus te
 | `reader.model-missing` | Ollama o un lector de API no tienen modelo, o Ollama no tiene ese | `memo sources readers set <reader> --model <model>`, y para Ollama `ollama pull <model>` |
 | `reader.unavailable` | Claude Code o Codex no están instalados | Instálalo o elige otro lector |
 | `reader.failed` | El lector falló. Sin sesión iniciada, versión antigua, clave rechazada o cuenta sin saldo | `memo sources readers list` nombra el problema. Inicia sesión, actualiza o ejecuta `memo models keys set <provider>` |
-| `reader.no-key` | No hay clave guardada para el lector de API | `memo models keys set <provider>` |
+| `reader.no-key` | No hay clave guardada para el lector de API, o para el modelo de IA con el que lee `ai-model` | `memo models keys set <provider>`. Para `ai-model`, `memo models ai set <provider> --model <m> --secret-stdin` |
+| `reader.ai-not-set` | `ai-model` está elegido, pero no hay ningún modelo de IA | `memo models ai set <provider> --model <m>` |
 | `reader.not-running` | Ollama no se está ejecutando en este ordenador | `ollama serve` y vuelve a intentarlo |
 | `reader.limit` | Se alcanzó el límite del proveedor | Inténtalo más tarde |
 | `reader.timeout` | El lector no respondió en 10 minutos | Vuelve a intentarlo o añade una parte más pequeña de la fuente |

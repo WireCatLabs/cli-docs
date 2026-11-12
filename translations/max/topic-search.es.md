@@ -59,7 +59,7 @@ Prepara el chat una vez y luego haz tantas preguntas como quieras.
 ```sh
 max personal messages sync "Книжный клуб"                  # 1. скачать историю, если её ещё нет
 max personal conversations links rebuild --chat "Книжный клуб"   # 2. разделить чат на разговоры
-max personal models download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
+max personal models download embeddinggemma         # 3. один раз: скачать модель, 219 МБ, общая с tg
 max personal conversations embed --chat "Книжный клуб"   # 4. посчитать вектор каждого куска
 max personal search conversations "где встречаемся" --chat "Книжный клуб"   # 5. спросить
 max personal conversations show 91                       # 6. прочитать найденный разговор
@@ -99,7 +99,7 @@ Un mensaje sin conexión inicia una nueva conversación. Una conversación puede
 
 `max personal search conversations` busca su pregunta de dos maneras y combina los resultados:
 
-- **Por significado.** Convierte también la pregunta en un vector, lo compara con los fragmentos y puntúa cada conversación por el más cercano. Con `e5-small`, exige similitud superior a 0,80 en una escala donde 1 es significado idéntico.
+- **Por significado.** Convierte también la pregunta en un vector, lo compara con los fragmentos y puntúa cada conversación por el más cercano. Con `embeddinggemma`, el modelo predeterminado, cuentan todas las coincidencias, ordenadas por similitud en una escala donde 1 es significado idéntico. Con `e5-small`, la coincidencia por significado debe ser bastante cercana: similitud superior a 0,80.
 - **Por palabras.** Busca cada palabra de la pregunta. Con tres letras o más también encuentra palabras que empiezan por ella (`встреч` encuentra «встреча»). No corrige erratas.
 
 Una conversación encontrada usando ambos métodos tiene un valor más alto que una conversación encontrada usando un método. Cada resultado dice cómo se encontró: `"by": ["meaning"]` (por significado), `["words"]` (por palabras) o ambos. Sin el modelo descargado, la búsqueda aún funciona, solo por palabras, y luego la respuesta es `"meaning": "unavailable"`. No se visualiza un chat que nunca se ha construido: primero `build`.
@@ -215,12 +215,12 @@ De forma predeterminada, nada sale de la computadora. El modelo funciona aquí y
 
 ```sh
 max personal models list kind:text                             # модели и какие скачаны
-max personal models download embeddinggemma --accept-terms
+max personal models download embeddinggemma
 ```
 
-`e5-small` es el predeterminado: pequeño, rápido y con unos 100 idiomas. `embeddinggemma` encuentra más, pero es unas siete veces más lento y requiere `--accept-terms` para aceptar las condiciones de Google Gemma. No se mezclan sus vectores: busca con el modelo usado para calcularlos. stderr indica los chats calculados solo con otro modelo.
+`embeddinggemma` es el predeterminado: conoce más de 100 idiomas y encuentra más, pero se rige por las condiciones de uso de Google Gemma. Para descargarlo no hace falta ningún flag. `--accept-terms` se sigue aceptando, pero no hace nada. `e5-small` es más pequeño y unas siete veces más rápido, con licencia MIT. Si en el equipo solo está descargado `e5-small`, se sigue usando hasta que se descargue `embeddinggemma`. `models set` elige el modelo. No se mezclan sus vectores: busca con el modelo usado para calcularlos. stderr indica los chats calculados solo con otro modelo.
 
-En un portátil reciente, `e5-small` vectoriza unos 30 fragmentos por segundo; un grupo de 100 000 mensajes tarda algo más de 20 minutos, una sola vez. Las ejecuciones siguientes vectorizan solo lo que ha cambiado.
+En un portátil reciente, `embeddinggemma` vectoriza unos 8 fragmentos por segundo: un grupo de 100 000 mensajes tarda alrededor de una hora y cuarto, una sola vez. `e5-small` vectoriza unos 30 por segundo, algo más de 20 minutos. Las ejecuciones siguientes vectorizan solo lo que ha cambiado.
 
 Un servicio puede calcular los vectores en su lugar, con tu propia clave:
 

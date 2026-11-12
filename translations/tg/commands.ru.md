@@ -199,6 +199,26 @@ tg account sessions end [options]
 
 **Example:** `tg personal account sessions end --others`
 
+### `tg account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something in Telegram.**
+
+```sh
+tg account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: tg commands info account remove
+
+**Example:** `tg personal account remove --keep-data --dry-run`, `tg personal account remove --delete-data --yes`
+
 ## `tg chats`
 
 the account's chats
@@ -1359,7 +1379,7 @@ tg contacts context <person> [options]
 | `--chat <chat>` | a chat, by id or name; repeat it for more — then their newest messages in each, 20 unless --limit, short unless -v. |
 | `--sync-first` | with --chat, read their newest messages in each from the messenger first. |
 
-**Returns:** contact context — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: tg commands info contacts context
+**Returns:** contact context — person, accounts, shared, last, recent, mentions, limits, complete, and 3 more; every field: tg commands info contacts context
 
 **Example:** `tg personal contacts context "Alex Example" --limit 10`
 
@@ -1380,13 +1400,13 @@ tg contacts prepare <person> [options]
 | `--limit <n>` | at most this many messages, and items in each section; 10 if not given. |
 | `--since-time <time>` | no message or meeting older than this ISO 8601 time, or 2h / 1d ago. |
 
-**Returns:** contact preparation — person, shared, last, recent, mentions, limits, complete, not_read, and 2 more; every field: tg commands info contacts prepare
+**Returns:** contact preparation — person, accounts, shared, last, recent, mentions, limits, complete, and 3 more; every field: tg commands info contacts prepare
 
 **Example:** `tg personal contacts prepare Ana`
 
 ### `tg contacts events`
 
-everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; never connects
+everything one person took part in, in every messenger linked to them — messages they wrote or were mentioned in, chats, mail, meetings, tasks — newest first, from the store; only in this account's scope, personal or work, and scope: of the other one is refused; never connects
 
 ```sh
 tg contacts events <person> [query] [options]
@@ -1433,7 +1453,7 @@ record that two people in the store are one person — the same name is never en
 **Changes something on this computer only.**
 
 ```sh
-tg contacts link <person> <other>
+tg contacts link <person> <other> [options]
 ```
 
 | Argument | | What it is |
@@ -1441,7 +1461,11 @@ tg contacts link <person> <other>
 | `person` | required | their id, @username, or part of their name. |
 | `other` | required | the same in another messenger of the store, as <messenger>:<person> — max:Ana; me: it is you, as zoom:<id> me. |
 
-**Returns:** linked person — uid, name, identities; every field: tg commands info contacts link
+| Option | What it does |
+|---|---|
+| `--reason <text>` | why they are one person; an agent's link is a proposal and needs it. |
+
+**Returns:** linked person — uid, name, identities, proposal; every field: tg commands info contacts link
 
 **Example:** `tg personal contacts link "Alex Example" zoom:101`
 
@@ -1459,7 +1483,7 @@ tg contacts unlink <person>
 |---|---|---|
 | `person` | required | their id, @username, or part of their name; <messenger>:<person> for another messenger. |
 
-**Returns:** linked person — uid, name, identities; every field: tg commands info contacts unlink
+**Returns:** linked person — uid, name, identities, proposal; every field: tg commands info contacts unlink
 
 **Example:** `tg personal contacts unlink "Alex Example"`
 
@@ -2163,7 +2187,7 @@ tg messages sync [chat] [options]
 
 | Option | What it does |
 |---|---|
-| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last. |
+| `--all` | every chat, most recently active first — what search needs; the last 90d unless --since-time or --last; muted chats only with --with-muted or history_muted true. |
 | `--limit <n>` | at most this many messages in this run, per chat with --all; 1000 if not given. |
 | `--page-size <n>` | how many messages one request asks for; 100 if not given. |
 | `--pause <duration>` | pause between pages, to stay under the provider's limits. Default: `1s`. |
@@ -2175,6 +2199,7 @@ tg messages sync [chat] [options]
 | `--catch-up-messages <n>` | skip a graph rebuild larger than this many messages. |
 | `--catch-up-time <duration>` | local preparation time budget, 30s by default. |
 | `--full-history` | read and keep this chat's history in full from now on, past the history limits (history_* settings). |
+| `--with-muted` | with --all: also read the chats the owner muted, as history_muted true does. |
 | `--background` | run as a job that outlives this command; `store jobs show` follows it. |
 | `--dry-run` | only estimate how many messages, requests and minutes a full fetch would still take — from the store, no request. |
 
@@ -2425,9 +2450,9 @@ tg models list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: tg commands info models list
 
-**Next usually:** `tg models download <model>`, `tg images models download <model>`
+**Next usually:** `tg models download <model>`, `tg models set <model>`, `tg images models download <model>`
 
 **Example:** `tg personal models list`, `tg personal models list kind:audio`
 
@@ -2447,13 +2472,57 @@ tg models download <model> [options]
 
 | Option | What it does |
 |---|---|
-| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
+| `--accept-terms` | no longer needed; kept so older scripts still run. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: tg commands info models download
 
-**Next usually:** `tg images models download <model>`
+**Next usually:** `tg models set <model>`, `tg images models download <model>`
 
-**Example:** `tg personal models download e5-small`, `tg personal models download mmarco`
+**Example:** `tg personal models download embeddinggemma`, `tg personal models download mmarco`
+
+### `tg models set`
+
+make a downloaded text model the one every embed and every search by meaning uses, in every WireCat CLI. Each model keeps its own vectors: the next syncs embed what the new one lacks, and switching back is instant
+
+**Changes something on this computer only.**
+
+```sh
+tg models set <model>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a downloaded text model id from models list. |
+
+**Returns:** model chosen — id, kind, title, languages, size_bytes, downloaded, default, path, and 9 more; every field: tg commands info models set
+
+**Next usually:** `tg models download <model>`, `tg images models download <model>`
+
+**Example:** `tg personal models set e5-large`
+
+### `tg models add`
+
+add an ONNX embedding model from Hugging Face, pinned and checked by sha256
+
+**Reads from an outside service.**
+
+```sh
+tg models add <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the id to give it: a-z, 0-9, . _ -. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | where the model is and how to run it, as JSON (below). |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: tg commands info models add
+
+**Next usually:** `tg models download <model>`, `tg models set <model>`, `tg images models download <model>`
+
+**Example:** `tg personal models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
 
 ## `tg inbox`
 
@@ -2842,7 +2911,7 @@ tg schedule command <name> <args> [options]
 | Option | What it does |
 |---|---|
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
@@ -2873,7 +2942,7 @@ tg schedule agent <name> <harness> <prompt> [options]
 | `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
 | `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
@@ -2894,25 +2963,30 @@ tg schedule list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: tg commands info schedule list
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, spent_today_usd, and 2 more; every field: tg commands info schedule list
 
 **Example:** `tg personal schedule list`, `tg personal schedule list kind:agent`
 
 ### `tg schedule run`
 
-run a schedule now, as its timer would, and wait for it
+run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Changes something in Telegram.**
 
 ```sh
-tg schedule run <name>
+tg schedule run <name> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | the schedule's name, as `schedule list` shows it. |
 
-**Returns:** run a schedule now, as its timer would, and wait for it
+| Option | What it does |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
+
+**Returns:** run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Example:** `tg personal schedule run health`
 
@@ -2933,6 +3007,42 @@ tg schedule remove <name>
 **Returns:** stop a schedule and remove its timer; its past output stays
 
 **Example:** `tg personal schedule remove health`
+
+### `tg schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Changes something on this computer only.**
+
+```sh
+tg schedule pause <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Example:** `tg personal schedule pause health`
+
+### `tg schedule resume`
+
+put a paused schedule back on its timer
+
+**Changes something on this computer only.**
+
+```sh
+tg schedule resume <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Returns:** put a paused schedule back on its timer
+
+**Example:** `tg personal schedule resume health`
 
 ### `tg schedule exec`
 
@@ -3184,6 +3294,24 @@ tg store clear [options]
 **Returns:** store clear — cleared, chats, messages, left, dry_run; every field: tg commands info store clear
 
 **Example:** `tg personal store clear --left --dry-run`
+
+### `tg store import`
+
+load a JSON file marked "synthetic": true (account, people, chats, members, messages) into this profile's account in the local store, as a sync would save them; the same file twice adds nothing and a changed message is updated in place. Refuses the owner's real store. Without --yes, says what it would load and changes nothing
+
+**Changes something on this computer only.**
+
+```sh
+tg store import <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the JSON file to load. |
+
+**Returns:** store import — store, profile, account, imported, file, added; every field: tg commands info store import
+
+**Example:** `tg personal store import ./synthetic-chats.json --yes`
 
 ### `tg store info`
 
@@ -3454,7 +3582,7 @@ tg conversations related <chat> <message> [options]
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3474,7 +3602,7 @@ tg conversations status [options]
 | Option | What it does |
 |---|---|
 | `--chat <chat>` | only this chat: a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3602,7 +3730,7 @@ tg conversations embeddings status [options]
 | Option | What it does |
 |---|---|
 | `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3624,7 +3752,7 @@ tg conversations embeddings clear [options]
 | Option | What it does |
 |---|---|
 | `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -3705,7 +3833,7 @@ tg conversations embed [options]
 | Option | What it does |
 |---|---|
 | `--chat <chat>` | a chat: its title or part of it, its id, @username, or `me` for Saved Messages. |
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -4174,7 +4302,7 @@ tg mentions confirm <id> [person] [options]
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** mention decision — kind, value, status, target, mentions; every field: tg commands info mentions confirm
+**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: tg commands info mentions confirm
 
 **Example:** `tg personal mentions confirm 12 person:7`, `tg personal mentions confirm 15`, `tg personal mentions confirm 31 person:7 --all-in-chat`
 
@@ -4197,7 +4325,7 @@ tg mentions reject <id> [options]
 | `--all-in-chat` | a name: also every undecided place of the same name in its chat. |
 | `--as-owner` | record it as yours although an agent's terminal runs the tool (AI_AGENT or CLAUDECODE set). |
 
-**Returns:** mention decision — kind, value, status, target, mentions; every field: tg commands info mentions reject
+**Returns:** mention decision — kind, value, status, target, mentions, proposal; every field: tg commands info mentions reject
 
 **Example:** `tg personal mentions reject 12`
 
@@ -4258,9 +4386,9 @@ tg images models list [query]
 |---|---|---|
 | `query` | optional | field:value terms; this list filters by none yet. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info images models list
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: tg commands info images models list
 
-**Next usually:** `tg models download <model>`, `tg images models download <model>`
+**Next usually:** `tg models download <model>`, `tg models set <model>`, `tg images models download <model>`
 
 **Example:** `tg personal images models list`
 
@@ -4278,9 +4406,9 @@ tg images models download <model>
 |---|---|---|
 | `model` | required | a model id from `images models list`. |
 
-**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 1 more; every field: tg commands info images models download
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: tg commands info images models download
 
-**Next usually:** `tg models download <model>`
+**Next usually:** `tg models download <model>`, `tg models set <model>`
 
 **Example:** `tg personal images models download clip-b32`
 
@@ -4481,7 +4609,7 @@ tg stats messages responses [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | optional | date:, chat: and kind: terms, AND-ed — date>=30d, date:[60d TO 30d]; none reads all time. |
+| `query` | optional | date:, chat:, kind: and muted: terms, AND-ed — date>=30d, date:[60d TO 30d], muted:false; none reads all time. |
 
 | Option | What it does |
 |---|---|
@@ -4504,7 +4632,7 @@ tg stats messages waiting [query] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `query` | optional | date:, chat: and kind: terms, AND-ed — date>=30d, date:[60d TO 30d]; none reads all time. |
+| `query` | optional | date:, chat:, kind: and muted: terms, AND-ed — date>=30d, date:[60d TO 30d], muted:false; none reads all time. |
 
 | Option | What it does |
 |---|---|
@@ -5325,7 +5453,7 @@ find things by text: one resource when you know it (messages, notes), or search 
 
 ### `tg search all`
 
-search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes and events are local only; --backend archive or --offline keeps it to the local store), calendar events when the store holds a calendar, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
+search messenger messages and notes in the local store, and by default the messenger's server for messages too (notes and events are local only; --backend archive or --offline keeps it to the local store), calendar events when the store holds a calendar, and meeting transcripts, chat and summaries when it holds a meeting account — best match first; not mail (the separate memo CLI searches it: memo search mail), tasks, people, memories or projects. Use it when you do not know where something was written; search messages or notes reads one kind with all its fields
 
 ```sh
 tg search all <query> [options]
@@ -5337,9 +5465,8 @@ tg search all <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
-| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
-| `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events, meetings. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind. |
 | `--limit <n>` | how many. |
 | `--page <n>` | which page, starting at 1. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
@@ -5347,7 +5474,7 @@ tg search all <query> [options]
 | `--backend <archive\|server\|both>` | where to search: the local archive, the messenger's server (default: both; message discovery uses archive only), or both. |
 | `--server-time <duration>` | stop waiting for the server after this long (default: 5s). |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 13 more; every field: tg commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 17 more; every field: tg commands info search all
 
 **Example:** `tg personal search all draft`
 
@@ -5433,7 +5560,7 @@ tg search conversations <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--model <model>` | local: a model id from `models list` (default: e5-small); remote: the provider's model. |
+| `--model <model>` | local: a model id from `models list` (default: embeddinggemma); remote: the provider's model. |
 | `--embedding-provider <provider>` | embedding provider: local or openai; flags override profile settings. |
 | `--base-url <url>` | a server with OpenAI's /v1/embeddings: Gemini, Jina, or Ollama and LM Studio on this machine. |
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
@@ -6088,7 +6215,7 @@ tg config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -6113,7 +6240,7 @@ tg config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, proxy, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self. |
 
 | Option | What it does |
 |---|---|
@@ -6759,6 +6886,7 @@ tg bot messages send <chat> [text] [options]
 | `--silent` | deliver without a notification. |
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
+| `--button <text=data>` | an inline button, as <text>=<data>; repeat for more in one row; the data (1 to 64 bytes) goes back to the bot. |
 | `--file <file>` | attach a file; the text becomes its caption. |
 | `--photo <file>` | attach a .jpg, .png or .webp as a photo; the text becomes its caption. |
 | `--as-file` | send the --file as a file to download, a video included. |
@@ -6811,7 +6939,7 @@ tg bot messages show <chat> <message>
 
 #### `tg bot messages edit`
 
-replace the text of a message the bot sent
+replace the text of a message the bot sent; --button replaces its buttons, --no-buttons takes them off
 
 **Changes something in Telegram.**
 
@@ -6829,8 +6957,10 @@ tg bot messages edit <chat> <message> <text> [options]
 |---|---|
 | `--md` | read this messenger's Markdown; see its formatting guide for supported syntax. |
 | `--html` | the text is HTML: <b>, <i>, <a href>, <code>. |
+| `--button <text=data>` | a button under the message, as <text>=<data>; replaces its buttons; repeat for more in one row. |
+| `--no-buttons` | take the buttons off the message. |
 
-**Returns:** replace the text of a message the bot sent
+**Returns:** replace the text or buttons of a message the bot sent
 
 **Example:** `tg sales bot messages edit Team 101 "Doors open at 10"`
 

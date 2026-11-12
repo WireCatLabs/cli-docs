@@ -44,13 +44,14 @@ memo tasks list --source telegram:1
 memo tasks agenda --source telegram:1           # overdue, due, owed and waiting chats
 memo tasks update 1a2b3c4d --due 2d --remind-time 1d --title 'Send the revised budget' --account telegram:1
 memo tasks show 1a2b3c4d --source telegram:1
-memo stats tasks show --source telegram:1       # open tasks per chat
+memo stats tasks show                           # open tasks per chat, every account
 memo tasks agenda --source notes                # tasks from your notes folder
 ```
 
 Чтобы изменить поля задачи, используйте `tasks update`.
 
-Без `--source` или `--account` команда перечисляет аккаунты в хранилище. tg и max открывают эти задачи при синхронизации; memo читает то же хранилище.
+Без `--source` или `--account` команда перечисляет аккаунты в хранилище, а `stats tasks show` без них считает все
+сохранённые аккаунты и называет их в `accounts`. tg и max открывают эти задачи при синхронизации; memo читает то же хранилище.
 
 ## Задачи в проекте
 
@@ -64,7 +65,9 @@ memo tasks update HRB-1 --priority critical --description 'Call before Friday'
 ```
 
 Простой `memo tasks list` показывает только задачи ваших аккаунтов; задачи проекта выводятся через
-`project:` и ключ проекта, его название или псевдоним, а задачи всех проектов — через `project:*`.
+`project:` и ключ проекта, его название или псевдоним, а задачи всех проектов — через `project:*`. Любое другое поле
+(`assignee:`, `priority:`, слова…), `--sort` или `--cursor` выводит все задачи: задачи проектов и задачи, найденные в
+сообщениях, каждую найденную с её `account`.
 
 | Параметр | Значение |
 |---|---|
@@ -77,6 +80,11 @@ memo tasks update HRB-1 --priority critical --description 'Call before Friday'
 Как сначала создать проект, см. [организации и проекты](./people.md#organizations-and-projects).
 
 ### Перенос задачи в другой проект
+
+Задача, найденная в сообщении, переносится в проект так же, со своим аккаунтом:
+`memo tasks update Q-9 --project HRB --account telegram:1`. Она получает следующий ключ проекта (`HRB-12`). `Q-9`
+и её id по-прежнему находят её, и она сохраняет сообщение, из которого пришла. С этого момента это задача проекта: она
+уходит из списка своего аккаунта, а `--type` в той же команде может сделать её `bug`, `feature` или `chore`.
 
 ```sh
 memo tasks update HRB-1 --project OPS
@@ -114,30 +122,32 @@ in the todo column`). Один `--status` переносит задачу в п�
 Задача проекта бывает `open` (новая), `todo` (решено делать), `in_progress`, `done` или `dismissed`. Меняйте
 состояние через `tasks update --status`, в том числе возвращайте из `done` или `dismissed`; каждое изменение
 сохраняется в истории. `todo` и `in_progress` везде считаются открытой работой: задача, которая ждёт такую, не
-готова, а агент может такую взять. Задача из сообщения бывает только `open`, `done` или `dismissed`.
+готова, а агент может такую взять. Задача, найденная в сообщении, принимает те же состояния, а также приоритет, агента и исполнителей. Она сохраняет вид
+сообщения (`question`, `request`, `mention`, `promise`), пока не перейдёт в проект. Список аккаунта читает `state:open`
+как все задачи, которые ещё не закрыты.
 
 ```sh
 memo tasks update HRB-1 --status in_progress
 memo tasks history HRB-1 --json      # who changed what, and when
 ```
 
-## Поиск задач проекта
+## Поиск задач
 
-`memo tasks list` с `project:` принимает запрос: поля, соединённые через AND, OR внутри поля, NOT и обычные слова,
-которые ищут по названию и описанию:
+`memo tasks list` принимает запрос: поля, соединённые через AND, OR внутри поля, NOT и обычные слова, которые ищут по
+названию и описанию. Без `project:` он охватывает и задачи, найденные в сообщениях:
 
 ```sh
-memo tasks list project:* 'assignee:"person:3"' priority:[high TO critical] invoice
+memo tasks list 'assignee:"person:3"' priority:[high TO critical] invoice
 memo tasks list project:(HRB OR OPS) state:(done OR dismissed) closed:>=14d
 memo tasks list project:* overdue:true --sort due
 memo tasks list project:* NOT due:* NOT priority:*
-memo tasks counts project:* --json   # how many per project, assignee, priority and state
+memo tasks counts --json             # how many per project, assignee, priority and state, found tasks too
 ```
 
 | Поле | Значение |
 |---|---|
 | `state:` | `open`, `todo`, `in_progress`, `done`, `dismissed`; без него — три открытых состояния |
-| `project:` | ключ, название, `project:<id>` или `*` для всех проектов |
+| `project:` | ключ, название, `project:<id>` или `*` для всех проектов, без найденных задач |
 | `assignee:` | `any`, `none` или человек: `"person:3"` в кавычках либо `3` |
 | `priority:` | метка, `none` или диапазон меток или чисел |
 | `agent:` | агент, который над ней работает, `none` или `any` |
@@ -171,7 +181,7 @@ memo tasks update HRB-1 --title 'Book the hall' --revision 4
 memo tasks assign HRB-1 PERSON_UID
 memo tasks assign HRB-1 PERSON_UID --role reviewer
 memo tasks assign HRB-1 PERSON_UID --clear     # take them off it
-memo people list                               # you, and everyone tasks already name
+memo people list                               # you, and the people who write to you most
 memo tasks update HRB-1 --agent hermes         # the agent working on it; --agent none clears it
 ```
 

@@ -16,8 +16,8 @@ Several open tools connect a personal Telegram account to a terminal or an AI ag
 five of them, row by row, by the jobs people do: catch up, reply, find, organise, look after a group, and hand the
 account to an agent. Use it to pick the tool that fits your job.
 
-Every mark was checked on 24 October 2026. Our marks come from the `main` branch of `tg` and from running it; the
-albums row is on `main` and ships in the next release. A mark for another tool comes from its own documentation or
+Every mark was checked on 24 October 2026. Our marks come from the `main` branch of `tg` and from running it. A
+mark for another tool comes from its own documentation or
 source, linked [below the table](#where-the-marks-come-from). A tool may do more than its documentation says.
 
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation

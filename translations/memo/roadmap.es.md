@@ -27,7 +27,7 @@ Ahora mismo no hay nada en desarrollo. Los primeros elementos del apartado sigui
 
 - **Fuentes de un proyecto: próximos pasos.** Antes de recopilar, indicar qué fuentes están lo bastante
   actualizadas para buscar; leer el hilo completo alrededor de una coincidencia; añadir búsqueda por significado si se desea.
-- **Reuniones en `search all` y en el contexto de una persona.** Hoy las reuniones guardadas tienen su propia búsqueda.
+- **Reuniones en el contexto de una persona.** `search all` lee todas las cuentas de reuniones. `memo context` todavía no.
 - **Búsqueda más rápida.** Una búsqueda en un almacén pequeño no debería tardar varios segundos.
 
 ## Más adelante

@@ -34,6 +34,7 @@ antes de moverlos o borrarlos.
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
 | `record` | `false` guarda en `drive runs list` solo las ejecuciones fallidas; predeterminado `true`, todas | Solo `defaults` |
 | `record_input` | Una ejecución guardada conserva el comando tal como se escribió, con los secretos o números de teléfono escritos como `[redacted]`. `"failed"` conserva las palabras escritas solo en una ejecución fallida; `false` escribe también como `[redacted]` cada valor que pueda ser contenido | Solo `defaults` |
+| `max_add_profiles` | Cuántos perfiles como máximo puede probar `documents add` para un documento, predeterminado `5`, como máximo `50` | Solo `defaults` |
 | `keep_runs_for_days` | Cuántos días se conserva una ejecución fallida; predeterminado `30` | Solo `defaults` |
 | `keep_successful_runs_for_days` | Cuántos días se conserva una ejecución correcta; predeterminado `7` | Solo `defaults` |
 | `runs_size_limit_mb` | El tamaño máximo del registro de ejecuciones; primero se borran las ejecuciones correctas más antiguas; predeterminado `200` | Solo `defaults` |

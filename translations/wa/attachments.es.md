@@ -25,7 +25,7 @@ Algunas palabras en esta página:
 
 ## Lo que puedes enviar
 
-Un mensaje contiene un archivo y el texto se convierte en su título. Un `--photo` y un vídeo `--file` juntos forman un álbum: el texto es el título de la foto y la respuesta es el mensaje de la foto. Un álbum contiene únicamente fotos y vídeos, por lo que se rechaza un documento junto a una foto. Sólo el mensaje de la foto llega a el almacén local; El vídeo está en el chat de WhatsApp. Una foto muestra la pequeña vista previa que muestra el chat antes de descargarse (ni un WEBP ni un video todavía). El envío necesita un comando explícito y pasa los [permisos y límites de envío](./permissions.md) del perfil, como lo hace cualquier envío.
+Un mensaje contiene un archivo y el texto se convierte en su título. Un `--photo` y un vídeo `--file` juntos forman un álbum: el texto es el título de la foto y la respuesta es el mensaje de la foto. Sin texto, un teléfono puede mostrarlos como dos mensajes. Un álbum contiene únicamente fotos y vídeos, por lo que se rechaza un documento junto a una foto. Sólo el mensaje de la foto llega a el almacén local; El vídeo está en el chat de WhatsApp. Una foto muestra la pequeña vista previa que muestra el chat antes de descargarse (ni un WEBP ni un video todavía). El envío necesita un comando explícito y pasa los [permisos y límites de envío](./permissions.md) del perfil, como lo hace cualquier envío.
 
 | Archivo | Opción | Lo que obtiene el chat |
 | --- | --- | --- |

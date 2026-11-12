@@ -31,7 +31,7 @@ WhatsApp no ​​guarda ninguna copia de tus chats en sus servidores: la única
 
 **Primero abre WhatsApp en tu teléfono.** El teléfono responde mientras la aplicación está abierta; en segundo plano mantiene la solicitud y responde la próxima vez que la abra. Una solicitud que no responde en 25 segundos falla con `timeout`; la respuesta tardía aún llega y un `serve` en ejecución la guarda, por lo que no se pierde nada. Una respuesta vacía significa que el chat comienza allí.
 
-`wa personal messages sync <chat>` realiza esta solicitud, página tras página, con al menos 2 segundos de diferencia, hasta llegar a `--limit` o al inicio del chat. Cuando el teléfono envía una página corta, `wa` pregunta una o dos veces más por el resto, con un segundo de diferencia. Pregunta sobre un chat a la vez: `--all` se rechaza, ya que WhatsApp no ​​tiene una lista de chats para recorrer.
+`wa personal messages sync <chat>` realiza esta solicitud, página tras página, con 5 a 10 segundos de diferencia, hasta llegar a `--limit` o al inicio del chat. Cuando el teléfono envía una página corta, `wa` pregunta una o dos veces más por el resto, con un segundo de diferencia. Pregunta sobre un chat a la vez: `--all` se rechaza, ya que WhatsApp no ​​tiene una lista de chats para recorrer.
 
 ## Qué puedes hacer
 

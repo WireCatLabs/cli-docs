@@ -35,6 +35,11 @@ Las decisiones sobre hallazgos de reuniones (`meetings.actions.confirm` y `meeti
 Guarda los permisos en la configuración; la búsqueda y la siguiente llamada leen los niveles actuales.
 Los permisos y el límite compartido de WireCat de solo lectura se comprueban en cada llamada.
 
+`search all` devuelve fragmentos de reuniones de todas las cuentas de reuniones, personales y de trabajo, junto a
+mensajes, correo, notas, eventos y CRM. El paso `next` de un resultado de una transcripción lo abre con
+`meetings passage`. Cuando `search.meetings` o `meetings.passage` está en `deny` o `ask`, search all deja fuera las
+reuniones y lo dice en `missing`: un resultado que el agente no puede abrir sin preguntar no se le entrega.
+
 `memo mcp serve --permission notes.edit=deny` restringe un permiso para ese servidor; repite la opción para más claves.
 No puede ampliar los permisos guardados, incluidas las claves más específicas.
 `MEMO_READ_ONLY=1` marca todos los comandos de escritura como no disponibles y los rechaza en una conexión abierta.
@@ -86,7 +91,9 @@ través de Memo. Una ruta o un enlace se añaden desde la línea de comandos ([F
 Los temas que indica un agente esperan a que los confirmes. `sources remove` no se ofrece, porque solo tú quitas
 una fuente que añadiste. Tampoco se ofrece `sources suggest`, así que un agente no puede enviar el texto de una
 fuente fuera de este ordenador. Ni `sources readers set`, ni `models keys set` y `remove`, porque solo tú eliges
-el lector y le das su clave. `sources readers list` sí se ofrece.
+el lector y le das su clave. `sources readers list` sí se ofrece. De `models ai`
+solo se ofrece `show`: `set`, `unset`, `remove`, `revoke` y `check` eligen el modelo de IA, su dirección y su clave,
+o gastan tu crédito, así que solo los ejecutas tú.
 
 `memories add`, `facts add`, `actions add`, `meetings actions add` y `projects actions add` guardan propuestas.
 Por defecto solo el propietario decide las propuestas de proyecto. `projects actions confirm` y `projects actions reject` rechazan

@@ -55,7 +55,7 @@ Prepare the chat once, and then ask as many questions as you like.
 ```sh
 max personal messages sync "Книжный клуб"                  # 1. скачать историю, если её ещё нет
 max personal conversations links rebuild --chat "Книжный клуб"   # 2. разделить чат на разговоры
-max personal models download e5-small               # 3. один раз: скачать модель, 135 МБ, общая с tg
+max personal models download embeddinggemma         # 3. один раз: скачать модель, 219 МБ, общая с tg
 max personal conversations embed --chat "Книжный клуб"   # 4. посчитать вектор каждого куска
 max personal search conversations "где встречаемся" --chat "Книжный клуб"   # 5. спросить
 max personal conversations show 91                       # 6. прочитать найденный разговор
@@ -95,7 +95,7 @@ A message without a link starts a new discussion. Messages from other discussion
 
 `max personal search conversations` searches for your question in two ways and combines the results:
 
-- **By meaning.** The question also becomes a vector. `max` compares it with saved chunks and ranks each discussion by its closest chunk. The default `e5-small` requires similarity above 0.80, on a scale where 1 means the same meaning.
+- **By meaning.** The question also becomes a vector. `max` compares it with saved chunks and ranks each discussion by its closest chunk. With the default `embeddinggemma`, every match counts, ranked by similarity on a scale where 1 means the same meaning. With `e5-small`, a match by meaning must be close enough: similarity above 0.80.
 - **By words.** Each query word is searched in saved messages. Words of at least three characters also match longer words beginning with them (`встреч` matches the Russian word for meeting). Typos are not corrected.
 
 A discussion found by both methods ranks above one found by only one. Each result reports `"by": ["meaning"]`, `["words"]` or both. Without downloaded recognition files, word search still works and the result says `"meaning": "unavailable"`. Chats without a built graph are skipped; run `build` first.
@@ -211,13 +211,12 @@ By default, nothing leaves the computer. The model works here and is downloaded 
 
 ```sh
 max personal models list kind:text                             # модели и какие скачаны
-max personal models download embeddinggemma --accept-terms
+max personal models download embeddinggemma
 ```
 
-`e5-small` is the small, fast default and supports about 100 languages. `embeddinggemma` can find more but is about seven times slower; downloading requires `--accept-terms` for Google Gemma terms. Their vectors are kept separate: search with the model used to calculate them. Stderr identifies chats prepared only with a different model.
+`embeddinggemma` is the default: it knows more than 100 languages and finds more, but the Google Gemma terms of use apply to it. Downloading it needs no flag. `--accept-terms` is still accepted but does nothing. `e5-small` is smaller and about seven times faster, under the MIT license. If only `e5-small` is downloaded on the computer, it stays in use until `embeddinggemma` is downloaded. `models set` chooses the model. Their vectors are kept separate: search with the model used to calculate them. Stderr identifies chats prepared only with a different model.
 
-On a recent laptop `e5-small` embeds about 30 pieces a second; a group of 100,000 messages takes
-a little over 20 minutes, once. Later runs embed only what changed.
+On a recent laptop `embeddinggemma` embeds about 8 pieces a second: a group of 100,000 messages takes about an hour and a quarter, once. `e5-small` embeds about 30 a second, a little over 20 minutes. Later runs embed only what changed.
 
 A service can compute the vectors instead, with your own key:
 

@@ -4,6 +4,84 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.71.0 — 09.11.2026
+
+### Añadido
+
+- **Un pull request añade sus entradas del historial de cambios como un fragmento, `changes/<branch>.md`.** Los pull requests abiertos ya no
+  entran en conflicto bajo `## Unreleased`. `pnpm docs:check` comprueba cada fragmento, y `bin/release` los reúne en la sección de la
+  versión. Una entrada bajo `## Unreleased` sigue funcionando durante la transición.
+
+### Cambiado — puede romper la compatibilidad
+
+- **`zm search all` ya no tiene `--max-meetings`.** Lee las reuniones del perfil a través de su índice de
+  búsqueda, las ordena junto con mensajes, correo y notas, da como máximo 3 coincidencias por reunión y pagina con `--page`. Ya no
+  examina las 100 reuniones más recientes. Una coincidencia de transcripción lleva `cue_ref` para `meetings passage`. La búsqueda general nunca
+  construye el índice: cuando `missing` nombra la cuenta, `zm <profile> search meetings` lo construye.
+- **cli-core 0.619.0.** Un `meetings link` de un agente ahora abre una propuesta para el propietario en lugar de vincular a la persona.
+
+### Corregido
+
+- **Los `meetings link --yes` y `meetings update --yes` del propio propietario se aplican al momento.** zm ahora le dice a cli-core quién ejecuta
+  el comando: el propietario en una terminal vincula a la persona enseguida, mientras que la terminal de un agente o una ejecución por MCP solo
+  lo propone. Sin esto, cli-core 0.619.0 trataría cada vínculo como de un agente.
+
+## 0.70.0 — 08.11.2026
+
+### Añadido
+
+- **`zm <profile> session end`** elimina el inicio de sesión de Zoom guardado del perfil del llavero y del archivo privado.
+  Las reuniones guardadas se quedan.
+- **`zm <profile> account remove --keep-data|--delete-data`** quita un perfil de este equipo: elimina
+  su inicio de sesión, olvida el perfil en los ajustes y sus puntos de sincronización y, con `--delete-data`, elimina sus
+  reuniones del almacén. `--keep-data` las deja disponibles para la búsqueda. Los demás perfiles no cambian. Una programación del archivo
+  que aún funciona para el perfil detiene la eliminación: desactívala antes con `recordings schedule disable`. zm no
+  revoca el inicio de sesión en Zoom, solo lo olvida aquí.
+
+## 0.69.0 — 08.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **`--offline` en un comando que necesita Zoom puede rechazarse con `offline.refused`, código de salida 5**, antes de que el comando
+  se ejecute (cli-core 0.607.0). Decide según el motivo, no según el código de salida.
+- **El almacén pasa al esquema 57.** Los demás WireCat CLI que lo comparten necesitan una versión que entienda el 56 o posterior.
+
+### Corregido
+
+- **zm vuelve a abrir el almacén después de que otro WireCat CLI lo actualizara.** Un CLI con un cli-core más nuevo pasa el almacén
+  compartido a la versión 56 o posterior, que un zm anterior a esta versión rechaza. cli-core actualizado a 0.608.0.
+
+## 0.68.0 — 08.11.2026
+
+### Añadido
+
+- **`zm meetings sync` se detiene antes de su `--timeout` y continúa la próxima vez.** Lee las reuniones de la más antigua a la más reciente. Una ejecución
+  que se queda sin tiempo conserva lo que guardó, responde `stopped` y `remaining`, y la siguiente sincronización empieza en la primera
+  reunión a la que no llegó. De cli-core 0.601.0 (antes 0.600.0).
+- **`zm meetings sync --rescan`** vuelve a leer los últimos 30 días en lugar de empezar donde se detuvo la última sincronización.
+- **`zm meetings export` funciona con `ZM_READ_ONLY` y con la herramienta de lectura de MCP.** Sin `--output` solo muestra el resultado.
+  Con él, solo añade un archivo nuevo y rechaza uno que ya existe.
+- **`zm app` muestra qué introducir al crear la app de Zoom**: el tipo de app (General app, User-managed, Public
+  Client OAuth), la URL de redirección y la lista de permitidos, cada permiso que pide zm y la página de Marketplace, como una lista
+  numerada de comprobación, o como JSON con `--json`.
+- **`zm <profile> session start --json --answer-stdin` pide el Public Client ID cuando no hay una app de Zoom configurada**: una
+  línea `needs` con el campo `client_id`, que se responde por stdin. El inicio de sesión continúa con él y, cuando termina bien, lo guarda
+  como `zoom.client_id`, igual que `--client-id`.
+
+### Cambiado — puede romper la compatibilidad
+
+- **Por MCP, `meetings export` ya no acepta `--output`**: un agente recibe la exportación en la respuesta y no
+  elige dónde de tu disco va.
+- **Las búsquedas de nombres de cli-core tratan ё y е como una sola letra** (`Алена` encuentra `Алёна`). Un nombre que coincidía exactamente con uno
+  ahora puede coincidir con dos. En ese caso se rechaza mostrando ambos.
+- **El almacén pasa al esquema 55.** Los demás WireCat CLI que lo comparten necesitan una versión que lo entienda.
+- **Un inicio de sesión sin app de Zoom falla con el motivo `zoom.client-id-missing`** en lugar del motivo general de configuración,
+  para que quien llama decida según el motivo, no según el mensaje.
+
+### Corregido
+
+- cli-core actualizado a 0.604.0.
+
 ## 0.67.0 — 05.11.2026
 
 ### Añadido

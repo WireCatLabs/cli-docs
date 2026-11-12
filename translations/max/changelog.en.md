@@ -4,6 +4,107 @@ title: "Changelog"
 
 Notable changes to `@wirecat/max-cli`, one section per version, newest first. Versions follow [Semantic Versioning](https://semver.org/lang/ru/); the command interface may still change before `1.0.0`.
 
+## 0.111.0 — 12.11.2026
+
+### What's new
+
+- **The run record keeps the sync progress.** Each progress line of `messages sync` is now also a `sync.progress` event with counters, in any output format, so `max <profile> runs show <run>` shows what WireCat Desktop saw and when.
+- **Part of a name in `from:` and `chat:`.** `from:Ярослав*` and `chat:*Квестор*` match part of a name, alias or @username, ignoring case and ё/е. If nobody matches the pattern, the answer is `not_found` with the closest names. If more than 50 match, it is `query.too-large`: make the pattern narrower. A number and an exact name work as before. If several people have exactly that name, the error now also suggests those whose name only contains it: for «Ярослав», also «Ярослав Орлов».
+- **Part of a word in message text.** `*договор*` without a field finds «Договор», «ДОГОВОРЫ» and «переговоры», also in a large archive, inside `AND`, `OR`, `NOT` and together with `chat:` and `date:`. It needs three letters in a row.
+- **The start of a word searches where a whole word does.** `счет*` without a field now also finds the word in voice message transcripts, in text and in file names, and `matched_in` says where exactly.
+
+### Changed — may break scripts
+
+- **Built on cli-core 0.642.0** (was 0.638.0). The store stays at version 66. Details in the [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`*часть*` in message text is searched as written.** Before, `*мои*` also found «мой», and `*cafe*` also found «café». Now only case and ё/е are ignored. What to consider: write the letter as it stands in the text, or search for the whole word (`мой`), which still finds all its forms.
+- **Remote embeddings over plain http only on this computer.** `--base-url` or `embedding_base_url` with an `http://` address on another machine is now refused with `model.address-refused`: the messages would travel over the network unencrypted. What to consider: use `https://` or run the model on this computer (`localhost`, `127.0.0.1`). A saved setting is still read, and other commands do not break.
+- **`list:` in message search is now refused.** It is a mail field, and a query with it used to find nothing without saying why. Now the answer is `query.unsupported-field` with an explanation.
+- **Test data is hidden from people lists.** A person whose addresses are all test ones (`example.com`, `.test` and similar) or were added as an example is no longer shown in any view, `all` included.
+
+### Fixed
+
+- **`messages sync --all` shows progress inside a chat.** MAX returns a chat 30 messages at a time with a pause of 5–10 seconds, and the progress line came out only when the chat was finished: on a large chat WireCat Desktop showed «Чат 1 из 36 · 0» for minutes. Now the `fetched` counter grows after each page, at most twice a second.
+- **The password storage hint no longer sends you to cron.** If the profile has signed in but the token cannot be read, the error and `max <profile> doctor` now say that the storage is most likely locked: right after the computer starts, it opens when you log in to the system, and a scheduled run waits for that by itself. The advice about `XDG_RUNTIME_DIR` stays for cron and ssh.
+- **Daily and one-time schedules wait out a MAX request to wait.** If such a timer run gets `rate_limited`, it waits as long as MAX asked, if that is no more than six hours, and tries again instead of being lost until the next day. What to consider: a schedule with `--every` and a manual run still fail with an error at once.
+- **`*слово*` in text suggests a way out.** If such a pattern goes through too many words, the error now suggests `слово*`, which also finds the forms of the word.
+
+## 0.110.0 — 11.11.2026
+
+### What's new
+
+- **`participants_count` in search and statistics.** `participants_count<10` finds messages in chats with fewer than ten people, so `stats messages show -- 'kind:private OR (kind:group participants_count<10)'` counts private conversations without large groups.
+
+### Changed — may break scripts
+
+- **Built on cli-core 0.638.0** (was 0.633.0) and cli-base 0.96.0 (was 0.93.0). On first open the store moves to version 66.
+  `contacts unlink` now requires `--from person:<uid>` or `--from person:me`: the person the account is unlinked from. Without it the command refuses and says what to add. An account already recorded for another person does not move. Details in the
+  [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **Setting the system clock back no longer stops sync for hours.** If the computer's clock ran ahead and was corrected, max assumed MAX had asked it to wait and refused every sync, although it had not even contacted MAX. Now the wait is recalculated by the size of the shift, and the refusal no longer says that MAX asked to wait.
+
+## 0.109.0 — 10.11.2026
+
+### What's new
+
+- **`muted:` in search and statistics, from `@wirecat/cli-core` 0.633.0.** `muted:false` leaves out chats where you turned off notifications, so `stats messages show -- 'date>=30d muted:false'` counts only what sync still reads. `stats messages responses` and `stats messages waiting` understand it too.
+- **`store import`, from `@wirecat/cli-core` 0.633.0.** It loads made-up chats, people and messages from a file marked synthetic into a test store, for example the Desktop sandbox. It does not touch the owner's real store.
+
+## 0.108.0 — 10.11.2026
+
+### Changed — may break scripts
+
+- **Built on cli-core 0.630.0** (was 0.624.0). On first open the store moves to version 63. Each person's view is kept with the person, and saving chat members does not touch the rows of those who stayed, so `people list` in memo filters, counts and pages in SQL. Whoever wrote in a private chat or a small group now counts as the owner's person, no rule joins anyone to the owner, and a name matches in Cyrillic and Latin. A tool on an older cli-core that saves members erases the saved views, so max, tg and memo move together. What changed between the versions is in the
+  [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.107.0 — 09.11.2026
+
+### Changed — may break scripts
+
+- **Built on cli-core 0.624.0** (was 0.618.0). On first open the store moves to version 61 (people's ties to the owner, additions only). What changed between the versions is in the
+  [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`search messages --timeout 30s` searches for up to 29 seconds.** Before, search stopped after 2 seconds however much time the run was given, and a correct query on a large store failed in WireCat Desktop. Without `--timeout` the limit stays 2 seconds, also for agents and MCP.
+- **`schedule pause <имя>` and `schedule resume <имя>`**: the schedule is taken off the timer and kept, and `schedule run` still runs it. `--at` can be given several times: `--at 08:30 --at 18:00`.
+
+## 0.106.0 — 09.11.2026
+
+### What's new
+
+- **A pull request writes its changelog lines to a separate file, `changes/<ветка>.md`.** Open pull requests no longer conflict in the "Unreleased" section. `pnpm docs:check` checks each such file, and `bin/release` collects them into the version's section. During the transition an entry under "Unreleased" also works.
+
+### Fixed
+
+- **`max serve` exits when its version is outdated, and the service starts the new one.** Once a minute it checks whether the shared store has moved to a format this version can no longer write, and whether a newer version of max is installed. If so, it writes `serve.outdated` to the log and exits with code 3, and the systemd service (`Restart=on-failure`) starts the installed version. Why: before, `serve` could keep running on an old version and save nothing.
+- **After `max store recover run`, a normal sync loads again what may have been lost in the damage.** Recovery marks as not loaded everything the chat held from one day before the last passed deep check. From cli-core 0.618.0 (was 0.616.0).
+
+## 0.105.0 — 09.11.2026
+
+### What's new
+
+- **`max <профиль> account remove --keep-data|--delete-data` signs the profile out of MAX and erases it on this computer.**
+  The command ends the session on the MAX server, then deletes the token from the keyring and the profile files: the state, the socket and the `max serve` log, and with them what the shared layer keeps for the profile. `--keep-data` keeps the messages in the store, and search finds them. `--delete-data` deletes them too. Other profiles are not affected.
+  Why: until now `session end` forgot only the token and left the rest of the profile behind.
+  What to consider: while `max serve` runs for the profile, the command refuses, as `session end` does: first
+  `max <профиль> server stop`. The bot token (`bot:<профиль>`) stays: a bot is a separate account. A run with moved folders forgets only its own copy and does not sign the owner out of MAX.
+
+## 0.104.0 — 08.11.2026
+
+### Changed — may break scripts
+
+- **`max` opens a store that memo and other WireCat tools have already upgraded, and upgrades it to version 57 itself.** A store at version 56 or later cannot be opened by `max` 0.103.0 and older or by any tool on cli-core older than 0.606.0: they ask you to update.
+  What to consider: update `max`, `tg` and memo together (cli-core 0.606.0, 0.607.0).
+- **`--offline` on a command that needs MAX answers `permission_error` (`offline.refused`) with exit code 5.** Before, `chats inspect`, `chats events`, `chats folders …` and `upgrade` answered `validation_error` with code 2.
+  What to consider: a script that expects code 2 there must expect 5 (cli-core 0.607.0).
+- **`contacts context` and `contacts prepare` read only accounts of the same sphere as the profile.** A personal profile no longer shows a person's mail, messages, events and meetings from work accounts, and a work profile no longer shows them from personal ones. The answer has a new `accounts` field: each account read and its sphere (cli-core 0.605.0).
+- **A name typed with «е» finds a chat or person with «ё».** A name that used to match one chat or person may now match two (`Алена` and `Алёна`). Then `max` refuses and names both, as with any ambiguous name (cli-core 0.601.0).
+- **Search reads a query as plain words more often.** `?` at the end of a word is a question mark: `счёт?` finds «счёт». Text with a colon, a link, a bracket or an unclosed quote (`встреча в 10:30`) is searched as words, where search used to refuse (cli-core 0.602.0, 0.604.0).
+
+### Fixed
+
+- **A damaged store file stops writes and names `max store recover`.** Before, a command that got «database disk image is malformed» from SQLite failed with `internal_error`. Now the answer is `configuration_error` (`store.damaged`), and the next commands that write refuse until a deep check or recovery passes. Reading works (cli-core 0.605.0).
+- **People you separated are not joined again.** A third contact with the same email address could join two people again after you had separated them (cli-core 0.605.0).
+
 ## 0.103.0 — 07.11.2026
 
 ### Changed — may break scripts
@@ -2232,7 +2333,7 @@ Commands follow one naming rule: subject first, then action. Old names no longer
 
 ### New
 
-- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.103.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
+- **`max bot` uses the official Bot API.** `max bot auth set` verifies and stores its token separately in the keyring. Profiles go first: `max рабочий bot me`. `max bot me` shows the bot; `max bot api <операция>` calls any of 33 operations with parameter flags and JSON bodies, generated from the [official schema](https://github.com/WireCatLabs/max-cli/blob/v0.111.0/docs/dev/bot-api-coverage.md). IDs above 2^53 are strings; scripts must treat them accordingly.
 - **Convenient bot commands.** `max <имя> bot messages send <чат> <текст>` sends to a chat by number, to a person as `user:<номер>`, or by the title of a chat the bot has seen; `edit`, `delete`, `list` and `get` are also available. `max <имя> bot chats list` shows chats the bot has seen, alongside `chats get|pin|unpin|leave|action`. `max bot list` shows every name with a bot token.
   Why “has seen”: MAX has no bot chat list, so `max` remembers chats itself.
 - **Bot recipients and logs:** `max <имя> bot recipients add|list|remove|off`, `max <имя> bot sends list`. Every write, including `bot api`, checks recipients. No hourly bot limit existed until 0.17.0. See [Bots](./bot.md).

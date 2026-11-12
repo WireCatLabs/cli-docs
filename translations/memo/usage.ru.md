@@ -31,7 +31,7 @@ Show the matching text and the source of each result.
 Если вы знаете, где что-то лежит, ищите только там:
 
 ```sh
-memo search all 'venue'               # messages, mail, notes and calendar events together
+memo search all 'venue'               # messages, mail, notes, events, CRM and meetings together
 memo search notes 'venue'             # notes only
 memo search mail 'from:kai invoice'   # mail only
 ```
@@ -250,3 +250,11 @@ personal work` переносит его одной записью: сначал
 которую он входит. Без блокировки группа это удобство, а не граница: ссылки (`msg:…`, `deal:5`) не проверяются, а
 запуск без имени группы читает все аккаунты. Чтобы закрепить процесс за одной группой, смотрите
 [блокировку MCP](./mcp.md#lock-an-agent-to-a-group).
+
+Каждый аккаунт личный или рабочий: рабочие представления и подготовка к встрече читают только рабочие аккаунты. Каждый
+аккаунт личный, пока вы не скажете иначе, кроме того, что добавляет CLI для CRM, например `b24`: он сразу рабочий.
+`memo groups update
+bitrix24:acme --scope work` переносит один аккаунт вместе с тем, что поиск скопировал из его прежней области, а
+`groups list` показывает `scope` каждого аккаунта. `--chat 7 --scope work` закрепляет один чат аккаунта, а
+`--scope account` снова позволяет этому чату следовать за своим аккаунтом. Область меняете только вы: агент через MCP
+этой команды не видит.

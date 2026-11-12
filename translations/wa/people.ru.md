@@ -19,6 +19,7 @@ title: "Контекст общения с человеком"
 | Прочитайте, что они сказали, в каждом чате или в названных вами чатах | `wa personal contacts context` |
 | Зафиксируйте, что аккаунт WhatsApp и аккаунт Telegram или MAX — это одно лицо | `wa personal contacts link` |
 | Сохраняйте свое имя и заметки для человека | `wa personal contacts aliases`, `wa personal contacts notes` |
+| Сохраните человека в контактах WhatsApp или переименуйте его там | `wa personal contacts add`, `wa personal contacts rename` |
 
 Все параметры этих команд приведены в [справке по командам](./commands.md).
 
@@ -54,10 +55,15 @@ WhatsApp, Telegram и MAX используют одну локальное хр�
 
 ```sh
 wa personal contacts link 100000000000001@lid max:"Example User"
-wa personal contacts unlink 100000000000001@lid
 ```
 
 После этого `contacts context` без `--chat` собирает обе учетные записи. `contacts context --chat` по-прежнему показывает только указанную вами аккаунт. Ссылка — это только то, что вы записываете: одно и то же имя в двух мессенджерах никогда не воспринимается как один и тот же человек.
+
+Чтобы отменить связь, назовите аккаунт и человека, от которого он отделяется. Без `--from` команда отклоняется, а ошибка называет человека, к которому привязан аккаунт:
+
+```sh
+wa personal contacts unlink 100000000000001@lid --from person:12
+```
 
 ## Ваши собственные имена и примечания: `contacts aliases`, `contacts notes`
 
@@ -80,6 +86,8 @@ wa personal contacts notes list 100000000000001@lid
 wa personal contacts show 100000000000001@lid        # their name, about line and whether they show a photo
 wa personal contacts block 100000000000001@lid
 wa personal contacts unblock 100000000000001@lid
+wa personal contacts add 100000000000001@lid          # save them under the name WhatsApp shows
+wa personal contacts rename 100000000000001@lid Ana Lima   # save them under your name for them
 wa personal contacts lookup < number.txt                # whether this number has WhatsApp, and its id
 wa personal contacts sync                                # the phone's address book into the local store
 ```
@@ -88,7 +96,8 @@ wa personal contacts sync                                # the phone's address b
 
 - `contacts show` ничего не говорит человеку. Не показывает номер телефона, поэтому `--hide-phone` здесь ничего не меняет. `--offline` отвечает только из локального хранилища.
 - `contacts lookup` считывает число из стандартного ввода, а не из командной строки, и ничего на него не отправляет. Для профиля требуется одно число, максимум одно каждые 10 секунд: множество поисков подряд — вот за что WhatsApp запрещает парсеры.
-- WhatsApp хранит вашу адресную книгу на телефоне, поэтому `contacts add`, `remove`, `rename` и `import` отклоняются.
+- `contacts add` сохраняет человека под именем, которое WhatsApp показывает для него, а `contacts rename` под именем, которое даёте вы. Это имя контакта WhatsApp: оно видно на каждом устройстве аккаунта, а человеку ничего не отправляется. Для того, кто сохранён в приложении «Контакты» на телефоне, телефон продолжает показывать имя из этого приложения, и wa его не меняет. Собственный номер аккаунта wa отклоняет.
+- `contacts remove` и `import` отклоняются: связанное устройство не может удалить контакт WhatsApp, а за массовый импорт WhatsApp блокирует сборщиков контактов.
 
 ## Следующий шаг
 
