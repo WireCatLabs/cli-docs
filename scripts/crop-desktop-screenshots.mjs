@@ -40,6 +40,9 @@ const docsScreens = [
   "clients",
   "digests",
   "memory-add",
+  "sync-error",
+  "failed-run",
+  "report",
 ]
 const docs = process.argv.includes("--docs")
 const full = { left: 0, top: 0, width: 1440, height: 900 }

@@ -7,7 +7,7 @@ La página **Registros** de WireCat Desktop muestra lo que cada herramienta de l
 
 ## Qué muestra la página
 
-Las seis herramientas guardan logs de ejecución: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`) y Memo (`memo`). La aplicación los lee con los comandos `runs list` y `runs show` de cada herramienta. Un Zoom, Google Drive o Memo más antiguo no tiene logs de ejecución; actualízalo para verlos. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Load older** lee las 500 siguientes.
+Todas las herramientas de WireCat guardan logs de ejecución: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`), Memo (`memo`), Correo (`mail`), Google Calendar (`gcal`) y Bitrix24 (`b24`). La aplicación los lee con los comandos `runs list` y `runs show` de cada herramienta. Un Zoom, Google Drive o Memo más antiguo no tiene logs de ejecución; actualízalo para verlos. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Load older** lee las 500 siguientes.
 
 ## Por qué casi todo son fallos
 
@@ -100,6 +100,14 @@ Elige **Última 1 h**, **Últimas 24 h**, **Últimos 7 d**, **Últimos 30 d** o 
 
 ## Abrir una ejecución
 
+<DesktopShot
+  shot="failed-run"
+  folder="desktop/docs"
+  lang="es"
+  alt="Registros: una ejecución fallida abierta, Qué salió mal muestra el error completo"
+  caption="Una ejecución abierta: el error completo, sus pasos y el botón Copiar JSON."
+/>
+
 Haz clic en una ejecución para abrirla. Verás:
 
 - **Pasos**: las solicitudes que la herramienta hizo al servicio y los pasos importantes de la ejecución, con la hora, el resultado y la duración de cada uno. Haz clic en un paso para ver todos sus campos.
@@ -107,6 +115,28 @@ Haz clic en una ejecución para abrirla. Verás:
 - **Copiar JSON** copia el registro completo. Puedes adjuntarlo a un informe de error o darlo a tu agente.
 
 **Copiar el id de la ejecución** copia el identificador de la ejecución. Puedes usarlo con el comando `runs show` de la herramienta.
+
+## Logs en el terminal
+
+Los comandos `runs` de la herramienta leen las mismas ejecuciones. Sirven cuando la aplicación no se abre, o para
+darle la salida a un agente. **Abrir terminal** en la tarjeta de la herramienta abre un terminal donde la herramienta
+ya está lista.
+
+```sh
+tg personal runs list status:failed --limit 10
+tg personal runs show 20261025T100000Z-sync-a1b2c3 --problems
+tg personal runs path 20261025T100000Z-sync-a1b2c3
+```
+
+- `runs list` muestra las últimas ejecuciones, primero las nuevas. La búsqueda que sigue es la misma que en esta
+  página, y `--limit` y `--page` pasan las páginas de la lista.
+- `runs show <id>` muestra una ejecución con todos sus pasos. Con `--problems`, solo los errores, los avisos y los
+  fallos.
+- `runs path <id>` imprime la carpeta con los archivos de la ejecución. Puedes abrirla o añadirla a un informe.
+
+Pon tu herramienta y tu perfil, por ejemplo `b24 Anna runs list` o `mail work runs list`. Zoom y Memo no tienen
+perfil: `zm runs list`, `memo runs list`. Qué hacer con el error que encuentres se explica en
+[Si algo no funciona](./troubleshooting.mdx).
 
 ## Privacidad
 
