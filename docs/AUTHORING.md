@@ -255,6 +255,19 @@ conversation history. Prefer running the hidden-input command personally when po
 a categorical claim that the user cannot share it. Keep short optional creation instructions
 in a disclosure and preserve them in the Markdown counterpart.
 
+## Pages a reader opens because something broke
+
+A reader on a troubleshooting or error page came for help, often worried. Show at once that the help is here and how
+long it takes; do not open with how the product is built.
+
+- Open with the symptom in the reader's words ("a sync stopped, a sign-in failed"), then what they will be able to do.
+  Do not open with internal parts (tool, run, code, profile); introduce each where the reader meets it.
+- Put a numbered table of contents right after the opening.
+- Then two short sections: what happened, as a few plain cases, and the ways to fix it, from the cheapest (the app's
+  own hint) to writing to us. Details for each way come after them, in the same order.
+- Exact codes, reasons and exit codes go last, as a reference. A reader should be able to recover without them.
+- End with how to check that it is fixed and what to send if it is not.
+
 ## Mandatory opening order for every public page
 
 1. State what the page is about and the situation it addresses.

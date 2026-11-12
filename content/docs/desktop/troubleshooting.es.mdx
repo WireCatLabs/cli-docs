@@ -1,131 +1,133 @@
 ---
 title: Errores y cómo resolverlos
-description: Cómo leer el error de una herramienta, dónde encontrar su texto completo y sus logs, qué darle a tu agente y cómo informar de un problema.
+description: "Qué hacer cuando WireCat Desktop muestra un error: entender qué pasó, resolverlo tú o con tu agente de IA y escribirnos si no funciona."
 ---
 
-Cuando una herramienta falla en WireCat Desktop, la aplicación muestra un error corto en la tarjeta de la herramienta.
-Aquí aprendes a entender ese error, a encontrar su texto completo, a darle a tu agente lo que necesita para arreglarlo y
-a informar del problema si el agente no pudo ayudar.
+Algo no funcionó: una sincronización se detuvo, el inicio de sesión falló o WireCat mostró un aviso. Aquí sabrás qué
+pasó y cómo resolverlo: con la indicación de la aplicación, con tu agente de IA o con nuestra ayuda. A menudo basta con
+un par de minutos.
 
-## El error en la tarjeta de la herramienta
+**En esta página:**
 
-Un error de sincronización o de inicio de sesión aparece en la tarjeta de la cuenta, en la página **Herramientas**. La
-primera línea dice con palabras sencillas qué pasó y qué hacer. Pulsa **Detalles** para ver el código del error y el
-botón **Abrir la ejecución en Registros**.
+1. [Qué pasó](#qué-pasó)
+2. [Cómo resolverlo](#cómo-resolverlo)
+3. [Dónde se ve el error](#dónde-se-ve-el-error)
+4. [El error completo en Registros](#el-error-completo-en-registros)
+5. [El error en el terminal](#el-error-en-el-terminal)
+6. [Pide ayuda a tu agente](#pide-ayuda-a-tu-agente)
+7. [Escríbenos](#escríbenos)
+8. [Comprueba que está resuelto](#comprueba-que-está-resuelto)
+9. [Referencia de códigos de error](#referencia-de-códigos-de-error)
+
+## Qué pasó
+
+Casi cualquier error en WireCat es uno de estos cuatro casos:
+
+- **El servicio pidió esperar o no respondió.** Telegram, el correo o Bitrix24 limitan con qué frecuencia se les puede
+  pedir algo, a veces no están disponibles, o se cortó internet. Normalmente se pasa solo.
+- **El inicio de sesión ya no funciona.** La sesión caducó, cambió la contraseña o se revocó el acceso en el servicio.
+- **Falta un ajuste.** WireCat no sabe qué hacer hasta que eliges, por ejemplo, de quién son las negociaciones que se
+  copian.
+- **Algo se rompió de nuestro lado.** Entonces solo nosotros podemos arreglarlo, y tu informe nos ayuda.
+
+La indicación bajo el error dice con palabras sencillas qué caso es.
+
+## Cómo resolverlo
+
+1. **Haz lo que dice la indicación.** Pulsa **Sincronizar de nuevo**, vuelve a iniciar sesión o espera. A menudo basta
+   con eso.
+2. **Lee el texto completo del error** en Registros. Dice qué pasó exactamente y qué comando ejecutar.
+3. **Pide ayuda a tu agente de IA**, por ejemplo Claude Code. Lee los registros por sí mismo y propone una solución.
+4. **Escríbenos** con **Informar de un problema** en la aplicación, o en el chat de soporte.
+
+Abajo se explica cada forma en detalle.
+
+## Dónde se ve el error
+
+Los errores de sincronización y de inicio de sesión aparecen en la página **Herramientas**. Ahí están conectados tus
+servicios: Telegram, el correo, Bitrix24 y otros, cada uno con su tarjeta. El error se ve en la tarjeta de la cuenta
+que tuvo el problema. Su primera línea dice qué pasó y qué hacer.
 
 <DesktopShot
   shot="sync-error"
   folder="desktop/docs"
   lang="es"
   alt="La tarjeta de Telegram con un error porque hay otra sincronización en curso; bajo Detalles el código provider_unavailable · profile.locked y el botón Abrir la ejecución en Registros"
-  caption="Un error en la tarjeta de la cuenta. Detalles muestra su código y su motivo, y el botón de abajo abre esa ejecución en Registros."
+  caption="Un error en la tarjeta de la cuenta. Detalles muestra el código del error, y el botón de abajo abre los detalles en Registros."
 />
 
-La línea bajo **Detalles** tiene dos partes, por ejemplo `provider_unavailable · profile.locked`:
+Pulsa **Detalles** para ver el código del error, por ejemplo `provider_unavailable · profile.locked`, y el botón
+**Abrir la ejecución en Registros**. El código nos sirve a nosotros o a tu agente. Qué significa cada código está en la
+[referencia al final de la página](#referencia-de-códigos-de-error).
 
-- El **código** (`provider_unavailable`) dice de qué tipo es el error. Hay 15 códigos, los mismos en todas las
-  herramientas de WireCat. La tabla está más abajo.
-- El **motivo** (`profile.locked`) dice con más precisión qué pasó. Aquí, otra ejecución está usando el perfil ahora.
-
-La tarjeta no muestra el texto completo del error, porque puede nombrar chats y personas. El texto está en Registros y
-en el terminal, como se explica abajo.
-
-### Cuando el motivo es general
-
-Los motivos `config.invalid`, `input.invalid`, `auth.failed`, `access.denied` e `item.not-found` son generales. Una
-herramienta los pone cuando no nombró un motivo exacto. Solo dicen de qué tipo es el error. Qué pasó y qué comando lo
-arregla están en el texto completo del error, así que abre la ejecución en Registros.
-
-### Códigos de error
-
-| Código | Qué significa | Qué hacer | Código de salida |
-| --- | --- | --- | --- |
-| `validation_error` | El comando o sus datos no son correctos | Lee el texto del error, dice qué está mal | 2 |
-| `configuration_error` | Falta un ajuste, o el archivo de ajustes está roto | El texto del error nombra el comando que lo arregla. `doctor` revisa los ajustes | 3 |
-| `authentication_error` | El inicio de sesión ya no funciona: la sesión caducó o la clave se revocó | Vuelve a iniciar sesión en la tarjeta de la cuenta | 4 |
-| `permission_error` | La cuenta no puede hacer esto, o se lo prohibiste a los agentes | Revisa los permisos de la cuenta en el servicio, o los permisos en la página de la herramienta | 5 |
-| `not_found` | No existe ese chat, registro o perfil | Revisa el nombre o el id, y el perfil | 6 |
-| `confirmation_required` | El comando cambia algo y espera que lo confirmes | Confirma si estás de acuerdo con el cambio | 7 |
-| `rate_limited` | El servicio pide esperar | Espera. Una sincronización sigue sola | 8 |
-| `timeout` | El servicio no respondió a tiempo | Vuelve a intentarlo más tarde | 9 |
-| `network_error` | No hay conexión con el servicio | Revisa internet, la VPN o el proxy | 10 |
-| `provider_error` | El servicio respondió con un error | Vuelve a intentarlo. Si se repite, informa del problema | 11 |
-| `provider_unavailable` | El servicio o el perfil no está disponible ahora, por ejemplo hay otra sincronización en curso | Espera y pulsa **Sincronizar de nuevo** | 12 |
-| `invalid_response` | El servicio respondió de una forma que la herramienta no esperaba | Informa del problema | 13 |
-| `outcome_unknown` | No se sabe si el cambio se hizo | Revisa primero el resultado en el servicio y solo después repite, para no enviarlo dos veces | 14 |
-| `conflict` | El estado actual lo impide, por ejemplo ya existe | Lee el texto del error | 15 |
-| `cancelled` | La ejecución se detuvo | Nada, si la detuviste tú | 130 |
-
-El código de salida sirve en el terminal y en los scripts: la herramienta termina con ese número.
+La tarjeta no muestra el texto completo del error. Puede nombrar chats y personas, así que la aplicación lo muestra
+solo en Registros.
 
 ## El error completo en Registros
 
-**Abrir la ejecución en Registros** abre esa ejecución en la página **Registros**. **Qué salió mal** muestra el texto
-completo del error, la petición en la que pasó y lo que respondió el servicio.
+Cada vez que WireCat hace algo con un servicio, por ejemplo sincronizarlo, Registros lo guarda como una **ejecución**.
+**Abrir la ejecución en Registros** abre la ejecución fallida en la página **Registros**. **Qué salió mal** muestra el
+texto completo del error, la petición en la que pasó y lo que respondió el servicio.
 
 <DesktopShot
   shot="failed-run"
   folder="desktop/docs"
   lang="es"
-  alt="Registros: abierta una ejecución fallida de tg messages read, Qué salió mal muestra rate_limited y el texto del error"
-  caption="Una ejecución abierta en Registros. Qué salió mal da el error completo, y Copiar JSON más abajo copia todo el registro de la ejecución."
+  alt="Registros: abierta una ejecución fallida, Qué salió mal muestra rate_limited y el texto del error"
+  caption="Una ejecución fallida en Registros. Qué salió mal da el error completo, y Copiar JSON copia todo el registro."
 />
 
-**Copiar JSON** copia todo el registro de la ejecución. Puedes dárselo a tu agente o añadirlo a un informe. Los datos
-personales ya están ocultos. Cómo buscar ejecuciones y qué guardan se explica en la página [Registros](./logs.mdx).
+El texto del error suele decir qué hacer, a veces con un comando listo. **Copiar JSON** copia todo el registro de la
+ejecución: puedes dárselo a tu agente o añadirlo a un informe. Los datos personales ya están ocultos. Cómo buscar en
+Registros se explica en la página [Registros](./logs.mdx).
 
-## El error y los logs en el terminal
+## El error en el terminal
 
-**Abrir terminal** en la tarjeta de la herramienta abre un terminal donde la herramienta ya está lista. Ahí puedes ver
-el error completo de dos maneras.
+Si usas el terminal, o la aplicación no se abre, también puedes ver ahí el error completo. **Abrir terminal** en la
+tarjeta abre un terminal donde el programa ya está listo.
 
-Vuelve a ejecutar el comando que falló. Para una sincronización es `sync`, por ejemplo Bitrix24 con el perfil `Anna`:
+Repite lo que falló. Para una sincronización es `sync`, por ejemplo Bitrix24 con la cuenta `Anna`:
 
 ```sh
 b24 Anna sync
 ```
 
-O lee el registro de una ejecución anterior con los comandos `runs`, que tiene cada herramienta:
+O lee los registros de ejecuciones anteriores:
 
 ```sh
 b24 Anna runs list status:failed --limit 5
 b24 Anna runs show 20261112T095912Z-sync-54a1a4 --problems
-b24 Anna runs path 20261112T095912Z-sync-54a1a4
 ```
 
-- `runs list` muestra las últimas ejecuciones. La búsqueda que sigue es la misma que en la página **Registros**.
-- `runs show <id>` muestra una ejecución con todos sus pasos. Con `--problems`, solo los errores y los avisos.
-- `runs path <id>` imprime la carpeta con los archivos de la ejecución.
+`runs list` muestra las últimas ejecuciones fallidas, y `runs show` una ejecución con todos sus pasos. Pon tu servicio
+y tu cuenta en lugar de `b24` y `Anna`, por ejemplo `tg personal runs list` o `mail work runs list`. Todos los comandos
+de Registros están en [Logs en el terminal](./logs.mdx#logs-en-el-terminal).
 
-Pon tu herramienta y tu perfil en lugar de `b24` y `Anna`: `tg personal runs list`, `mail work runs list`. Zoom y Memo
-no tienen perfil: `zm runs list`, `memo runs list`.
+`doctor` lo revisa todo de una vez, por ejemplo `tg personal doctor` o `memo doctor`. Revisa el inicio de sesión, los
+ajustes y los archivos, y dice qué arreglar.
 
-`doctor` revisa la herramienta entera, por ejemplo `tg personal doctor` o `memo doctor`. Revisa el inicio de sesión,
-los ajustes, el almacenamiento y los permisos de los archivos, y dice qué arreglar.
+## Pide ayuda a tu agente
 
-## Qué darle a tu agente
+Tu agente de IA, por ejemplo Claude Code o Codex, sabe leer los registros de WireCat y a menudo encuentra la causa
+antes. Dale:
 
-Un agente como Claude Code o Codex sabe leer los logs de las herramientas y a menudo encuentra la causa antes. Dale:
-
-- la línea del error de la tarjeta, por ejemplo `configuration_error · config.invalid`, y la herramienta con su
-  perfil;
-- el registro de la ejecución copiado con **Copiar JSON**, o la salida de `runs show`;
-- la salida de `doctor` de esa herramienta.
+- el código del error de la tarjeta, por ejemplo `configuration_error · config.invalid`, y el servicio y la cuenta;
+- el registro de la ejecución copiado con **Copiar JSON**, si lo tienes.
 
 Puedes escribir:
 
 ```text
-WireCat: la sincronización de Bitrix24 del perfil Anna falla
+WireCat: la sincronización de Bitrix24 de la cuenta Anna falla
 con configuration_error · config.invalid. Busca la causa en los logs
 de b24 (b24 Anna runs list status:failed) y dime qué hacer.
 ```
 
 No le des a tu agente códigos de inicio de sesión, contraseñas ni claves. No los necesita para revisar un error.
 
-## Cómo informar de un problema
+## Escríbenos
 
-Si tu agente no pudo ayudar, pulsa **Informar de un problema** arriba en la ventana de la aplicación, o **Informar**
-junto al error.
+Si tu agente no pudo ayudar, pulsa **Informar de un problema** arriba en la ventana, o **Informar** junto al error.
+Describe qué hacías, qué pasó y qué esperabas.
 
 <DesktopShot
   shot="report"
@@ -137,8 +139,8 @@ junto al error.
 
 - El informe se convierte en una incidencia pública (issue) en GitHub, para que puedas seguirla. Las direcciones de
   correo, los números de teléfono y los tokens del texto se ocultan antes, en tu ordenador.
-- Con el informe van los últimos logs de error de tus herramientas. Nunca se publican: se guardan en el servidor de
-  WireCat 90 días y después se borran. Más en la [política de privacidad](/es/privacy#bug-reports).
+- Con el informe van los últimos registros de error. Nunca se publican: se guardan en el servidor de WireCat 90 días y
+  después se borran. Más en la [política de privacidad](/es/privacy#bug-reports).
 - No se envía nada hasta que pulsas **Enviar informe**.
 
 O escribe en el [chat de soporte en Telegram](https://t.me/wirecatdev), tema Ayuda, o en
@@ -148,9 +150,45 @@ O escribe en el [chat de soporte en Telegram](https://t.me/wirecatdev), tema Ayu
 Qué hice: conecté Bitrix24, pulsé Sincronizar de nuevo
 Esperaba: que las negociaciones aparecieran en la página Clientes
 Pasó: configuration_error · config.invalid, captura abajo
-Versiones: del botón ?, Acerca de WireCat, Copiar los datos de la versión
+Versiones: el botón ?, Acerca de WireCat, Copiar los datos de la versión
 Sistema: Windows 11
 Mi agente dijo: no hay usuarios del CRM elegidos
 ```
 
 No envíes códigos de inicio de sesión, contraseñas, claves ni mensajes de otras personas.
+
+## Comprueba que está resuelto
+
+Repite lo que falló, por ejemplo pulsa **Sincronizar de nuevo** en la tarjeta. Está resuelto cuando el error desaparece
+de la tarjeta y la nueva ejecución en Registros tiene el estado **Correcta**. Si el error vuelve, escríbenos con su
+código y el registro de la ejecución.
+
+## Referencia de códigos de error
+
+El código bajo **Detalles** tiene dos partes, por ejemplo `provider_unavailable · profile.locked`. El **código**
+(`provider_unavailable`) dice de qué tipo es el error, y es el mismo en todos los programas de WireCat. El **motivo**
+(`profile.locked`) dice con más precisión qué pasó: aquí, otra ejecución está usando la cuenta ahora.
+
+Los motivos `config.invalid`, `input.invalid`, `auth.failed`, `access.denied` e `item.not-found` son generales. Se usan
+cuando no hay un motivo exacto, y solo dicen de qué tipo es el error. Lo que pasó de verdad está en el texto completo
+del error en Registros.
+
+| Código | Qué significa | Qué hacer | Código de salida |
+| --- | --- | --- | --- |
+| `validation_error` | El comando o sus datos no son correctos | Lee el texto del error, dice qué está mal | 2 |
+| `configuration_error` | Falta un ajuste, o el archivo de ajustes está roto | El texto del error nombra el comando que lo arregla. `doctor` revisa los ajustes | 3 |
+| `authentication_error` | El inicio de sesión ya no funciona: la sesión caducó o la clave se revocó | Vuelve a iniciar sesión en la tarjeta de la cuenta | 4 |
+| `permission_error` | La cuenta no puede hacer esto, o se lo prohibiste a los agentes | Revisa los permisos de la cuenta en el servicio, o los permisos en la página del servicio en WireCat | 5 |
+| `not_found` | No existe ese chat, registro o perfil | Revisa el nombre o el id, y la cuenta | 6 |
+| `confirmation_required` | El comando cambia algo y espera que lo confirmes | Confirma si estás de acuerdo con el cambio | 7 |
+| `rate_limited` | El servicio pide esperar | Espera. Una sincronización sigue sola | 8 |
+| `timeout` | El servicio no respondió a tiempo | Vuelve a intentarlo más tarde | 9 |
+| `network_error` | No hay conexión con el servicio | Revisa internet, la VPN o el proxy | 10 |
+| `provider_error` | El servicio respondió con un error | Vuelve a intentarlo. Si se repite, escríbenos | 11 |
+| `provider_unavailable` | El servicio o la cuenta no está disponible ahora, por ejemplo hay otra sincronización en curso | Espera y pulsa **Sincronizar de nuevo** | 12 |
+| `invalid_response` | El servicio respondió de una forma inesperada | Escríbenos | 13 |
+| `outcome_unknown` | No se sabe si el cambio se hizo | Revisa primero el resultado en el servicio y solo después repite, para no enviarlo dos veces | 14 |
+| `conflict` | El estado actual lo impide, por ejemplo ya existe | Lee el texto del error | 15 |
+| `cancelled` | La ejecución se detuvo | Nada, si la detuviste tú | 130 |
+
+El código de salida sirve en el terminal y en los scripts: el programa termina con ese número.
