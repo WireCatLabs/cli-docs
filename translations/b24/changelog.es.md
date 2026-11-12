@@ -4,6 +4,62 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.15.0 — 12.11.2026
+
+### Añadido
+
+- **`account remove` olvida un perfil.** `b24 <profile> account remove --keep-data` olvida la dirección del webhook o
+  el inicio de sesión de la aplicación local, los ajustes del perfil y sus archivos en este ordenador. Deja su copia
+  del portal en el almacén, donde la búsqueda la sigue encontrando. `--delete-data` borra además las negociaciones,
+  los prospectos, los contactos, las empresas y el estado de sincronización del portal. Pregunta antes, o acepta
+  `--yes`. `--dry-run` muestra lo que quitaría y lo que conservaría. Es el comando compartido de cli-core, con la misma
+  respuesta que las demás herramientas de WireCat, así que WireCat Desktop quita una cuenta de Bitrix24 de la misma
+  forma. El webhook sigue en Bitrix24. `--delete-data` se niega (motivo `account-remove.portal-shared`) mientras otro
+  perfil de este ordenador lee el mismo portal, porque el almacén guarda una sola copia de él.
+- **Una tarea cuando una negociación o un prospecto entra en una etapa.** El ajuste
+  `crm.bitrix24:<portal>.stage-tasks` nombra etapas, y cada `sync` abre una tarea local por cada negociación o
+  prospecto que pasó a una de ellas desde la última sincronización, una vez por cada paso. Solo tú lo pones. Los pasos
+  hechos antes de ponerlo por primera vez no abren ninguna. Consulta
+  [una tarea cuando una negociación entra en una etapa](./usage.md#a-task-when-a-deal-enters-a-stage).
+- **Completar comandos en la terminal:** `b24 complete zsh` imprime el script que debes cargar. También para bash, fish y
+  PowerShell.
+- **Los comandos del archivo del almacén compartido y los informes de problemas.** `b24 store backup`, `check`,
+  `repair`, `restore` y los demás cuidan el único archivo de almacén que comparten todas las herramientas de WireCat.
+  `b24 doctor reports create` escribe un informe para enviar con un problema. Un agente por MCP también los ve, cada
+  uno con su permiso, como cualquier escritura.
+- **`b24` te avisa cuando sale una versión nueva**, tras un comando que terminó bien, por stderr. `update_check: false`
+  o `B24_NO_UPDATE_CHECK=1` lo desactiva.
+
+### Cambiado — puede romper llamadas
+
+- **Sobre cli-core 0.644.0.** Una página de una lista del CRM responde `hasMore` y `nextCursor`, la forma única de las
+  listas de cli-core.
+- **`session start` rechaza un webhook que ya usa otro perfil.** El mismo portal y el mismo empleado que un perfil con
+  sesión iniciada en este ordenador dan un `conflict` con el motivo `session.duplicate`. La respuesta nombra ese
+  perfil y dice cómo volver a iniciar su sesión o quitarlo. No se pregunta nada al portal. Volver a iniciar sesión con
+  el mismo perfil, y el webhook de otro empleado en el mismo portal, siguen funcionando.
+
+### Corregido
+
+- **Un webhook sin el permiso de usuarios dice qué marcar.** Cuando `user.current` responde `INSUFFICIENT_SCOPE`,
+  `session start` dice que al webhook le falta "Users (basic)" (`user_basic`, «Пользователи (базовый)»), dónde
+  añadirlo en el portal (Developer resources → Integrations, edita el webhook) y que vuelvas a iniciar sesión con la
+  dirección que muestra. El motivo sigue siendo `webhook.scope-missing` y el inicio de sesión sigue rechazado.
+- **Una sincronización copia tus propias negociaciones y prospectos sin configurar nada.** Hasta que elijas usuarios
+  en `crm.bitrix24:<portal>.unassigned`, una sincronización copia las negociaciones y los prospectos del usuario que
+  inició sesión, y sus clientes. Antes se detenía con `configuration_error`, que WireCat Desktop mostraba como
+  `config.invalid`, hasta que se ejecutaba un `config set` en una terminal. Una lista elegida funciona como antes.
+  Consulta [de quién son las negociaciones y los prospectos](./usage.md#whose-deals-and-leads).
+- **Un `scope all` guardado dice su motivo.** El rechazo lleva `bitrix.scope-all-refused`, donde antes mostraba el
+  `config.invalid` general.
+- **Un prospecto conserva su propia persona y su empresa.** Un prospecto a menudo no tiene un contacto ni una empresa
+  vinculados. Su nombre y su empresa estaban en los campos del propio prospecto, y `sync` los descartaba, así que
+  «Иван Петров, ООО Ромашка» solo se encontraba por el título del prospecto. Ahora `b24` lee `name`, `secondName`,
+  `lastName` y `companyTitle` y los da al almacén como el nombre del contacto y de la empresa del prospecto. Con un
+  cli-core que los guarde, `leads show` responde `contact_name` y `company_name`, y `search all` encuentra el
+  prospecto por ellos. Se dan a todos. Solo los teléfonos y los correos de los clientes de otras personas siguen
+  ocultos.
+
 ## 0.14.0 — 12.11.2026
 
 ### Añadido
@@ -25,13 +81,13 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ### Corregido
 
-- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.14.0/README.md)
+- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.15.0/README.md)
   ahora elige de quién copiar negociaciones y prospectos antes del primer `sync`, que hasta entonces no copia nada.
   Ya no dice que un administrador copia todo el CRM, dice que por MCP un borrado con `ask` se ejecuta, y nombra
   `wcat-b24` para cuando se encuentra primero el comando `b24` de otro paquete.
   [Solución de problemas](./troubleshooting.md) incluye el error "no CRM user is chosen".
 - **Por MCP, `ask` no detiene una escritura.** El
-  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.14.0/README.md), [seguridad](./security.md) y la
+  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.15.0/README.md), [seguridad](./security.md) y la
   primera pantalla recomendaban poner `deals.move` en `ask` frente a los robots del portal, pero eso solo detiene un
   movimiento en una terminal. Por MCP nadie responde, así que la escritura sigue adelante. Ahora dicen que se ponga
   `readonly` o `deny`, o que se active la aprobación en el cliente del agente.

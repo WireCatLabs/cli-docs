@@ -34,6 +34,14 @@ que el empleado del webhook.
 `b24 work session end` olvida la dirección en este ordenador; el webhook sigue en Bitrix24 hasta que lo borres allí.
 `b24 session list` muestra los perfiles de este ordenador.
 
+Un webhook pertenece a un solo perfil. `session start` rechaza un webhook que ya usa otro perfil de este ordenador (el
+mismo portal y el mismo empleado), nombra ese perfil y dice cómo volver a iniciar su sesión o quitarlo. Dos perfiles
+en un mismo portal funcionan bien si cada uno tiene el webhook de su propio empleado.
+
+Si el portal responde que el webhook no puede leer quién lo creó, al webhook le falta el permiso "Users (basic)"
+(`user_basic`, «Пользователи (базовый)» en un portal en ruso). Abre Developer resources → Integrations, edita el
+webhook, marca ese permiso y guarda. Luego ejecuta `session start` otra vez con la dirección que muestra el webhook.
+
 ### Con una aplicación local
 
 Un webhook actúa como el empleado que lo creó. Una aplicación local actúa como el empleado que inicia sesión, y sus
@@ -60,6 +68,19 @@ dirección en la que terminó el navegador. Después `session status` muestra `k
 `session start` olvida el inicio de sesión de la aplicación, y al revés. `session end` olvida los tokens en este
 ordenador. Bitrix24 no permite revocarlos, así que para pararlos borra la aplicación en el portal.
 
+### Quitar un perfil
+
+```sh
+b24 work account remove --keep-data --dry-run   # what it would remove and keep, changing nothing
+b24 work account remove --keep-data             # forget the profile; its copy of the portal stays searchable
+b24 work account remove --delete-data --yes     # also delete the portal's deals, leads, contacts and companies
+```
+
+`account remove` olvida el perfil en este ordenador: la dirección de su webhook, sus ajustes y sus archivos. Pregunta
+antes, o acepta `--yes`. El webhook sigue en Bitrix24 hasta que lo borres allí. El almacén guarda una sola copia de
+cada portal, así que `--delete-data` se niega mientras otro perfil de este ordenador lee el mismo portal. Quita antes
+ese perfil, o usa `--keep-data`.
+
 ## Sincronizar
 
 Las negociaciones, los prospectos, los embudos y las etapas se leen del almacén local de WireCat, el mismo en el que
@@ -80,10 +101,11 @@ desde ahí.
 ### De quién son las negociaciones y los prospectos
 
 Una sincronización copia las negociaciones y los prospectos de los usuarios de Bitrix24 que elijas en
-`crm.bitrix24:<portal>.unassigned`, y los clientes que aparecen en ellos. No se elige a nadie por ti, ni siquiera al
-usuario del propio webhook, porque a menudo un webhook es de un compañero. Hasta que elijas, una sincronización no copia
-nada y te dice cómo hacerlo. Ninguna sincronización copia todo el CRM, tampoco la de un administrador. Cualquier otro
-cliente lo encuentras en el propio portal.
+`crm.bitrix24:<portal>.unassigned`, y los clientes que aparecen en ellos. Hasta que elijas, copia las negociaciones y
+los prospectos del usuario que inició sesión, el usuario del webhook o de la aplicación local. Una lista elegida
+sustituye a ese usuario, que queda fuera si no lo nombras. Elige cuando el webhook sea de un compañero o cuando
+trabajes en el portal de otra persona. Ninguna sincronización copia todo el CRM, tampoco la de un administrador.
+Cualquier otro cliente lo encuentras en el propio portal.
 
 ```sh
 b24 work users list                                                    # who is who on the portal
@@ -177,6 +199,25 @@ b24 work schedule command crm --every 1h -- sync
 b24 work schedule list                           # the schedule and how its last run went
 b24 work schedule remove crm
 ```
+
+### Una tarea cuando una negociación entra en una etapa
+
+`stage-tasks` nombra etapas, y cada negociación o prospecto que pasa a una de ellas abre una tarea en este ordenador,
+junto a tus otras tareas de WireCat. La abre la sincronización que trae el cambio, una vez por cada paso: una tarea que
+descartas no vuelve, y la siguiente entrada en la misma etapa abre una nueva. La etapa de un prospecto se escribe
+`lead:<stage id>`. `b24 work stages list` muestra los ids.
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.ru.stage-tasks \
+  '{"C1:WON":{"title":"Send the closing papers","due_days":2},"lead:CONVERTED":{"title":"Call back","due_days":0}}'
+b24 work sync          # moves since the last sync open their tasks
+```
+
+Los pasos hechos antes de poner el ajuste por primera vez no abren ninguna, y tampoco la primera copia de una
+negociación. La tarea nombra la negociación, su etapa y su embudo, y vence `due_days` días después de la
+sincronización. Solo tú pones este ajuste, a un agente se le rechaza. Para pararlo,
+`b24 work config unset crm.bitrix24:example.bitrix24.ru.stage-tasks`. En el propio portal, el robot "Create task" de
+Bitrix24 hace lo mismo con una tarea del portal.
 
 ### Preguntar a memo por un cliente
 
