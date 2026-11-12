@@ -211,7 +211,7 @@ A CRM sync turns its records into the people and organizations you already have:
 
 Some things a CRM cannot tell, so they come only from you. In Bitrix24 these are a deal contact's part (decision-maker
 or influencer), whom a contact reports to, a company's parent company and the dates when a relationship started or
-ended. [Who is who in Bitrix24](./b24/usage.md#sync) lists what `b24` reads and the settings that change it,
+ended. [Who is who in Bitrix24](./b24/usage.md#who-is-who) lists what `b24` reads and the settings that change it,
 for example to have every new CRM relationship wait for your review.
 
 To see the relationships of a person, a company or a deal, with examples: [Clients, colleagues and

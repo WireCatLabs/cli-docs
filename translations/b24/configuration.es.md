@@ -6,9 +6,9 @@ Los ajustes están en un único archivo, `config.json`, en la carpeta que muestr
 propia sección, y `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.
 
 ```sh
-b24 personal config show
-b24 personal config set limit 50
-b24 personal config unset limit
+b24 work config show
+b24 work config set limit 50
+b24 work config unset limit
 ```
 
 `config show` muestra cada ajuste y de dónde viene: el archivo, una variable o el valor por defecto.
@@ -16,8 +16,14 @@ b24 personal config unset limit
 ## Permisos
 
 `permissions` decide qué puede hacer un comando en este perfil: `allow`, `ask`, `readonly` o `deny`, por clave de
-permiso. Por MCP no hay nadie a quien preguntar, así que `ask` deja que el comando se ejecute. `B24_READ_ONLY=1`
-rechaza toda escritura, digan lo que digan los permisos.
+permiso. Por MCP `ask` no pregunta y la escritura sigue adelante. Las claves, sus niveles de serie y cómo hacer que
+las escrituras de un agente sigan siendo tuyas están en [Permisos](./permissions.md).
+
+## Relaciones del CRM
+
+Dos ajustes del almacén compartido, no de un perfil, dicen cómo guarda la sincronización las relaciones:
+`crm.bitrix24:<portal>.links` (`reported` o `review`) y `crm.bitrix24:<portal>.company-types` (qué significa cada tipo
+de empresa). [Quién es quién](./usage.md#who-is-who) explica los dos.
 
 ## Registros de ejecución
 

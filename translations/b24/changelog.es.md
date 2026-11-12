@@ -4,6 +4,215 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.14.0 — 12.11.2026
+
+### Añadido
+
+- **`b24 guide` muestra escenarios para tareas comunes**, cada uno como comandos en orden con su porqué: `first-sync`
+  (la primera sincronización y el tablero del embudo), `keep-in-sync` (un temporizador y la búsqueda) y
+  `safe-agent-writes` (un agente por MCP cuyas escrituras siguen siendo tuyas). `b24 guide <name> --json` da uno
+  como datos.
+- **Páginas de [MCP](./mcp.md) y [Permisos](./permissions.md).** Cómo añadir `b24` a un agente, qué ve el agente y
+  qué no se le ofrece nunca. Cada nivel, los niveles incluidos, las claves que comprueba un comando y las
+  comprobaciones que ningún nivel levanta.
+- **Inicio de sesión con una aplicación local.** `b24 <profile> session start --portal <host> --client-id <id>`
+  inicia sesión en el navegador con una aplicación local que creas en el portal, y actúa con los permisos del
+  empleado que inicia sesión. La clave de la aplicación se pide sin mostrarla, o se lee de stdin o de
+  `B24_BITRIX24_CLIENT_SECRET`. El inicio de sesión vuelve por `https://wirecat.dev/webhooks/apps/b24-callback` o por
+  la dirección que pegues. Los tokens se renuevan solos. `session status` y `session list` muestran el tipo de inicio
+  de sesión, y `session end` olvida cualquiera de los dos. El webhook entrante sigue siendo la vía rápida, consulta
+  [iniciar sesión](./usage.md#with-a-local-application).
+
+### Corregido
+
+- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.14.0/README.md)
+  ahora elige de quién copiar negociaciones y prospectos antes del primer `sync`, que hasta entonces no copia nada.
+  Ya no dice que un administrador copia todo el CRM, dice que por MCP un borrado con `ask` se ejecuta, y nombra
+  `wcat-b24` para cuando se encuentra primero el comando `b24` de otro paquete.
+  [Solución de problemas](./troubleshooting.md) incluye el error "no CRM user is chosen".
+- **Por MCP, `ask` no detiene una escritura.** El
+  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.14.0/README.md), [seguridad](./security.md) y la
+  primera pantalla recomendaban poner `deals.move` en `ask` frente a los robots del portal, pero eso solo detiene un
+  movimiento en una terminal. Por MCP nadie responde, así que la escritura sigue adelante. Ahora dicen que se ponga
+  `readonly` o `deny`, o que se active la aprobación en el cliente del agente.
+- **La habilidad del agente cubre lo que un agente necesita.** `b24 skill show` ahora incluye códigos de salida y
+  motivos de error, MCP y la trampa de `ask`, la primera configuración desde el webhook hasta la primera
+  sincronización, los límites de una escritura y las trampas.
+- Los ejemplos usan el perfil `work` en todas partes, en lugar de `personal`.
+- **`b24 commands` muestra el CRM por secciones.** Negociaciones, prospectos, contactos y empresas se dividen en Read
+  y Write, embudos, etapas, campos, productos, usuarios y `api` están en Read, `sync` en Automate y `session` en Set
+  up. Antes, la mayor parte de `b24` estaba en Other.
+- **Los dos archivos de estado locales se escriben de forma atómica y siguen siendo privados.** La lista de tus
+  propias empresas y el recuento del día de clientes ajenos mostrados se escriben ahora con un archivo temporal y un
+  cambio de nombre, como el archivo de ajustes.
+- **Un `sync` diario ya no vuelve a leer todos los clientes.** Una ronda de cambios leía cada contacto y empresa
+  nombrados en las negociaciones y prospectos de los usuarios elegidos, cambiara algo o no. En un portal con 50.000
+  negociaciones eran unas 300 peticiones y casi tres minutos para una sincronización sin nada nuevo. Ahora lee solo
+  los clientes de las negociaciones y prospectos que cambiaron, y lista las negociaciones de los usuarios para sus
+  clientes una vez por sincronización, en lugar de una vez para contactos y otra para empresas.
+
+## 0.13.0 — 11.11.2026
+
+### Cambiado — puede romper llamadas
+
+- **Solo el webhook de un administrador de Bitrix24 borra o vacía datos en el CRM.** Para cualquier otro webhook,
+  `b24` rechaza `deals delete`, `leads delete`, un `api call` a un método que borra (su nombre termina en `.delete`,
+  `.deletefieldvalue` o `.markdeleted`), una actualización o un `.set` que deja un campo vacío (un valor vacío,
+  `null`, `[]`, un vínculo `0` a empresa, contacto o prospecto, o un teléfono o correo marcado `DELETE: Y`), y
+  `batch`. El rechazo es un `permission_error` con el motivo `employee.delete`, `employee.clear` o `employee.batch`,
+  y ningún nivel de permisos lo levanta. Al crear se pueden seguir dejando campos vacíos.
+- **Solo el webhook de un administrador de Bitrix24 desvincula registros o fusiona duplicados.** Para cualquier otro
+  webhook, `api call` rechaza un método cuyo nombre termina en `.unbind`, como `crm.timeline.bindings.unbind`, con el
+  motivo `employee.unbind`, y una fusión de duplicados, `crm.entity.mergeBatch`, que borra todos los registros menos
+  uno, con el motivo `employee.merge`. Como con los borrados, ningún nivel de permisos lo levanta.
+  `crm.deal.contact.delete` y `crm.deal.contact.items.delete` ya contaban como borrados.
+- **La cuenta de un portal se guarda como de trabajo.** El primer `sync`, escritura o lectura de un perfil guarda la
+  cuenta de un portal nuevo con el ámbito `work`, así que las vistas de trabajo y la preparación de reuniones leen su
+  copia y las lecturas personales la dejan fuera. Un portal que ya está en el almacén mantiene su ámbito, que es
+  `personal` en todos los almacenes hasta ahora. Cámbialo una vez con
+  `memo groups update bitrix24:<portal> --scope work` (memo 0.131.81 o posterior). Una sincronización nunca vuelve a
+  cambiar un ámbito.
+
+## 0.12.0 — 10.11.2026
+
+### Añadido
+
+- `store apply` quita de una copia hecha con `scope mine` los contactos que no nombra ninguna negociación ni
+  prospecto de los usuarios elegidos y que no pertenecen a ninguna empresa conservada, y las personas que quedan
+  vacías. Sin `--yes` solo cuenta. Una sincronización que reduce la copia, o `sync --rescan`, lo hace sola, y su
+  respuesta da las cifras como `contacts_removed`.
+- **Construido sobre cli-core 0.631.0** (antes 0.630.0). El almacén pasa a la versión 64 al abrirse por primera vez:
+  guardar o quitar el vínculo de una negociación con una persona ya no lee todos esos vínculos. Lo que cambió está en
+  el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Cambiado — puede romper llamadas
+
+- Una sincronización copia solo las negociaciones y prospectos de los usuarios que el propietario elige en
+  `crm.bitrix24:<portal>.unassigned`, y sus clientes. Por defecto no hay nadie elegido, tampoco el usuario del propio
+  webhook. Hasta que el propietario elija, la sincronización se rechaza (`configuration_error`, motivo
+  `bitrix.scope-users-unchosen`) y nombra el `config set` que hay que ejecutar. Atención: una copia existente falla
+  en su próxima sincronización hasta que el propietario elija.
+- Ninguna sincronización copia ya todo el CRM, tampoco la de un administrador. Una sincronización con un
+  `scope all` guardado se rechaza (motivo `bitrix.scope-all-refused`, antes `bitrix.scope-all-admin-only`) y dice
+  que se ponga `mine`. Una vez puesto, las negociaciones y prospectos de usuarios no elegidos se marcan como borrados
+  en la copia local. Cualquier otro cliente se encuentra en vivo en el portal con `people list` u
+  `organizations list`.
+- El webhook de un empleado puede elegirse a sí mismo, a un usuario despedido o a alguien que no es empleado, y el de
+  un administrador, a cualquiera.
+
+### Corregido
+
+- El nombre de un contacto ya no lleva el `null` o `null #<id>` que una importación al portal dejó en sus campos de
+  nombre ("Ярослав Орлов null #907" ahora es "Ярослав Орлов"). Lo tenían 101.876 de 114.165 contactos en un portal
+  real. Atención: un nombre guardado antes conserva ese resto hasta que ese contacto se sincronice de nuevo.
+- **Construido sobre cli-core 0.630.0** (antes 0.623.0). El almacén pasa a la versión 63 al abrirse por primera vez.
+  Un contacto del CRM ya no se une a tu propia persona ni le cambia el nombre, y dos contactos que comparten el buzón
+  o el teléfono de una empresa siguen siendo dos personas. Lo que cambió entre medias está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.11.0 — 10.11.2026
+
+### Cambiado — puede romper llamadas
+
+- Con `scope mine` una sincronización copia solo los clientes del usuario: los contactos y empresas asignados a él o
+  a un usuario sin asignar, y los que nombran las negociaciones y prospectos que copia. Antes copiaba toda la base de
+  contactos y empresas del portal, 114.165 contactos en un portal real donde el usuario no tenía ninguna negociación.
+  La pasada diaria de borrados también lista solo esos id. Atención: una copia que ya tiene toda la base conserva sus
+  contactos, y las empresas esperan a `sync --rescan`.
+- Solo un administrador de Bitrix24 puede sincronizar con `scope all`. A un jefe de departamento se le rechaza como a
+  un empleado (`bitrix.scope-all-admin-only`, antes `bitrix.scope-all-manager-only`).
+- Cualquiera que no sea administrador de Bitrix24 ve teléfonos y correos solo de sus propios clientes.
+  `people list` y `organizations list` los omiten en el resto, y `people show` y `organizations show` de uno los dan,
+  como mucho para 100 de esos contactos y empresas al día entre el usuario y sus agentes. `api call` rechaza las
+  lecturas de contactos y empresas (`crm.contact.*`, `crm.company.*`, `crm.item.*` de tipo 3 o 4, requisitos,
+  direcciones, búsquedas de duplicados) a cualquiera que no sea administrador, digan lo que digan los permisos.
+- Solo un administrador de Bitrix24 puede nombrar a un empleado en activo en `crm.bitrix24:<portal>.unassigned`. Un
+  jefe de departamento queda limitado a usuarios despedidos y a quienes no son empleados, como todos los demás.
+- **Construido sobre cli-core 0.623.0** (antes 0.621.0). El almacén pasa a la versión 61 al abrirse por primera vez
+  (vínculos entre personas, solo añade). Lo que cambió entre medias está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.10.0 — 09.11.2026
+
+### Añadido
+
+- `session start` y `session status --check` responden si el usuario del webhook es `manager` (un administrador de
+  Bitrix24 o el jefe de un departamento), junto a `admin`.
+
+### Cambiado — puede romper llamadas
+
+- Solo un responsable copia todas las negociaciones y prospectos: una sincronización con
+  `crm.bitrix24:<portal>.scope all` se rechaza (`configuration_error`) salvo que el usuario del webhook sea
+  administrador de Bitrix24 o jefe de un departamento, algo que se comprueba en cada sincronización. Los demás copian
+  sus propias negociaciones y prospectos y los que no tienen asignado a nadie, y el rechazo dice que se ponga `scope`
+  en `mine`. Atención: con un webhook sin el ámbito `department`, un jefe de departamento cuenta como empleado.
+- Para cualquiera que no sea responsable, `crm.bitrix24:<portal>.unassigned` solo cuenta a los usuarios que el portal
+  muestra como despedidos o como no empleados (extranet, correo, bot), y se comprueba en cada sincronización. Un
+  empleado en activo en la lista se omite con el motivo en los `issues` de la sincronización
+  (`crm.unassigned-dropped`), y sus negociaciones y prospectos salen de la copia local. Un responsable puede seguir
+  nombrando a cualquiera. Atención: con un webhook sin el ámbito `user`, para un empleado nadie cuenta como sin
+  asignar.
+
+## 0.9.0 — 09.11.2026
+
+### Añadido
+
+- `sync` guarda en el almacén local quién es quién. Un contacto es miembro de cada una de sus empresas con el rol
+  `contact`, con su cargo al lado. Los contactos de una negociación y de un prospecto están en ella, con el principal
+  marcado, y la persona responsable es su `owner`. Los empleados son miembros de tus propias empresas, se leen en cada
+  sincronización y dependen del jefe de su departamento. Un prospecto convertido apunta a su negociación. Estas
+  relaciones están `reported` hasta que las confirmas, terminan en lugar de borrarse cuando el portal deja de
+  decirlas y nunca cambian una que hiciste tú. Atención: el webhook necesita los ámbitos `user_basic` y `department`
+  para los correos de los empleados y las relaciones de dependencia. Sin ellos la sincronización lee el resto.
+- `schedule` instala un temporizador que ejecuta `sync`, u otro comando de `b24`, por su cuenta. MCP no lo ofrece.
+- Por defecto una sincronización copia solo las negociaciones y prospectos del propio usuario del webhook y los de los
+  usuarios en `crm.bitrix24:<portal>.unassigned`. Bitrix24 siempre nombra a una persona responsable, así que así es
+  como las negociaciones de un formulario web o de una integración cuentan como de nadie.
+  `config set crm.bitrix24:<portal>.scope all` las copia todas. La respuesta de la sincronización tiene `scope` (con
+  el usuario del webhook como `self`) y el `out_of_scope` de cada tipo: una negociación pasada a otro usuario sale de
+  la copia local en la siguiente sincronización. Los contactos y las empresas se copian enteros como antes.
+- Sin un ajuste `scope`, un primer `mine` que marcaría como borrados más de la mitad de las negociaciones o
+  prospectos guardados los conserva (`crm.narrowing-held`) hasta que el propietario ponga `scope`. Un agente no puede
+  poner `scope`, `self` ni `unassigned`.
+- La copia de un portal pertenece a un solo usuario: una sincronización con el webhook de un usuario distinto al de la
+  primera sincronización se rechaza hasta `config unset crm.bitrix24:<portal>.self`.
+
+### Cambiado — puede romper llamadas
+
+- Los `people` de una negociación y de un prospecto ahora incluyen al empleado responsable, con el rol `owner`, junto
+  a sus contactos. Atención: el código que tomaba cada entrada de `people` por un contacto de un cliente.
+- `store status` cuenta tus propias empresas entre las organizaciones y a los empleados del portal entre las
+  personas.
+- `api call department.get` y `crm.mycompany.basic.list` se ejecutan sin preguntar, como las demás lecturas que hace
+  `b24`. `department.get` se rechaza con `users.list: deny`, y `crm.mycompany.*` con `organizations.list: deny`.
+- Un webhook creado solo con los ámbitos `crm` y `user` recibe ahora una entrada en los `issues` de cada
+  sincronización: Bitrix24 le niega los departamentos. Añade el ámbito `department` o cuenta con esa entrada.
+- La primera sincronización tras la actualización marca como borrados en la copia local las negociaciones y
+  prospectos de otros usuarios. Salen de las listas y de la búsqueda, y su copia anterior queda en el archivo del
+  almacén. Pon `crm.bitrix24:<portal>.scope all` antes de ella para conservarlos.
+- Una respuesta de lista sin sus elementos ahora hace fallar la sincronización de ese tipo (`invalid_response`) en
+  lugar de terminar ahí la lista.
+
+### Corregido
+
+- `api show department.get` y `api call` llamaban `basic` al ámbito del método, y el de Bitrix24 es `department`.
+- Un método que Bitrix24 solo deja llamar a una aplicación instalada (`WRONG_AUTH_TYPE`) se rechaza como
+  `permission_error` con el motivo `webhook.app-only`. Antes `b24` decía que se había rechazado el webhook y pedía
+  volver a iniciar sesión, lo que no puede ayudar. Atención: un script que se ramificaba por `authentication_error`
+  para este rechazo.
+- `create` y `update` de `people` y `organizations` declaran sus respuestas (`crm_record_created`,
+  `crm_record_updated`), así que `--json` acepta sus nombres de campo y `commands info` los lista.
+- `session start` y la solución de problemas nombran los mismos ámbitos del webhook que el README: `crm`,
+  `user_basic` y `department`. La solución de problemas también pedía `catalog`, que `b24` no usa.
+- `api show`, `api list` y una llamada rechazada nombraban el ámbito `basic` para cada método fuera de cinco prefijos
+  de nombre, como `im.message.add` y `tasks.task.add`. Ahora nombran el ámbito que da la referencia de Bitrix24
+  (`im`, `task`, `calendar`), o `unknown`, y un rechazo por uno desconocido no nombra ámbito.
+
+### Seguridad
+
+- `b24` envía peticiones solo al portal de la dirección de tu webhook y rechaza cualquier otro host antes de que salga
+  un solo byte del equipo. Su manifiesto lo dice (`network`), así que WireCat Desktop muestra adónde van los datos.
+
 ## 0.8.0 — 08.11.2026
 
 ### Añadido

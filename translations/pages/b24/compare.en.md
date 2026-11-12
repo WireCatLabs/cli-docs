@@ -2,29 +2,32 @@
 title: "Compared with other tools"
 ---
 
-`b24` is a command line and an MCP server for the sales data of a Bitrix24 portal: deals, leads, contacts,
-companies, pipelines, products and employees. This page puts it next to the other tools that let an AI agent read
-and change a Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.8.0,
-its commands and its source, checked on 8 November 2026; they are checked again at each release. The marks for the
-other tools come from their own documentation, listings and source, checked on 7 November 2026, and for CSV export
-on 8 November 2026. Nothing was signed in to or tested live, and a tool may do more than its pages say.
+`b24` is a command line and an MCP server for the sales data of a Bitrix24 portal: deals, leads, contacts, companies,
+pipelines, products and employees. This page puts it next to the other tools that let an AI agent read and change a
+Bitrix24 CRM, so you can see which one fits your job. The marks for `b24` come from its release 0.14.0, its commands
+and its source, checked on 12 November 2026, and they are checked again at each release. The marks for the other tools
+come from their own documentation, listings and source, checked on 7 November 2026, and for CSV export on 8 November
+2026. On 12 November 2026 the versions, the install count, the Node.js requirement and the plans with the REST API
+below were checked again. Nothing was signed in to or tested live, and a tool may do more than its pages say.
 
 The tools:
 
-- **b24**: this tool. Keeps a copy of deals, leads and pipelines on your computer, and decides for each action what
-  an agent may do. It signs in with an incoming webhook of the portal.
+- **b24**: this tool. Keeps a copy of the deals, leads and clients of the users you choose on your computer, and
+  decides for each action what an agent may do. It signs in with an incoming webhook of the portal, or through a local
+  application that you create in the portal.
 - **[Vibecode MCP](https://vibecode.bitrix24.com/docs-content-en/mcp.md)**: Bitrix24's own MCP server, on its
   Vibecode API, with 53 tools across the whole platform (npm `@bitrix24/mcp-vibecode-api`, release 3.4.1 on
-  6 November 2026).
+  6 November 2026, still the latest on 12 November 2026).
 - **[Zapier MCP](https://zapier.com/mcp/bitrix24-crm-new)**: Zapier's hosted MCP server with the Bitrix24 CRM app.
   Each tool call uses two Zapier tasks.
 - **[MCP Bridge](https://www.bitrix24.com/apps/app/hub_despachos_y_pyme.mcp_bridge_ai_for_bitrix24/)**: a hosted MCP
-  connector from the Bitrix24 Market, made by a partner company (604 installs on 7 November 2026).
+  connector from the Bitrix24 Market, made by a partner company (620 installs on 12 November 2026).
 - **[bitrix24-mcp-server](https://github.com/gunnit/bitrix24-mcp-server)**: the most starred open-source MCP server
   that covers the whole CRM (35 stars, last change July 2025).
 
-`b24`, Vibecode MCP and bitrix24-mcp-server call the portal's REST API, which a cloud portal has only on a paid
-plan ([Bitrix24's page](https://apidocs.bitrix24.com/first-steps/access-to-rest-api.html)).
+`b24`, Vibecode MCP and bitrix24-mcp-server call the portal's REST API. A cloud portal has it on a paid plan of the
+Vibe+ line, or for a 15-day trial, and the Essentials plans do not include it
+([Bitrix24's page](https://apidocs.bitrix24.com/first-steps/access-to-rest-api.html)).
 The Zapier app also works with paid plans only ([its listing](https://www.bitrix24.pl/apps/app/integrations24.zapierbitrix24crm/)).
 
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation · n/a cannot apply
@@ -65,42 +68,51 @@ The Zapier app also works with paid plans only ([its listing](https://www.bitrix
 
 | | b24 | Vibecode MCP | Zapier MCP | MCP Bridge | bitrix24-mcp-server |
 |---|---|---|---|---|---|
-| Install | npm, Node 22.16+ or 24+ | npm, Node 18+ | none: hosted | from the Bitrix24 Market | from source |
+| Install | npm, Node 22.16+ or 24+ | npm, Node 20.18.1+ in [its package](https://unpkg.com/@bitrix24/mcp-vibecode-api@3.4.1/package.json), 18+ in its docs | none: hosted | from the Bitrix24 Market | from source |
 | Licence | Apache-2.0 | MIT | closed service | closed service | MIT in `package.json`, no licence file |
-| Price | free, on a paid Bitrix24 plan | free, on a paid Bitrix24 plan | two Zapier tasks per call, on a paid Bitrix24 plan | free, with paid extras | free, on a paid Bitrix24 plan |
+| Price | free, on a Bitrix24 Vibe+ plan | free, on a Bitrix24 Vibe+ plan | two Zapier tasks per call, on a paid Bitrix24 plan | free, with paid extras | free, on a Bitrix24 Vibe+ plan |
 
 Notes on the `b24` column:
 
+- **Sign-in.** An incoming webhook acts as the employee who made it. A local application acts as the employee who
+  signs in through the browser, and `b24` renews its tokens by itself. Either is kept in the system keyring, or in a
+  private file on a computer without one. See [sign in](./usage.md#sign-in).
 - **Read-only.** `B24_READ_ONLY=1` refuses every write, whatever the settings say. The `readonly` level does the
   same for one key. Without either, a new profile lets an agent create, update, move and close deals and leads.
 - **Allow, ask or refuse.** Each command has its permission key, such as `deals.delete` or `leads.move`, set to
   `allow`, `ask`, `readonly` or `deny` in [the settings](./configuration.md#permissions). `mcp serve --permission`
   makes a key stricter for one server only. An agent over MCP cannot change these settings.
-- **A delete asks first** at a terminal. Over MCP nobody is there to answer, so `ask` lets the agent go ahead. To
-  stop an agent from deleting, set `deals.delete` and `leads.delete` to `deny`. So this row is partly.
+- **A delete asks first** at a terminal. Over MCP nobody is there to answer, so `ask` lets the agent go ahead, and
+  this row is partly. To stop an agent from deleting, set `deals.delete` and `leads.delete` to `deny`. Only a
+  Bitrix24 administrator deletes at all. For anyone else `b24` refuses every delete, an update that clears a field,
+  an unlink and a merge of duplicates, whatever the settings say. See
+  [permissions](./permissions.md#checks-that-hold-whatever-the-permissions-say).
 - **Messages and workflows.** `api call` refuses the methods that message people, publish, start workflows or create
   tasks, until you allow them. A stage change can still start the portal's own robots, which may write to your
-  clients: set `deals.move` and `leads.move` to `ask` or `deny` if your portal has such robots. See
-  [security](./security.md).
+  clients. If your portal has such robots, set `deals.move` and `leads.move` to `readonly` or `deny` before an agent
+  gets the profile, since `ask` stops a move only at a terminal. See
+  [permissions](./permissions.md#stage-changes-start-the-portals-robots).
 - **Another employee.** Bitrix24 tells an employee when a record is given to them, so `--owner` with someone else is
   refused until you set `crm.assign-others` to `allow`.
-- **Without the internet.** `sync` copies pipelines, deals, leads, contacts and companies into the local store, and
-  `deals`, `leads`, `pipelines` and `stages` read it, with `--offline` too. `people`, `organizations`, `products` and
-  `users` always ask the portal.
+- **Without the internet.** `sync` copies the pipelines, and the deals and leads of the Bitrix24 users you choose with
+  their clients, into the local store. `deals`, `leads`, `pipelines` and `stages` read it, with `--offline` too.
+  `people`, `organizations`, `products` and `users` always ask the portal. A sync copies nothing until you choose
+  whose deals to copy, and no sync copies the whole CRM. See [whose deals and leads](./usage.md#whose-deals-and-leads).
 - **One search.** `search all` finds deals and leads by the words of their title, beside the messages, notes and
   events that other WireCat tools on the same computer stored, without the internet. Under `deals.list: deny` it
   leaves deals out, and under `leads.list: deny` leads, and names what it left out.
-- **CSV.** `deals`, `leads`, `people` and `organizations list --format csv` print one page as a table for a spreadsheet,
-  each custom field headed by its label; `--json=a,b` picks the columns. It is for you at a terminal: no MCP tool offers
-  it, and an agent reads the JSON answer.
+- **CSV.** `deals`, `leads`, `people` and `organizations list --format csv` print one page as a table for a
+  spreadsheet, each custom field headed by its label, and `--json=a,b` picks the columns. It is for you at a terminal.
+  No MCP tool offers it, and an agent reads the JSON answer.
 - **Custom fields by label.** Deals, leads, contacts and companies take a custom field by its label or code, and a
   list field's option by its label. Deals and leads read the labels that the last `sync` stored.
-- **A write is sent once.** A write that got no answer is not sent again: it ends as `outcome_unknown` with its
-  `operation_id`. Check the portal before you write it again: Bitrix24 makes a repeated write a second time.
-- **Only one call.** `api call` is kept for you at a terminal; no MCP tool offers it.
+- **A write is sent once.** A write that got no answer is not sent again. It ends as `outcome_unknown` with its
+  `operation_id`. Check the portal before you write it again, since Bitrix24 makes a repeated write a second time.
+- **Only one call.** `api call` is kept for you at a terminal, and no MCP tool offers it. It reads contacts and
+  companies for a Bitrix24 administrator only.
 - **ChatGPT or Claude in the browser.** `mcp serve --http` serves the tool behind an HTTPS tunnel that you set up and
-  keep running yourself, so this row is partly. See [usage](./usage.md#agents).
-- **Speed and cost against a browser agent.** `b24` calls the portal's REST API and reads its own copy; it opens no
+  keep running yourself, so this row is partly. See [MCP](./mcp.md#chatgpt-and-claude-in-the-browser).
+- **Speed and cost against a browser agent.** `b24` calls the portal's REST API, reads its own copy and opens no
   browser. No measurement of it against a browser agent is published, so this page makes no claim.
 
 ## When another tool fits better
