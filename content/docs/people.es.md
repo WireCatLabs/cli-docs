@@ -402,11 +402,11 @@ y su rol `decision-maker`, que le diste tú, sigue igual. `memo review confirm 2
 
 ### De quién son las negociaciones que se copian
 
-En el CRM de un equipo de ventas, la mayoría de las negociaciones son de otras personas, y un webhook suele ser de un
-compañero. Por eso una sincronización copia solo las negociaciones y los prospectos de los usuarios del CRM que eliges,
-y los clientes que aparecen en ellos: los contactos y las empresas asignados a esos usuarios o nombrados en las
-negociaciones y los prospectos que copia. Nadie se elige por ti, ni siquiera el usuario de la propia sincronización.
-Hasta que eliges, una sincronización no copia nada y dice cómo hacerlo (`bitrix.scope-users-unchosen`). Ninguna
+En el CRM de un equipo de ventas, la mayoría de las negociaciones son de otras personas. Por eso una sincronización
+copia solo las negociaciones y los prospectos de los usuarios del CRM que eliges, y los clientes que aparecen en ellos:
+los contactos y las empresas asignados a esos usuarios o nombrados en las negociaciones y los prospectos que copia.
+Mientras no eliges a nadie, copia los del usuario que inició sesión, es decir, los tuyos. Cuando eliges usuarios, solo
+se copian los suyos, así que elige también tu usuario si quieres los tuyos. Ninguna
 sincronización copia todo el CRM, tampoco la de un administrador, y el resto de los clientes sigue en el portal, donde
 `b24 work people list` los encuentra. Los detalles de Bitrix24 están en
 [de quién son las negociaciones y los prospectos](./b24/usage.md#whose-deals-and-leads):
@@ -423,6 +423,7 @@ así que las negociaciones del formulario llegan solo si eliges a ese usuario. E
 Bitrix24 puede elegir a cualquiera. El de cualquier otro solo puede elegirse a sí mismo, a un usuario dado de baja o a
 un usuario que no es empleado, como uno de extranet o un bot. La sincronización revisa la lista cada vez, y deja fuera
 a un usuario que no puede tomar, con el motivo en `issues` (`crm.unassigned-dropped`).
+Si deja fuera a todos los que elegiste, la sincronización copia los tuyos.
 
 Qué pasa cuando cambia la elección:
 

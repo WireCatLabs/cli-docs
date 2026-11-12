@@ -391,11 +391,11 @@ his `decision-maker` role from you stays as it was. `memo review confirm 2` make
 
 ### Whose deals are copied
 
-In a sales team's CRM most deals belong to other people, and a webhook is often a colleague's. So a sync copies only
-the deals and leads of the CRM users you choose, and the clients on them: the contacts and companies assigned to
-those users or named on the deals and leads it copies. No one is chosen for you, the sync's own user included. Until
-you choose, a sync copies nothing and says how (`bitrix.scope-users-unchosen`). No sync copies the whole CRM, an
-administrator's either, and any other client stays on the portal, where `b24 work people list` still finds it.
+In a sales team's CRM most deals belong to other people. So a sync copies only the deals and leads of the CRM users
+you choose, and the clients on them: the contacts and companies assigned to those users or named on the deals and
+leads it copies. Until you choose, it copies those of the user who signed in, yours. Once you choose, only the chosen
+users' deals are copied, so add yourself too if you want your own. No sync copies the whole CRM, an administrator's
+either, and any other client stays on the portal, where `b24 work people list` still finds it.
 [Whose deals and leads](./b24/usage.md#whose-deals-and-leads) has the Bitrix24 details:
 
 ```sh
@@ -409,7 +409,7 @@ deal has a responsible person, by default the user who created it
 so a form's deals come only when you choose that user. A Bitrix24 administrator's webhook may choose anyone. Anyone
 else's may choose only themselves, a dismissed user or a user who is not an employee, such as an extranet or bot
 user. The sync checks the list every time, and a user it may not take is left out with the reason in its `issues`
-(`crm.unassigned-dropped`).
+(`crm.unassigned-dropped`). If every user you chose is left out, the sync copies yours.
 
 What happens when the choice changes:
 
