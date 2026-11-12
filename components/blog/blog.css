@@ -32,7 +32,7 @@
   text-underline-offset: 5px;
 }
 .wirecat-blog a:focus-visible,
-.wirecat-blog :is(button, summary, input):focus-visible {
+.wirecat-blog :is(button, summary, input, .blog-table):focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
   border-radius: 4px;
@@ -961,10 +961,11 @@
   border-top: 1px solid var(--line);
   margin-block: 2.4em;
 }
-.wirecat-blog .blog-prose table {
-  display: block;
+.wirecat-blog .blog-prose .blog-table {
   max-width: 100%;
   overflow-x: auto;
+}
+.wirecat-blog .blog-prose table {
   border-collapse: collapse;
   font-size: 16px;
   line-height: 1.5;

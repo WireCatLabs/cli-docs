@@ -69,6 +69,7 @@ const words = {
     breadcrumb: "Breadcrumb",
     languages: { en: "English", ru: "Russian", es: "Spanish" },
     translation: "Also in",
+    table: "Table",
   },
   ru: {
     title: "Блог",
@@ -141,6 +142,7 @@ const words = {
     breadcrumb: "Навигация",
     languages: { en: "английском", ru: "русском", es: "испанском" },
     translation: "Этот пост на",
+    table: "Таблица",
   },
   es: {
     title: "Blog",
@@ -214,6 +216,7 @@ const words = {
     breadcrumb: "Ruta",
     languages: { en: "inglés", ru: "ruso", es: "español" },
     translation: "También en",
+    table: "Tabla",
   },
 }
 
