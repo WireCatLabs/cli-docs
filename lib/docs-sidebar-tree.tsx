@@ -51,6 +51,8 @@ import {
   PackagePlus,
   Paperclip,
   PenLine,
+  Phone,
+  PhoneCall,
   Reply,
   Rocket,
   Route,
@@ -86,6 +88,8 @@ export const sidebarIcons = {
   email: Mail,
   mail: Mail,
   b24: Handshake,
+  voip: Phone,
+  beeline: PhoneCall,
   notes: StickyNote,
   sources: FilePlus2,
   tags: Tag,
@@ -184,6 +188,7 @@ const folderIcons = {
   b24: Handshake,
   zm: Video,
   desktop: Monitor,
+  voip: Phone,
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }

@@ -27,6 +27,7 @@ next-env.d.ts
 # filled by `pnpm sync` from each tool's repository
 /content/docs/*/
 !/content/docs/desktop/
+!/content/docs/voip/
 /content/upstream/
 /public/*/
 # Redirect stubs for removed documentation pages: public/<lang>/docs/<old-slug>/index.html

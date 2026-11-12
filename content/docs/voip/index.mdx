@@ -1,0 +1,59 @@
+---
+title: Phone calls
+description: "Recorded calls from your company phone system as text on your computer: a dialogue between the manager and the client, searchable offline and open to your AI agent within the limits you set."
+---
+
+Your managers talk to clients on the phone, and your phone system records the calls. WireCat turns those recordings
+into text on your computer, so you and your AI agent can find what a client asked for or what a manager promised,
+without listening to the calls again. Here you see how it works, which phone systems it supports today and where to
+start. A phone system here is the PBX, the exchange your company's numbers run through, in the cloud or in the
+office.
+
+**On this page:** [How it works](#how-it-works) · [Phone systems](#phone-systems) ·
+[What stays on your computer](#what-stays-on-your-computer)
+
+## How it works
+
+Each phone system gets its own command-line tool, a program that you or your agent run in a terminal. The steps are
+the same for every phone system.
+
+1. **Copy the list of calls.** The tool copies the recorded calls into the local store, one file on your computer
+   that every WireCat tool shares. Each call keeps its time, direction and duration, the manager and the client.
+2. **Turn speech into text on your computer.** The tool downloads each recording and transcribes it with a speech
+   model that runs on your computer. The transcript is a dialogue: the manager's lines and the client's lines, in
+   the order they were said. The recording goes to no speech service.
+3. **Search with no network.** After a copy, listing, reading, search and export answer from the local store.
+   `search all` in any WireCat tool finds calls next to your chats, mail and meetings.
+4. **Let your AI agent work with the calls.** An agent with a terminal, such as Claude Code, Codex or Gemini CLI,
+   runs the tool itself. An app with no terminal, such as Claude Desktop or Cursor, connects to it through MCP, a
+   standard way for an AI app to use tools on your computer. Permissions decide what the agent may run. Text from a
+   call reaches the agent as data, never as instructions.
+
+A request to your agent can be as plain as this:
+
+```text prompt
+Use beeline CLI. Which calls from yesterday were longer than five minutes? Tell me what each client asked for and show the calls.
+```
+
+## Phone systems
+
+| Phone system | Status | Guide |
+|---|---|---|
+| Beeline Cloud PBX (Облачная АТС Билайн) | Available | [Beeline Cloud PBX](./beeline.mdx), in Russian |
+| Asterisk | Coming soon | No date yet |
+
+The Beeline guide is a working example of the whole flow, from the first copy of calls to an agent's answer.
+Asterisk gets the same steps. If your company uses another phone system, tell us in the
+[WireCat Discord](https://discord.gg/DebENqbRrJ). We use these requests to decide what comes next.
+
+## What stays on your computer
+
+This is how the Beeline tool works today.
+
+- It only reads from the phone system. It never deletes a recording and never places a call.
+- The transcripts and the list of calls stay in the local store on your computer.
+- A recording is held in memory while it is transcribed. It is not saved to disk.
+- The store keeps the client's phone number and the manager's name. Treat it as you treat the calls themselves.
+
+Start with the [Beeline Cloud PBX guide](./beeline.mdx). How WireCat keeps data and permissions for every tool is on
+the [security page](../security.mdx).
