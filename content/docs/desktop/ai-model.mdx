@@ -1,12 +1,25 @@
 ---
 title: AI model and better search
-description: Set one AI model and key for WireCat Desktop, choose who reads your sources for facts, and turn on the two search helpers that send data out only after you agree.
+description: Set one AI model and key for WireCat Desktop, choose the agent for digests and the mail agent, keep every model call on this computer, and turn on the two search helpers that send data only after you agree.
 ---
 
-Some WireCat features need an AI model: reading the text in a picture, suggesting facts from a document, and two
-optional search helpers. This page shows how to set one model and one key for all of them in WireCat Desktop, and what
-each feature sends out of your computer. Everything here is off until you turn it on. Without a model, your own AI
-agent does this work when you ask it.
+Some WireCat features need an AI model: reading the text in a picture, suggesting facts from a document, writing
+digests and two optional search helpers. In **Settings** you choose which model or agent does each job, and you see
+what each one sends out of your computer. When you are done, the features work with the model you picked, and you
+know where your data goes. Everything here is off until you turn it on. Without a model, your own AI agent does this
+work when you ask it.
+
+**On this page:** [AI model](#set-the-ai-model) · [Agent for background jobs](#agent-for-background-jobs) ·
+[Only this computer](#only-this-computer) · [Reading pictures](#reading-pictures) ·
+[Reading for facts](#reading-for-facts) · [Better search](#better-search)
+
+<DesktopShot
+  shot="settings"
+  folder="desktop/docs"
+  lang="en"
+  alt="The Settings page: language, interface size, the two tool switches, the AI model and Reading for facts"
+  caption="Settings: the AI model sits below the tool switches."
+/>
 
 ## Set the AI model
 
@@ -19,9 +32,13 @@ Open **Settings**. The **AI model** section is below the tool switches.
 2. Choose the **Model**. Ollama and OpenRouter list their models. Anthropic and OpenAI show their list only with your
    key, so type the model's name as the provider writes it.
 3. Enter the **API key**. It is kept in your system's password store and never shown again. Where there is no
-   password store, it is kept in a file only your user can read. The section says which.
+   password store, it is kept in a file only your user can read. The section says which. A model on this computer
+   usually needs no key.
 4. Save, then click **Check**. It sends one short request, billed by your provider, and says in plain words whether it
    works, with the model and how fast it answered, or what to fix.
+
+Linking chats, reply drafts and reading the text in attachments use this model too, unless a messenger profile sets a
+model of its own for them.
 
 **Read pictures with this model** lets **Add to memory** send pictures to this model to read their text. The note
 under it says what reads pictures now. A model on your computer is usually slower and less accurate. A change applies
@@ -33,21 +50,69 @@ only to pictures you add after it.
 such as OpenRouter at `https://openrouter.ai/api/v1`, or a model you run yourself. Run a model on this computer with a
 server that speaks the OpenAI interface, and enter its address, for example `http://localhost:8080/v1`. Then the
 pictures and texts the model reads never leave your computer. A model on your company's server keeps them inside the
-company. The address must start with `https://`; plain `http://` works only for a server on this computer. Type a key even
-for a server on this computer: any value works when your server asks for none. Your key is sent only to this address.
+company. The address must start with `https://`. Plain `http://` works only for a server on this computer. Your key
+is sent only to this address.
 
 **Ollama on this computer** also keeps everything on your computer, and lists the models you downloaded. Ollama must
 run at its usual address, `127.0.0.1:11434`. [Run WireCat on local models](./local-models.mdx) covers every feature.
 
-### Reading for facts
+## Agent for background jobs
 
-**Reading for facts**, below, chooses who reads a source when you ask [Add to memory](./memory.mdx#add-to-memory) to
-suggest facts. **AI model (recommended)** uses the model and key above. Choose a reader and click **Use this reader**.
+The mail agent and the digests run on a schedule, without you. A coding agent on this computer does that work, and
+**Agent for background jobs** chooses which one. Pick an agent and click **Use this agent**.
+
+<DesktopShot
+  shot="settings-agents"
+  folder="desktop/docs"
+  lang="en"
+  alt="Settings: Agent for background jobs with Claude Code ready, then Only this computer with its switch and the list of where each feature sends data"
+  caption="Agent for background jobs and Only this computer, below the AI model."
+/>
+
+- Claude Code, Gemini CLI and OpenCode are held to WireCat's commands while they run a job, and show **Ready** when
+  they are installed.
+- Codex shows **Ready after a warning**. Memo cannot limit the commands Codex runs, and a job reads your mail and
+  messages. Choose it, and a dialog asks **Run background jobs in Codex?** first. You are asked once.
+- Other agents are greyed, with the reason, such as **Not installed** or **Its commands cannot be limited**.
+- With several agents ready, nothing runs until you choose. With only one ready, background jobs run in it.
+
+Each job sends what it reads to the model of the agent that runs it. A digest can also have its own agent: see
+[Choose the agent](./digests.mdx#choose-the-agent). When a run fails because the agent has no credit, reached its usage
+limit or is not signed in, the mail agent and the digest name the agent and offer **Switch to** another one that is
+ready.
+
+## Only this computer
+
+**Keep every model call on this computer** makes every WireCat tool send text only to a model on this computer. A
+model on another computer is refused before anything is sent. An agent may turn it on, but only you can turn it off.
+
+**Where each feature sends data now** lists each feature, such as the AI model, search helpers, linking chats, voice
+messages and the digest, with **This computer**, **Another computer**, **Through your agent** or **Off**. While the
+switch is on, a feature that points elsewhere is marked **Refused** and sends nothing until you give it a model on this
+computer.
+
+What runs through your agent (the digest, reading pictures, agents over MCP) is outside WireCat. Its data stays here
+only if your agent runs a model on this computer.
+
+## Reading pictures
+
+WireCat reads no picture by itself. With **Reading pictures** set to **On request**, your coding agent reads the text of
+one picture you choose, and search finds it from then on. Choose **Agent that reads**, Claude Code or Codex, and
+optionally a **Model**, then click **Turn on**. Only you can turn it on.
+
+The picture you ask to read goes to that agent and from there to its provider, unless the agent runs a model on this
+computer. **Only this computer** does not stop it. **Never** keeps every picture here.
+
+## Reading for facts
+
+**Reading for facts** chooses who reads a source when you ask [Add to memory](./memory.mdx#add-to-memory) to suggest
+facts. **AI model (recommended)** uses the model and key above. Each reader says whether the text leaves this
+computer. Choose a reader and click **Use this reader**.
 
 ## Better search
 
-Two helpers can make search find more. Both are off by default, and both send data to the provider of your choice, so
-each asks first. They live in Memo's details: on the Tools page, click **Manage** on Memo's row.
+Two helpers can make search find more. Both are off by default, and both send data to the model you choose, so each
+asks first. They live in Memo's details: on the Tools page, click **Manage** on Memo's row.
 
 Before turning them on, set up your notes on the same panel. The card **Set up your notes** has three steps: choose
 your notes folders, read your notes, and **Search by meaning (optional)**. The last step offers the local search
@@ -56,19 +121,21 @@ models; the recommended one is labelled **Best local model**. It runs on your co
 ### Rewrite records for better search
 
 Your notes, documents and emails get other words added, so a question asked in other words still finds them. Click
-**Turn on**. **What turning it on sends** shows which records go, to which provider and model, the price, and that
+**Turn on** and choose a model: a hosted one, or **Another model at an address** for a server on this computer or
+another OpenAI-compatible service. **What turning it on sends** shows which records go, where, the price, and that
 turning it off deletes the added text. You agree with the button that names the number of records and the provider.
 After that, each sync sends new records too. **Turn off** asks first, then deletes the added text.
 
 ### Search harder
 
-A hosted model reorders the top results of one search, when you ask for it. Click **Allow**. **What searching harder
-sends** shows the provider, the model and the price, and that only your question and its first results go, only when
-you press the button. A search without it sends nothing.
+A model reorders the top results of one search, when you ask for it. Click **Allow**. **What searching harder sends**
+shows the provider, the model and the price, and that only your question and its first results go, only when you
+press the button. A search without it sends nothing.
 
 Then, on the [Search](./index.mdx#search) page, a Memo search with two or more results shows **Search harder**. Press
 it to reorder that one search.
 
 ## Next
 
-[Add a note or a picture to memory](./memory.mdx#add-to-memory) and ask your agent about it.
+[Add a note or a picture to memory](./memory.mdx#add-to-memory) and ask your agent about it, or
+[set up a digest](./digests.mdx) that your chosen agent writes.

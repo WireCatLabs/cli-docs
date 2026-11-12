@@ -1,14 +1,14 @@
 ---
 title: Digests in WireCat Desktop
 sidebarTitle: "Digests"
-description: Get one short summary of your chats, mail, meetings and tasks every morning or every week, in the app, in Telegram or by mail, with a cost limit you set.
+description: Get one short summary of your chats, mail, meetings and tasks every morning or every week, in the app, in Telegram or by mail, written by the AI agent you choose.
 ---
 
-A digest is one short page that says what came in and what waits for you, built from your chats, mail, meetings and
-tasks. The **Digests** page in WireCat Desktop sets them up: when each one runs, what it reads, where it sends, and how
-much it may spend. When it is done, you get a digest every morning or every week without asking your agent. Claude Code
-writes each digest, so the page needs Memo and Claude Code. If Claude Code is missing, the page offers **Install it in
-Agents**.
+You have many chats, mail and meetings, and no time to read them all each morning. A digest is one short page that
+says what came in and what waits for you. On the **Digests** page in WireCat Desktop you set it up once: when it runs,
+what it reads, where it is sent and which AI agent writes it. After that, a digest arrives every morning or every week
+without asking. The page needs Memo, which keeps your sources, and one coding agent on this computer, such as Claude
+Code, Gemini CLI or OpenCode.
 
 Digests is marked beta: you see a β beside its name. The section is new and lightly tested.
 
@@ -20,6 +20,16 @@ Digests is marked beta: you see a β beside its name. The section is new and lig
   caption="Digests: one row per digest, with when it ran and when it runs next."
 />
 
+## Before you start
+
+- **Memo** is installed on the Tools page. Without it, the page offers to install it.
+- **An agent that can write digests.** The digest is written by a coding agent on this computer. Claude Code, Gemini
+  CLI and OpenCode can do it. Codex can do it after you agree to a warning, see [Choose the agent](#choose-the-agent).
+  The list in **Settings**, **Agent for background jobs**, says why any other agent cannot. If no agent is ready, the
+  page says so and offers **Choose it in Settings**.
+- **Optional, a place to send it.** To get digests in Telegram or by mail, connect a Telegram bot or a mail account
+  on the Tools page first. Without one, a digest shows only in the app and as a notification.
+
 ## Create a digest
 
 Under **New digest**, pick **Daily digest**, **Weekly digest** or **Create your own**, and click **Set up**. The
@@ -28,24 +38,52 @@ dialog **Create digest** asks for:
 - **Title.** A second digest from the same template gets its own name, such as "Weekly digest 2".
 - **Times** and **Days:** one or more times a day, every day or on the days you pick. The table then reads, for
   example, "Twice a day: 08:30 and 18:00" or "Weekdays at 09:00".
-- **Takes from:** the sources to read. With none picked, it reads every connected source.
-- **Instructions** (optional): what to look for, in your words.
+- **Takes from:** the sources to read: Telegram, MAX, WhatsApp, Mail, Meetings, Tasks, Google Drive, Google Calendar
+  and CRM. With none picked, it reads every connected source.
+- **Where:** where to send it, a **Telegram bot** or **Mail**. Choose the account that sends it and who gets it, then
+  click **Add**.
+- **Instructions** (optional): what to look for and what to skip, in your words.
+- **Agent** and **Model:** who writes it. See [Choose the agent](#choose-the-agent).
 - **Cost limits:** at most this much for one run, and for one day.
 - **Run it on schedule.**
 
 Click **Create**.
 
+<DesktopShot
+  shot="digest-editor"
+  folder="desktop/docs"
+  lang="en"
+  alt="The Create digest dialog: where to send it, the instructions, the Agent list with Claude Code chosen, the Model field and the cost limits"
+  caption="Create digest: the agent that writes it, its model and how much a run may cost."
+/>
+
+### Choose the agent
+
+**Agent** is the coding agent that writes the digest. Each run is a paid call to that agent's provider, so what the
+digest reads goes to that provider too. A new digest starts with Claude Code where it is ready. Otherwise it starts
+with the agent you chose in **Settings**, **Agent for background jobs**.
+
+- **Model** is optional. Type an alias such as `sonnet` or a model name. Empty means the agent's own default.
+- **Cost limits** work only for an agent that says what a run costs. Today that is Claude Code. For any other agent,
+  the dialog says that a cost limit cannot stop it.
+- **Codex** follows its own limits, not WireCat's list of allowed commands. To use it, tick the box that says Codex may
+  run any program on this computer while it writes this digest. Without the tick, **Create** and **Save** wait.
+- Agents that Memo never runs on a schedule are listed under the field, with the reason.
+
+[Agent for background jobs](./ai-model.mdx#agent-for-background-jobs) explains the choice in Settings, which the mail
+agent uses too.
+
 ## The table
 
 Each digest shows its **Name**, **How often**, **Takes from**, **Sends to**, its last **Run** with what it cost and the
-next one, and an **On schedule** switch. **Other schedules** below lists other jobs Memo runs on a timer, such as the
-mail agent, and where to change each.
+next one, and an **On schedule** switch. A digest that cannot run until you act shows **Waits for you**. **Other
+schedules** below lists other jobs Memo runs on a timer, such as the mail agent, and where to change each.
 
 ## One digest
 
 Click a digest to open it.
 
-- **Get now** makes one at once. It first says what it will cost about. Its menu can show it only here or send it to
+- **Get now** writes one at once. It first says what it will cost about. Its menu can show it only here or send it to
   one route.
 - **Put on schedule** or **Take off schedule**.
 - **Settings:** the same fields as when you created it, plus **Sends it to** (a Telegram bot or mail) and what it
@@ -64,6 +102,16 @@ The days you have are listed beside it. Click one to read it.
 While WireCat runs, a new digest shows one notification. A `wirecat://` link to a digest, for example from a message
 an agent sent you, opens it on this page.
 
+## If a digest does not arrive
+
+- **The run failed because the agent has no credit, reached a limit or is not signed in.** The digest's page names the
+  agent and the reason. When another agent is ready, it offers **Switch to** that agent.
+- **No agent is ready or chosen.** Open **Settings**, **Agent for background jobs**, and choose one.
+- **It shows here, but not in Telegram or mail.** Open the digest's **Settings** and check **Sends it to**.
+
+For any other error, [Errors and how to fix them](./troubleshooting.mdx) shows where to read it in full.
+
 ## Next
 
-Connect a Telegram bot or mail on the Tools page to get digests there, then set **Sends it to**.
+Ask your agent about something the digest listed, for example "What does Anna want from me?". To keep what the digest
+reads on your computer, see [Run WireCat on local models](./local-models.mdx#8-digests-and-the-mail-agent).

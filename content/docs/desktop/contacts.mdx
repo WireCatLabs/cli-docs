@@ -6,9 +6,9 @@ description: See who is who across Telegram, MAX, WhatsApp, mail, meetings and B
 
 The same person often writes to you from Telegram, WhatsApp and email, and sits in your CRM too. The **Contacts** page
 in WireCat Desktop shows each person once, with all their accounts. Use it to check who is who, to join two entries
-that are one person, and to undo a join that was wrong. Your agents read the same list, so a correct list gives them
-better answers about the people you talk to. The page needs Memo, which keeps the list; without it the page says so
-and offers **Install Memo**.
+that are one person, to undo a join that was wrong and to add someone by name. Your agents read the same list, so a
+correct list gives them better answers about the people you talk to. The page needs Memo, which keeps the list.
+Without it, the page says so and offers **Install Memo**.
 
 Contacts is marked beta: you see a β beside its name. The section is new and lightly tested.
 
@@ -32,20 +32,27 @@ Tabs sort everyone into **People**, **Companies**, **Newsletters & notifications
 Each tab shows its count. A count with a plus, such as "5,002+", is not exact yet.
 
 The table shows **Name**, **Contact**, **Messages from them**, **Last contact** and **Tasks**, 50 rows a page. The
-pager below changes it to 25 or 100. A person with a phone and an email shows the first and "+1". A person with only a
-WhatsApp or MAX account shows that service. Bots are marked **bot**. Above the table you can search by name, phone or
-address, sort with **Order** (most messages, recent contact, name or most tasks), and keep only people with tasks or
-with a name.
+pager below changes it to 25 or 100. A person with a phone and an email shows both, one under the other. A person with
+only a WhatsApp or MAX account shows that service. Bots are marked as bots. Above the table you can search by name,
+phone or address, sort with **Order** (most messages, recent contact, name or most tasks), and keep only people with
+tasks or with a name.
+
+### Add a person
+
+**Add a person**, above the table, adds someone you know by name only, for example to give them a task before any
+message names them. Type the name and click **Add**. While you type, the form lists people with a similar name, each
+with **Open**. If the very same name is already there, the form asks once more, and **Add anyway** adds a second
+person.
 
 ## Open a person
 
 Click a name to open the person's card:
 
-- **Accounts:** each account with its service, the profiles of yours it was seen in, and a **bot** or **work** mark.
-  **Unlink** beside an account moves it off this person. It asks first.
+- **Accounts:** each account with its service, the profiles of yours it was seen in, and whether it is a bot, a
+  personal account or a work account. **Unlink** beside an account moves it off this person. It asks first.
 - **Move accounts to a new person:** tick the accounts that belong to someone else and confirm. At least one account
-  stays with this person. The dialog names the person the accounts leave, so WireCat never takes an account from
-  someone else.
+  stays with this person. Under **Name of the new person**, pick one of the ticked accounts' names. The dialog names
+  the person the accounts leave, so WireCat never takes an account from someone else.
 - **Joined into this person:** each join, with **Undo**. **Undo the join** names the person and lists every account
   that goes back.
 - **Tasks:** the tasks assigned to this person. Each opens on the [Tasks](./index.mdx#tasks) page.
@@ -70,6 +77,9 @@ When WireCat finds people who may be the same person, a band at the top says how
 Several people can write from one address, such as `info@` or `sales@` of a company. Such a card is marked **shared
 mailbox**. **Company mailbox** gives the address to a company, which you choose or type. WireCat then stops suggesting
 a join for the people on it.
+
+Two people with the same name can also share a company domain. **Company address** on such a card asks which of their
+addresses is the company's. The address goes to the company, and the two people stay apart.
 
 ## Answer your agents
 

@@ -4,7 +4,17 @@ sidebarTitle: "Buscar en los registros"
 description: Descubre por qué falló una herramienta, con qué frecuencia pasa y qué comando, perfil o error intervienen, con filtros, grupos y el registro de cada ejecución.
 ---
 
-La página **Registros** de WireCat Desktop muestra lo que cada herramienta de línea de comandos registró sobre sus propias ejecuciones. Una **ejecución** es un arranque de una herramienta, como `tg personal messages send`, desde el inicio hasta la salida. Usa esta página cuando una herramienta falló y quieres saber por qué, con qué frecuencia pasa o qué comando, perfil o error intervienen. Aprenderás a filtrar ejecuciones, agruparlas, abrir una y copiar su registro para un informe de error.
+Una herramienta falló, o un agente dice que un comando no funcionó, y quieres saber por qué. La página **Registros** de WireCat Desktop muestra lo que cada herramienta de línea de comandos registró sobre sus propias ejecuciones. Una **ejecución** es un arranque de una herramienta, como `tg personal messages send`, desde el inicio hasta la salida. Aquí ves con qué frecuencia pasa un fallo y qué comando, perfil, agente o error interviene. Después puedes abrir una ejecución y copiar su registro para un informe de error o para tu agente.
+
+**En esta página:** [Por qué casi todo son fallos](#por-qué-casi-todo-son-fallos) · [Buscar ejecuciones](#buscar-ejecuciones) · [Facetas](#filtrar-con-facetas) · [Agrupar ejecuciones](#agrupar-ejecuciones) · [Abrir una ejecución](#abrir-una-ejecución) · [Logs en el terminal](#logs-en-el-terminal) · [Privacidad](#privacidad)
+
+<DesktopShot
+  shot="logs"
+  folder="desktop/docs"
+  lang="es"
+  alt="La página Registros: el cuadro de búsqueda, los botones de periodo, las facetas a la izquierda y una tabla de ejecuciones con su herramienta, perfil, comando, agente y estado"
+  caption="Registros: cada ejecución que guardaron las herramientas, con las facetas a la izquierda."
+/>
 
 ## Qué muestra la página
 
@@ -14,13 +24,13 @@ Todas las herramientas de WireCat guardan logs de ejecución: Telegram (`tg`), M
 
 Una herramienta guarda cada ejecución: las correctas durante 7 días y las fallidas durante 30. Si una herramienta está configurada para guardar solo las fallidas, o su versión es más antigua, la lista muestra sobre todo fallos. Es lo esperado. No significa que todo esté roto.
 
-Para guardar todas las ejecuciones de Telegram, MAX o WhatsApp, elige **Guardar todas** para la herramienta en la parte superior de la página Registros, o cambia el ajuste tú mismo:
+Para guardar todas las ejecuciones de Telegram, MAX, WhatsApp o Correo, abre **Ajustes de registros** en la parte superior de la página Registros y elige **Todas** para la herramienta, o cambia el ajuste tú mismo:
 
 ```sh
 tg config set record true --defaults
 ```
 
-Esto se aplica a todos los perfiles de esa herramienta. Para MAX o WhatsApp, escribe `max` o `wa` en lugar de `tg`. La página no ofrece el interruptor para las otras tres herramientas; cambia el ajuste tú mismo:
+Esto se aplica a todos los perfiles de esa herramienta. Para MAX o WhatsApp, escribe `max` o `wa` en lugar de `tg`. La página no ofrece el interruptor para Zoom, Google Drive y Memo. Cambia el ajuste tú mismo:
 
 - Zoom: `zm config set record true`.
 - Google Drive: `drive personal config set record true --defaults`. Escribe cualquiera de tus perfiles en lugar de `personal`; con `--defaults` el ajuste se aplica a todos.
@@ -31,6 +41,8 @@ Una herramienta borra las ejecuciones con más de `keep_runs_for_days` días. El
 ## Buscar ejecuciones
 
 Escribe en el cuadro de búsqueda sobre la lista. Una búsqueda tiene condiciones separadas por espacios. Una ejecución debe cumplir todas las condiciones.
+
+El cuadro de búsqueda empieza con `-no_command:true`. Oculta las ejecuciones que empezaron sin un comando, casi siempre por una errata o un perfil que falta. Para verlas, quita la condición o pulsa **Mostrarlas** sobre la lista.
 
 | Escribe | Significado | Ejemplo |
 | --- | --- | --- |
@@ -87,7 +99,7 @@ La [búsqueda de mensajes](../search.mdx#prueba-con-mensajes-de-ejemplo) usa la 
 
 ## Filtrar con facetas
 
-La columna de la izquierda muestra las **facetas**: los valores de Herramienta, Estado, Comando, Perfil y Código de error, con el número de ejecuciones de cada uno. Haz clic en un valor para ver solo esas ejecuciones y vuelve a hacer clic para quitar el filtro. Alt + clic en un valor, o su botón de menos, oculta esas ejecuciones. Cada clic añade una condición al cuadro de búsqueda, así puedes ver y editar la búsqueda. Los números tienen en cuenta todas las demás condiciones. Por eso puedes elegir también un segundo valor de la misma faceta.
+La columna de la izquierda muestra las **facetas**: los valores de campos como Herramienta, Estado, Comando, Perfil, Agente, Iniciada desde y Código de error, con el número de ejecuciones de cada uno. Haz clic en un valor para ver solo esas ejecuciones y vuelve a hacer clic para quitar el filtro. Alt + clic en un valor, o su botón de menos, oculta esas ejecuciones. Cada clic añade una condición al cuadro de búsqueda, así puedes ver y editar la búsqueda. Los números tienen en cuenta todas las demás condiciones. Por eso puedes elegir también un segundo valor de la misma faceta.
 
 En una ventana estrecha, abre las facetas con el botón **Filtros**.
 
