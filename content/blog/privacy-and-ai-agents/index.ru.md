@@ -4,7 +4,7 @@ description: Когда приватность реально нужна, в к�
 date: 2026-11-05
 tags: [security, ai-agents]
 author: viacheslav-ptsarev
-draft: true
+draft: false
 ---
 
 Сейчас многие задумываются о приватности, и есть из-за чего. В марте этого года The Register [писал](https://www.theregister.com/2026/03/03/chatbot_data_harvesting_personal_info/) про коммерческую базу, где продаются переписки с ChatGPT и Claude, и исследователь нашел в ней данные пациентов, которые туда вставили медики. В декабре 2025 VPN-расширение для Chrome, которое обещало как раз приватность, вместе с еще 7 расширениями того же издателя (больше 8 миллионов пользователей) [собирали](https://www.malwarebytes.com/blog/news/2025/12/chrome-extension-slurps-up-ai-chats-after-users-installed-it-for-privacy) чаты с ИИ и отправляло их брокеру данных. В феврале этого года одно приложение-чатбот [открыло](https://www.foxnews.com/tech/millions-ai-chat-messages-exposed-app-data-leak.print), по оценке исследователя, около 300 миллионов сообщений 25 миллионов пользователей, просто из-за криво настроенного Firebase. И это я выбрал только самое свежее.

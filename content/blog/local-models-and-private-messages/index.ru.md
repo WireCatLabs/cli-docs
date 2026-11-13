@@ -4,7 +4,7 @@ description: Что такое WireCat, каким его функциям ну�
 date: 2026-11-10
 tags: [ai-agents, search, benchmarks]
 author: viacheslav-ptsarev
-draft: true
+draft: false
 ---
 
 Агенты вроде Claude Code или Codex хорошо пишут код, но не знают, о чем вы договорились с подрядчиком на прошлой неделе, потому что это лежит в Telegram, в почте и в записи созвона. Я делаю [WireCat](https://wirecat.dev/ru), набор open source инструментов, которые дают агенту доступ ко всему этому, и приложение, в котором все это подключается без терминала.

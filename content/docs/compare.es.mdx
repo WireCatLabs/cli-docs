@@ -1,0 +1,151 @@
+---
+title: WireCat y otras herramientas
+sidebarTitle: "Comparación"
+description: De qué partes se compone un asistente personal de IA, cuáles cubre WireCat, en qué se diferencia de OpenClaw, Hermes, ChatGPT y de sistemas de memoria como Mem0, y cómo puedes usarlos juntos.
+---
+
+Con WireCat tu agente de IA puede responder a "qué acordamos con Iván sobre el proyecto" y mostrar el mensaje, el correo
+o la grabación de la llamada donde se dijo. Da igual en qué agente trabajes, y tus datos se quedan en tu ordenador.
+
+Mucha gente pregunta al principio en qué se diferencia WireCat de OpenClaw, ChatGPT o Mem0. La respuesta es que son
+partes distintas de un mismo sistema. Abajo, paso a paso, de qué se compone un asistente personal de IA, qué hace
+WireCat, qué hacen los demás y cómo se pueden combinar.
+
+Lo principal en una lista:
+
+- **WireCat no es un agente ni un modelo.** Conecta tus fuentes (mensajería, correo, reuniones, CRM), guarda una copia
+  en tu ordenador y da al agente búsqueda rápida y memoria.
+- **El agente lo eliges tú.** Claude Code, Codex, OpenClaw, Hermes, ChatGPT o Claude en el navegador. Cambias de agente
+  y la memoria se queda.
+- **La memoria guarda los propios registros, no un resumen.** Por eso el agente puede mostrar de dónde sacó la
+  respuesta.
+- **WireCat complementa a OpenClaw y Hermes, no los sustituye.** Son buenos como asistente siempre disponible, y WireCat
+  les da tus datos.
+
+## De qué se compone un asistente de IA
+
+Cuando le preguntas a un asistente algo de tu vida, trabajan varias partes distintas. Normalmente no se distinguen, y de
+ahí viene la confusión.
+
+![Seis capas de un asistente personal de IA: dónde hablas con él, el agente, el modelo, la memoria, el almacenamiento con búsqueda y las fuentes. WireCat cubre las tres de abajo.](/compare-layers.es.svg)
+
+- **Dónde hablas con él.** Una terminal, una ventana de chat, mensajes de voz, un bot en Telegram. Es solo la entrada.
+- **El agente (en inglés, harness).** El programa que recibe tu tarea y decide por sí mismo qué hacer después: qué
+  comando ejecutar, qué leer, qué responder. Claude Code, Codex, OpenClaw y Hermes son agentes.
+- **El modelo (LLM).** Lo que piensa y escribe el texto. Claude, GPT, Gemini o un modelo que funciona en tu ordenador.
+  El agente le pasa al modelo la tarea y lo que ha encontrado.
+- **La memoria.** Lo que el asistente sabe de ti entre conversaciones: quién es Iván, qué proyectos tienes, qué
+  decidiste la semana pasada. Sin memoria cada conversación empieza de cero.
+- **Almacenamiento y búsqueda.** Dónde están los propios mensajes y correos y cómo encontrar rápido lo que buscas. El
+  agente no puede releer todos tus mensajes en cada pregunta, es lento y caro, por eso hace falta búsqueda.
+- **Fuentes.** De dónde salen los datos: Telegram, WhatsApp, MAX, correo, Zoom, Google Drive, CRM, notas.
+
+WireCat cubre las tres capas de abajo, fuentes, almacenamiento con búsqueda y memoria, más la app [WireCat
+Desktop](./desktop/index.mdx), donde todo esto se instala y se configura sin terminal. El agente y el modelo los eliges
+tú.
+
+## Qué te da WireCat
+
+- **Todas las fuentes en un sitio.** Telegram, WhatsApp, MAX, correo, reuniones de Zoom, Google Drive y Calendar, notas
+  de Obsidian, Bitrix24. Los servicios de mensajería se conectan con tu propia cuenta, así que el agente ve lo mismo que
+  tú, no solo un chat con un bot.
+- **Búsqueda en todo a la vez.** Una sola consulta sobre mensajes, correo, notas y tratos del CRM. Por palabras, también
+  en otra forma de la palabra, y por significado, cuando preguntas con otras palabras.
+- **Respuesta con su fuente.** Cada registro tiene un enlace al mensaje, correo o entrada del CRM original, y el agente
+  puede mostrarlo. Si una conclusión está mal, se ve enseguida.
+- **Personas y empresas.** Una persona en Telegram, en el correo y en el CRM es un solo contacto, no tres. Una pregunta
+  sobre una persona reúne todos sus mensajes de todas las fuentes.
+- **Tareas y acuerdos.** WireCat encuentra en tus mensajes promesas y tareas, y el agente puede preguntar qué prometiste
+  a quién y qué corre prisa ahora.
+- **Tus datos contigo.** La copia se guarda en tu ordenador, y la búsqueda funciona sin nube. Más en
+  [Seguridad](./security.mdx).
+- **Cualquier agente.** Por la línea de comandos o por MCP (la forma estándar de conectar herramientas a agentes).
+  Telegram y MAX también se pueden conectar a ChatGPT o Claude en el navegador.
+
+## WireCat y los agentes: OpenClaw, Hermes, Claude Code
+
+Es la pregunta más frecuente, porque OpenClaw y Hermes también se llaman asistentes personales, y también tienen memoria
+y conexiones a servicios.
+
+OpenClaw y Hermes son agentes que funcionan todo el tiempo. Hacen tareas programadas, reaccionan a eventos y puedes
+hablarles por voz a través de Telegram. WireCat no habla contigo ni reacciona a eventos, salvo los resúmenes y el agente
+de correo, y no tengo intención de convertirlo en ese tipo de asistente.
+
+La diferencia está en la memoria. Cada uno de esos agentes tiene su propia memoria, hecha a su medida. Si mañana quieres
+pasarte a otro agente, tendrás que trasladarla, y eso no siempre es fácil. WireCat guarda la memoria aparte del agente,
+así que el mismo contexto está disponible para OpenClaw, Claude Code y ChatGPT.
+
+Por eso yo los usaría juntos. OpenClaw o Hermes como asistente siempre disponible que responde en Telegram, y WireCat
+como su fuente de datos y su memoria. [Conectar tu agente de IA](./agents.mdx) explica cómo conectarlos.
+
+| | OpenClaw, Hermes | Claude Code, Codex | WireCat |
+| --- | --- | --- | --- |
+| Qué es | un asistente que funciona todo el tiempo | un agente que abres para una tarea | fuentes, almacenamiento, búsqueda, memoria |
+| Modelo | conectas cualquiera | por defecto el de su empresa, se puede otro | no tiene propio |
+| Memoria | la suya, dentro del agente | archivos de instrucciones y notas del agente | compartida por cualquier agente |
+| Tu mensajería | canales para escribir al agente, no leen los mensajes antiguos | solo con conexiones (MCP) | todo el historial, desde tu cuenta |
+| Tareas programadas | sí | sí | resúmenes y el agente de correo |
+
+## WireCat y ChatGPT o Claude con conectores
+
+ChatGPT y Claude en el navegador también saben conectar Gmail, Google Drive y otros servicios. Es cómodo y se configura
+en un par de minutos, y si todos tus datos están ahí, puede que te baste.
+
+Las diferencias son estas:
+
+- **Los conectores van al servicio en cada pregunta** (en cuentas personales). Busca el propio buscador de Gmail o
+  Drive. WireCat guarda una copia en tu ordenador y busca él mismo, en todas las fuentes a la vez.
+- **Casi no hay mensajería.** Un Telegram, WhatsApp o MAX personal no se puede conectar directamente a ChatGPT, y los
+  acuerdos suelen vivir justo ahí.
+- **Los datos van a la nube.** Todo lo que se lee se procesa en el lado del proveedor. Con WireCat puedes elegir qué
+  sale, hasta [usarlo todo con modelos locales](./desktop/local-models.mdx).
+
+Y esto también se puede combinar. Telegram y MAX de WireCat se conectan a ChatGPT y Claude en el navegador por MCP. Para
+eso tu ordenador tiene que estar encendido y accesible desde internet con un túnel, y el texto que encuentre irá a
+OpenAI o Anthropic, como todo lo que lee un asistente en la nube. [Usar desde la web o el móvil](./browser-apps.mdx)
+explica cómo.
+
+## WireCat y los sistemas de memoria: Mem0, Supermemory, Honcho, Hindsight
+
+Ahora hay muchos sistemas de memoria para agentes, y cada uno promete que el agente dejará de olvidarlo todo. Funcionan
+de formas distintas, y la diferencia principal es qué guardan exactamente.
+
+La mayoría de los sistemas de memoria dan tus mensajes a un modelo, y él decide qué hechos recordar. En la memoria queda
+un resumen, por ejemplo "Iván se encarga del proyecto X", y el agente busca en esos resúmenes. Es cómodo mientras los
+hechos son correctos. Pero el modelo puede equivocarse, saltarse algo importante o no darse cuenta de que el plazo se
+movió después, y al agente le cuesta mostrar de dónde salió la respuesta.
+
+WireCat hace lo contrario. Guarda los propios registros tal cual y construye encima cosas que la gente entiende: una
+persona, una empresa, una tarea, un proyecto. Las relaciones entre ellas, quién prometió qué a quién, quién está en qué
+proyecto, también llevan a los registros originales. El agente busca tanto en el texto como en esas relaciones, y puede
+mostrar la fuente.
+
+| | Qué guarda | Dónde están los datos | Fuente de la respuesta | Conexiones propias a mensajería |
+| --- | --- | --- | --- | --- |
+| [Mem0](https://mem0.ai) | hechos que sacó el modelo | en la nube o en tu ordenador | un hecho, sin el registro original | no |
+| [Supermemory](https://supermemory.ai) | trozos de documentos y un grafo de hechos | en la nube o en tu ordenador | en parte | no, tiene correo y documentos |
+| [Honcho](https://honcho.dev) | mensajes y conclusiones sobre cada participante | en la nube o en tu ordenador | conclusiones sin el registro original | no |
+| [Hindsight](https://github.com/vectorize-io/hindsight) | hechos, personas y relaciones | en tu ordenador o en la nube | en parte | no |
+| Memoria de OpenClaw, Hermes | notas y hechos del agente en archivos | en tu ordenador, la búsqueda puede ir por la nube | depende del agente | solo los mensajes nuevos al agente |
+| WireCat | los propios registros más personas, empresas, tareas y relaciones | en tu ordenador | un enlace en cada registro | todo el historial, desde tu cuenta |
+
+Estos sistemas también tienen puntos fuertes. Por ejemplo, Hindsight responde mejor que nosotros a preguntas en las que
+un hecho cambió con el tiempo. Y los cuatro tienen plugins listos para OpenClaw y Hermes. Una comparación detallada con
+cifras, incluido que una simple carpeta con archivos no lo hace peor con volúmenes pequeños, está en el post [Comparé
+memorias para agentes de IA](/es/blog/memory-for-agents-benchmark).
+
+## Cuándo no necesitas WireCat
+
+- Todos tus datos están en Gmail y Google Drive, y te bastan los conectores de ChatGPT o Claude.
+- Tienes pocos datos, y al agente le basta una carpeta con archivos en la que busca él mismo.
+- Necesitas un asistente que haga cosas de forma programada y responda por voz, y no necesitas conectar tus propios
+  datos. Entonces usa OpenClaw o Hermes.
+
+Pero si tus datos están repartidos entre mensajería, correo, reuniones y un CRM, y quieres que cualquier agente
+encuentre en ellos la respuesta y muestre de dónde sale, WireCat es justo para eso.
+
+## Por dónde empezar
+
+- [Descarga WireCat Desktop](./desktop/index.mdx) y conecta tu primera fuente.
+- [Conecta tu agente](./agents.mdx).
+- [Primeras tareas](./first-tasks.mdx), para probarlo con tus propios datos.
