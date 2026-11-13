@@ -128,9 +128,9 @@ memo models search-consents set openai --model <model> --base-url http://127.0.0
 
 ## 6. Mensajes de voz
 
-Por defecto, el servicio de mensajería hace el texto a partir de su propia copia del mensaje de voz, cuando tiene
-servicio de voz, como Telegram Premium. Para hacer el texto en tu ordenador con un modelo que descargaste, añade
-`--local`:
+Por defecto, el texto lo hace un modelo descargado en tu ordenador. Si no lo hay, lo hace el servicio de mensajería a
+partir de su propia copia del mensaje, cuando tiene servicio de voz, como Telegram Premium. Para que se quede solo en tu
+ordenador, añade `--local`:
 
 ```sh
 tg <profile> messages transcribe <chat> <message> --local
@@ -194,7 +194,6 @@ antes de activarlos.
 Cuando termines los pasos de arriba, abre **Ajustes**, **Solo este ordenador**, y activa **Todas las llamadas a
 modelos en este ordenador**. Así cada herramienta de WireCat envía texto solo a un modelo en este ordenador, y rechaza
 un modelo en otro ordenador antes de enviar nada. Un agente puede activarlo, pero solo tú puedes desactivarlo.
-Hoy lo siguen memo y max. tg, whatsapp, el correo y zoom lo seguirán desde sus próximas versiones.
 
 Bajo el interruptor, **Adónde envía datos cada función ahora** lista cada función con **Este ordenador**, **Otro
 ordenador**, **A través de tu agente** o **Desactivado**. Arregla cada fila que dice **Otro ordenador**. Lo que va **A

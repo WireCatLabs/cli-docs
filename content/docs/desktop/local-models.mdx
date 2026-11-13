@@ -120,8 +120,9 @@ memo models search-consents set openai --model <model> --base-url http://127.0.0
 
 ## 6. Voice messages
 
-By default the messenger makes the text from its own copy of a voice message, when it has a speech service, such as
-Telegram Premium. To make the text on your computer with a model you downloaded, add `--local`:
+By default a model downloaded to your computer makes the text. Without it, the messenger makes the text from its own
+copy of the message, when it has a speech service, such as Telegram Premium. To keep it on your computer only, add
+`--local`:
 
 ```sh
 tg <profile> messages transcribe <chat> <message> --local
@@ -182,7 +183,6 @@ the mail agent off, or check where your agent's model runs before you turn them 
 When the steps above are done, open **Settings**, **Only this computer**, and turn on **Keep every model call on this
 computer**. Then every WireCat tool sends text only to a model on this computer, and refuses a model on another
 computer before anything is sent. An agent may turn it on, but only you can turn it off.
-Today memo and max follow it. tg, whatsapp, mail and zoom follow it from their next versions.
 
 Under the switch, **Where each feature sends data now** lists each feature with **This computer**, **Another
 computer**, **Through your agent** or **Off**. Fix each row that says **Another computer**. What runs **Through your
