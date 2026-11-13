@@ -235,5 +235,20 @@
     "id": "crm-upkeep",
     "pages": ["b24/configuration.md", "b24/troubleshooting.md"],
     "families": { "b24": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
+    "id": "calls-connect",
+    "pages": ["asterisk/installation.md", "asterisk/asterisk.md", "asterisk/usage.md", "asterisk/security.md"],
+    "families": { "asterisk": ["session", "skill", "mcp"] }
+  },
+  {
+    "id": "calls-read-transcribe",
+    "pages": ["asterisk/usage.md", "asterisk/asterisk.md", "asterisk/commands.md"],
+    "families": { "asterisk": ["meetings", "events", "models", "commands"] }
+  },
+  {
+    "id": "calls-upkeep",
+    "pages": ["asterisk/configuration.md", "asterisk/troubleshooting.md"],
+    "families": { "asterisk": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

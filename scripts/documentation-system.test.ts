@@ -152,6 +152,12 @@ it("checks every non-executable shorthand alternative instead of hiding unknown 
   expect(validateInvocation(commandSegments("tg [profile] resource action")[0], program, true)?.kind).toBe("syntax")
 })
 
+it("leaves the PBX's own asterisk console command to Asterisk", () => {
+  const program: Program = { cli: "asterisk", globalOptions: [], commands: [leaf(["meetings"])] }
+  expect(validateInvocation('asterisk -rx "cdr show status"', program, false)).toBeNull()
+  expect(validateInvocation('asterisk -r "cdr show status"', program, false)?.kind).toBe("invalid")
+})
+
 it("validates released commands from the actual published HTML, including encoded arguments", () => {
   const source = JSON.stringify(
     {

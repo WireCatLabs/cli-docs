@@ -23,7 +23,8 @@ certify an npm release and does not change release gates for published tools. So
 changelog from their sidebar until there is a release to document.
 
 Some pages are written on this site, not in a tool's release: the comparison (`compare`, every tool)
-and the guides that cross tools (`email` in Mail, `meetings` in Zoom). `siteOwnedPages` in
+the guides that cross tools (`email` in Mail, `meetings` in Zoom), and the roadmap of a tool whose release
+has none yet (`roadmap` in Asterisk). `siteOwnedPages` in
 `scripts/localize.ts` lists them, with the sidebar page each follows. Their sources are
 `translations/pages/<tool>/<slug>.<lang>.md`; sync copies them into the tool's section and its sidebar.
 Add a page there, not in the tool's repository.

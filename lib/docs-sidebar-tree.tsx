@@ -51,12 +51,14 @@ import {
   PackagePlus,
   Paperclip,
   PenLine,
+  PhoneCall,
   Reply,
   Rocket,
   Route,
   ScrollText,
   Search,
   Send,
+  Server,
   Settings2,
   ShieldCheck,
   SlidersHorizontal,
@@ -86,6 +88,7 @@ export const sidebarIcons = {
   email: Mail,
   mail: Mail,
   b24: Handshake,
+  asterisk: Server,
   notes: StickyNote,
   sources: FilePlus2,
   tags: Tag,
@@ -182,6 +185,7 @@ const folderIcons = {
   mail: Mail,
   memo: NotebookPen,
   b24: Handshake,
+  asterisk: PhoneCall,
   zm: Video,
   desktop: Monitor,
 }
@@ -278,7 +282,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm|b24)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm|b24|asterisk)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

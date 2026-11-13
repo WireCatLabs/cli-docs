@@ -35,6 +35,8 @@ export const siteOwnedPages: { tool?: string; slug: string; after?: string }[] =
   { slug: "compare" },
   { tool: "mail", slug: "email", after: "usage" },
   { tool: "zm", slug: "meetings", after: "usage" },
+  // asterisk ships no roadmap.md yet; drop this once its release has one.
+  { tool: "asterisk", slug: "roadmap", after: "changelog" },
 ]
 export const siteOwnedFor = (tool: string) => siteOwnedPages.filter((page) => !page.tool || page.tool === tool)
 

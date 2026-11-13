@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
+import { asteriskDescriptions } from "./asterisk-descriptions"
 import { b24Descriptions } from "./b24-descriptions"
 import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
@@ -99,6 +100,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
   if (authored?.trim()) return authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
   const reviewed = {
+    asterisk: asteriskDescriptions,
     b24: b24Descriptions,
     drive: driveDescriptions,
     gcal: gcalDescriptions,

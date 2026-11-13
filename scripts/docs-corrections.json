@@ -2785,5 +2785,19 @@
         }
       ]
     }
+  },
+  {
+    "tool": "asterisk",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.1.0/docs/index.md",
+    "reason": "The overview page's sidebar label is its title. asterisk's overview is titled with the command name; the other tools' overview pages carry the product name. Drop this once the release's own heading is Asterisk.",
+    "replacements": {
+      "en": [
+        {
+          "before": "title: \"asterisk\"",
+          "after": "title: \"Asterisk\""
+        }
+      ]
+    }
   }
 ]
