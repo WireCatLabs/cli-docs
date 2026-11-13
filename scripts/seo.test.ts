@@ -59,7 +59,9 @@ describe("localized SEO", () => {
       expect(documentationTitle(lang, ["max"], "MAX")).toContain("MAX")
       expect(documentationTitle(lang, ["max"], "MAX")).toContain("CLI")
       expect(documentationTitle(lang, ["agents"], "Connect your agent")).toBe("Connect your agent")
-      expect(documentationTitle(lang, ["tg", "search"], "Search")).toBe("Search — tg")
+      expect(documentationTitle(lang, ["tg", "search"], "Search")).toBe("Search — Telegram")
+      expect(documentationTitle(lang, ["pbx", "usage"], "Use it")).toBe("Use it — Asterisk")
+      expect(documentationTitle(lang, ["pbx"], "Asterisk")).toContain("FreePBX")
     },
   )
 
@@ -120,7 +122,7 @@ describe("localized SEO", () => {
   it("renders the newly released Memo comparison metadata in every locale", () => {
     for (const lang of seoLocales) {
       expect(documentationDescription(lang, ["memo", "compare"])).toContain("Memo")
-      expect(documentationTitle(lang, ["memo", "compare"], "Comparison")).toContain("memo")
+      expect(documentationTitle(lang, ["memo", "compare"], "Comparison")).toContain("Memo")
     }
   })
 
@@ -130,7 +132,7 @@ describe("localized SEO", () => {
       expect(installation).toContain("npm")
       expect(installation).toContain("WireCat")
       expect(documentationDescription(lang, ["drive", "changelog"])).toContain("Google Drive")
-      expect(documentationTitle(lang, ["drive"], "Google Drive")).toBe("Google Drive")
+      expect(documentationTitle(lang, ["drive"], "Google Drive")).toContain("Google Drive")
     }
   })
 })

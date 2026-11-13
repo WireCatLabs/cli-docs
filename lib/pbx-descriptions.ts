@@ -1,7 +1,8 @@
 export const pbxDescriptions: Record<string, Record<string, string>> = {
   en: {
     compare: "Compare tools for Asterisk and FreePBX calls: transcripts, where recordings go, agent access and setup.",
-    index: "Your company's Asterisk PBX calls on your computer, transcribed locally and open to your AI agent.",
+    index:
+      "Connect Asterisk or FreePBX calls to your AI agent: transcribed locally, one caller across chats, mail and CRM.",
     installation: "Install the Asterisk CLI with npm on your own computer, check Node.js and run doctor.",
     asterisk:
       "Connect Master.csv or the CDR database and the recordings folder of your Asterisk or FreePBX, read-only.",
@@ -16,7 +17,8 @@ export const pbxDescriptions: Record<string, Record<string, string>> = {
   },
   ru: {
     compare: "Сравните инструменты для звонков Asterisk и FreePBX: расшифровки, куда уходят записи, доступ агента.",
-    index: "Звонки АТС Asterisk вашей компании на вашем компьютере, с локальной расшифровкой и доступом для ИИ-агента.",
+    index:
+      "Подключите звонки Asterisk или FreePBX к ИИ-агенту: расшифровка на компьютере, один клиент в чатах, почте и CRM.",
     installation: "Установите CLI Asterisk через npm на свой компьютер, проверьте Node.js и запустите doctor.",
     asterisk:
       "Подключите Master.csv или базу CDR и папку аудиозаписей вашей АТС Asterisk или FreePBX, только для чтения.",
@@ -32,7 +34,7 @@ export const pbxDescriptions: Record<string, Record<string, string>> = {
     compare:
       "Compara herramientas para llamadas de Asterisk y FreePBX: transcripciones, grabaciones y acceso del agente.",
     index:
-      "Las llamadas de la centralita Asterisk de tu empresa en tu ordenador, transcritas en local y para tu agente.",
+      "Conecta las llamadas de Asterisk o FreePBX a tu agente de IA: transcritas en local, un cliente en chats, correo y CRM.",
     installation: "Instala la CLI de Asterisk con npm en tu propio ordenador, comprueba Node.js y ejecuta doctor.",
     asterisk: "Conecta Master.csv o la base de datos del CDR y la carpeta de grabaciones de tu Asterisk o FreePBX.",
     usage: "Lista y lee tus llamadas, transcribe sus grabaciones y deja que tu agente las use por MCP o con una skill.",
