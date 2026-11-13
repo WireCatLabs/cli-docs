@@ -83,6 +83,8 @@ export default async function Page(props: Props) {
     ]),
   ]
   const taskGuide = readerGuide(page.slugs, lang)
+  // The H1 is the page title search engines and answer engines see: "Install — Asterisk", not "Install".
+  const heading = documentationTitle(lang, page.slugs, taskGuide?.title ?? page.data.title)
   const toc = taskGuide
     ? [
         ...(taskGuide.setup ? [{ title: taskGuide.setup.title, url: "#task-bot-connect", depth: 2 }] : []),
@@ -117,14 +119,14 @@ export default async function Page(props: Props) {
         data={pageStructuredData({
           lang,
           pathname: page.url,
-          title: taskGuide?.title ?? page.data.title,
+          title: heading,
           description,
           breadcrumbs,
           tool,
         })}
       />
       <DocsDisclosures />
-      <DocsTitle>{taskGuide?.title ?? page.data.title}</DocsTitle>
+      <DocsTitle>{heading}</DocsTitle>
       <DocsDescription className="mb-0">{description}</DocsDescription>
       <div className="flex flex-row gap-2 items-center border-b pb-6">
         <MarkdownCopyButton markdownUrl={markdownUrl} />

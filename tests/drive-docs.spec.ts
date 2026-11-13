@@ -1,9 +1,15 @@
 import { expect, test } from "@playwright/test"
 
+const driveTitles = {
+  en: "Connect Google Drive and Docs to your AI agent",
+  ru: "Подключите Google Drive и Google Docs к ИИ-агенту",
+  es: "Conecta Google Drive y Docs a tu agente de IA",
+}
+
 for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: Drive overview leads to installation beside messenger tools`, async ({ page }) => {
     await page.goto(`/${lang}/docs/drive`)
-    await expect(page.getByRole("heading", { level: 1, name: "Google Drive", exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1, name: driveTitles[lang], exact: true })).toBeVisible()
     await expect(page.locator(`a[href="/${lang}/docs/drive/installation"]`).first()).toBeVisible()
     await expect(page.locator("main")).toContainText("SQLite")
     await expect(
@@ -81,7 +87,7 @@ for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: Drive changelog renders current and first released features`, async ({ page }) => {
     await page.goto(`/${lang}/docs/drive/changelog`)
     const title = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
-    await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1, name: `${title} — Google Drive`, exact: true })).toBeVisible()
     await expect(page.locator("main")).toContainText("0.1.0")
     await expect(page.locator("main")).toContainText("0.7.0")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
