@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-labelledby="t d">
+  <title id="t">Из чего состоит личный ИИ-ассистент и что из этого закрывает WireCat</title>
+  <desc id="d">Шесть уровней сверху вниз: где вы общаетесь с ассистентом, агент, модель, память, хранилище с поиском и источники данных. WireCat закрывает три нижних уровня и приложение для настройки, а агента и модель вы выбираете сами.</desc>
+  <rect width="1000" height="640" rx="20" fill="#f8fafc"/>
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#17243a">
+    <text x="40" y="44" font-size="22" font-weight="700">Из чего состоит личный ИИ-ассистент</text>
+    <text x="40" y="70" font-size="14" fill="#475569">Слева что делает уровень, справа примеры. Зеленым то, что дает WireCat.</text>
+
+    <g font-size="15">
+      <rect x="40" y="92" width="920" height="70" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="64" y="122" font-size="17" font-weight="650">Где вы с ним говорите</text>
+      <text x="64" y="146" fill="#475569">терминал, чат, голос, бот в мессенджере</text>
+      <text x="560" y="134" fill="#334155">чат Claude или ChatGPT, бот в Telegram</text>
+
+      <rect x="40" y="172" width="920" height="70" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="64" y="202" font-size="17" font-weight="650">Агент (harness)</text>
+      <text x="64" y="226" fill="#475569">берет задачу, решает, какие инструменты вызвать</text>
+      <text x="560" y="214" fill="#334155">Claude Code, Codex, OpenClaw, Hermes</text>
+
+      <rect x="40" y="252" width="920" height="70" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="64" y="282" font-size="17" font-weight="650">Модель (LLM)</text>
+      <text x="64" y="306" fill="#475569">думает и пишет текст</text>
+      <text x="560" y="294" fill="#334155">Claude, GPT, Gemini, локальная модель</text>
+
+      <rect x="40" y="340" width="920" height="268" rx="16" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+      <text x="64" y="366" font-size="14" font-weight="700" fill="#047857">WIRECAT</text>
+
+      <rect x="60" y="378" width="880" height="66" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
+      <text x="84" y="406" font-size="17" font-weight="650">Память</text>
+      <text x="84" y="430" fill="#475569">люди, компании, задачи, решения и связи между ними</text>
+      <text x="560" y="418" fill="#334155">каждый факт ведет к записи-источнику</text>
+
+      <rect x="60" y="454" width="880" height="66" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
+      <text x="84" y="482" font-size="17" font-weight="650">Хранилище и поиск</text>
+      <text x="84" y="506" fill="#475569">копия всех данных у вас, поиск по словам и по смыслу</text>
+      <text x="560" y="494" fill="#334155">на вашем компьютере, без облака</text>
+
+      <rect x="60" y="530" width="880" height="66" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
+      <text x="84" y="558" font-size="17" font-weight="650">Источники</text>
+      <text x="84" y="582" fill="#475569">откуда берутся данные</text>
+      <text x="560" y="570" fill="#334155">Telegram, WhatsApp, MAX, почта, Zoom, CRM...</text>
+    </g>
+  </g>
+</svg>
