@@ -100,8 +100,8 @@ Both helpers are off by default. They are in Memo's details: on the Tools page, 
 
 **Search harder** reorders the top results of one search when you press the button. Click **Allow**, choose
 **OpenAI**, type your local model's name in **Model**, and enter `http://127.0.0.1:11434/v1` in **Address of another
-OpenAI-compatible service**. Then agree with the button that names the provider. It waits only 5 seconds for an answer, so a model that runs without a graphics card will likely
-run out of time, and the search keeps its own order.
+OpenAI-compatible service**. Then agree with the button that names the provider. It waits up to 60 seconds for a model on this computer and 5 seconds for a hosted one. A model that runs without a
+graphics card may still run out of time, and then the search keeps its own order.
 
 **Rewrite records for better search** adds other words to your notes, documents and emails. Click **Turn on** and
 choose **Another model at an address**. Type the model's name as your server names it, for example `llama3.1:8b`, and
@@ -120,8 +120,9 @@ memo models search-consents set openai --model <model> --base-url http://127.0.0
 
 ## 6. Voice messages
 
-By default the messenger makes the text from its own copy of a voice message, when it has a speech service, such as
-Telegram Premium. To make the text on your computer with a model you downloaded, add `--local`:
+By default a model downloaded to your computer makes the text. Without it, the messenger makes the text from its own
+copy of the message, when it has a speech service, such as Telegram Premium. To keep it on your computer only, add
+`--local`:
 
 ```sh
 tg <profile> messages transcribe <chat> <message> --local
@@ -196,8 +197,8 @@ provider. Only this computer does not stop it. Leave it at **Never** if no pictu
 1. Ollama or another model server runs on this computer, and Ollama's cloud models are off.
 2. **Settings**, **AI model** is Ollama or an address on this computer.
 3. **Reading for facts** uses the AI model or Ollama.
-4. **Search harder** is off, or points at your local server. **Rewrite records for better search** is off, or set from
-   a terminal to your local server.
+4. **Search harder** is off, or points at your local server. **Rewrite records for better search** is off, or points at your
+   local server.
 5. Voice messages are transcribed with `--local`.
 6. Your agent runs on a local model, or you connect no agent.
 7. Digests and the mail agent are off, or their agent runs a model on this computer.

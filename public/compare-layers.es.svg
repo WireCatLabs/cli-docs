@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" role="img" aria-labelledby="t d">
+  <title id="t">De qué se compone un asistente personal de IA y qué cubre WireCat</title>
+  <desc id="d">Seis capas de arriba abajo: dónde hablas con el asistente, el agente, el modelo, la memoria, el almacenamiento con búsqueda y las fuentes de datos. WireCat cubre las tres capas de abajo y la app para configurarlas, y el agente y el modelo los eliges tú.</desc>
+  <rect width="1000" height="640" rx="20" fill="#f8fafc"/>
+  <g font-family="system-ui, -apple-system, sans-serif" fill="#17243a">
+    <text x="40" y="44" font-size="22" font-weight="700">De qué se compone un asistente personal de IA</text>
+    <text x="40" y="70" font-size="14" fill="#475569">A la izquierda, qué hace la capa. A la derecha, ejemplos. En verde, lo que da WireCat.</text>
+
+    <g font-size="15">
+      <rect x="40" y="92" width="920" height="70" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="64" y="122" font-size="17" font-weight="650">Dónde hablas con él</text>
+      <text x="64" y="146" fill="#475569">terminal, chat, voz, un bot de mensajería</text>
+      <text x="560" y="134" fill="#334155">chat de Claude o ChatGPT, bot de Telegram</text>
+
+      <rect x="40" y="172" width="920" height="70" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="64" y="202" font-size="17" font-weight="650">Agente (harness)</text>
+      <text x="64" y="226" fill="#475569">recibe la tarea, decide qué herramientas llamar</text>
+      <text x="560" y="214" fill="#334155">Claude Code, Codex, OpenClaw, Hermes</text>
+
+      <rect x="40" y="252" width="920" height="70" rx="12" fill="#ffffff" stroke="#cbd5e1"/>
+      <text x="64" y="282" font-size="17" font-weight="650">Modelo (LLM)</text>
+      <text x="64" y="306" fill="#475569">piensa y escribe el texto</text>
+      <text x="560" y="294" fill="#334155">Claude, GPT, Gemini, un modelo local</text>
+
+      <rect x="40" y="340" width="920" height="268" rx="16" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+      <text x="64" y="366" font-size="14" font-weight="700" fill="#047857">WIRECAT</text>
+
+      <rect x="60" y="378" width="880" height="66" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
+      <text x="84" y="406" font-size="17" font-weight="650">Memoria</text>
+      <text x="84" y="430" fill="#475569">personas, empresas, tareas, decisiones y sus vínculos</text>
+      <text x="560" y="418" fill="#334155">cada hecho lleva a su registro de origen</text>
+
+      <rect x="60" y="454" width="880" height="66" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
+      <text x="84" y="482" font-size="17" font-weight="650">Almacenamiento y búsqueda</text>
+      <text x="84" y="506" fill="#475569">copia de tus datos, búsqueda por palabras y sentido</text>
+      <text x="560" y="494" fill="#334155">en tu ordenador, sin nube</text>
+
+      <rect x="60" y="530" width="880" height="66" rx="12" fill="#ffffff" stroke="#6ee7b7"/>
+      <text x="84" y="558" font-size="17" font-weight="650">Fuentes</text>
+      <text x="84" y="582" fill="#475569">de dónde salen los datos</text>
+      <text x="560" y="570" fill="#334155">Telegram, WhatsApp, MAX, correo, Zoom, CRM...</text>
+    </g>
+  </g>
+</svg>
