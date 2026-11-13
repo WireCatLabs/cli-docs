@@ -118,7 +118,10 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(body).toContainText("drive personal mcp revoke --json")
     await expect(body).toContainText("DCR")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
-    const remoteLink = page.locator("#nd-sidebar").getByRole("link", { name: /ChatGPT.*Claude/ })
+    const remoteLink = page.locator("#nd-sidebar").getByRole("link", {
+      name: { en: "In the browser", ru: "В браузере", es: "En el navegador" }[lang],
+      exact: true,
+    })
     await expect(remoteLink).toHaveAttribute("href", `/${lang}/docs/drive/remote`)
     await expect(remoteLink).toBeVisible()
     const prefix = lang === "en" ? "" : `${lang}/`

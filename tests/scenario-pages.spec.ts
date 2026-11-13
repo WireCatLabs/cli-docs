@@ -8,6 +8,7 @@ const pages = [
   { tool: "memo", first: "decision-trail", command: "tg personal contacts context Kai", crossTool: false },
 ]
 const headings = { en: "Step-by-step scenarios", ru: "Пошаговые сценарии", es: "Escenarios paso a paso" }
+const sidebarNames = { en: "Scenarios", ru: "Сценарии", es: "Escenarios" }
 const terminal = { en: "In the terminal:", ru: "В терминале:", es: "En la terminal:" }
 
 for (const lang of ["en", "ru", "es"] as const)
@@ -25,7 +26,9 @@ for (const lang of ["en", "ru", "es"] as const)
       await expect(step.locator("xpath=ancestor::figure[1]").getByRole("button").first()).toBeAttached()
       await expect(body).toContainText(`${terminal[lang]} ${tool} guide ${first}`)
       await expect(
-        page.locator("#nd-sidebar").locator(`a[href="/${lang}/docs/${tool}/scenarios"]`, { hasText: headings[lang] }),
+        page
+          .locator("#nd-sidebar")
+          .locator(`a[href="/${lang}/docs/${tool}/scenarios"]`, { hasText: sidebarNames[lang] }),
       ).toHaveCount(1)
       if (crossTool) await expect(body.locator(`a[href="/${lang}/docs/memo/scenarios#person-brief"]`)).toBeVisible()
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
