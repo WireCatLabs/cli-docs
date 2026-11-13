@@ -119,5 +119,20 @@
       "ru": "Читайте и меняйте CRM Битрикс24 из терминала или через ИИ-агента: сделки, лиды, контакты и компании, с локальной копией для поиска без интернета.",
       "es": "Lee y cambia tu CRM de Bitrix24 desde la terminal o con tu agente de IA: negociaciones, prospectos, contactos y empresas, con una copia local para buscar sin conexión."
     }
+  },
+  {
+    "name": "pbx",
+    "displayName": "Asterisk",
+    "repo": "WireCatLabs/asterisk-cli",
+    "package": "@wirecat/asterisk-cli",
+    "lang": "en",
+    "docsRef": "v0.3.0",
+    "tier": "extra",
+    "category": "calls",
+    "summary": {
+      "en": "Your company's Asterisk PBX calls on your computer: call records, recordings transcribed locally, offline search and access for your AI agent.",
+      "ru": "Звонки вашей АТС Asterisk на вашем компьютере: записи о звонках, расшифровка записей локально, поиск без интернета и доступ для ИИ-агента.",
+      "es": "Las llamadas de la centralita Asterisk de tu empresa en tu ordenador: registros de llamadas, grabaciones transcritas en local, búsqueda sin conexión y acceso para tu agente de IA."
+    }
   }
 ]

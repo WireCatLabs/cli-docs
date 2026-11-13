@@ -5,6 +5,7 @@ import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
 import { mailDescriptions } from "./mail-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
+import { pbxDescriptions } from "./pbx-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
@@ -104,6 +105,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     gcal: gcalDescriptions,
     mail: mailDescriptions,
     memo: memoDescriptions,
+    pbx: pbxDescriptions,
     wa: whatsappDescriptions,
   }[selectedTool?.name ?? ""]
   if (reviewed) {

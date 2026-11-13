@@ -23,6 +23,8 @@ decidimos qué viene después.
   los chats y las notas sobre ellas.
 - **[OpenClaw y Hermes](./agents.mdx#openclaw)**: los dos agentes usan las herramientas de WireCat con sus skills.
 - **[Bitrix24](./b24/usage.md)**: tus acuerdos, leads, contactos y empresas, en la búsqueda junto a tus mensajes.
+- **[Asterisk](./pbx/usage.md)**: las llamadas de tu centralita Asterisk o FreePBX, transcritas en tu ordenador y
+  en la búsqueda junto a tus mensajes.
 
 Todo lo que funciona hoy está en [funciones](./features.mdx).
 
@@ -93,6 +95,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de Google Calendar](./gcal/roadmap.md)
 - [Hoja de ruta de Mail](./mail/roadmap.md)
 - [Hoja de ruta de Bitrix24](./b24/roadmap.md)
+- [Hoja de ruta de Asterisk](./pbx/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
 - [Hoja de ruta de WhatsApp](./wa/roadmap.md)
 

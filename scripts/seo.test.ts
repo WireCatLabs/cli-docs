@@ -111,6 +111,12 @@ describe("localized SEO", () => {
       for (const slug of [...pages, "roadmap", "changelog", "mcp", "permissions", "scenarios"])
         expect(() => documentationDescription(lang, ["b24", slug]), `${lang} b24/${slug}`).not.toThrow()
   })
+  it("describes every page the Asterisk CLI publishes in every locale", () => {
+    const slugs = ["index", "installation", "asterisk", "usage", "commands", "configuration", "troubleshooting"]
+    for (const lang of seoLocales)
+      for (const slug of [...slugs, "security", "changelog", "compare", "roadmap"])
+        expect(() => documentationDescription(lang, ["pbx", slug]), `${lang} pbx/${slug}`).not.toThrow()
+  })
   it("renders the newly released Memo comparison metadata in every locale", () => {
     for (const lang of seoLocales) {
       expect(documentationDescription(lang, ["memo", "compare"])).toContain("Memo")
