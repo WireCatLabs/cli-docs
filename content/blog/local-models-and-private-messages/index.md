@@ -3,6 +3,8 @@ title: "WireCat on local models: what runs where, how to set it up and what it c
 description: What WireCat is, which of its features need an AI model, how to move all of them to a model on your own computer and what that costs in speed and memory. With numbers from our measurements and the places where data still goes out.
 date: 2026-11-10
 tags: [ai-agents, search, benchmarks]
+cover: ./cover.jpg
+coverAlt: "A small black home computer with a green light on a dark desk, surrounded by what it reads: chat message cards, an opened letter, old photos under a brass loupe and a cassette voice recorder. A network cable lies coiled beside it, unplugged."
 author: viacheslav-ptsarev
 draft: false
 ---

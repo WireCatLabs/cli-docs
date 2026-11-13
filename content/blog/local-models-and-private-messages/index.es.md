@@ -3,6 +3,8 @@ title: "WireCat con modelos locales: qué funciona dónde, cómo configurarlo y 
 description: Qué es WireCat, qué funciones necesitan un modelo de IA, cómo pasarlas todas a un modelo en tu propio ordenador y cuánto cuesta en velocidad y memoria. Con cifras de nuestras mediciones y los sitios por donde los datos aún salen.
 date: 2026-11-10
 tags: [ai-agents, search, benchmarks]
+cover: ./cover.jpg
+coverAlt: "Un pequeño ordenador doméstico negro con una luz verde en una mesa oscura, rodeado de lo que lee: tarjetas de mensajes, una carta abierta, fotos antiguas bajo una lupa de latón y una grabadora de casete. A su lado hay un cable de red enrollado, sin conectar."
 author: viacheslav-ptsarev
 draft: false
 ---
