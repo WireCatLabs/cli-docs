@@ -10,7 +10,7 @@ for (const lang of ["en", "ru", "es"] as const) {
       }) => {
         await page.setViewportSize({ width, height: 900 })
         await page.goto(`/${lang}/docs/${tool}/attachments`)
-        await expect(page.locator("main h1")).toHaveText(titles[lang])
+        await expect(page.locator("main h1")).toHaveText(`${titles[lang]} — ${tool === "tg" ? "Telegram" : "MAX"}`)
         await expect(page.locator("main")).toContainText("content:")
         await expect(page.locator("main table")).not.toHaveCount(0)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
