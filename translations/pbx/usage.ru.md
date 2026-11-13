@@ -10,10 +10,10 @@ title: "Работа с инструментом"
 аккаунт:
 
 ```sh
-asterisk office meetings list
+pbx office meetings list
 ```
 
-`ASTERISK_PROFILE=office` делает то же самое для одного сеанса оболочки. Профиль никогда не подставляется сам, даже
+`PBX_PROFILE=office` делает то же самое для одного сеанса оболочки. Профиль никогда не подставляется сам, даже
 если он единственный: команда без профиля останавливается с кодом выхода 2 и показывает профили на этом компьютере.
 
 ## Звонки хранятся как встречи
@@ -23,15 +23,15 @@ asterisk office meetings list
 как вложение.
 
 ```sh
-asterisk office meetings sync                                  # import what is new
-asterisk office meetings list "started_at>=2026-11-01"          # newest first
-asterisk office meetings list "title:*79000000001*"             # the calls of one number
-asterisk office meetings show 42                                 # times, people, recording
-asterisk office meetings transcribe                              # recordings to text, on this computer
-asterisk office meetings transcript 42                           # what was said
+pbx office meetings sync                                  # import what is new
+pbx office meetings list "started_at>=2026-11-01"          # newest first
+pbx office meetings list "title:*79000000001*"             # the calls of one number
+pbx office meetings show 42                                 # times, people, recording
+pbx office meetings transcribe                              # recordings to text, on this computer
+pbx office meetings transcript 42                           # what was said
 ```
 
-`asterisk office meetings list --help` перечисляет поля, которые принимает запрос.
+`pbx office meetings list --help` перечисляет поля, которые принимает запрос.
 
 ## Вывод для скриптов
 
@@ -41,12 +41,12 @@ asterisk office meetings transcript 42                           # what was said
 
 ## Агенты
 
-`asterisk skill install` кладет навык инструмента туда, где его ищут Claude Code, Codex, Gemini CLI и OpenClaw.
-`asterisk skill install --for hermes` еще и добавляет эту папку в собственные настройки Hermes Agent, так что простой
-`skill install` обходится без Hermes. `asterisk office mcp serve` отдает команды профиля по MCP, через stdin и stdout:
+`pbx skill install` кладет навык инструмента туда, где его ищут Claude Code, Codex, Gemini CLI и OpenClaw.
+`pbx skill install --for hermes` еще и добавляет эту папку в собственные настройки Hermes Agent, так что простой
+`skill install` обходится без Hermes. `pbx office mcp serve` отдает команды профиля по MCP, через stdin и stdout:
 
 ```sh
-claude mcp add asterisk -- asterisk office mcp serve
+claude mcp add pbx -- pbx office mcp serve
 ```
 
 Сервер предлагает все команды, кроме `session start` и `session end`. Что запускается, решают разрешения профиля,
@@ -54,6 +54,6 @@ claude mcp add asterisk -- asterisk office mcp serve
 с пометкой «недоверенные данные».
 
 Для ChatGPT и Claude в браузере
-`asterisk office mcp serve --http --public-url https://laptop.example.ts.net` слушает на `127.0.0.1` (порт 8765 или
+`pbx office mcp serve --http --public-url https://laptop.example.ts.net` слушает на `127.0.0.1` (порт 8765 или
 `--port`) за вашим собственным туннелем. Браузерное приложение входит по одноразовому коду, который печатает команда.
-`asterisk office mcp revoke` завершает все входы.
+`pbx office mcp revoke` завершает все входы.

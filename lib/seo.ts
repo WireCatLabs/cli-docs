@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
-import { asteriskDescriptions } from "./asterisk-descriptions"
 import { b24Descriptions } from "./b24-descriptions"
 import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
 import { mailDescriptions } from "./mail-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
+import { pbxDescriptions } from "./pbx-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
@@ -100,12 +100,12 @@ export function documentationDescription(lang: string, slugs: string[], authored
   if (authored?.trim()) return authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
   const reviewed = {
-    asterisk: asteriskDescriptions,
     b24: b24Descriptions,
     drive: driveDescriptions,
     gcal: gcalDescriptions,
     mail: mailDescriptions,
     memo: memoDescriptions,
+    pbx: pbxDescriptions,
     wa: whatsappDescriptions,
   }[selectedTool?.name ?? ""]
   if (reviewed) {

@@ -140,8 +140,6 @@ export function validateInvocation(
       break
     tokens.push(entry)
   }
-  // The PBX ships its own `asterisk` program, and `asterisk -rx "…"` runs a command in that console, not in ours.
-  if (program.cli === "asterisk" && tokens[0] === "-rx") return null
   const all = flatten(program.commands)
   const roots = new Set(program.commands.map((command) => command.path[0]))
   const globals = new Map(

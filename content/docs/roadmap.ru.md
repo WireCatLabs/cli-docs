@@ -21,7 +21,7 @@ WireCat собирает ваш контекст в одном месте. Со�
   перепиской и заметками о них.
 - **[OpenClaw и Hermes](./agents.mdx#openclaw)**: оба агента работают с инструментами WireCat через навыки.
 - **[Битрикс24](./b24/usage.md)**: ваши сделки, лиды, контакты и компании находятся поиском рядом с сообщениями.
-- **[Asterisk](./asterisk/usage.md)**: звонки вашей АТС Asterisk или FreePBX, расшифрованные на вашем компьютере и
+- **[Asterisk](./pbx/usage.md)**: звонки вашей АТС Asterisk или FreePBX, расшифрованные на вашем компьютере и
   доступные в поиске рядом с сообщениями.
 
 Всё, что работает сейчас, описано в [возможностях](./features.mdx).
@@ -89,7 +89,7 @@ WireCat собирает ваш контекст в одном месте. Со�
 - [Планы Google Calendar](./gcal/roadmap.md)
 - [Планы Mail](./mail/roadmap.md)
 - [Планы Битрикс24](./b24/roadmap.md)
-- [Планы Asterisk](./asterisk/roadmap.md)
+- [Планы Asterisk](./pbx/roadmap.md)
 - [Планы Memo](./memo/roadmap.md)
 - [Планы WhatsApp](./wa/roadmap.md)
 

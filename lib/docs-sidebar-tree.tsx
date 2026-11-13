@@ -89,6 +89,7 @@ export const sidebarIcons = {
   mail: Mail,
   b24: Handshake,
   asterisk: Server,
+  pbx: PhoneCall,
   notes: StickyNote,
   sources: FilePlus2,
   tags: Tag,
@@ -185,7 +186,7 @@ const folderIcons = {
   mail: Mail,
   memo: NotebookPen,
   b24: Handshake,
-  asterisk: PhoneCall,
+  pbx: PhoneCall,
   zm: Video,
   desktop: Monitor,
 }
@@ -282,7 +283,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm|b24|asterisk)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm|b24|pbx)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

@@ -52,5 +52,11 @@
     "roadmapSha256": "60be3c31c423a9487ba00c8ea20284000fcc83c15785ce5ee3029c45f278bb33",
     "reviewedAt": "2026-11-12",
     "conclusion": "Reviewed b24 v0.15.0 with its published changelog and the changed command reference, usage and troubleshooting pages. 0.15.0 adds account remove (cli-core's shared command, --keep-data or --delete-data, refused while another profile reads the same portal), a local task when a deal or lead enters a stage named in stage-tasks, shell completion, the shared store's file commands and doctor reports, and an update notice. session start refuses a webhook another profile already uses, and a webhook without user_basic says what to tick. A sync with no users chosen now copies the signed-in user's own deals and leads instead of stopping with configuration_error, which WireCat Desktop showed as config.invalid; a chosen list replaces that user. A stored scope all names bitrix.scope-all-refused, and a lead keeps its own person and company names. The roadmap is unchanged since v0.14.0: its Next items, contacts and companies from the local store and their custom fields kept locally, have not shipped. RU/ES changelog, commands, troubleshooting and usage translated and accepted."
+  },
+  "pbx": {
+    "version": "v0.3.0",
+    "roadmapSha256": "cfde10c4fd10b70476ef328c779f0e0b01726143ca49539e8aa673adc6164426",
+    "reviewedAt": "2026-11-13",
+    "conclusion": "First publication of the Asterisk CLI (pbx) at v0.3.0, with its 0.1.0 and 0.2.0 notes. 0.3.0 renames the command to pbx, also wcat-pbx, with PBX_ variables and pbx_ MCP tools, while the package, settings folder and keyring keep the asterisk-cli name. 0.2.0 adds files_from sftp with a pinned server key and fixes phone_region for every country. The roadmap is the tool's own: missed-call and direction filters, call statistics, transfer legs shown together and the CEL log are planned, none shipped. RU/ES translations of every page accepted."
   }
 }

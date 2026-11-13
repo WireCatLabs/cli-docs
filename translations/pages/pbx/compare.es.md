@@ -5,17 +5,17 @@ title: "Comparado con otras herramientas"
 <a id="features" />
 <a id="when-another-tool-fits-better" />
 
-`asterisk` es una línea de comandos y un servidor MCP que copia las llamadas de una centralita Asterisk a tu ordenador,
+`pbx` es una línea de comandos y un servidor MCP que copia las llamadas de una centralita Asterisk a tu ordenador,
 convierte allí sus grabaciones en texto y se las da a tu agente de IA para leerlas. Aquí aparece junto a las otras
 herramientas que se usan para leer, transcribir y buscar las llamadas de un sistema Asterisk o FreePBX, para que veas
-cuál encaja con tu tarea. Las marcas de `asterisk` salen de su código fuente, revisado el 13 de noviembre de 2026.
+cuál encaja con tu tarea. Las marcas de `pbx` salen de su código fuente, revisado el 13 de noviembre de 2026.
 Las marcas de las demás herramientas salen de sus propios README y su documentación, revisados el 13 de noviembre de
 2026. Para esta página no se conectó ninguna herramienta a una centralita real, y una herramienta puede hacer más de lo
 que dicen sus páginas.
 
 Las herramientas:
 
-- **asterisk**: esta herramienta. Lee los registros de llamadas y las grabaciones de cualquier centralita Asterisk,
+- **pbx**: esta herramienta. Lee los registros de llamadas y las grabaciones de cualquier centralita Asterisk,
   las transcribe en tu ordenador y da las llamadas a un agente. Solo lee: nunca cambia la centralita.
 - **[Las herramientas propias de FreePBX](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe)**: la página CDR Reports del panel de FreePBX, la API GraphQL del CDR
   y Scribe, un módulo de pago de Sangoma para FreePBX que transcribe y resume grabaciones.
@@ -29,7 +29,7 @@ Las herramientas:
 
 ## Funciones
 
-| Tarea | asterisk | [FreePBX](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [Frogman](https://github.com/mwtcmi/frogman) | [ai-call-notes](https://github.com/taka-1128/asterisk-ai-call-notes) |
+| Tarea | pbx | [FreePBX](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [Frogman](https://github.com/mwtcmi/frogman) | [ai-call-notes](https://github.com/taka-1128/asterisk-ai-call-notes) |
 |---|:-:|:-:|:-:|:-:|
 | **Encontrar llamadas** | | | | |
 | Listar las llamadas de un periodo | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26083384/PBX+GUI+-+CDR+Module+GraphQL+APIs) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L155) | [❌](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L20) |
@@ -58,7 +58,7 @@ Las herramientas:
 | Funciona con Asterisk sin FreePBX | ✅ | [❌](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26542152/PBX+GUI+-+CDR+Reports+Module) | [❌](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L13) | [✅](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L3) |
 | No hay que instalar nada en la centralita | ✅ | [🟡](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [❌](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L22) | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L77) |
 
-| | asterisk | FreePBX | Frogman | ai-call-notes |
+| | pbx | FreePBX | Frogman | ai-call-notes |
 |---|---|---|---|---|
 | Instalación | npm, Node 22.16 o posterior | incluido en FreePBX, Scribe desde Module Admin | un módulo de FreePBX | clonarlo, luego Python |
 | Licencia | Apache-2.0 | Scribe necesita una licencia de pago | AGPL-3.0 | MIT |
@@ -66,34 +66,34 @@ Las herramientas:
 
 Notas sobre las marcas:
 
-- **Buscar lo que se dijo.** `asterisk` no tiene un comando de búsqueda propio. Las llamadas están en el almacén de
+- **Buscar lo que se dijo.** `pbx` no tiene un comando de búsqueda propio. Las llamadas están en el almacén de
   WireCat, así que `memo` y la búsqueda de las demás herramientas de WireCat las encuentran junto a tus chats y tu
   correo. FreePBX busca transcripciones por las etiquetas que configures. ai-call-notes escribe el texto en una tabla
   de SQLite y te deja la búsqueda a ti.
-- **Resúmenes.** `asterisk` no hace resúmenes propios. Tu agente lee la transcripción y escribe uno. Scribe hace
+- **Resúmenes.** `pbx` no hace resúmenes propios. Tu agente lee la transcripción y escribe uno. Scribe hace
   resúmenes solo en inglés. ai-call-notes envía el texto de la transcripción a Anthropic u OpenAI para su resumen.
-- **Las grabaciones se quedan contigo.** `asterisk` reconoce la voz en tu ordenador. Scribe envía las grabaciones a
+- **Las grabaciones se quedan contigo.** `pbx` reconoce la voz en tu ordenador. Scribe envía las grabaciones a
   Deepgram. ai-call-notes deja el audio en tu servidor con faster-whisper y envía el texto a un modelo en la nube.
 - **Transcribir lo que ya tienes.** Scribe Rewind transcribe las grabaciones pasadas que eliges. ai-call-notes toma un
   archivo cada vez con su opción de archivo, o vigila la carpeta.
-- **El agente solo puede leer.** `asterisk` abre la base de datos del CDR en una sesión de solo lectura y los archivos
+- **El agente solo puede leer.** `pbx` abre la base de datos del CDR en una sesión de solo lectura y los archivos
   solo para lectura, y no tiene ningún comando que escriba en la centralita. Un token de acceso de FreePBX se limita a
   lo que se concede a su aplicación. Frogman da a cada usuario un nivel de permisos y pide una confirmación antes de un
   cambio.
-- **Comandos concretos.** `asterisk` fija cada comando en allow, ask, readonly o deny, por perfil. Por MCP no hay nadie
+- **Comandos concretos.** `pbx` fija cada comando en allow, ask, readonly o deny, por perfil. Por MCP no hay nadie
   que responda, así que ask deja que el comando se ejecute. Consulta los [ajustes](./configuration.md#permissions).
-- **Un registro de lo que se ejecutó.** `asterisk` guarda las ejecuciones fallidas, y una sincronización o una
+- **Un registro de lo que se ejecutó.** `pbx` guarda las ejecuciones fallidas, y una sincronización o una
   transcripción cuando se lo pides. Frogman guarda un registro de auditoría de cada llamada a una herramienta. FreePBX
   muestra cuándo y desde dónde se usó cada token por última vez.
-- **Entrar como root.** La configuración MCP de Frogman se conecta a la centralita por SSH como root. `asterisk`
-  funciona en tu ordenador y necesita un usuario de base de datos de solo lectura o una carpeta montada en solo
-  lectura.
-- **Instalar en la centralita.** `asterisk` no necesita nada en la centralita. CDR Reports viene con FreePBX, y Scribe
+- **Entrar como root.** La configuración MCP de Frogman se conecta a la centralita por SSH como root. `pbx`
+  funciona en tu ordenador y necesita un usuario de base de datos de solo lectura, una carpeta montada en solo
+  lectura o un usuario de SFTP que solo pueda leer.
+- **Instalar en la centralita.** `pbx` no necesita nada en la centralita. CDR Reports viene con FreePBX, y Scribe
   es un módulo que se instala allí. ai-call-notes funciona donde pueda leer la carpeta de grabaciones, a menudo en la
   propia centralita.
 - **Estadísticas de llamadas.** ai-call-notes cuenta la tasa de abandono, las causas de colgado por hora y el
   reparto de resultados solo para VICIdial, dentro de su informe de revisión.
-- **Grabaciones con un enlace.** `asterisk` enlaza cada llamada con su archivo de grabación por la ruta. No la sirve
+- **Grabaciones con un enlace.** `pbx` enlaza cada llamada con su archivo de grabación por la ruta. No la sirve
   en streaming.
 
 ## Cuándo encaja mejor otra herramienta
@@ -105,4 +105,4 @@ Notas sobre las marcas:
 - **asterisk-ai-call-notes**: un centro de llamadas salientes quiere un resumen, un siguiente paso y una hora para
   devolver la llamada junto a cada llamada en cuanto termina.
 
-Si `asterisk` encaja, empieza por la [instalación](./installation.md) y luego [conecta tu Asterisk](./asterisk.md).
+Si `pbx` encaja, empieza por la [instalación](./installation.md) y luego [conecta tu Asterisk](./asterisk.md).

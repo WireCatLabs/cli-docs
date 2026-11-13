@@ -121,12 +121,12 @@
     }
   },
   {
-    "name": "asterisk",
+    "name": "pbx",
     "displayName": "Asterisk",
     "repo": "WireCatLabs/asterisk-cli",
     "package": "@wirecat/asterisk-cli",
     "lang": "en",
-    "docsRef": "v0.1.0",
+    "docsRef": "v0.3.0",
     "tier": "extra",
     "category": "calls",
     "summary": {

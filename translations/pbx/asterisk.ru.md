@@ -2,7 +2,7 @@
 title: "Подключите Asterisk"
 ---
 
-`asterisk` читает из вашей АТС две вещи: записи о звонках (CDR) и, если они есть, аудиозаписи разговоров. Здесь
+`pbx` читает из вашей АТС две вещи: записи о звонках (CDR) и, если они есть, аудиозаписи разговоров. Здесь
 написано, где найти и то и другое, какой доступ дать и как настроить профиль. Менять диалплан не нужно, как и заводить
 учетную запись Asterisk Manager Interface (AMI) или REST Interface (ARI).
 
@@ -14,8 +14,8 @@ title: "Подключите Asterisk"
   - `Master.csv`, который пишет модуль `cdr_csv`, обычно `/var/log/asterisk/cdr-csv/Master.csv`;
   - таблица MySQL или MariaDB (`cdr_mysql`, `cdr_adaptive_odbc`; FreePBX хранит ее в `asteriskcdrdb.cdr`);
   - таблица PostgreSQL (`cdr_pgsql`).
-- **Аудиозаписи** в папке, которую может читать этот компьютер: локальная папка или папка АТС, подключенная только
-  для чтения. Находятся файлы WAV, wav49 (`.WAV`), GSM, MP3, Ogg, Opus, FLAC и M4A. Для расшифровки WAV и GSM нужен
+- **Аудиозаписи** в папке, которую может читать этот компьютер, в папке, подключенной только для чтения, или в
+  собственной папке АТС по SFTP. Находятся файлы WAV, wav49 (`.WAV`), GSM, MP3, Ogg, Opus, FLAC и M4A. Для расшифровки WAV и GSM нужен
   `ffmpeg`.
 
 Пока проверено на выдуманных записях о звонках и аудиозаписях из `examples/`, собранных по спецификации CDR и исходному
@@ -34,26 +34,26 @@ title: "Подключите Asterisk"
 ## Master.csv
 
 ```sh
-asterisk office config set cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv
-asterisk office config set cdr_timezone Europe/Moscow
+pbx office config set cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv
+pbx office config set cdr_timezone Europe/Moscow
 ```
 
 В `Master.csv` нет строки заголовка. Набор столбцов зависит от `loguniqueid`, `loguserfield` и `newcdrcolumns` в
-`cdr.conf` (`[csv]`), и `asterisk` различает их по числу полей в каждой строке. Поэтому строки, записанные после
+`cdr.conf` (`[csv]`), и `pbx` различает их по числу полей в каждой строке. Поэтому строки, записанные после
 включения одного из них, читаются рядом со старыми. По возможности включите `loguniqueid` и `newcdrcolumns`: без
 `uniqueid` аудиозапись нельзя найти по имени, а без `linkedid` и `sequence` плечи переадресованного звонка
 различаются только по содержимому. Если столбцы определились неверно, назовите их сами:
 
 ```sh
-asterisk office config set cdr_csv_columns "accountcode,src,dst,dcontext,clid,channel,dstchannel,lastapp,lastdata,start,answer,end,duration,billsec,disposition,amaflags,uniqueid"
+pbx office config set cdr_csv_columns "accountcode,src,dst,dcontext,clid,channel,dstchannel,lastapp,lastdata,start,answer,end,duration,billsec,disposition,amaflags,uniqueid"
 ```
 
 Время в `Master.csv` записано по местному времени АТС, если только не включено `usegmtime=yes`. Задайте в
 `cdr_timezone` часовой пояс АТС или `UTC`, когда `usegmtime` включен. Без этой настройки берется пояс этого
 компьютера.
 
-Когда `asterisk` работает на другом компьютере, копируйте туда `Master.csv` по расписанию или подключите папку логов
-АТС только для чтения, например так: `sshfs pbx:/var/log/asterisk/cdr-csv ~/pbx-cdr -o ro`.
+Когда `pbx` работает на другом компьютере, читайте `Master.csv` на АТС по SFTP (см. ниже) или подключите папку
+логов АТС только для чтения, например так: `sshfs pbx:/var/log/asterisk/cdr-csv ~/pbx-cdr -o ro`.
 
 ## База CDR
 
@@ -74,12 +74,12 @@ GRANT SELECT ON cdr TO wirecat_reader;
 Затем настройте профиль и войдите. Пароль вводится скрыто и проверяется, прежде чем его сохранить:
 
 ```sh
-asterisk office config set cdr_source mysql
-asterisk office config set db_host 10.0.0.5
-asterisk office config set db_name asteriskcdrdb
-asterisk office config set db_user wirecat_reader
-asterisk office config set cdr_timezone Europe/Moscow
-asterisk office session start
+pbx office config set cdr_source mysql
+pbx office config set db_host 10.0.0.5
+pbx office config set db_name asteriskcdrdb
+pbx office config set db_user wirecat_reader
+pbx office config set cdr_timezone Europe/Moscow
+pbx office session start
 ```
 
 `db_port` меняет порт (3306 для MySQL, 5432 для PostgreSQL), `db_table` меняет таблицу (`cdr`), а `db_tls true`
@@ -91,13 +91,13 @@ asterisk office session start
 
 ```sh
 ssh -N -L 3306:127.0.0.1:3306 admin@pbx.example.lan &
-asterisk office config set db_host 127.0.0.1
+pbx office config set db_host 127.0.0.1
 ```
 
 ## Аудиозаписи
 
 ```sh
-asterisk office config set recordings_path /var/spool/asterisk/monitor
+pbx office config set recordings_path /var/spool/asterisk/monitor
 ```
 
 Аудиозапись звонка ищется в таком порядке:
@@ -110,13 +110,40 @@ asterisk office config set recordings_path /var/spool/asterisk/monitor
 `{dd}` и `*`:
 
 ```sh
-asterisk office config set recordings_pattern "calls/{yyyy}-{mm}-{dd}/*{linkedid}*"
+pbx office config set recordings_pattern "calls/{yyyy}-{mm}-{dd}/*{linkedid}*"
 ```
 
 Файл, измененный в последние две минуты, возможно, еще пишет MixMonitor, поэтому он остается до следующей
 синхронизации. Звонок без аудиозаписи импортируется все равно. Аудиозапись связывается по пути: ее никогда не
-копируют, не перемещают и не меняют. Если папка находится на АТС, подключите ее только для чтения, например
+копируют, не перемещают и не меняют. Если папка находится на АТС, читайте ее по SFTP (см. ниже) или подключите только для
+чтения, например
 `sshfs pbx:/var/spool/asterisk/monitor ~/pbx-monitor -o ro`, и укажите эту точку подключения в `recordings_path`.
+
+## Файлы на АТС по SFTP
+
+`files_from sftp` читает `Master.csv` и аудиозаписи на самой АТС через ее SSH-сервер. Ничего не копируется в
+отдельную папку, и ничего туда не пишется. Создайте пользователя, которому разрешено только читать эти папки,
+например в группе `pbx`, затем:
+
+```sh
+pbx office config set files_from sftp
+pbx office config set sftp_host pbx.example.lan
+pbx office config set sftp_user wirecat
+pbx office config set sftp_key_path ~/.ssh/wirecat_pbx      # or leave it out to sign in with a password
+pbx office session start
+```
+
+Первый `session start` подключается только для того, чтобы увидеть ключ сервера, и останавливается. Он печатает
+отпечаток ключа и команду, которая его закрепляет. Сравните отпечаток с собственным отпечатком АТС, который там
+показывает `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`, и только потом выполните эту команду
+(`config set sftp_host_key SHA256:…`). Пароль или ключ не отправляются серверу, ключ которого не закреплен, а сервер,
+у которого ключ изменился, отклоняется. Затем `session start` спрашивает пароль SFTP, если файла ключа нет, проверяет
+его, читая самые новые записи о звонках, и сохраняет в связке ключей.
+
+Пути указываются как на АТС: `cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv`, `recordings_path
+/var/spool/asterisk/monitor`. Профиль, который читает CDR из базы, хранит пароль этой базы, поэтому для SFTP он
+входит по файлу ключа. Оборванное соединение или тайм-аут повторяются, а неверный пароль, изменившийся ключ или
+отсутствующий файл нет.
 
 ## Номера, направления и люди
 
@@ -136,8 +163,8 @@ asterisk office config set recordings_pattern "calls/{yyyy}-{mm}-{dd}/*{linkedid
 ## Загрузите историю и держите ее свежей
 
 ```sh
-asterisk office meetings sync --since-time 2024-01-01T00:00:00Z   # once: everything since then
-asterisk office meetings sync                                     # later: what is new
+pbx office meetings sync --since-time 2024-01-01T00:00:00Z   # once: everything since then
+pbx office meetings sync                                     # later: what is new
 ```
 
 Каждая синхронизация заново читает шесть часов до предыдущей, потому что звонок попадает в CDR только после
@@ -148,8 +175,8 @@ systemd.
 ## Расшифровка
 
 ```sh
-asterisk models download gigaam-v3       # Russian; models list shows the others
-asterisk office meetings transcribe --max-meetings 50
+pbx models download gigaam-v3       # Russian; models list shows the others
+pbx office meetings transcribe --max-meetings 50
 ```
 
 Распознавание идет на этом компьютере. Уже расшифрованная аудиозапись не читается заново, если файл не изменился.

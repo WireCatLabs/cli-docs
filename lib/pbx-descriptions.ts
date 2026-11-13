@@ -1,4 +1,4 @@
-export const asteriskDescriptions: Record<string, Record<string, string>> = {
+export const pbxDescriptions: Record<string, Record<string, string>> = {
   en: {
     compare: "Compare tools for Asterisk and FreePBX calls: transcripts, where recordings go, agent access and setup.",
     index: "Your company's Asterisk PBX calls on your computer, transcribed locally and open to your AI agent.",
@@ -10,7 +10,7 @@ export const asteriskDescriptions: Record<string, Record<string, string>> = {
     configuration: "Every Asterisk CLI setting, what each command may do for a profile, and which runs it keeps.",
     troubleshooting:
       "Fix missing call records or recordings, wrong times, database sign-in and transcription problems.",
-    roadmap: "See what the Asterisk CLI already does and what is planned next, such as reading the PBX over SFTP.",
+    roadmap: "See what the Asterisk CLI already does and what is planned next, such as call statistics.",
     security: "What the Asterisk CLI reads and keeps, where the database password lives and what an agent sees.",
     changelog: "Read Asterisk CLI release notes, including new capabilities, changes and fixes.",
   },
@@ -24,7 +24,7 @@ export const asteriskDescriptions: Record<string, Record<string, string>> = {
     commands: "Все команды, параметры и коды выхода CLI Asterisk в справочнике, созданном из программы.",
     configuration: "Все настройки CLI Asterisk, что может делать каждая команда в профиле и какие запуски он хранит.",
     troubleshooting: "Решайте проблемы с записями о звонках, аудиозаписями, временем, входом в базу и расшифровкой.",
-    roadmap: "Что CLI Asterisk уже умеет и что запланировано дальше, например чтение АТС по SFTP.",
+    roadmap: "Что CLI Asterisk уже умеет и что запланировано дальше, например статистика звонков.",
     security: "Что CLI Asterisk читает и хранит, где лежит пароль базы и что видит агент.",
     changelog: "История выпусков CLI Asterisk: новые возможности, изменения и исправления.",
   },
@@ -40,7 +40,7 @@ export const asteriskDescriptions: Record<string, Record<string, string>> = {
     configuration:
       "Cada ajuste de la CLI de Asterisk, qué puede hacer cada comando en un perfil y qué ejecuciones guarda.",
     troubleshooting: "Resuelve registros o grabaciones que faltan, horas desviadas, acceso a la base y transcripción.",
-    roadmap: "Consulta qué hace ya la CLI de Asterisk y qué está planificado, como leer la centralita por SFTP.",
+    roadmap: "Consulta qué hace ya la CLI de Asterisk y qué está planificado, como estadísticas de llamadas.",
     security: "Qué lee y guarda la CLI de Asterisk, dónde vive la contraseña de la base de datos y qué ve un agente.",
     changelog: "Lee las notas de versión de la CLI de Asterisk: novedades, cambios y correcciones.",
   },

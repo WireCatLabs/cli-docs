@@ -2,7 +2,7 @@
 title: "Conecta tu Asterisk"
 ---
 
-`asterisk` lee dos cosas de tu centralita: los registros de llamadas (CDR) y, cuando las hay, las grabaciones. Aquí
+`pbx` lee dos cosas de tu centralita: los registros de llamadas (CDR) y, cuando las hay, las grabaciones. Aquí
 ves dónde encontrar cada una, qué acceso dar y cómo configurar un perfil. No hace falta cambiar el plan de marcación
 ni crear una cuenta de Asterisk Manager Interface (AMI) o REST Interface (ARI).
 
@@ -14,8 +14,8 @@ ni crear una cuenta de Asterisk Manager Interface (AMI) o REST Interface (ARI).
   - `Master.csv`, que escribe el módulo `cdr_csv`, normalmente `/var/log/asterisk/cdr-csv/Master.csv`;
   - una tabla de MySQL o MariaDB (`cdr_mysql`, `cdr_adaptive_odbc`; FreePBX la guarda en `asteriskcdrdb.cdr`);
   - una tabla de PostgreSQL (`cdr_pgsql`).
-- **Grabaciones** en una carpeta que este ordenador pueda leer: una carpeta local o la carpeta de la centralita
-  montada en solo lectura. Se encuentran WAV, wav49 (`.WAV`), GSM, MP3, Ogg, Opus, FLAC y M4A. Para transcribir WAV y
+- **Grabaciones** en una carpeta que este ordenador pueda leer, en una carpeta montada en solo lectura o en la propia
+  carpeta de la centralita por SFTP. Se encuentran WAV, wav49 (`.WAV`), GSM, MP3, Ogg, Opus, FLAC y M4A. Para transcribir WAV y
   GSM hace falta `ffmpeg`.
 
 Por ahora se ha comprobado con los registros y grabaciones inventados de `examples/`, hechos a partir de la
@@ -34,25 +34,25 @@ especificación del CDR y del código de `cdr_csv`, y todavía no con una centra
 ## Master.csv
 
 ```sh
-asterisk office config set cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv
-asterisk office config set cdr_timezone Europe/Moscow
+pbx office config set cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv
+pbx office config set cdr_timezone Europe/Moscow
 ```
 
 `Master.csv` no tiene línea de cabecera. Sus columnas dependen de `loguniqueid`, `loguserfield` y `newcdrcolumns` en
-`cdr.conf` (`[csv]`), y `asterisk` las distingue por el número de campos de cada línea. Así, las líneas escritas
+`cdr.conf` (`[csv]`), y `pbx` las distingue por el número de campos de cada línea. Así, las líneas escritas
 después de activar una de ellas se leen junto a las anteriores. Activa `loguniqueid` y `newcdrcolumns` si puedes: sin
 el `uniqueid` no se puede encontrar una grabación por su nombre, y sin `linkedid` y `sequence` los tramos de una
 transferencia solo se distinguen por su contenido. Si la deducción falla, nombra las columnas:
 
 ```sh
-asterisk office config set cdr_csv_columns "accountcode,src,dst,dcontext,clid,channel,dstchannel,lastapp,lastdata,start,answer,end,duration,billsec,disposition,amaflags,uniqueid"
+pbx office config set cdr_csv_columns "accountcode,src,dst,dcontext,clid,channel,dstchannel,lastapp,lastdata,start,answer,end,duration,billsec,disposition,amaflags,uniqueid"
 ```
 
 Las horas de `Master.csv` son la hora local de la centralita salvo con `usegmtime=yes`. Pon en `cdr_timezone` la zona
 de la centralita, o `UTC` cuando `usegmtime` está activo. Sin este ajuste se usa la zona de este ordenador.
 
-Si `asterisk` funciona en otro ordenador, copia allí `Master.csv` de forma periódica o monta la carpeta de registros
-de la centralita en solo lectura, por ejemplo con `sshfs pbx:/var/log/asterisk/cdr-csv ~/pbx-cdr -o ro`.
+Si `pbx` funciona en otro ordenador, lee `Master.csv` en la centralita por SFTP (más abajo) o monta la carpeta de
+registros de la centralita en solo lectura, por ejemplo con `sshfs pbx:/var/log/asterisk/cdr-csv ~/pbx-cdr -o ro`.
 
 ## Una base de datos de CDR
 
@@ -73,12 +73,12 @@ GRANT SELECT ON cdr TO wirecat_reader;
 Después configura el perfil e inicia sesión. La contraseña se pide oculta y se comprueba antes de guardarla:
 
 ```sh
-asterisk office config set cdr_source mysql
-asterisk office config set db_host 10.0.0.5
-asterisk office config set db_name asteriskcdrdb
-asterisk office config set db_user wirecat_reader
-asterisk office config set cdr_timezone Europe/Moscow
-asterisk office session start
+pbx office config set cdr_source mysql
+pbx office config set db_host 10.0.0.5
+pbx office config set db_name asteriskcdrdb
+pbx office config set db_user wirecat_reader
+pbx office config set cdr_timezone Europe/Moscow
+pbx office session start
 ```
 
 `db_port` cambia el puerto (3306 para MySQL, 5432 para PostgreSQL), `db_table` cambia la tabla (`cdr`) y `db_tls true`
@@ -90,13 +90,13 @@ La base de datos de FreePBX solo escucha en la propia centralita. No la abras a 
 
 ```sh
 ssh -N -L 3306:127.0.0.1:3306 admin@pbx.example.lan &
-asterisk office config set db_host 127.0.0.1
+pbx office config set db_host 127.0.0.1
 ```
 
 ## Grabaciones
 
 ```sh
-asterisk office config set recordings_path /var/spool/asterisk/monitor
+pbx office config set recordings_path /var/spool/asterisk/monitor
 ```
 
 La grabación de una llamada se busca en este orden:
@@ -110,13 +110,40 @@ Un plan de marcación que nombra los archivos de otra forma define su propio pat
 `{yyyy}`, `{mm}`, `{dd}` y `*`:
 
 ```sh
-asterisk office config set recordings_pattern "calls/{yyyy}-{mm}-{dd}/*{linkedid}*"
+pbx office config set recordings_pattern "calls/{yyyy}-{mm}-{dd}/*{linkedid}*"
 ```
 
 Un archivo modificado en los últimos dos minutos puede que aún lo esté escribiendo MixMonitor, así que se deja para la
 siguiente sincronización. Una llamada sin grabación se importa igualmente. La grabación se enlaza por su ruta: nunca se
-copia, se mueve ni se cambia. Si la carpeta está en la centralita, móntala en solo lectura, por ejemplo
+copia, se mueve ni se cambia. Si la carpeta está en la centralita, léela por SFTP (más abajo) o móntala en solo lectura,
+por ejemplo
 `sshfs pbx:/var/spool/asterisk/monitor ~/pbx-monitor -o ro`, y pon ese punto de montaje en `recordings_path`.
+
+## Archivos de la centralita por SFTP
+
+`files_from sftp` lee `Master.csv` y las grabaciones en la propia centralita, a través de su servidor SSH. No se copia
+nada a una carpeta propia y no se escribe nada allí. Crea un usuario que solo pueda leer esas carpetas, por ejemplo uno
+del grupo `pbx`, y luego:
+
+```sh
+pbx office config set files_from sftp
+pbx office config set sftp_host pbx.example.lan
+pbx office config set sftp_user wirecat
+pbx office config set sftp_key_path ~/.ssh/wirecat_pbx      # or leave it out to sign in with a password
+pbx office session start
+```
+
+El primer `session start` se conecta solo lo justo para ver la clave del servidor y se detiene. Imprime la huella de
+la clave y el comando que la fija. Compara la huella con la de la propia centralita, que allí muestra
+`ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub`, y solo entonces ejecuta ese comando
+(`config set sftp_host_key SHA256:…`). Nunca se envía una contraseña o una clave a un servidor cuya clave no está
+fijada, y se rechaza un servidor cuya clave cambia. Después `session start` pide la contraseña de SFTP, si no hay
+archivo de clave, la comprueba leyendo los registros de llamadas más recientes y la guarda en el llavero.
+
+Las rutas son las de la centralita: `cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv`, `recordings_path
+/var/spool/asterisk/monitor`. Un perfil que lee su CDR de una base de datos guarda la contraseña de esa base, así que
+su lado SFTP inicia sesión con un archivo de clave. Una conexión cortada o un tiempo de espera agotado se reintentan,
+y una contraseña incorrecta, una clave cambiada o un archivo que falta no.
 
 ## Números, direcciones y personas
 
@@ -138,8 +165,8 @@ copia, se mueve ni se cambia. Si la carpeta está en la centralita, móntala en 
 ## Importa el historial y mantenlo al día
 
 ```sh
-asterisk office meetings sync --since-time 2024-01-01T00:00:00Z   # once: everything since then
-asterisk office meetings sync                                     # later: what is new
+pbx office meetings sync --since-time 2024-01-01T00:00:00Z   # once: everything since then
+pbx office meetings sync                                     # later: what is new
 ```
 
 Cada sincronización vuelve a leer las seis horas anteriores a la última, porque una llamada se escribe en el CDR solo
@@ -149,8 +176,8 @@ cuenta en stderr, y el resto se importa. Lanza la sincronización a mano, desde 
 ## Transcribe
 
 ```sh
-asterisk models download gigaam-v3       # Russian; models list shows the others
-asterisk office meetings transcribe --max-meetings 50
+pbx models download gigaam-v3       # Russian; models list shows the others
+pbx office meetings transcribe --max-meetings 50
 ```
 
 El reconocimiento se hace en este ordenador. Una grabación ya transcrita no se vuelve a leer salvo que el archivo

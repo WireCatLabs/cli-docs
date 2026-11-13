@@ -238,17 +238,17 @@
   },
   {
     "id": "calls-connect",
-    "pages": ["asterisk/installation.md", "asterisk/asterisk.md", "asterisk/usage.md", "asterisk/security.md"],
-    "families": { "asterisk": ["session", "skill", "mcp"] }
+    "pages": ["pbx/installation.md", "pbx/asterisk.md", "pbx/usage.md", "pbx/security.md"],
+    "families": { "pbx": ["session", "skill", "mcp"] }
   },
   {
     "id": "calls-read-transcribe",
-    "pages": ["asterisk/usage.md", "asterisk/asterisk.md", "asterisk/commands.md"],
-    "families": { "asterisk": ["meetings", "events", "models", "commands"] }
+    "pages": ["pbx/usage.md", "pbx/asterisk.md", "pbx/commands.md"],
+    "families": { "pbx": ["meetings", "events", "models", "commands"] }
   },
   {
     "id": "calls-upkeep",
-    "pages": ["asterisk/configuration.md", "asterisk/troubleshooting.md"],
-    "families": { "asterisk": ["config", "doctor", "runs", "upgrade"] }
+    "pages": ["pbx/configuration.md", "pbx/troubleshooting.md"],
+    "families": { "pbx": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

@@ -2,7 +2,7 @@
 title: "Asterisk"
 ---
 
-`asterisk` lleva las llamadas de una centralita Asterisk a WireCat: para la terminal, para scripts y para agentes de
+`pbx` lleva las llamadas de una centralita Asterisk a WireCat: para la terminal, para scripts y para agentes de
 IA. Lee los registros de llamadas (CDR) de `Master.csv` o de la base de datos de CDR, enlaza cada llamada con su
 grabación y las guarda en el almacén local de WireCat como reuniones. `meetings transcribe` convierte las grabaciones
 en texto en este ordenador.

@@ -2,13 +2,13 @@
 title: "Ajustes"
 ---
 
-Los ajustes viven en un archivo, `config.json`, en la carpeta que muestra `asterisk doctor`. Cada perfil tiene su
+Los ajustes viven en un archivo, `config.json`, en la carpeta que muestra `pbx doctor`. Cada perfil tiene su
 parte, y `defaults` se aplica a todos los perfiles.
 
 ```sh
-asterisk office config show
-asterisk office config set cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv
-asterisk office config unset cdr_csv_path
+pbx office config show
+pbx office config set cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv
+pbx office config unset cdr_csv_path
 ```
 
 `config show` lista cada ajuste y de dónde viene: el archivo, una variable o el valor por defecto.
@@ -30,21 +30,24 @@ Qué significa cada ajuste está en [conecta tu Asterisk](./asterisk.md).
 | `cdr_timezone` | la de este ordenador | la zona de las horas del CDR |
 | `phone_region` | — | el país de los números escritos sin `+`, como `ru` |
 | `extension_pattern` | `^\d{2,5}$` | qué números son extensiones internas |
-| `files_from` | `local` | `local`; `sftp` llega en una versión posterior |
+| `files_from` | `local` | `local`, o `sftp` para leer `Master.csv` y las grabaciones en la centralita |
+| `sftp_host`, `sftp_port`, `sftp_user` | —, 22, — | el servidor SSH de la centralita, para `files_from sftp` |
+| `sftp_key_path` | — | un archivo de clave privada; sin él, `session start` pide la contraseña de SFTP |
+| `sftp_host_key` | — | la huella de la clave del servidor, `SHA256:…`, que comprobaste; nada se conecta hasta fijarla |
 
 ## Permisos
 
 `permissions` decide qué puede hacer un comando en este perfil: `allow`, `ask`, `readonly` o `deny`, por ruta de
 comando (`meetings.sync`, `meetings.transcribe`). Por MCP no hay nadie a quien preguntar, así que `ask` deja que el
-comando se ejecute. `ASTERISK_READ_ONLY=1` rechaza cada comando que cambia tu inicio de sesión o tus ajustes.
+comando se ejecute. `PBX_READ_ONLY=1` rechaza cada comando que cambia tu inicio de sesión o tus ajustes.
 
 ```sh
-asterisk office config set permissions.meetings.transcribe deny
+pbx office config set permissions.meetings.transcribe deny
 ```
 
 ## Registros de ejecución
 
-Un comando que falla se guarda como ejecución, para `asterisk runs list` y `runs show`. `meetings sync`, `meetings
+Un comando que falla se guarda como ejecución, para `pbx runs list` y `runs show`. `meetings sync`, `meetings
 transcribe` y `session status --check` hacen su trabajo dentro de una ejecución, así que `--record` las guarda también
 cuando salen bien. `record_input` decide si una ejecución guarda las palabras que escribiste. Los secretos se ocultan
 siempre; consulta [Seguridad](./security.md).
