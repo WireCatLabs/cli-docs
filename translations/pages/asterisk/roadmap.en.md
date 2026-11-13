@@ -9,14 +9,17 @@ feature: it may already be on the way. The order can change, and there are no da
 ## What works today
 
 `asterisk` reads the call records of an Asterisk PBX from `Master.csv`, or from a MySQL, MariaDB or PostgreSQL CDR
-table in a read-only session. It keeps each call in the local WireCat store with its two people, links it to its
+table in a read-only session. It reads the files from this computer, a mounted folder, or the PBX over SFTP with
+a pinned server key. It keeps each call in the local WireCat store with its two people, links it to its
 recording, and turns recordings into text on your computer. You and your agent list, read and export the calls with
 no network, over the command line or MCP. See [connect your Asterisk](./asterisk.md).
 
-## Next
+## Later
 
-- **Read the PBX over SFTP.** `asterisk` reads `Master.csv` and the recordings straight from the PBX over SFTP, with a
-  read-only user, so you no longer copy the files or mount the folders yourself.
+- Find missed calls and calls in one direction with a filter on `meetings list`.
+- Call stats: calls per extension and per hour, and the share of missed calls.
+- Show the legs of a transferred call together, while each stays its own record.
+- Read Asterisk's CEL log, where transfers and queues are exact.
 
 ## What it will not do
 
