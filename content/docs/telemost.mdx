@@ -25,8 +25,8 @@ mail work rules apply
 ```
 
 The first command adds a mail rule: an instruction the mail tool follows on every sync. From now on, each sync saves
-new Telemost notes as meetings. The last command only counts the notes stored before the rule. Read its answer, then
-run it again with `--yes` to save them too ([details](#notes-already-in-your-mailbox)).
+Telemost notes from its window, the last 30 days by default, as meetings. The last command counts older notes. Read
+its answer, then run it again with `--yes` to save them too ([details](#notes-already-in-your-mailbox)).
 
 ## Who gets the notes
 
@@ -56,7 +56,8 @@ example `telemost:anna@company.example`. Nothing changes in your mailbox or in T
 
 ## Notes already in your mailbox
 
-Notes stored before the rule existed are not saved by the next sync. Count them first:
+A sync saves only the notes in its window, the last 30 days unless you give `--since-time`. For older notes, count
+them first:
 
 ```sh
 mail work rules apply
@@ -84,7 +85,8 @@ mail from that date.
   [connected with gcal](./gcal/index.md), and the event holds the same Telemost link, the meeting takes that event's
   start, end and title. Otherwise it is placed at the start of the day, marked as known to the day only, and keeps
   the email's subject as its title. No calendar event is created for it.
-- **The meeting link, without its passcode.** The part of a link after `?` is never stored.
+- **The meeting link, without its passcode.** The meeting keeps the link without the part after `?`, where a
+  passcode may be. The email itself stays as it arrived.
 
 What does not come from Telemost: the recording, and a transcript (the text of what each person said). If Yandex
 attaches a full transcript to the email, it stays an attachment of that email and is not saved as the meeting's
@@ -92,8 +94,8 @@ transcript.
 
 ## Ask your agent
 
-Your agent searches the meetings with Memo, the tool that searches everything in the local store. Ask in your own
-words:
+Your agent searches the meetings with Memo, the tool that searches everything in the local store
+([install Memo](./memo/installation.md) if you have not). Ask in your own words:
 
 ```text prompt
 Find the Telemost meetings from the last month where we discussed the Harbour budget. Show the tasks and open
@@ -127,12 +129,5 @@ added and changed in a terminal; the panel shows the command to copy.
    [Notes already in your mailbox](#notes-already-in-your-mailbox).
 4. **The meeting has a day but no time.** No synced Google Calendar event has the same Telemost link that day. Sync
    the calendar with gcal before the notes are saved: set it up before you add the rule or run `rules apply --yes`.
-
-For the search itself, the agent runs commands such as:
-
-```sh
-memo search meetings budget --source telemost:anna@company.example --since-time 2026-10-01
-memo search all "Harbour budget" --only meetings
-```
 
 Next: [Meetings](./zm/meetings.md) shows how to connect meeting findings to projects and prepare for the next call.

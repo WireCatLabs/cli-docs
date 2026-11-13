@@ -26,9 +26,9 @@ mail work rules apply
 ```
 
 El primer comando añade una regla de correo: una instrucción que la herramienta de correo sigue en cada
-sincronización. Desde ese momento, cada sincronización guarda como reuniones las notas nuevas de Telemost. El último
-comando solo cuenta las notas guardadas antes de la regla. Lee su respuesta y ejecútalo otra vez con `--yes` para
-guardarlas también ([detalles](#notas-que-ya-están-en-el-buzón)).
+sincronización. Desde ese momento, cada sincronización guarda como reuniones las notas de Telemost de su ventana,
+por defecto los últimos 30 días. El último comando cuenta las notas más antiguas. Lee su respuesta y ejecútalo otra
+vez con `--yes` para guardarlas también ([detalles](#notas-que-ya-están-en-el-buzón)).
 
 ## Quién recibe las notas
 
@@ -58,7 +58,8 @@ la dirección del buzón, por ejemplo `telemost:anna@company.example`. Nada camb
 
 ## Notas que ya están en el buzón
 
-La siguiente sincronización no guarda las notas que ya estaban antes de la regla. Primero, cuéntalas:
+Una sincronización guarda solo las notas de su ventana: los últimos 30 días si no indicas `--since-time`. Las notas
+más antiguas, cuéntalas primero:
 
 ```sh
 mail work rules apply
@@ -89,7 +90,8 @@ para tomar solo el correo desde esa fecha.
   [conectado con gcal](./gcal/index.md), y el evento tiene el mismo enlace de Telemost, la reunión toma de ese evento
   el inicio, el final y el título. Si no, se coloca al inicio del día, marcada como conocida solo hasta el día, y toma
   el asunto del correo como título. No se crea ningún evento de calendario para ella.
-- **El enlace de la reunión, sin su código de acceso.** La parte del enlace después de `?` nunca se guarda.
+- **El enlace de la reunión, sin su código de acceso.** La reunión guarda el enlace sin la parte después de `?`,
+  donde puede ir un código de acceso. El correo queda tal como llegó.
 
 Lo que no llega de Telemost: la grabación y una transcripción (el texto de lo que dijo cada persona). Si Yandex adjunta
 al correo una transcripción completa, queda como adjunto de ese correo y no se guarda como la transcripción de la
@@ -97,8 +99,8 @@ reunión.
 
 ## Pregunta a tu agente
 
-Tu agente busca en las reuniones con Memo, la herramienta que busca en todo el almacén local. Pregunta con tus
-palabras:
+Tu agente busca en las reuniones con Memo, la herramienta que busca en todo el almacén local
+([instala Memo](./memo/installation.md) si aún no lo tienes). Pregunta con tus palabras:
 
 ```text prompt
 Busca las reuniones de Telemost del último mes en las que hablamos del presupuesto de Harbour. Muestra las tareas y
@@ -134,13 +136,6 @@ copiar.
 4. **La reunión tiene día pero no hora.** Ningún evento sincronizado de Google Calendar tiene ese día el mismo enlace
    de Telemost. Sincroniza el calendario con gcal antes de que se guarden las notas: configúralo antes de añadir la
    regla o de ejecutar `rules apply --yes`.
-
-Para la búsqueda en sí, el agente ejecuta comandos como estos:
-
-```sh
-memo search meetings presupuesto --source telemost:anna@company.example --since-time 2026-10-01
-memo search all "presupuesto Harbour" --only meetings
-```
 
 Siguiente: [Reuniones](./zm/meetings.md) explica cómo unir lo hallado en las reuniones con tus proyectos y preparar la
 próxima llamada.
