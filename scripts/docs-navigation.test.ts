@@ -160,6 +160,31 @@ describe("tool folders in the sidebar", () => {
     expect(icons).toEqual([CalendarDays, WhatsAppIcon, MessageSquare])
   })
 
+  it("puts Asterisk in an open Voice calls group and Bitrix24 in a closed CRM group, keeping their URLs", () => {
+    const folder = (tool: string): Node => ({
+      type: "folder",
+      name: tool,
+      index: { type: "page", name: tool, url: `/ru/docs/${tool}` },
+      children: [],
+    })
+    const tree = unifiedDocsTree({ name: "Docs", children: ["zm", "b24", "pbx", "memo"].map(folder) }, "ru")
+    const groups = tree.children.map((node) =>
+      node.type === "folder" && !node.index
+        ? {
+            name: node.name,
+            open: node.defaultOpen,
+            urls: node.children.map((child) => (child.type === "folder" ? child.index?.url : undefined)),
+          }
+        : node.name,
+    )
+    expect(groups).toEqual([
+      "zm",
+      { name: "CRM", open: false, urls: ["/ru/docs/b24"] },
+      { name: "Звонки", open: true, urls: ["/ru/docs/pbx"] },
+      "memo",
+    ])
+  })
+
   it("lists Google Calendar right after Google Drive in every language", () => {
     for (const suffix of ["", ".ru", ".es"]) {
       const { pages } = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }

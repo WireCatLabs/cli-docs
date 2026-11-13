@@ -91,7 +91,9 @@ export function documentationTitle(lang: string, slugs: string[], authored: stri
   if (!tool) return authored
   if (slugs.length === 1)
     return seoWords(lang).toolTitles[tool.name as "tg" | "max" | "memo"] ?? tool.displayName ?? authored
-  return `${readerGuide(slugs, lang)?.title ?? authored} — ${tool.name}`
+  // People search for the product, not the command: "Search — Telegram", not "Search — tg".
+  const product = tool.displayName ?? { tg: "Telegram", max: "MAX" }[tool.name] ?? tool.name
+  return `${readerGuide(slugs, lang)?.title ?? authored} — ${product}`
 }
 
 export function documentationDescription(lang: string, slugs: string[], authored?: string): string {

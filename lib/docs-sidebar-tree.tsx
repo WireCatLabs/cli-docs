@@ -51,6 +51,7 @@ import {
   PackagePlus,
   Paperclip,
   PenLine,
+  Phone,
   PhoneCall,
   Reply,
   Rocket,
@@ -233,6 +234,43 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
   return [...rest.slice(0, at), separator, ...moved, ...rest.slice(at)]
 }
 
+// A tool listed here sits in a folder of its own inside "Connect a source", at the place of the group's first tool.
+// The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
+const toolGroups = {
+  voiceCalls: { tools: ["pbx"], open: true, icon: Phone },
+  crm: { tools: ["b24"], open: false, icon: Handshake },
+} as const
+
+export const toolGroupId = (group: string, lang: string) => `tools-${group}-${lang}`
+
+export function withToolGroups(children: Node[], lang: string): Node[] {
+  const groupOf = (node: Node) =>
+    (Object.keys(toolGroups) as (keyof typeof toolGroups)[]).find((group) =>
+      (toolGroups[group].tools as readonly string[]).includes(folderTool(node) ?? ""),
+    )
+  const out: Node[] = []
+  const placed = new Set<string>()
+  for (const node of children) {
+    const group = groupOf(node)
+    if (!group) {
+      out.push(node)
+      continue
+    }
+    if (placed.has(group)) continue
+    placed.add(group)
+    const { open, icon: Icon } = toolGroups[group]
+    out.push({
+      type: "folder",
+      $id: toolGroupId(group, lang),
+      name: wordsFor(lang).navigation[group],
+      defaultOpen: open,
+      icon: <Icon aria-hidden="true" />,
+      children: children.filter((child) => groupOf(child) === group),
+    })
+  }
+  return out
+}
+
 // Keyed by the section's first page, so one entry covers every language. The value is whether it starts open.
 const foldingSections: Record<string, boolean> = {
   prompting: true,
@@ -293,5 +331,6 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
     const commands = /^\/(en|ru|es)\/docs\/(?:tg|max|wa)\/commands\/?$/.exec(node.url)
     return commands ? commandFolder(page, commands[1]) : page
   }
-  return { ...tree, children: withFoldingSections(withCommunityGroup(tree.children, lang).map(decorate)) }
+  const grouped = withToolGroups(withCommunityGroup(tree.children, lang).map(decorate), lang)
+  return { ...tree, children: withFoldingSections(grouped) }
 }

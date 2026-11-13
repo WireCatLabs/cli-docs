@@ -1,7 +1,7 @@
 {
   "en": {
     "homeTitle": "WireCat — Everything you’ve said, ready for your agent",
-    "homeDescription": "Connect the AI agent you already use to your Telegram and WhatsApp chats, mail, meetings, documents, calendar and notes. Free, open-source tools that keep everything on your computer.",
+    "homeDescription": "Connect the AI agent you already use to your Telegram and WhatsApp chats, mail, meetings, phone calls, CRM, documents, calendar and notes. Free, open-source tools that keep everything on your computer.",
     "homeLabel": "Home",
     "docsLabel": "Documentation",
     "socialTitle": "Everything you’ve said. Ready for your agent.",
@@ -44,12 +44,18 @@
       "tg": "Telegram CLI client for AI agents",
       "max": "MAX CLI for AI agents and bots",
       "memo": "Memo: notes, mail and messages for AI agents",
-      "wa": "WhatsApp CLI for your AI agent and business bots"
+      "wa": "WhatsApp CLI for your AI agent and business bots",
+      "pbx": "Connect Asterisk and FreePBX to your AI agent",
+      "zm": "Connect Zoom transcripts and recordings to your AI agent",
+      "drive": "Connect Google Drive and Docs to your AI agent",
+      "gcal": "Connect Google Calendar to your AI agent",
+      "mail": "Connect your mail to your AI agent over IMAP",
+      "b24": "Connect Bitrix24 CRM to your AI agent"
     }
   },
   "ru": {
     "homeTitle": "WireCat: всё, что вы сказали — под рукой у агента",
-    "homeDescription": "Подключите своего ИИ-агента к чатам в Telegram, WhatsApp и MAX, почте, встречам, документам, календарю и заметкам. Бесплатные инструменты с открытым кодом, всё хранится на вашем компьютере.",
+    "homeDescription": "Подключите своего ИИ-агента к чатам в Telegram, WhatsApp и MAX, почте, встречам, звонкам, CRM, документам, календарю и заметкам. Бесплатные инструменты с открытым кодом, всё хранится на вашем компьютере.",
     "homeLabel": "Главная",
     "docsLabel": "Документация",
     "socialTitle": "Всё, что вы сказали — под рукой у агента.",
@@ -92,12 +98,18 @@
       "tg": "CLI-клиент Telegram для ИИ-агентов",
       "max": "MAX CLI для ИИ-агентов и ботов",
       "memo": "Memo: заметки, почта и сообщения для ИИ-агентов",
-      "wa": "WhatsApp CLI для ИИ-агентов и бизнес-ботов"
+      "wa": "WhatsApp CLI для ИИ-агентов и бизнес-ботов",
+      "pbx": "Подключите Asterisk и FreePBX к ИИ-агенту",
+      "zm": "Подключите расшифровки и записи Zoom к ИИ-агенту",
+      "drive": "Подключите Google Drive и Google Docs к ИИ-агенту",
+      "gcal": "Подключите Google Calendar к ИИ-агенту",
+      "mail": "Подключите почту к ИИ-агенту по IMAP",
+      "b24": "Подключите CRM Bitrix24 к ИИ-агенту"
     }
   },
   "es": {
     "homeTitle": "WireCat — Todo lo que has dicho, listo para tu agente",
-    "homeDescription": "Conecta el agente de IA que ya usas con tus chats de Telegram y WhatsApp, correo, reuniones, documentos, calendario y notas. Herramientas gratuitas de código abierto que guardan todo en tu ordenador.",
+    "homeDescription": "Conecta el agente de IA que ya usas con tus chats de Telegram y WhatsApp, correo, reuniones, llamadas, CRM, documentos, calendario y notas. Herramientas gratuitas de código abierto que guardan todo en tu ordenador.",
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
     "socialTitle": "Todo lo que has dicho. Listo para tu agente.",
@@ -140,7 +152,13 @@
       "tg": "Cliente CLI de Telegram para agentes de IA",
       "max": "CLI de MAX para agentes de IA y bots",
       "memo": "Memo: notas, correo y mensajes para agentes de IA",
-      "wa": "CLI de WhatsApp para tu agente de IA y bots de empresa"
+      "wa": "CLI de WhatsApp para tu agente de IA y bots de empresa",
+      "pbx": "Conecta Asterisk y FreePBX a tu agente de IA",
+      "zm": "Conecta las transcripciones y grabaciones de Zoom a tu agente de IA",
+      "drive": "Conecta Google Drive y Docs a tu agente de IA",
+      "gcal": "Conecta Google Calendar a tu agente de IA",
+      "mail": "Conecta tu correo a tu agente de IA por IMAP",
+      "b24": "Conecta el CRM Bitrix24 a tu agente de IA"
     }
   }
 }
