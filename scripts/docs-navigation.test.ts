@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest"
 import { WhatsAppIcon } from "../components/brand-icons"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
 import { sidebarIcons, unifiedDocsTree, withCommunityGroup, withFoldingSections } from "../lib/docs-sidebar-tree"
+import { toolSidebarTitle } from "../lib/tool-sidebar-titles"
 import { registryProblems } from "./desktop-registry"
 import { type Tool, toolProblems } from "./sync"
 
@@ -271,5 +272,20 @@ describe("withFoldingSections", () => {
       "/en/docs/architecture",
       "/en/docs/testing",
     ])
+  })
+})
+
+describe("short sidebar names of tool pages", () => {
+  it("names a release page in the reader's language, a tool's own name before the shared one", () => {
+    expect(toolSidebarTitle("tg/query-language.md", "en")).toBe("Query language")
+    expect(toolSidebarTitle("max/diagnostics.ru.md", "ru")).toBe("Диагностика")
+    expect(toolSidebarTitle("zm/mcp.es.md", "es")).toBe("MCP y skills")
+    expect(toolSidebarTitle("gcal/mcp.md", "es")).toBe("Servidor MCP")
+  })
+
+  it("keeps the title of a page that is not a tool's or has no short name", () => {
+    expect(toolSidebarTitle("desktop/memory.mdx", "en")).toBeUndefined()
+    expect(toolSidebarTitle("tg/usage.md", "en")).toBeUndefined()
+    expect(toolSidebarTitle("index.mdx", "en")).toBeUndefined()
   })
 })
