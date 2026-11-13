@@ -15,6 +15,7 @@ import { remarkDisclosures } from "./remark-disclosures"
 import { remarkDocUsability } from "./remark-doc-usability"
 import { remarkMermaid } from "./remark-mermaid"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
+import { toolSidebarTitle } from "./tool-sidebar-titles"
 
 const docs = defineDocs({
   dir: "content/docs",
@@ -53,7 +54,10 @@ export const source = loader({
       transformPageTree: {
         file(node, filePath) {
           const file = filePath ? this.storage.read(filePath) : undefined
-          const short = file?.format === "page" ? (file.data as { sidebarTitle?: string }).sidebarTitle : undefined
+          const short =
+            file?.format === "page"
+              ? ((file.data as { sidebarTitle?: string }).sidebarTitle ?? toolSidebarTitle(file.path, this.locale))
+              : undefined
           return short ? { ...node, name: short } : node
         },
       },
