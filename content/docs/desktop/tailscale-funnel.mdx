@@ -21,6 +21,14 @@ Open the tool, then **MCP server (or connect web)**, then **Start and connect**,
 | Allow Funnel | Opens the page of the Tailscale admin console where you switch on what Funnel needs. |
 | Connect this server | Turns Funnel on for the server's local port and starts the server with the public address. |
 
+<DesktopShot
+  shot="tailscale-funnel"
+  folder="desktop/docs"
+  lang="en"
+  alt="The Public address step with Tailscale Funnel chosen, Tailscale installed and logged in, and Allow Funnel open"
+  caption="Each step has a Check button. Allow Funnel opens the right page of the Tailscale admin console."
+/>
+
 WireCat never asks for your computer password and never runs `sudo`. The installer, the Software app or your terminal asks for it. Stopping the server turns off only the Funnel that WireCat turned on; your own Funnels and Tailscale settings stay as they are.
 
 All your tools share one public address and take one path each, for example `https://laptop.tail4a2c.ts.net/tg`. The address stays the same the next time you start the server, so browser apps stay logged in. Funnel allows only the public ports 443, 8443 and 10000; WireCat uses another one only when the first is taken by a Funnel you set up yourself, and the step reports it if all three are in use.

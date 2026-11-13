@@ -21,6 +21,14 @@ Abre la herramienta, luego **Servidor MCP (o conectar la web)**, luego **Iniciar
 | Permite Funnel | Abre la página de la consola de administración de Tailscale donde activas lo que Funnel necesita. |
 | Conecta este servidor | Activa Funnel para el puerto local del servidor e inicia el servidor con la dirección pública. |
 
+<DesktopShot
+  shot="tailscale-funnel"
+  folder="desktop/docs"
+  lang="es"
+  alt="El paso Dirección pública con Tailscale Funnel elegido, Tailscale instalado y con sesión, y Permite Funnel abierto"
+  caption="Cada paso tiene un botón Comprobar. Permite Funnel abre la página correcta de la consola de Tailscale."
+/>
+
 WireCat nunca pide la contraseña de tu ordenador ni ejecuta `sudo`. La contraseña la pide el instalador, la aplicación de Software o tu terminal. Al detener el servidor se desactiva solo el Funnel que activó WireCat; tus propios Funnel y los ajustes de Tailscale quedan como estaban.
 
 Todas tus herramientas comparten una dirección pública y cada una tiene su ruta, por ejemplo `https://laptop.tail4a2c.ts.net/tg`. La dirección es la misma la próxima vez que inicies el servidor, así que las aplicaciones del navegador siguen con la sesión iniciada. Funnel solo admite los puertos públicos 443, 8443 y 10000; WireCat usa otro solo si el primero lo ocupa un Funnel que configuraste tú, y el paso avisa si los tres están en uso.
