@@ -1,0 +1,146 @@
+---
+title: "Yandex Telemost"
+description: "Guarda como reuniones las notas que Telemost envía por correo después de una llamada, y tu agente las encuentra junto a Zoom, los chats y el correo."
+---
+
+Te reúnes en Yandex Telemost con un plan de Yandex 360 para empresas, y después de una llamada llega un correo
+«Конспект встречи» (notas de la reunión) desde `keeper@telemost.yandex.ru`. Telemost no guarda estas notas: su versión
+web solo muestra los chats de las reuniones, y su API no da notas ni transcripciones. El correo es la única copia. Aquí
+configuras la herramienta de correo para que cada uno de esos correos se convierta en una reunión que tu agente de IA
+pueda buscar, junto a tus llamadas de Zoom, tus chats y tu correo. Necesitas el buzón que recibe las notas
+[conectado con la herramienta de correo](./mail/email.md).
+
+**En esta página:** 1. [En resumen](#en-resumen) · 2. [Quién recibe las notas](#quién-recibe-las-notas) ·
+3. [Convierte las notas en reuniones](#convierte-las-notas-en-reuniones) · 4. [Notas que ya están en el buzón](#notas-que-ya-están-en-el-buzón) ·
+5. [Qué guarda una reunión](#qué-guarda-una-reunión) · 6. [Pregunta a tu agente](#pregunta-a-tu-agente) ·
+7. [La regla en WireCat Desktop](#la-regla-en-wirecat-desktop) · 8. [Si no aparece la reunión](#si-no-aparece-la-reunión)
+
+## En resumen
+
+Los ejemplos usan el perfil `work`. Un perfil es el nombre que diste al buzón al conectarlo; usa el tuyo.
+
+```sh
+mail work rules add --do meeting-notes:telemost
+mail work sync
+mail work rules apply
+```
+
+El primer comando añade una regla de correo: una instrucción que la herramienta de correo sigue en cada
+sincronización. Desde ese momento, cada sincronización guarda como reuniones las notas nuevas de Telemost. El último
+comando solo cuenta las notas guardadas antes de la regla. Lee su respuesta y ejecútalo otra vez con `--yes` para
+guardarlas también ([detalles](#notas-que-ya-están-en-el-buzón)).
+
+## Quién recibe las notas
+
+Las notas las escribe Telemost, no WireCat. La [página de Yandex sobre las notas](https://yandex.ru/support/yandex-360/business/telemost/web/ru/summary)
+describe estas condiciones:
+
+- La organización tiene un plan de Yandex 360 para empresas: Минимальный, Основной, Продвинутый o Корпоративный.
+- Quien inicia las notas entra con una cuenta del dominio de la organización, como `anna@company.example`. Una cuenta
+  personal `@yandex.ru` no puede.
+- Por defecto, las notas llegan al organizador y a los coorganizadores. Los demás participantes las reciben solo si,
+  antes de la llamada, está activado «Получать конспект звонка на почту» en los ajustes «Права участников» de la
+  llamada. Los invitados de fuera de la organización no las reciben nunca.
+- Las notas pueden tardar hasta 24 horas en llegar después de la llamada.
+
+## Convierte las notas en reuniones
+
+```sh
+mail work rules add --do meeting-notes:telemost
+```
+
+Sin otra condición, la regla elige el correo de `keeper@telemost.yandex.ru`. Cada correo que elige se guarda entero y
+protegido: ninguna otra regla ni ninguna limpieza puede recortarlo, archivarlo ni moverlo a la papelera.
+
+Después, cada `mail work sync` guarda también como reuniones las notas que encuentra. Una sincronización lee los
+últimos 30 días si no indicas `--since-time`. Las reuniones quedan en el almacén local bajo la cuenta `telemost:` más
+la dirección del buzón, por ejemplo `telemost:anna@company.example`. Nada cambia en tu buzón ni en Telemost.
+
+## Notas que ya están en el buzón
+
+La siguiente sincronización no guarda las notas que ya estaban antes de la regla. Primero, cuéntalas:
+
+```sh
+mail work rules apply
+```
+
+Esta ejecución no cambia nada. Entre sus líneas está `would save 12 telemost meetings from notes` («guardaría 12
+reuniones de Telemost a partir de notas»). También lee las cabeceras del buzón en el servidor, así que necesita
+internet.
+
+El mismo comando aplica **todas** las reglas de este buzón, no solo esta. Si otra línea dice que recortará correos a
+su sobre (remitente, fecha y tamaño, sin texto), eso también ocurrirá. Cuando las líneas coincidan con lo que quieres,
+guarda:
+
+```sh
+mail work rules apply --yes
+```
+
+Ahora la respuesta dice `saved 12 telemost meetings from notes`. Añade `--since-time 2026-01-01` a las dos ejecuciones
+para tomar solo el correo desde esa fecha.
+
+## Qué guarda una reunión
+
+- **Las notas, por partes.** «Итоги» se convierte en el resumen de la reunión. «Что обсудили», «Задачи», «Открытые
+  вопросы» y «Следующая встреча» quedan como partes separadas, así tu agente puede citar solo las tareas o solo las
+  preguntas abiertas.
+- **El día.** El asunto da solo la fecha, no la hora.
+- **Las horas y el título, si tu calendario los tiene.** Si la reunión está en Google Calendar,
+  [conectado con gcal](./gcal/index.md), y el evento tiene el mismo enlace de Telemost, la reunión toma de ese evento
+  el inicio, el final y el título. Si no, se coloca al inicio del día, marcada como conocida solo hasta el día, y toma
+  el asunto del correo como título. No se crea ningún evento de calendario para ella.
+- **El enlace de la reunión, sin su código de acceso.** La parte del enlace después de `?` nunca se guarda.
+
+Lo que no llega de Telemost: la grabación y una transcripción (el texto de lo que dijo cada persona). Si Yandex adjunta
+al correo una transcripción completa, queda como adjunto de ese correo y no se guarda como la transcripción de la
+reunión.
+
+## Pregunta a tu agente
+
+Tu agente busca en las reuniones con Memo, la herramienta que busca en todo el almacén local. Pregunta con tus
+palabras:
+
+```text prompt
+Busca las reuniones de Telemost del último mes en las que hablamos del presupuesto de Harbour. Muestra las tareas y
+las preguntas abiertas de sus notas, con la fecha de la reunión y referencias a la fuente. Dime qué reuniones tienen
+solo el día y no la hora.
+```
+
+Una respuesta útil nombra cada reunión, su fecha y la parte de las notas que cita. Una respuesta vacía no demuestra que
+la reunión no ocurriera: revisa los pasos de abajo.
+
+## La regla en WireCat Desktop
+
+[WireCat Desktop](./desktop/index.mdx) muestra las reglas del buzón, solo para leer. En la página **Herramientas**,
+abre **Email**, luego el menú **⋯** de la cuenta y **Reglas de correo**. La regla de Telemost está marcada como
+**Notas de reuniones de Telemost**. Las reglas se añaden y cambian en una terminal; el panel muestra el comando para
+copiar.
+
+<DesktopShot
+  shot="mail-rules"
+  folder="desktop/docs"
+  lang="es"
+  alt="Reglas de correo de la cuenta personal: la regla de keeper@telemost.yandex.ru se guarda entera, está protegida y marcada como notas de reuniones de Telemost, junto a otras reglas"
+  caption="Reglas de correo: la regla de Telemost guarda las notas enteras y protegidas."
+/>
+
+## Si no aparece la reunión
+
+1. **No llegaron las notas.** Busca en el buzón correo de `keeper@telemost.yandex.ru`. Si no hay, revisa las
+   condiciones en [Quién recibe las notas](#quién-recibe-las-notas).
+2. **Falta la regla.** `mail work rules list` la muestra como `telemost meeting notes`. Si no está, añádela.
+3. **Las notas son más antiguas que la sincronización.** Ejecuta `mail work rules apply` y luego
+   `mail work rules apply --yes`, como en [Notas que ya están en el buzón](#notas-que-ya-están-en-el-buzón).
+4. **La reunión tiene día pero no hora.** Ningún evento sincronizado de Google Calendar tiene ese día el mismo enlace
+   de Telemost. Sincroniza el calendario con gcal antes de que se guarden las notas: configúralo antes de añadir la
+   regla o de ejecutar `rules apply --yes`.
+
+Para la búsqueda en sí, el agente ejecuta comandos como estos:
+
+```sh
+memo search meetings presupuesto --source telemost:anna@company.example --since-time 2026-10-01
+memo search all "presupuesto Harbour" --only meetings
+```
+
+Siguiente: [Reuniones](./zm/meetings.md) explica cómo unir lo hallado en las reuniones con tus proyectos y preparar la
+próxima llamada.

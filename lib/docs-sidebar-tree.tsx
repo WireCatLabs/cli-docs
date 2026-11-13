@@ -100,6 +100,7 @@ export const sidebarIcons = {
   "how-it-works": Lightbulb,
   meetings: Video,
   zm: Video,
+  telemost: Video,
   gcal: CalendarDays,
   "zoom-app": KeyRound,
   "remote-meetings": Video,

@@ -10,7 +10,8 @@ showing what was said, when and in which meeting.
 A transcript is the text of a conversation; a recording is its audio or video. Meeting information
 also includes the date, title and available participant records. [Zoom](./index.md) supplies these
 sources through its API or transcript files you import. You attend calls in Zoom; the command-line
-tool gives your agent access to the saved information.
+tool gives your agent access to the saved information. Meetings in Yandex Telemost come from the notes it
+emails after a call: see [Yandex Telemost](../telemost.mdx).
 
 ## Find a discussion or decision
 
