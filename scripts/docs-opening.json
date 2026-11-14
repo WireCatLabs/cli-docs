@@ -1,0 +1,43 @@
+{
+  "contentsLabels": {
+    "en": "On this page:",
+    "ru": "На этой странице:",
+    "es": "En esta página:"
+  },
+  "words": {
+    "en": [
+      { "pattern": "see below", "fix": "link the section instead" },
+      {
+        "pattern": "(?:steps|section|sections|example|examples|table|list|instructions) below",
+        "fix": "link the section instead"
+      },
+      { "pattern": "(?:shown|described|listed|explained|covered) below", "fix": "link the section instead" },
+      { "pattern": "it is important to note", "fix": "state the fact itself" },
+      { "pattern": "in order to", "fix": "write \"to\"" }
+    ],
+    "ru": [
+      { "pattern": "явля(?:ется|ются)", "fix": "write «X — это Y» or name the action" },
+      { "pattern": "данн(?:ый|ая|ого|ой)", "fix": "write «этот», «эта» or name the thing" },
+      { "pattern": "в рамках", "fix": "write «в», «при» or «во время»" },
+      { "pattern": "осуществля\\p{L}*", "fix": "name the action with its own verb" },
+      { "pattern": "позволя(?:ет|ют)", "fix": "write «можно» or what the reader does" },
+      { "pattern": "обеспечива\\p{L}*", "fix": "name what actually happens" },
+      { "pattern": "необходимо", "fix": "write «нужно» or give the step" },
+      { "pattern": "следует(?:\\s+не)?\\s+\\p{L}+(?:ть|ти|чь)(?:ся)?", "fix": "write «нужно» or give the step" },
+      { "pattern": "важно отметить", "fix": "state the fact itself" },
+      { "pattern": "(?:см\\.|смотрите)\\s+(?:ниже|далее)", "fix": "link the section instead" },
+      {
+        "pattern": "(?:шаг|раздел|пример|инструкци|таблиц|списк|список)\\p{L}*\\s+ниже",
+        "fix": "link the section instead"
+      },
+      {
+        "pattern": "(?:описан|приведен|приведён|показан|перечислен)\\p{L}*\\s+ниже",
+        "fix": "link the section instead"
+      },
+      {
+        "pattern": "(?:ниже|далее)\\s+(?:описан|приведен|приведён|показан|перечислен|рассмотр|расскаж|покажем)\\p{L}*",
+        "fix": "link the section instead"
+      }
+    ]
+  }
+}

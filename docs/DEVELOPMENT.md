@@ -30,7 +30,8 @@ shares one server; each test keeps an isolated page/context so state cannot leak
 
 Git hooks do not run browsers. The commit hook checks staged code and secrets;
 there is no push hook. A pull request runs the shared fast job: lint, Markdown lint,
-the secret scan and the unit tests. `pnpm build` is a separate production check: it
+the release-number check, the opening and wording check of new or changed guide pages
+(`pnpm docs:opening`), the secret scan and the unit tests. `pnpm build` is a separate production check: it
 syncs tool documentation and exports the entire site. Full export, link, SEO and
 browser coverage run in the deployment workflow on each merge to `main`, daily, and
 in the monthly full validation; use targeted local checks for routine edits.

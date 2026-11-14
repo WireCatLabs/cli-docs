@@ -162,6 +162,12 @@ reachability, locale completeness, source fingerprints, command contracts and di
 behavior. Assess orientation, clarity, appropriate scope and task usefulness through editorial
 review and a reader task; a linter cannot prove them.
 
+`pnpm docs:opening` (part of `pnpm docs:check` and the pull request checks) reads only the guide pages that are new
+or changed against `main`: each opens with a paragraph, not a command or its contents; a page with more than three
+`##` sections has the “On this page:” label and a numbered list with one section link per line before its first
+section; RU and EN prose avoids the phrases in `scripts/docs-opening.json`. Command references, changelogs and
+roadmaps are exempt.
+
 Approve a revised page when its outcome is clear, its claims match the selected release, a reader
 can recognize success or a boundary, and its next step is useful. Do not add rules that require
 more pages, more headings or more words just to raise a score.
