@@ -15,7 +15,7 @@ pbx office config unset cdr_csv_path
 
 ## La fuente
 
-Qué significa cada ajuste está en [conecta tu Asterisk](./asterisk.md).
+Qué significa cada ajuste está en [instala y conecta](./installation.md).
 
 | Ajuste | Por defecto | Qué es |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ Qué significa cada ajuste está en [conecta tu Asterisk](./asterisk.md).
 | `recordings_path` | — | la carpeta de las grabaciones |
 | `recordings_pattern` | el de FreePBX, luego `*{uniqueid}*` | cómo el nombre de una grabación indica la llamada |
 | `cdr_timezone` | la de este ordenador | la zona de las horas del CDR |
-| `phone_region` | — | el país de los números escritos sin `+`, como `ru` |
+| `phone_region` | — | el país de los números escritos sin `+`, como `ru`, o varios: `es,ru` |
 | `extension_pattern` | `^\d{2,5}$` | qué números son extensiones internas |
 | `files_from` | `local` | `local`, o `sftp` para leer `Master.csv` y las grabaciones en la centralita |
 | `sftp_host`, `sftp_port`, `sftp_user` | —, 22, — | el servidor SSH de la centralita, para `files_from sftp` |

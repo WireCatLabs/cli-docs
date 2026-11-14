@@ -15,7 +15,7 @@ pbx office config unset cdr_csv_path
 
 ## Источник
 
-Что значит каждая настройка, описано на странице [подключите Asterisk](./asterisk.md).
+Что значит каждая настройка, описано на странице [установка и подключение](./installation.md).
 
 | Настройка | По умолчанию | Что это |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ pbx office config unset cdr_csv_path
 | `recordings_path` | — | папка с аудиозаписями |
 | `recordings_pattern` | как в FreePBX, затем `*{uniqueid}*` | как по имени аудиозаписи найти звонок |
 | `cdr_timezone` | пояс этого компьютера | часовой пояс времени в CDR |
-| `phone_region` | — | страна для номеров без `+`, например `ru` |
+| `phone_region` | — | страна для номеров без `+`, например `ru`, или несколько: `es,ru` |
 | `extension_pattern` | `^\d{2,5}$` | какие номера считаются внутренними |
 | `files_from` | `local` | `local` или `sftp`, чтобы читать `Master.csv` и аудиозаписи на АТС |
 | `sftp_host`, `sftp_port`, `sftp_user` | —, 22, — | SSH-сервер АТС для `files_from sftp` |

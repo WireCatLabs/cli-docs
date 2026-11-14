@@ -17,7 +17,7 @@ perfil para una consulta de soporte.
 | «N call records could not be read» | Esas filas no tienen hora de inicio. El resto se importó. |
 | `db.refused` | La base de datos rechazó el usuario o la contraseña. Vuelve a ejecutar `session start`. |
 | `db.no-table`, `db.no-select` | Define `db_table` o da al usuario `SELECT` sobre la tabla. |
-| `network_error` de la base de datos | El servidor no es accesible desde aquí. Usa un túnel SSH, como muestra [conecta tu Asterisk](./asterisk.md#a-cdr-database). |
+| `network_error` de la base de datos | El servidor no es accesible desde aquí. Usa un túnel SSH, como muestra [conecta tu Asterisk](./installation.md#a-cdr-database). |
 | Una llamada no tiene grabación | Revisa `recordings_path` y luego `recordings_pattern`. Un archivo modificado en los últimos dos minutos se deja para la siguiente sincronización. |
 | `model.not-downloaded` | Ejecuta `pbx models download gigaam-v3`, o el modelo que nombra el mensaje. |
 | Una llamada WAV o GSM no se transcribe | Instala `ffmpeg`. |

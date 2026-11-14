@@ -8,8 +8,8 @@ la [página de seguridad común](https://wirecat.dev/en/docs/security). Aquí so
 `pbx` guarda sus ajustes en `config.json` y su estado en las carpetas que muestra `pbx doctor`. Lee la
 centralita y nunca escribe en ella: Master.csv y las grabaciones se abren solo para lectura, y una sesión de base de
 datos se abre en solo lectura y envía un `SELECT` de la tabla del CDR, con los valores como parámetros. Dale un usuario
-que no pueda hacer nada más, como muestra [conecta tu Asterisk](./asterisk.md#a-cdr-database), y no expongas la base de
-datos ni AMI a internet.
+que no pueda hacer nada más, como muestra [conecta tu Asterisk](./installation.md#a-cdr-database), y no expongas la
+base de datos ni AMI a internet.
 
 `session start` guarda la contraseña de la base de datos en el llavero del sistema, o en un archivo privado donde no
 funciona ningún llavero. La contraseña se lee oculta o desde stdin, nunca desde la línea de comandos, y se comprueba

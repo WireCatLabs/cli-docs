@@ -2789,12 +2789,12 @@
   {
     "tool": "pbx",
     "slug": "index",
-    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.3.0/docs/index.md",
-    "reason": "The overview page's sidebar label is its title. The release titles its overview with the command name, pbx; the other tools' overview pages carry the product name. Drop this once the release's own heading is Asterisk.",
+    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.4.0/docs/index.md",
+    "reason": "The overview page's sidebar label is its title. The release titles its overview \"Asterisk calls for your AI agent\", too long for the sidebar; the other tools' overview pages carry the product name. Drop this once the release's own heading is Asterisk.",
     "replacements": {
       "en": [
         {
-          "before": "title: \"pbx\"",
+          "before": "title: \"Asterisk calls for your AI agent\"",
           "after": "title: \"Asterisk\""
         }
       ]
@@ -2821,6 +2821,32 @@
         {
           "before": "`memo search --source import:handbook`",
           "after": "`memo search notes budget --source import:handbook`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "pbx",
+    "slug": "changelog",
+    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.4.0/CHANGELOG.md",
+    "reason": "The released 0.2.0 entry links docs/asterisk.md, which v0.4.0 merged into the install and connect page; the sync pins the link to a tag where that file is gone.",
+    "replacements": {
+      "en": [
+        {
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.4.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "after": "./installation.md#files-on-the-pbx-over-sftp"
+        }
+      ],
+      "ru": [
+        {
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.4.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "after": "./installation.md#files-on-the-pbx-over-sftp"
+        }
+      ],
+      "es": [
+        {
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.4.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ]
     }

@@ -156,7 +156,7 @@ pbx meetings show <meeting> [options]
 | `--json` | one JSON value. |
 | `--jsonl` | one JSON object per item. |
 
-**Returns:** meeting details — ref, id, provider, account, title, url, started_at, ended_at, and 16 more; every field: pbx commands info meetings show
+**Returns:** meeting details — ref, id, provider, account, title, url, started_at, ended_at, and 17 more; every field: pbx commands info meetings show
 
 **Next usually:** `pbx meetings transcript <meeting>`, `pbx meetings summary <meeting>`, `pbx meetings export <meeting>`
 

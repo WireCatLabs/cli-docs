@@ -111,4 +111,4 @@ Notas sobre las marcas:
 - **asterisk-ai-call-notes**: un centro de llamadas salientes quiere un resumen, un siguiente paso y una hora para
   devolver la llamada junto a cada llamada en cuanto termina.
 
-Si `pbx` encaja, empieza por la [instalación](./installation.md) y luego [conecta tu Asterisk](./asterisk.md).
+Si `pbx` encaja, empieza por la [instalación y conexión](./installation.md).

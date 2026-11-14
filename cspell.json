@@ -9,6 +9,10 @@
   "files": ["content/docs/*.{md,mdx}", "content/docs/desktop/*.{md,mdx}"],
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
+    "Deepgram",
+    "Idial",
+    "Issabel",
+    "Sangoma",
     "Fastmail",
     "Maildir",
     "mbox",
