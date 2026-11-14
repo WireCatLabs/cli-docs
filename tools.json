@@ -98,9 +98,9 @@
     "package": "@wirecat/cli-memo",
     "lang": "en",
     "summary": {
-      "en": "Your notes, mail and messages in one place for your AI agent: search, tags, people and memories, on your computer.",
-      "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
-      "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
+      "en": "Your notes, files, Obsidian vaults, mail and messages in one place for your AI agent: search, tags, people and memories, on your computer.",
+      "ru": "Заметки, файлы, хранилища Obsidian, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
+      "es": "Tus notas, archivos, bóvedas de Obsidian, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
     "docsRef": "v0.131.87",
     "profile": false
