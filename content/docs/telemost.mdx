@@ -3,20 +3,34 @@ title: "Yandex Telemost"
 description: "Save the meeting notes Telemost emails after a call as meetings, so your agent finds them beside Zoom calls, chats and mail."
 ---
 
-You meet in Yandex Telemost on a Yandex 360 for Business plan, and after a call an email «Конспект встречи» (meeting
-notes) arrives from `keeper@telemost.yandex.ru`. Telemost keeps no history of these notes: its web app shows only
-meeting chats, and its API gives no notes or transcripts. The email is the only copy. Here you set up the mail tool so
-that each of these emails becomes a meeting your AI agent can search, next to your Zoom calls, chats and mail. You
-need the mailbox that gets the notes [connected with the mail tool](./mail/email.md).
+Once this is set up, your AI agent answers questions about past calls in Yandex Telemost: what was agreed, who took
+which task, which questions are still open. It searches these calls together with your Zoom meetings, mail and chats,
+and names the meeting and date each answer comes from.
+
+After a call, Telemost emails a summary titled «Конспект встречи» (meeting notes). Telemost itself keeps no copy, so the
+email is the only one. This page shows how one command turns these emails into meetings, how to add the notes already
+in your mailbox, what a meeting keeps, and what to do if a meeting does not appear. You need the mailbox that gets the
+notes [connected with the mail tool](./mail/email.md).
 
 **On this page:** 1. [Short version](#short-version) · 2. [Who gets the notes](#who-gets-the-notes) ·
 3. [Turn the notes into meetings](#turn-the-notes-into-meetings) · 4. [Notes already in your mailbox](#notes-already-in-your-mailbox) ·
 5. [What a meeting keeps](#what-a-meeting-keeps) · 6. [Ask your agent](#ask-your-agent) ·
 7. [See the rule in WireCat Desktop](#see-the-rule-in-wirecat-desktop) · 8. [If no meeting appears](#if-no-meeting-appears)
 
-## Short version
+Terms used below:
 
-The examples use the profile `work`. A profile is the name you gave the mailbox when you connected it; use yours.
+- **Meeting notes** — the email from `keeper@telemost.yandex.ru` with a call's summary, tasks and open questions.
+  Telemost writes it, not WireCat.
+- **Mail tool** — the command-line tool `mail`. It copies your email into the local store on your computer, where your
+  agent searches it.
+- **Profile** — the name you gave the mailbox when you connected it. The examples use `work`; use yours.
+- **Mail rule** — an instruction the mail tool follows on every sync: which emails to keep whole, which to cut down,
+  which to also save as meetings.
+- **Sync** — a run of `mail work sync`, which copies new email into the store.
+- **Meeting** — a record in the store with a date, a title and the notes, the same kind your Zoom calls get.
+- **Memo** — the tool your agent uses to search the whole store.
+
+## Short version
 
 ```sh
 mail work rules add --do meeting-notes:telemost
@@ -24,7 +38,7 @@ mail work sync
 mail work rules apply
 ```
 
-The first command adds a mail rule: an instruction the mail tool follows on every sync. From now on, each sync saves
+The first command adds the mail rule. From now on, each sync saves
 Telemost notes from its window, the last 30 days by default, as meetings. The last command counts older notes. Read
 its answer, then run it again with `--yes` to save them too ([details](#notes-already-in-your-mailbox)).
 
