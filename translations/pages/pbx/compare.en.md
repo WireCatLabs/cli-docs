@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `pbx` is a command line and an MCP server that copies the calls of an Asterisk PBX to your computer, turns their
 recordings into text there and gives them to your AI agent to read. This page puts it next to the other tools people
 use to read, transcribe and search the calls of an Asterisk or FreePBX system, so you can see which one fits your job.
-The marks for `pbx` come from version 0.4.0, checked on 14 November 2026. The marks for the other tools come
+The marks for `pbx` come from version 0.5.0, checked on 14 November 2026. The marks for the other tools come
 from their own READMEs and documentation, checked on 13 November 2026. Nothing was connected to a live PBX for this
 page, and a tool may do more than its pages say.
 
