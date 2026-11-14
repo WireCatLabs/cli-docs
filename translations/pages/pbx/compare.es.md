@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `pbx` es una línea de comandos y un servidor MCP que copia las llamadas de una centralita Asterisk a tu ordenador,
 convierte allí sus grabaciones en texto y se las da a tu agente de IA para leerlas. Aquí aparece junto a las otras
 herramientas que se usan para leer, transcribir y buscar las llamadas de un sistema Asterisk o FreePBX, para que veas
-cuál encaja con tu tarea. Las marcas de `pbx` salen de la versión 0.4.0, revisada el 14 de noviembre de 2026.
+cuál encaja con tu tarea. Las marcas de `pbx` salen de la versión 0.5.0, revisada el 14 de noviembre de 2026.
 Las marcas de las demás herramientas salen de sus propios README y su documentación, revisados el 13 de noviembre de
 2026. Para esta página no se conectó ninguna herramienta a una centralita real, y una herramienta puede hacer más de lo
 que dicen sus páginas.
