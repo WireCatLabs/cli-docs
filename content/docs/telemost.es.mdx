@@ -82,9 +82,10 @@ para tomar solo el correo desde esa fecha.
 
 ## Qué guarda una reunión
 
-- **Las notas, por partes.** «Итоги» se convierte en el resumen de la reunión. «Что обсудили», «Задачи», «Открытые
-  вопросы» y «Следующая встреча» quedan como partes separadas, así tu agente puede citar solo las tareas o solo las
-  preguntas abiertas.
+- **Las notas, por partes.** «Итоги» se convierte en el resumen de la reunión. Muchas notas no tienen el
+  encabezado «Итоги»: entonces el resumen es el texto antes del primer encabezado. «Что обсудили», «Задачи»,
+  «Открытые вопросы» y «Следующая встреча» quedan como partes separadas, así tu agente puede citar solo las tareas o
+  solo las preguntas abiertas. El pie de Yandex, «Оцените точность конспекта», no se guarda.
 - **El día.** El asunto da solo la fecha, no la hora.
 - **Las horas y el título, si tu calendario los tiene.** Si la reunión está en Google Calendar,
   [conectado con gcal](./gcal/index.md), y el evento tiene el mismo enlace de Telemost, la reunión toma de ese evento
@@ -106,6 +107,13 @@ Tu agente busca en las reuniones con Memo, la herramienta que busca en todo el a
 Busca las reuniones de Telemost del último mes en las que hablamos del presupuesto de Harbour. Muestra las tareas y
 las preguntas abiertas de sus notas, con la fecha de la reunión y referencias a la fuente. Dime qué reuniones tienen
 solo el día y no la hora.
+```
+
+Para buscar en las reuniones, el agente indica la cuenta de Telemost con `--source`: `telemost:` más la dirección
+del buzón. Sin ella, Memo la pide:
+
+```sh
+memo search meetings "lanzamiento" --source telemost:anna@company.example
 ```
 
 Una respuesta útil nombra cada reunión, su fecha y la parte de las notas que cita. Una respuesta vacía no demuestra que

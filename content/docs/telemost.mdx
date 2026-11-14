@@ -78,8 +78,10 @@ mail from that date.
 
 ## What a meeting keeps
 
-- **The notes, in parts.** «Итоги» becomes the meeting's overview. «Что обсудили», «Задачи», «Открытые вопросы» and
-  «Следующая встреча» stay as separate parts, so your agent can quote the tasks or the open questions on their own.
+- **The notes, in parts.** «Итоги» becomes the meeting's overview. Many notes have no «Итоги» heading: then the
+  overview is the text before the first heading. «Что обсудили», «Задачи», «Открытые вопросы» and «Следующая встреча»
+  stay as separate parts, so your agent can quote the tasks or the open questions on their own. Yandex's footer,
+  «Оцените точность конспекта», is not kept.
 - **The day.** The subject gives the date only, not the time.
 - **The hours and the title, when your calendar has them.** If you keep the meeting in Google Calendar,
   [connected with gcal](./gcal/index.md), and the event holds the same Telemost link, the meeting takes that event's
@@ -101,6 +103,13 @@ Your agent searches the meetings with Memo, the tool that searches everything in
 Find the Telemost meetings from the last month where we discussed the Harbour budget. Show the tasks and open
 questions from their notes, with the meeting date and source references. Tell me which meetings have only a day and
 no time.
+```
+
+To search the meetings itself, the agent names the Telemost account with `--source`, `telemost:` plus the mailbox's
+address. Without it, Memo asks for one:
+
+```sh
+memo search meetings "release" --source telemost:anna@company.example
 ```
 
 A useful answer names each meeting, its date and the part of the notes it quotes. An empty answer does not prove the

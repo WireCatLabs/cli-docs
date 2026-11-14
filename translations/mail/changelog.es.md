@@ -4,6 +4,81 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.28.0 — 13.11.2026
+
+### Corregido
+
+- **Las notas de reunión de Telemost con el formato antiguo de Yandex reciben su resumen** (cli-core 0.657.0). La
+  mayoría de los correos de notas no tienen el encabezado «Итоги»: el resumen es ahora el texto antes del primer
+  encabezado, y el pie de Yandex ya no se guarda.
+
+## 0.27.0 — 13.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Construido sobre cli-core 0.656.0** (antes 0.653.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **La sincronización funciona en una instalación nueva.** Una configuración compartida de WireCat
+  (`~/.config/WireCat/config.json`) que no se podía leer (una marca de orden de bytes, un JSON roto, una carpeta en su
+  lugar, una forma antigua de `setup`) dejaba cada herramienta de WireCat en solo lectura y rechazaba `sync`. Ahora solo
+  tu propia respuesta «solo lectura» limita una herramienta, e incluso entonces la sincronización funciona: solo lee el
+  servicio hacia el almacén local (cli-core 0.656.0).
+
+## 0.26.0 — 13.11.2026
+
+### Añadido
+
+- **`rules add --do meeting-notes:<provider>` guarda las notas de reunión como reuniones.** Cada correo que coincide
+  con la regla se guarda entero, protegido, y al sincronizar también como una reunión de ese proveedor, unida al evento
+  del calendario en la misma sala ese día. Sin condición, coincide con el remitente del proveedor:
+  `--do meeting-notes:telemost` es `keeper@telemost.yandex.ru`. `rules apply --yes` guarda las notas almacenadas antes
+  de la regla; su simulación las cuenta. `rules list`, `export` e `import` llevan la marca.
+
+### Cambiado — puede romper a quien llama
+
+- **Construido sobre cli-core 0.651.0** (antes 0.648.0). Un inicio de sesión OAuth que falta tiene ahora el motivo
+  `session.missing` (antes `oauth.missing`), `ai.address-refused` es ahora `model.address-refused`, y una huella de
+  proyecto de reuniones caducada sale como `conflict` en lugar de `configuration_error`. La primera pantalla muestra
+  `pbx`, la herramienta de Asterisk. Lo que cambió entre medias está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Construido sobre cli-core 0.648.0** (antes 0.647.0). Un nombre de perfil que no tiene ningún perfil sale ahora con
+  el código 6. `store reset` ya no se ofrece por MCP. Lo que cambió entre medias está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Dos inicios de sesión que terminan a la vez conservan ambos registros.** `sign-ins.json`, que lee `doctor`, se
+  cambia bajo un bloqueo, así que el registro de un perfil ya no sobrescribe el de otro.
+
+### Seguridad
+
+- **`contracts/wirecat.json` enumera los hosts a los que cli-core llega para el correo**: npm para `upgrade`, y
+  Hugging Face y GitHub para descargar modelos y los hosts a los que redirigen. WireCat Desktop los muestra antes de
+  instalar mail.
+- **mail solo llega a los hosts que declara.** El inicio de sesión, la comprobación de la cuenta de Google, el
+  descubrimiento del servidor y las consultas al registro para la puntuación del remitente pasan por `hostFetch`, que
+  rechaza cualquier otro host antes de que salga un byte y comprueba cada salto a otra dirección. Un archivo de descubrimiento o un
+  registro que redirige a otro host ya no se sigue: el descubrimiento prueba la siguiente fuente, y la consulta al
+  registro cuenta como fallida y se repite en una ejecución posterior. El paquete incluye `contracts/wirecat.json`, así
+  que WireCat Desktop muestra estos hosts antes de instalar mail.
+
+## 0.25.0 — 13.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Construido sobre cli-core 0.647.0** (antes 0.630.0). El almacén pasa a una versión más nueva al abrirse por primera
+  vez (solo añade). Las listas leídas de cli-core son `ListResult`, `doctor reports show` y `doctor reports create`
+  escriben un informe de problema para enviar, y se ofrece el ajuste `crm.<provider>:<account>.activities`. Lo que
+  cambió entre medias está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Las llamadas a modelos se quedan en este ordenador cuando lo pides.** Con el interruptor de solo local activado
+  (`memo models local-only set on`), cada llamada a un modelo que cli-core hace para mail, incluidas las incrustaciones
+  remotas, rechaza una dirección que no sea este ordenador antes de enviar nada. El `http://` simple se acepta ahora
+  solo hacia este ordenador, para que los registros nunca crucen la red sin cifrar; usa https o ejecuta el modelo
+  localmente.
+
 ## 0.24.0 — 10.11.2026
 
 ### Cambiado — puede romper a quien llama
