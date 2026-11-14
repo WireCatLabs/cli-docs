@@ -25,6 +25,7 @@ const crops = {
 // The docs page shows the whole window. `--docs` writes every screen, uncropped, to public/screenshots/desktop/docs/.
 const docsScreens = [
   "onboarding-welcome",
+  "mail-rules",
   "onboarding-install",
   "tools",
   "connect",

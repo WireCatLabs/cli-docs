@@ -100,6 +100,7 @@ export const sidebarIcons = {
   "how-it-works": Lightbulb,
   meetings: Video,
   zm: Video,
+  telemost: Video,
   gcal: CalendarDays,
   "zoom-app": KeyRound,
   "remote-meetings": Video,
@@ -216,6 +217,9 @@ const folderTool = (node: Node): string | undefined => {
   return first?.type === "page" ? /\/docs\/([a-z0-9-]+)(?:\/|$)/.exec(first.url)?.[1] : undefined
 }
 
+const toolOf = (node: Node): string | undefined =>
+  node.type === "page" ? /\/docs\/([a-z0-9-]+)$/.exec(node.url)?.[1] : folderTool(node)
+
 /** Community tools leave our Tools group for their own, which exists only while one is listed. */
 export function withCommunityGroup(children: Node[], lang: string, list: readonly Tool[] = tools): Node[] {
   const community = new Set(list.filter((tool) => tool.community).map((tool) => tool.name))
@@ -234,10 +238,11 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
   return [...rest.slice(0, at), separator, ...moved, ...rest.slice(at)]
 }
 
-// A tool listed here sits in a folder of its own inside "Connect a source", at the place of the group's first tool.
+// A tool listed here, by its folder or its single page, sits in a folder of its own inside "Connect a source", at the
+// place of the group's first tool.
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
-  voiceCalls: { tools: ["pbx"], open: true, icon: Phone },
+  meetingsCalls: { tools: ["zm", "telemost", "pbx"], open: true, icon: Phone },
   crm: { tools: ["b24"], open: false, icon: Handshake },
 } as const
 
@@ -246,7 +251,7 @@ export const toolGroupId = (group: string, lang: string) => `tools-${group}-${la
 export function withToolGroups(children: Node[], lang: string): Node[] {
   const groupOf = (node: Node) =>
     (Object.keys(toolGroups) as (keyof typeof toolGroups)[]).find((group) =>
-      (toolGroups[group].tools as readonly string[]).includes(folderTool(node) ?? ""),
+      (toolGroups[group].tools as readonly string[]).includes(toolOf(node) ?? ""),
     )
   const out: Node[] = []
   const placed = new Set<string>()

@@ -15,7 +15,7 @@ export type Words = {
     prompting: string
     mcp: string
     communityTools: string
-    voiceCalls: string
+    meetingsCalls: string
     crm: string
     messenger: string
     language: string
@@ -131,7 +131,7 @@ export const words: Record<string, Words> = {
       prompting: "Writing requests",
       mcp: "MCP and skills",
       communityTools: "Community tools",
-      voiceCalls: "Voice calls",
+      meetingsCalls: "Meetings & Calls",
       crm: "CRM",
       messenger: "Choose a messenger",
       language: "Choose a language",
@@ -183,7 +183,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       prompting: "Как формулировать запросы",
       mcp: "MCP и навыки",
       communityTools: "Инструменты сообщества",
-      voiceCalls: "Звонки",
+      meetingsCalls: "Встречи и звонки",
       crm: "CRM",
       messenger: "Выбрать мессенджер",
       language: "Выбрать язык",
@@ -236,7 +236,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       prompting: "Cómo formular peticiones",
       mcp: "MCP y skills",
       communityTools: "Herramientas de la comunidad",
-      voiceCalls: "Llamadas",
+      meetingsCalls: "Reuniones y llamadas",
       crm: "CRM",
       messenger: "Elegir servicio de mensajería",
       language: "Elegir idioma",

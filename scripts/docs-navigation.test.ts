@@ -160,27 +160,30 @@ describe("tool folders in the sidebar", () => {
     expect(icons).toEqual([CalendarDays, WhatsAppIcon, MessageSquare])
   })
 
-  it("puts Asterisk in an open Voice calls group and Bitrix24 in a closed CRM group, keeping their URLs", () => {
+  it("puts Zoom, Telemost and Asterisk in an open Meetings & Calls group and Bitrix24 in a closed CRM group, keeping their URLs", () => {
     const folder = (tool: string): Node => ({
       type: "folder",
       name: tool,
       index: { type: "page", name: tool, url: `/ru/docs/${tool}` },
       children: [],
     })
-    const tree = unifiedDocsTree({ name: "Docs", children: ["zm", "b24", "pbx", "memo"].map(folder) }, "ru")
+    const telemost: Node = { type: "page", name: "Телемост", url: "/ru/docs/telemost" }
+    const children = [folder("zm"), telemost, ...["b24", "pbx", "memo"].map(folder)]
+    const tree = unifiedDocsTree({ name: "Docs", children }, "ru")
     const groups = tree.children.map((node) =>
       node.type === "folder" && !node.index
         ? {
             name: node.name,
             open: node.defaultOpen,
-            urls: node.children.map((child) => (child.type === "folder" ? child.index?.url : undefined)),
+            urls: node.children.map((child) =>
+              child.type === "folder" ? child.index?.url : child.type === "page" ? child.url : undefined,
+            ),
           }
         : node.name,
     )
     expect(groups).toEqual([
-      "zm",
+      { name: "Встречи и звонки", open: true, urls: ["/ru/docs/zm", "/ru/docs/telemost", "/ru/docs/pbx"] },
       { name: "CRM", open: false, urls: ["/ru/docs/b24"] },
-      { name: "Звонки", open: true, urls: ["/ru/docs/pbx"] },
       "memo",
     ])
   })

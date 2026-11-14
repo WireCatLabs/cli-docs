@@ -10,7 +10,8 @@ que indiquen qué se dijo, cuándo y en qué reunión.
 Una transcripción es el texto de la conversación; una grabación contiene el audio o vídeo. Los datos
 de una reunión también incluyen fecha, título y participantes registrados. [Zoom](./index.md)
 obtiene estas fuentes mediante su API o archivos que importas. Participas en las llamadas desde
-Zoom; la herramienta de línea de comandos da al agente acceso a la información guardada.
+Zoom; la herramienta de línea de comandos da al agente acceso a la información guardada. Las reuniones
+de Yandex Telemost llegan de las notas que envía por correo tras una llamada: ver [Yandex Telemost](../telemost.mdx).
 
 ## Encontrar una discusión o decisión
 
