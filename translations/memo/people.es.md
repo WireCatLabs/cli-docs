@@ -94,6 +94,8 @@ fuente que no leyó, con el motivo. La respuesta reúne:
 - los eventos de calendario a los que está invitada, los próximos y los últimos pasados, de cada calendario que gcal
   guardó. La respuesta nombra los calendarios que leyó. El título y el lugar de un evento los escribe quien envió la
   invitación, y `--json` lista esos campos bajo `untrusted`;
+- `meetings`: las llamadas y reuniones grabadas en las que participó, de la más reciente a la más antigua, cada una con
+  su cuenta. `meetings show` de la herramienta dueña de la cuenta abre una;
 - la nota sobre ella, las notas que enlazan a ella y las notas que escribiste sobre ella en Memo;
 - las tareas abiertas que tratan sobre ella o que tiene asignadas.
 - los archivos de Google Drive que posee o que editó por última vez, tal como los indica Google. No has revisado estos

@@ -51,6 +51,40 @@ memo events list account:phone:pixel starts_at>=2026-10-01
 memo events show event:42                          # one event, and the accounts and calendars that hold it
 ```
 
+## Встречи и звонки одним списком
+
+`memo meetings list` собирает в один список события календаря, встречи из Zoom или Meet и импортированные телефонные
+звонки. Одна строка соответствует одной настоящей встрече: событие календаря и его встреча в Zoom дают одну строку,
+если хранилище их связало или если у них общая комната и время пересекается. В строке видно, откуда она, кто
+участвовал (со ссылками `person:`), ссылки для входа и есть ли сохранённая запись, расшифровка или итоги. В список
+попадают строки, которые пересекаются с заданным периодом. Без периода это последние 30 дней и следующие 7, а
+`started_at:[* TO *]` показывает всё. `memo meetings show` добавляет строки расшифровки со временем, итоги, находки,
+которые ждут вашего решения, и текст из календаря.
+
+```sh
+memo meetings list                                         # every account, latest first
+memo meetings list 'started_at:[2026-11-01 TO 2026-12-01}' kind:call
+memo meetings list 'started_at:[2026-11-09T00:00:00+01:00 TO 2026-11-16T00:00:00+01:00}' --order start
+memo meetings list 'started_at:[* TO *]' --page 3          # every row, no window
+memo meetings list has_transcript:true person:"person:12"
+memo meetings show event:42 --limit 100                    # or meeting:<account>/<id>
+```
+
+## Все документы
+
+`memo documents list` показывает документы всех аккаунтов: Drive, папки заметок, добавленные вами источники и
+импорт. Сначала идут недавно изменённые, у каждого указаны источник, папка, тип и ссылка. Слово ищется по их тексту
+так же, как в `memo search notes`. `memo documents tree` показывает папки каждого аккаунта и число документов в
+каждой, а `memo documents show` открывает часть текста одного документа с его тегами, людьми и встречами.
+
+```sh
+memo documents list                                        # every account, newest first
+memo documents list budget kind:pdf source:google-drive
+memo documents list 'folder:"Projects/Acme"' --page 2
+memo documents tree --depth 2
+memo documents show document:42 --cursor 20000
+```
+
 ## Подготовьтесь к разговору
 
 ```text prompt
