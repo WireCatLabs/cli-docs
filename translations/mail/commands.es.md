@@ -365,9 +365,11 @@ mail rules apply [options]
 | Option | What it does |
 |---|---|
 | `--since-time <time>` | only mail from this time, ISO 8601 or 30d ago (default: all mail). |
+| `--yes` | cut them; without it, only say what would change. |
 | `--dry-run` | only say what would change, even with --yes; the read-only lock lets this through. |
+| `--cursor <cursor>` | go on from where a stopped run ended; its next step gives it, with the same options. |
 
-**Returns:** mail rules apply — account, applied, listed, envelopes, bytes, skip_matched, protected_kept, tagged, and 2 more; every field: mail commands info rules apply
+**Returns:** mail rules apply — account, applied, listed, envelopes, bytes, skip_matched, protected_kept, tagged, and 5 more; every field: mail commands info rules apply
 
 **Example:** `mail personal rules apply`, `mail personal rules apply --since-time 2026-01-01 --yes`
 
@@ -398,6 +400,7 @@ mail rules import <file> [options]
 | Option | What it does |
 |---|---|
 | `--format <format>` | the file's format: mail (memo's export is the same file) or gmail. One of: `mail`, `memo`, `gmail`. Default: `mail`. |
+| `--yes` | with --format gmail, add the rules the filters suggest; without it, only preview them. |
 
 **Returns:** mail rule import — match, action, decided_at, id, tags, reason, protected, meeting_notes, and 5 more; every field: mail commands info rules import
 

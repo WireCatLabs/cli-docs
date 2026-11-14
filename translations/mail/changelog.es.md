@@ -4,6 +4,70 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.32.0 — 14.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Un nivel `readonly` ya no detiene `mail sync`** (cli-core 0.662.0, antes 0.661.0). Un comando que solo trae
+  correo al almacén local funciona en `readonly`; `deny` lo sigue rechazando. Los comandos que escriben archivos del
+  propietario o llaman a otro servicio siguen bloqueados por `readonly`. Si un perfil usaba `readonly` para detener la
+  sincronización, pon esa clave en `deny`.
+
+## 0.31.0 — 14.11.2026
+
+### Corregido
+
+- **`rules import --format gmail` acepta `--yes` por MCP.** Un agente solo podía previsualizar las reglas que
+  sugieren los filtros de Gmail: la herramienta ofrecía solo las opciones propias del comando, y `--yes` era del
+  programa.
+- **`rules export` responde por MCP.** La llamada fallaba con «el comando imprimió su respuesta en lugar de
+  entregarla». Ahora el agente recibe el archivo de reglas como respuesta; en una terminal y en una tubería sigue
+  imprimiendo el archivo, así que `rules export > rules.json` se vuelve a importar.
+- **`rules apply` ya no ofrece repetir con el mismo límite de tiempo una ejecución que no leyó nada.** Por MCP el paso
+  decía que se pasara un `--timeout` más largo, algo que un agente no puede hacer, y estaba marcado como seguro de
+  ejecutar sin preguntar, así que una ejecución reanudada podía repetirse sin avanzar. Por MCP ahora pide al
+  propietario que dé al servidor un `MAIL_TIMEOUT` más largo o que lo ejecute en una terminal; en una terminal el paso
+  añade `--timeout 30m` y espera al propietario.
+- **`messages delete --rules` conserva el correo de un remitente al que el propietario escribió.** Juzgaba a los
+  remitentes por el correo guardado, donde el correo propio del propietario de una carpeta Enviados por IMAP parecía
+  recibido. Así, un sobre de alguien a quien el propietario respondió podía proponerse para la Papelera, y una regla
+  predefinida aún podía atrapar a ese remitente. Ahora cli-core marca como enviado el correo guardado del propietario,
+  y los motivos «respondido» y «enviado» de la limpieza valen también para los buzones IMAP.
+
+## 0.30.0 — 14.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Construido sobre cli-core 0.659.0** (antes 0.657.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Una configuración compartida con un pequeño desliz se repara al leerla.** En `~/.config/WireCat/config.json`, una
+  marca de orden de bytes, un comentario, una coma final o una coma que falta entre dos líneas se corrigen en el sitio,
+  y el archivo anterior se guarda al lado como `config.json.bak-<time>`. Para otros daños se indica la línea, la
+  columna y la corrección probable.
+
+## 0.29.0 — 14.11.2026
+
+### Añadido
+
+- **`rules apply --cursor` continúa desde donde terminó una ejecución detenida.** Una ejecución que llega a su límite
+  de tiempo responde `state: partial` con el cursor y el paso que continúa. La ejecución que termina la ventana
+  informa los recuentos de toda ella.
+- **`rules apply` acepta `--yes` por MCP.** Un agente solo podía previsualizarlo: la herramienta no ofrecía `--yes`.
+
+### Corregido
+
+- **`rules apply` termina en un buzón grande, y por MCP responde a tiempo.** Fallaba a los 27 segundos en un buzón de
+  17 000 correos, cuya lista tarda unos 4 minutos en leerse. Ahora funciona hasta 15 minutos por defecto (45 segundos
+  por MCP, donde los clientes se rinden tras un minuto más o menos; `--timeout` sigue fijándolo). Lee los encabezados
+  del más nuevo al más antiguo y guarda su trabajo lote a lote, así que una ejecución que se detiene conserva lo hecho.
+  `score:` y `--kind` juzgan a un remitente por su correo en el almacén, así que el punto donde se detiene una
+  ejecución nunca cambia lo que deciden.
+- **`rules apply` dice cuándo se queda sin límite de tiempo.** El error decía que el servidor de correo no respondió a
+  tiempo. Ahora dice que el comando llegó a su límite de tiempo y que se ejecute de nuevo con un `--timeout` más largo.
+
 ## 0.28.0 — 13.11.2026
 
 ### Corregido
