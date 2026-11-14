@@ -8,6 +8,133 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
+## 0.135.0 — 14.11.2026
+
+### Changed — may break callers
+
+- **`memo search meetings` without `--limit` shows 20 hits, not 100** (cli-core 0.663.0). The page now comes from
+  the shared default limit, as other lists do. Pass `--limit` for a longer page.
+- **Meeting time flags take one grammar** (cli-core 0.663.0). `memo meetings prepare` and `memo search meetings`
+  take an ISO date or time with or without seconds and zone, a date alone, `today`, or `30m`, `2h`, `7d` ago; a time
+  without a zone reads the computer's zone. A `memo tasks update --due` or `--remind-time` date alone is that day.
+
+## 0.134.0 — 14.11.2026
+
+### Changed — may break callers
+
+- **Dates in list queries read the computer's zone, and a due date alone is the end of that day** (cli-core
+  0.661.0). `today` and a bare date in `memo tasks list` and the other list queries started in UTC, and now start
+  at local midnight, as search and the digest do. `memo tasks update --due 2026-11-20` sets the end of the 20th, so
+  the task is not overdue all that day.
+- **`memo folders add` picks a new folder's format when `--format` is not given.** A folder with Obsidian's own
+  `.obsidian` folder in it or above it is `obsidian`, any other folder `markdown`; before, every folder was
+  `obsidian`, so a `#word` in plain Markdown became a tag. The `--json` answer names where the format came from
+  (`format_from`: `detected`, `option` or `saved`). `--format` still wins, and a folder memo already knows keeps
+  its format. A bare path written before folder ids counts as never chosen, so it is detected too.
+  See [Add a folder](./notes.md#add-a-folder).
+- **`memo folders add` refuses a folder inside or around one memo already reads.** Each file under both would be
+  two notes. The `validation_error` names both folders, with reason `folder.overlap`; `memo doctor` reports such a
+  pair in an existing config. See [Add a folder](./notes.md#add-a-folder).
+- **A `readonly` level no longer stops a sync** (cli-core 0.662.0, was 0.661.0). A command that only fetches from a
+  service into the local store runs at `readonly`; `deny` still refuses it. Commands that write the owner's files or
+  call another service stay blocked by `readonly`.
+- **`memo models ai check` counts as reaching another service** (cli-core 0.662.0), so `readonly` stops its paid
+  request to the model provider.
+
+### Fixed
+
+- **`memo documents show` says more text follows after emoji** (cli-core 0.661.0). `has_more` compared a length in
+  UTF-16 units with one in code points, so a part holding emoji could report no more text before the end, and
+  WireCat Desktop's "Show more" disappeared early. `text_offset`, `text_length`, `--cursor` and `--max-chars` all
+  count Unicode code points.
+- **Changing a folder's format reads its notes again.** After `memo folders add --format` or `memo folders update
+  --format` with another format, the next `memo sync --only notes` parses every note of that folder again, even
+  unchanged ones, so tags and links read in the old format are replaced. See
+  [Markdown or Obsidian](./notes.md#markdown-or-obsidian).
+
+## 0.133.0 — 14.11.2026
+
+### Added
+
+- **`memo documents list`, `show` and `tree`: every document of every account.** Drive files, notes folders,
+  sources added by hand and imports in one paged list with a total, newest change first, each with its source,
+  folder, kind, size, link and whether its text is stored; narrowed by source, kind, folder, edit time, tag, person
+  and words of its text. `tree` gives each account's folder tree with counts.
+  See [usage](./usage.md#every-document).
+- **`memo meetings list` and `show`: meetings, calls and calendar events as one row per real meeting.** A calendar
+  event and its Zoom meeting are one row; each row names its sources, participants with their person refs, join
+  links, recording, transcript and summary flags, linked documents and findings waiting for you. A window is read by
+  overlap (`started_at:`, by days or by instants with their offset), latest first or oldest first (`--order start`).
+  `show` adds the transcript lines with their times. See [usage](./usage.md#meetings-and-calls-in-one-list).
+
+## 0.132.0 — 13.11.2026
+
+### Added
+
+- **`memo import` brings a folder of documents, transcripts and recordings, or a records file, into memo's search.**
+  Text, Markdown, PDF and Word files, `.vtt` and `.srt` transcripts and, with `--transcribe`, recordings heard by the
+  local speech model each become a document of the account you name, `--account import:<name>` or
+  `phone:<exchange>`, keyed by its path in the folder: the same folder twice changes nothing, an edited file updates
+  its own document, a recording is heard once, and a file gone from the folder is kept. A `.json` or `.jsonl` file
+  goes to the records import. Links are not followed, nothing leaves the computer, and `--dry-run` writes nothing
+  ([Import files and records](./import.md)).
+- **`memo sources add` keeps meeting transcripts.** A `.vtt` (WebVTT) or `.srt` (SubRip) file exported from a video
+  call is kept as searchable text, one `Name: text` line per turn without the timings; before, it was refused as
+  `source.unsupported`. WireCat Desktop's "Add to memory" takes them too
+  ([Sources you add by hand](./sources.md#add-a-source)).
+- **An agent over MCP may run a schedule you made.** `schedule list`, `agents list`, `run` and `exec` are offered, as
+  in every WireCat CLI. Making, removing, pausing or resuming a schedule needs `mcp.authority`, which defaults to
+  `deny`. See [MCP](./mcp.md).
+- **`memo context` lists the recorded calls and meetings a person took part in, in `meetings`**, beside `events`:
+  each with its `meeting:` ref, account, title, start, length and whether it has a transcript. `meetings show` of the
+  CLI that owns the account opens one. From cli-core 0.650.0, which also links a call to the CRM contact with the same
+  phone.
+
+### Changed — may break callers
+
+- **`memo projects meetings link --fingerprint` with a stale fingerprint answers `conflict`, not
+  `configuration_error`** (reason `meeting-project.stale`). From cli-core 0.651.0. A script that checks the code
+  checks `conflict`, lists the proposals again and links with the new fingerprint.
+- **memo needs `@wirecat/cli-core` 0.649.0**, which adds the `document` record type and the import-only provider
+  `import`, and lets search read the documents of import-only accounts.
+- **`memo stats tasks show` has no `--chat` any more: name the chat in the query, `-- chat:7`.** From cli-core
+  0.648.0, as in tg and MAX. A chat with no account named is still refused.
+- **Built on cli-core 0.656.0** (was 0.651.0). See the
+  [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **A model address WireCat refuses now answers the reason `model.address-refused`, not `ai.address-refused`.** From
+  cli-core 0.650.0, in `memo models ai set`, `memo answers create --analyze` and every other call to a model. A
+  script that checks the old name checks the new one.
+
+### Fixed
+
+- **`memo review show --compact` prints the proposal as one line**, as `review` lists it: id, kind, title, score,
+  who proposed it and the day. It printed the same `key: value` lines as without `--compact`.
+- **`memo review confirm` and `reject --compact` print one line per decision and one per refusal**, under
+  `# decided: N` and `# refused: N`. They printed only the counts.
+- **`memo projects meetings link --fingerprint` keeps your `--reason` when you confirm an agent's proposed link.** The
+  agent's reason stayed. From cli-core 0.651.0.
+- **`memo notes add --export` writes the note's first `--subject` as a link in the file too**, as it does every later
+  one. The file named only the others. `notes edit --export` and `notes export` still leave it out: the store does not
+  return a note's first subject yet.
+- **The sync health of the digest no longer credits a schedule with no profile to one named `default`.** A tg, MAX or
+  WhatsApp sync timer that names no profile, in its arguments or its environment, now counts for no account, so a
+  profile called `default` is never picked for you.
+- **A release with new commands or a breaking change gets a new minor version.** `bin/release` raised only the patch
+  number, so 0.131.86 and 0.131.87 shipped new commands as patches.
+- **`memo mcp --help` no longer speaks of "this profile".** Memo has no profiles; it serves memo's commands.
+- **`memo sync` finishes when the shared WireCat config starts with a byte-order mark.** A
+  `~/.config/WireCat/config.json` saved by a Windows editor made the meaning-search step fail with "not valid JSON",
+  so the sync ended incomplete. A config that cannot be read at all also no longer counts as the "read only" setup
+  answer (cli-core 0.656.0).
+- **`memo store recover run --json` prints JSON.** It printed the text report: `store recover` has a `--json` of its
+  own, and it took the flag. A script or WireCat Desktop reading the answer now gets the JSON object.
+
+### Security
+
+- **`sources suggest` reaches only the hosts of the readers.** Its Ollama and API readers go through the host check:
+  OpenAI's and Anthropic's APIs, this computer, and the addresses you set for Ollama and for the shared AI model. A
+  local model may take up to 15 minutes on one source.
+
 ## 0.131.87 — 12.11.2026
 
 ### Added

@@ -51,6 +51,40 @@ memo events list account:phone:pixel starts_at>=2026-10-01
 memo events show event:42                          # one event, and the accounts and calendars that hold it
 ```
 
+## Reuniones y llamadas en una sola lista
+
+`memo meetings list` reúne en una lista los eventos del calendario, las reuniones de Zoom o Meet y las llamadas
+telefónicas importadas, con una fila por cada reunión real: un evento del calendario y su reunión de Zoom son una sola
+fila cuando el almacén los vinculó, o cuando comparten sala y sus horas se solapan. Cada fila dice de dónde viene, quién
+participó (con sus referencias `person:`), sus enlaces para unirse y si hay una grabación, una transcripción o un
+resumen guardados. Una fila aparece cuando se solapa con el periodo indicado. Sin periodo, son los últimos 30 días y
+los 7 siguientes, y `started_at:[* TO *]` las lee todas. `memo meetings show` añade las líneas de la transcripción con
+sus horas, los resúmenes, los hallazgos que esperan tu decisión y el texto del calendario.
+
+```sh
+memo meetings list                                         # every account, latest first
+memo meetings list 'started_at:[2026-11-01 TO 2026-12-01}' kind:call
+memo meetings list 'started_at:[2026-11-09T00:00:00+01:00 TO 2026-11-16T00:00:00+01:00}' --order start
+memo meetings list 'started_at:[* TO *]' --page 3          # every row, no window
+memo meetings list has_transcript:true person:"person:12"
+memo meetings show event:42 --limit 100                    # or meeting:<account>/<id>
+```
+
+## Todos los documentos
+
+`memo documents list` lista los documentos de todas las cuentas: Drive, carpetas de notas, fuentes que añadiste e
+importaciones, primero los cambiados más recientemente, con su fuente, carpeta, tipo y enlace. Una palabra busca en su
+texto igual que `memo search notes`. `memo documents tree` da las carpetas de cada cuenta con cuántos documentos tiene
+cada una, y `memo documents show` una parte del texto de un documento con sus etiquetas, personas y reuniones.
+
+```sh
+memo documents list                                        # every account, newest first
+memo documents list budget kind:pdf source:google-drive
+memo documents list 'folder:"Projects/Acme"' --page 2
+memo documents tree --depth 2
+memo documents show document:42 --cursor 20000
+```
+
 ## Prepararte para una conversación
 
 ```text prompt
