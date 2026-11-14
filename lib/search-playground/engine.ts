@@ -257,7 +257,7 @@ export function createDemoMessages(dates: ReturnType<typeof createDemoDates> = d
       "Sam",
       "15:00",
       "Atlas invoice voice note: please check the billing address before the deadline.",
-      ["voice"],
+      ["voice", "transcript"],
       -1,
     ),
     row(
@@ -268,7 +268,7 @@ export function createDemoMessages(dates: ReturnType<typeof createDemoDates> = d
       "Leo",
       "15:05",
       "A voice note with my design course recommendation and the weekly workload.",
-      ["voice"],
+      ["voice", "transcript"],
       -1,
     ),
     row(
