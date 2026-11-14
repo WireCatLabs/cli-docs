@@ -3,34 +3,32 @@ title: "Yandex Telemost"
 description: "Guarda como reuniones las notas que Telemost envía por correo después de una llamada, y tu agente las encuentra junto a Zoom, los chats y el correo."
 ---
 
-Con esto configurado, tu agente de IA responde preguntas sobre llamadas pasadas en Yandex Telemost: qué se acordó,
-quién asumió cada tarea, qué preguntas siguen abiertas. Busca estas llamadas junto a tus reuniones de Zoom, tu correo y
-tus chats, y nombra la reunión y la fecha de donde sale cada respuesta.
+Yandex Telemost no da acceso a las notas ni a las transcripciones de las reuniones: su API no las tiene y su versión
+web solo muestra los chats de las reuniones. Pero después de una llamada Telemost envía las notas por correo: un
+mensaje «Конспект встречи» (notas de la reunión) desde `keeper@telemost.yandex.ru`. La integración por correo recoge
+esos mensajes y guarda cada uno como una reunión. Así tu agente de IA puede buscarlas y usarlas como contexto: qué se
+acordó, quién asumió cada tarea, qué preguntas siguen abiertas. Las ve junto a tus llamadas de Zoom, tu correo y tus
+chats.
 
-Después de una llamada, Telemost envía por correo un resumen titulado «Конспект встречи» (notas de la reunión).
-Telemost no guarda ninguna copia, así que el correo es la única. Esta página muestra cómo un comando convierte esos
-correos en reuniones, cómo añadir las notas que ya están en tu buzón, qué guarda una reunión y qué hacer si una reunión
-no aparece. Necesitas el buzón que recibe las notas [conectado con la herramienta de correo](./mail/email.md).
+Los correos los recoge la herramienta de correo, `mail`: copia tu correo al almacén local de tu ordenador, y una regla
+le indica que guarde también las notas de Telemost como reuniones. Tu agente las busca con Memo, la herramienta que
+busca en todo el almacén a la vez: correo, chats, reuniones y notas. Necesitas el buzón que recibe las notas
+[conectado con la herramienta de correo](./mail/email.md).
 
-**En esta página:** 1. [En resumen](#en-resumen) · 2. [Quién recibe las notas](#quién-recibe-las-notas) ·
-3. [Convierte las notas en reuniones](#convierte-las-notas-en-reuniones) · 4. [Notas que ya están en el buzón](#notas-que-ya-están-en-el-buzón) ·
-5. [Qué guarda una reunión](#qué-guarda-una-reunión) · 6. [Pregunta a tu agente](#pregunta-a-tu-agente) ·
-7. [La regla en WireCat Desktop](#la-regla-en-wirecat-desktop) · 8. [Si no aparece la reunión](#si-no-aparece-la-reunión)
+**En esta página:**
 
-Palabras en esta página:
-
-- **Notas de la reunión** — el correo de `keeper@telemost.yandex.ru` con el resumen, las tareas y las preguntas
-  abiertas de una llamada. Lo escribe Telemost, no WireCat.
-- **Herramienta de correo** — la herramienta de línea de comandos `mail`. Copia tu correo al almacén local de tu
-  ordenador, donde tu agente lo busca.
-- **Perfil** — el nombre que diste al buzón al conectarlo. Los ejemplos usan `work`; usa el tuyo.
-- **Regla de correo** — una instrucción que la herramienta de correo sigue en cada sincronización: qué correos guardar
-  enteros, cuáles recortar y cuáles guardar también como reuniones.
-- **Sincronización** — una ejecución de `mail work sync`, que copia el correo nuevo al almacén.
-- **Reunión** — un registro en el almacén con fecha, título y notas, igual que tus llamadas de Zoom.
-- **Memo** — la herramienta con la que tu agente busca en todo el almacén.
+1. [En resumen](#en-resumen)
+2. [Quién recibe las notas](#quién-recibe-las-notas)
+3. [Convierte las notas en reuniones](#convierte-las-notas-en-reuniones)
+4. [Notas que ya están en el buzón](#notas-que-ya-están-en-el-buzón)
+5. [Qué guarda una reunión](#qué-guarda-una-reunión)
+6. [Pregunta a tu agente](#pregunta-a-tu-agente)
+7. [La regla en WireCat Desktop](#la-regla-en-wirecat-desktop)
+8. [Si no aparece la reunión](#si-no-aparece-la-reunión)
 
 ## En resumen
+
+Los ejemplos usan el perfil `work`, el nombre que diste al buzón al conectarlo. Usa el tuyo.
 
 ```sh
 mail work rules add --do meeting-notes:telemost
@@ -112,8 +110,7 @@ reunión.
 
 ## Pregunta a tu agente
 
-Tu agente busca en las reuniones con Memo, la herramienta que busca en todo el almacén local
-([instala Memo](./memo/installation.md) si aún no lo tienes). Pregunta con tus palabras:
+Si aún no tienes Memo, [consulta cómo instalarlo](./memo/installation.md). Pregunta con tus palabras:
 
 ```text prompt
 Busca las reuniones de Telemost del último mes en las que hablamos del presupuesto de Harbour. Muestra las tareas y

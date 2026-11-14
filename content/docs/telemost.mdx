@@ -3,34 +3,31 @@ title: "Yandex Telemost"
 description: "Save the meeting notes Telemost emails after a call as meetings, so your agent finds them beside Zoom calls, chats and mail."
 ---
 
-Once this is set up, your AI agent answers questions about past calls in Yandex Telemost: what was agreed, who took
-which task, which questions are still open. It searches these calls together with your Zoom meetings, mail and chats,
-and names the meeting and date each answer comes from.
+Yandex Telemost gives no access to meeting notes or transcripts: its API has none, and its web app shows only the
+meeting chats. But after a call Telemost emails the notes: a message «Конспект встречи» (meeting notes) from
+`keeper@telemost.yandex.ru`. The mail integration picks up these emails and saves each one as a meeting. Your AI agent
+can then search them and use them as context: what was agreed, who took which task, which questions are still open.
+It sees them next to your Zoom calls, mail and chats.
 
-After a call, Telemost emails a summary titled «Конспект встречи» (meeting notes). Telemost itself keeps no copy, so the
-email is the only one. This page shows how one command turns these emails into meetings, how to add the notes already
-in your mailbox, what a meeting keeps, and what to do if a meeting does not appear. You need the mailbox that gets the
-notes [connected with the mail tool](./mail/email.md).
+The emails are picked up by the mail tool, `mail`: it copies your mail into the local store on your computer, and one
+rule tells it to also save Telemost notes as meetings. Your agent searches them with Memo, the tool that searches the
+whole store at once: mail, chats, meetings and notes. You need the mailbox that gets the notes
+[connected with the mail tool](./mail/email.md).
 
-**On this page:** 1. [Short version](#short-version) · 2. [Who gets the notes](#who-gets-the-notes) ·
-3. [Turn the notes into meetings](#turn-the-notes-into-meetings) · 4. [Notes already in your mailbox](#notes-already-in-your-mailbox) ·
-5. [What a meeting keeps](#what-a-meeting-keeps) · 6. [Ask your agent](#ask-your-agent) ·
-7. [See the rule in WireCat Desktop](#see-the-rule-in-wirecat-desktop) · 8. [If no meeting appears](#if-no-meeting-appears)
+**On this page:**
 
-Terms used below:
-
-- **Meeting notes** — the email from `keeper@telemost.yandex.ru` with a call's summary, tasks and open questions.
-  Telemost writes it, not WireCat.
-- **Mail tool** — the command-line tool `mail`. It copies your email into the local store on your computer, where your
-  agent searches it.
-- **Profile** — the name you gave the mailbox when you connected it. The examples use `work`; use yours.
-- **Mail rule** — an instruction the mail tool follows on every sync: which emails to keep whole, which to cut down,
-  which to also save as meetings.
-- **Sync** — a run of `mail work sync`, which copies new email into the store.
-- **Meeting** — a record in the store with a date, a title and the notes, the same kind your Zoom calls get.
-- **Memo** — the tool your agent uses to search the whole store.
+1. [Short version](#short-version)
+2. [Who gets the notes](#who-gets-the-notes)
+3. [Turn the notes into meetings](#turn-the-notes-into-meetings)
+4. [Notes already in your mailbox](#notes-already-in-your-mailbox)
+5. [What a meeting keeps](#what-a-meeting-keeps)
+6. [Ask your agent](#ask-your-agent)
+7. [See the rule in WireCat Desktop](#see-the-rule-in-wirecat-desktop)
+8. [If no meeting appears](#if-no-meeting-appears)
 
 ## Short version
+
+The examples use the profile `work`, the name you gave the mailbox when you connected it. Use yours.
 
 ```sh
 mail work rules add --do meeting-notes:telemost
@@ -110,8 +107,7 @@ transcript.
 
 ## Ask your agent
 
-Your agent searches the meetings with Memo, the tool that searches everything in the local store
-([install Memo](./memo/installation.md) if you have not). Ask in your own words:
+If you do not have Memo yet, [install it](./memo/installation.md). Ask in your own words:
 
 ```text prompt
 Find the Telemost meetings from the last month where we discussed the Harbour budget. Show the tasks and open
