@@ -8,6 +8,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     "how-it-works": "Where Memo keeps your text, what an import changes, how links and references work.",
     notes: "Import Markdown folders and Obsidian vaults, read documents and write notes about people.",
     sources: "Add one file, web page or pasted text for Memo to keep, and see who it names.",
+    import:
+      "Bring a folder of files, transcripts or recordings, or a records file from your own script, into Memo's search.",
     tags: "Label notes, emails, messages, people and projects, then find everything with a label.",
     search: "Find words, phrases, tags and dates across notes, mail and messages, with each source.",
     scenarios:
@@ -37,6 +39,7 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     "how-it-works": "Где Memo хранит текст, что меняет импорт и как работают ссылки и ссылки на источники.",
     notes: "Импортируйте папки Markdown и хранилища Obsidian, читайте документы и пишите заметки о людях.",
     sources: "Добавьте файл, веб-страницу или текст, чтобы Memo его хранил, и посмотрите, кого он называет.",
+    import: "Добавьте в поиск Memo папку файлов, расшифровок или записей, или файл записей из своего скрипта.",
     tags: "Отмечайте тегами заметки, письма, сообщения, людей и проекты и находите всё по тегу.",
     search: "Ищите слова, фразы, теги и даты в заметках, почте и сообщениях с указанием источника.",
     scenarios:
@@ -66,6 +69,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     "how-it-works": "Dónde guarda Memo tu texto, qué cambia una importación y cómo funcionan enlaces y referencias.",
     notes: "Importa carpetas Markdown y bóvedas de Obsidian, lee documentos y escribe notas sobre personas.",
     sources: "Añade un archivo, una página web o un texto pegado para que Memo lo guarde, y mira a quién nombra.",
+    import:
+      "Trae a la búsqueda de Memo una carpeta de archivos, transcripciones o grabaciones, o un archivo de registros de tu propio script.",
     tags: "Etiqueta notas, correos, mensajes, personas y proyectos, y encuentra todo por su etiqueta.",
     search: "Busca palabras, frases, etiquetas y fechas en notas, correo y mensajes, con cada fuente.",
     scenarios:

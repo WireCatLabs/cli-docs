@@ -27,18 +27,18 @@ Tell me how many notes it found and which files it could not read.
 
 **Или выполните команды сами.** Замените `/path/to/notes` на полный путь к вашей папке.
 
-Для папки с обычными файлами Markdown:
-
 ```sh
-memo folders add /path/to/notes --format markdown
+memo folders add /path/to/notes
 memo sync --only notes --no-embed
 ```
 
-Для папки Obsidian:
+Формат Memo выберет сам. Папка считается папкой Obsidian, если в ней или в папке выше есть служебная папка
+Obsidian `.obsidian`: такую папку Memo читает как `obsidian`. Любая другая папка получает `markdown`. С `--json` в
+ответе есть `format` и `format_from`: `detected`, `option`, если вы указали `--format`, или `saved` для папки, которую
+Memo уже знал. Чтобы выбрать формат самому, добавьте `--format`:
 
 ```sh
-memo folders add /path/to/vault --format obsidian
-memo sync --only notes --no-embed
+memo folders add /path/to/notes --format markdown
 ```
 
 `memo folders add` выводит ID папки, например `1`. `memo sync --only notes` читает заметки и сообщает,
@@ -61,7 +61,9 @@ memo sync --only notes --no-embed
 
 `label` это ID папки.
 
-Можно добавить несколько папок. `memo folders list` показывает их все.
+Можно добавить несколько папок. `memo folders list` показывает их все. Папку внутри той, что Memo уже читает, или
+папку, которая её содержит, Memo не добавит (причина `folder.overlap`): каждый общий файл стал бы двумя заметками.
+В старом файле настроек такую пару назовёт `memo doctor`.
 
 ### Удалите папку
 
@@ -80,7 +82,7 @@ memo folders remove 1 --allow-delete --yes       # also deletes its notes from t
 Формат сообщает Memo, как в ваших заметках записаны ссылки и теги. Чтобы пользоваться Memo, Obsidian не
 нужен, и Obsidian не обязательно держать открытым.
 
-| | `markdown` | `obsidian` (по умолчанию) |
+| | `markdown` | `obsidian` |
 |---|---|---|
 | Ссылки на другие заметки | Ссылки Markdown на файл (см. ниже) | `[[Other note]]`, `[[Other note\|label]]`, а также с `#heading` |
 | Теги | поле `tags:` в начале файла | поле `tags:` и `#tags` в тексте |
@@ -97,6 +99,10 @@ memo folders remove 1 --allow-delete --yes       # also deletes its notes from t
 
 **Папка Obsidian** (vault) — это папка с заметками Markdown, которую Obsidian открывает как одно рабочее
 пространство. Memo пропускает скрытые папки, например `.obsidian`.
+
+Чтобы сменить формат папки, добавьте её ещё раз с `--format` или выполните `memo folders update` с `--format`.
+Следующий `memo sync --only notes` заново прочитает все заметки этой папки, и `#word`, который раньше считался тегом,
+перестанет им быть.
 
 ### Файлы, которые читает Memo
 

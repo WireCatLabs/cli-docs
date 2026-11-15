@@ -6,6 +6,8 @@ Esta página te ayuda a dar a Memo una cosa que recordar: un archivo, una págin
 guarda como un documento propio, así que la encuentras al buscar, un agente la encuentra cuando consulta algo y los
 hechos pueden citarla. Una carpeta vigilada sirve para muchos archivos que cambian a menudo
 ([Notas y carpetas](./notes.md)). Esta página es para una sola fuente.
+Las transcripciones, exportaciones y registros de una fuente que ninguna herramienta de WireCat sincroniza entran con
+`memo import` ([Importar archivos y registros](./import.md)).
 
 ## Añadir una fuente
 
@@ -17,7 +19,7 @@ pbpaste | memo sources add - --subject person:12
 
 | Das | Memo lee |
 |---|---|
-| La ruta de un archivo | El archivo, con los lectores de [Archivos que Memo puede leer](./notes.md#files-memo-can-read), y páginas web guardadas como `.html` o `.htm` |
+| La ruta de un archivo | El archivo, con los lectores de [Archivos que Memo puede leer](./notes.md#files-memo-can-read), páginas web guardadas como `.html` o `.htm`, y transcripciones de reuniones guardadas como `.vtt` o `.srt` |
 | Una dirección `http` o `https` | La página, una vez, desde este ordenador, tal como está hoy |
 | `-` | El texto de stdin |
 
@@ -35,6 +37,9 @@ pbpaste | memo sources add - --subject person:12
   del texto.
 - **`--max-chars`** guarda como mucho esa cantidad de caracteres de texto, hasta 2.000.000 (por defecto 200.000). La
   respuesta dice `truncated: true` cuando solo se guardó la primera parte.
+
+Una transcripción de reunión guardada como WebVTT (`.vtt`) o SubRip (`.srt`) se guarda como lo que se dijo: una línea
+por intervención, `Name: text` cuando el archivo nombra a quien habla, sin los tiempos.
 
 Un PDF escaneado no tiene texto que Memo pueda leer. Se guarda solo por su título y sus temas (`read: "no-text"`).
 

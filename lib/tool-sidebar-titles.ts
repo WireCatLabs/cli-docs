@@ -48,6 +48,7 @@ const byTool: Record<string, Record<string, Names>> = {
   },
   memo: {
     sources: { en: "Your sources", ru: "Свои источники", es: "Tus fuentes" },
+    import: { en: "Import", ru: "Импорт", es: "Importar" },
     people: { en: "People and projects", ru: "Люди и проекты", es: "Personas y proyectos" },
     remote: { en: "Browser and phone", ru: "Браузер и телефон", es: "Navegador y teléfono" },
     archive: { en: "Keeping up to date", ru: "Обновление", es: "Mantener al día" },

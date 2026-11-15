@@ -222,6 +222,7 @@ test("simplified fields and attachment examples work in every documentation loca
       "video",
       "audio",
       "voice",
+      "transcript",
       "sticker",
       "contact",
       "location",
@@ -242,7 +243,7 @@ test("has and in complete values; every Space reopens fields and operators", asy
     await input.press("Escape")
     await input.pressSequentially(`${field}:`)
     await expect(page.locator(".sp-popup")).toBeVisible()
-    await expect(page.locator(".sp-suggestion")).toHaveCount(field === "has" ? 13 : 4)
+    await expect(page.locator(".sp-suggestion")).toHaveCount(field === "has" ? 14 : 4)
     if (field === "has")
       await expect(page.locator(".sp-suggestion span").getByText("text", { exact: true })).toBeVisible()
   }

@@ -37,7 +37,7 @@ válido se corrige a mano en la línea y la columna que indica `memo doctor`.
 
 | Clave | Significado |
 |---|---|
-| `folders` | Tus carpetas de notas. Cada una tiene el `id` que le dio el almacén local, su `path` en este ordenador y su `format`: `obsidian` (el predeterminado) o `markdown`. `memo folders add` escribe una entrada; la importación rechaza una entrada sin `id`. Consulta [Markdown u Obsidian](./notes.md#markdown-or-obsidian). |
+| `folders` | Tus carpetas de notas. Cada una tiene el `id` que le dio el almacén local, su `path` en este ordenador y su `format`: `obsidian` o `markdown`, que elige `memo folders add` cuando no indicas `--format`. `memo folders add` escribe una entrada; la importación rechaza una entrada sin `id`. Consulta [Markdown u Obsidian](./notes.md#markdown-or-obsidian). |
 | `ignore` | Archivos y carpetas que la importación omite: una ruta dentro de la carpeta, una carpeta o un patrón como `**/Private*`. `--ignore` añade reglas para una sola ejecución. |
 | `embed` | `false` deja las notas fuera de la búsqueda por significado. |
 | `export` | `dir` y `format` para `memo notes export` y `--export` cuando no indicas ninguna carpeta. |

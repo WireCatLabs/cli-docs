@@ -27,18 +27,18 @@ Tell me how many notes it found and which files it could not read.
 
 **O ejecuta tú los comandos.** Sustituye `/path/to/notes` por la ruta completa de tu carpeta.
 
-Para una carpeta de archivos Markdown normales:
-
 ```sh
-memo folders add /path/to/notes --format markdown
+memo folders add /path/to/notes
 memo sync --only notes --no-embed
 ```
 
-Para una bóveda de Obsidian:
+Memo elige el formato por ti. Una carpeta es una bóveda de Obsidian cuando ella, o una carpeta superior, tiene la
+carpeta propia de Obsidian, `.obsidian`: Memo la lee como `obsidian`. Cualquier otra carpeta es `markdown`. Con
+`--json`, la respuesta trae `format` y `format_from`: `detected`, `option` si indicaste `--format`, o `saved` para una
+carpeta que Memo ya conocía. Para elegirlo tú, añade `--format`:
 
 ```sh
-memo folders add /path/to/vault --format obsidian
-memo sync --only notes --no-embed
+memo folders add /path/to/notes --format markdown
 ```
 
 `memo folders add` muestra el ID de la carpeta, por ejemplo `1`. `memo sync --only notes` lee las notas y
@@ -61,7 +61,9 @@ segundo. Solo contiene recuentos, nunca un nombre de archivo:
 
 `label` es el ID de la carpeta.
 
-Puedes añadir más de una carpeta. `memo folders list` las muestra todas.
+Puedes añadir más de una carpeta. `memo folders list` las muestra todas. Memo rechaza una carpeta que está dentro
+de otra que ya lee, o que la contiene (motivo `folder.overlap`), porque cada archivo compartido serían dos notas.
+`memo doctor` señala ese par en una configuración antigua.
 
 ### Quitar una carpeta
 
@@ -80,7 +82,7 @@ El almacén conserva el ID de la carpeta, así que `memo folders update` puede v
 El formato le dice a Memo cómo se escriben los enlaces y las etiquetas en tus notas. No necesitas
 Obsidian para usar Memo, y Obsidian no tiene que estar abierto.
 
-| | `markdown` | `obsidian` (el predeterminado) |
+| | `markdown` | `obsidian` |
 |---|---|---|
 | Enlaces a otras notas | Enlaces Markdown al archivo (abajo) | `[[Other note]]`, `[[Other note\|label]]`, también con `#heading` |
 | Etiquetas | el campo `tags:` al principio del archivo | el campo `tags:` y `#tags` en el texto |
@@ -97,6 +99,10 @@ enlaces escritos como referencias, como `[Kai](person:7)` o un simple `msg:teleg
 
 Una **bóveda de Obsidian** es una carpeta de notas Markdown que Obsidian abre como un solo espacio de
 trabajo. Memo omite las carpetas ocultas, como `.obsidian`.
+
+Para cambiar el formato de una carpeta, añádela de nuevo con `--format` o usa `memo folders update` con `--format`. El
+siguiente `memo sync --only notes` vuelve a leer todas las notas de esa carpeta, así que una `#word` que antes era
+etiqueta deja de serlo.
 
 ### Archivos que Memo puede leer
 

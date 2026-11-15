@@ -81,7 +81,7 @@ memo commands --json   # every command and option, for agents and scripts
 Memo не требует входа или отдельной настройки. Добавьте папку заметок, прочитайте её и выполните поиск:
 
 ```sh
-memo folders add ~/Documents/Notes   # your notes folder; Obsidian format by default
+memo folders add ~/Documents/Notes   # your notes folder; Obsidian format when it is a vault
 memo sync --only notes                    # reads the notes, their links and tags
 memo search notes "budget"
 ```

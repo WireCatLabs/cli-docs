@@ -81,7 +81,7 @@ memo commands --json   # every command and option, for agents and scripts
 Memo no requiere iniciar sesión ni una configuración inicial. Añade una carpeta de notas, léela y busca:
 
 ```sh
-memo folders add ~/Documents/Notes   # your notes folder; Obsidian format by default
+memo folders add ~/Documents/Notes   # your notes folder; Obsidian format when it is a vault
 memo sync --only notes                    # reads the notes, their links and tags
 memo search notes "budget"
 ```

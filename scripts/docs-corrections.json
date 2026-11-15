@@ -2799,5 +2799,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "memo",
+    "slug": "import",
+    "reason": "memo search takes a resource and a query; on 0.135.0 an imported document is found by `memo search notes <query> --source import:<name>` (checked in a throwaway home), and bare `memo search --source` is refused as an unknown option.",
+    "replacements": {
+      "en": [
+        {
+          "before": "`memo search --source import:handbook`",
+          "after": "`memo search notes budget --source import:handbook`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`memo search --source import:handbook`",
+          "after": "`memo search notes budget --source import:handbook`"
+        }
+      ],
+      "es": [
+        {
+          "before": "`memo search --source import:handbook`",
+          "after": "`memo search notes budget --source import:handbook`"
+        }
+      ]
+    }
   }
 ]
