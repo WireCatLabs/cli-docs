@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `pbx` es una línea de comandos y un servidor MCP que copia las llamadas de una centralita Asterisk a tu ordenador,
 convierte allí sus grabaciones en texto y se las da a tu agente de IA para leerlas. Aquí aparece junto a las otras
 herramientas que se usan para leer, transcribir y buscar las llamadas de un sistema Asterisk o FreePBX, para que veas
-cuál encaja con tu tarea. Las marcas de `pbx` salen de la versión 0.5.0, revisada el 14 de noviembre de 2026.
+cuál encaja con tu tarea. Las marcas de `pbx` salen de la versión 0.6.0, revisada el 15 de noviembre de 2026.
 Las marcas de las demás herramientas salen de sus propios README y su documentación, revisados el 13 de noviembre de
 2026. Para esta página no se conectó ninguna herramienta a una centralita real, y una herramienta puede hacer más de lo
 que dicen sus páginas.
@@ -34,7 +34,7 @@ Las herramientas:
 | **Encontrar llamadas** | | | | |
 | Listar las llamadas de un periodo | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26083384/PBX+GUI+-+CDR+Module+GraphQL+APIs) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L155) | [❌](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L20) |
 | Encontrar todas las llamadas de un número | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26542152/PBX+GUI+-+CDR+Reports+Module) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | [❌](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L20) |
-| Ver estadísticas de llamadas: extensiones con más llamadas, horas punta, llamadas fallidas | ❌ | ➖ | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L438) | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L103) |
+| Ver estadísticas de llamadas: extensiones con más llamadas, horas punta, llamadas fallidas | ✅ | ➖ | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L438) | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L103) |
 | Ver a la misma persona en llamadas, chats, correo y el CRM | ✅ | ➖ | ➖ | ➖ |
 | **Grabaciones y transcripciones** | | | | |
 | Encontrar la grabación de una llamada | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26083384/PBX+GUI+-+CDR+Module+GraphQL+APIs) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L73) |
@@ -43,8 +43,8 @@ Las herramientas:
 | Las grabaciones no salen de tus ordenadores | ✅ | [❌](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L75) |
 | Transcribir de una vez las grabaciones que ya tienes | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L39) |
 | Un resumen breve de cada llamada | ❌ | [🟡](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [✅](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L6) |
-| Buscar lo que se dijo | 🟡 | [🟡](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L10) |
-| Marcar las llamadas que mencionan palabras que eliges | ❌ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L8) |
+| Buscar lo que se dijo | ✅ | [🟡](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L10) |
+| Marcar las llamadas que mencionan palabras que eliges | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L8) |
 | Guardar una transcripción como archivo | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L20) |
 | **Agentes y seguridad** | | | | |
 | Una aplicación de IA lee las llamadas por MCP | ✅ | ➖ | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L549) | ➖ |
@@ -62,17 +62,18 @@ Las herramientas:
 |---|---|---|---|---|
 | Instalación | npm, Node 22.16 o posterior | incluido en FreePBX, Scribe desde Module Admin | un módulo de FreePBX | clonarlo, luego Python |
 | Licencia | Apache-2.0 | Scribe necesita una licencia de pago | AGPL-3.0 | MIT |
-| Voz a texto | un modelo en tu ordenador | Deepgram, socio de Sangoma | el de Scribe, solo para el buzón de voz | faster-whisper en tu servidor, u OpenAI |
+| Voz a texto | un modelo en tu ordenador, u OpenAI si lo eliges | Deepgram, socio de Sangoma | el de Scribe, solo para el buzón de voz | faster-whisper en tu servidor, u OpenAI |
 
 Notas sobre las marcas:
 
-- **Buscar lo que se dijo.** `pbx` no tiene un comando de búsqueda propio. Las llamadas están en el almacén de
-  WireCat, así que `memo` y la búsqueda de las demás herramientas de WireCat las encuentran junto a tus chats y tu
-  correo. FreePBX busca transcripciones por las etiquetas que configures. ai-call-notes escribe el texto en una tabla
+- **Buscar lo que se dijo.** `pbx search meetings` encuentra una llamada por las palabras dichas en ella. Con un
+  modelo de texto en tu ordenador, también la encuentra por su sentido, sin palabras en común. Las llamadas están en el
+  almacén de WireCat, así que `memo` también las encuentra junto a tus chats y tu correo. FreePBX busca transcripciones por las etiquetas que configures. ai-call-notes escribe el texto en una tabla
   de SQLite y te deja la búsqueda a ti.
 - **Resúmenes.** `pbx` no hace resúmenes propios. Tu agente lee la transcripción y escribe uno. Scribe hace
   resúmenes solo en inglés. ai-call-notes envía el texto de la transcripción a Anthropic u OpenAI para su resumen.
-- **Las grabaciones se quedan contigo.** `pbx` reconoce la voz en tu ordenador. Scribe envía las grabaciones a
+- **Las grabaciones se quedan contigo.** `pbx` reconoce la voz en tu ordenador. Un perfil puede enviar el audio
+  a OpenAI en su lugar, y la ejecución lo dice antes de la primera llamada. Scribe envía las grabaciones a
   Deepgram. ai-call-notes deja el audio en tu servidor con faster-whisper y envía el texto a un modelo en la nube.
 - **Transcribir lo que ya tienes.** Scribe Rewind transcribe las grabaciones pasadas que eliges. ai-call-notes toma un
   archivo cada vez con su opción de archivo, o vigila la carpeta.
@@ -87,12 +88,17 @@ Notas sobre las marcas:
   muestra cuándo y desde dónde se usó cada token por última vez.
 - **Entrar como root.** La configuración MCP de Frogman se conecta a la centralita por SSH como root. `pbx`
   funciona en tu ordenador y necesita un usuario de base de datos de solo lectura, una carpeta montada en solo
-  lectura o un usuario de SFTP que solo pueda leer.
+  lectura o un usuario de SFTP que solo pueda leer. Una base de datos detrás del SSH de la centralita necesita un
+  usuario de SSH que solo pueda reenviar un puerto.
 - **Instalar en la centralita.** `pbx` no necesita nada en la centralita. CDR Reports viene con FreePBX, y Scribe
   es un módulo que se instala allí. ai-call-notes funciona donde pueda leer la carpeta de grabaciones, a menudo en la
   propia centralita.
-- **Estadísticas de llamadas.** ai-call-notes cuenta la tasa de abandono, las causas de colgado por hora y el
+- **Estadísticas de llamadas.** `pbx stats calls show` cuenta las llamadas por dirección y resultado, por
+  extensión, por hora y por día, y lista las llamadas perdidas y si se devolvió la llamada al cliente. ai-call-notes
+  cuenta la tasa de abandono, las causas de colgado por hora y el
   reparto de resultados solo para VICIdial, dentro de su informe de revisión.
+- **Marcar llamadas.** `pbx tags add` marca cada llamada que encuentra una búsqueda, y una ejecución programada
+  sigue marcando las nuevas. Scribe etiqueta una llamada por las palabras que configures.
 - **Grabaciones con un enlace.** `pbx` enlaza cada llamada con su archivo de grabación por la ruta. No la sirve
   en streaming.
 
@@ -101,7 +107,7 @@ Notas sobre las marcas:
 - **FreePBX con Scribe**: usas FreePBX, quieres resúmenes, sentimiento y etiquetas en el portal de usuario y en la app
   del teléfono, y no te importa enviar las grabaciones a un servicio en la nube.
 - **Frogman**: quieres que un agente cambie la centralita (extensiones, grupos de timbrado, rutas o llamadas en curso)
-  y no solo lea sus llamadas. Además ya muestra estadísticas de llamadas.
+  y no solo lea sus llamadas.
 - **asterisk-ai-call-notes**: un centro de llamadas salientes quiere un resumen, un siguiente paso y una hora para
   devolver la llamada junto a cada llamada en cuanto termina.
 
