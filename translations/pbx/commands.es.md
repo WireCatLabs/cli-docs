@@ -1,5 +1,5 @@
 ---
-title: "Comandos asterisk"
+title: "Comandos pbx"
 ---
 
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
@@ -60,7 +60,7 @@ check this profile's Asterisk source and keep its password in the OS keyring
 
 ### `pbx session start`
 
-check that this profile reaches its call records, set with config set: a database password, or an SFTP password when no key file is set, is asked hidden or read from stdin, never taken as an argument, checked, and only then kept in the keyring, or in a private file; Master.csv on this computer needs none
+check that this profile reaches its call records, set with config set: each password it needs (the database's, the SSH tunnel's, the SFTP server's, when no key file is set) is asked hidden, or read from stdin one per line, never taken as an argument, checked, and only then kept in the keyring, or in a private file; Master.csv on this computer needs none
 
 **Changes something on this computer only.**
 
@@ -116,7 +116,7 @@ stored meetings and their records
 
 ### `pbx meetings list`
 
-stored meetings, newest first
+meetings, newest first: the service's and the stored ones, kept in the store
 
 ```sh
 pbx meetings list [query] [options]
@@ -128,20 +128,19 @@ pbx meetings list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-| `--limit <n>` | meetings per page. Default: `100`. |
-| `--page <n>` | page number. Default: `1`. |
+| `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
+| `--limit <n>` | meetings per page; the profile's defaults.limit when absent. |
+| `--page <n>` | which page, starting at 1. |
 
-**Returns:** meeting — ref, id, provider, account, title, url, started_at, ended_at, and 8 more; every field: pbx commands info meetings list
+**Returns:** meeting — ref, id, provider_id, provider, account, title, url, started_at, and 11 more; every field: pbx commands info meetings list
 
 **Next usually:** `pbx meetings show <meeting>`, `pbx meetings transcript <meeting>`, `pbx meetings summary <meeting>`
 
-**Example:** `pbx office meetings list --limit 20 --json`
+**Example:** `pbx office meetings list --limit 50 --json`
 
 ### `pbx meetings show`
 
-show a stored meeting
+show a meeting, read again from the service with its people, transcript and documents
 
 ```sh
 pbx meetings show <meeting> [options]
@@ -149,14 +148,13 @@ pbx meetings show <meeting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `meeting` | required | stored meeting id. |
+| `meeting` | required | the stored meeting's number, its meeting: ref, or the service's id (provider_id). |
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
+| `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
 
-**Returns:** meeting details — ref, id, provider, account, title, url, started_at, ended_at, and 17 more; every field: pbx commands info meetings show
+**Returns:** meeting details — ref, id, provider_id, provider, account, title, url, started_at, and 20 more; every field: pbx commands info meetings show
 
 **Next usually:** `pbx meetings transcript <meeting>`, `pbx meetings summary <meeting>`, `pbx meetings export <meeting>`
 
@@ -177,10 +175,8 @@ pbx meetings transcript <meeting> [options]
 | Option | What it does |
 |---|---|
 | `--history` | include superseded transcript versions. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** meeting transcript — ref, meeting, source, language, superseded_at, created_at, lines; every field: pbx commands info meetings transcript
+**Returns:** meeting transcript — ref, meeting, source, language, superseded_at, created_at, lines, untrusted; every field: pbx commands info meetings transcript
 
 **Example:** `pbx office meetings transcript 1 --json`
 
@@ -189,19 +185,14 @@ pbx meetings transcript <meeting> [options]
 show stored meeting summaries
 
 ```sh
-pbx meetings summary <meeting> [options]
+pbx meetings summary <meeting>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `meeting` | required | stored meeting id. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
-**Returns:** meeting summary — id, meeting, source, title, overview, sections, next_steps, content, and 3 more; every field: pbx commands info meetings summary
+**Returns:** meeting summary — id, meeting, source, title, overview, sections, next_steps, content, and 4 more; every field: pbx commands info meetings summary
 
 **Next usually:** `pbx meetings show <meeting>`, `pbx meetings transcript <meeting>`, `pbx meetings export <meeting>`
 
@@ -226,10 +217,8 @@ pbx meetings export <meeting> [options]
 | `--format <format>` | export format. One of: `markdown`, `vtt`. Default: `markdown`. |
 | `--transcript-id <id>` | export a specific transcript version. |
 | `--output <file>` | write content to a new file through the host's writer. |
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
-**Returns:** meeting export — meeting_id, format, filename, content, output; every field: pbx commands info meetings export
+**Returns:** meeting export — meeting_id, format, filename, content, untrusted, output; every field: pbx commands info meetings export
 
 **Example:** `pbx office meetings export 1 --format markdown --json`
 
@@ -247,8 +236,6 @@ pbx meetings people <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 | `--limit <n>` | most matching observations per page, 1–1000 (default 50). |
 | `--scan-limit <n>` | most participant observations to inspect, 1–10000 (default 1000). |
 | `--max-read-bytes <bytes>` | most stored name and email bytes to read (default 1048576). |
@@ -270,9 +257,7 @@ pbx meetings sync [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-| `--since-time <time>` | fetch meetings starting at or after this ISO 8601 date or time. |
+| `--since-time <time>` | fetch meetings starting at or after this ISO 8601 date or time, or 30m, 2h, 7d ago. |
 | `--lookback-days <days>` | revisit recent occurrences for late transcripts (0–31). |
 | `--rescan` | read the last 30 days again, not only what came after the last sync. |
 
@@ -287,17 +272,12 @@ import downloaded meeting transcripts
 **Changes something on this computer only.**
 
 ```sh
-pbx meetings import <folder> [options]
+pbx meetings import <folder>
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `folder` | required | folder of transcripts downloaded from the provider. |
-
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 
 **Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: pbx commands info meetings import
 
@@ -315,17 +295,37 @@ pbx meetings repair [options]
 
 | Option | What it does |
 |---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
 | `--yes` | store the detected languages; otherwise only preview. |
 
 **Returns:** meeting repair — account_id, applied, transcripts, languages; every field: pbx commands info meetings repair
 
 **Example:** `pbx office meetings repair --json`
 
+### `pbx meetings embed`
+
+preview building the vectors search by meaning reads; --yes builds one batch, rerun for the next
+
+**Changes something on this computer only.**
+
+```sh
+pbx meetings embed [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | embedding model: a local one (default: the models command's default text model). |
+| `--base-url <url>` | remote embedding service; the passages are sent there. OpenAI reads OPENAI_API_KEY. |
+| `--dims <n>` | vector size the remote service returns, in dimensions. |
+| `--limit <n>` | how many passages in one batch, 1 through 1000 (default 100). |
+| `--max-rows <n>` | most transcript lines to read, 1 through 100000. |
+| `--max-text-bytes <bytes>` | most transcript text to read, in bytes (default 4 MiB). |
+| `--yes` | split transcripts and build their vectors; otherwise only preview. |
+
+**Example:** `pbx office meetings embed --json`, `pbx office meetings embed --yes --json`
+
 ### `pbx meetings transcribe`
 
-read each call's recording, never changing it, and recognize the speech with a local speech model
+read each call's recording, never changing it, and recognize the speech with a local speech model; a profile with transcribe_engine openai sends the audio to that service instead, and the run says so first
 
 **Changes something on this computer only.**
 
@@ -341,7 +341,7 @@ pbx meetings transcribe [query] [options]
 |---|---|
 | `--replace` | transcribe calls that already have a transcript too, replacing it. |
 | `--max-meetings <n>` | at most this many calls transcribed, newest first. Default: `20`. |
-| `--model <model>` | local speech model. Default: `gigaam-v3`. |
+| `--model <model>` | local speech model, when the profile transcribes locally. Default: `gigaam-v3`. |
 
 **Returns:** call transcription report — transcribed, audio_seconds, failed, without_recording, remaining, stopped; every field: pbx commands info meetings transcribe
 
@@ -356,21 +356,162 @@ the owner's stored events
 list stored events
 
 ```sh
-pbx events list [query] [options]
+pbx events list [query]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `query` | optional | event id, origin or time fields that narrow the list. |
 
-| Option | What it does |
-|---|---|
-| `--json` | one JSON value. |
-| `--jsonl` | one JSON object per item. |
-
 **Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: pbx commands info events list
 
 **Example:** `pbx office events list --json`
+
+## `pbx stats`
+
+statistics
+
+### `pbx stats calls`
+
+numbers about the stored phone calls
+
+#### `pbx stats calls show`
+
+calls by direction and outcome, per employee, by hour and by day; missed incoming calls and whether the client was called back; short calls. What the phone system does not record is counted as unknown
+
+```sh
+pbx stats calls show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | calls starting at or after this date or time (ISO 8601, or 30d ago). |
+| `--until-time <time>` | calls starting at or before this date or time; a date alone is that whole day. |
+| `--timezone <zone>` | the IANA zone hours and days are read in (default: this computer's). |
+| `--person-id <id>` | only calls this stored person took part in; a phone system that keeps no one who only rang misses those. |
+| `--within <duration>` | how long after a missed call a callback counts (default 1d). |
+| `--limit <n>` | most missed calls listed one by one, newest first (default 100); all are counted. |
+
+**Returns:** call stats — time_zone, callback_within_ms, short_call_under_ms, calls, not_calls, known, employees, hours, and 10 more; every field: pbx commands info stats calls show
+
+**Example:** `pbx office stats calls show --since-time 7d --json`
+
+## `pbx search`
+
+search the stored resources
+
+### `pbx search meetings`
+
+find words in stored meetings, and by meaning with --model
+
+**Changes something on this computer only.**
+
+```sh
+pbx search meetings <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | words, OR, (groups), -word, "a phrase", "a b"\~N (within N lines), exact:word, from:"Name" (who said the line); date>=30d, project:, tag:, topic: choose meetings; a word also matches its other forms and spellings speech recognition garbled. |
+
+| Option | What it does |
+|---|---|
+| `--meeting-id <id>` | only this stored meeting. |
+| `--identity-id <id>` | meetings with this participant identity; does not say who spoke a hit. |
+| `--person-id <id>` | meetings with a participant linked to this person. |
+| `--event-id <id>` | only meetings linked to this stored event. |
+| `--series-id <id>` | only meetings in this stored series. |
+| `--project <project>` | meetings confirmed in this project, by name, key or alias. |
+| `--tag <name>` | meetings with this tag, by name or alias. |
+| `--topic-name <name>` | meetings with this topic, by name or alias. |
+| `--since-time <time>` | meetings starting at or after this ISO 8601 date or time, or 30m, 2h, 7d ago. |
+| `--until-time <time>` | meetings starting at or before this ISO 8601 date or time; a date alone covers that whole local day. |
+| `--limit <n>` | how many hits, 1 through 1000; the profile's defaults.limit when absent. |
+| `--cursor <cursor>` | continue from the previous page's page.next_cursor, with the same query and filters. |
+| `--max-read-bytes <bytes>` | most stored bytes to read, 1 through 67108864 (default 4194304). |
+| `--model <model>` | rank words and meaning together with this embedding model, building missing vectors first; local stays here. |
+| `--base-url <url>` | remote embedding service for --model; the passages are sent there. |
+| `--dims <n>` | vector size the remote service returns, in dimensions. |
+| `--max-chunks <n>` | by meaning: most stored passages to compare (default 10000). |
+| `--max-rows <n>` | by meaning: most transcript lines to read, 1 through 100000. |
+| `--max-text-bytes <bytes>` | by meaning: most transcript text to read (default 4 MiB). |
+
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, language, line, and 8 more; every field: pbx commands info search meetings
+
+**Next usually:** `pbx meetings show <meeting>`, `pbx meetings transcript <meeting>`, `pbx meetings summary <meeting>`
+
+**Example:** `pbx office search meetings refund --json`, `pbx office search meetings "a client unhappy with the delivery" --model embeddinggemma --json`
+
+## `pbx tags`
+
+your labels on stored meetings, kept in the local store and never sent
+
+### `pbx tags add`
+
+put tags on stored meetings: by id, or every meeting where a search finds its words
+
+**Changes something on this computer only.**
+
+```sh
+pbx tags add <tag> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `tag` | required | one or more tags: 1–32 letters a–z, digits and hyphens; upper case is lowered. |
+
+| Option | What it does |
+|---|---|
+| `--meeting <id>` | a meeting, by its store id; repeat for more. |
+| `--matching <query>` | every meeting where search meetings finds this query: words, phrases, OR, -word, from:, date>=30d. |
+
+**Returns:** meeting tag change — tags, matched, changed; every field: pbx commands info tags add
+
+**Example:** `pbx office tags add complaint --matching "refund OR complaint" --json`, `pbx office tags add vip --meeting 12 --json`
+
+### `pbx tags remove`
+
+take tags off stored meetings: by id, or every meeting where a search finds its words
+
+**Changes something on this computer only.**
+
+```sh
+pbx tags remove <tag> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `tag` | required | one or more tags: 1–32 letters a–z, digits and hyphens; upper case is lowered. |
+
+| Option | What it does |
+|---|---|
+| `--meeting <id>` | a meeting, by its store id; repeat for more. |
+| `--matching <query>` | every meeting where search meetings finds this query: words, phrases, OR, -word, from:, date>=30d. |
+
+**Returns:** meeting tag change — tags, matched, changed; every field: pbx commands info tags remove
+
+**Example:** `pbx office tags remove complaint --meeting 12 --json`
+
+### `pbx tags list`
+
+the stored meetings of this account that carry a tag, each with all its tags
+
+```sh
+pbx tags list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | meetings per page, 1–500 (default 100). Default: `100`. |
+| `--page <n>` | page number. Default: `1`. |
+
+**Returns:** meeting tagging — meeting, meeting_id, title, started_at, tags, untrusted; every field: pbx commands info tags list
+
+**Example:** `pbx office tags list tag:complaint --json`
 
 ## `pbx models`
 
@@ -390,7 +531,7 @@ pbx models list [query]
 
 **Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: pbx commands info models list
 
-**Next usually:** `pbx models download <model>`
+**Next usually:** `pbx models download <model>`, `pbx models set <model>`
 
 **Example:** `pbx models list`, `pbx models list kind:audio`
 
@@ -415,7 +556,54 @@ pbx models download <model> [options]
 
 **Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: pbx commands info models download
 
-**Example:** `pbx models download parakeet-v3`
+**Next usually:** `pbx models set <model>`
+
+**Example:** `pbx models download embeddinggemma`
+
+### `pbx models set`
+
+make a downloaded text model the one every embed and every search by meaning uses, in every WireCat CLI. Each model keeps its own vectors: the next syncs embed what the new one lacks, and switching back is instant
+
+**Changes something on this computer only.**
+
+```sh
+pbx models set <model>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `model` | required | a downloaded text model id from models list. |
+
+**Returns:** model chosen — id, kind, title, languages, size_bytes, downloaded, default, path, and 9 more; every field: pbx commands info models set
+
+**Next usually:** `pbx models download <model>`
+
+**Example:** `pbx models set e5-large`
+
+### `pbx models add`
+
+add an ONNX embedding model from Hugging Face, pinned and checked by sha256
+
+**Changes something on this computer only.**
+
+```sh
+pbx models add <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | the id to give it: a-z, 0-9, . _ -. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | where the model is and how to run it, as JSON (below). |
+| `--offline` | refuse a call that needs the network. |
+
+**Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: pbx commands info models add
+
+**Next usually:** `pbx models download <model>`, `pbx models set <model>`
+
+**Example:** `pbx models add e5-base --payload '{"repository":"Xenova/multilingual-e5-base","onnx":"onnx/model_quantized.onnx","dims":768,"pooling":"mean","prefix":{"query":"query: ","passage":"passage: "}}'`
 
 ## `pbx doctor`
 
@@ -691,7 +879,7 @@ pbx config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, recordings_path, recordings_pattern, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, db_ssh_host, db_ssh_port, db_ssh_user, db_ssh_key_path, db_ssh_host_key, recordings_path, recordings_pattern, recordings_channels, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, transcribe_engine, transcribe_model, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -712,7 +900,7 @@ pbx config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, recordings_path, recordings_pattern, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, db_ssh_host, db_ssh_port, db_ssh_user, db_ssh_key_path, db_ssh_host_key, recordings_path, recordings_pattern, recordings_channels, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, transcribe_engine, transcribe_model, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
 
 | Option | What it does |
 |---|---|
@@ -766,8 +954,8 @@ pbx runs list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | how many to show. Default: `20`. |
-| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
 **Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: pbx commands info runs list
 
