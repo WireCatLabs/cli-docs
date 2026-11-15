@@ -9,6 +9,10 @@
   "files": ["content/docs/*.{md,mdx}", "content/docs/desktop/*.{md,mdx}"],
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
+    "Deepgram",
+    "Idial",
+    "Issabel",
+    "Sangoma",
     "Fastmail",
     "Maildir",
     "mbox",
@@ -181,6 +185,18 @@
     "Encuéntralas",
     "Telemost",
     "соорганизаторы",
-    "coorganizadores"
+    "coorganizadores",
+    "dialplan",
+    "диалплан",
+    "стереозапись",
+    "стереозаписи",
+    "стереозаписях",
+    "стереозаписью",
+    "монозапись",
+    "монозаписи",
+    "монозаписью",
+    "коммита",
+    "расшифруются",
+    "неизменённого"
   ]
 }

@@ -2787,20 +2787,6 @@
     }
   },
   {
-    "tool": "pbx",
-    "slug": "index",
-    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.3.0/docs/index.md",
-    "reason": "The overview page's sidebar label is its title. The release titles its overview with the command name, pbx; the other tools' overview pages carry the product name. Drop this once the release's own heading is Asterisk.",
-    "replacements": {
-      "en": [
-        {
-          "before": "title: \"pbx\"",
-          "after": "title: \"Asterisk\""
-        }
-      ]
-    }
-  },
-  {
     "tool": "memo",
     "slug": "import",
     "reason": "memo search takes a resource and a query; on 0.135.0 an imported document is found by `memo search notes <query> --source import:<name>` (checked in a throwaway home), and bare `memo search --source` is refused as an unknown option.",
@@ -2821,6 +2807,32 @@
         {
           "before": "`memo search --source import:handbook`",
           "after": "`memo search notes budget --source import:handbook`"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "pbx",
+    "slug": "changelog",
+    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/CHANGELOG.md",
+    "reason": "The released 0.2.0 entry links docs/asterisk.md, which v0.4.0 merged into the install and connect page; the sync pins the link to a tag where that file is gone.",
+    "replacements": {
+      "en": [
+        {
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "after": "./installation.md#files-on-the-pbx-over-sftp"
+        }
+      ],
+      "ru": [
+        {
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "after": "./installation.md#files-on-the-pbx-over-sftp"
+        }
+      ],
+      "es": [
+        {
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ]
     }

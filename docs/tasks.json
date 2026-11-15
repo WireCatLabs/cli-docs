@@ -238,12 +238,12 @@
   },
   {
     "id": "calls-connect",
-    "pages": ["pbx/installation.md", "pbx/asterisk.md", "pbx/usage.md", "pbx/security.md"],
+    "pages": ["pbx/installation.md", "pbx/usage.md", "pbx/security.md"],
     "families": { "pbx": ["session", "skill", "mcp"] }
   },
   {
     "id": "calls-read-transcribe",
-    "pages": ["pbx/usage.md", "pbx/asterisk.md", "pbx/commands.md"],
+    "pages": ["pbx/usage.md", "pbx/installation.md", "pbx/commands.md"],
     "families": { "pbx": ["meetings", "events", "models", "commands"] }
   },
   {

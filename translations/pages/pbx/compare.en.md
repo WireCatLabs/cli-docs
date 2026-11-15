@@ -100,4 +100,4 @@ Notes on the marks:
 - **asterisk-ai-call-notes**: an outbound call centre wants a summary, a next step and a callback time written next
   to each call as soon as it ends.
 
-If `pbx` fits, start with [installation](./installation.md), then [connect your Asterisk](./asterisk.md).
+If `pbx` fits, start with [install and connect](./installation.md).
