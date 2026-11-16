@@ -40,6 +40,8 @@ actual product UI labels exactly. [AUTHORING.md](AUTHORING.md) covers page struc
 | Who may receive auto-replies | audience | аудитория | audiencia | The rule file's recipient controls. Link the audience setup at the point the reader must choose recipients. Do not assume an explicit allowlist is always required. |
 | Allowed actions | permissions | разрешения | permisos | Controls what the tool may do. Keep permissions distinct from an agent's instructions and from permission to send data to an AI provider. |
 | Named account and settings | profile | профиль | perfil | A named tool configuration for an account or bot. Do not use profile and account interchangeably. |
+| Key a service issues for an account | token | токен | token | A secret that lets a tool act on an account, such as a Notion personal access token. Say what it can see. It is asked hidden and never shown. |
+| Where the computer keeps secrets | system keyring | связка ключей системы | llavero del sistema | The operating system's store for passwords and tokens: Keychain, Credential Manager or Secret Service. A tool falls back to a private file where there is none. |
 | Service processing AI requests | AI provider | провайдер ИИ | proveedor de IA | The configured service that receives data for AI processing. Explain this term when external data sharing matters; a provider is not another name for the agent. |
 | Configured text-generation component | model identifier (technical setting) | идентификатор модели (техническая настройка) | identificador del modelo (ajuste técnico) | The name used by an AI provider to select a text-generating component. This is a configuration value, not the agent the reader chats with. Preserve `models.replies.model` and other actual keys. |
 

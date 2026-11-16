@@ -7,6 +7,16 @@ Save settings for the command-line tools so you do not repeat the same options o
 
 Two terms help here. The **settings file** (`config.json`) keeps these values on your computer. A <DocTerm term="profile" lang="en" label="profile" /> is a named configuration for an account or bot connection, such as `work`, with its own values; values under `defaults` apply to every profile. Login data is never stored in this file, and what your agent may do is set in [Permissions](./configuration.mdx#permissions).
 
+**On this page:**
+
+1. [Where the file is](#where-the-file-is)
+2. [Check and change a setting](#check-and-change-a-setting)
+3. [Which value wins?](#which-value-wins)
+4. [An example](#an-example)
+5. [All settings for Telegram and MAX](#all-settings-for-telegram-and-max)
+6. [Profiles and bots](#profiles-and-bots)
+7. [Permissions](#permissions)
+
 ## Where the file is
 
 The tool creates the file with common defaults the first time a command reads settings, and keeps an existing file as it is.
@@ -74,7 +84,7 @@ The two tools share most settings, such as `limit`, `sends_per_hour`, `record` a
 - **Telegram:** [Telegram configuration guide](./tg/configuration.md) · [every Telegram setting, default and environment variable](./tg/configuration-reference.md).
 - **MAX:** [MAX configuration guide](./max/configuration.md) · [every MAX setting, default and environment variable](./max/configuration-reference.md).
 
-The other tools have their own settings files: [Zoom](./zm/configuration.md), [Google Drive](./drive/configuration.md), [Google Calendar](./gcal/configuration.md), [Mail](./mail/configuration.md), [Bitrix24](./b24/configuration.md), [Asterisk](./pbx/configuration.md) and [Memo](./memo/configuration.md).
+The other tools have their own settings files: [Zoom](./zm/configuration.md), [Google Drive](./drive/configuration.md), [Notion](./notion/configuration.md), [Google Calendar](./gcal/configuration.md), [Mail](./mail/configuration.md), [Bitrix24](./b24/configuration.md), [Asterisk](./pbx/configuration.md) and [Memo](./memo/configuration.md).
 
 ## Profiles and bots
 

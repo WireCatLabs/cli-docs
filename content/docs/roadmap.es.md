@@ -25,6 +25,8 @@ decidimos qué viene después.
 - **[Bitrix24](./b24/usage.md)**: tus acuerdos, leads, contactos y empresas, en la búsqueda junto a tus mensajes.
 - **[Asterisk](./pbx/usage.md)**: las llamadas de tu centralita Asterisk o FreePBX, transcritas en tu ordenador y
   en la búsqueda junto a tus mensajes.
+- **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
+  junto a tus mensajes.
 
 Todo lo que funciona hoy está en [funciones](./features.mdx).
 
@@ -92,6 +94,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de MAX](./max/roadmap.md)
 - [Hoja de ruta de Zoom](./zm/roadmap.md)
 - [Hoja de ruta de Google Drive](./drive/roadmap.md)
+- [Hoja de ruta de Notion](./notion/roadmap.md)
 - [Hoja de ruta de Google Calendar](./gcal/roadmap.md)
 - [Hoja de ruta de Mail](./mail/roadmap.md)
 - [Hoja de ruta de Bitrix24](./b24/roadmap.md)

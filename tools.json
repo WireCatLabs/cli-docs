@@ -50,6 +50,19 @@
     }
   },
   {
+    "name": "notion",
+    "displayName": "Notion",
+    "repo": "WireCatLabs/notion-cli",
+    "package": "@wirecat/notion-cli",
+    "lang": "en",
+    "docsRef": "v0.2.0",
+    "summary": {
+      "en": "Keep your Notion pages and databases on your computer, search them offline and give your AI agent the context.",
+      "ru": "Храните страницы и базы данных Notion на своём компьютере, ищите по ним без интернета и давайте ИИ-агенту контекст.",
+      "es": "Guarda tus páginas y bases de datos de Notion en tu ordenador, búscalas sin conexión y dale el contexto a tu agente de IA."
+    }
+  },
+  {
     "name": "gcal",
     "displayName": "Google Calendar",
     "repo": "WireCatLabs/gcal-cli",

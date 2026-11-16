@@ -24,6 +24,8 @@ what comes next.
 - **[Bitrix24](./b24/usage.md)**: your deals, leads, contacts and companies, searchable next to your messages.
 - **[Asterisk](./pbx/usage.md)**: the calls of your Asterisk or FreePBX phone system, transcribed on your computer
   and searchable next to your messages.
+- **[Notion](./notion/index.md)**: your Notion pages and databases on your computer, searchable offline next to your
+  messages.
 
 Everything that works today is in [features](./features.mdx).
 
@@ -84,6 +86,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [MAX roadmap](./max/roadmap.md)
 - [Zoom roadmap](./zm/roadmap.md)
 - [Google Drive roadmap](./drive/roadmap.md)
+- [Notion roadmap](./notion/roadmap.md)
 - [Google Calendar roadmap](./gcal/roadmap.md)
 - [Mail roadmap](./mail/roadmap.md)
 - [Bitrix24 roadmap](./b24/roadmap.md)

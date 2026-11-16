@@ -250,5 +250,27 @@
     "id": "calls-upkeep",
     "pages": ["pbx/configuration.md", "pbx/troubleshooting.md"],
     "families": { "pbx": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
+    "id": "notion-connect-copy",
+    "pages": ["notion/index.md", "notion/installation.md", "notion/usage.md", "notion/security.md"],
+    "families": { "notion": ["session", "folders", "sync", "status", "skill", "mcp"] }
+  },
+  {
+    "id": "notion-read-search",
+    "pages": ["notion/index.md", "notion/commands.md"],
+    "families": {
+      "notion": ["documents", "databases", "search", "catalog", "commands", "api"]
+    }
+  },
+  {
+    "id": "notion-annotate",
+    "pages": ["notion/commands.md", "organize.md"],
+    "families": { "notion": ["tags", "relationships", "notes", "memories", "facts", "identities"] }
+  },
+  {
+    "id": "notion-upkeep",
+    "pages": ["notion/configuration.md", "notion/troubleshooting.md"],
+    "families": { "notion": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

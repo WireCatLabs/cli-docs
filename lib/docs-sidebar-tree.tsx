@@ -49,6 +49,7 @@ import {
   Network,
   Newspaper,
   NotebookPen,
+  NotebookText,
   PackagePlus,
   Paperclip,
   PenLine,
@@ -87,6 +88,7 @@ export const sidebarIcons = {
   memo: NotebookPen,
   organize: Layers,
   drive: FolderOpen,
+  notion: NotebookText,
   email: Mail,
   mail: Mail,
   b24: Handshake,
@@ -188,6 +190,7 @@ const folderIcons = {
   max: MessageSquare,
   wa: WhatsAppIcon,
   drive: FolderOpen,
+  notion: NotebookText,
   gcal: CalendarDays,
   mail: Mail,
   memo: NotebookPen,
@@ -330,7 +333,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|gcal|mail|memo|zm|b24|pbx)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|b24|pbx)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
