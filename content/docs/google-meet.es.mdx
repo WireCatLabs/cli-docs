@@ -115,12 +115,16 @@ Para buscar en las transcripciones junto a tus mensajes y notas, el agente ejecu
 gcal personal search all "budget"
 ```
 
+`search all` encuentra una llamada por su título enseguida, pero solo encuentra palabras de una transcripción cuando
+ya están en el índice de búsqueda de las reuniones, y no construye ese índice. Hasta entonces, su respuesta dice en
+`missing` que las reuniones recientes aún no se encuentran; `meetings transcript` sigue mostrando todo el texto.
+
 Una respuesta útil nombra cada llamada, su fecha y el pasaje que cita. Una respuesta vacía no prueba que una llamada no
 ocurriera: consulta [Si falta una llamada o una transcripción](#si-falta-una-llamada-o-una-transcripción).
 
 ## Encuentra a una persona en tus llamadas
 
-`meetings people` encuentra las llamadas en las que estuvo una persona, por su nombre o su dirección de correo:
+`meetings people` encuentra a los participantes de tus llamadas por su nombre o su dirección de correo:
 
 ```sh
 gcal personal meetings people "Ana Example"
@@ -136,8 +140,7 @@ gcal personal meetings export 12 --format markdown --output harbour-call.md
 gcal personal meetings export 12 --format vtt --output harbour-call.vtt
 ```
 
-Markdown guarda toda la reunión. WebVTT guarda solo la transcripción, como subtítulos con sus tiempos. El archivo es
-nuevo: nunca se sobrescribe uno que ya existe.
+Markdown guarda toda la reunión. WebVTT guarda solo la transcripción, como subtítulos con sus tiempos. `--output` escribe un archivo nuevo.
 
 ## Un enlace de Meet o una sala nueva
 
@@ -180,6 +183,8 @@ el evento del calendario.
    llamada, o comprueba que no tiene más de 30 días.
 5. **No hay ninguna transcripción.** La transcripción estaba desactivada en esa llamada, o la cuenta es personal y no
    de Google Workspace.
+6. **Una búsqueda por palabras no encuentra una transcripción.** `search all` dice en `missing` que el índice de
+   búsqueda de las reuniones va atrasado. Lee la llamada con `meetings transcript`.
 
 Más problemas de inicio de sesión en [solución de problemas de gcal](./gcal/troubleshooting.md). Después:
 [Reuniones](./zm/meetings.md) muestra cómo enlazar lo que se decidió en una llamada con tus proyectos y preparar la

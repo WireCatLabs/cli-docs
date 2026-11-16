@@ -106,7 +106,7 @@ Notes on the `gcal` column:
   agent how to write the brief, and `gcal guide digest` a daily or weekly digest.
 - **Google Meet.** After `session start --grant meetings`, `meetings sync` keeps your Meet calls on your
   computer with who joined, the transcript and the Drive files Google made, and links each call to its calendar
-  event; `search all` finds the transcripts beside your other sources. Google lists only the calls you organized,
+  event; `search all` finds them beside your other sources once the meetings' search index holds them. Google lists only the calls you organized,
   and deletes a call's record 30 days after it ends, so sync at least every few weeks. gog lists a room's past calls
   and the latest call's participants, with no transcript, so its row is partly.
   `events create --conference google-meet` needs `--grant write` only; `meetings create` needs

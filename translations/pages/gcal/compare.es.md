@@ -113,7 +113,7 @@ Notas sobre la columna de `gcal`:
   enseñan al agente a escribir el informe, y `gcal guide digest` un resumen diario o semanal.
 - **Google Meet.** Tras `session start --grant meetings`, `meetings sync` guarda tus llamadas de Meet en tu
   ordenador con quién se unió, la transcripción y los archivos de Drive que hizo Google, y enlaza cada llamada con su
-  evento del calendario; `search all` encuentra las transcripciones junto a tus otras fuentes. Google lista solo las
+  evento del calendario; `search all` las encuentra junto a tus otras fuentes cuando ya están en el índice de búsqueda de las reuniones. Google lista solo las
   llamadas que organizaste, y borra el registro de una llamada 30 días después de que termine, así que sincroniza al
   menos cada pocas semanas. gog lista las llamadas pasadas de una sala y los participantes de la última, sin
   transcripción, así que su fila queda en parte. `events create --conference google-meet` solo necesita

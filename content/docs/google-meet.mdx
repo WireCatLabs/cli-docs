@@ -108,12 +108,16 @@ To search the transcripts with your messages and notes, the agent runs `search a
 gcal personal search all "budget"
 ```
 
+`search all` finds a call by its title at once, but finds words in a transcript only after the meetings' search
+index holds them, and it does not build that index. Until then, its answer says under `missing` that recent meetings
+are not found yet; `meetings transcript` still shows the whole text.
+
 A useful answer names each call, its date and the passage it quotes. An empty answer does not prove that a call
 never happened: see [If a call or transcript is missing](#if-a-call-or-transcript-is-missing).
 
 ## Find a person across calls
 
-`meetings people` finds the calls a person joined, by a name or an email address:
+`meetings people` finds the participants of your calls by a name or an email address:
 
 ```sh
 gcal personal meetings people "Ana Example"
@@ -129,8 +133,8 @@ gcal personal meetings export 12 --format markdown --output harbour-call.md
 gcal personal meetings export 12 --format vtt --output harbour-call.vtt
 ```
 
-Markdown holds the whole meeting. WebVTT holds the transcript only, as subtitles with times. The file is new: an
-existing file is never overwritten.
+Markdown holds the whole meeting. WebVTT holds the transcript only, as subtitles with times. `--output` writes a
+new file.
 
 ## Add a Meet link or make a room
 
@@ -169,6 +173,8 @@ them.
 4. **The call is not in the list.** Someone else organized it. Open it with `meetings show` and Google's id of the
    call, or check that it is not older than 30 days.
 5. **No transcript at all.** Transcription was off for that call, or the account is a personal Google account.
+6. **A word search misses a transcript.** `search all` says under `missing` that the meetings' search index is behind.
+   Read the call with `meetings transcript` instead.
 
 More sign-in problems are in [gcal troubleshooting](./gcal/troubleshooting.md). Next: [Meetings](./zm/meetings.md)
 shows how to connect what was decided on a call to your projects and prepare for the next one.
