@@ -19,6 +19,8 @@
     "memo",
     "b24",
     "pbx",
+    "voip",
+    "beeline",
     "---Работа с агентом---",
     "prompting",
     "search",

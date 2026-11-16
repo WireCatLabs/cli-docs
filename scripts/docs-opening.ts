@@ -25,6 +25,9 @@ const exempt = /(?:^|\/)(?:commands(?:-(?:personal|bot|admin))?|changelog|roadma
 const page = /^content\/docs\/.+\.mdx?$/
 
 export const langOf = (file: string): Lang => (/\.ru\.mdx?$/.test(file) ? "ru" : /\.es\.mdx?$/.test(file) ? "es" : "en")
+// A page written in one language only is a default-locale file that names its language in the front matter.
+const pageLang = (file: string, markdown: string): Lang =>
+  (/^---\r?\n[\s\S]*?^contentLanguage:\s*"?(en|ru|es)"?\s*$/m.exec(markdown)?.[1] as Lang | undefined) ?? langOf(file)
 
 const blank = (text: string) => text.replace(/[^\n]/g, " ")
 const parse = (file: string, markdown: string): Node => {
@@ -39,7 +42,7 @@ const isLabel = (node: Node, label: string) =>
 
 export function openingFindings(file: string, markdown: string): Finding[] {
   if (exempt.test(file)) return []
-  const label = rules.contentsLabels[langOf(file)]
+  const label = rules.contentsLabels[pageLang(file, markdown)]
   const blocks = parse(file, markdown).children ?? []
   const firstSection = blocks.findIndex((node) => node.type === "heading" && node.depth === 2)
   const opening = (firstSection < 0 ? blocks : blocks.slice(0, firstSection)).filter(
@@ -98,7 +101,7 @@ export function openingFindings(file: string, markdown: string): Finding[] {
 
 export function styleFindings(file: string, markdown: string): Finding[] {
   if (exempt.test(file)) return []
-  const words = (rules.words[langOf(file)] ?? []).map(({ pattern, fix }) => ({
+  const words = (rules.words[pageLang(file, markdown)] ?? []).map(({ pattern, fix }) => ({
     regex: new RegExp(`(?<![\\p{L}\\p{N}])${pattern}(?![\\p{L}\\p{N}])`, "giu"),
     fix,
   }))

@@ -16,6 +16,11 @@ describe("page opening", () => {
     expect(openingFindings("content/docs/a.mdx", page)).toEqual([])
   })
 
+  it("reads the contents label in the language the front matter names", () => {
+    const page = `---\ncontentLanguage: "ru"\n---\n\nЗачем эта страница.\n\n${contents(4, "На этой странице:")}\n${sections(4)}`
+    expect(openingFindings("content/docs/a.mdx", page)).toEqual([])
+  })
+
   it("needs no contents with three sections or fewer", () => {
     expect(openingFindings("content/docs/a.md", `Intro.\n\n${sections(3)}`)).toEqual([])
   })
