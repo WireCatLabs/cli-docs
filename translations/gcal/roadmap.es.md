@@ -22,6 +22,9 @@ avisa una vez de cada reunión que empieza pronto, o ejecuta tu propio programa 
 `overlapping:true` encuentra las reuniones que se solapan. `events prepare` reúne lo que necesitas para la siguiente
 reunión, `events create --text` añade una a partir de una línea de texto, y `events export` y `events import` leen y
 escriben archivos `.ics`. `calendars add <url>` sigue un calendario publicado como dirección `.ics`, solo para leer.
+Tras `session start --grant meetings`, `meetings sync`, `list`, `show` y `transcript` guardan y leen tus llamadas de
+Google Meet con quién se unió, la transcripción y sus archivos de Drive, enlazadas al evento del calendario.
+`events create --conference google-meet` da a un evento un enlace de Meet, y `meetings create` crea una sala de Meet.
 `search all` busca a la vez en reuniones, chats y notas guardados. `gcal api` llega a cualquier
 método de la API de Google Calendar por su nombre. Todos los comandos están en la
 [referencia de comandos](./commands.md).

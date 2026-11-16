@@ -26,6 +26,8 @@ what comes next.
   and searchable next to your messages.
 - **[Notion](./notion/index.md)**: your Notion pages and databases on your computer, searchable offline next to your
   messages.
+- **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
+  event and kept on your computer after Google deletes them.
 
 Everything that works today is in [features](./features.mdx).
 
@@ -61,7 +63,6 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 
 ### New sources
 
-- **Google Meet**: meetings and their transcripts, linked to the people and chats around them, as Zoom is today.
 - **Notion**: your pages and databases next to your notes and documents.
 
 ### Trust

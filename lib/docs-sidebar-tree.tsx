@@ -106,6 +106,7 @@ export const sidebarIcons = {
   "how-it-works": Lightbulb,
   meetings: Video,
   zm: Video,
+  "google-meet": Video,
   telemost: Video,
   gcal: CalendarDays,
   "zoom-app": KeyRound,
@@ -249,7 +250,7 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // place of the group's first tool.
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
-  meetingsCalls: { tools: ["zm", "telemost", "pbx", "voip", "beeline"], open: true, icon: Phone },
+  meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "voip", "beeline"], open: true, icon: Phone },
   crm: { tools: ["b24"], open: false, icon: Handshake },
 } as const
 

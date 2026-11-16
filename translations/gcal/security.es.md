@@ -7,7 +7,11 @@ Lo que comparten las CLI de WireCat —el llavero, los permisos, MCP y lo que nu
 
 `gcal` guarda sus ajustes en `config.json` y su estado en las carpetas que muestra `gcal doctor`. Solo se comunica con
 Google, y pide acceso de lectura a Calendar y a tu dirección de correo. `session start --grant write` añade los
-eventos, y `--grant sharing` añade quién puede ver un calendario: nada más.
+eventos, `--grant sharing` añade quién puede ver un calendario, y `--grant meetings` añade la lectura de tus llamadas
+de Google Meet: nada más. La tabla está en [iniciar sesión en Google](./usage.md#sign-in-to-google).
+
+Los nombres de los participantes de Google Meet y las transcripciones los escriben otras personas. `gcal` los marca como
+no fiables para un agente, y guarda los archivos de Drive que hizo Google solo por su id: nunca los descarga.
 
 Un agente conectado con `gcal <profile> mcp serve` puede cambiar quién ve tu calendario sin preguntarte. Tras
 `--grant sharing` puede compartir un calendario con cualquier dirección, hacerlo público o quitarle el acceso a alguien.
@@ -30,7 +34,9 @@ también debe tratarlos como datos. Su entorno es el de la ejecución de `gcal`,
 cuenta, sin terminal. El temporizador ejecuta `gcal schedule exec <file>`, y el archivo de la programación, en la
 carpeta de estado, guarda las palabras, el perfil y tu `PATH`, nunca una credencial. Instalar un temporizador no levanta
 `events.remind.hook`: cada ejecución lo vuelve a comprobar. `GCAL_READ_ONLY` rechaza `schedule command`, `remove`, `run`
-y `exec`, y ninguna herramienta MCP ofrece `schedule`.
+y `exec`. Por MCP, como en toda herramienta de WireCat, un agente puede listar las programaciones y ejecutar una con las
+claves `schedule.run` y `schedule.exec` (`ask` por defecto); `mcp.authority` (`deny` por defecto) le impide instalar,
+quitar, pausar o reanudar una.
 
 Un feed que sigue `calendars add` se guarda por su dirección, y la dirección de un calendario publicado a menudo lleva un
 token privado. `gcal` guarda los feeds del perfil en el llavero del sistema, con el servicio `gcal-cli` y la cuenta
@@ -54,7 +60,7 @@ cambia: su propio inicio de sesión va a una entrada aparte, `gcal-cli:<config f
 esa.
 
 Cuando el llavero falla, o con `session start --credential-storage file`, esa misma entrada va a `credentials.json`
-en la carpeta de estado de `gcal`, con modo 600: cualquiera que pueda leer tus archivos como tú puede leer la sesión.
+en la carpeta de configuración de `gcal`, con modo 600: cualquiera que pueda leer tus archivos como tú puede leer la sesión.
 `gcal` lo avisa una vez en stderr y nunca pregunta. Elige el archivo solo donde no funcione ningún llavero.
 
 `gcal` rechaza un archivo de cliente de OAuth que puedan leer otros usuarios del ordenador. La dirección de correo de

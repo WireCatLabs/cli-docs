@@ -36,6 +36,7 @@ title: "Команды gcal"
 | `--yes` | go ahead without the question an ask level puts before a write. |
 | `--record` | keep this run even where the config says record false; record_input false leaves the typed words out. |
 | `--no-record` | do not keep this run, even if it fails. |
+| `--read-only` | refuse every change, as GCAL_READ_ONLY=1 does. |
 
 ## `gcal commands`
 
@@ -52,8 +53,6 @@ gcal commands info [path]
 | Argument | | What it is |
 |---|---|---|
 | `path` | optional | one command path; without one, export schemas, error reasons and explicit overrides. |
-
-**Returns:** one command contract, or all schemas, error reasons and explicit overrides
 
 **Example:** `gcal commands info commands`
 
@@ -77,11 +76,9 @@ gcal session start [options]
 | `--client-id <id>` | your own Desktop app OAuth client ID, used instead of WireCat's; its secret comes from GCAL_GOOGLE_CLIENT_SECRET. |
 | `--no-browser` | print the sign-in URL instead of opening a browser. |
 | `--credential-storage <storage>` | where the sign-in is kept: keyring, which falls back to a private file, or file. Default: `keyring`. |
-| `--grant <scopes>` | also ask for these, comma-separated: write, sharing. |
+| `--grant <scopes>` | also ask for these, comma-separated: write, sharing, meetings. |
 
-**Returns:** sign in to Google in the browser; read-only unless you pass --grant write
-
-**Example:** `gcal personal session start --client-file ~/client_secret.json`, `gcal personal session start --client-id 1234-abc.apps.googleusercontent.com`, `gcal personal session start --grant write,sharing`
+**Example:** `gcal personal session start --client-file ~/client_secret.json`, `gcal personal session start --grant write,sharing`, `gcal personal session start --grant meetings`
 
 ### `gcal session status`
 
@@ -95,8 +92,6 @@ gcal session status [options]
 |---|---|
 | `--check` | ask Google whether the sign-in still works and which account it is. |
 
-**Returns:** show this profile's saved Google sign-in; tokens are never printed
-
 **Example:** `gcal personal session status`, `gcal personal session status --check --json`
 
 ### `gcal session end`
@@ -109,8 +104,6 @@ sign this profile out of Google on this computer; stored calendar data stays
 gcal session end
 ```
 
-**Returns:** sign this profile out of Google on this computer; stored calendar data stays
-
 **Example:** `gcal personal session end`
 
 ### `gcal session list`
@@ -120,8 +113,6 @@ list the profiles on this computer and whether each is signed in; picks none
 ```sh
 gcal session list
 ```
-
-**Returns:** list the profiles here and whether each is signed in
 
 **Example:** `gcal session list`, `gcal session list --json`
 
@@ -322,8 +313,8 @@ gcal events list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | events per page, 1–1000. Default: `100`. |
-| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--limit <n>` | events per page, 1–1000; the profile's defaults.limit when absent. |
+| `--page <n>` | which page, starting at 1. |
 | `--source <accounts>` | calendar accounts held in the store to read as one list: all, a provider, or a list such as gcal:work,gcal:personal or group:<name>; the profile's account when absent. |
 
 **Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: gcal commands info events list
@@ -437,6 +428,7 @@ gcal events create <calendar> [options]
 | `--description <text>` | the details; empty clears it. |
 | `--attendee <email>` | an attendee; repeat for each. Default: ``. |
 | `--repeat <rule>` | how it repeats: an RFC 5545 rule: FREQ=DAILY\|WEEKLY\|MONTHLY, and INTERVAL, BYDAY (MO,WE; in MONTHLY also 1MO or -1FR), COUNT or UNTIL (a date, YYYYMMDD, for an all-day event; a UTC time, YYYYMMDDTHHMMSSZ, for a timed one). |
+| `--conference <service>` | make a new meeting link with it; never replaces a link. One of: `google-meet`. |
 | `--notify` | the provider mails the other attendees; needs events.notify allowed; this or --no-notify is required when there are other attendees. |
 | `--no-notify` | the provider mails nobody. |
 | `--operation-id <id>` | the operation_id a create that ended in outcome_unknown named: a retry finds that event. |
@@ -471,6 +463,7 @@ gcal events update <event> [options]
 | `--description <text>` | the details; empty clears it. |
 | `--attendee <email>` | an attendee; repeat for each, replacing the list. Default: ``. |
 | `--repeat <rule>` | how it repeats, with --series: an RFC 5545 rule: FREQ=DAILY\|WEEKLY\|MONTHLY, and INTERVAL, BYDAY (MO,WE; in MONTHLY also 1MO or -1FR), COUNT or UNTIL (a date, YYYYMMDD, for an all-day event; a UTC time, YYYYMMDDTHHMMSSZ, for a timed one). |
+| `--conference <service>` | make a new meeting link with it; never replaces a link. One of: `google-meet`. |
 | `--calendar <id>` | the calendar, by id or title, when the event is on more than one of the account's. |
 | `--series` | change the whole repeating event, not only this occurrence. |
 | `--following` | change this occurrence and every later one: the repeating event ends before it and a new one starts with the change. |
@@ -584,7 +577,7 @@ find stored things by text: events, or all of messages, notes and events
 
 ### `gcal search all`
 
-search calendar events, messages from the other WireCat tools and notes in the local store, and a meeting account's transcripts when --source names one — best match first; not mail (the separate memo CLI searches it: memo search mail). Use it when you do not know where something was written; search events reads the calendar with all its fields
+search calendar events, messages from the other WireCat tools, notes and meeting transcripts, chat and summaries in the local store — best match first; not mail (the separate memo CLI searches it: memo search mail). Use it when you do not know where something was written; search events reads the calendar with all its fields
 
 ```sh
 gcal search all <query> [options]
@@ -596,15 +589,14 @@ gcal search all <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--only <resources>` | only these resources, separated by commas: messages, notes, events; meetings when --source names a meeting account. |
-| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind, and meetings only when it names one. |
-| `--max-meetings <n>` | how many of the meeting account's meetings to look through, newest first, or all for every one (default 100). |
+| `--only <resources>` | only these resources, separated by commas: messages, notes, events, meetings. |
+| `--source <accounts>` | only these accounts, separated by commas: provider:account as a hit shows it, a provider, a kind or group:<name>; each resource reads the ones of its kind. |
 | `--limit <n>` | how many. |
 | `--page <n>` | which page, starting at 1. |
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 15 more; every field: gcal commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: gcal commands info search all
 
 **Example:** `gcal personal search all roadmap`, `gcal personal search all "quarterly review" --source telegram,gcal --json`
 
@@ -622,8 +614,8 @@ gcal search events <query> [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | events per page. Default: `20`. |
-| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. Default: `0`. |
+| `--limit <n>` | events per page; the profile's defaults.limit when absent. |
+| `--cursor <cursor>` | go on from the previous page's page.next_cursor, with the same query. |
 | `--exact` | every word as written, no word stems. |
 | `--newest` | latest start first instead of best first. |
 | `--backend <archive\|server\|both>` | where to search: archive, the local store, or server, the provider's own search over the synced calendars, earliest first; both gives the store's hits, each the provider also found marked server, then the provider's other hits, one page with no cursor. One of: `archive`, `server`, `both`. Default: `archive`. |
@@ -659,7 +651,7 @@ join an attendee to a person the owner knows elsewhere
 **Changes something on this computer only.**
 
 ```sh
-gcal people link <person> <other>
+gcal people link <person> <other> [options]
 ```
 
 | Argument | | What it is |
@@ -667,7 +659,11 @@ gcal people link <person> <other>
 | `person` | required | an attendee's address as email:<address>, or a person:<id>. |
 | `other` | required | the same person in another tool, as <provider>:<person>, or me. |
 
-**Returns:** calendar linked person — person, name, identities; every field: gcal commands info people link
+| Option | What it does |
+|---|---|
+| `--reason <text>` | why they are one person; an agent's link is a proposal and needs it. |
+
+**Returns:** calendar linked person — person, name, identities, proposal; every field: gcal commands info people link
 
 **Example:** `gcal personal people link email:ana@example.com telegram:12345`
 
@@ -706,6 +702,213 @@ gcal links resolve <review> <choice>
 
 **Example:** `gcal personal links resolve 7 event:42`
 
+## `gcal meetings`
+
+stored meetings and their records
+
+### `gcal meetings list`
+
+meetings, newest first: the service's and the stored ones, kept in the store
+
+```sh
+gcal meetings list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
+| `--limit <n>` | meetings per page; the profile's defaults.limit when absent. |
+| `--page <n>` | which page, starting at 1. |
+
+**Returns:** meeting — ref, id, provider_id, provider, account, title, url, started_at, and 12 more; every field: gcal commands info meetings list
+
+**Next usually:** `gcal meetings show <meeting>`, `gcal meetings transcript <meeting>`, `gcal meetings export <meeting>`
+
+**Example:** `gcal personal meetings list started_at>=2026-11-01 --limit 20 --json`
+
+### `gcal meetings show`
+
+show a meeting, read again from the service with its people, transcript and documents
+
+```sh
+gcal meetings show <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | the stored meeting's number, its meeting: ref, or the service's id (provider_id). |
+
+| Option | What it does |
+|---|---|
+| `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
+
+**Returns:** meeting details — ref, id, provider_id, provider, account, title, url, started_at, and 21 more; every field: gcal commands info meetings show
+
+**Next usually:** `gcal meetings transcript <meeting>`, `gcal meetings export <meeting>`, `gcal meetings update <meeting>`
+
+**Example:** `gcal personal meetings show 1 --json`
+
+### `gcal meetings transcript`
+
+show current meeting transcripts
+
+```sh
+gcal meetings transcript <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | stored meeting id. |
+
+| Option | What it does |
+|---|---|
+| `--history` | include superseded transcript versions. |
+
+**Returns:** meeting transcript — ref, meeting, source, language, superseded_at, created_at, lines, untrusted; every field: gcal commands info meetings transcript
+
+**Example:** `gcal personal meetings transcript 1 --json`
+
+### `gcal meetings export`
+
+export a meeting as Markdown or one transcript as WebVTT
+
+**Changes something on this computer only.**
+
+```sh
+gcal meetings export <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | stored meeting id. |
+
+| Option | What it does |
+|---|---|
+| `--format <format>` | export format. One of: `markdown`, `vtt`. Default: `markdown`. |
+| `--transcript-id <id>` | export a specific transcript version. |
+| `--output <file>` | write content to a new file through the host's writer. |
+
+**Returns:** meeting export — meeting_id, format, filename, content, untrusted, output; every field: gcal commands info meetings export
+
+**Example:** `gcal personal meetings export 1 --format markdown --json`
+
+### `gcal meetings people`
+
+find meeting participants by name or email
+
+```sh
+gcal meetings people <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | a name or an email address. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | most matching observations per page, 1–1000 (default 50). |
+| `--scan-limit <n>` | most participant observations to inspect, 1–10000 (default 1000). |
+| `--max-read-bytes <bytes>` | most stored name and email bytes to read (default 1048576). |
+| `--cursor <cursor>` | continue with the same name query and selected account. |
+
+**Returns:** meeting participants — schema_version, kind, account_id, query, items, ambiguity, coverage, page; every field: gcal commands info meetings people
+
+**Example:** `gcal personal meetings people "Test Person" --json`
+
+### `gcal meetings sync`
+
+bring the stored meetings up to date from the connected account, oldest first; a run that stops before its deadline keeps what it saved and the next one goes on from there
+
+**Changes something on this computer only.**
+
+```sh
+gcal meetings sync [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | fetch meetings starting at or after this ISO 8601 date or time, or 30m, 2h, 7d ago. |
+| `--lookback-days <days>` | revisit recent occurrences for late transcripts (0–31). |
+| `--rescan` | read the last 30 days again, not only what came after the last sync. |
+
+**Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: gcal commands info meetings sync
+
+**Example:** `gcal personal meetings sync --since-time 2026-11-01T00:00:00Z --json`
+
+### `gcal meetings repair`
+
+preview filling in what older builds left out of stored transcripts (their language); --yes stores it
+
+**Changes something on this computer only.**
+
+```sh
+gcal meetings repair [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--yes` | store the detected languages; otherwise only preview. |
+
+**Returns:** meeting repair — account_id, applied, transcripts, languages; every field: gcal commands info meetings repair
+
+**Example:** `gcal personal meetings repair --json`
+
+### `gcal meetings create`
+
+create a meeting on the service
+
+**Changes something in the service.**
+
+```sh
+gcal meetings create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the meeting's title. |
+| `--kind <kind>` | an instant or a scheduled meeting. One of: `instant`, `scheduled`. |
+| `--start-time <time>` | when it starts: an ISO time with its offset, 2026-11-20T10:00:00+01:00; this service takes none, its meetings start now. |
+| `--duration-minutes <minutes>` | how long it lasts, 1–1440. |
+| `--timezone <zone>` | its IANA time zone, Europe/Madrid. |
+| `--agenda <text>` | its agenda. |
+| `--setting <name=value>` | a setting of this service; repeat it for more: access_type=open\|trusted\|restricted, moderation=true\|false, auto_recording=true\|false, auto_transcription=true\|false, auto_smart_notes=true\|false. |
+
+**Returns:** meeting change — action, provider, account, applied, id, occurrence_id, change, meeting, and 1 more; every field: gcal commands info meetings create
+
+**Example:** `gcal personal meetings create --setting access_type=trusted --setting auto_transcription=true --dry-run --json`
+
+### `gcal meetings update`
+
+change a meeting on the service
+
+**Changes something in the service.**
+
+```sh
+gcal meetings update <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | the service's id of the meeting. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the meeting's title. |
+| `--kind <kind>` | an instant or a scheduled meeting. One of: `instant`, `scheduled`. |
+| `--start-time <time>` | when it starts: an ISO time with its offset, 2026-11-20T10:00:00+01:00. |
+| `--duration-minutes <minutes>` | how long it lasts, 1–1440. |
+| `--timezone <zone>` | its IANA time zone, Europe/Madrid. |
+| `--agenda <text>` | its agenda. |
+| `--setting <name=value>` | a setting of this service; repeat it for more: access_type=open\|trusted\|restricted, moderation=true\|false, auto_recording=true\|false, auto_transcription=true\|false, auto_smart_notes=true\|false. |
+
+**Returns:** meeting change — action, provider, account, applied, id, occurrence_id, change, meeting, and 1 more; every field: gcal commands info meetings update
+
+**Example:** `gcal personal meetings update spaces/jQCFfuBOdN5z --setting moderation=true --dry-run --json`
+
 ## `gcal api`
 
 discover and call the official Google Calendar API methods
@@ -738,8 +941,6 @@ gcal api show <method>
 |---|---|---|
 | `method` | required | Google method name, as api list prints it. |
 
-**Returns:** show one method's request schema and contract, without calling Google
-
 **Example:** `gcal personal api show calendar.events.list --json`
 
 ### `gcal api call`
@@ -762,9 +963,7 @@ gcal api call <method> [options]
 | `--body <json>` | request body as a JSON object. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** call one Google Calendar API method by name with JSON parameters
-
-**Example:** `gcal personal api call calendar.events.list --params '{"calendarId":"primary","maxResults":10}'`, `gcal personal api call calendar.freebusy.query --body '{"timeMin":"2026-11-02T00:00:00Z","timeMax":"2026-11-03T00:00:00Z","items":[{"id":"primary"}]}'`
+**Example:** `gcal personal api call calendar.events.list --params '{"calendarId":"primary","maxResults":10}'`, `gcal personal api call calendar.events.list --params '{"calendarId":"primary","fields":"items(id,attachments(fileId,mimeType),organizer/self)"}' --json`, `gcal personal api call calendar.freebusy.query --body '{"timeMin":"2026-11-02T00:00:00Z","timeMax":"2026-11-03T00:00:00Z","items":[{"id":"primary"}]}'`
 
 ### `gcal api calendar-acl-delete`
 
@@ -787,8 +986,6 @@ gcal api calendar-acl-delete [options]
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Deletes an access control rule. — destructive (DELETE…
-
 **Example:** `gcal personal api calendar-acl-delete --rule-id <value> --calendar-id <value>`
 
 ### `gcal api calendar-acl-get`
@@ -808,8 +1005,6 @@ gcal api calendar-acl-get [options]
 | `--quota-user <value>` | An opaque string that represents a user for quota purposes. Must not exceed 40 characters. |
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--rule-id <value>` | ACL rule identifier. |
-
-**Returns:** Returns an access control rule. — read (GET calendars/{calendarId}/acl/{ruleId})
 
 **Example:** `gcal personal api calendar-acl-get --calendar-id <value> --rule-id <value>`
 
@@ -836,8 +1031,6 @@ gcal api calendar-acl-insert [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Creates an access control rule. — write (POST calendars/{calendarId}/acl)
-
 **Example:** `gcal personal api calendar-acl-insert --calendar-id <value>`
 
 ### `gcal api calendar-acl-list`
@@ -860,8 +1053,6 @@ gcal api calendar-acl-list [options]
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--sync-token <value>` | Token obtained from the nextSyncToken field returned on the last page of results from the previous list request. It makes the result of this list request contain only entries that have changed since then. All entries deleted since the previous list request will always be in the result set and it is not allowed to set showDeleted to False. |
 | `--page-token <value>` | Token specifying which result page to return. Optional. |
-
-**Returns:** Returns the rules in the access control list for the calendar. — read (GET…
 
 **Example:** `gcal personal api calendar-acl-list --calendar-id <value>`
 
@@ -889,8 +1080,6 @@ gcal api calendar-acl-patch [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates an access control rule. This method supports patch semantics. —…
-
 **Example:** `gcal personal api calendar-acl-patch --calendar-id <value> --rule-id <value>`
 
 ### `gcal api calendar-acl-update`
@@ -917,8 +1106,6 @@ gcal api calendar-acl-update [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates an access control rule. — write (PUT…
-
 **Example:** `gcal personal api calendar-acl-update --rule-id <value> --calendar-id <value>`
 
 ### `gcal api calendar-calendar-list-delete`
@@ -941,8 +1128,6 @@ gcal api calendar-calendar-list-delete [options]
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Removes a calendar from the user's calendar list. — destructive (DELETE…
-
 **Example:** `gcal personal api calendar-calendar-list-delete --calendar-id <value>`
 
 ### `gcal api calendar-calendar-list-get`
@@ -961,8 +1146,6 @@ gcal api calendar-calendar-list-get [options]
 | `--pretty-print <value>` | Returns response with indentations and line breaks. |
 | `--quota-user <value>` | An opaque string that represents a user for quota purposes. Must not exceed 40 characters. |
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
-
-**Returns:** Returns a calendar from the user's calendar list. — read (GET…
 
 **Example:** `gcal personal api calendar-calendar-list-get --calendar-id <value>`
 
@@ -987,8 +1170,6 @@ gcal api calendar-calendar-list-insert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Inserts an existing calendar into the user's calendar list. — write (POST…
 
 **Example:** `gcal personal api calendar-calendar-list-insert`
 
@@ -1015,8 +1196,6 @@ gcal api calendar-calendar-list-list [options]
 | `--page-token <value>` | Token specifying which result page to return. Optional. |
 | `--show-deleted <value>` | Whether to include deleted calendar list entries in the result. Optional. The default is False. |
 
-**Returns:** Returns the calendars on the user's calendar list. — read (GET…
-
 **Example:** `gcal personal api calendar-calendar-list-list`
 
 ### `gcal api calendar-calendar-list-patch`
@@ -1041,8 +1220,6 @@ gcal api calendar-calendar-list-patch [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Updates an existing calendar on the user's calendar list. This method…
 
 **Example:** `gcal personal api calendar-calendar-list-patch --calendar-id <value>`
 
@@ -1069,8 +1246,6 @@ gcal api calendar-calendar-list-update [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates an existing calendar on the user's calendar list. — write (PUT…
-
 **Example:** `gcal personal api calendar-calendar-list-update --calendar-id <value>`
 
 ### `gcal api calendar-calendars-clear`
@@ -1092,8 +1267,6 @@ gcal api calendar-calendars-clear [options]
 | `--quota-user <value>` | An opaque string that represents a user for quota purposes. Must not exceed 40 characters. |
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Clears a primary calendar. This operation deletes all events associated with…
 
 **Example:** `gcal personal api calendar-calendars-clear --calendar-id <value>`
 
@@ -1117,8 +1290,6 @@ gcal api calendar-calendars-delete [options]
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Deletes a secondary calendar. Use calendars.clear for clearing all events on…
-
 **Example:** `gcal personal api calendar-calendars-delete --calendar-id <value>`
 
 ### `gcal api calendar-calendars-get`
@@ -1137,8 +1308,6 @@ gcal api calendar-calendars-get [options]
 | `--pretty-print <value>` | Returns response with indentations and line breaks. |
 | `--quota-user <value>` | An opaque string that represents a user for quota purposes. Must not exceed 40 characters. |
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
-
-**Returns:** Returns metadata for a calendar. — read (GET calendars/{calendarId})
 
 **Example:** `gcal personal api calendar-calendars-get --calendar-id <value>`
 
@@ -1162,8 +1331,6 @@ gcal api calendar-calendars-insert [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Creates a secondary calendar. — write (POST calendars)
 
 **Example:** `gcal personal api calendar-calendars-insert`
 
@@ -1189,8 +1356,6 @@ gcal api calendar-calendars-patch [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates metadata for a calendar. This method supports patch semantics. —…
-
 **Example:** `gcal personal api calendar-calendars-patch --calendar-id <value>`
 
 ### `gcal api calendar-calendars-transfer-ownership`
@@ -1214,8 +1379,6 @@ gcal api calendar-calendars-transfer-ownership [options]
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs, call the calendarList.list method. |
 | `--new-data-owner <value>` | The email address of a user who will become the data owner of the calendar. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Transfers a secondary calendar between users within a Google Workspace…
 
 **Example:** `gcal personal api calendar-calendars-transfer-ownership --use-admin-access <value> --calendar-id <value> --new-data-owner <value>`
 
@@ -1241,8 +1404,6 @@ gcal api calendar-calendars-update [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates metadata for a calendar. — write (PUT calendars/{calendarId})
-
 **Example:** `gcal personal api calendar-calendars-update --calendar-id <value>`
 
 ### `gcal api calendar-colors-get`
@@ -1260,8 +1421,6 @@ gcal api calendar-colors-get [options]
 | `--user-ip <value>` | Deprecated. Please use quotaUser instead. |
 | `--pretty-print <value>` | Returns response with indentations and line breaks. |
 | `--quota-user <value>` | An opaque string that represents a user for quota purposes. Must not exceed 40 characters. |
-
-**Returns:** Returns the color definitions for calendars and events. — read (GET colors)
 
 **Example:** `gcal personal api calendar-colors-get`
 
@@ -1288,8 +1447,6 @@ gcal api calendar-events-delete [options]
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Deletes an event. — destructive (DELETE calendars/{calendarId}/events/{eventId})
-
 **Example:** `gcal personal api calendar-events-delete --event-id <value> --calendar-id <value>`
 
 ### `gcal api calendar-events-get`
@@ -1312,8 +1469,6 @@ gcal api calendar-events-get [options]
 | `--event-id <value>` | Event identifier. |
 | `--max-attendees <value>` | The maximum number of attendees to include in the response. If there are more than the specified number of attendees, only the participant is returned. Optional. |
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
-
-**Returns:** Returns an event based on its Google Calendar ID. To retrieve an event using…
 
 **Example:** `gcal personal api calendar-events-get --event-id <value> --calendar-id <value>`
 
@@ -1341,8 +1496,6 @@ gcal api calendar-events-import [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Imports an event. This operation is used to add a private copy of an…
 
 **Example:** `gcal personal api calendar-events-import --calendar-id <value>`
 
@@ -1374,8 +1527,6 @@ gcal api calendar-events-insert [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Creates an event. — write (POST calendars/{calendarId}/events)
-
 **Example:** `gcal personal api calendar-events-insert --calendar-id <value>`
 
 ### `gcal api calendar-events-instances`
@@ -1404,8 +1555,6 @@ gcal api calendar-events-instances [options]
 | `--time-zone <value>` | Time zone used in the response. Optional. The default is the time zone of the calendar. |
 | `--original-start <value>` | The original start time of the instance in the result. Optional. |
 | `--time-max <value>` | Upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. Must be an RFC3339 timestamp with mandatory time zone offset. |
-
-**Returns:** Returns instances of the specified recurring event. — read (GET…
 
 **Example:** `gcal personal api calendar-events-instances --event-id <value> --calendar-id <value>`
 
@@ -1444,8 +1593,6 @@ gcal api calendar-events-list [options]
 | `--private-extended-property <value>` | Extended properties constraint specified as propertyName=value. Matches only private properties. This parameter might be repeated multiple times to return events that match all given constraints. |
 | `--page-token <value>` | Token specifying which result page to return. Optional. |
 
-**Returns:** Returns events on the specified calendar. — read (GET…
-
 **Example:** `gcal personal api calendar-events-list --calendar-id <value>`
 
 ### `gcal api calendar-events-move`
@@ -1471,8 +1618,6 @@ gcal api calendar-events-move [options]
 | `--destination <value>` | Calendar identifier of the target calendar where the event is to be moved to. |
 | `--calendar-id <value>` | Calendar identifier of the source calendar where the event currently is on. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Moves an event to another calendar, i.e. changes an event's organizer. Note…
 
 **Example:** `gcal personal api calendar-events-move --event-id <value> --destination <value> --calendar-id <value>`
 
@@ -1506,8 +1651,6 @@ gcal api calendar-events-patch [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates an event. This method supports patch semantics. — write (PATCH…
-
 **Example:** `gcal personal api calendar-events-patch --event-id <value> --calendar-id <value>`
 
 ### `gcal api calendar-events-quick-add`
@@ -1532,8 +1675,6 @@ gcal api calendar-events-quick-add [options]
 | `--text <value>` | The text describing the event to be created. |
 | `--calendar-id <value>` | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the "primary" keyword. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
-
-**Returns:** Creates an event based on a simple text string. — write (POST…
 
 **Example:** `gcal personal api calendar-events-quick-add --text <value> --calendar-id <value>`
 
@@ -1567,8 +1708,6 @@ gcal api calendar-events-update [options]
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 | `--dry-run` | show every permission this call checks, with its level, and call nothing. |
 
-**Returns:** Updates an event. — write (PUT calendars/{calendarId}/events/{eventId})
-
 **Example:** `gcal personal api calendar-events-update --calendar-id <value> --event-id <value>`
 
 ### `gcal api calendar-freebusy-query`
@@ -1589,8 +1728,6 @@ gcal api calendar-freebusy-query [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Returns free/busy information for a set of calendars. — read (POST freeBusy)
-
 **Example:** `gcal personal api calendar-freebusy-query`
 
 ### `gcal api calendar-settings-get`
@@ -1609,8 +1746,6 @@ gcal api calendar-settings-get [options]
 | `--pretty-print <value>` | Returns response with indentations and line breaks. |
 | `--quota-user <value>` | An opaque string that represents a user for quota purposes. Must not exceed 40 characters. |
 | `--setting <value>` | The id of the user setting. |
-
-**Returns:** Returns a single user setting. — read (GET users/me/settings/{setting})
 
 **Example:** `gcal personal api calendar-settings-get --setting <value>`
 
@@ -1633,8 +1768,6 @@ gcal api calendar-settings-list [options]
 | `--sync-token <value>` | Token obtained from the nextSyncToken field returned on the last page of results from the previous list request. It makes the result of this list request contain only entries that have changed since then. |
 | `--max-results <value>` | Maximum number of entries returned on one result page. By default the value is 100 entries. The page size can never be larger than 250 entries. Optional. |
 
-**Returns:** Returns all user settings for the authenticated user. — read (GET…
-
 **Example:** `gcal personal api calendar-settings-list`
 
 ## `gcal doctor`
@@ -1649,9 +1782,38 @@ gcal doctor [options]
 |---|---|
 | `--online` | also connect once and read the account; sends nothing. |
 
-**Returns:** the state this installation is in, without connecting unless --online
-
 **Example:** `gcal doctor`, `gcal doctor --json`
+
+### `gcal doctor reports`
+
+problem reports
+
+#### `gcal doctor reports show`
+
+what a problem report holds; writes nothing
+
+```sh
+gcal doctor reports show
+```
+
+**Example:** `gcal doctor reports show`
+
+#### `gcal doctor reports create`
+
+write a problem report to a file, and say where to send it
+
+**Changes something on this computer only.**
+
+```sh
+gcal doctor reports create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--run <id>` | the run the report is about; the newest failed one if not given. |
+| `--output <file>` | where to write it; a new file in this directory if not given. |
+
+**Example:** `gcal doctor reports create --output ./problem-report.json`
 
 ## `gcal models`
 
@@ -1692,13 +1854,13 @@ gcal models download <model> [options]
 | Option | What it does |
 |---|---|
 | `--offline` | refuse a download that needs the network. |
-| `--accept-terms` | accept the model's licence terms, for a model that has its own. |
+| `--accept-terms` | no longer needed; kept so older scripts still run. |
 
 **Returns:** model — id, kind, title, languages, size_bytes, downloaded, default, path, and 6 more; every field: gcal commands info models download
 
 **Next usually:** `gcal models set <model>`
 
-**Example:** `gcal models download e5-small`
+**Example:** `gcal models download embeddinggemma`
 
 ### `gcal models set`
 
@@ -1757,8 +1919,6 @@ gcal guide [name]
 |---|---|---|
 | `name` | optional | one scenario; without it, the list. |
 
-**Returns:** scenarios: the commands for a common task, in order, and why each
-
 **Example:** `gcal guide`, `gcal guide agent-access --json`
 
 ## `gcal skill`
@@ -1777,8 +1937,6 @@ gcal skill show [options]
 |---|---|
 | `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
-**Returns:** print the tool's instructions for AI agents
-
 **Example:** `gcal skill show`
 
 ### `gcal skill install`
@@ -1795,8 +1953,6 @@ gcal skill install [options]
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
-**Returns:** install the tool's instructions for AI agents
-
 **Example:** `gcal skill install --for agents`
 
 ### `gcal skill status`
@@ -1806,8 +1962,6 @@ for each place `gcal skill install` writes to, and for the copy Hermes reads: th
 ```sh
 gcal skill status
 ```
-
-**Returns:** whether the installed instructions for AI agents match this version
 
 **Example:** `gcal skill status`, `gcal skill status --json`
 
@@ -1833,8 +1987,6 @@ gcal mcp serve [options]
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
 
-**Returns:** serve this profile's commands to an AI agent
-
 **Example:** `gcal personal mcp serve`, `gcal mcp serve --profiles work,personal`, `gcal personal mcp serve --http --public-url https://laptop.example.ts.net`
 
 ### `gcal mcp revoke`
@@ -1850,8 +2002,6 @@ gcal mcp revoke [options]
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
-
-**Returns:** forget every login given to a browser app
 
 **Example:** `gcal personal mcp revoke`, `gcal mcp revoke --profiles all`
 
@@ -1876,8 +2026,6 @@ gcal mcp server start [options]
 | `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Returns:** start the HTTP MCP server in the background
-
 **Example:** `gcal personal mcp server start --public-url https://laptop.example.ts.net`
 
 #### `gcal mcp server stop`
@@ -1894,8 +2042,6 @@ gcal mcp server stop [options]
 |---|---|
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Returns:** stop the background HTTP MCP server
-
 **Example:** `gcal personal mcp server stop`
 
 #### `gcal mcp server status`
@@ -1909,8 +2055,6 @@ gcal mcp server status [options]
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
-
-**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
 
 **Example:** `gcal personal mcp server status --json`
 
@@ -1926,8 +2070,6 @@ gcal mcp config [options]
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like api.calendar.events.insert=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
-
-**Returns:** print the local MCP configuration of this profile, or of those --profiles names
 
 **Example:** `gcal personal mcp config`, `gcal mcp config --profiles all`
 
@@ -1950,8 +2092,6 @@ gcal mcp add <client> [options]
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | make a permission stricter for this server only, like api.calendar.events.insert=deny; it never loosens the profile; repeat for more keys. |
 
-**Returns:** add this profile's local MCP server to Codex or Claude Code
-
 **Example:** `gcal personal mcp add codex --allow-writes`
 
 ### `gcal mcp check`
@@ -1965,8 +2105,6 @@ gcal mcp check [options]
 | Option | What it does |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like api.calendar.events.insert=deny; it never loosens the profile; repeat for more keys. |
-
-**Returns:** check this profile's local MCP handshake and tool list
 
 **Example:** `gcal personal mcp check`
 
@@ -1984,8 +2122,6 @@ gcal upgrade [options]
 |---|---|
 | `--check` | say whether a newer version exists, and install nothing. |
 
-**Returns:** upgrade gcal with the package manager that installed it; --check only looks
-
 **Example:** `gcal upgrade --check`
 
 ## `gcal config`
@@ -1999,8 +2135,6 @@ the profile, the profiles that exist, and each setting with where it came from
 ```sh
 gcal config show
 ```
-
-**Returns:** the profile, the profiles that exist, and each setting with where it came from
 
 **Example:** `gcal personal config show`
 
@@ -2016,14 +2150,12 @@ gcal config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, google_client_id, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, google_client_id, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
-
-**Returns:** save a setting to the configuration file
 
 **Example:** `gcal personal config set limit 20`
 
@@ -2039,13 +2171,11 @@ gcal config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, google_client_id, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, google_client_id, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
 
 | Option | What it does |
 |---|---|
 | `--defaults` | change what every profile gets, rather than this profile. |
-
-**Returns:** remove a setting from the configuration file
 
 **Example:** `gcal personal config unset limit`
 
@@ -2058,8 +2188,6 @@ write each setting the file lacks at its default, keeping yours
 ```sh
 gcal config migrate
 ```
-
-**Returns:** write each setting the file lacks at its default, keeping yours
 
 **Example:** `gcal config migrate`
 
@@ -2076,8 +2204,6 @@ gcal config repair [options]
 | Option | What it does |
 |---|---|
 | `--dry-run` | say what it would fix, and change nothing. |
-
-**Returns:** fix the settings file's JSON syntax, keeping every value
 
 **Example:** `gcal config repair`, `gcal config repair --dry-run`
 
@@ -2099,8 +2225,8 @@ gcal runs list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | how many to show. Default: `20`. |
-| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
 **Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: gcal commands info runs list
 
@@ -2164,18 +2290,16 @@ gcal schedule command <name> <args> [options]
 | Option | What it does |
 |---|---|
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
-
-**Returns:** run gcal <args…> on a timer — reads save what they read, so this is how a…
 
 **Example:** `gcal personal schedule command health --every 1h -- doctor`, `gcal personal schedule command morning-check --at 08:00 -- doctor`
 
 ### `gcal schedule agent`
 
-start an agent (claude or codex) with a prompt on a timer; it runs with GCAL_READ_ONLY=1, so it reads and drafts and cannot send — its answer is kept and you are notified
+start an agent (claude, codex, gemini, cursor, opencode, openclaw, hermes, grok, kimi) with a prompt on a timer; it runs with GCAL_READ_ONLY=1, so it reads and drafts and cannot send, and its own limits hold it to these CLIs' commands; an agent with no such limit is refused (`schedule agents list` says which) — its answer is kept and you are notified
 
 **Changes something on this computer only.**
 
@@ -2186,23 +2310,22 @@ gcal schedule agent <name> <harness> <prompt> [options]
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
-| `harness` | required | the agent to start. One of: `claude`, `codex`. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`, `gemini`, `cursor`, `opencode`, `openclaw`, `hermes`, `grok`, `kimi`. |
 | `prompt` | required | what to do, e.g. "summarize what came in during the last day: gcal personal search messages 'date>1d' --newest --limit 20". |
 
 | Option | What it does |
 |---|---|
-| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the harness's default (default sonnet for claude, codex's own for codex, or the config file's). |
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the agent's own default (default sonnet for claude, the agent's own for the others, or the config file's). |
 | `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
-| `--max-cost-per-day <usd>` | claude only: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
+| `--allow-dangerous` | start an agent its own limits cannot hold to these CLIs' commands, where `schedule agents list` says allowed_with_ack: it may then run any program inside its sandbox. |
+| `--max-cost-per-day <usd>` | claude only, as the others report no cost: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
 | `--every <duration>` | repeat: 30m, 2h, 1d. |
-| `--at <HH:MM>` | every day at this local time. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
 | `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
 | `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
 | `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
 
-**Returns:** start an agent (claude or codex) with a prompt on a timer; it runs with…
-
-**Example:** `gcal personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `gcal personal schedule agent triage codex "list what needs an answer today" --every 2h --max-cost 1`, `gcal personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
+**Example:** `gcal personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `gcal personal schedule agent triage gemini "list what needs an answer today" --every 2h`, `gcal personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
 
 ### `gcal schedule list`
 
@@ -2216,25 +2339,48 @@ gcal schedule list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** scheduled job — name, kind, when, last, notify, deliver_to, spent_today_usd, max_cost_usd, and 1 more; every field: gcal commands info schedule list
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, harness, and 4 more; every field: gcal commands info schedule list
 
 **Example:** `gcal personal schedule list`, `gcal personal schedule list kind:agent`
 
+### `gcal schedule agents`
+
+the coding agents an agent schedule may start
+
+#### `gcal schedule agents list`
+
+the agents a schedule may start, and which are on PATH here
+
+```sh
+gcal schedule agents list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** schedule harness — id, name, programs, reports_cost, restricted, restricted_reason, allowed_with_ack, installed, and 1 more; every field: gcal commands info schedule agents list
+
+**Example:** `gcal personal schedule agents list`, `gcal personal schedule agents list --json`
+
 ### `gcal schedule run`
 
-run a schedule now, as its timer would, and wait for it
+run a schedule now, as its timer would, and wait for it; a paused one runs too
 
 **Changes something in the service.**
 
 ```sh
-gcal schedule run <name>
+gcal schedule run <name> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | the schedule's name, as `schedule list` shows it. |
 
-**Returns:** run a schedule now, as its timer would, and wait for it
+| Option | What it does |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
 
 **Example:** `gcal personal schedule run health`
 
@@ -2252,9 +2398,39 @@ gcal schedule remove <name>
 |---|---|---|
 | `name` | required | the schedule's name, as `schedule list` shows it. |
 
-**Returns:** stop a schedule and remove its timer; its past output stays
-
 **Example:** `gcal personal schedule remove health`
+
+### `gcal schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Changes something on this computer only.**
+
+```sh
+gcal schedule pause <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `gcal personal schedule pause health`
+
+### `gcal schedule resume`
+
+put a paused schedule back on its timer
+
+**Changes something on this computer only.**
+
+```sh
+gcal schedule resume <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `gcal personal schedule resume health`
 
 ### `gcal schedule exec`
 
@@ -2263,14 +2439,13 @@ what a timer runs, given the schedule's file; to run one by hand, use run
 **Changes something in the service.**
 
 ```sh
-gcal schedule exec <file>
+gcal schedule exec <file> [seal]
 ```
 
 | Argument | | What it is |
 |---|---|---|
 | `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
-
-**Returns:** what a timer runs, given the schedule's file; to run one by hand, use run
+| `seal` | optional | the file's SHA-256 as it was saved, which the timer passes; a file that differs does not run. |
 
 **Example:** `gcal personal schedule exec ~/.local/share/gcal-cli/schedules/health/schedule.json`
 

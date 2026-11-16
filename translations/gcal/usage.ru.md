@@ -33,7 +33,24 @@ gcal personal session start --client-file ~/client_secret.json
 ```sh
 gcal personal session start --grant write
 gcal personal session start --grant write,sharing
+gcal personal session start --grant meetings
 ```
+
+Чтобы читать ваши звонки Google Meet, добавьте `--grant meetings`: см. [Google Meet](#google-meet). Каждое право
+добавляет одно разрешение Google, а обычный вход просит только чтение Календаря:
+
+| `--grant` | Разрешение Google | Что оно даёт |
+| --- | --- | --- |
+| нет | `calendar.readonly` | читать ваши календари и их события |
+| `write` | `calendar.events` | создавать, менять и удалять события, отвечать на приглашения и добавлять к событию ссылку на Meet |
+| `sharing` | `calendar.acls` | видеть и менять, кто видит календарь |
+| `meetings` | `meetings.space.readonly` | читать звонки Google Meet, которые вы видите, кто подключился, расшифровку и её файлы на Диске |
+| `write,meetings` | ещё и `meetings.space.created` | создавать комнаты Google Meet и менять те, что создал `gcal` |
+
+Списки Google: [разрешения Calendar](https://developers.google.com/workspace/calendar/api/auth) и
+[разрешения Meet](https://developers.google.com/workspace/meet/api/guides/authenticate-authorize). Запись в Meet `gcal`
+просит только вместе с `write` и `meetings`. Новый вход заменяет права, которые были у профиля, поэтому просите все
+сразу: `--grant write,meetings`.
 
 Без `--client-file` и `--client-id` `gcal` входит через ваше приложение, если его называет `GCAL_GOOGLE_CLIENT_ID` или
 настройка `google_client_id`, а иначе через приложение Google от WireCat: см. [подключите аккаунт Google](./installation.md#connect-your-google-account). Добавьте `--no-browser`, чтобы
@@ -60,7 +77,7 @@ gcal session list                       # every profile here, and whether each h
 
 На компьютере, где хранилище ключей не работает, например на сервере без рабочего стола, `session start` сам
 сохраняет вход в файле, один раз сообщает об этом в stderr и отвечает `credential_storage: "file"`. Он никогда не
-спрашивает. Это `credentials.json` в папке состояния `gcal`, доступный для чтения только вам. `gcal doctor` показывает
+спрашивает. Это `credentials.json` в папке настроек `gcal`, доступный для чтения только вам. `gcal doctor` показывает
 его путь и профили в нём. Файл можно выбрать и явно, хотя хранилище ключей надёжнее и мы этого не советуем:
 
 ```sh
@@ -298,6 +315,65 @@ gcal personal events prepare event:42 --since-time 2026-10-01
 агента, а не инструкции. `gcal guide prepare-meeting` и `gcal guide digest` показывают, как агент превращает этот ответ
 и `events list` в справку к встрече или в ежедневную или еженедельную сводку.
 
+## Google Meet
+
+У каждого звонка Google Meet есть время, поэтому `gcal` хранит ваши звонки рядом с календарём. Отдельного инструмента
+для Google Meet нет. Сначала войдите с `--grant meetings`.
+
+```sh
+gcal personal session start --grant meetings
+gcal personal meetings sync                          # keep the calls of the last 30 days
+gcal personal meetings list started_at>=2026-11-01  # Google's calls and the stored ones, newest first
+gcal personal meetings show 12                       # one call: who joined, its transcript and Drive files
+gcal personal meetings transcript 12                 # what was said, line by line
+gcal personal search all "budget"                    # transcripts beside events, messages and notes
+```
+
+- **Что такое звонок.** Google хранит запись о каждом звонке в комнате. `gcal` сохраняет её как встречу: когда она
+  началась и закончилась, кто подключился, расшифровку и файлы на Диске, которые создал Google: документ с
+  расшифровкой, запись и заметки Gemini, по id файла на Диске. Эти файлы читает drive-cli; `gcal` не просит доступа к
+  Диску.
+- **Связь с событием.** Звонок связывается с событием календаря по ссылке на комнату (`meet.google.com/abc-defg-hij`).
+  Meet не даёт звонку названия, поэтому название берётся из события.
+- **Сразу с сервера и из хранилища.** `meetings list` и `meetings show` спрашивают Google, сохраняют ответ и отвечают
+  из хранилища. Каждая запись говорит, где её нашли: `found_in` равно `server`, `archive` или `both`. `--offline` и
+  `--backend archive` читают только хранилище. `meetings show` принимает сохранённый номер, ссылку `meeting:` или id
+  звонка у Google (`provider_id`).
+- **В списке только ваши звонки.** Google показывает только звонки, которые организовали вы. Звонок, к которому вы
+  подключились, открывается по id через `meetings show`.
+- **30 дней.** Google удаляет запись о звонке, его участников и расшифровку через 30 дней после звонка. Синхронизируйте
+  хотя бы раз в несколько недель. После 30 дней звонок остаётся в хранилище, а документ с расшифровкой — на Диске.
+- **Расшифровка приходит позже.** Google делает расшифровку после звонка. Пока она не готова, `meetings sync`
+  оставляет звонок в очереди и читает его снова в следующий раз, а `meetings show` не сохраняет расшифровку и говорит об
+  этом в `missing`. Если звонок держит синхронизацию 25 дней или дольше, ответ синхронизации говорит, с какого дня.
+  Личные аккаунты Google расшифровок не получают.
+- **Ограничение частоты останавливает синхронизацию.** После первого ограничения частоты от Google `meetings sync`
+  больше ничего не отправляет, сохраняет то, что успел, и говорит, когда запустить его снова (`retry_after_ms`).
+- **Имена и слова принадлежат другим людям.** Имена участников и то, что они сказали, приходят от других людей. Агент
+  читает их как данные, а не как инструкции.
+
+Без `--grant meetings` команда `meetings list` отвечает тем, что есть в хранилище, и сообщает, что Google отказал, а
+`meetings sync` отклоняется с командой, которая входит с этим правом.
+
+Чтобы дать новому событию ссылку на Meet, см. [менять события](#change-events): `events create … --conference google-meet`.
+
+### Создать комнату Meet
+
+После `session start --grant write,meetings` команда `meetings create` создаёт комнату Google Meet, которая начинается
+сразу, а `meetings update` меняет комнату, созданную `gcal`. У комнаты нет названия и времени: их хранит событие
+календаря.
+
+```sh
+gcal personal meetings create --setting access_type=trusted --setting auto_transcription=true
+gcal personal meetings update spaces/jQCFfuBOdN5z --setting moderation=true
+```
+
+- `--setting access_type=open|trusted|restricted`: кто входит без запроса.
+- `--setting moderation|auto_recording|auto_transcription|auto_smart_notes=true|false`: управление для организатора и
+  то, что Google записывает, расшифровывает и конспектирует в каждом звонке комнаты.
+- Обе команды сначала спрашивают; `--yes` отвечает за скрипт. `meeting.id` в ответе — id комнаты для `meetings update`,
+  а `meeting.join_url` — её ссылка. Google даёт `gcal` менять только те комнаты, которые он создал.
+
 ## Напоминание перед встречей
 
 `events remind` один раз сообщает о каждом событии, которое скоро начнётся. Команда сделана для таймера, который
@@ -408,7 +484,9 @@ gcal personal schedule command feeds --every 1h -- sync
 
 Установка таймера не разрешает запуск вашей программы. Если `events.remind.hook` ещё не `allow`, команда говорит об
 этом и даёт строку `config set`; пока вы её не выполните, каждый запуск отказывается запускать программу.
-`GCAL_READ_ONLY` отклоняет `schedule command` и `schedule remove`, и ни один инструмент MCP не предлагает `schedule`.
+`GCAL_READ_ONLY` отклоняет `schedule command` и `schedule remove`. Через MCP, как и в любом инструменте WireCat, агент
+может смотреть список расписаний и запускать их (`schedule.run`, по умолчанию `ask`); `mcp.authority` (по умолчанию
+`deny`) не даёт ему установить, удалить, приостановить или возобновить расписание.
 
 В Linux без пользовательского сеанса systemd (некоторые контейнеры, WSL без systemd) `schedule command` завершается
 ошибкой на `systemctl`; используйте cron, как ниже.
@@ -596,6 +674,8 @@ SIP-адрес — последовательность набора после 
 gcal personal events create 3 --title "Planning" --start-time 2026-11-02T10:00 --end-time 2026-11-02T11:00
 gcal personal events create 3 --title "Offsite" --start-date 2026-11-03 --end-date 2026-11-04
 gcal personal events create Work --text "Lunch with Ana tomorrow 1pm at Example Cafe"
+gcal personal events create 3 --title "Sync" --start-time 2026-11-20T10:00 --end-time 2026-11-20T10:30 \
+  --conference google-meet
 gcal personal events create 3 --title "Standup" --start-time 2026-11-02T09:30 --end-time 2026-11-02T09:45 \
   --repeat "FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=12"
 gcal personal events update event:42 --series --repeat "FREQ=WEEKLY;BYDAY=TU" --no-notify
@@ -635,6 +715,10 @@ gcal personal events delete event:42 --following --no-notify
   временем. `gcal` читает событие из Google и отправляет его целиком, с вашим изменением, и только если это всё ещё
   версия, которую видела последняя синхронизация. Повторяющемуся событию, правило которого заканчивается датой или
   временем прежнего вида, нужно заново передать правило через `--repeat`.
+- `--conference google-meet` в `events create` и `events update` просит у Google Календаря новую ссылку Google Meet
+  для события. Нужен только `--grant write`, без разрешения Meet. `join_url` события — новая ссылка. Событие, у
+  которого ссылка уже есть, отклоняется (`event.conference-exists`), чтобы участники сохранили свою. С `--text` флаг
+  не работает.
 - `respond` меняет только ваш собственный ответ; остальной список гостей остаётся таким, каким его хранит Google.
 - `create --text` передаёт одну строку в
   [быстрое добавление](https://developers.google.com/workspace/calendar/api/v3/reference/events/quickAdd) Google,

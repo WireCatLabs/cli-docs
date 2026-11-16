@@ -4,9 +4,9 @@ title: "Compared with other tools"
 
 `gcal` is a command line and an MCP server for the Google Calendar of your own account. This page puts it next to the
 other command lines, MCP servers and assistant connectors that read a Google Calendar, so you can see which one fits
-your job. The marks for `gcal` come from its release 0.21.0, its commands and its source, checked on 7 November 2026;
+your job. The marks for `gcal` come from its release 0.31.0, its commands and its source, checked on 16 November 2026;
 they are checked again at each release. The marks for the other tools come from their own
-READMEs, documentation and source, checked on 27 October 2026. Nothing was signed in to or tested live, and a tool may
+READMEs, documentation and source, checked on 27 October 2026, and on 16 November 2026 for the Google Meet rows. Nothing was signed in to or tested live, and a tool may
 do more than its pages say.
 
 The tools:
@@ -52,6 +52,10 @@ The tools:
 | Add a meeting | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Accept or decline an invitation | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Export meetings to an .ics file, and import one | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
+| **Google Meet** | | | | | | |
+| Keep your Google Meet calls with who joined and the transcript, linked to the calendar event | ✅ | ➖ | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-meet.md) | ➖ | ➖ | ➖ |
+| Give a new meeting a Google Meet link | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-create.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | ➖ |
+| Make a Google Meet room and change its settings | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-meet-create.md) | ➖ | ➖ | ➖ |
 | **Agents and safety** | | | | | | |
 | MCP server | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Every calendar command of the tool is also an MCP tool | 🟡 | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
@@ -100,6 +104,13 @@ Notes on the `gcal` column:
   one come from the other WireCat tools on the same computer, such as `tg` or `mail`; with `gcal` alone those lists
   are empty. It reads the local store only and writes no summary: the skill and `gcal guide prepare-meeting` show the
   agent how to write the brief, and `gcal guide digest` a daily or weekly digest.
+- **Google Meet.** After `session start --grant meetings`, `meetings sync` keeps your Meet calls on your
+  computer with who joined, the transcript and the Drive files Google made, and links each call to its calendar
+  event; `search all` finds the transcripts beside your other sources. Google lists only the calls you organized,
+  and deletes a call's record 30 days after it ends, so sync at least every few weeks. gog lists a room's past calls
+  and the latest call's participants, with no transcript, so its row is partly.
+  `events create --conference google-meet` needs `--grant write` only; `meetings create` needs
+  `--grant write,meetings` ([Google Meet](../google-meet.mdx)).
 - **Birthdays and other noise.** `events list -event_type:birthday -event_type:working-location` leaves those kinds
   out, and `event_type:default` keeps ordinary events only.
 - **iCalendar files.** `events export <query> --output week.ics` writes the events a list would show as an `.ics`
@@ -154,8 +165,9 @@ Notes on the `gcal` column:
 - **Most commands are MCP tools.** Through three MCP tools, `gcal_tools_search`, `gcal_read` and `gcal_write`. Some
   commands are kept for you at a terminal: `api call`; emptying a calendar (`calendars.clear`); `events remind`, which
   runs a program of yours, so through it an agent could run any program on your computer; `calendars add` and
-  `remove`, since a feed's address can hold a private token; and `schedule`, which installs a timer that runs on its
-  own. So this row is partly.
+  `remove`, since a feed's address can hold a private token; and installing, removing, pausing or resuming a
+  `schedule`, which `mcp.authority` (`deny` by default) keeps from an agent, though it can list schedules and run one.
+  So this row is partly.
 - **claude.ai on the web.** `mcp serve --http` serves the tool to Claude and ChatGPT in the browser or on the phone,
   behind an HTTPS tunnel you set up and keep running yourself, such as Tailscale Funnel, so this row stays partly.
   [ChatGPT or Claude in the browser](./remote.md) walks through it, login code and permissions included.

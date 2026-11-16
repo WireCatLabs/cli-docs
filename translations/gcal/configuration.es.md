@@ -105,7 +105,7 @@ gcal personal config set permissions.events.create ask       # be asked before e
 Frente a una clave más general, estos valores por defecto solo se vuelven más estrictos: `permissions.api allow`
 mantiene tanto la pregunta como el `deny`. Para cambiar uno, define la clave propia de ese método, como
 `permissions.api.calendar.calendars.clear ask`. Una clave que no corresponde a ningún método se rechaza, y
-`gcal doctor` muestra las que haya en el archivo. `GCAL_READ_ONLY=1` rechaza toda escritura, digan lo que digan los
+`gcal doctor` muestra las que haya en el archivo. `GCAL_READ_ONLY=1`, o `--read-only` para una ejecución, rechaza toda escritura, digan lo que digan los
 permisos. `gcal <profile> mcp serve --permission api=readonly` hace una clave más estricta solo para ese servidor.
 
 ## Registros de ejecución

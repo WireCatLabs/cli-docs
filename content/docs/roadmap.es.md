@@ -27,6 +27,8 @@ decidimos qué viene después.
   en la búsqueda junto a tus mensajes.
 - **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
   junto a tus mensajes.
+- **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al
+  evento del calendario y guardadas en tu ordenador después de que Google las borre.
 
 Todo lo que funciona hoy está en [funciones](./features.mdx).
 
@@ -67,8 +69,6 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 
 ### Nuevas fuentes
 
-- **Google Meet**: las reuniones y sus transcripciones, enlazadas con las personas y los chats relacionados, como ya
-  ocurre con Zoom.
 - **Notion**: tus páginas y bases de datos junto a tus notas y documentos.
 
 ### Confianza

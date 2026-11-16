@@ -1,0 +1,174 @@
+---
+title: "Google Meet"
+description: "Keep your Google Meet calls, who joined and the transcript on your computer, so your agent finds what was said next to the calendar event, chats and notes."
+---
+
+Google Meet keeps a call's record, its participants and its transcript for 30 days, and shows them one call at a time.
+Your AI agent cannot see them next to the calendar event, the chats about the meeting or your notes. Google
+Calendar's tool `gcal` copies your Meet calls to your computer and keeps them there after Google deletes them.
+
+Your agent can then answer what was decided on a call, who joined and who said what, and quote the passage with its
+call and time. It finds a call by the calendar event, by a person or by a word, beside your messages and notes.
+
+`gcal` keeps each call as a meeting in the local store on your computer, the one file all WireCat tools share, and
+links it to its calendar event by the room's link. There is no separate Google Meet tool. You need `gcal` installed
+and signed in to your Google account ([installation](./gcal/installation.md)). Transcripts come only from a Google
+Workspace account: a personal Google account gets none.
+
+**On this page:**
+
+1. [Short version](#short-version)
+2. [Which calls you get](#which-calls-you-get)
+3. [Keep your calls up to date](#keep-your-calls-up-to-date)
+4. [What a meeting keeps](#what-a-meeting-keeps)
+5. [Ask your agent](#ask-your-agent)
+6. [Find a person across calls](#find-a-person-across-calls)
+7. [Save a call as a file](#save-a-call-as-a-file)
+8. [Add a Meet link or make a room](#add-a-meet-link-or-make-a-room)
+9. [If a call or transcript is missing](#if-a-call-or-transcript-is-missing)
+
+## Short version
+
+The examples use the profile `personal`, the name you gave your Google account in `gcal`. Use yours.
+
+```sh
+gcal personal session start --grant meetings
+gcal personal meetings sync
+gcal personal meetings list started_at>=2026-11-01
+gcal personal meetings transcript 12
+```
+
+The first command signs in again with read access to Google Meet. The sync keeps the calls of the last 30 days. The
+list shows them newest first, and `meetings transcript` shows what was said in call 12, line by line.
+
+A new sign-in replaces the permissions the profile had. If you also change events with `gcal`, ask for both at once:
+`gcal personal session start --grant write,meetings`. If you sign in through your own Google app, turn on the
+[Google Meet API](https://console.cloud.google.com/apis/library/meet.googleapis.com) in its project first.
+
+## Which calls you get
+
+- **The calls you organized.** Google lists only those. A call you joined in someone else's room is not listed, but
+  `meetings show` opens it by Google's id of the call.
+- **The last 30 days.** Google deletes a call's record, its participants and its transcript 30 days after the call.
+  A call already in the store stays there, and the transcript Doc stays in Google Drive.
+- **Transcripts after the call.** Google makes the transcript after the call ends. Until it is ready, the sync keeps
+  the call due and reads it again next time.
+- **Transcripts on Google Workspace only.** A personal Google account gets calls and participants, but no
+  transcript.
+
+## Keep your calls up to date
+
+Run the sync at least every few weeks, so no call passes Google's 30 days first:
+
+```sh
+gcal personal meetings sync
+gcal personal meetings sync --since-time 2026-11-01
+gcal personal meetings sync --rescan
+```
+
+A sync goes on from where the last one stopped. `--since-time` starts from a date, and `--rescan` reads the last 30
+days again. When Google limits the requests, the sync keeps what it saved and says when to run it again. When one call
+has waited for its transcript for 25 days or more, the sync's answer says since when.
+
+To run it on its own, install a timer as for [feeds](./gcal/usage.md#run-it-on-a-timer):
+
+```sh
+gcal personal schedule command meet --every 1d -- meetings sync
+```
+
+## What a meeting keeps
+
+- **When the call started and ended, and who joined.**
+- **The transcript**, line by line with the speaker.
+- **The Drive files Google made**: the transcript Doc, the recording and Gemini's notes, by their Drive file id.
+  `gcal` does not download them and asks for no Drive permission. The [Google Drive tool](./drive/index.md) reads
+  them.
+- **The calendar event.** A call joins its event by the room's link (`meet.google.com/abc-defg-hij`). Meet gives a
+  call no title, so the event's title is used.
+
+`meetings list` and `meetings show` ask Google and the store at once, and save what Google returns. Each meeting says
+where it was found: `found_in` is `server`, `archive` or `both`. Add `--backend archive` to read the store only,
+without the internet.
+
+Participant names and what they said come from other people. `gcal` marks them as untrusted, so your agent reads them
+as data and never follows them as instructions.
+
+## Ask your agent
+
+Ask in your own words:
+
+```text prompt
+Find my Google Meet calls from the last month about the Harbour budget. Quote what was decided, with the call, its
+date and the speaker. Tell me which calls have no transcript yet.
+```
+
+To search the transcripts with your messages and notes, the agent runs `search all`:
+
+```sh
+gcal personal search all "budget"
+```
+
+A useful answer names each call, its date and the passage it quotes. An empty answer does not prove that a call
+never happened: see [If a call or transcript is missing](#if-a-call-or-transcript-is-missing).
+
+## Find a person across calls
+
+`meetings people` finds the calls a person joined, by a name or an email address:
+
+```sh
+gcal personal meetings people "Ana Example"
+```
+
+When the matches belong to more than one person, `ambiguity.multiple_identities` is `true`. Choose by the email
+address: a matching name alone does not prove that it is the same person.
+
+## Save a call as a file
+
+```sh
+gcal personal meetings export 12 --format markdown --output harbour-call.md
+gcal personal meetings export 12 --format vtt --output harbour-call.vtt
+```
+
+Markdown holds the whole meeting. WebVTT holds the transcript only, as subtitles with times. The file is new: an
+existing file is never overwritten.
+
+## Add a Meet link or make a room
+
+To give a new event its own Meet link, sign in with `--grant write`; it needs no Meet permission:
+
+```sh
+gcal personal events create 3 --title "Sync" --start-time 2026-11-20T10:00 --end-time 2026-11-20T10:30 \
+  --conference google-meet
+```
+
+An event that already has a link is refused (`event.conference-exists`), so its attendees keep the link they have.
+More on changing events is in [the usage guide](./gcal/usage.md#change-events).
+
+A room is the place with one link that calls happen in. After `session start --grant write,meetings`,
+`meetings create` makes a room that starts now, and `meetings update` changes a room `gcal` made:
+
+```sh
+gcal personal meetings create --setting access_type=trusted --setting auto_transcription=true
+gcal personal meetings update spaces/jQCFfuBOdN5z --setting moderation=true
+```
+
+`access_type` sets who joins without knocking: `open`, `trusted` or `restricted`. `auto_transcription`,
+`auto_recording` and `auto_smart_notes` turn on the transcript, the recording and Gemini's notes in every call of the
+room. Both commands ask first; `--yes` answers for a script. A room has no title or time: the calendar event carries
+them.
+
+## If a call or transcript is missing
+
+1. **"this profile signed in without access to Google Meet".** Run the `session start --grant …` the message gives.
+   It names the permissions the profile already has, so you keep them.
+2. **"the Google Meet API is turned off for this OAuth project".** Your own Google app's project has the Meet API off.
+   [Turn it on](https://console.cloud.google.com/apis/library/meet.googleapis.com), wait a few minutes and run
+   `meetings sync` again.
+3. **"Google Meet has not finished the transcript yet".** Nothing to do: the next sync reads it. `meetings show`
+   lists what is still missing under `missing`.
+4. **The call is not in the list.** Someone else organized it. Open it with `meetings show` and Google's id of the
+   call, or check that it is not older than 30 days.
+5. **No transcript at all.** Transcription was off for that call, or the account is a personal Google account.
+
+More sign-in problems are in [gcal troubleshooting](./gcal/troubleshooting.md). Next: [Meetings](./zm/meetings.md)
+shows how to connect what was decided on a call to your projects and prepare for the next one.

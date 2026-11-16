@@ -111,7 +111,7 @@ gcal personal mcp serve --http --public-url https://laptop.example-tailnet.ts.ne
 gcal personal mcp serve --http --public-url https://laptop.example-tailnet.ts.net --permission api.calendar.acl=deny
 ```
 
-`api=readonly` rechaza cualquier cambio, también en los eventos; `api.calendar.acl=deny` impide que la aplicación comparta un calendario. Un ajuste así solo endurece: nunca afloja el nivel del perfil. Para permitir más, cambia los permisos del perfil ([ajustes](./configuration.md#permissions)). `GCAL_READ_ONLY=1` en el entorno del servidor también rechaza cualquier cambio.
+`api=readonly` rechaza cualquier cambio, también en los eventos; `api.calendar.acl=deny` impide que la aplicación comparta un calendario. Un ajuste así solo endurece: nunca afloja el nivel del perfil. Para permitir más, cambia los permisos del perfil ([ajustes](./configuration.md#permissions)). `GCAL_READ_ONLY=1` en el entorno del servidor, o `mcp serve --read-only`, también rechaza cualquier cambio.
 
 ## Detén el servidor o revoca el acceso
 

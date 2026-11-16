@@ -7,6 +7,7 @@ title: "Google Calendar"
 
 Он входит в Google (`session start`, `session status`, `session end`), синхронизирует ваши календари в локальное
 хранилище WireCat (`sync`, `store status`, `calendars`) и читает их оттуда: `events`, `search events`, `people` и `links`.
+С `--grant meetings` команда `meetings` сохраняет ваши звонки Google Meet: кто подключился и расшифровку.
 `calendars busy` спрашивает у Google, когда люди свободны. С правом записи `events create | update | delete | move |
 respond` меняют Google Календарь. Есть и команды, общие для всех CLI WireCat: `doctor`, `commands`, `guide`, `config`,
 `skill`, `mcp`, `runs` и `upgrade`. Начните с [установки](./installation.md), затем перейдите к [работе с инструментом](./usage.md).

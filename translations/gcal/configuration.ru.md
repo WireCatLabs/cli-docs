@@ -102,7 +102,7 @@ gcal personal config set permissions.events.create ask       # be asked before e
 Более общий ключ может сделать эти значения по умолчанию только строже: при `permissions.api allow` и вопрос, и
 `deny` остаются. Чтобы изменить одно из них, задайте собственный ключ метода, например
 `permissions.api.calendar.calendars.clear ask`. Ключ, который не называет ни одного метода, отклоняется, а
-`gcal doctor` показывает такие ключи в файле. `GCAL_READ_ONLY=1` запрещает любую запись, что бы ни говорили
+`gcal doctor` показывает такие ключи в файле. `GCAL_READ_ONLY=1` или `--read-only` для одного запуска запрещает любую запись, что бы ни говорили
 разрешения. `gcal <profile> mcp serve --permission api=readonly` делает ключ строже только для этого сервера.
 
 ## Записи запусков

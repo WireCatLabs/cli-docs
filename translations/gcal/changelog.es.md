@@ -4,6 +4,165 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.31.0 — 16.11.2026
+
+### Añadido
+
+- **Llamadas de Google Meet en gcal.** No hay una herramienta aparte para Google Meet: `meetings list`, `show`,
+  `transcript`, `people`, `export`, `sync` y `repair` guardan tus llamadas de Meet con quién se unió, la transcripción
+  y los archivos de Drive que hizo Google (el documento de la transcripción, la grabación, las notas de Gemini),
+  enlazadas al evento del calendario por el enlace de la sala. `meetings list` y `show` preguntan a Google y al almacén
+  a la vez. Consulta [Google Meet](./usage.md#google-meet).
+- **`session start --grant meetings`** pide acceso de lectura a Google Meet (`meetings.space.readonly`). El inicio de
+  sesión normal no cambia. Un aviso para volver a iniciar sesión nombra todos los permisos del perfil, para que los
+  conserve.
+- **`events create --conference google-meet` y `events update --conference google-meet`** dan al evento un nuevo
+  enlace de Google Meet, con el `--conference` compartido de cli-core. Solo necesitan `--grant write`. Un evento que ya
+  tiene enlace se rechaza (`event.conference-exists`).
+- **`meetings create` y `meetings update`** crean una sala de Google Meet que empieza ahora y cambian las salas que
+  creó gcal: `--setting access_type=open|trusted|restricted`, `moderation`, `auto_recording`, `auto_transcription` y
+  `auto_smart_notes` (`true|false`). Preguntan antes, como toda escritura remota. `session start --grant write,meetings`
+  añade `meetings.space.created` para ellas.
+- **`meetings sync` dice cuándo una llamada lo lleva reteniendo 25 días o más:** Google borra el registro de una
+  llamada 30 días después de que termine. Un límite de frecuencia detiene la sincronización y dice cuándo volver a
+  ejecutarla.
+
+### Cambios — pueden romper scripts
+
+- **`gcal` accede a `meet.googleapis.com`**, un host nuevo en el manifiesto.
+
+## 0.30.0 — 16.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.674.0** (antes 0.673.0) y cli-base 0.103.0 (antes 0.102.1). El almacén compartido
+  pasa a la versión 67, así que actualiza también las demás CLI de WireCat que lo comparten. Un comando ejecutado sin
+  el perfil que necesita ahora lleva el motivo `profile.missing`. Consulta el
+  [registro de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.29.0 — 16.11.2026
+
+### Añadido
+
+- **`gcal --read-only` rechaza todo cambio durante una ejecución, como `GCAL_READ_ONLY=1` y como el `--read-only` de
+  drive.** `gcal --read-only personal api call calendar.events.quickAdd …` respondía `unknown option '--read-only'`;
+  ahora responde `permission_error` (código de salida 5), y las lecturas siguen funcionando.
+  `gcal personal mcp serve --read-only` rechaza toda herramienta de escritura (cli-core 0.673.0, antes 0.664.0;
+  cli-base 0.102.1).
+
+### Corregido
+
+- **La transcripción de Meet o las notas de Gemini de un evento se enlazan con él cuando dos perfiles de Drive
+  importaron el mismo archivo** (cli-core 0.673.0). `search all` mostraba el evento y el documento por separado.
+
+## 0.28.0 — 15.11.2026
+
+### Cambios — pueden romper scripts
+
+- **`gcal events list` y `gcal search events` muestran el `defaults.limit` configurado sin `--limit`** (20 si no se
+  ajusta), como las herramientas MCP `events_list` y `search_events` (cli-core 0.664.0, antes 0.662.0; cli-base
+  0.102.0). Una opción de hora que no se puede leer ahora dice
+  `--x takes an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago`.
+
+### Corregido
+
+- **El `--fields` de un comando de API generado llega a Google junto a `--json`.**
+  `gcal <profile> api calendar-events-list --calendar-id primary --fields 'items(id,attachments)' --json` fallaba con
+  "--json takes comma-separated field paths". Ahora envía a Google la máscara de respuesta parcial, como ya hacía
+  `gcal <profile> api call calendar.events.list --params '{"calendarId":"primary","fields":"items(id)"}' --json`.
+  Ninguno lee ni abre el almacén local.
+
+## 0.27.0 — 14.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Un nivel `readonly` ya no detiene `gcal sync`** (cli-core 0.662.0, antes 0.659.0). Un comando que solo trae datos
+  de Google Calendar al almacén local funciona con `readonly`; `deny` lo sigue rechazando. Los comandos que escriben
+  archivos del propietario o llaman a otro servicio siguen bloqueados por `readonly`. Un perfil que usaba `readonly`
+  para detener la sincronización pone la clave en `deny`.
+
+## 0.26.0 — 14.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.659.0** (antes 0.656.0). Consulta el
+  [registro de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Una configuración compartida con un pequeño error se arregla al leerla.** `~/.config/WireCat/config.json` con una
+  marca de orden de bytes, un comentario, una coma final o una coma que falta entre dos líneas se corrige en su sitio,
+  y el archivo antiguo se guarda al lado como `config.json.bak-<time>`. Otro daño indica su línea, su columna y el
+  arreglo probable.
+
+## 0.25.0 — 13.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.651.0** (antes 0.650.0). Una huella de proyecto de reunión obsoleta sale como
+  `conflict` en lugar de `configuration_error`. Un nombre de perfil en `GCAL_PROFILE` que este ordenador no conoce
+  falla con `profile.unknown` y lista los perfiles de aquí, como una primera palabra mal escrita, y el mensaje dice
+  "no profile named" una sola vez. La primera pantalla lista `pbx`, la herramienta de Asterisk. Lo que cambió está en
+  el [registro de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Construido sobre cli-core 0.656.0** (antes 0.651.0). Consulta el
+  [registro de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **La sincronización funciona en una instalación nueva.** Una configuración compartida de WireCat
+  (`~/.config/WireCat/config.json`) que no se podía leer (una marca de orden de bytes, un JSON roto, una carpeta en su
+  lugar, una forma antigua de `setup`) dejaba toda herramienta de WireCat en solo lectura y rechazaba `sync`. Ahora
+  solo la propia respuesta "solo lectura" del propietario limita una herramienta, y aun así la sincronización
+  funciona: solo lee el servicio al almacén local (cli-core 0.656.0).
+
+### Seguridad
+
+- **`contracts/wirecat.json` lista los hosts a los que cli-core accede para gcal**: npm para `upgrade`, y Hugging
+  Face y GitHub para descargar modelos y los hosts a los que redirigen. WireCat Desktop los muestra antes de instalar
+  gcal.
+
+## 0.24.0 — 13.11.2026
+
+### Añadido
+
+- **Un pull request añade sus entradas del registro de cambios como un fragmento, `changes/<branch>.md`.** Los pull
+  requests abiertos ya no chocan en `## Unreleased`. `pnpm docs:check` comprueba cada fragmento, y `bin/release` los
+  reúne en la sección de la versión. Una entrada en `## Unreleased` sigue funcionando durante el cambio.
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.650.0** (antes 0.615.0). El almacén pasa a la versión 66 al abrirse por primera vez
+  (vínculos entre personas, tipos de persona y orden del nombre; solo añade). Los embeddings remotos de la búsqueda
+  por significado siguen el interruptor "solo local" de memo (`models
+  local-only set on`), envían a una dirección `http` simple solo en este ordenador y solo llegan a su propio host. Un
+  perfil sin sesión iniciada falla con `session.missing` (antes `oauth.missing`). Un nombre de perfil escrito como
+  primera palabra que este ordenador no conoce falla con `profile.unknown` y el código de salida 6, antes de ejecutar
+  el comando, y lista los perfiles de aquí. `doctor reports show` y `doctor reports create` escriben un informe de
+  problema para enviar; `doctor --help` vuelve a mostrar sus Returns y Example. `store reset` ya no se ofrece por MCP.
+  El inicio de sesión en Google y la apertura del almacén de gcal ahora son de cli-core. Lo que cambió está en el
+  [registro de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`search all` ya no lista las reuniones como un problema cuando no hay ninguna cuenta de reuniones conectada**, y
+  `--max-meetings` desaparece de él.
+- **`schedule pause <name>` y `schedule resume <name>`** quitan una programación de su temporizador y la conservan;
+  `schedule run` la sigue ejecutando. `--at` se repite: `--at 08:30 --at 18:00` se ejecuta dos veces al día.
+- **El archivo de sesión pasa de la carpeta de estado a la carpeta de configuración**, donde lo guardan las demás CLI
+  de WireCat. Es `credentials.json`, que se usa solo donde no funciona ningún llavero o con
+  `--credential-storage file`. La primera ejecución que lee una sesión mueve el archivo antiguo, así que nadie vuelve a
+  iniciar sesión. `gcal doctor` muestra la nueva ruta. Una ejecución con carpetas movidas guarda ahora su propia sesión
+  en la entrada del llavero `gcal-cli:<config folder>`, como siempre dijo [seguridad](./security.md), no en la carpeta
+  de estado.
+- **Un agente MCP ahora encuentra `schedule`, como en toda CLI de WireCat.** Puede listar programaciones y ejecutar
+  una, con las claves `schedule.run` y `schedule.exec` (`ask` por defecto). `mcp.authority` (`deny` por defecto) le
+  sigue impidiendo instalar, quitar, pausar o reanudar una. Antes, gcal ocultaba todo el grupo.
+
+### Corregido
+
+- **`GCAL_READ_ONLY` ya no crea `wirecat.db`.** Una lectura sin almacén, o sin fila guardada para el perfil, ahora lee
+  un almacén vacío en una carpeta temporal, como hacen los comandos de CRM de cli-core, y responde sin eventos. Con el
+  bloqueo, `--source` deja fuera un perfil que nunca se abrió, porque guardar su fila sería una escritura.
+- **El README decía que necesitas una aplicación de Google propia.** Todo paquete lleva la aplicación de Google de
+  WireCat. El inicio rápido ahora inicia sesión con ella y remite a tu propia aplicación para cuando Google la rechace.
+
 ## 0.23.0 — 08.11.2026
 
 ### Añadido

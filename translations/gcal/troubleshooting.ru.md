@@ -13,7 +13,7 @@ title: "Если что-то пошло не так"
 | Файл настроек не читается | `doctor` перечисляет все проблемы файла в `config.issues`. Выполните `config unset`, который предлагается для каждой, или исправьте файл вручную. |
 | `doctor` показывает `files.problems` | Другие пользователи компьютера могут читать `config.json` или заходить в его папку. Выполните каждую команду `chmod`, которую `doctor` выводит после «to make it private:». Сам `doctor` права файлов не меняет. |
 | `profile.wrong-account` или `profile.same-account` | У каждого аккаунта Google один профиль. Используйте профиль, который уже есть у этого аккаунта, или новое имя профиля для нового аккаунта. |
-| `oauth.not-saved` | Файл со входом (`credentials.json` в папке состояния; его используют `--credential-storage file` и любой запуск, когда хранилище ключей не работает) существует, но не читается как файл со входом. Уберите его в сторону и войдите снова. |
+| `oauth.not-saved` | Файл со входом (`credentials.json` в папке настроек; его используют `--credential-storage file` и любой запуск, когда хранилище ключей не работает) существует, но не читается как файл со входом. Уберите его в сторону и войдите снова. |
 | Запись отклонена | Её запрещают разрешения профиля или `GCAL_READ_ONLY`; см. [настройки](./configuration.md#permissions). |
 
 ## Проблемы со входом
@@ -34,6 +34,9 @@ title: "Если что-то пошло не так"
 | «Google sign-in was declined» | Вы нажали **Cancel** на странице Google. Снова запустите `session start` и разрешите доступ. |
 | Google показывает страницу «unverified app» | Ваше собственное приложение не проходило проверку Google, а для личного использования она не нужна. Нажмите на странице ссылку, ведущую дальше к приложению. Если Google не пускает через приложение WireCat, используйте своё приложение ([шаги](./installation.md#make-your-own-google-app)). |
 | «Google did not grant read access to Calendar» (`oauth.scope-missing`) | На странице согласия Google можно снять галочку с Календаря. Снова запустите `session start` и оставьте её. С `--grant write` — «Google did not grant the write permission»: оставьте отмеченным и доступ к событиям. |
+| «the Google Meet API is turned off for this OAuth project» | В проекте вашего приложения выключен Meet API. [Включите его](https://console.cloud.google.com/apis/library/meet.googleapis.com), подождите несколько минут и снова выполните `meetings sync`. |
+| «this profile signed in without access to Google Meet» (`oauth.scope-missing`, право `meetings`) | Выполните `session start --grant …` из сообщения. В нём названы и права, которые у профиля уже есть, потому что новый вход их заменяет. |
+| «Google Meet has not finished the transcript yet» | Google делает расшифровку после звонка. `meetings sync` оставляет звонок в очереди и прочитает его в следующий раз; ничего делать не нужно. Если звонок держит синхронизацию 25 дней, её ответ скажет об этом: Google удаляет звонок через 30 дней после его окончания. |
 | «the Google Calendar API is turned off for this OAuth project» | Вход прошёл, но Calendar API в проекте выключен. [Включите его](https://console.cloud.google.com/apis/library/calendar-json.googleapis.com) в проекте своего клиента, подождите несколько минут и повторите команду. |
 | «Google sign-in was refused (HTTP 400); run gcal personal session start again» (`oauth.expired`) через неделю после входа | Ваше приложение в режиме **Testing**, где вход заканчивается через 7 дней после согласия ([пояснение Google](https://developers.google.com/identity/protocols/oauth2#expiration)). Снова запустите `session start`. Чтобы это прекратилось, опубликуйте приложение: см. [шаг 4](./installation.md#4-audience). |
 
