@@ -32,8 +32,6 @@ conectan herramientas). Consulta
 
 - Encontrar llamadas perdidas y llamadas en una dirección con un filtro en `meetings list`.
 - Leer el registro CEL de Asterisk (el registro de eventos de canal), donde las transferencias y las colas son exactas.
-- Abrir una llamada en WireCat Desktop desde el enlace que imprime `meetings show`, cuando Desktop admita enlaces a
-  llamadas.
 
 <a id="what-it-will-not-do"></a>
 

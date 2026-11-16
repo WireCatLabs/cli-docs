@@ -8,7 +8,7 @@ title: "Comparado con otras herramientas"
 `pbx` es una línea de comandos y un servidor MCP que copia las llamadas de una centralita Asterisk a tu ordenador,
 convierte allí sus grabaciones en texto y se las da a tu agente de IA para leerlas. Aquí aparece junto a las otras
 herramientas que se usan para leer, transcribir y buscar las llamadas de un sistema Asterisk o FreePBX, para que veas
-cuál encaja con tu tarea. Las marcas de `pbx` salen de la versión 0.6.0, revisada el 15 de noviembre de 2026.
+cuál encaja con tu tarea. Las marcas de `pbx` salen de la versión 0.7.1, revisada el 16 de noviembre de 2026.
 Las marcas de las demás herramientas salen de sus propios README y su documentación, revisados el 13 de noviembre de
 2026. Para esta página no se conectó ninguna herramienta a una centralita real, y una herramienta puede hacer más de lo
 que dicen sus páginas.
@@ -38,7 +38,7 @@ Las herramientas:
 | Ver a la misma persona en llamadas, chats, correo y el CRM | ✅ | ➖ | ➖ | ➖ |
 | **Grabaciones y transcripciones** | | | | |
 | Encontrar la grabación de una llamada | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26083384/PBX+GUI+-+CDR+Module+GraphQL+APIs) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L73) |
-| Escuchar una grabación desde un enlace | ❌ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | ➖ |
+| Escuchar una grabación desde un enlace | 🟡 | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | ➖ |
 | Convertir en texto las llamadas grabadas | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [✅](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L6) |
 | Las grabaciones no salen de tus ordenadores | ✅ | [❌](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L75) |
 | Transcribir de una vez las grabaciones que ya tienes | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L39) |
@@ -99,8 +99,10 @@ Notas sobre las marcas:
   reparto de resultados solo para VICIdial, dentro de su informe de revisión.
 - **Marcar llamadas.** `pbx tags add` marca cada llamada que encuentra una búsqueda, y una ejecución programada
   sigue marcando las nuevas. Scribe etiqueta una llamada por las palabras que configures.
-- **Grabaciones con un enlace.** `pbx` enlaza cada llamada con su archivo de grabación por la ruta. No la sirve
-  en streaming.
+- **Grabaciones con un enlace.** WireCat Desktop reproduce la grabación en la propia ficha de la llamada, y el
+  enlace que imprime `pbx meetings show` abre esa ficha. Funciona cuando la carpeta de grabaciones está en este
+  ordenador. Una grabación que `pbx` lee por SFTP se queda en la centralita, y la ficha no puede reproducirla. `pbx`
+  por sí mismo no sirve la grabación en streaming.
 
 ## Cuándo encaja mejor otra herramienta
 

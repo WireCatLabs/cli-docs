@@ -12,10 +12,10 @@ title: "Настройки"
 
 **На этой странице:**
 
-1. Источник
-2. Расшифровка
-3. Разрешения
-4. Записи запусков
+1. [Источник](#the-source)
+2. [Расшифровка](#transcription)
+3. [Разрешения](#permissions)
+4. [Записи запусков](#run-records)
 
 ```sh
 pbx office config show
@@ -49,6 +49,7 @@ pbx office config unset cdr_csv_path
 | `cdr_timezone` | пояс этого компьютера | часовой пояс времени в записях о звонках |
 | `phone_region` | — | страна для номеров без `+`, например `ru`, или несколько: `es,ru` |
 | `extension_pattern` | `^\d{2,5}$` | какие номера считаются внутренними |
+| `extension_names` | — | имена внутренних номеров, в виде `101=Anna Smirnova,103=Vera Orlova`; важнее имён из FreePBX и из Caller ID |
 | `files_from` | `local` | `local` или `sftp`, чтобы читать `Master.csv` и аудиозаписи на АТС |
 | `sftp_host`, `sftp_port`, `sftp_user` | —, 22, — | SSH-сервер АТС для `files_from sftp` |
 | `sftp_key_path` | — | файл закрытого ключа; без него `session start` спрашивает пароль SFTP |
@@ -85,7 +86,7 @@ pbx office config set permissions.meetings.transcribe deny
 ## Записи запусков
 
 Запись запуска — это то, что инструмент сохранил о выполненной команде. Команда, которая завершилась ошибкой,
-сохраняется как запуск. Его покажут `pbx runs list` и `runs show`. `meetings sync`, `meetings
-transcribe` и `session status --check` работают внутри запуска. Поэтому с `--record` сохраняются и их успешные
+сохраняется как запуск. Его покажут `pbx runs list` и `runs show`. `meetings sync`,
+`meetings transcribe` и `session status --check` работают внутри запуска. Поэтому с `--record` сохраняются и их успешные
 запуски. `record_input` решает, хранит ли запуск слова, которые вы набрали. Секреты скрываются в любом случае, см.
 [Безопасность](./security.md).

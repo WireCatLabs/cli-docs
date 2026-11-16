@@ -19,8 +19,11 @@ No expongas a internet la base de datos ni AMI (la interfaz con la que los progr
 
 **En esta página:**
 
-1. Qué guarda el almacén
-2. Grabaciones y consentimiento
+1. [Qué guarda el almacén](#what-the-store-holds)
+2. [Grabaciones y consentimiento](#recordings-and-consent)
+3. [El servidor MCP](#the-mcp-server)
+4. [Qué oculta un registro de ejecución](#what-a-run-record-hides)
+5. [Archivos en este ordenador](#files-on-this-computer)
 
 `session start` guarda las contraseñas que necesita un perfil (el nombre que diste a la conexión con una
 centralita). Las guarda en el llavero del sistema (el lugar donde el sistema guarda las contraseñas), o en un
@@ -61,10 +64,18 @@ La ley de tu país decide cómo (en Rusia, por ejemplo, la ley 152-FZ de datos p
 la llamada se graba, y guardar las grabaciones solo el tiempo permitido, son deberes del titular de la centralita.
 `pbx` solo lee las grabaciones que la centralita ya hizo, y no borra ninguna.
 
+<a id="the-mcp-server"></a>
+
+## El servidor MCP
+
 `pbx personal mcp serve --http` escucha solo en `127.0.0.1`. Sirve a aplicaciones del navegador que llegan a él a
 través de tu propio túnel. Cada aplicación inicia sesión con un código de un solo uso. El servidor guarda un hash de
 cada inicio de sesión que concede, en la carpeta de estado, que solo tú puedes leer. `pbx personal mcp revoke` los
 olvida todos.
+
+<a id="what-a-run-record-hides"></a>
+
+## Qué oculta un registro de ejecución
 
 Un registro de ejecución guarda la línea de comandos tal como la escribiste, así que `pbx runs show` te dice qué se
 ejecutó. Aun así, un secreto se guarda como `[redacted]`: una opción con nombre de token o de contraseña, una
@@ -86,6 +97,10 @@ sigue al nombre de un secreto, venga después de `=`, de `:` o de un espacio: `p
 - una contraseña corta escrita sin el nombre de un secreto delante;
 - un secreto dentro de un enlace o de una ruta de archivo, salvo que tenga un formato conocido o vaya tras el nombre
   de un secreto.
+
+<a id="files-on-this-computer"></a>
+
+## Archivos en este ordenador
 
 `config.json` se guarda de modo que solo tú puedas leerlo (`0600`), y su carpeta se crea solo para ti (`0700`). Un
 archivo o una carpeta que creó una versión anterior puede estar abierto a otros usuarios del ordenador. `pbx doctor`

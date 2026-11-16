@@ -126,7 +126,7 @@
     "repo": "WireCatLabs/asterisk-cli",
     "package": "@wirecat/asterisk-cli",
     "lang": "en",
-    "docsRef": "v0.6.0",
+    "docsRef": "v0.7.1",
     "tier": "extra",
     "category": "calls",
     "summary": {

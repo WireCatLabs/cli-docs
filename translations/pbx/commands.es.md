@@ -132,7 +132,7 @@ pbx meetings list [query] [options]
 | `--limit <n>` | meetings per page; the profile's defaults.limit when absent. |
 | `--page <n>` | which page, starting at 1. |
 
-**Returns:** meeting — ref, id, provider_id, provider, account, title, url, started_at, and 11 more; every field: pbx commands info meetings list
+**Returns:** meeting — ref, id, provider_id, provider, account, title, url, started_at, and 12 more; every field: pbx commands info meetings list
 
 **Next usually:** `pbx meetings show <meeting>`, `pbx meetings transcript <meeting>`, `pbx meetings summary <meeting>`
 
@@ -154,7 +154,7 @@ pbx meetings show <meeting> [options]
 |---|---|
 | `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
 
-**Returns:** meeting details — ref, id, provider_id, provider, account, title, url, started_at, and 20 more; every field: pbx commands info meetings show
+**Returns:** meeting details — ref, id, provider_id, provider, account, title, url, started_at, and 21 more; every field: pbx commands info meetings show
 
 **Next usually:** `pbx meetings transcript <meeting>`, `pbx meetings summary <meeting>`, `pbx meetings export <meeting>`
 
@@ -879,7 +879,7 @@ pbx config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, db_ssh_host, db_ssh_port, db_ssh_user, db_ssh_key_path, db_ssh_host_key, recordings_path, recordings_pattern, recordings_channels, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, transcribe_engine, transcribe_model, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, db_ssh_host, db_ssh_port, db_ssh_user, db_ssh_key_path, db_ssh_host_key, recordings_path, recordings_pattern, recordings_channels, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, extension_names, transcribe_engine, transcribe_model, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -900,7 +900,7 @@ pbx config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, db_ssh_host, db_ssh_port, db_ssh_user, db_ssh_key_path, db_ssh_host_key, recordings_path, recordings_pattern, recordings_channels, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, transcribe_engine, transcribe_model, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, cdr_source, cdr_csv_path, cdr_csv_columns, db_host, db_port, db_name, db_user, db_table, db_tls, db_ssh_host, db_ssh_port, db_ssh_user, db_ssh_key_path, db_ssh_host_key, recordings_path, recordings_pattern, recordings_channels, files_from, sftp_host, sftp_port, sftp_user, sftp_key_path, sftp_host_key, cdr_timezone, phone_region, extension_pattern, extension_names, transcribe_engine, transcribe_model, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
 
 | Option | What it does |
 |---|---|
@@ -935,6 +935,56 @@ pbx config repair [options]
 | `--dry-run` | say what it would fix, and change nothing. |
 
 **Example:** `pbx config repair`, `pbx config repair --dry-run`
+
+## `pbx setup`
+
+connect this profile to pbx: the same questions WireCat Desktop shows, asked in the terminal, checked, and saved only when the check succeeds; show, apply and run are the same flow for programs
+
+### `pbx setup show`
+
+print the connection flow as a WireCat setup document: steps, texts in every language, and each setting's own JSON Schema; with a profile it adds the profile's current values, a secret only as { set: true }
+
+```sh
+pbx setup show
+```
+
+**Example:** `pbx personal setup show --json`, `pbx office setup show --json`
+
+### `pbx setup apply`
+
+read the answers as one JSON object on stdin (input id → value), keep only those on the path they lead to, check each with its setting's own schema, then run the CLI's check and save the settings and secrets; --dry-run only checks and saves nothing
+
+**Changes something on this computer only.**
+
+```sh
+pbx setup apply [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--dry-run` | check the answers, and save nothing. |
+
+**Example:** `pbx office setup apply --dry-run --json`, `pbx office setup apply --json`
+
+### `pbx setup run`
+
+run one run step of the flow: apply checks the answers, runs the CLI's check and saves; the sign-in events go to stderr as JSON lines and the result to stdout; with --answer-stdin the answers are stdin's first line
+
+**Changes something on this computer only.**
+
+```sh
+pbx setup run <action> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `action` | required | the step's action: apply. |
+
+| Option | What it does |
+|---|---|
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
+
+**Example:** `pbx office setup run apply --json --answer-stdin`
 
 ## `pbx runs`
 

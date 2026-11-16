@@ -2814,24 +2814,24 @@
   {
     "tool": "pbx",
     "slug": "changelog",
-    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/CHANGELOG.md",
+    "source": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.1/CHANGELOG.md",
     "reason": "The released 0.2.0 entry links docs/asterisk.md, which v0.4.0 merged into the install and connect page; the sync pins the link to a tag where that file is gone.",
     "replacements": {
       "en": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.1/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ],
       "ru": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.1/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ],
       "es": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.1/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ]
