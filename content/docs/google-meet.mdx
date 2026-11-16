@@ -7,24 +7,25 @@ Google Meet keeps a call's record, its participants and its transcript for 30 da
 Your AI agent cannot see them next to the calendar event, the chats about the meeting or your notes. Google
 Calendar's tool `gcal` copies your Meet calls to your computer and keeps them there after Google deletes them.
 
-Your agent can then answer what was decided on a call, who joined and who said what, and quote the passage with its
-call and time. It finds a call by the calendar event, by a person or by a word, beside your messages and notes.
+Ask your agent what was decided on a call, who joined and who said what, and it answers with a quote, its call and
+its time. It finds the call by the calendar event or by a person, beside your messages and notes. You can also save a
+call as a file and add a Meet link to an event.
 
-`gcal` keeps each call as a meeting in the local store on your computer, the one file all WireCat tools share, and
-links it to its calendar event by the room's link. There is no separate Google Meet tool. You need `gcal` installed
-and signed in to your Google account ([installation](./gcal/installation.md)). Transcripts come only from a Google
-Workspace account: a personal Google account gets none.
+`gcal` keeps each call as a meeting in the local store that all WireCat tools share, and links it to its calendar
+event. You need `gcal` installed and signed in to your Google account ([installation](./gcal/installation.md)).
+Transcripts come only from a Google Workspace account: a personal Google account gets calls and participants without
+transcripts.
 
 **On this page:**
 
 1. [Short version](#short-version)
-2. [Which calls you get](#which-calls-you-get)
-3. [Keep your calls up to date](#keep-your-calls-up-to-date)
-4. [What a meeting keeps](#what-a-meeting-keeps)
-5. [Ask your agent](#ask-your-agent)
-6. [Find a person across calls](#find-a-person-across-calls)
-7. [Save a call as a file](#save-a-call-as-a-file)
-8. [Add a Meet link or make a room](#add-a-meet-link-or-make-a-room)
+2. [Ask your agent](#ask-your-agent)
+3. [Find a person across calls](#find-a-person-across-calls)
+4. [Save a call as a file](#save-a-call-as-a-file)
+5. [Add a Meet link or make a room](#add-a-meet-link-or-make-a-room)
+6. [Which calls you get](#which-calls-you-get)
+7. [Keep your calls up to date](#keep-your-calls-up-to-date)
+8. [What a meeting keeps](#what-a-meeting-keeps)
 9. [If a call or transcript is missing](#if-a-call-or-transcript-is-missing)
 
 ## Short version
@@ -45,54 +46,6 @@ A new sign-in replaces the permissions the profile had. If you also change event
 `gcal personal session start --grant write,meetings`. If you sign in through your own Google app, turn on the
 [Google Meet API](https://console.cloud.google.com/apis/library/meet.googleapis.com) in its project first.
 
-## Which calls you get
-
-- **The calls you organized.** Google lists only those. A call you joined in someone else's room is not listed, but
-  `meetings show` opens it by Google's id of the call.
-- **The last 30 days.** Google deletes a call's record, its participants and its transcript 30 days after the call.
-  A call already in the store stays there, and the transcript Doc stays in Google Drive.
-- **Transcripts after the call.** Google makes the transcript after the call ends. Until it is ready, the sync keeps
-  the call due and reads it again next time.
-- **Transcripts on Google Workspace only.** A personal Google account gets calls and participants, but no
-  transcript.
-
-## Keep your calls up to date
-
-Run the sync at least every few weeks, so no call passes Google's 30 days first:
-
-```sh
-gcal personal meetings sync
-gcal personal meetings sync --since-time 2026-11-01
-gcal personal meetings sync --rescan
-```
-
-A sync goes on from where the last one stopped. `--since-time` starts from a date, and `--rescan` reads the last 30
-days again. When Google limits the requests, the sync keeps what it saved and says when to run it again. When one call
-has waited for its transcript for 25 days or more, the sync's answer says since when.
-
-To run it on its own, install a timer as for [feeds](./gcal/usage.md#run-it-on-a-timer):
-
-```sh
-gcal personal schedule command meet --every 1d -- meetings sync
-```
-
-## What a meeting keeps
-
-- **When the call started and ended, and who joined.**
-- **The transcript**, line by line with the speaker.
-- **The Drive files Google made**: the transcript Doc, the recording and Gemini's notes, by their Drive file id.
-  `gcal` does not download them and asks for no Drive permission. The [Google Drive tool](./drive/index.md) reads
-  them.
-- **The calendar event.** A call joins its event by the room's link (`meet.google.com/abc-defg-hij`). Meet gives a
-  call no title, so the event's title is used.
-
-`meetings list` and `meetings show` ask Google and the store at once, and save what Google returns. Each meeting says
-where it was found: `found_in` is `server`, `archive` or `both`. Add `--backend archive` to read the store only,
-without the internet.
-
-Participant names and what they said come from other people. `gcal` marks them as untrusted, so your agent reads them
-as data and never follows them as instructions.
-
 ## Ask your agent
 
 Ask in your own words:
@@ -102,15 +55,14 @@ Find my Google Meet calls from the last month about the Harbour budget. Quote wh
 date and the speaker. Tell me which calls have no transcript yet.
 ```
 
-To search the transcripts with your messages and notes, the agent runs `search all`:
+To search your calls with your messages and notes, the agent runs `search all`:
 
 ```sh
 gcal personal search all "budget"
 ```
 
-`search all` finds a call by its title at once, but finds words in a transcript only after the meetings' search
-index holds them, and it does not build that index. Until then, its answer says under `missing` that recent meetings
-are not found yet; `meetings transcript` still shows the whole text.
+For now `search all` finds a call by its title but not by words in its transcript, and says so under `missing`. The
+agent then reads the whole call with `meetings transcript`.
 
 A useful answer names each call, its date and the passage it quotes. An empty answer does not prove that a call
 never happened: see [If a call or transcript is missing](#if-a-call-or-transcript-is-missing).
@@ -160,6 +112,54 @@ gcal personal meetings update spaces/jQCFfuBOdN5z --setting moderation=true
 `auto_recording` and `auto_smart_notes` turn on the transcript, the recording and Gemini's notes in every call of the
 room. Both commands ask first; `--yes` answers for a script. A room has no title or time: the calendar event carries
 them.
+
+## Which calls you get
+
+- **The calls you organized.** Google lists only those. A call you joined in someone else's room is not listed, but
+  `meetings show` opens it by Google's id of the call.
+- **The last 30 days.** Google deletes a call's record, its participants and its transcript 30 days after the call.
+  A call already in the store stays there, and the transcript Doc stays in Google Drive.
+- **Transcripts after the call.** Google makes the transcript after the call ends. Until it is ready, the sync keeps
+  the call due and reads it again next time.
+- **Transcripts on Google Workspace only.** A personal Google account gets calls and participants, but no
+  transcript.
+
+## Keep your calls up to date
+
+Run the sync at least every few weeks, so no call passes Google's 30 days first:
+
+```sh
+gcal personal meetings sync
+gcal personal meetings sync --since-time 2026-11-01
+gcal personal meetings sync --rescan
+```
+
+A sync goes on from where the last one stopped. `--since-time` starts from a date, and `--rescan` reads the last 30
+days again. When Google limits the requests, the sync keeps what it saved and says when to run it again. When one call
+has waited for its transcript for 25 days or more, the sync's answer says since when.
+
+To run it on its own, install a timer as for [feeds](./gcal/usage.md#run-it-on-a-timer):
+
+```sh
+gcal personal schedule command meet --every 1d -- meetings sync
+```
+
+## What a meeting keeps
+
+- **When the call started and ended, and who joined.**
+- **The transcript**, line by line with the speaker.
+- **The Drive files Google made**: the transcript Doc, the recording and Gemini's notes, by their Drive file id.
+  `gcal` does not download them and asks for no Drive permission. The [Google Drive tool](./drive/index.md) reads
+  them.
+- **The calendar event.** A call joins its event by the room's link (`meet.google.com/abc-defg-hij`). Meet gives a
+  call no title, so the event's title is used.
+
+`meetings list` and `meetings show` ask Google and the store at once, and save what Google returns. Each meeting says
+where it was found: `found_in` is `server`, `archive` or `both`. Add `--backend archive` to read the store only,
+without the internet.
+
+Participant names and what they said come from other people. `gcal` marks them as untrusted, so your agent reads them
+as data and never follows them as instructions.
 
 ## If a call or transcript is missing
 
