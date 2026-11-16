@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+<title>amo session start</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { max-width: 36rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5; }
+  code { display: block; padding: .75rem; border-radius: .5rem; background: #8882; word-break: break-all; user-select: all; }
+</style>
+</head>
+<body>
+<p id="status">Finishing the amoCRM sign-in…</p>
+<div id="manual" hidden>
+  <p>If <code style="display:inline;padding:0">amo</code> is still waiting, paste this into it:</p>
+  <code id="answer"></code>
+</div>
+<script>
+  // An amoCRM integration has one fixed Redirect URI, so amoCRM lands here and the browser goes on to
+  // amo's local port, which amo put in front of the state. The code is useless without the integration's secret
+  // key, which amo keeps locally.
+  const params = new URLSearchParams(location.search)
+  history.replaceState(null, "", location.pathname)
+  const state = params.get("state") ?? ""
+  const port = Number(state.split(".")[0])
+  const status = document.getElementById("status")
+  const showManual = () => {
+    document.getElementById("answer").textContent = params.toString()
+    document.getElementById("manual").hidden = false
+  }
+  const local = Number.isInteger(port) && port >= 1024 && port <= 65535
+  if (local && (params.has("code") || params.has("error"))) {
+    location.replace(`http://127.0.0.1:${port}/callback?${params}`)
+    setTimeout(showManual, 3000)
+  } else if (params.has("error")) {
+    status.textContent = `amoCRM did not sign you in: ${params.get("error_description") ?? params.get("error")}`
+  } else if (params.has("code")) {
+    status.textContent = "amoCRM signed you in."
+    showManual()
+  } else {
+    status.textContent = "This page finishes an amoCRM or Kommo sign-in for amo. Start one with " +
+      "amo <profile> session start --host <your account> --client-id <integration ID>."
+  }
+</script>
+</body>
+</html>

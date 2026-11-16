@@ -8,7 +8,7 @@ export const privacyCopy: Record<
     title: "Privacy Policy",
     intro:
       "How WireCat handles Google, Microsoft, Zoom and email account data, local documents, optional AI processing, WireCat Desktop's update and news checks and bug reports, and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 11 November 2026",
+    updated: "Last updated: 16 November 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -37,6 +37,13 @@ export const privacyCopy: Record<
         title: "Bitrix24 sign-in through a local application (b24)",
         paragraphs: [
           "When b24 signs in through a local application you created in your Bitrix24 portal, the sign-in returns through wirecat.dev/webhooks/apps/b24-callback. That page is static: a script in your browser passes the one-time code to b24 on your computer and removes it from the address bar. The code works once, for 30 seconds, and only with the application’s secret key, which stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
+        ],
+      },
+      {
+        id: "amo-access",
+        title: "amoCRM and Kommo sign-in through your own integration (amo)",
+        paragraphs: [
+          "When amo signs in through a private integration you created in your amoCRM or Kommo account, the sign-in returns through wirecat.dev/webhooks/apps/amo-callback. That page is static: a script in your browser passes the one-time code to amo on your computer and removes it from the address bar. The code works once, for 20 minutes, and only with the integration’s secret key, which stays on your computer. wirecat.dev does not store it; Cloudflare, which serves the page, receives the request like any other page view.",
         ],
       },
       {
@@ -178,7 +185,7 @@ export const privacyCopy: Record<
     title: "Политика конфиденциальности",
     intro:
       "Как WireCat обрабатывает данные аккаунтов Google, Microsoft, Zoom и почты, локальные документы, дополнительные ИИ-запросы, проверку обновлений и новостей и отчёты об ошибках в WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 11 ноября 2026 г.",
+    updated: "Обновлено: 16 ноября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -207,6 +214,13 @@ export const privacyCopy: Record<
         title: "Вход в Битрикс24 через локальное приложение (b24)",
         paragraphs: [
           "Когда вы входите в b24 через локальное приложение, созданное в вашем портале Битрикс24, вход возвращается через wirecat.dev/webhooks/apps/b24-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код b24 на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз, в течение 30 секунд, и только вместе с секретным ключом приложения, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
+        ],
+      },
+      {
+        id: "amo-access",
+        title: "Вход в amoCRM и Kommo через вашу интеграцию (amo)",
+        paragraphs: [
+          "Когда вы входите в amo через приватную интеграцию, созданную в вашем аккаунте amoCRM или Kommo, вход возвращается через wirecat.dev/webhooks/apps/amo-callback. Это статическая страница: скрипт в вашем браузере передаёт одноразовый код amo на вашем компьютере и убирает его из адресной строки. Код срабатывает один раз, в течение 20 минут, и только вместе с секретным ключом интеграции, который остаётся на вашем компьютере. wirecat.dev его не сохраняет; Cloudflare, который отдаёт страницу, получает запрос как любой другой просмотр страницы.",
         ],
       },
       {
@@ -348,7 +362,7 @@ export const privacyCopy: Record<
     title: "Política de privacidad",
     intro:
       "Cómo WireCat trata los datos de cuentas de Google, Microsoft, Zoom y correo, los documentos locales, el procesamiento opcional con IA, las comprobaciones de actualizaciones y novedades y los informes de errores de WireCat Desktop, y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 11 de noviembre de 2026",
+    updated: "Última actualización: 16 de noviembre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -377,6 +391,13 @@ export const privacyCopy: Record<
         title: "Inicio de sesión en Bitrix24 con una aplicación local (b24)",
         paragraphs: [
           "Cuando inicias sesión en b24 con una aplicación local que creaste en tu portal de Bitrix24, el inicio de sesión vuelve a través de wirecat.dev/webhooks/apps/b24-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a b24 en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez, durante 30 segundos, y solo junto con la clave secreta de la aplicación, que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
+        ],
+      },
+      {
+        id: "amo-access",
+        title: "Inicio de sesión en amoCRM y Kommo con tu propia integración (amo)",
+        paragraphs: [
+          "Cuando inicias sesión en amo con una integración privada que creaste en tu cuenta de amoCRM o Kommo, el inicio de sesión vuelve a través de wirecat.dev/webhooks/apps/amo-callback. Es una página estática: un script en tu navegador pasa el código de un solo uso a amo en tu ordenador y lo quita de la barra de direcciones. El código funciona una sola vez, durante 20 minutos, y solo junto con la clave secreta de la integración, que se queda en tu ordenador. wirecat.dev no lo guarda; Cloudflare, que sirve la página, recibe la petición como cualquier otra visita.",
         ],
       },
       {
