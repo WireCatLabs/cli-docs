@@ -37,6 +37,23 @@ jobs:
       - name: Early bug checks
         timeout-minutes: 2
         run: pnpm run --if-present ci:quick
+      # The deploy after #653 refused links to a page pbx 0.6.0 removed (fixed in #654); `check:links` needs a build.
+      - run: pnpm check:links --source
+      # The deploy after #652 refused a new pin without a roadmap review (fixed in #653). Sync takes about 30 s, so only
+      # a change to a pin, a review or this check pays for it.
+      - name: Release notes
+        if: github.event_name == 'pull_request'
+        timeout-minutes: 2
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if git diff --quiet "$BASE_SHA" HEAD -- tools.json docs/release-notes-review.json scripts/sync.ts \
+            scripts/release-notes.ts .github/workflows/standards.yml; then
+            echo "No pin, review or release-note check changed"
+            exit 0
+          fi
+          pnpm sync --capture-only
+          pnpm docs:release-notes
       - name: Scan new commits for secrets
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}

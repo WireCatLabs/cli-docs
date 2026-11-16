@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
-import { linkProblems, markdownLinkProblems } from "./check-links.ts"
+import { linkProblems, markdownLinkProblems, sourceLinkProblems } from "./check-links.ts"
 
 describe("linkProblems", () => {
   let out: string
@@ -97,6 +97,47 @@ describe("linkProblems", () => {
     write("ru/docs/installation.html", '<h2 id="вход">Вход</h2>')
     expect(markdownLinkProblems(out)).toEqual([
       "llms.mdx/docs/agents/content.md: /llms.mdx/docs/ru/installation/content.md#gone — no such heading",
+    ])
+  })
+})
+
+describe("sourceLinkProblems", () => {
+  let root: string
+  const write = (path: string, text: string) => {
+    mkdirSync(dirname(join(root, path)), { recursive: true })
+    writeFileSync(join(root, path), text)
+  }
+  beforeEach(() => {
+    root = mkdtempSync(join(tmpdir(), "source-links-"))
+    write("tools.json", JSON.stringify([{ name: "pbx" }]))
+    write("translations/pbx/installation.ru.md", "# Установка\n")
+    write("translations/overviews/pbx.ru.md", "# Asterisk\n")
+    write("content/docs/installation.mdx", "# Installation\n\n## What you need\n")
+  })
+  afterEach(() => rmSync(root, { recursive: true, force: true }))
+
+  it("rejects a link to a tool page its release removed, though a redirect stub is left (#654)", () => {
+    write(
+      "public/en/docs/pbx/asterisk/index.html",
+      '<meta http-equiv="refresh" content="0; url=/en/docs/pbx/installation">',
+    )
+    write(
+      "content/docs/features.mdx",
+      "[connect](./pbx/asterisk.md), [install](./pbx/installation.md#any), [overview](./pbx/index.md)\n",
+    )
+    expect(sourceLinkProblems(root)).toEqual([
+      "content/docs/features.mdx: ./pbx/asterisk.md — no such page (content/docs/pbx/asterisk)",
+    ])
+  })
+
+  it("checks an authored page's anchors in the same language and links inside translations", () => {
+    write("content/docs/installation.ru.mdx", "# Установка\n\n## Что нужно\n")
+    write("content/docs/agents.mdx", "[ok](./installation.mdx#what-you-need) [gone](./installation.mdx#gone)\n")
+    write("content/docs/agents.ru.mdx", "[ok](./installation.mdx#что-нужно)\n")
+    write("translations/pbx/usage.ru.md", "[install](./installation.md) [missing](./asterisk.md)\n")
+    expect(sourceLinkProblems(root)).toEqual([
+      "content/docs/agents.mdx: ./installation.mdx#gone — no such heading",
+      "translations/pbx/usage.ru.md: ./asterisk.md — no such page (content/docs/pbx/asterisk)",
     ])
   })
 })
