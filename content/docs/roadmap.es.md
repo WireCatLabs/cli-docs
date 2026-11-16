@@ -27,6 +27,8 @@ decidimos qué viene después.
   en la búsqueda junto a tus mensajes.
 - **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
   junto a tus mensajes.
+- **[amoCRM y Kommo](./amo/index.md)**: tus negociaciones y sus clientes en tu ordenador, con lo que cambió desde ayer,
+  en la búsqueda junto a tus mensajes.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al
   evento del calendario y guardadas en tu ordenador después de que Google las borre.
 
@@ -98,6 +100,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de Google Calendar](./gcal/roadmap.md)
 - [Hoja de ruta de Mail](./mail/roadmap.md)
 - [Hoja de ruta de Bitrix24](./b24/roadmap.md)
+- [Hoja de ruta de amoCRM](./amo/roadmap.md)
 - [Hoja de ruta de Asterisk](./pbx/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
 - [Hoja de ruta de WhatsApp](./wa/roadmap.md)

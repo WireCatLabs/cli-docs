@@ -387,5 +387,19 @@
   "notion/usage.ru": "b2205aea7c685d5c55fa1c4275022ef5b46eb04422fe6169a2afe9dc9d7e05a3",
   "notion/usage.es": "b2205aea7c685d5c55fa1c4275022ef5b46eb04422fe6169a2afe9dc9d7e05a3",
   "notion/commands.ru": "a81417f05e8afdb90b377f0ffe5c98c26434d3972a86037bc378c12373ef99c3",
-  "notion/commands.es": "a81417f05e8afdb90b377f0ffe5c98c26434d3972a86037bc378c12373ef99c3"
+  "notion/commands.es": "a81417f05e8afdb90b377f0ffe5c98c26434d3972a86037bc378c12373ef99c3",
+  "amo/installation.ru": "a2b6d3dddee3e6401ea03416276401ebb75229ad5ace950ae871cc0a213f83e6",
+  "amo/installation.es": "a2b6d3dddee3e6401ea03416276401ebb75229ad5ace950ae871cc0a213f83e6",
+  "amo/usage.ru": "9ca6934d02f4c0dfa1819fd3171d26e40fc366411a3d189c93a3d7926f221cd9",
+  "amo/usage.es": "9ca6934d02f4c0dfa1819fd3171d26e40fc366411a3d189c93a3d7926f221cd9",
+  "amo/configuration.ru": "bc84fcf460e72078766718cf08f5878be7035b4532b19633e9222261e90ff2c2",
+  "amo/configuration.es": "bc84fcf460e72078766718cf08f5878be7035b4532b19633e9222261e90ff2c2",
+  "amo/troubleshooting.ru": "64bed072fe036d50ce8eae934267ad37d9cc4c9c9e370ce16e39746aa896cb23",
+  "amo/troubleshooting.es": "64bed072fe036d50ce8eae934267ad37d9cc4c9c9e370ce16e39746aa896cb23",
+  "amo/security.ru": "fee652c7cfb00298add1c9cdc1a775aeed7a2c50f1683477d2602a2d26406ec8",
+  "amo/security.es": "fee652c7cfb00298add1c9cdc1a775aeed7a2c50f1683477d2602a2d26406ec8",
+  "amo/changelog.ru": "b2df71d0968560fad15421b9cbebf4994bdbf048fc6313a856c2b9254c3ef0c5",
+  "amo/changelog.es": "b2df71d0968560fad15421b9cbebf4994bdbf048fc6313a856c2b9254c3ef0c5",
+  "amo/commands.ru": "d4a967b0c8a34aff4bf15d2d0496a3d51834a89acfdcc768ef9ff3ac4192ef7f",
+  "amo/commands.es": "d4a967b0c8a34aff4bf15d2d0496a3d51834a89acfdcc768ef9ff3ac4192ef7f"
 }

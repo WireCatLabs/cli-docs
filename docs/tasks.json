@@ -237,6 +237,39 @@
     "families": { "b24": ["config", "doctor", "runs", "upgrade"] }
   },
   {
+    "id": "crm-amo-connect",
+    "pages": ["amo/installation.md", "amo/usage.md", "amo/security.md"],
+    "families": { "amo": ["session", "account", "setup", "skill", "mcp"] }
+  },
+  {
+    "id": "crm-amo-read-change",
+    "pages": ["amo/usage.md", "amo/commands.md"],
+    "families": {
+      "amo": [
+        "sync",
+        "schedule",
+        "store",
+        "deals",
+        "pipelines",
+        "stages",
+        "people",
+        "organizations",
+        "users",
+        "activities",
+        "changes",
+        "fields",
+        "search",
+        "api",
+        "commands"
+      ]
+    }
+  },
+  {
+    "id": "crm-amo-upkeep",
+    "pages": ["amo/configuration.md", "amo/troubleshooting.md"],
+    "families": { "amo": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
     "id": "calls-connect",
     "pages": ["pbx/installation.md", "pbx/usage.md", "pbx/security.md"],
     "families": { "pbx": ["session", "skill", "mcp"] }

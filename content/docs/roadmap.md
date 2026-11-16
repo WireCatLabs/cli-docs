@@ -26,6 +26,8 @@ what comes next.
   and searchable next to your messages.
 - **[Notion](./notion/index.md)**: your Notion pages and databases on your computer, searchable offline next to your
   messages.
+- **[amoCRM and Kommo](./amo/index.md)**: your own deals and their clients on your computer, with what changed since
+  yesterday, searchable next to your messages.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -91,6 +93,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [Google Calendar roadmap](./gcal/roadmap.md)
 - [Mail roadmap](./mail/roadmap.md)
 - [Bitrix24 roadmap](./b24/roadmap.md)
+- [amoCRM roadmap](./amo/roadmap.md)
 - [Asterisk roadmap](./pbx/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)

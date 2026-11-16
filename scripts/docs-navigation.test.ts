@@ -160,7 +160,7 @@ describe("tool folders in the sidebar", () => {
     expect(icons).toEqual([CalendarDays, WhatsAppIcon, MessageSquare])
   })
 
-  it("puts Zoom, Google Meet, Telemost and Asterisk in an open Meetings & Calls group and Bitrix24 in a closed CRM group, keeping their URLs", () => {
+  it("puts Zoom, Google Meet, Telemost and Asterisk in an open Meetings & Calls group and Bitrix24 and amoCRM in a closed CRM group, keeping their URLs", () => {
     const folder = (tool: string): Node => ({
       type: "folder",
       name: tool,
@@ -169,7 +169,7 @@ describe("tool folders in the sidebar", () => {
     })
     const meet: Node = { type: "page", name: "Google Meet", url: "/ru/docs/google-meet" }
     const telemost: Node = { type: "page", name: "Телемост", url: "/ru/docs/telemost" }
-    const children = [folder("zm"), meet, telemost, ...["b24", "pbx", "memo"].map(folder)]
+    const children = [folder("zm"), meet, telemost, ...["b24", "amo", "pbx", "memo"].map(folder)]
     const tree = unifiedDocsTree({ name: "Docs", children }, "ru")
     const groups = tree.children.map((node) =>
       node.type === "folder" && !node.index
@@ -188,7 +188,7 @@ describe("tool folders in the sidebar", () => {
         open: true,
         urls: ["/ru/docs/zm", "/ru/docs/google-meet", "/ru/docs/telemost", "/ru/docs/pbx"],
       },
-      { name: "CRM", open: false, urls: ["/ru/docs/b24"] },
+      { name: "CRM", open: false, urls: ["/ru/docs/b24", "/ru/docs/amo"] },
       "memo",
     ])
   })

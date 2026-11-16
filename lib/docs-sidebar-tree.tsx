@@ -92,6 +92,7 @@ export const sidebarIcons = {
   email: Mail,
   mail: Mail,
   b24: Handshake,
+  amo: Handshake,
   asterisk: Server,
   pbx: PhoneCall,
   voip: Phone,
@@ -196,6 +197,7 @@ const folderIcons = {
   mail: Mail,
   memo: NotebookPen,
   b24: Handshake,
+  amo: Handshake,
   pbx: PhoneCall,
   zm: Video,
   desktop: Monitor,
@@ -251,7 +253,7 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "voip", "beeline"], open: true, icon: Phone },
-  crm: { tools: ["b24"], open: false, icon: Handshake },
+  crm: { tools: ["b24", "amo"], open: false, icon: Handshake },
 } as const
 
 export const toolGroupId = (group: string, lang: string) => `tools-${group}-${lang}`
@@ -334,7 +336,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|b24|pbx)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|b24|amo|pbx)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
