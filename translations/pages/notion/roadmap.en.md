@@ -16,12 +16,13 @@ over the command line or MCP. See [start here](./index.md).
 ## Next
 
 - Find database rows by a property, such as `status:Done`. Today search finds a row by its text only.
-- Create, change and delete a page with ready commands, not only through the raw API commands.
+- Write pages with ready commands: `documents create`, `update`, `delete` and `restore`. Today only the raw `api`
+  commands write.
 
 ## Later
 
 - Keep a folder of Markdown files on your computer in step with a Notion page tree, both ways.
-- Read comments and files.
+- Comments and files as ready commands. Today `api list-comments` and `api retrieve-comment` read comments.
 - Sign in through the browser, with your own Notion connection, instead of pasting a token.
 
 What changed in each released version is in the [changelog](./changelog.md).

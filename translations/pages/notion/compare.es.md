@@ -19,7 +19,7 @@ Las herramientas:
   datos ni una carpeta de Markdown que se mantenga al día con Notion.
 - **[Notion MCP](https://developers.notion.com/guides/mcp/get-started-with-mcp)**: el servidor MCP propio de Notion,
   alojado por Notion. Tu aplicación de IA se conecta a él y entra en tu espacio de trabajo.
-- **[ntn](https://developers.notion.com/cli/get-started/overview)**: la línea de comandos propia de Notion, en beta. Lee
+- **[ntn](https://developers.notion.com/cli/get-started/overview)**: la línea de comandos propia de Notion. Lee
   y escribe páginas en Markdown, consulta bases de datos, sube archivos y gestiona Notion Workers.
 - **[notion-mcp-server](https://github.com/makenotion/notion-mcp-server)**: el servidor MCP de código abierto de
   Notion, que ejecutas tú con un token. Su README dice que
@@ -35,22 +35,22 @@ Las herramientas:
 | Tarea | notion | [Notion MCP](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [ntn](https://developers.notion.com/cli/reference/commands) | [notion-mcp-server](https://github.com/makenotion/notion-mcp-server) | [notion-exporter](https://github.com/yannbolliger/notion-exporter) |
 |---|:-:|:-:|:-:|:-:|:-:|
 | **Encontrar una página** | | | | | |
-| Encontrar una página por palabras de su texto | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-search-reference) | [🟡](https://developers.notion.com/reference/post-search) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L22) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Encontrar una página por palabras de su texto | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-search-reference) | [❌](https://developers.notion.com/reference/post-search) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L22) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Encontrar una página por su significado, no solo por palabras exactas | ✅ | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L11) | [❌](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L22) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Buscar en tus páginas sin internet | ✅ | [❌](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L39) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
-| Encontrar una página junto a tus chats, tu correo y tus archivos de otros servicios | ✅ | [🟡](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Encontrar una página junto a tus chats, tu correo y tus archivos de otros servicios | ✅ | [🟡](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L23) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Encontrar filas de una base de datos por el valor de una propiedad, como Status es Done | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-databases-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L59) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Copia y exportación** | | | | | |
 | Tener en tu ordenador una copia de las páginas y bases de datos elegidas, que cada sincronización actualiza | ✅ | ➖ | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [🟡](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | Exportar una página y las páginas que tiene dentro como archivos Markdown | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Escribir** | | | | | |
-| Crear una página o cambiar su texto desde Markdown | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-pages) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Crear una página o cambiar su texto desde Markdown | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Agentes y seguridad** | | | | | |
 | Una aplicación de IA trabaja con tus páginas por MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Usarla desde Claude o ChatGPT en la web | ✅ | [✅](https://www.notion.com/help/notion-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L345) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Un agente con terminal la ejecuta, con salida JSON y una skill | ✅ | n/a | [🟡](https://developers.notion.com/cli/reference/commands) | n/a | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Se puede dejar al agente solo con lectura | ✅ | [🟡](https://www.notion.com/help/notion-mcp) | ➖ | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L112) | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/README.md?plain=1#L3-L6) |
-| Permitir o denegar comandos sueltos a un agente | ✅ | [🟡](https://www.notion.com/help/notion-mcp) | ➖ | ➖ | n/a |
+| Permitir o denegar comandos sueltos a un agente | ✅ | ➖ | ➖ | ➖ | n/a |
 | Ver un cambio antes de que se haga | ✅ | [🟡](https://developers.notion.com/guides/mcp/tools-faqs) | ➖ | ➖ | n/a |
 | El texto de una página llega al agente como datos, nunca como instrucciones | 🟡 | ➖ | ➖ | ➖ | ➖ |
 | **Instalación** | | | | | |
@@ -60,7 +60,7 @@ Las herramientas:
 | | notion | Notion MCP | ntn | notion-mcp-server | notion-exporter |
 |---|---|---|---|---|---|
 | Instalación | npm, Node 22.16 o un 22.x posterior, o Node 24 o posterior | nada: tu aplicación de IA se conecta al servidor de Notion | script de instalación, WinGet o npm | npx o Docker | npm |
-| Licencia | Apache-2.0 | un servicio de Notion, en cualquier plan | MIT | MIT | MIT |
+| Licencia | Apache-2.0 | un servicio de Notion, en cualquier plan | [MIT](https://www.npmjs.com/package/ntn) | MIT | MIT |
 | Inicio de sesión | un token de acceso personal o el token de una conexión, guardado en el llavero del sistema | OAuth en el navegador, o un token MCP en los planes Business y Enterprise | en el navegador, o un token de acceso personal | el token de una conexión | las cookies `token_v2` y `file_token` de tu navegador |
 
 Notas sobre las marcas:
@@ -72,7 +72,7 @@ Notas sobre las marcas:
   `notion search` encuentra una página también por su significado. Notion MCP busca por significado en el lado de
   Notion.
 - **Con tus chats y tu correo.** La copia está en el almacén local que comparten las herramientas de WireCat, así que `memo search` y
-  `search all` encuentran una página junto a tus mensajes, tu correo y tus archivos de las otras herramientas de
+  `memo search all` encuentran una página junto a tus mensajes, tu correo y tus archivos de las otras herramientas de
   WireCat. Notion MCP busca en servicios conectados como Slack y Google Drive en los planes Business y Enterprise con
   Notion AI.
 - **Filas por propiedad.** `notion` guarda las propiedades de cada fila en la copia como líneas del tipo
@@ -94,10 +94,10 @@ Notas sobre las marcas:
 - **Solo lectura.** El ajuste `permissions` da a un comando el nivel `readonly` o `deny`, y `WCNOTION_READ_ONLY=1`
   rechaza cualquier escritura. Por defecto el servidor MCP también ofrece las escrituras, y por MCP el nivel `ask`
   deja pasar el comando. Mira los [ajustes](./configuration.md#permissions). notion-mcp-server solo lee con un token
-  que tenga únicamente la capacidad "Read content". En Notion MCP un administrador puede desactivar la edición en los
-  clientes MCP y, en el plan Enterprise, bloquear las herramientas que no estén aprobadas.
+  que tenga únicamente la capacidad "Read content". En Notion MCP, desactivar la edición en los clientes MCP y bloquear
+  las aplicaciones de IA no aprobadas son controles de administrador de MCP Governance, solo en el plan Enterprise.
 - **Ver un cambio.** `--dry-run` muestra lo que haría un comando y no envía nada. Notion MCP puede proponer una
-  edición de página que alguien revisa antes de aplicarla.
+  edición de página que alguien revisa antes de aplicarla, en los planes Business y Enterprise.
 - **Texto como datos.** El servidor MCP de `notion` le dice al agente que el texto de las páginas, los títulos y los
   nombres de las propiedades los escriben otras personas y son datos, nunca instrucciones. El texto en sí no va
   marcado dentro de cada respuesta.

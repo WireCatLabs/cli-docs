@@ -19,7 +19,7 @@ title: "Сравнение с другими инструментами"
   согласии с Notion, пока нет.
 - **[Notion MCP](https://developers.notion.com/guides/mcp/get-started-with-mcp)**: собственный MCP-сервер Notion,
   который работает у Notion. Ваше ИИ-приложение подключается к нему и входит в ваше рабочее пространство.
-- **[ntn](https://developers.notion.com/cli/get-started/overview)**: собственная командная строка Notion, в бета-версии.
+- **[ntn](https://developers.notion.com/cli/get-started/overview)**: собственная командная строка Notion.
   Читает и пишет страницы в Markdown, делает запросы к базам данных, загружает файлы и управляет Notion Workers.
 - **[notion-mcp-server](https://github.com/makenotion/notion-mcp-server)**: MCP-сервер Notion с открытым кодом,
   который вы запускаете сами с токеном. В его README сказано, что он
@@ -35,22 +35,22 @@ title: "Сравнение с другими инструментами"
 | Задача | notion | [Notion MCP](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [ntn](https://developers.notion.com/cli/reference/commands) | [notion-mcp-server](https://github.com/makenotion/notion-mcp-server) | [notion-exporter](https://github.com/yannbolliger/notion-exporter) |
 |---|:-:|:-:|:-:|:-:|:-:|
 | **Найти страницу** | | | | | |
-| Найти страницу по словам внутри нее | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-search-reference) | [🟡](https://developers.notion.com/reference/post-search) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L22) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Найти страницу по словам внутри нее | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-search-reference) | [❌](https://developers.notion.com/reference/post-search) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L22) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Найти страницу по смыслу, а не только по точным словам | ✅ | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L11) | [❌](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L22) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Искать по страницам без интернета | ✅ | [❌](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L39) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
-| Найти страницу вместе с вашими чатами, почтой и файлами из других сервисов | ✅ | [🟡](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Найти страницу вместе с вашими чатами, почтой и файлами из других сервисов | ✅ | [🟡](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L23) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Найти строки базы данных по значению свойства, например Status равен Done | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-databases-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L59) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Копия и экспорт** | | | | | |
 | Держать на компьютере копию выбранных страниц и баз данных, которую обновляет каждая синхронизация | ✅ | ➖ | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [🟡](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | Выгрузить страницу и вложенные в нее страницы в файлы Markdown | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Запись** | | | | | |
-| Создать страницу или изменить ее текст из Markdown | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-pages) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Создать страницу или изменить ее текст из Markdown | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Агенты и безопасность** | | | | | |
 | ИИ-приложение работает с вашими страницами через MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Работать из Claude или ChatGPT в браузере | ✅ | [✅](https://www.notion.com/help/notion-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L345) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Агент с терминалом запускает его, с выводом в JSON и навыком | ✅ | n/a | [🟡](https://developers.notion.com/cli/reference/commands) | n/a | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Агенту можно оставить только чтение | ✅ | [🟡](https://www.notion.com/help/notion-mcp) | ➖ | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L112) | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/README.md?plain=1#L3-L6) |
-| Разрешить или запретить агенту отдельные команды | ✅ | [🟡](https://www.notion.com/help/notion-mcp) | ➖ | ➖ | n/a |
+| Разрешить или запретить агенту отдельные команды | ✅ | ➖ | ➖ | ➖ | n/a |
 | Посмотреть изменение до того, как оно сделано | ✅ | [🟡](https://developers.notion.com/guides/mcp/tools-faqs) | ➖ | ➖ | n/a |
 | Текст страницы доходит до агента как данные, а не как инструкции | 🟡 | ➖ | ➖ | ➖ | ➖ |
 | **Установка** | | | | | |
@@ -60,7 +60,7 @@ title: "Сравнение с другими инструментами"
 | | notion | Notion MCP | ntn | notion-mcp-server | notion-exporter |
 |---|---|---|---|---|---|
 | Установка | npm, Node 22.16 или новее 22.x, или Node 24 и новее | ничего: ваше ИИ-приложение подключается к серверу Notion | скрипт установки, WinGet или npm | npx или Docker | npm |
-| Лицензия | Apache-2.0 | сервис Notion, на любом тарифе | MIT | MIT | MIT |
+| Лицензия | Apache-2.0 | сервис Notion, на любом тарифе | [MIT](https://www.npmjs.com/package/ntn) | MIT | MIT |
 | Вход | личный токен доступа или токен подключения, хранится в связке ключей системы | OAuth в браузере или MCP-токен на тарифах Business и Enterprise | в браузере или личный токен доступа | токен подключения | cookie `token_v2` и `file_token` из вашего браузера |
 
 Пояснения к оценкам:
@@ -70,7 +70,7 @@ title: "Сравнение с другими инструментами"
   заголовку. Notion MCP запускает собственный поиск Notion по рабочему пространству.
 - **По смыслу.** `notion sync --embed` индексирует текст моделью, уже скачанной на ваш компьютер, и после этого
   `notion search` находит страницу и по смыслу. Notion MCP ищет по смыслу на стороне Notion.
-- **Вместе с чатами и почтой.** Копия лежит в локальном хранилище, общем для инструментов WireCat, поэтому `memo search` и `search all` находят
+- **Вместе с чатами и почтой.** Копия лежит в локальном хранилище, общем для инструментов WireCat, поэтому `memo search` и `memo search all` находят
   страницу рядом с вашими сообщениями, почтой и файлами из других инструментов WireCat. Notion MCP ищет в
   подключенных сервисах, таких как Slack и Google Drive, на тарифах Business и Enterprise с Notion AI.
 - **Строки базы данных по свойству.** `notion` хранит свойства каждой строки в копии строками вида `Status: Done`,
@@ -91,10 +91,10 @@ title: "Сравнение с другими инструментами"
 - **Только чтение.** Настройка `permissions` дает команде уровень `readonly` или `deny`, а `WCNOTION_READ_ONLY=1`
   отклоняет любую запись. По умолчанию MCP-сервер предлагает и команды записи, а через MCP уровень `ask` пропускает
   команду. Подробнее в [настройках](./configuration.md#permissions). notion-mcp-server только читает, если у токена
-  есть лишь право "Read content". В Notion MCP администратор может выключить редактирование в MCP-клиентах, а на
-  тарифе Enterprise закрыть инструменты, которые не одобрены.
+  есть лишь право "Read content". В Notion MCP выключить редактирование в MCP-клиентах и закрыть ИИ-приложения,
+  которые не одобрены, может только администратор, через MCP Governance на тарифе Enterprise.
 - **Просмотр изменения.** `--dry-run` показывает, что сделала бы команда, и ничего не отправляет. Notion MCP может
-  предложить правку страницы, которую человек проверяет до того, как она применится.
+  предложить правку страницы, которую человек проверяет до того, как она применится, на тарифах Business и Enterprise.
 - **Текст как данные.** MCP-сервер `notion` говорит агенту, что текст страниц, заголовки и названия свойств пишут
   другие люди и это данные, а не инструкции. Сам текст в каждом ответе не помечен.
 - **Без браузера.** Notion MCP принимает токен без браузера, только если владелец рабочего пространства на тарифе

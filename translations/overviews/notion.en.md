@@ -87,7 +87,9 @@ An MCP app gets the server, as described in [use it](./usage.md#agents).
 ## What it does not do yet
 
 - It does not search database rows by their properties, such as status or owner. Search finds rows by their text.
-- It does not write to Notion: no new pages and no edits.
+- It has no ready commands to write to Notion yet. The raw `api` commands can create and change pages, and they are
+  allowed by default. `WCNOTION_READ_ONLY=1` or the [`permissions` setting](./configuration.md#permissions) turns
+  them off.
 - It does not keep a folder of Markdown files in step with a Notion page tree.
 
 ## Find a guide for your task

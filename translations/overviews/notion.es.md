@@ -90,7 +90,9 @@ Una aplicación con MCP se conecta al servidor, como se explica en [úsalo](./us
 
 - No busca filas de una base de datos por sus propiedades, como el estado o el responsable. La búsqueda encuentra las
   filas por su texto.
-- No escribe en Notion: ni páginas nuevas ni cambios.
+- No tiene todavía comandos listos para escribir en Notion. Los comandos `api` ya pueden crear y cambiar páginas, y
+  están permitidos por defecto. `WCNOTION_READ_ONLY=1` o el [ajuste `permissions`](./configuration.md#permissions)
+  los desactivan.
 - No mantiene una carpeta de archivos Markdown al día con un árbol de páginas de Notion.
 
 ## Encuentra una guía para tu tarea

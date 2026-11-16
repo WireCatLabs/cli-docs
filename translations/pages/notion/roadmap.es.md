@@ -17,13 +17,14 @@ añadís vuestras etiquetas y notas, desde la línea de comandos o por MCP. Cons
 
 - Buscar filas de una base de datos por una propiedad, como `status:Done`. Hoy la búsqueda encuentra una fila solo
   por su texto.
-- Crear, cambiar y borrar una página con comandos listos, no solo con los comandos de la API.
+- Escribir páginas con comandos listos: `documents create`, `update`, `delete` y `restore`. Hoy solo escriben los
+  comandos `api`.
 
 ## Más adelante
 
 - Mantener una carpeta de archivos Markdown en tu ordenador al día con un árbol de páginas de Notion, en los dos
   sentidos.
-- Leer comentarios y archivos.
+- Comentarios y archivos con comandos listos. Hoy `api list-comments` y `api retrieve-comment` leen los comentarios.
 - Iniciar sesión en el navegador, con tu propia conexión de Notion, en lugar de pegar un token.
 
 Lo que cambió en cada versión está en el [registro de cambios](./changelog.md).
