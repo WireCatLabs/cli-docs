@@ -3,11 +3,13 @@
  * it. lychee does the same for links outside the site; it is not used here because it does not
  * decode an anchor, and every Russian heading's anchor reaches the page percent-encoded.
  *
- *   pnpm check:links    after `next build`
+ *   pnpm check:links             after `next build`
+ *   pnpm check:links --source    the repository's own `.md` links, before a build
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { dirname, join, relative } from "node:path"
 import { fileURLToPath } from "node:url"
+import GithubSlugger from "github-slugger"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { skillIndexProblems } from "./skills-index.ts"
 
@@ -113,7 +115,79 @@ export const markdownLinkProblems = (out: string, origin = "https://wirecat.dev"
   return [...new Set(problems)]
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+const pageId = (path: string) => path.replace(/\.mdx?$/, "").replace(/\.(?:en|ru|es)$/, "")
+const langOf = (path: string) => /\.(ru|es)\.mdx?$/.exec(path)?.[1] ?? "en"
+const textOf = (node: MarkdownNode): string => node.value ?? node.children?.map(textOf).join("") ?? ""
+
+/**
+ * The `.md` links written in this repository, checked without `pnpm sync` or `next build`. A tool's synced pages are
+ * known from their translations, which localize.ts requires for every page; a redirect stub in public/ is not a page,
+ * because the build rewrites a `.md` link only when the page behind it exists. Anchors are checked on authored pages
+ * only: a tool page's headings come from its release.
+ */
+export const sourceLinkProblems = (root: string): string[] => {
+  const tools = (JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as { name: string }[]).map((t) => t.name)
+  const docs = join(root, "content/docs")
+  const translations = join(root, "translations")
+  const authored = outputFiles(docs).filter(
+    (file) => /\.mdx?$/.test(file) && !tools.includes(relative(docs, file).split("/")[0] ?? ""),
+  )
+  const sources = authored.map((file) => ({ file, page: pageId(relative(docs, file)) }))
+  for (const tool of tools) {
+    for (const folder of [join(translations, tool), join(translations, "pages", tool)])
+      if (existsSync(folder))
+        for (const name of readdirSync(folder).filter((name) => name.endsWith(".md")))
+          sources.push({ file: join(folder, name), page: `${tool}/${pageId(name)}` })
+    for (const lang of ["en", "ru", "es"]) {
+      const file = join(translations, "overviews", `${tool}.${lang}.md`)
+      if (existsSync(file)) sources.push({ file, page: `${tool}/index` })
+    }
+  }
+  const pages = new Set(sources.map(({ page }) => page))
+  const anchors = new Map<string, Set<string>>()
+  const anchorsOf = (file: string) => {
+    let found = anchors.get(file)
+    if (!found) {
+      const text = readFileSync(file, "utf8")
+      const slugger = new GithubSlugger()
+      found = new Set([...text.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1] ?? ""))
+      const collect = (node: MarkdownNode) => {
+        if (node.type === "heading") found?.add(slugger.slug(textOf(node)))
+        for (const child of node.children ?? []) collect(child)
+      }
+      collect(fromMarkdown(text) as MarkdownNode)
+      anchors.set(file, found)
+    }
+    return found
+  }
+  const problems: string[] = []
+  for (const { file, page } of sources) {
+    const where = relative(root, file)
+    const visit = (node: MarkdownNode) => {
+      const [path = "", anchor] = (node.url ?? "").split("#")
+      if (node.type === "link" && /^[^/:]+(?:\/[^:]*)?\.mdx?$/.test(path)) {
+        const target = pageId(join(dirname(page), path))
+        const destination = pages.has(target) ? target : `${target}/index`
+        const authoredTarget = authored.find(
+          (other) => pageId(relative(docs, other)) === destination && langOf(other) === langOf(file),
+        )
+        if (!pages.has(destination)) problems.push(`${where}: ${node.url} — no such page (content/docs/${target})`)
+        else if (anchor && authoredTarget && !anchorsOf(authoredTarget).has(decodeURIComponent(anchor)))
+          problems.push(`${where}: ${node.url} — no such heading`)
+      }
+      for (const child of node.children ?? []) visit(child)
+    }
+    visit(fromMarkdown(readFileSync(file, "utf8")) as MarkdownNode)
+  }
+  return problems
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes("--source")) {
+  const problems = sourceLinkProblems(join(dirname(fileURLToPath(import.meta.url)), ".."))
+  for (const problem of problems) console.error(problem)
+  if (problems.length > 0) process.exit(1)
+  console.log("source links: ok")
+} else if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const out = join(dirname(fileURLToPath(import.meta.url)), "..", "out")
   const site = JSON.parse(readFileSync(join(out, "..", "site.config.json"), "utf8")) as { url: string }
   const problems = [...linkProblems(out, site.url), ...markdownLinkProblems(out, site.url), ...skillIndexProblems(out)]
