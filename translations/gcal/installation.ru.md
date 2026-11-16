@@ -63,6 +63,10 @@ gcal personal session start --client-file ~/client_secret.json
 нажмите **Enable**. Если пропустить этот шаг, вход всё равно пройдёт, но первая команда, которая читает Календарь,
 завершится ошибкой «the Google Calendar API is turned off for this OAuth project».
 
+Для `--grant meetings` откройте ещё [страницу Google Meet API](https://console.cloud.google.com/apis/library/meet.googleapis.com)
+и нажмите **Enable**. Без этого `meetings sync` завершится ошибкой «the Google Meet API is turned off for this OAuth
+project».
+
 ### 3. Branding
 
 Откройте **Google Auth platform → [Branding](https://console.cloud.google.com/auth/branding)**. Если на странице есть
@@ -126,6 +130,7 @@ table**, **Update**, затем **Save**:
 | `https://www.googleapis.com/auth/calendar.readonly` | Всегда: чтение ваших календарей и событий. |
 | `https://www.googleapis.com/auth/calendar.events` | С `--grant write`: создание, изменение и удаление событий и ответы на приглашения. |
 | `https://www.googleapis.com/auth/calendar.acls` | С `--grant sharing`: просмотр и изменение того, кто видит календарь. |
+| `https://www.googleapis.com/auth/meetings.space.readonly` | С `--grant meetings`: чтение ваших звонков Google Meet, кто подключился, расшифровка и её файлы на Диске. |
 
 `--grant` добавляет области к области чтения и никогда её не заменяет.
 

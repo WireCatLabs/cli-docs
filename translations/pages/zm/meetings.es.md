@@ -11,7 +11,8 @@ Una transcripción es el texto de la conversación; una grabación contiene el a
 de una reunión también incluyen fecha, título y participantes registrados. [Zoom](./index.md)
 obtiene estas fuentes mediante su API o archivos que importas. Participas en las llamadas desde
 Zoom; la herramienta de línea de comandos da al agente acceso a la información guardada. Las reuniones
-de Yandex Telemost llegan de las notas que envía por correo tras una llamada: ver [Yandex Telemost](../telemost.mdx).
+de Yandex Telemost llegan de las notas que envía por correo tras una llamada: ver [Yandex Telemost](../telemost.mdx). Las llamadas de Google Meet llegan con la herramienta
+de Google Calendar, `gcal`: ver [Google Meet](../google-meet.mdx).
 
 ## Encontrar una discusión o decisión
 

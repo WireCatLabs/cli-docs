@@ -21,7 +21,10 @@ title: "Планы развития"
 `events list --source all` показывает события всех аккаунтов, в которые выполнен вход, одним списком, а
 `overlapping:true` находит встречи, которые пересекаются. `events prepare` собирает всё нужное для следующей встречи,
 `events create --text` добавляет встречу из строки текста, а `events export` и `events import` читают и пишут файлы
-`.ics`. `calendars add <url>` следит за календарём, опубликованным по адресу `.ics`, только для чтения. `search all`
+`.ics`. `calendars add <url>` следит за календарём, опубликованным по адресу `.ics`, только для чтения. После `session start --grant meetings`
+команды `meetings sync`, `list`, `show` и `transcript` сохраняют и читают ваши звонки Google Meet: кто подключился,
+расшифровку и её файлы на Диске, со связью с событием календаря. `events create --conference google-meet` даёт событию
+ссылку на Meet, а `meetings create` создаёт комнату Meet. `search all`
 ищет сразу по сохранённым встречам, чатам и заметкам. `gcal api` вызывает любой метод API Google Календаря по имени.
 Все команды — в [справочнике команд](./commands.md).
 

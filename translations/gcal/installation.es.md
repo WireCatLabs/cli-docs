@@ -64,6 +64,9 @@ Abre la [página de la API de Google Calendar](https://console.cloud.google.com/
 y elige **Enable**. Si te saltas este paso, el inicio de sesión funciona igual, pero el primer comando que lee Calendar
 falla con «the Google Calendar API is turned off for this OAuth project».
 
+Para `--grant meetings`, abre también la [página de la API de Google Meet](https://console.cloud.google.com/apis/library/meet.googleapis.com)
+y elige **Enable**. Sin ella, `meetings sync` falla con «the Google Meet API is turned off for this OAuth project».
+
 ### 3. Branding
 
 Abre **Google Auth platform → [Branding](https://console.cloud.google.com/auth/branding)**. Si la página ofrece
@@ -127,6 +130,7 @@ Para añadirlos, elige **Add or remove scopes**, pega los permisos en **Manually
 | `https://www.googleapis.com/auth/calendar.readonly` | Siempre: leer tus calendarios y eventos. |
 | `https://www.googleapis.com/auth/calendar.events` | Con `--grant write`: crear, cambiar y borrar eventos, y responder a invitaciones. |
 | `https://www.googleapis.com/auth/calendar.acls` | Con `--grant sharing`: ver y cambiar quién puede ver un calendario. |
+| `https://www.googleapis.com/auth/meetings.space.readonly` | Con `--grant meetings`: leer tus llamadas de Google Meet, quién se unió, la transcripción y sus archivos de Drive. |
 
 `--grant` se suma al permiso de lectura; nunca lo sustituye.
 

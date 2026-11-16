@@ -7,6 +7,7 @@ lectura, salvo que inicies sesión con `--grant write` para crear, cambiar y bor
 
 Inicia sesión en Google (`session start`, `session status`, `session end`), sincroniza tus calendarios con el almacén
 local de WireCat (`sync`, `store status`, `calendars`) y los lee desde ahí: `events`, `search events`, `people` y `links`.
+Con `--grant meetings`, `meetings` guarda tus llamadas de Google Meet con quién se unió y la transcripción.
 `calendars busy` pregunta a Google cuándo están libres otras personas. Con el permiso de escritura,
 `events create | update | delete | move |
 respond` cambian Google Calendar. También tiene los comandos que comparten todas las

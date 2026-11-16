@@ -11,7 +11,8 @@ A transcript is the text of a conversation; a recording is its audio or video. M
 also includes the date, title and available participant records. [Zoom](./index.md) supplies these
 sources through its API or transcript files you import. You attend calls in Zoom; the command-line
 tool gives your agent access to the saved information. Meetings in Yandex Telemost come from the notes it
-emails after a call: see [Yandex Telemost](../telemost.mdx).
+emails after a call: see [Yandex Telemost](../telemost.mdx). Google Meet calls come through Google Calendar's tool,
+`gcal`: see [Google Meet](../google-meet.mdx).
 
 ## Find a discussion or decision
 

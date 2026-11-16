@@ -7,9 +7,9 @@ title: "Сравнение с другими инструментами"
 
 `gcal` — это командная строка и MCP-сервер для Google Календаря вашего собственного аккаунта. Здесь он стоит рядом с
 другими командными строками, MCP-серверами и коннекторами ассистентов, которые читают Google Календарь, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.21.0, его команд и
-исходного кода, проверенных 7 ноября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
-инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года. Ни в
+могли выбрать тот, что подходит для вашей работы. Оценки для `gcal` взяты из его выпуска 0.31.0, его команд и
+исходного кода, проверенных 16 ноября 2026 года; они проверяются заново при каждом выпуске. Оценки для остальных
+инструментов взяты из их собственных README, документации и исходного кода, проверенных 27 октября 2026 года, а для строк о Google Meet — 16 ноября 2026 года. Ни в
 один инструмент не выполнялся вход, и ничего не проверялось вживую; инструмент может делать больше, чем говорят его
 страницы.
 
@@ -56,6 +56,10 @@ title: "Сравнение с другими инструментами"
 | Добавить встречу | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Принять или отклонить приглашение | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Выгрузить встречи в файл .ics и загрузить такой файл | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
+| **Google Meet** | | | | | | |
+| Хранить ваши звонки Google Meet: кто подключился и расшифровку, со связью с событием календаря | ✅ | ➖ | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-meet.md) | ➖ | ➖ | ➖ |
+| Дать новой встрече ссылку на Google Meet | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-create.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | ➖ |
+| Создать комнату Google Meet и менять её настройки | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-meet-create.md) | ➖ | ➖ | ➖ |
 | **Агенты и безопасность** | | | | | | |
 | MCP-сервер | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Каждая команда календаря доступна и как инструмент MCP | 🟡 | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
@@ -107,6 +111,13 @@ title: "Сравнение с другими инструментами"
   `gcal` эти списки пусты. Команда читает только локальное хранилище и не пишет сводки: навык и
   `gcal guide prepare-meeting` показывают агенту, как написать справку, а `gcal guide digest` — ежедневную или
   еженедельную сводку.
+- **Google Meet.** После `session start --grant meetings` команда `meetings sync` хранит ваши звонки Meet на
+  компьютере: кто подключился, расшифровку и файлы на Диске, которые создал Google, и связывает каждый звонок с его
+  событием календаря; `search all` находит их рядом с другими вашими источниками, когда они уже в поисковом индексе встреч. Google показывает только
+  звонки, которые организовали вы, и удаляет запись о звонке через 30 дней после его окончания, поэтому
+  синхронизируйте хотя бы раз в несколько недель. gog показывает прошлые звонки комнаты и участников последнего
+  звонка, без расшифровки, поэтому в его строке — частично. `events create --conference google-meet` нужен только
+  `--grant write`, а `meetings create` — `--grant write,meetings` ([Google Meet](../google-meet.mdx)).
 - **Дни рождения и прочий шум.** `events list -event_type:birthday -event_type:working-location` убирает эти виды
   событий, а `event_type:default` оставляет только обычные.
 - **Файлы iCalendar.** `events export <query> --output week.ics` записывает в файл `.ics` события, которые показал бы
@@ -167,8 +178,9 @@ title: "Сравнение с другими инструментами"
 - **Большинство команд — инструменты MCP.** Через три инструмента MCP: `gcal_tools_search`, `gcal_read` и `gcal_write`.
   Некоторые команды оставлены вам в терминале: `api call`; очистка календаря (`calendars.clear`); `events remind`,
   который запускает вашу программу, так что через него агент мог бы запустить любую программу на вашем компьютере;
-  `calendars add` и `remove`, потому что в адресе ленты может быть закрытый токен; и `schedule`, который ставит таймер,
-  работающий сам по себе. Поэтому в этой строке — частично.
+  `calendars add` и `remove`, потому что в адресе ленты может быть закрытый токен; а также установка, удаление,
+  приостановка и возобновление `schedule`: их не даёт агенту `mcp.authority` (по умолчанию `deny`), хотя смотреть
+  список расписаний и запускать их он может. Поэтому в этой строке — частично.
 - **claude.ai в браузере.** `mcp serve --http` отдаёт инструмент Claude и ChatGPT в браузере или на телефоне через
   HTTPS-туннель, который вы сами настраиваете и держите запущенным, например Tailscale Funnel, поэтому оценка остаётся
   «частично». Руководство [ChatGPT или Claude в браузере](./remote.md) проводит через настройку, включая код входа и

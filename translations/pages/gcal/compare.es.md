@@ -7,9 +7,9 @@ title: "Comparado con otras herramientas"
 
 `gcal` es una línea de comandos y un servidor MCP para el Google Calendar de tu propia cuenta. Esta página lo pone
 junto a las otras líneas de comandos, servidores MCP y conectores de asistentes que leen un Google Calendar, para que
-veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.21.0, sus comandos y su código, revisados
-el 7 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
-propios README, documentación y código, revisados el 27 de octubre de 2026. No se inició sesión en ninguna ni se
+veas cuál encaja con tu trabajo. Las marcas de `gcal` salen de su versión 0.31.0, sus comandos y su código, revisados
+el 16 de noviembre de 2026; se revisan de nuevo en cada versión. Las marcas de las demás herramientas salen de sus
+propios README, documentación y código, revisados el 27 de octubre de 2026, y el 16 de noviembre de 2026 para las filas de Google Meet. No se inició sesión en ninguna ni se
 probó nada en vivo, y una herramienta puede hacer más de lo que dicen sus páginas.
 
 Las herramientas:
@@ -56,6 +56,10 @@ Las herramientas:
 | Añadir una reunión | ✅ | [✅](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Aceptar o rechazar una invitación | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands.generated.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | [✅](https://support.claude.com/en/articles/10166901-use-google-workspace-connectors) |
 | Exportar reuniones a un archivo .ics e importar uno | ✅ | [🟡](https://github.com/insanum/gcalcli/blob/main/gcalcli/argparsers.py) | ➖ | ➖ | ➖ | ➖ |
+| **Google Meet** | | | | | | |
+| Guardar tus llamadas de Google Meet con quién se unió y la transcripción, enlazadas al evento del calendario | ✅ | ➖ | [🟡](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-meet.md) | ➖ | ➖ | ➖ |
+| Dar a una reunión nueva un enlace de Google Meet | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-calendar-create.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/gcalendar/calendar_tools.py) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | ➖ |
+| Crear una sala de Google Meet y cambiar sus ajustes | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/commands/gog-meet-create.md) | ➖ | ➖ | ➖ |
 | **Agentes y seguridad** | | | | | | |
 | Servidor MCP | ✅ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/nspady/google-calendar-mcp#readme) | n/a |
 | Cada comando de calendario es también una herramienta MCP | 🟡 | n/a | [❌](https://github.com/openclaw/gogcli/blob/main/docs/mcp.md) | [🟡](https://github.com/taylorwilsdon/google_workspace_mcp/blob/main/core/tool_tiers.yaml) | [✅](https://github.com/nspady/google-calendar-mcp/blob/main/src/tools/registry.ts) | n/a |
@@ -107,6 +111,13 @@ Notas sobre la columna de `gcal`:
   uno vienen de las otras herramientas de WireCat del mismo ordenador, como `tg` o `mail`; solo con `gcal` esas
   listas están vacías. Solo lee el almacén local y no escribe ningún resumen: el skill y `gcal guide prepare-meeting`
   enseñan al agente a escribir el informe, y `gcal guide digest` un resumen diario o semanal.
+- **Google Meet.** Tras `session start --grant meetings`, `meetings sync` guarda tus llamadas de Meet en tu
+  ordenador con quién se unió, la transcripción y los archivos de Drive que hizo Google, y enlaza cada llamada con su
+  evento del calendario; `search all` las encuentra junto a tus otras fuentes cuando ya están en el índice de búsqueda de las reuniones. Google lista solo las
+  llamadas que organizaste, y borra el registro de una llamada 30 días después de que termine, así que sincroniza al
+  menos cada pocas semanas. gog lista las llamadas pasadas de una sala y los participantes de la última, sin
+  transcripción, así que su fila queda en parte. `events create --conference google-meet` solo necesita
+  `--grant write`; `meetings create` necesita `--grant write,meetings` ([Google Meet](../google-meet.mdx)).
 - **Cumpleaños y otro ruido.** `events list -event_type:birthday -event_type:working-location` deja fuera esos tipos,
   y `event_type:default` conserva solo los eventos normales.
 - **Archivos iCalendar.** `events export <query> --output week.ics` escribe como archivo `.ics` los eventos que
@@ -166,8 +177,9 @@ Notas sobre la columna de `gcal`:
 - **Casi todos los comandos son herramientas MCP.** A través de tres herramientas MCP: `gcal_tools_search`, `gcal_read` y
   `gcal_write`. Algunos comandos quedan para ti en una terminal: `api call`; vaciar un calendario (`calendars.clear`);
   `events remind`, que ejecuta un programa tuyo, así que a través de él un agente podría ejecutar cualquier programa en
-  tu equipo; `calendars add` y `remove`, porque la dirección de un feed puede llevar un token privado; y `schedule`,
-  que instala un temporizador que se ejecuta solo. Por eso esta fila queda en parte.
+  tu equipo; `calendars add` y `remove`, porque la dirección de un feed puede llevar un token privado; e instalar,
+  quitar, pausar o reanudar una `schedule`, que `mcp.authority` (`deny` por defecto) impide a un agente, aunque puede
+  listar las programaciones y ejecutar una. Por eso esta fila queda en parte.
 - **claude.ai en la web.** `mcp serve --http` sirve la herramienta a Claude y ChatGPT en el navegador o en el móvil,
   tras un túnel HTTPS que configuras y mantienes tú, como Tailscale Funnel, así que esta fila sigue en «en parte».
   [ChatGPT o Claude en el navegador](./remote.md) lo explica paso a paso, con el código de acceso y los permisos.

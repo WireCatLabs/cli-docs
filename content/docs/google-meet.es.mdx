@@ -1,0 +1,188 @@
+---
+title: "Google Meet"
+description: "No pierdas nunca las transcripciones de Google Meet: se quedan en tu ordenador, y tu agente encuentra lo que se dijo junto al evento, los chats y las notas."
+---
+
+No pierdas nunca las transcripciones de tus llamadas de Google Meet. Se quedan en tu ordenador después de que Google
+las borre de Meet, 30 días tras la llamada. Siempre encontrarás la llamada que buscas y la enlazarás con su evento del
+calendario, tus chats y tus notas, para que tu agente tenga todo el contexto de la reunión.
+
+Un agente con acceso a tus llamadas te cuenta qué se decidió, quién se unió y quién dijo qué, y cita el pasaje con su
+hora. Encuentra una llamada por su evento del calendario o por una persona.
+
+No hay una herramienta aparte para Meet: la herramienta de Google Calendar, `gcal`, trabaja con Google Meet. Guarda
+llamadas, participantes y transcripciones, señala las grabaciones y las notas de Gemini en Google Drive, crea salas y
+añade un enlace de Meet a un evento. Necesitas `gcal` instalado y con la sesión iniciada en tu cuenta de Google
+([instalación](./gcal/installation.md)). Las transcripciones solo llegan de una cuenta de Google Workspace: una cuenta
+personal de Google recibe las llamadas y los participantes, sin transcripción.
+
+**En esta página:**
+
+1. [Versión corta](#versión-corta)
+2. [Lo que te cuenta tu agente](#lo-que-te-cuenta-tu-agente)
+3. [Encuentra a una persona en tus llamadas](#encuentra-a-una-persona-en-tus-llamadas)
+4. [Guarda una llamada en un archivo](#guarda-una-llamada-en-un-archivo)
+5. [Un enlace de Meet o una sala nueva](#un-enlace-de-meet-o-una-sala-nueva)
+6. [Qué llamadas recibes](#qué-llamadas-recibes)
+7. [Mantén tus llamadas al día](#mantén-tus-llamadas-al-día)
+8. [Qué guarda una reunión](#qué-guarda-una-reunión)
+9. [Si falta una llamada o una transcripción](#si-falta-una-llamada-o-una-transcripción)
+
+## Versión corta
+
+Los ejemplos usan el perfil `personal`, el nombre que diste a tu cuenta de Google en `gcal`. Usa el tuyo.
+
+```sh
+gcal personal session start --grant meetings
+gcal personal meetings sync
+gcal personal meetings list started_at>=2026-11-01
+gcal personal meetings transcript 12
+```
+
+El primer comando vuelve a iniciar sesión, ahora con acceso de lectura a Google Meet. La sincronización guarda las
+llamadas de los últimos 30 días. La lista las muestra de la más reciente a la más antigua, y `meetings transcript`
+muestra lo que se dijo en la llamada 12, línea a línea.
+
+Un nuevo inicio de sesión sustituye los permisos que tenía el perfil. Si también cambias eventos con `gcal`, pide los
+dos a la vez: `gcal personal session start --grant write,meetings`. Si inicias sesión con tu propia aplicación de
+Google, activa antes la [API de Google Meet](https://console.cloud.google.com/apis/library/meet.googleapis.com) en su
+proyecto.
+
+## Lo que te cuenta tu agente
+
+Pregunta con tus propias palabras:
+
+```text prompt
+Busca mis llamadas de Google Meet del último mes sobre el presupuesto de Harbour. Cita lo que se decidió, con la
+llamada, su fecha y quién lo dijo. Dime qué llamadas aún no tienen transcripción.
+```
+
+Para buscar tus llamadas junto a tus mensajes y notas, el agente ejecuta `search all`:
+
+```sh
+gcal personal search all "budget"
+```
+
+Por ahora `search all` encuentra una llamada por su título, pero no por palabras de su transcripción, y lo indica en
+`missing`. Entonces el agente lee la llamada entera con `meetings transcript`.
+
+Una respuesta útil nombra cada llamada, su fecha y el pasaje que cita. Una respuesta vacía no prueba que una llamada no
+ocurriera: consulta [Si falta una llamada o una transcripción](#si-falta-una-llamada-o-una-transcripción).
+
+## Encuentra a una persona en tus llamadas
+
+`meetings people` encuentra a los participantes de tus llamadas por su nombre o su dirección de correo:
+
+```sh
+gcal personal meetings people "Ana Example"
+```
+
+Si las coincidencias son de más de una persona, `ambiguity.multiple_identities` es `true`. Elige por la dirección de
+correo: que coincida el nombre no prueba que sea la misma persona.
+
+## Guarda una llamada en un archivo
+
+```sh
+gcal personal meetings export 12 --format markdown --output harbour-call.md
+gcal personal meetings export 12 --format vtt --output harbour-call.vtt
+```
+
+Markdown guarda toda la reunión. WebVTT guarda solo la transcripción, como subtítulos con sus tiempos. `--output` escribe un archivo nuevo.
+
+## Un enlace de Meet o una sala nueva
+
+Para dar a un evento nuevo su propio enlace de Meet, inicia sesión con `--grant write`; no necesita ningún permiso de
+Meet:
+
+```sh
+gcal personal events create 3 --title "Sync" --start-time 2026-11-20T10:00 --end-time 2026-11-20T10:30 \
+  --conference google-meet
+```
+
+Un evento que ya tiene enlace se rechaza (`event.conference-exists`), para que sus asistentes conserven el suyo. Más
+sobre cambiar eventos en [la guía de uso](./gcal/usage.md#change-events).
+
+Una sala es el lugar con un solo enlace donde ocurren las llamadas. Tras `session start --grant write,meetings`,
+`meetings create` crea una sala que empieza ahora, y `meetings update` cambia una sala que creó `gcal`:
+
+```sh
+gcal personal meetings create --setting access_type=trusted --setting auto_transcription=true
+gcal personal meetings update spaces/jQCFfuBOdN5z --setting moderation=true
+```
+
+`access_type` indica quién entra sin pedir permiso: `open`, `trusted` o `restricted`. `auto_transcription`,
+`auto_recording` y `auto_smart_notes` activan la transcripción, la grabación y las notas de Gemini en cada llamada de
+la sala. Los dos comandos preguntan antes; `--yes` responde por un script. Una sala no tiene título ni hora: los lleva
+el evento del calendario.
+
+## Qué llamadas recibes
+
+- **Las llamadas que organizaste.** Google solo lista esas. Una llamada en la sala de otra persona a la que te uniste
+  no aparece en la lista, pero `meetings show` la abre por el id de Google de la llamada.
+- **Los últimos 30 días.** Google borra el registro de una llamada, sus participantes y su transcripción 30 días
+  después de la llamada. Una llamada que ya está en el almacén se queda ahí, y el documento de la transcripción sigue en
+  Google Drive.
+- **La transcripción, después de la llamada.** Google hace la transcripción cuando termina la llamada. Hasta que está
+  lista, la sincronización deja la llamada pendiente y la vuelve a leer la próxima vez.
+- **Transcripciones solo en Google Workspace.** Una cuenta personal de Google recibe las llamadas y los participantes,
+  pero no la transcripción.
+
+## Mantén tus llamadas al día
+
+Ejecuta la sincronización al menos cada pocas semanas, para que ninguna llamada pase antes los 30 días de Google:
+
+```sh
+gcal personal meetings sync
+gcal personal meetings sync --since-time 2026-11-01
+gcal personal meetings sync --rescan
+```
+
+Una sincronización sigue desde donde se paró la anterior. `--since-time` empieza en una fecha, y `--rescan` vuelve a
+leer los últimos 30 días. Cuando Google limita las peticiones, la sincronización conserva lo que guardó y dice cuándo
+volver a ejecutarla. Si una llamada lleva 25 días o más esperando su transcripción, la respuesta de la sincronización
+dice desde cuándo.
+
+Para que se ejecute sola, instala un temporizador como para los [feeds](./gcal/usage.md#run-it-on-a-timer):
+
+```sh
+gcal personal schedule command meet --every 1d -- meetings sync
+```
+
+## Qué guarda una reunión
+
+- **Cuándo empezó y terminó la llamada, y quién se unió.**
+- **La transcripción**, línea a línea con quién habla.
+- **Los archivos de Drive que hizo Google**: el documento de la transcripción, la grabación y las notas de Gemini, por
+  su id de archivo de Drive. `gcal` no los descarga y no pide ningún permiso de Drive. Los lee la
+  [herramienta de Google Drive](./drive/index.md).
+- **El evento del calendario.** Una llamada se une a su evento por el enlace de la sala
+  (`meet.google.com/abc-defg-hij`). Meet no da título a una llamada, así que se usa el título del evento.
+
+`meetings list` y `meetings show` preguntan a Google y al almacén a la vez, y guardan lo que devuelve Google. Cada
+reunión dice dónde se encontró: `found_in` es `server`, `archive` o `both`. Añade `--backend archive` para leer solo el
+almacén, sin internet.
+
+Los nombres de los participantes y lo que dijeron vienen de otras personas. `gcal` los marca como no fiables, así que
+tu agente los lee como datos y nunca los sigue como instrucciones.
+
+## Si falta una llamada o una transcripción
+
+1. **"this profile signed in without access to Google Meet"** (el perfil no tiene acceso a Google Meet). Ejecuta el
+   `session start --grant …` que da el mensaje. También nombra los permisos que ya tiene el perfil, así que los
+   conservas.
+2. **"the Google Meet API is turned off for this OAuth project"** (la API de Google Meet está desactivada). El proyecto
+   de tu aplicación de Google tiene la API de Meet desactivada.
+   [Actívala](https://console.cloud.google.com/apis/library/meet.googleapis.com), espera unos minutos y vuelve a
+   ejecutar `meetings sync`.
+3. **"Google Meet has not finished the transcript yet"** (la transcripción aún no está lista). No tienes que hacer
+   nada: la próxima sincronización la lee. `meetings show` lista lo que aún falta en `missing`.
+4. **La llamada no está en la lista.** La organizó otra persona. Ábrela con `meetings show` y el id de Google de la
+   llamada, o comprueba que no tiene más de 30 días.
+5. **No hay ninguna transcripción.** La transcripción estaba desactivada en esa llamada, o la cuenta es personal y no
+   de Google Workspace.
+6. **Una búsqueda por palabras no encuentra una transcripción.** `search all` dice en `missing` que el índice de
+   búsqueda de las reuniones va atrasado. Lee la llamada con `meetings transcript`.
+
+Más problemas de inicio de sesión en [solución de problemas de gcal](./gcal/troubleshooting.md). Después:
+[Reuniones](./zm/meetings.md) muestra cómo enlazar lo que se decidió en una llamada con tus proyectos y preparar la
+siguiente.

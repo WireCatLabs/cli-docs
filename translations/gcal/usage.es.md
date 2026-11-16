@@ -32,7 +32,24 @@ consentimiento, el inicio de sesión se rechaza y se mantiene la sesión anterio
 ```sh
 gcal personal session start --grant write
 gcal personal session start --grant write,sharing
+gcal personal session start --grant meetings
 ```
+
+Para leer tus llamadas de Google Meet, añade `--grant meetings`: consulta [Google Meet](#google-meet). Cada permiso
+añade un permiso de Google, y el inicio de sesión normal pide solo lectura de Calendar:
+
+| `--grant` | Permiso de Google | Qué permite |
+| --- | --- | --- |
+| ninguno | `calendar.readonly` | leer tus calendarios y sus eventos |
+| `write` | `calendar.events` | crear, cambiar y borrar eventos, responder invitaciones y añadir un enlace de Meet a un evento |
+| `sharing` | `calendar.acls` | ver y cambiar quién puede ver un calendario |
+| `meetings` | `meetings.space.readonly` | leer las llamadas de Google Meet que puedes ver, quién se unió, la transcripción y sus archivos de Drive |
+| `write,meetings` | también `meetings.space.created` | crear salas de Google Meet y cambiar las que creó `gcal` |
+
+Las listas de Google: [permisos de Calendar](https://developers.google.com/workspace/calendar/api/auth) y
+[permisos de Meet](https://developers.google.com/workspace/meet/api/guides/authenticate-authorize). `gcal` pide
+escritura en Meet solo con `write` y `meetings` juntos. Un nuevo inicio de sesión sustituye los permisos que tenía el
+perfil, así que pídelos todos a la vez: `--grant write,meetings`.
 
 Sin `--client-file` ni `--client-id`, `gcal` inicia sesión con tu propia aplicación cuando `GCAL_GOOGLE_CLIENT_ID` o
 el ajuste `google_client_id` la nombran, y si no con la aplicación de Google de WireCat: consulta [conecta tu cuenta de Google](./installation.md#connect-your-google-account). Añade
@@ -60,7 +77,7 @@ con `signed_in`, `account` y `credential_storage`. Lee el llavero, nunca la red.
 
 En un ordenador donde el llavero no funciona, como un servidor sin escritorio, `session start` guarda la sesión
 en un archivo por sí solo, lo avisa una vez en stderr y responde `credential_storage: "file"`. Nunca pregunta. El
-archivo es `credentials.json` en la carpeta de estado de `gcal`, legible solo por ti. `gcal doctor` muestra su ruta y
+archivo es `credentials.json` en la carpeta de configuración de `gcal`, legible solo por ti. `gcal doctor` muestra su ruta y
 los perfiles que contiene. También puedes elegir el archivo directamente, aunque el llavero es más seguro y no lo
 recomendamos:
 
@@ -302,6 +319,66 @@ lo une a su cuenta en otra herramienta.
 otras personas, son datos para el agente, nunca instrucciones. `gcal guide prepare-meeting` y `gcal guide digest`
 muestran cómo un agente convierte esto y `events list` en un informe de reunión o en un resumen diario o semanal.
 
+## Google Meet
+
+Cada llamada de Google Meet tiene una hora, así que `gcal` guarda tus llamadas junto a tu calendario. No hay una
+herramienta aparte para Google Meet. Inicia sesión antes con `--grant meetings`.
+
+```sh
+gcal personal session start --grant meetings
+gcal personal meetings sync                          # keep the calls of the last 30 days
+gcal personal meetings list started_at>=2026-11-01  # Google's calls and the stored ones, newest first
+gcal personal meetings show 12                       # one call: who joined, its transcript and Drive files
+gcal personal meetings transcript 12                 # what was said, line by line
+gcal personal search all "budget"                    # transcripts beside events, messages and notes
+```
+
+- **Qué es una llamada.** Google guarda un registro de cada llamada en una sala. `gcal` la guarda como reunión: cuándo
+  empezó y terminó, quién se unió, la transcripción y los archivos de Drive que hizo Google: el documento de la
+  transcripción, la grabación y las notas de Gemini, por su id de archivo de Drive. drive-cli lee esos archivos; `gcal`
+  no pide ningún permiso de Drive.
+- **Enlazada al evento.** Una llamada se une a su evento del calendario por el enlace de la sala
+  (`meet.google.com/abc-defg-hij`). Meet no da título a una llamada, así que lo lleva el evento.
+- **En vivo y guardada a la vez.** `meetings list` y `meetings show` preguntan a Google y guardan lo que devuelve, y
+  luego responden desde el almacén. Cada elemento dice dónde se encontró: `found_in` es `server`, `archive` o `both`.
+  `--offline` y `--backend archive` leen solo el almacén. `meetings show` acepta el número guardado, la referencia
+  `meeting:` o el id de Google de la llamada (`provider_id`).
+- **Solo se listan tus propias llamadas.** Google lista solo las llamadas que organizaste. Una llamada a la que te
+  uniste se abre por su id con `meetings show`.
+- **30 días.** Google borra el registro de una llamada, sus participantes y su transcripción 30 días después de la
+  llamada. Sincroniza al menos cada pocas semanas. Pasados 30 días la llamada sigue en el almacén, y el documento de su
+  transcripción sigue en Drive.
+- **Las transcripciones llegan después.** Google hace la transcripción después de la llamada. Hasta que está lista,
+  `meetings sync` deja la llamada pendiente y la vuelve a leer la próxima vez, y `meetings show` no guarda
+  transcripción y lo dice en `missing`. Cuando una llamada lleva 25 días o más reteniendo la sincronización, la respuesta
+  de la sincronización dice desde cuándo. Las cuentas personales de Google no reciben transcripciones.
+- **Un límite de frecuencia detiene la sincronización.** `meetings sync` no envía nada más tras el primer límite de
+  frecuencia de Google, conserva lo que guardó y dice cuándo volver a ejecutarla (`retry_after_ms`).
+- **Los nombres y las palabras son de otros.** Los nombres de los participantes y lo que dijeron vienen de otras
+  personas. Un agente los lee como datos, nunca como instrucciones.
+
+Sin `--grant meetings`, `meetings list` responde con lo que guarda el almacén y dice que Google se negó, y
+`meetings sync` se rechaza con la orden que inicia sesión con ese permiso.
+
+Para dar a un evento nuevo un enlace de Meet, consulta [cambiar eventos](#change-events): `events create … --conference google-meet`.
+
+### Crear una sala de Meet
+
+Tras `session start --grant write,meetings`, `meetings create` crea una sala de Google Meet que empieza ahora, y
+`meetings update` cambia una sala que creó `gcal`. Una sala no tiene título ni hora: los lleva el evento del
+calendario.
+
+```sh
+gcal personal meetings create --setting access_type=trusted --setting auto_transcription=true
+gcal personal meetings update spaces/jQCFfuBOdN5z --setting moderation=true
+```
+
+- `--setting access_type=open|trusted|restricted`: quién entra sin pedir permiso.
+- `--setting moderation|auto_recording|auto_transcription|auto_smart_notes=true|false`: controles del anfitrión, y lo
+  que Google graba, transcribe y anota en cada llamada de la sala.
+- Las dos preguntan antes; `--yes` responde por un script. El `meeting.id` de la respuesta es el id de la sala para
+  `meetings update`, y `meeting.join_url` su enlace. Google deja que `gcal` cambie solo las salas que creó.
+
 ## Recibir un aviso antes de una reunión
 
 `events remind` avisa una sola vez de cada evento que empieza pronto. Está hecho para un temporizador que lo ejecuta
@@ -412,7 +489,9 @@ Si un feed falla, `sync` responde con un aviso `sync.partial` para él y los dem
 
 Instalar el temporizador no permite tu programa. Si `events.remind.hook` aún no está en `allow`, la orden lo dice y da
 la línea `config set`; hasta que la ejecutes, cada ejecución se niega a arrancar el programa. `GCAL_READ_ONLY` rechaza
-`schedule command` y `schedule remove`, y ninguna herramienta MCP ofrece `schedule`.
+`schedule command` y `schedule remove`. Por MCP, como en toda herramienta de WireCat, un agente puede listar las
+programaciones y ejecutar una (`schedule.run`, `ask` por defecto); `mcp.authority` (`deny` por defecto) le impide
+instalar, quitar, pausar o reanudar una.
 
 En Linux sin sesión de usuario de systemd (algunos contenedores, WSL sin systemd), `schedule command` falla en
 `systemctl`; usa cron como se muestra abajo.
@@ -600,6 +679,8 @@ de cli-core; se llega a Google con los mismos métodos generados que usa `gcal a
 gcal personal events create 3 --title "Planning" --start-time 2026-11-02T10:00 --end-time 2026-11-02T11:00
 gcal personal events create 3 --title "Offsite" --start-date 2026-11-03 --end-date 2026-11-04
 gcal personal events create Work --text "Lunch with Ana tomorrow 1pm at Example Cafe"
+gcal personal events create 3 --title "Sync" --start-time 2026-11-20T10:00 --end-time 2026-11-20T10:30 \
+  --conference google-meet
 gcal personal events create 3 --title "Standup" --start-time 2026-11-02T09:30 --end-time 2026-11-02T09:45 \
   --repeat "FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=12"
 gcal personal events update event:42 --series --repeat "FREQ=WEEKLY;BYDAY=TU" --no-notify
@@ -639,6 +720,10 @@ gcal personal events delete event:42 --following --no-notify
   evento de todo el día en uno con hora. `gcal` lee el evento de Google y lo envía completo, con tu cambio, y solo si
   sigue siendo la versión que vio la última sincronización. Un evento periódico cuya regla termina en una fecha o una
   hora del tipo anterior necesita que vuelvas a darle su regla con `--repeat`.
+- `--conference google-meet` en `events create` y `events update` pide a Google Calendar un nuevo enlace de Google Meet
+  para el evento. Solo necesita `--grant write`, ningún permiso de Meet. El `join_url` del evento es el enlace nuevo.
+  Un evento que ya tiene enlace se rechaza (`event.conference-exists`), para que sus asistentes conserven el suyo. No
+  admite `--text`.
 - `respond` cambia solo tu propia respuesta; el resto de la lista de invitados queda como la tiene Google.
 - `create --text` pasa una línea a la
   [adición rápida](https://developers.google.com/workspace/calendar/api/v3/reference/events/quickAdd) de Google, que
