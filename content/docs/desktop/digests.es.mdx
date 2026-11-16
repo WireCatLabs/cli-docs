@@ -5,36 +5,85 @@ description: Recibe un resumen breve de tus chats, correo, reuniones y tareas ca
 ---
 
 Tienes muchos chats, correos y reuniones, y no tienes tiempo de leerlos todos cada mañana. Un resumen es una página
-breve que dice qué llegó y qué te espera. En la página **Resúmenes** de WireCat Desktop lo configuras una vez: cuándo
-se ejecuta, qué lee, adónde se envía y qué agente de IA lo escribe. Después, recibes un resumen cada mañana o cada
-semana sin pedirlo. La página necesita Memo, que guarda tus fuentes, y un agente de programación en este ordenador,
-como Claude Code, Gemini CLI u OpenCode.
+breve que dice qué llegó y qué te espera. Lo escribe un agente de IA en tu ordenador a la hora que eliges, cada mañana o
+cada semana, y llega sin pedirlo: a la aplicación, a Telegram o al correo.
 
-Resúmenes está marcada como beta: ves una β junto a su nombre. La sección es nueva y está poco probada.
+En WireCat Desktop lees todos tus resúmenes en un solo sitio, con el día más reciente primero. Un nombre, un chat o una
+tarea del resumen se abre con un clic, así que pasas de «Anna espera respuesta» directamente al mensaje de Anna. Cada
+resumen lo configuras una vez: cuándo se ejecuta, qué lee, adónde se envía y qué agente lo escribe.
+
+**Resúmenes** tiene su propia página en la barra lateral, después de **Tareas**, con dos pestañas: **Resúmenes** para
+leerlos y **Ajustes** para su configuración. Necesita Memo, la herramienta que guarda tus chats, correo y reuniones
+en este ordenador, y un agente de programación aquí mismo, como Claude Code, Gemini CLI u OpenCode. Resúmenes está
+marcada como beta: una β junto a su nombre significa que la sección es nueva y está poco probada.
+
+**En esta página:**
+
+1. [Antes de empezar](#antes-de-empezar)
+2. [Leer tus resúmenes](#leer-tus-resúmenes)
+3. [Qué abre un enlace de un resumen](#qué-abre-un-enlace-de-un-resumen)
+4. [Crear un resumen](#crear-un-resumen)
+5. [La tabla](#la-tabla)
+6. [Los ajustes de un resumen](#los-ajustes-de-un-resumen)
+7. [Cuando un resumen está listo](#cuando-un-resumen-está-listo)
+8. [Si un resumen no llega](#si-un-resumen-no-llega)
+9. [Siguiente paso](#siguiente-paso)
+
+## Antes de empezar
+
+- **Memo** está instalado en la página **Herramientas**. Sin él, la página ofrece instalarlo.
+- **Un agente que pueda escribir resúmenes.** El resumen lo escribe un agente de programación en este ordenador. Claude
+  Code, Gemini CLI y OpenCode pueden hacerlo. Codex puede hacerlo después de que aceptes un aviso, mira
+  [Elegir el agente](#elegir-el-agente). La lista de los **Ajustes** de la aplicación (abajo en la barra lateral),
+  **Agente para tareas en segundo plano**, dice por qué cualquier otro agente no puede. Si ningún agente está listo, la
+  página lo dice y ofrece **Elegirlo en Ajustes**.
+- **Opcional, un sitio adonde enviarlo.** Para recibir resúmenes en Telegram o por correo, conecta antes un bot de
+  Telegram o una cuenta de correo en la página Herramientas. Sin uno, un resumen solo se ve en la aplicación y como
+  notificación.
+
+## Leer tus resúmenes
+
+Abre **Resúmenes** en la barra lateral. La pestaña **Resúmenes** muestra el informe completo del día más reciente, con
+la lista de días al lado. Pulsa un día para leerlo. Si tienes más de un resumen, una lista arriba elige cuál ver. **Ajustes**,
+junto al nombre del resumen, abre sus ajustes en la pestaña **Ajustes**.
 
 <DesktopShot
   shot="digests"
   folder="desktop/docs"
   lang="es"
-  alt="La página Resúmenes: Resumen diario, Resumen semanal y Crear el tuyo sobre una tabla de tres resúmenes con su horario, fuentes, destinos y última ejecución"
-  caption="Resúmenes: una fila por resumen, con cuándo se ejecutó y cuándo se ejecuta la próxima vez."
+  alt="La pestaña Resúmenes: el resumen matutino del lunes 16 de noviembre, con Hoy, Esperan tu decisión y Dinero, y la lista de días a la derecha"
+  caption="La pestaña Resúmenes: el informe de un día completo y los demás días al lado."
 />
 
-## Antes de empezar
+Si la última ejecución de un resumen falló, un aviso arriba de la pestaña lo dice, con un botón **Abrir** que nombra el
+resumen. Abre esa ejecución: en lugar de un resumen, el agente escribió qué salió mal. **Obtener ahora** en los ajustes
+del resumen lo ejecuta de nuevo cuando se corrija la causa.
 
-- **Memo** está instalado en la página Herramientas. Sin él, la página ofrece instalarlo.
-- **Un agente que pueda escribir resúmenes.** El resumen lo escribe un agente de programación en este ordenador. Claude
-  Code, Gemini CLI y OpenCode pueden hacerlo. Codex puede hacerlo después de que aceptes un aviso, mira
-  [Elegir el agente](#elegir-el-agente). La lista de **Ajustes**, **Agente para tareas en segundo plano**, dice por qué
-  cualquier otro agente no puede. Si ningún agente está listo, la página lo dice y ofrece **Elegirlo en Ajustes**.
-- **Opcional, un sitio adonde enviarlo.** Para recibir resúmenes en Telegram o por correo, conecta antes un bot de
-  Telegram o una cuenta de correo en la página Herramientas. Sin uno, un resumen solo se ve en la aplicación y como
-  notificación.
+Si aún no hay resúmenes, la pestaña ofrece **Configurar un resumen**, que te lleva a la pestaña **Ajustes**.
+
+## Qué abre un enlace de un resumen
+
+Las personas, chats, tareas y reuniones de un informe son enlaces. Cada uno abre su elemento aquí, en WireCat:
+
+| En el resumen | Abre |
+| --- | --- |
+| Un mensaje, un chat o un hilo de correo | La conversación en una pantalla de solo lectura, con el mensaje marcado. WireCat no envía nada desde ella. |
+| Una tarea | El diálogo de la tarea |
+| Un grupo de tareas, como **Todas las vencidas** | La lista de **Tareas** con ese filtro |
+| Una propuesta por revisar | Su fila en **Memoria** |
+| Un proyecto | **Tareas**, filtradas por ese proyecto |
+| Una línea sobre la sincronización | La sincronización de esa herramienta |
+| Una persona | Su ficha en **Contactos** |
+| Un evento o una llamada | La ficha de la reunión en **Reuniones** |
+| Un documento | Los detalles del documento en **Documentos** |
+| Una negociación o un prospecto | Su ficha en **Clientes** |
+
+Todo lo demás del informe queda como texto sin enlace.
 
 ## Crear un resumen
 
-En **Nuevo resumen**, elige **Resumen diario**, **Resumen semanal** o **Crear el tuyo**, y pulsa **Configurar**. El
-diálogo **Crear resumen** pide:
+En la pestaña **Ajustes**, en **Nuevo resumen**, elige **Resumen diario**, **Resumen semanal** o **Crear el tuyo**, y
+pulsa **Configurar**. El diálogo **Crear resumen** pide:
 
 - **Nombre.** Un segundo resumen de la misma plantilla recibe su propio nombre, como «Resumen semanal 2».
 - **Horas** y **Días:** una o más horas al día, cada día o los días que elijas. La tabla dice entonces, por ejemplo,
@@ -83,10 +132,19 @@ Cada resumen muestra su **Nombre**, **Con qué frecuencia**, **De dónde toma**,
 hasta que actúes muestra **Te espera**. **Otros horarios**, debajo, lista otras tareas que Memo ejecuta según un
 horario, como el agente de correo, y dónde se cambia cada una.
 
-## Un resumen
+<DesktopShot
+  shot="digest-settings"
+  folder="desktop/docs"
+  lang="es"
+  alt="La pestaña Ajustes de Resúmenes: Resumen diario, Resumen semanal y Crear el tuyo sobre una tabla de tres resúmenes con su horario, fuentes, destinos y última ejecución"
+  caption="La pestaña Ajustes: una fila por resumen, con cuándo se ejecutó y cuándo se ejecuta la próxima vez."
+/>
 
-Pulsa un resumen para abrirlo.
+## Los ajustes de un resumen
 
+Pulsa un resumen en la tabla para abrir sus ajustes. **Todos los resúmenes** vuelve a la tabla.
+
+- **Leer lo que escribió** abre su día más reciente en la pestaña **Resúmenes**.
 - **Obtener ahora** escribe uno al momento. Antes dice cuánto costará más o menos. Su menú puede mostrarlo solo aquí o
   enviarlo a un único destino.
 - **Programar** o **Quitar de la programación**.
@@ -96,22 +154,24 @@ Pulsa un resumen para abrirlo.
 - **Cómo se ve:** la plantilla para **Telegram**, **Correo** y **Texto sin formato**, con una **Vista previa** de lo
   que se enviaría. **Volver a la predeterminada** recupera la original.
 - **Crear días pasados** crea los resúmenes de días anteriores a la configuración, para que los leas en la
-  aplicación. Antes dice el precio. Esos días no se envían a ningún sitio, y la lista los marca como «creado después».
+  pestaña **Resúmenes**. Antes dice el precio. Esos días no se envían a ningún sitio, y la lista los marca como
+  «creado después».
 - **Más** tiene **Eliminar resumen**.
-
-Los días que tienes aparecen al lado. Pulsa uno para leerlo.
 
 ## Cuando un resumen está listo
 
-Mientras WireCat está abierto, un resumen nuevo muestra una notificación. Un enlace `wirecat://` a un resumen, por
-ejemplo en un mensaje que te envió un agente, lo abre en esta página.
+Mientras WireCat está abierto, un resumen nuevo muestra una notificación, que se queda en **Avisos**, arriba en la
+ventana. **Abrir el resumen** abre el informe de ese día en la pestaña **Resúmenes**. Un enlace `wirecat://` al resumen
+matutino, por ejemplo en un mensaje que te envió un agente, hace lo mismo.
 
 ## Si un resumen no llega
 
-- **La ejecución falló porque el agente no tiene saldo, llegó a un límite o no tiene la sesión iniciada.** La página
-  del resumen nombra el agente y el motivo. Si hay otro agente listo, ofrece **Cambiar a** ese agente.
-- **Ningún agente está listo o elegido.** Abre **Ajustes**, **Agente para tareas en segundo plano**, y elige uno.
-- **Se ve aquí, pero no en Telegram ni en el correo.** Abre los **Ajustes** del resumen y revisa **Lo envía a**.
+- **La ejecución falló porque el agente no tiene saldo, llegó a un límite o no tiene la sesión iniciada.** Los ajustes
+  del resumen nombran el agente y el motivo. Si hay otro agente listo, ofrecen **Cambiar a** ese agente.
+- **Ningún agente está listo o elegido.** Abre **Ajustes**, abajo en la barra lateral, **Agente para tareas en segundo
+  plano**, y elige uno.
+- **Se ve en la pestaña Resúmenes, pero no en Telegram ni en el correo.** Abre los ajustes del resumen y revisa
+  **Lo envía a**.
 
 Para cualquier otro error, [Errores y cómo resolverlos](./troubleshooting.mdx) muestra dónde leerlo completo.
 
