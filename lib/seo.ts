@@ -5,6 +5,7 @@ import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
 import { mailDescriptions } from "./mail-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
+import { notionDescriptions } from "./notion-descriptions"
 import { pbxDescriptions } from "./pbx-descriptions"
 import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
@@ -107,6 +108,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     gcal: gcalDescriptions,
     mail: mailDescriptions,
     memo: memoDescriptions,
+    notion: notionDescriptions,
     pbx: pbxDescriptions,
     wa: whatsappDescriptions,
   }[selectedTool?.name ?? ""]
