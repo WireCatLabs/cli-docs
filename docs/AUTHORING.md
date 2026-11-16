@@ -276,8 +276,12 @@ long it takes; do not open with how the product is built.
 
 ## Mandatory opening order for every public page
 
-1. State what the page is about and the situation it addresses.
-2. State the concrete result the reader will get by reading it.
+1. State what the page is about and the situation it addresses. Lead with what the reader gains, not with what the
+   service lacks: "Never lose the transcripts of your Google Meet calls. They stay on your computer after Google
+   removes them" tells the reader the benefit at once, while "Google Meet keeps a transcript for only 30 days" reads
+   as a complaint and leaves the reader to work out why it matters. The service's limit may follow as the reason.
+2. State the concrete result the reader will get by reading it, with the reader or the agent as the subject ("An agent
+   with access to your calls tells you what was decided"), not an instruction ("Ask your agent") or a tool.
 3. Define unfamiliar terms needed for that result, then explain why or how the feature works
    only when that explanation helps the task.
 4. Proceed to instructions, examples or the reference entries appropriate to the page.

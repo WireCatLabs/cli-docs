@@ -1,17 +1,17 @@
 ---
 title: "Google Meet"
-description: "Keep your Google Meet calls, who joined and the transcript on your computer, so your agent finds what was said next to the calendar event, chats and notes."
+description: "Never lose your Google Meet transcripts: they stay on your computer, and your agent finds what was said next to the calendar event, chats and notes."
 ---
 
-Google Meet keeps a call's record, its participants and its transcript for 30 days, and shows them one call at a time.
-Your AI agent cannot see them next to the calendar event, the chats about the meeting or your notes. Google
-Calendar's tool `gcal` copies your Meet calls to your computer and keeps them there after Google deletes them.
+Never lose the transcripts of your Google Meet calls. They stay on your computer after Google removes them from Meet,
+30 days after the call. You can always find the call you need and link it to its calendar event, your chats and your
+notes, so your agent has the whole context of the meeting.
 
-Ask your agent what was decided on a call, who joined and who said what, and it answers with a quote, its call and
-its time. It finds the call by the calendar event or by a person, beside your messages and notes. You can also save a
-call as a file and add a Meet link to an event.
+An agent with access to your calls tells you what was decided, who joined and who said what, and quotes the passage
+with its time. It finds a call by its calendar event or by a person.
 
-`gcal` keeps each call as a meeting in the local store that all WireCat tools share, and links it to its calendar
+There is no separate Meet tool: Google Calendar's tool `gcal` works with Google Meet. It keeps calls, participants and
+transcripts, points to the call recordings and Gemini notes on Google Drive, makes rooms and adds a Meet link to an
 event. You need `gcal` installed and signed in to your Google account ([installation](./gcal/installation.md)).
 Transcripts come only from a Google Workspace account: a personal Google account gets calls and participants without
 transcripts.
@@ -19,7 +19,7 @@ transcripts.
 **On this page:**
 
 1. [Short version](#short-version)
-2. [Ask your agent](#ask-your-agent)
+2. [What your agent tells you](#what-your-agent-tells-you)
 3. [Find a person across calls](#find-a-person-across-calls)
 4. [Save a call as a file](#save-a-call-as-a-file)
 5. [Add a Meet link or make a room](#add-a-meet-link-or-make-a-room)
@@ -46,7 +46,7 @@ A new sign-in replaces the permissions the profile had. If you also change event
 `gcal personal session start --grant write,meetings`. If you sign in through your own Google app, turn on the
 [Google Meet API](https://console.cloud.google.com/apis/library/meet.googleapis.com) in its project first.
 
-## Ask your agent
+## What your agent tells you
 
 Ask in your own words:
 
