@@ -12,10 +12,10 @@ todos los perfiles. Los tres comandos del ejemplo muestran los ajustes, cambian 
 
 **En esta página:**
 
-1. La fuente
-2. Transcripción
-3. Permisos
-4. Registros de ejecución
+1. [La fuente](#the-source)
+2. [Transcripción](#transcription)
+3. [Permisos](#permissions)
+4. [Registros de ejecución](#run-records)
 
 ```sh
 pbx office config show
@@ -49,6 +49,7 @@ Qué significa cada ajuste está en [instala y conecta](./installation.md).
 | `cdr_timezone` | la de este ordenador | la zona de las horas de los registros de llamadas |
 | `phone_region` | — | el país de los números escritos sin `+`, como `ru`, o varios: `es,ru` |
 | `extension_pattern` | `^\d{2,5}$` | qué números son extensiones internas |
+| `extension_names` | — | nombres de las extensiones internas, como `101=Anna Smirnova,103=Vera Orlova`; mandan sobre los nombres de FreePBX y el identificador de llamada |
 | `files_from` | `local` | `local`, o `sftp` para leer `Master.csv` y las grabaciones en la centralita |
 | `sftp_host`, `sftp_port`, `sftp_user` | —, 22, — | el servidor SSH de la centralita, para `files_from sftp` |
 | `sftp_key_path` | — | un archivo de clave privada; sin él, `session start` pide la contraseña de SFTP |
@@ -85,7 +86,7 @@ pbx office config set permissions.meetings.transcribe deny
 ## Registros de ejecución
 
 Un registro de ejecución es lo que la herramienta guarda sobre un comando que se ejecutó. Un comando que falla se
-guarda como ejecución. La muestran `pbx runs list` y `runs show`. `meetings sync`, `meetings
-transcribe` y `session status --check` hacen su trabajo dentro de una ejecución. Por eso, con `--record` también se
+guarda como ejecución. La muestran `pbx runs list` y `runs show`. `meetings sync`,
+`meetings transcribe` y `session status --check` hacen su trabajo dentro de una ejecución. Por eso, con `--record` también se
 guardan cuando salen bien. `record_input` decide si una ejecución guarda las palabras que escribiste. Los secretos se
 ocultan siempre; consulta [Seguridad](./security.md).

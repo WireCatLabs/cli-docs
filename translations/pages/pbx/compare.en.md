@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `pbx` is a command line and an MCP server that copies the calls of an Asterisk PBX to your computer, turns their
 recordings into text there and gives them to your AI agent to read. This page puts it next to the other tools people
 use to read, transcribe and search the calls of an Asterisk or FreePBX system, so you can see which one fits your job.
-The marks for `pbx` come from version 0.6.0, checked on 15 November 2026. The marks for the other tools come
+The marks for `pbx` come from version 0.7.1, checked on 16 November 2026. The marks for the other tools come
 from their own READMEs and documentation, checked on 13 November 2026. Nothing was connected to a live PBX for this
 page, and a tool may do more than its pages say.
 
@@ -33,7 +33,7 @@ The tools:
 | See the same caller in calls, chats, mail and the CRM | ✅ | ➖ | ➖ | ➖ |
 | **Recordings and transcripts** | | | | |
 | Find the recording of a call | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/26083384/PBX+GUI+-+CDR+Module+GraphQL+APIs) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L73) |
-| Play a recording from a link | ❌ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | ➖ |
+| Play a recording from a link | 🟡 | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | [✅](https://github.com/mwtcmi/frogman/blob/357b9ce/README.md?plain=1#L187) | ➖ |
 | Turn recorded calls into text | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [✅](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L6) |
 | Recordings never leave your own computers | ✅ | [❌](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L75) |
 | Transcribe the recordings you already have, in one run | ✅ | [✅](https://sangomakb.atlassian.net/wiki/spaces/PG/pages/488898594/PBX+GUI+-+Scribe) | ➖ | [🟡](https://github.com/taka-1128/asterisk-ai-call-notes/blob/8f35284/README.md?plain=1#L39) |
@@ -89,7 +89,9 @@ Notes on the marks:
   for VICIdial, inside its health check report.
 - **Mark calls.** `pbx tags add` marks every call a search finds, and a schedule keeps marking the new ones. Scribe
   tags a call by the words you set up.
-- **Recordings with a link.** `pbx` links each call to its recording file by its path. It does not stream it.
+- **Recordings with a link.** WireCat Desktop plays a call's recording right on the call's card, and the link
+  `pbx meetings show` prints opens that card. This works when the recordings folder is on this computer. A recording
+  that `pbx` reads over SFTP stays on the PBX, and the card cannot play it. `pbx` itself does not stream a recording.
 
 ## When another tool fits better
 

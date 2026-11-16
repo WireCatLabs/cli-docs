@@ -18,7 +18,8 @@ herramienta de WireCat, junto con el resto de tus datos. También la encuentra M
 persona en llamadas, chats y correo a la vez. Conecta `pbx` una vez por centralita. Necesita permiso
 de lectura sobre el registro de llamadas: sobre el archivo, o sobre la base de datos con un usuario que solo puede
 leer. Si quieres el texto de las llamadas, necesita también permiso de lectura sobre la carpeta de grabaciones.
-WireCat Desktop instala `pbx` por ti y lo conecta con un formulario. Desde una terminal bastan unos pocos comandos.
+WireCat Desktop y `pbx office setup` en una terminal hacen las mismas preguntas. Un script define cada ajuste con
+`config set`.
 
 **En esta página:**
 
@@ -109,20 +110,34 @@ perfiles. También muestra si otros usuarios del ordenador pueden leer los ajust
 2. En **Cuentas**, añade una cuenta con un nombre para esta centralita, como `office`, y pulsa
    **Iniciar sesión aquí**.
 3. En **¿Dónde están los registros de llamadas?**, elige **Archivo Master.csv**, **MySQL o MariaDB** o
-   **PostgreSQL**:
-   - para **Archivo Master.csv**, escribe su **Ruta de Master.csv** en este ordenador: una copia del archivo o una
-     carpeta compartida que lo contenga;
-   - para una base de datos, rellena **Servidor de la base de datos**, **Nombre de la base de datos**, **Usuario** y la
-     **Contraseña del usuario de la base de datos**. Deja **Puerto (opcional)** vacío para el puerto habitual. Activa
-     **Conexión cifrada** cuando la base de datos no esté en tu propia red.
-4. **Carpeta de grabaciones (opcional)** es la carpeta de las grabaciones de llamadas en este ordenador. Las llamadas
-   llegan también sin ella.
-5. En **Países de tus líneas telefónicas**, elige los países. El formulario explica: «Las llamadas se enlazan con tus
-   contactos por el número de teléfono. Asterisk suele escribir el número sin el prefijo del país, así que elige los
-   países que atienden tus líneas. Las llamadas de otros países llegan igualmente con su prefijo +.»
-6. Empieza el inicio de sesión. `pbx` lee la última hora de llamadas para comprobar los ajustes y no cambia nada. La
-   contraseña de una base de datos se guarda solo cuando esa comprobación funciona. Después, la sincronización trae
-   las llamadas de los últimos 30 días, con sus grabaciones.
+   **PostgreSQL**. Después elige dónde están `Master.csv` y las grabaciones: **En este equipo** o
+   **En la centralita, por SFTP**. SFTP es una forma de leer archivos de un servidor por SSH, el acceso seguro al
+   servidor.
+4. Por SFTP, rellena **Servidor**, **Usuario** y **Contraseña del usuario SFTP**. Deja vacía la **Clave del servidor**
+   la primera vez. La comprobación se detiene entonces y muestra la clave del servidor. Compárala con la clave de la
+   centralita (consulta [archivos de la centralita por SFTP](#files-on-the-pbx-over-sftp)), copia la clave en el
+   campo y comprueba de nuevo.
+5. Para **Archivo Master.csv**, indica su **Ruta de Master.csv**. En este equipo es una copia del archivo o una
+   carpeta compartida que lo contiene. Por SFTP es su ruta en la centralita.
+6. Para una base de datos, rellena **Servidor de la base de datos**, **Nombre de la base de datos**, **Usuario** y la
+   **Contraseña del usuario de la base de datos**. Deja **Puerto (opcional)** vacío para el puerto habitual. Activa
+   **Conexión cifrada** cuando la base de datos no esté en tu propia red. A veces la base de datos solo acepta
+   conexiones desde la propia centralita, como en FreePBX. Entonces abre **Por un túnel SSH (opcional)** y rellena el
+   servidor SSH, su usuario y su contraseña. Un túnel SSH lleva la conexión con la base de datos a través del acceso
+   SSH de la centralita. El **Servidor de la base de datos** es entonces `127.0.0.1`: así ve la base de datos la
+   propia centralita.
+7. **Carpeta de grabaciones (opcional)** es la carpeta de las grabaciones de llamadas. Las llamadas llegan también sin
+   ella. En **Países de tus líneas telefónicas**, elige los países. El formulario explica: «Las llamadas se enlazan
+   con tus contactos por el número de teléfono. Asterisk suele escribir el número sin el prefijo del país, así que
+   elige los países que atienden tus líneas. Las llamadas de otros países llegan igualmente con su prefijo +.»
+   **Nombres de las extensiones (opcional)** da nombre a los empleados que nunca hacen una llamada (consulta
+   [nombres de las extensiones](#names-of-the-extensions)).
+8. `pbx` lee la última hora de llamadas para comprobar los ajustes y no cambia nada. Los ajustes y las contraseñas se
+   guardan solo cuando esa comprobación funciona. Si rechaza una contraseña o un ajuste, el formulario vuelve al paso
+   que lo tiene. Después, la sincronización trae las llamadas de los últimos 30 días, con sus grabaciones.
+
+Estas preguntas vienen del propio `pbx`, así que WireCat Desktop y la terminal siempre hacen las mismas. Un WireCat
+Desktop antiguo muestra su propio formulario, más corto, sin SFTP ni túnel SSH.
 
 La zona horaria de los registros y los nombres de archivo de las grabaciones están en la página **Ajustes** de la
 cuenta. Para convertir las grabaciones en texto, consulta [Transcribir](#transcribe).
@@ -132,8 +147,22 @@ cuenta. Para convertir las grabaciones en texto, consulta [Transcribir](#transcr
 ## Conectar desde la terminal
 
 Un perfil es el nombre que das a una centralita, como `office`. Es la primera palabra de cada comando que lee las
-llamadas de esa centralita. Elige dónde están los registros y configura el perfil. Después ejecuta `session start`.
-El comando comprueba los ajustes leyendo las llamadas más recientes.
+llamadas de esa centralita. `pbx office setup` hace una a una las preguntas de WireCat Desktop y comprueba las
+respuestas leyendo las llamadas más recientes. Guarda los ajustes y las contraseñas solo si eso funciona:
+
+```sh
+pbx office setup
+```
+
+Responde a una elección con su número, a los países con sus códigos separados por comas (`ru, es`), y escribe la
+contraseña sin que se vea. Pulsa Intro para dejar el valor entre corchetes. Para cambiar un perfil, ejecútalo de
+nuevo. Una contraseña guardada se mantiene salvo que pidas cambiarla, pero si cambia el servidor o el usuario hay que
+escribir su contraseña otra vez. Si la comprobación rechaza una contraseña o un ajuste, `setup` vuelve al paso que lo
+tiene.
+
+Un script, o un ajuste que `setup` no pregunta, usa `config set` y `session start`. Hay ejemplos
+en las secciones sobre Master.csv, la base de datos de CDR y las grabaciones.
+`session start` comprueba los ajustes leyendo las llamadas más recientes y después guarda las contraseñas.
 
 <a id="mastercsv"></a>
 
@@ -293,8 +322,8 @@ la clave y el comando que la fija. Compara la huella con la de la propia central
 fijada. Si la clave de un servidor cambia, `pbx` lo rechaza. Después `session start` pide la contraseña de SFTP, si no
 hay archivo de clave. La comprueba leyendo los registros de llamadas más recientes y la guarda en el llavero.
 
-Las rutas son las de la centralita: `cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv`, `recordings_path
-/var/spool/asterisk/monitor`. Un perfil puede leer sus registros de una base de datos y sus grabaciones por SFTP con
+Las rutas son las de la centralita: `cdr_csv_path /var/log/asterisk/cdr-csv/Master.csv`,
+`recordings_path /var/spool/asterisk/monitor`. Un perfil puede leer sus registros de una base de datos y sus grabaciones por SFTP con
 contraseña. Entonces pide las dos contraseñas, primero la de la base de datos. Si además hay un túnel SSH, el orden
 es este: la de la base de datos, la del usuario SSH y la del usuario SFTP. Una conexión cortada se abre de nuevo, y el
 archivo se sigue leyendo desde donde se quedó. Una contraseña incorrecta, una clave cambiada o un archivo que falta
@@ -325,6 +354,39 @@ no se reintentan.
   `Restricted`) o un nombre interno del plan de marcación, como `s`, no es una persona.
 - Un grupo de timbrado o una cola llega a sus miembros a través de canales `Local/<extension>@…`. La extensión de ese
   canal, y no el número del grupo, es el miembro que contestó.
+
+<a id="names-of-the-extensions"></a>
+
+### Nombres de las extensiones
+
+Una extensión recibe su nombre de tres sitios. Gana el primero que tenga un nombre:
+
+1. **`extension_names`**, que defines tú. Úsalo para los empleados que solo atienden llamadas y nunca hacen una:
+
+   ```sh
+   pbx office config set extension_names "101=Anna Smirnova,103=Vera Orlova"
+   ```
+
+   `pbx office setup` y WireCat Desktop también lo preguntan, en el paso de las grabaciones.
+2. **La lista de extensiones del propio FreePBX**, la tabla `asterisk.users`, cuando los registros de llamadas están
+   en el MySQL de FreePBX. `pbx` la lee con el mismo usuario de la base de datos, y solo lee dos columnas:
+   `extension` (el número) y `name` (el nombre). Esa tabla guarda también la contraseña de cada teléfono, así que da
+   al usuario solo esas dos columnas, nunca la tabla entera:
+
+   ```sql
+   GRANT SELECT (extension, name) ON asterisk.users TO 'wirecat_reader'@'10.0.0.%';
+   ```
+
+   Sin este permiso la sincronización funciona igual. La comprobación de `pbx office setup`, `session start` y
+   `session status --check` imprime un aviso: los nombres no se leyeron de `asterisk.users`. Una sincronización no
+   imprime ningún aviso, así que la sincronización programada (cron) no dice nada. Un Asterisk sin FreePBX no tiene
+   esa tabla, y la comprobación muestra el mismo aviso. Si das el permiso más tarde, la siguiente sincronización lee
+   los nombres.
+3. **El identificador de llamada** (caller ID) de una llamada que hizo la extensión, como `"Oleg Petrov" <101>`. Es
+   el nombre de quien llama que transmite la centralita. Un empleado que nunca llama no recibe nombre de aquí.
+
+Cuando una sincronización vuelve a leer una llamada, la llamada conserva el nombre que ya tiene, aunque esta vez
+ninguna llamada de esa extensión lo haya dado.
 
 <a id="import-the-history-then-keep-it-current"></a>
 

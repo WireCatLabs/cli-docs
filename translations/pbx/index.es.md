@@ -71,9 +71,9 @@ necesitas acceso de lectura al registro de llamadas: un archivo o un usuario de 
 ## Lo que todavía no hace
 
 - **Resúmenes.** Tu agente lee la transcripción y escribe el resumen. `pbx` no escribe resúmenes propios.
-- **Reproducir una grabación.** Una llamada enlaza su grabación por la ruta del archivo, y tú abres el archivo en un
-  reproductor. No hay un enlace que la reproduzca en el navegador. `meetings show` imprime un enlace para WireCat
-  Desktop. Abrirá la llamada cuando Desktop admita enlaces a llamadas.
+- **Reproducir una grabación por SFTP.** WireCat Desktop reproduce la grabación en la ficha de la llamada cuando la
+  carpeta de grabaciones está en este ordenador. Si `pbx` lee las grabaciones por SFTP, el archivo se queda en la
+  centralita, y la ficha no puede reproducirlo. No hay un enlace que reproduzca una grabación en el navegador.
 - **Quién dijo qué en una grabación mono.** En una grabación estéreo, quien llama y el empleado están en canales
   distintos. Si defines [`recordings_channels`](./installation.md#transcribe), cada línea lleva un nombre. Una
   grabación mono es una sola pista mezclada, y su texto sale sin nombres.

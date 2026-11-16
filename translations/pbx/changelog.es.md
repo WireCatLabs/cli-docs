@@ -4,6 +4,77 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/asterisk-cli`. Una sección por versión, la más reciente primero.
 
+## 0.7.1 — 16.11.2026
+
+### Corregido
+
+- **Una sincronización ya no imprime el aviso sobre `asterisk.users`.** Cuando el usuario de una base de datos MySQL
+  no puede leer la tabla `asterisk.users` de FreePBX, como en un Asterisk sin FreePBX, cada sincronización decía que
+  no se leyeron los nombres de las extensiones, también la programada (cron). Ahora la comprobación de
+  `pbx office setup`, `session start` y `session status --check` imprime el aviso una vez, donde estás mirando, y la
+  sincronización no dice nada. Si das el permiso más tarde, la siguiente sincronización lee los nombres. Consulta
+  [nombres de las extensiones](./installation.md#names-of-the-extensions).
+- **La documentación dice que WireCat Desktop reproduce la grabación de una llamada.** Desktop la reproduce en la
+  ficha de la llamada cuando la carpeta de grabaciones está en este ordenador, y el enlace que imprime
+  `meetings show` abre la llamada. Una grabación que `pbx` lee por SFTP se queda en la centralita.
+
+## 0.7.0 — 16.11.2026
+
+### Añadido
+
+- **`pbx office setup` conecta un perfil pregunta a pregunta, y WireCat Desktop muestra las mismas preguntas.**
+  Pregunta dónde están los registros de llamadas (Master.csv, MySQL o MariaDB, PostgreSQL), si los archivos están en
+  este ordenador o en la centralita por SFTP, la base de datos a través del servidor SSH de la centralita cuando solo
+  escucha allí, la carpeta de grabaciones y los países de las líneas telefónicas. Lee la última hora de llamadas para
+  comprobar las respuestas, la misma comprobación que `session start`, y guarda los ajustes y las contraseñas solo
+  cuando funciona. Una contraseña o un ajuste rechazados lo devuelven al paso que los tiene. `setup show --json`,
+  `setup apply --dry-run` y `setup run apply --answer-stdin` dan las mismas preguntas a WireCat Desktop, en inglés,
+  ruso y español. Consulta [instalar y conectar](./installation.md#connect-from-the-terminal).
+- **Un servidor cambiado nunca recibe la contraseña antigua.** Cuando `setup` cambia un servidor de base de datos,
+  SSH o SFTP, su puerto, su usuario o la fuente, una contraseña vacía se rechaza (`validation_error`, `param` nombra
+  el campo) en lugar de probar la guardada en el sitio nuevo.
+- **Un perfil sin conectar señala `setup`.** El mensaje de un perfil que nunca se conectó, y la primera pantalla de
+  `pbx`, nombran `pbx <profile> setup`.
+- **`extension_names` da nombre a los empleados que nunca hacen una llamada.** Se define como
+  `101=Anna Smirnova,103=Vera Orlova`, o en `pbx office setup` y WireCat Desktop. Antes, una extensión solo recibía
+  nombre del identificador de llamada de una llamada que hizo, así que `stats calls show` mostraba como un simple
+  número a un empleado que solo atiende. Un nombre de aquí gana. Consulta
+  [nombres de las extensiones](./installation.md#names-of-the-extensions).
+- **Los nombres de las extensiones del propio FreePBX.** En el MySQL de FreePBX, `pbx` lee `asterisk.users` con el
+  mismo usuario de la base de datos, solo las dos columnas `extension` y `name`, así que el administrador da permiso
+  sobre esas columnas y nunca sobre las contraseñas de los teléfonos de la misma tabla. Un usuario sin ese permiso
+  sincroniza como antes; cada sincronización imprime un aviso. El orden: `extension_names`, después FreePBX, después
+  el identificador de llamada.
+
+### Cambios — pueden romper scripts
+
+- **`phone_region` también acepta una lista.** El flujo de configuración guarda los países elegidos como lista
+  (`["RU","ES"]`), y `config set phone_region es,ru` ahora también. Un texto separado por comas definido antes se lee
+  como antes.
+
+### Corregido
+
+- **Una sincronización ya no pierde el nombre de una extensión en una llamada que vuelve a leer.** Si los registros
+  leídos esta vez no tenían ninguna llamada que nombrara la extensión, la llamada se quedaba sin nombre para ella;
+  ahora conserva el nombre con el que se guardó.
+
+## 0.6.1 — 16.11.2026
+
+### Corregido
+
+- **`session start` ya no espera para siempre ante una tubería que sigue abierta.** Lee una línea por cada contraseña
+  que necesita y se detiene ahí, así que un programa que deja stdin abierto tras la última contraseña, como hacía
+  antes WireCat Desktop, recibe su respuesta. Una tubería que no envía nada se rinde a los 30 segundos con «no
+  password was given».
+- **Un perfil que nunca se conectó lo dice.** `meetings sync` y los demás comandos que leen la centralita ya no piden
+  `cdr_csv_path` a un perfil sin ajustes de fuente propios. Dicen que el perfil no está conectado, señalan
+  [instalar y conectar](./installation.md) y listan los perfiles de este ordenador. Un perfil que eligió
+  `cdr_source csv` sigue recibiendo el nombre del ajuste que falta. El motivo sigue siendo `source.not-configured`.
+- **La documentación:** la página de problemas nombra el motivo `network.failed`, como lo da el error; las páginas de
+  ajustes y de seguridad tienen índice; el servidor MCP, el registro de ejecución y los archivos de este ordenador
+  tienen sus propias secciones en la página de seguridad, fuera de «Grabaciones y consentimiento»; dos fragmentos de
+  código ya no se parten entre dos líneas.
+
 ## 0.6.0 — 15.11.2026
 
 ### Añadido
@@ -167,7 +238,7 @@ Cambios destacados de `@wirecat/asterisk-cli`. Una sección por versión, la má
   de cli-core: reintentos si se corta la conexión, tiempos de espera y cada petición en la traza de la ejecución. La
   clave del servidor se fija con `sftp_host_key` antes de enviar ninguna contraseña o clave, y el primer
   `session start` muestra la huella para comprobarla. Consulta
-  [conecta tu Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.6.0/docs/asterisk.md#files-on-the-pbx-over-sftp).
+  [conecta tu Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.1/docs/asterisk.md#files-on-the-pbx-over-sftp).
 
 ### Corregido
 
