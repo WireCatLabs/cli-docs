@@ -41,6 +41,7 @@ const docsScreens = [
   "contacts-matches",
   "clients",
   "digests",
+  "digest-settings",
   "memory-add",
   "sync-error",
   "failed-run",

@@ -10,10 +10,15 @@ las herramientas guardan en tu ordenador. Lee desde arriba para instalar la apli
 unos minutos. Después, cada sección explica una página de la ventana. La aplicación es opcional: cada herramienta se
 sigue instalando y funcionando desde una terminal sin ella.
 
-**En esta página:** [Descargar e instalar](#descargar-e-instalar) · [El primer arranque](#el-primer-arranque) ·
-[Iniciar sesión en una herramienta](#iniciar-sesión-en-una-herramienta) ·
-[Páginas de la aplicación](#qué-puedes-hacer-en-la-aplicación) · [Ajustes](#ajustes) ·
-[Actualizar y desinstalar](#actualizar-y-desinstalar) · [Problemas frecuentes](#problemas-frecuentes)
+**En esta página:**
+
+1. [Descargar e instalar](#descargar-e-instalar)
+2. [El primer arranque](#el-primer-arranque)
+3. [Iniciar sesión en una herramienta](#iniciar-sesión-en-una-herramienta)
+4. [Páginas de la aplicación](#qué-puedes-hacer-en-la-aplicación)
+5. [Ajustes](#ajustes)
+6. [Actualizar y desinstalar](#actualizar-y-desinstalar)
+7. [Problemas frecuentes](#problemas-frecuentes)
 
 ## Descargar e instalar
 
@@ -151,11 +156,12 @@ funcionando.
 
 ## Qué puedes hacer en la aplicación
 
-La barra lateral enumera las páginas en este orden: **Herramientas**, **Agentes**, **Buscar**, **Tareas**,
-**Resúmenes**, **Clientes**, **Guías**, **Memoria**, **Contactos** y **Analítica**. Debajo, aparte, están
-**Almacenamiento**, **Registros** y **Ajustes**, que tratan de los datos y de la propia aplicación. Tareas,
-Resúmenes, Clientes, Memoria y Contactos están marcadas como beta: una β junto al nombre significa que la sección es
-nueva y está poco probada.
+La barra lateral enumera las páginas en este orden: **Herramientas**, **Tareas**, **Resúmenes**, **Clientes**,
+**Contactos**, **Reuniones**, **Documentos**, **Memoria**, **Guías**, **Analítica** y **Buscar**. Debajo, aparte,
+están **Registros** y **Ajustes**, que tratan de la propia aplicación. Algunas páginas tienen pestañas: **Agentes** es
+una pestaña de **Herramientas**, **Almacenamiento** es una pestaña de **Analítica**, y **Resúmenes** tiene una pestaña
+**Ajustes**. Tareas, Resúmenes, Clientes, Contactos, Reuniones, Documentos y Memoria están marcadas como beta: una β
+junto al nombre significa que la sección es nueva y está poco probada.
 
 Cuando una página necesita una herramienta que falta, es demasiado antigua o no tiene la sesión iniciada, lo dice con
 las mismas palabras en todas partes, con un botón que lleva al arreglo, como **Instalar Memo** o **Actualizar Memo**.
@@ -316,8 +322,9 @@ proyecto: una nota junto a cada uno dice por qué. En el tablero, suéltala en H
 ### Resúmenes
 
 Un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o
-por correo. Lo escribe un agente de programación que eliges, como Claude Code. [Resúmenes](./digests.mdx) muestra cómo
-configurar uno.
+por correo. Lo escribe un agente de programación que eliges, como Claude Code. La pestaña **Resúmenes** muestra lo que
+escribió cada resumen, y una persona, un chat o una tarea que nombra se abre con un clic. En la pestaña **Ajustes** se
+configuran. [Resúmenes](./digests.mdx) muestra cómo.
 
 ### Clientes
 
@@ -477,8 +484,11 @@ en GitHub si hay una versión nueva de sí misma y enviar un informe de error cu
 ## Abrir WireCat desde un enlace
 
 Un enlace `wirecat://` abre su elemento en la aplicación abierta: un chat o un mensaje, una tarea, una lista de
-tareas, un recuerdo por revisar o un resumen. Los agentes y los resúmenes escriben esos enlaces. Un chat o un mensaje
-se abre en una pantalla de solo lectura, con el mensaje enlazado marcado; WireCat no envía nada desde ella. Un enlace a
+tareas, un recuerdo por revisar, un proyecto, una reunión o el resumen matutino. Los agentes y los resúmenes escriben
+esos enlaces. Un chat o un mensaje se abre en una pantalla de solo lectura, con el mensaje enlazado marcado; WireCat no
+envía nada desde ella. Un enlace a un resumen abre el informe de ese día en la pestaña **Resúmenes**. Dentro de un
+resumen, una persona, un documento o una negociación también se abren en la aplicación, mira
+[Qué abre un enlace de un resumen](./digests.mdx#qué-abre-un-enlace-de-un-resumen). Un enlace a
 algo que no está en este ordenador lo dice, con **Copiar la referencia**. Cuando un enlace web no se puede abrir en tu
 navegador, un diálogo muestra la dirección para copiarla. Haz clic derecho en cualquier enlace web de la aplicación
 para copiarlo.

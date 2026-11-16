@@ -71,12 +71,15 @@ see its CLAUDE.md), with the sample data of `?showcase`. The language comes from
 | `settings` | Settings page: language, interface size, a tool's settings | `?showcase&section=settings` | Missing |
 
 The guides beside the walkthrough use three more shots, captured from Desktop main at `ddc7fa3f` (0.6.1) at 1440x900
-with `capture.mjs --lang en|ru|es [--dark]`, then `node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`:
+with `capture.mjs --lang en|ru|es [--dark]`, then `node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`.
+The three Digests shots (`digest-editor`, `digests`, `digest-settings`) were retaken from Desktop main at `98c2b8f4`:
 
 | Shot | Page | Query | Before the capture |
 | --- | --- | --- | --- |
 | `settings-agents` | AI model | `?showcase&section=settings&agent=claude` | Scroll the heading Agent for background jobs to the top |
-| `digest-editor` | Digests | `?showcase&section=digests&agent=claude` | Click Set up on Daily digest, then scroll the Agent field to the middle |
+| `digest-editor` | Digests | `?showcase&section=digest-settings&agent=claude` | Click Set up on Daily digest, then scroll the Agent field to the middle |
+| `digests` | Digests | `?showcase&section=digests` | |
+| `digest-settings` | Digests | `?showcase&section=digest-settings` | |
 | `logs` | Logs | `?showcase&section=logs` | |
 
 Own tools (`own-name`, `own-review`, `own-confirm`, `own-tools-list`, `own-refused`): English only, copied from
