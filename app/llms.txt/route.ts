@@ -57,7 +57,7 @@ export function GET() {
   const text = [
     `# ${appName}`,
     "",
-    "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's chats, mail, meetings, phone calls, CRM, documents, calendar and notes: Telegram, WhatsApp, MAX, email, Google Drive, Google Calendar, Google Meet, Zoom, Notion, Bitrix24, Asterisk and Memo. Every link below is the page as Markdown.",
+    "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's chats, mail, meetings, phone calls, CRM, documents, calendar and notes: Telegram, WhatsApp, MAX, email, Google Drive, Google Calendar, Google Meet, Zoom, Notion, Yandex Disk, Bitrix24, Asterisk and Memo. Every link below is the page as Markdown.",
     "",
     `${siteUrl}/llms-full.txt is every English page in one file, without changelogs and the per-group command pages. The same pages exist in Russian and Spanish: insert the language after /llms.mdx/docs/, for example ${localized.join(" or ")}.`,
     "",
