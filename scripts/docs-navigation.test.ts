@@ -225,7 +225,7 @@ describe("tool folders in the sidebar", () => {
     ])
   })
 
-  it("puts Google Drive, Notion and Markdown in an open Documents & files group, keeping their URLs", () => {
+  it("puts Google Drive, Notion, Yandex Disk and Markdown in an open Documents & files group, keeping their URLs", () => {
     const folder = (tool: string): Node => ({
       type: "folder",
       name: tool,
@@ -233,8 +233,9 @@ describe("tool folders in the sidebar", () => {
       children: [],
     })
     const markdown: Node = { type: "page", name: "Markdown y Obsidian", url: "/es/docs/markdown" }
+    const ydisk: Node = { type: "page", name: "Yandex Disk", url: "/es/docs/ydisk" }
     const tree = unifiedDocsTree(
-      { name: "Docs", children: [folder("drive"), folder("gcal"), folder("notion"), markdown] },
+      { name: "Docs", children: [folder("drive"), folder("gcal"), folder("notion"), ydisk, markdown] },
       "es",
     )
     const [group, gcal] = tree.children
@@ -245,7 +246,7 @@ describe("tool folders in the sidebar", () => {
         group.children.map((child) =>
           child.type === "folder" ? child.index?.url : child.type === "page" ? child.url : "",
         ),
-    ).toEqual(["/es/docs/drive", "/es/docs/notion", "/es/docs/markdown"])
+    ).toEqual(["/es/docs/drive", "/es/docs/notion", "/es/docs/ydisk", "/es/docs/markdown"])
     expect(gcal.name).toBe("gcal")
   })
 

@@ -10,18 +10,30 @@ your agent can search them and use them as context, even without the internet.
 You can ask your agent for the page where a decision was written down, the rows of a project database, or what a
 spec says about a feature. The agent finds the page in the local copy and gives you its Notion link.
 
-`notion` keeps the copy in the local store, one file on your computer that every WireCat tool shares. Your chats,
-mail and meetings are there too, so [Memo](/en/docs/memo) can find a Notion page together with the conversation
-about it. To start, you need a Notion
-token: a key that lets the tool read your workspace.
+This page explains what you get, how the copy works and how to connect your workspace.
 
 **On this page:**
 
-1. [What you get](#what-you-get)
-2. [Get a Notion token](#get-a-notion-token)
-3. [Connect and copy your pages](#connect-and-copy-your-pages)
-4. [What it does not do yet](#what-it-does-not-do-yet)
-5. [Find a guide for your task](#find-a-guide-for-your-task)
+1. [How it works](#how-it-works)
+2. [What you get](#what-you-get)
+3. [Get a Notion token](#get-a-notion-token)
+4. [Connect and copy your pages](#connect-and-copy-your-pages)
+5. [What it does not do yet](#what-it-does-not-do-yet)
+6. [Find a guide for your task](#find-a-guide-for-your-task)
+
+## How it works
+
+- **A copy on your computer.** `notion` keeps the pages in the local store, one file on your computer that every
+  WireCat tool shares. Search reads this copy, not Notion. Your chats, mail and meetings are there too, so
+  [Memo](/en/docs/memo) can find a Notion page together with the conversation about it.
+- **A token instead of a password.** A Notion token is a key that lets the tool read your workspace. It decides what
+  the tool can see, so you can give it the whole workspace or only a few pages.
+- **A profile for each workspace.** A profile is a name you choose for one Notion account, such as `personal`. Every
+  command that uses an account names it first: `notion personal search "quarterly plan"`.
+- **A sync brings in changes.** The copy is as fresh as the last sync. Run it again to bring in what changed in
+  Notion.
+- **Your agent uses the same commands.** A terminal agent runs `notion` for you, and an app that connects to MCP
+  servers gets the same commands over MCP.
 
 ## What you get
 

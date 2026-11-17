@@ -10,18 +10,31 @@ elijas a tu ordenador. Así tu agente puede buscarlas y usarlas como contexto, i
 Pregunta a tu agente en qué página se anotó una decisión, qué filas tiene la base de datos de un proyecto o qué dice
 una especificación sobre una función. El agente encuentra la página en la copia local y te da su enlace de Notion.
 
-`notion` guarda la copia en el almacén local, un archivo de tu ordenador que comparten todas las herramientas de
-WireCat. Ahí están también tus chats, tu correo y tus reuniones, así que [Memo](/es/docs/memo) encuentra una página
-de Notion junto con la conversación sobre ella. Para empezar necesitas un token de Notion: una clave con la que la
-herramienta lee tu espacio de trabajo.
+Esta página explica qué obtienes, cómo funciona la copia y cómo conectar tu espacio de trabajo.
 
 **En esta página:**
 
-1. [Qué obtienes](#qué-obtienes)
-2. [Consigue un token de Notion](#consigue-un-token-de-notion)
-3. [Conecta y copia tus páginas](#conecta-y-copia-tus-páginas)
-4. [Qué no hace todavía](#qué-no-hace-todavía)
-5. [Encuentra una guía para tu tarea](#encuentra-una-guía-para-tu-tarea)
+1. [Cómo funciona](#cómo-funciona)
+2. [Qué obtienes](#qué-obtienes)
+3. [Consigue un token de Notion](#consigue-un-token-de-notion)
+4. [Conecta y copia tus páginas](#conecta-y-copia-tus-páginas)
+5. [Qué no hace todavía](#qué-no-hace-todavía)
+6. [Encuentra una guía para tu tarea](#encuentra-una-guía-para-tu-tarea)
+
+## Cómo funciona
+
+- **Una copia en tu ordenador.** `notion` guarda las páginas en el almacén local, un archivo de tu ordenador que
+  comparten todas las herramientas de WireCat. La búsqueda lee esta copia, no Notion. Ahí están también tus chats, tu
+  correo y tus reuniones, así que [Memo](/es/docs/memo) encuentra una página de Notion junto con la conversación sobre
+  ella.
+- **Un token en lugar de una contraseña.** Un token de Notion es una clave con la que la herramienta lee tu espacio de
+  trabajo. Decide qué ve la herramienta: todo el espacio o solo unas pocas páginas.
+- **Un perfil por espacio.** Un perfil es el nombre que eliges para una cuenta de Notion, como `personal`. Cada
+  comando que usa una cuenta empieza por él: `notion personal search "quarterly plan"`.
+- **Cada sincronización trae los cambios.** La copia está al día según la última sincronización. Vuelve a ejecutarla
+  para traer lo que cambió en Notion.
+- **Tu agente usa los mismos comandos.** Un agente de terminal ejecuta `notion` por ti, y una aplicación que se conecta
+  a servidores MCP recibe los mismos comandos por MCP.
 
 ## Qué obtienes
 
