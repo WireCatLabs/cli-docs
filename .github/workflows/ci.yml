@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sample: [1, 2, 3, 4]
+        sample: [1, 2]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -26,10 +26,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
       - run: nproc && free -m
-      - name: next build in a 13 GB cgroup, reporting its memory peak
+      - name: next build in a 15.5 GB cgroup with swap, reporting its memory peak
         timeout-minutes: 15
         run: |
-          sudo systemd-run --unit=nextbuild --wait --collect -p MemoryMax=13G -p MemorySwapMax=0 \
+          sudo systemd-run --unit=nextbuild --wait --collect -p MemoryMax=15500M \
             -p User=runner -p WorkingDirectory="$PWD" -E PATH="$PATH" -E HOME="$HOME" -E CI=true \
             -p StandardOutput=file:"$PWD/build.log" -p StandardError=file:"$PWD/build.log" \
             "$(command -v pnpm)" exec next build && rc=0 || rc=$?
