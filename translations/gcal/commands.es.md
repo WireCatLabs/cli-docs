@@ -1929,8 +1929,12 @@ the instructions an agent is given for this tool
 print SKILL.md — `gcal skill install` puts it where Claude Code, Codex, Gemini CLI and OpenClaw look for it, and where Hermes does on request; --for prints the copy already there
 
 ```sh
-gcal skill show [options]
+gcal skill show [name] [options]
 ```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | optional | a part of this skill, or a skill shipped for a task: prepare, meet, mcp, events, changing, calendars, api. |
 
 | Option | What it does |
 |---|---|
