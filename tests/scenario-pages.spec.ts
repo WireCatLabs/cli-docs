@@ -7,7 +7,7 @@ const pages = [
   { tool: "zm", first: "archive-recordings", command: "zm personal recordings schedule run daily", crossTool: true },
   { tool: "memo", first: "decision-trail", command: "tg personal contacts context Kai", crossTool: false },
 ]
-const headings = { en: "Step-by-step scenarios", ru: "Пошаговые сценарии", es: "Escenarios paso a paso" }
+const headings = { en: "step by step", ru: "Пошаговые сценарии", es: "paso a paso" }
 const sidebarNames = { en: "Scenarios", ru: "Сценарии", es: "Escenarios" }
 const terminal = { en: "In the terminal:", ru: "В терминале:", es: "En la terminal:" }
 

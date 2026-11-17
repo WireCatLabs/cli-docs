@@ -14,6 +14,7 @@ import { remarkAnchorAliases } from "./remark-anchor-aliases"
 import { remarkDisclosures } from "./remark-disclosures"
 import { remarkDocUsability } from "./remark-doc-usability"
 import { remarkMermaid } from "./remark-mermaid"
+import { documentationTitle } from "./seo"
 import { docsRoute, getPageMarkdownUrl, siteUrl, toolOf } from "./shared"
 import { toolSidebarTitle } from "./tool-sidebar-titles"
 
@@ -105,6 +106,9 @@ export const docsLlms = llms(source, {
         (pathname) => markdownUrls.get(pathname),
       ),
     )
-    return `# ${readerGuide(page.slugs, page.locale ?? i18n.defaultLanguage)?.title ?? page.data.title} (${page.url})\n\n${compactAgentMarkdown(markdown).trimStart()}`
+    const lang = page.locale ?? i18n.defaultLanguage
+    // The Markdown copy answer engines read carries the same title as the HTML page.
+    const title = documentationTitle(lang, page.slugs, readerGuide(page.slugs, lang)?.title ?? page.data.title)
+    return `# ${title} (${page.url})\n\n${compactAgentMarkdown(markdown).trimStart()}`
   },
 })

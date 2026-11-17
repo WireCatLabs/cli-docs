@@ -1,5 +1,6 @@
 ---
-title: "Hoja de ruta"
+title: "Hoja de ruta de WireCat"
+sidebarTitle: "Hoja de ruta"
 description: "Lo que WireCat construye a continuación: la aplicación Desktop, búsqueda y memoria, nuevas fuentes e inicio de sesión verificado."
 ---
 

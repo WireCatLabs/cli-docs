@@ -60,7 +60,12 @@ export default async function Page(props: Props) {
         ]
       : []),
     ...(page.slugs.length > (tool ? 1 : 0)
-      ? [{ name: readerGuide(page.slugs, lang)?.title ?? page.data.title, pathname: page.url }]
+      ? [
+          {
+            name: readerGuide(page.slugs, lang)?.title ?? page.data.sidebarTitle ?? page.data.title,
+            pathname: page.url,
+          },
+        ]
       : []),
   ]
   const written = page.data.contentLanguage ?? tool?.lang ?? lang

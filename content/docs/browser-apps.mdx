@@ -1,11 +1,27 @@
 ---
-title: Use from web or mobile
+title: "Telegram and MAX in ChatGPT, Claude or Gemini on the web"
+sidebarTitle: "Use from web or mobile"
 description: "Connect Telegram and MAX to an AI chat such as ChatGPT, Claude or Gemini in your browser or mobile app. You do not need their desktop apps."
 ---
 
 Use Telegram and MAX from an AI chat in your browser or mobile app: find messages, gather context and prepare replies. Setup takes a few commands and adding an address in your chat settings. You do not need to install the ChatGPT or Claude desktop apps. The app must support remote MCP over HTTP and OAuth sign-in compatible with this server; choose your app below.
 
 This guide connects your chosen messenger and checks it with a request for your own chats. A program on your computer talks to the messenger; your AI chat reaches that program <DocTerm term="public-address" lang="en" label="through a public address" />. <DocTerm term="mcp" lang="en" label="MCP" /> is the way these tools connect to an agent. Below, we will obtain the address and add it to the app. Keep the computer, the CLI’s MCP server and the HTTPS tunnel running while you use the connection. The messenger’s desktop app is not required.
+
+**On this page:**
+
+1. [Before starting](#before-starting)
+2. [1. Prepare a public address](#1-prepare-a-public-address)
+3. [2. Get the address and start the connection](#2-get-the-address-and-start-the-connection)
+4. [3. Add the connection to your AI chat](#3-add-the-connection-to-your-ai-chat)
+5. [Try reading first](#try-reading-first)
+6. [Choose what the agent may do](#choose-what-the-agent-may-do)
+7. [It worked before, but stopped](#it-worked-before-but-stopped)
+8. [Run both messengers](#run-both-messengers)
+9. [Stop, restart or revoke](#stop-restart-or-revoke)
+10. [Troubleshooting](#troubleshooting)
+11. [How the connection works](#how-the-connection-works)
+12. [Connect without keeping your laptop awake](#connect-without-keeping-your-laptop-awake)
 
 ## Before starting
 
@@ -40,7 +56,7 @@ In WireCat Desktop, the Connect guide does this step for you. Open the tool, the
 
 Choose your operating system and <DocTerm term="terminal" lang="en" label="open two terminal windows" />. **Paste the first block into window 1**: it prints an address such as `https://computer.network.ts.net`. If it first shows an approval link, complete item 4 above and return here.
 
-**Paste the second block into window 2** and supply the printed HTTPS address when asked, without `/mcp`. Keep `:8443` if the address contains it. Leave both windows open. The profile's permissions decide what the agent may do; [choosing permissions](#choose-what-the-assistant-may-do) is explained below.
+**Paste the second block into window 2** and supply the printed HTTPS address when asked, without `/mcp`. Keep `:8443` if the address contains it. Leave both windows open. The profile's permissions decide what the agent may do; see [choose what the assistant may do](#choose-what-the-assistant-may-do).
 
 <PlatformSetupTabs>
 

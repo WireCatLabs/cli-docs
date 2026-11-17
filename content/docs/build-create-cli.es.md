@@ -1,5 +1,6 @@
 ---
-title: "Crea tu CLI"
+title: "Crea tu propia CLI y servidor MCP para cualquier servicio"
+sidebarTitle: "Crea tu CLI"
 description: "Conecta un servicio que WireCat aún no admite: crea tu propia herramienta con nuestra plantilla y tu agente de IA, con guías para cada paso."
 ---
 
@@ -9,6 +10,22 @@ tú.
 
 Esta página muestra lo que hace falta, lo que obtienes y por dónde empezar. Las guías siguientes te acompañan en cada
 parte.
+
+**En esta página:**
+
+1. [Dos formas de usarla](#dos-formas-de-usarla)
+2. [Cómo construirla, en breve](#cómo-construirla-en-breve)
+3. [Qué le da WireCat a tu herramienta](#qué-le-da-wirecat-a-tu-herramienta)
+4. [Qué necesitas](#qué-necesitas)
+5. [Empieza desde la plantilla](#empieza-desde-la-plantilla)
+6. [Qué pasa después](#qué-pasa-después)
+7. [Si te atascas](#si-te-atascas)
+8. [Aparece en wirecat.dev](#aparece-en-wirecatdev)
+9. [Prepárala para WireCat Desktop](#prepárala-para-wirecat-desktop)
+10. [De principio a fin, con un ejemplo](#de-principio-a-fin-con-un-ejemplo)
+11. [Recibe las mejoras de la plantilla](#recibe-las-mejoras-de-la-plantilla)
+12. [Detalles de la plantilla](#detalles-de-la-plantilla)
+13. [Adónde ir después](#adónde-ir-después)
 
 ## Dos formas de usarla
 

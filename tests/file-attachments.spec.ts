@@ -1,16 +1,20 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
 
-const titles = { en: "File attachments", ru: "Файловые вложения", es: "Archivos adjuntos" }
+const titles = {
+  en: { tg: "Send and download Telegram file attachments", max: "Send and download MAX messenger file attachments" },
+  ru: { tg: "Отправка и загрузка вложений в Telegram", max: "Отправка и загрузка вложений в MAX" },
+  es: { tg: "Envía y descarga archivos adjuntos de Telegram", max: "Envía y descarga archivos adjuntos de MAX" },
+}
 for (const lang of ["en", "ru", "es"] as const) {
   for (const width of [1440, 390]) {
-    for (const tool of ["tg", "max"]) {
+    for (const tool of ["tg", "max"] as const) {
       test(`${lang}/${tool}: attachments at ${width}px retain explanatory content and sidebar icons`, async ({
         page,
       }) => {
         await page.setViewportSize({ width, height: 900 })
         await page.goto(`/${lang}/docs/${tool}/attachments`)
-        await expect(page.locator("main h1")).toHaveText(`${titles[lang]} — ${tool === "tg" ? "Telegram" : "MAX"}`)
+        await expect(page.locator("main h1")).toHaveText(titles[lang][tool])
         await expect(page.locator("main")).toContainText("content:")
         await expect(page.locator("main table")).not.toHaveCount(0)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)

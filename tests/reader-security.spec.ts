@@ -36,9 +36,9 @@ for (const lang of ["en", "ru", "es"]) {
     expect(scan.violations).toEqual([])
     await page.goto(`/${lang}/docs/browser-apps`)
     const title = {
-      en: "Use from web or mobile",
-      ru: "В браузере или на телефоне",
-      es: "Usar desde la web o el móvil",
+      en: "Telegram and MAX in ChatGPT, Claude or Gemini on the web",
+      ru: "Telegram и MAX в ChatGPT, Claude и Gemini в браузере",
+      es: "Telegram y MAX en ChatGPT, Claude o Gemini desde la web",
     }[lang]
     await expect(page.getByRole("heading", { name: title, exact: true }).first()).toBeVisible()
   })

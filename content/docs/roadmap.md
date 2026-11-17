@@ -1,5 +1,6 @@
 ---
-title: "Roadmap"
+title: "WireCat roadmap"
+sidebarTitle: "Roadmap"
 description: "What WireCat builds next: the Desktop app, search and memory, new sources and verified sign-in."
 ---
 

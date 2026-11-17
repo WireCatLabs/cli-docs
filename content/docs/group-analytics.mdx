@@ -1,5 +1,6 @@
 ---
-title: "Group and channel analytics"
+title: "Telegram channel and group analytics with an AI agent"
+sidebarTitle: "Group and channel analytics"
 description: "A recipe for a full report on a public Telegram channel: reach, what readers share, themes, posting rhythm, polls and comments, with an example report, and how a group admin follows activity."
 ---
 
@@ -7,6 +8,22 @@ Use this recipe when you want to understand a Telegram channel: your own, a comp
 advertise in. Your agent reads the channel's public posts with the tg command-line tool and writes a report: how
 many subscribers see a post, which posts readers pass on, which themes and formats work, and what to try next. You
 need a Telegram account that can open the channel. You do not need to be an admin.
+
+**On this page:**
+
+1. [What you get](#what-you-get)
+2. [Before you start](#before-you-start)
+3. [Ask your agent](#ask-your-agent)
+4. [What happens](#what-happens)
+5. [How long it takes](#how-long-it-takes)
+6. [The commands your agent runs](#the-commands-your-agent-runs)
+7. [Check the result](#check-the-result)
+8. [What it cannot see](#what-it-cannot-see)
+9. [Adapt the themes](#adapt-the-themes)
+10. [Example channel report](#example-channel-report)
+11. [For a group](#for-a-group)
+12. [Group admins](#group-admins)
+13. [Privacy](#privacy)
 
 ## What you get
 
@@ -26,7 +43,7 @@ The example found, for instance, that readers forward posts with released code m
 views, against 4.0 for the channel), and that views fell about 40% after a three-month pause in posting and did not
 come back.
 
-We made the example with our own internal script. The script is not published. The steps below use only public tg
+We made the example with our own internal script. The script is not published. The steps in [Ask your agent](#ask-your-agent) use only public tg
 commands, so your agent can produce the same kind of report.
 
 ## Before you start
