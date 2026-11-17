@@ -30,6 +30,7 @@ describe("selected editorial production snapshots", () => {
       expect(hero).toContain("Zoom</span>")
       expect(hero).toContain("Asterisk</span>")
       expect(pages.home.includes(`href="/${lang}/docs/beeline"`)).toBe(lang === "ru")
+      expect(pages.home.includes(`href="/${lang}/docs/telemost"`)).toBe(lang === "ru")
       expect(hero.match(/data-dialogue-provider="wa"/g)).toHaveLength(4)
       expect(pages.home).not.toMatch(/ru-only/)
       expect(pages.header).toContain(`class="button connect-download" href="/${lang}/download"`)
