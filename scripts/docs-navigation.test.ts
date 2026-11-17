@@ -1,9 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs"
 import type { Node, Root } from "fumadocs-core/page-tree"
-import { CalendarDays, MessageSquare } from "lucide-react"
+import { Mail, PhoneCall } from "lucide-react"
 import type { ReactElement } from "react"
 import { describe, expect, it } from "vitest"
-import { WhatsAppIcon } from "../components/brand-icons"
+import { ServiceLogo } from "../components/brand-icons"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
 import { sidebarIcons, unifiedDocsTree, withCommunityGroup, withFoldingSections } from "../lib/docs-sidebar-tree"
 import { toolSidebarTitle } from "../lib/tool-sidebar-titles"
@@ -149,19 +149,47 @@ describe("sidebar icon coverage", () => {
 })
 
 describe("tool folders in the sidebar", () => {
-  it("gives Google Calendar a calendar and WhatsApp its own mark", () => {
+  it("shows each service's own logo, and a line icon for Email and Asterisk", () => {
     const folder = (tool: string): Node => ({
       type: "folder",
       name: tool,
       index: { type: "page", name: tool, url: `/en/docs/${tool}` },
       children: [],
     })
-    const iconsOf = (nodes: Node[]) =>
-      nodes.map((node) => (node.type === "folder" ? (node.icon as ReactElement).type : undefined))
-    const tree = unifiedDocsTree({ name: "Docs", children: ["gcal", "wa", "max"].map(folder) })
-    expect(iconsOf(tree.children)).toEqual([CalendarDays, MessageSquare])
-    const messengers = tree.children[1]
-    expect(messengers.type === "folder" && iconsOf(messengers.children)).toEqual([WhatsAppIcon, MessageSquare])
+    const tools = ["tg", "wa", "max", "gcal", "zm", "b24", "mail", "pbx"]
+    const folders = unifiedDocsTree({ name: "Docs", children: tools.map(folder) }).children.flatMap((node) =>
+      node.type === "folder" && !node.index ? node.children : [node],
+    )
+    const icons = Object.fromEntries(
+      folders.map((node) => {
+        const icon = node.icon as ReactElement<{ file?: string }>
+        return [node.name, icon.type === ServiceLogo ? icon.props.file : icon.type]
+      }),
+    )
+    expect(icons).toEqual({
+      tg: "telegram.svg",
+      wa: "whatsapp.svg",
+      max: "max.png",
+      gcal: "google-calendar.svg",
+      zm: "zoom.svg",
+      b24: "bitrix24.svg",
+      mail: Mail,
+      pbx: PhoneCall,
+    })
+  })
+
+  it("gives the Google Meet and Telemost pages their logos", () => {
+    const pages: Node[] = [
+      { type: "page", name: "Google Meet", url: "/en/docs/google-meet" },
+      { type: "page", name: "Telemost", url: "/ru/docs/telemost" },
+    ]
+    const files = unifiedDocsTree({ name: "Docs", children: pages }).children.flatMap((node) =>
+      node.type === "folder" ? node.children : [node],
+    )
+    expect(files.map((node) => (node.icon as ReactElement<{ file?: string }>).props.file)).toEqual([
+      "google-meet.svg",
+      "telemost.png",
+    ])
   })
 
   it("puts Zoom, Google Meet, Telemost and Asterisk in an open Meetings & Calls group and Bitrix24 in a closed CRM group, keeping their URLs", () => {
