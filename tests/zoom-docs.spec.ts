@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test"
 
 const titles = { en: "Meetings", ru: "Встречи", es: "Reuniones" }
 const startTitles = {
-  en: "Connect Zoom transcripts and recordings to your AI agent",
-  ru: "Подключите расшифровки и записи Zoom к ИИ-агенту",
-  es: "Conecta las transcripciones y grabaciones de Zoom a tu agente de IA",
+  en: "Zoom transcripts MCP server and CLI",
+  ru: "MCP-сервер и CLI для расшифровок Zoom",
+  es: "Servidor MCP y CLI para transcripciones de Zoom",
 }
 const ownershipRecovery = {
   en: "lost or changed writer ownership",

@@ -41,15 +41,15 @@
       "scenarios": "Common {messenger} CLI tasks step by step: the commands in order, why each one runs and what to look at."
     },
     "toolTitles": {
-      "tg": "Telegram CLI client for AI agents",
-      "max": "MAX CLI for AI agents and bots",
+      "tg": "Telegram MCP server and CLI for your own account",
+      "max": "MAX messenger MCP server, CLI and Bot API",
       "memo": "Memo: notes, mail and messages for AI agents",
-      "wa": "WhatsApp CLI for your AI agent and business bots",
+      "wa": "WhatsApp MCP server and CLI for your personal account",
       "pbx": "Integrate Asterisk and FreePBX with your AI agent",
-      "zm": "Connect Zoom transcripts and recordings to your AI agent",
+      "zm": "Zoom transcripts MCP server and CLI",
       "drive": "Connect Google Drive and Docs to your AI agent",
       "gcal": "Connect Google Calendar to your AI agent",
-      "mail": "Connect your mail to your AI agent over IMAP",
+      "mail": "IMAP mail MCP server and CLI with offline search",
       "b24": "Connect Bitrix24 CRM to your AI agent"
     }
   },
@@ -95,15 +95,15 @@
       "scenarios": "Частые задачи {messenger} CLI по шагам: команды по порядку, зачем нужна каждая и на что смотреть."
     },
     "toolTitles": {
-      "tg": "CLI-клиент Telegram для ИИ-агентов",
-      "max": "MAX CLI для ИИ-агентов и ботов",
+      "tg": "Telegram MCP-сервер и CLI для личного аккаунта",
+      "max": "MCP-сервер и CLI для мессенджера MAX",
       "memo": "Memo: заметки, почта и сообщения для ИИ-агентов",
-      "wa": "WhatsApp CLI для ИИ-агентов и бизнес-ботов",
+      "wa": "WhatsApp MCP-сервер и CLI для личного аккаунта",
       "pbx": "Интеграция Asterisk и FreePBX с ИИ-агентом",
-      "zm": "Подключите расшифровки и записи Zoom к ИИ-агенту",
+      "zm": "MCP-сервер и CLI для расшифровок Zoom",
       "drive": "Подключите Google Drive и Google Docs к ИИ-агенту",
       "gcal": "Подключите Google Calendar к ИИ-агенту",
-      "mail": "Подключите почту к ИИ-агенту по IMAP",
+      "mail": "MCP-сервер почты по IMAP с поиском без интернета",
       "b24": "Подключите CRM Bitrix24 к ИИ-агенту"
     }
   },
@@ -149,15 +149,15 @@
       "scenarios": "Tareas habituales de la CLI de {messenger} paso a paso: los comandos en orden, para qué sirve cada uno y qué mirar."
     },
     "toolTitles": {
-      "tg": "Cliente CLI de Telegram para agentes de IA",
-      "max": "CLI de MAX para agentes de IA y bots",
+      "tg": "Servidor MCP y CLI de Telegram para tu cuenta",
+      "max": "Servidor MCP y CLI de MAX Messenger",
       "memo": "Memo: notas, correo y mensajes para agentes de IA",
-      "wa": "CLI de WhatsApp para tu agente de IA y bots de empresa",
+      "wa": "Servidor MCP y CLI de WhatsApp para tu cuenta",
       "pbx": "Integra Asterisk y FreePBX con tu agente de IA",
-      "zm": "Conecta las transcripciones y grabaciones de Zoom a tu agente de IA",
+      "zm": "Servidor MCP y CLI para transcripciones de Zoom",
       "drive": "Conecta Google Drive y Docs a tu agente de IA",
       "gcal": "Conecta Google Calendar a tu agente de IA",
-      "mail": "Conecta tu correo a tu agente de IA por IMAP",
+      "mail": "Servidor MCP de correo IMAP con búsqueda sin conexión",
       "b24": "Conecta el CRM Bitrix24 a tu agente de IA"
     }
   }
