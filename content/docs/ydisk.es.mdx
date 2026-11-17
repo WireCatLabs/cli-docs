@@ -1,16 +1,20 @@
 ---
 title: "Yandex Disk"
-description: "Copia a tu ordenador el texto de las carpetas de Yandex Disk que elijas, para que tu agente encuentre un archivo por lo que dice y trabaje con archivos cuando lo permitas."
+description: "Busca en el texto de tus carpetas de Yandex Disk en tu ordenador y deja que tu agente de IA lea, archive y comparta documentos allí con la línea de comandos o MCP."
 ---
 
-Tus contratos, informes y notas están en Yandex Disk, y un agente de IA en tu ordenador no puede leerlos a menos que
-descargues cada archivo y lo pegues en el chat. La herramienta de línea de comandos `ydisk` copia a tu ordenador el
-texto de las carpetas del Disk que elijas. Después tu agente encuentra el archivo que menciona un presupuesto, un
-cliente o una fecha, lo cita y te da su ruta en el Disk, incluso sin internet. Cuando lo necesitas, la misma
-herramienta lista, descarga, sube, mueve y comparte archivos en el Disk.
+Encuentra cualquier documento de tu Yandex Disk por lo que dice y deja que tu agente de IA lo lea, lo archive y lo
+comparta por ti. La herramienta de línea de comandos `ydisk` copia a tu ordenador el texto de las carpetas del Disk
+que elijas, así que una búsqueda de «contrato de alquiler» encuentra el PDF aunque se llame `scan_0042.pdf`, e incluso
+sin internet.
 
-Para empezar necesitas Node.js 22.16 o un 22.x posterior, o 24 o posterior, y un token OAuth de Yandex: una clave con la que la herramienta usa
-tu Disk. Esta página explica cómo funciona la copia, cómo conseguir el token y cómo conectar tu primera carpeta.
+Pregunta a tu agente dónde está el contrato con un cliente y qué condiciones de pago tiene. Te responde con la cita y
+la ruta del archivo en el Disk. Pídele que mueva las facturas del año pasado a un archivo o que cree un enlace para un
+colega, y lo hace en el Disk, preguntándote antes de borrar o de crear un enlace público.
+
+`ydisk` funciona con Claude Code, Codex y otros agentes que ejecutan comandos, con Claude Desktop y Cursor por MCP, y
+con ChatGPT y Claude en el navegador a través de tu propio túnel. Necesita Node.js y un token OAuth de Yandex: una
+clave de tu propia cuenta de Yandex con la que la herramienta usa tu Disk.
 
 **En esta página:**
 
@@ -20,7 +24,8 @@ tu Disk. Esta página explica cómo funciona la copia, cómo conseguir el token 
 4. [Conecta tu agente](#connect-your-agent)
 5. [Trabaja con archivos en el Disk](#work-with-files-on-the-disk)
 6. [Límites](#limits)
-7. [Referencia](#reference)
+7. [Si algo no funciona](#if-something-goes-wrong)
+8. [Referencia](#reference)
 
 <a id="how-it-works"></a>
 
@@ -28,24 +33,23 @@ tu Disk. Esta página explica cómo funciona la copia, cómo conseguir el token 
 
 - **Una copia del texto en tu ordenador.** `ydisk` lee las carpetas que eliges y guarda el texto de sus archivos en el
   almacén local, un archivo de base de datos en tu ordenador que comparten todas las herramientas de WireCat. La
-  búsqueda lee esta copia, no el Disk.
-- **Solo las carpetas que eliges.** Añade unas pocas carpetas, no todo el Disk. Yandex Disk no le dice a la
-  herramienta qué cambió, así que cada sincronización vuelve a listar todas las carpetas elegidas y sus subcarpetas, y
-  descarga solo los archivos que cambiaron.
+  búsqueda lee esta copia, no el Disk, y encuentra otras formas de una palabra en ruso y en inglés.
+- **Solo las carpetas que eliges.** Yandex Disk no dice a la herramienta qué cambió, así que cada sincronización vuelve
+  a listar todas las carpetas elegidas con sus subcarpetas y descarga solo los archivos cuyo contenido cambió. Elige
+  carpetas con documentos, no todo el Disk.
 - **Texto, no copias de archivos.** La herramienta lee Markdown, texto plano, PDF con capa de texto, Word `.docx`,
-  Excel `.xlsx`, CSV y TSV. Los demás archivos, como las fotos, se guardan solo por su nombre. Los archivos se quedan
-  en el Disk.
+  Excel `.xlsx`, CSV y TSV. Las fotos y los demás archivos se guardan solo por su nombre. Los archivos se quedan en el
+  Disk.
 - **Un perfil por cuenta.** Un perfil es el nombre que eliges para una cuenta de Yandex, como `personal` o `work`.
   Cada comando que usa una cuenta empieza por él: `ydisk personal search budget`.
 - **Los comandos `files` cambian el Disk.** Trabajan directamente con Yandex. Borrar mueve el archivo a la papelera del
-  Disk. En una terminal la herramienta pregunta antes de borrar, sobrescribir o crear un enlace público. Por MCP no hay
-  a quién preguntar, así que pon esos permisos en `deny` para un agente que no deba hacerlo.
+  Disk. En una terminal la herramienta pregunta antes de borrar, sobrescribir o crear un enlace público.
 
 <a id="install-and-sign-in"></a>
 
 ## Instalar e iniciar sesión
 
-1. Instala la herramienta desde npm y compruébala:
+1. Instala la herramienta desde npm y compruébala. Necesitas Node.js 22.16 o un 22.x posterior, o 24 o posterior.
 
 ```sh
 npm install -g @wirecat/yandex-disk-cli
@@ -53,60 +57,77 @@ ydisk --version
 ydisk doctor
 ```
 
-2. Consigue un token. Yandex se lo da a una aplicación que registras, y lo recibes abriendo un enlace
-   ([guía de Yandex](https://yandex.ru/dev/id/doc/en/tokens/debug-token)):
-   - Registra una aplicación en [oauth.yandex.com](https://oauth.yandex.com/client/new/). En el paso "App
-     platforms", elige "Web services" e introduce el Redirect URI `https://oauth.yandex.ru/verification_code`.
-   - Dale los accesos `cloud_api:disk.read`, `cloud_api:disk.info` y, para cambiar archivos, `cloud_api:disk.write`.
-   - Abre `https://oauth.yandex.com/authorize?response_type=token&client_id=<ClientID>` con el ClientID de tu
-     aplicación, pulsa Allow y copia el token de la página.
+2. Registra una aplicación en Yandex para obtener un token. La aplicación es solo un nombre y una lista de permisos en
+   tu cuenta, y no se publica nada. Las páginas de Yandex están en ruso, así que sus textos se dan también en ruso
+   ([guía de Yandex](https://yandex.ru/dev/disk-api/doc/ru/concepts/quickstart)):
+   - Abre [oauth.yandex.ru/client/new](https://oauth.yandex.ru/client/new/) e inicia sesión con la cuenta cuyo Disk
+     quieres usar. Si Yandex pregunta el tipo de aplicación, elige «Для доступа к API или отладки» (para acceso a la
+     API o depuración).
+   - Escribe cualquier nombre y tu correo. En «Доступ к данным» (acceso a los datos) añade los permisos de Yandex Disk
+     `cloud_api:disk.read`, `cloud_api:disk.info` y, para cambiar archivos, `cloud_api:disk.write`.
+   - Crea la aplicación y copia su **ClientID** de la página de la aplicación.
 
-3. Inicia sesión con un nombre de perfil que elijas. La herramienta pide el token sin mostrarlo, lo comprueba con
-   Yandex y lo guarda en el llavero del sistema, o en un archivo privado donde no hay llavero.
+3. Abre `https://oauth.yandex.ru/authorize?response_type=token&client_id=` añadiendo tu ClientID al final, permite el
+   acceso y copia el token de la página. Guárdalo como una contraseña.
+
+4. Inicia sesión con el nombre de perfil que elijas. La herramienta pide el token con entrada oculta, lo comprueba
+   con Yandex y lo guarda en el llavero del sistema, o en un archivo privado donde no hay llavero.
 
 ```sh
 ydisk personal session start
 ydisk personal session status --check
 ```
 
-Cuando Yandex deje de aceptar el token, vuelve a ejecutar `session start` con uno nuevo.
+Yandex mantiene válido el token durante meses mientras se usa. Cuando Yandex deje de aceptarlo, consigue uno nuevo
+igual y vuelve a ejecutar `session start`.
+
+`ydisk personal session end` quita el token de este ordenador.
 
 <a id="copy-a-folder-and-search-it"></a>
 
 ## Copia una carpeta y busca en ella
 
-`folders browse` muestra el Disk nivel a nivel, para que elijas una carpeta por su ruta:
+`folders browse` muestra el Disk un nivel cada vez, para elegir una carpeta por su ruta:
 
 ```sh
 ydisk personal folders browse
 ydisk personal folders add /Documents
 ydisk personal sync
-ydisk personal search "quarterly budget"
+ydisk personal search "presupuesto trimestral"
 ```
 
-Una sincronización lee hasta 200 archivos (`--limit`), recorre hasta unos 10.000 elementos y guarda dónde se detuvo. Vuelve a ejecutarla para continuar, y
-más tarde para traer lo que cambió. `ydisk personal status` muestra la última sincronización y el trabajo pendiente.
-`documents show` muestra el texto completo de un archivo encontrado.
+Una sincronización lee hasta 200 archivos (`--limit`), recorre hasta unas 10 000 entradas y recuerda dónde se detuvo.
+Ejecútala otra vez para seguir y, más adelante, para traer lo que cambió. Nada se sincroniza en segundo plano.
+`ydisk personal status` muestra la última sincronización, el trabajo pendiente y los archivos guardados solo por su
+nombre. `documents show` imprime el texto completo de un archivo encontrado por la búsqueda.
+
+La búsqueda por significado encuentra un documento que responde a una pregunta con otras palabras. Necesita un modelo de
+texto que se descarga una vez con [Memo](./memo/installation.md), `memo models download embeddinggemma`, y después
+`ydisk personal sync --embed`.
 
 <a id="connect-your-agent"></a>
 
 ## Conecta tu agente
 
-Un agente de terminal como Claude Code recibe la skill de la herramienta:
+Un agente de terminal como Claude Code o Codex recibe la guía de la herramienta:
 
 ```sh
 ydisk skill install
 ```
 
-Después pide con palabras normales:
+Después pídele las cosas con palabras normales:
 
 ```text prompt
-Usa ydisk CLI con el perfil personal. Busca el contrato con Harbour Ltd en mis carpetas del Disk.
+Usa ydisk CLI con el perfil personal. Busca en mis carpetas del Disk el contrato con Harbour Ltd.
 Cita las condiciones de pago y dame la ruta del archivo en el Disk. No cambies ningún archivo.
 ```
 
-El agente busca primero en la copia local. Un archivo fuera de las carpetas elegidas lo lee en directo del Disk. Una
-aplicación que se conecta a servidores MCP recibe los mismos comandos con `ydisk personal mcp serve`.
+El agente busca primero en la copia local. Un archivo fuera de las carpetas elegidas lo lee en directo del Disk.
+
+Para añadir la herramienta como servidor MCP, `ydisk personal mcp add claude-code --allow-writes` (o `codex`) lo hace
+con un solo comando. Para Claude Desktop, Cursor y otras aplicaciones MCP, `ydisk personal mcp config` imprime la
+entrada que debes pegar en los ajustes de la aplicación. Para ChatGPT y Claude en el navegador, mira las
+[aplicaciones del navegador](./browser-apps.mdx).
 
 <a id="work-with-files-on-the-disk"></a>
 
@@ -124,16 +145,42 @@ ydisk personal files publish /Documents/plan.pdf
 `files delete` mueve el archivo a la papelera del Disk, y `files restore` lo devuelve. `files publish` crea un enlace
 que puede abrir cualquiera que lo tenga. En una terminal la herramienta pregunta antes de borrar, de sobrescribir con
 `--replace` o de crear un enlace público. Por MCP no hay a quién preguntar, así que para un agente que no debe hacerlo,
-pon los permisos `files.delete=deny` y `files.share=deny`. `YDISK_READ_ONLY=1` rechaza cualquier cambio.
+cierra esos permisos:
+
+```sh
+ydisk personal config set permissions.files.delete deny
+ydisk personal config set permissions.files.share deny
+```
+
+`YDISK_READ_ONLY=1` rechaza cualquier cambio. `--dry-run` en cualquier cambio muestra lo que haría sin hacerlo.
 
 <a id="limits"></a>
 
 ## Límites
 
-- Los PDF escaneados y las imágenes no tienen texto que buscar.
+- Los PDF escaneados y las imágenes no tienen texto que buscar. Los archivos de más de 50 MB se guardan solo por su
+  nombre.
 - Una carpeta elegida que renombras o mueves en el Disk deja de sincronizarse y sus copias salen del almacén. Vuelve a
   añadirla con su nueva ruta.
-- El inicio de sesión es con un token pegado. Todavía no hay inicio de sesión en el navegador.
+- El inicio de sesión es con un token pegado de una aplicación que registras tú. Todavía no hay inicio de sesión en el
+  navegador.
+
+<a id="if-something-goes-wrong"></a>
+
+## Si algo no funciona
+
+- **«refused the token», código de salida 4.** El token es incorrecto, está revocado o caducó. Consigue uno nuevo y
+  vuelve a ejecutar `session start`.
+- **Un cambio falla con el código de salida 5.** El token se creó sin `cloud_api:disk.write`, o los permisos del perfil
+  rechazan el cambio.
+- **La búsqueda no encuentra un archivo que sabes que está.** Comprueba que su carpeta aparece en `folders list`,
+  ejecuta `sync` hasta que `status` no muestre trabajo pendiente y mira si `status` lo lista como guardado solo por su
+  nombre.
+- **«the OS keyring did not answer» en Linux.** Cierra la sesión y vuelve a entrar, o inicia sesión con
+  `ydisk personal session start --credential-storage file`.
+
+`ydisk doctor` muestra lo que está configurado sin conectarse, y `ydisk personal doctor --online` comprueba el token.
+Hay más casos en la [página de problemas](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/troubleshooting.md).
 
 <a id="reference"></a>
 
@@ -141,6 +188,6 @@ pon los permisos `files.delete=deny` y `files.share=deny`. `YDISK_READ_ONLY=1` r
 
 Todos los comandos y opciones: [comandos](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/commands.md). Ajustes y
 permisos: [ajustes](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/configuration.md). Qué llega al disco y a la
-red: [seguridad](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/security.md). La referencia está en inglés.
+red: [seguridad](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/security.md). La referencia está en inglés. Cómo se compara `ydisk` con rclone, el servidor MCP de Yandex y otros: [comparación con otras herramientas](https://wirecat.dev/es/docs/ydisk/compare).
 
 Siguiente: [dale también a tu agente una carpeta de notas en Markdown](./markdown.mdx).
