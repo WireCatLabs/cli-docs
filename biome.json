@@ -12,6 +12,7 @@
       "!pnpm-workspace.yaml",
       "!next-env.d.ts",
       "!design",
+      "!public/logos",
       "!lib/search-language.generated.js",
       "!lib/search-language.generated.d.ts",
       "!.docs-tooling",
