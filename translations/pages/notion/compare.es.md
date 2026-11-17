@@ -5,7 +5,7 @@ title: "Comparado con otras herramientas"
 Guarda tus páginas de Notion en tu ordenador y deja que tu agente de IA las encuentre por su significado, sin
 internet, junto a tus chats y tu correo. Las herramientas propias de Notion para agentes funcionan en línea, dentro de
 Notion, y no guardan ninguna copia en tu ordenador. `notion` guarda esa copia, y tu agente también puede comentar una
-página o añadirle un archivo cuando se lo permites.
+página o añadirle un archivo. Puedes desactivar cada una de estas acciones.
 
 Tu agente puede decirte quién escribió una página y mostrarte junto a ella los mensajes y el correo de esa persona.
 Encuentra una página aunque tus palabras no estén en ella. Verás lado a lado lo que dan `notion` y otras cuatro
@@ -58,7 +58,7 @@ comentarios, archivos y personas. Una herramienta puede hacer más de lo que dic
 | Exportar una página y las páginas que tiene dentro como archivos Markdown | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Escribir** | | | | | |
 | Crear una página o cambiar su texto desde Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
-| Leer los comentarios de una página y responderlos | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1391-L1515) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Leer los comentarios de una página y responderlos | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1512-L1565) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Añadir a una página un archivo de tu ordenador | ✅ | [🟡](https://developers.notion.com/guides/mcp/tools-files-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Agentes y seguridad** | | | | | |
 | Una aplicación de IA trabaja con tus páginas por MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -98,8 +98,8 @@ comentarios, archivos y personas. Una herramienta puede hacer más de lo que dic
   vez como personas en el almacén local, con los nombres y las direcciones de correo que da Notion. Una dirección de
   correo los une con la misma persona de tu correo, tus chats u otras herramientas, así que `memo context` muestra las
   páginas de Notion entre los archivos de esa persona. Notion solo da las direcciones de correo si la conexión puede
-  leer la información de los usuarios con sus direcciones de correo. Sin eso, los autores se guardan por su id de
-  Notion, y `notion sync` y `notion doctor` lo dicen. Una relación que tu agente añade a una página espera a que la
+  leer la información de los usuarios con sus direcciones de correo. Sin ellas, los autores no se unen con
+  nadie, y `notion sync` y `notion doctor` lo dicen. Una relación que tu agente añade a una página espera a que la
   confirmes. Notion MCP encuentra las páginas que un usuario creó en Notion, pero no lo une con nadie de tus otros
   servicios.
 - **Filas por propiedad.** `notion` guarda las propiedades de cada fila en la copia como líneas del tipo
@@ -122,7 +122,7 @@ comentarios, archivos y personas. Una herramienta puede hacer más de lo que dic
   Notion no da los resueltos. `notion comments create` abre una discusión y `notion comments reply` responde en ella.
   Notion MCP lee también las discusiones resueltas. ntn no tiene un comando de comentarios, así que un script llama a
   la API de comentarios de Notion con `ntn api`. notion-mcp-server lee los comentarios abiertos y añade otros nuevos
-  con herramientas hechas a partir de la API de Notion.
+  con herramientas hechas a partir de la API de Notion, pero no puede responder en una discusión.
 - **Archivos.** `notion files upload` añade un archivo de tu ordenador al final de una página como imagen, vídeo,
   audio, PDF o archivo, y envía por partes un archivo de más de 20 MB. Notion MCP le da a la aplicación de IA una
   dirección de subida, y la aplicación envía el archivo ella misma, en una sola parte de hasta 20 MiB.

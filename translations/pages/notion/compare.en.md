@@ -4,7 +4,7 @@ title: "Compared with other tools"
 
 Keep your Notion pages on your computer and let your AI agent find them by meaning, with no internet, next to your
 chats and mail. Notion's own tools for agents work online, inside Notion, and keep no copy on your computer. `notion`
-keeps that copy, and your agent can also comment on a page or add a file to it when you allow it.
+keeps that copy, and your agent can also comment on a page or add a file to it. You can turn each of these off.
 
 Your agent can tell you who wrote a page and show that person's messages and mail beside it. It finds a page even when
 your words are not in it. You'll see what `notion` and four other tools give side by side, so you can pick the one
@@ -54,7 +54,7 @@ tool may do more than its pages say.
 | Export a page and the pages under it as Markdown files | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Write** | | | | | |
 | Create a page or change its text from Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
-| Read a page's comments and reply to them | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1391-L1515) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Read a page's comments and reply to them | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1512-L1565) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Add a file from your computer to a page | ✅ | [🟡](https://developers.notion.com/guides/mcp/tools-files-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Agents and safety** | | | | | |
 | An AI app works with your pages over MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -89,8 +89,8 @@ tool may do more than its pages say.
 - **A person's pages.** Each sync saves a page's creator and last editor as people in the local store, with the names
   and email addresses Notion gives. An email address joins them with the same person from your mail, chats or other
   tools, so `memo context` lists the Notion pages under that person's files. Notion gives the email addresses only
-  when the connection may read user information including email addresses. Without that, the authors are kept by their
-  Notion id, and `notion sync` and `notion doctor` say so. A relationship your agent adds to a page waits until you
+  when the connection may read user information including email addresses. Without them, the authors are joined with
+  no one, and `notion sync` and `notion doctor` say so. A relationship your agent adds to a page waits until you
   confirm it. Notion MCP finds the pages a user created in Notion, but does not join that user with anyone from your
   other services.
 - **Database rows by property.** `notion` keeps each row's properties in the copy as lines such as `Status: Done`,
@@ -111,7 +111,8 @@ tool may do more than its pages say.
 - **Comments.** `notion comments list` reads a page's open comments live, as Notion's API gives no resolved ones.
   `notion comments create` starts a discussion and `notion comments reply` answers in one. Notion MCP reads resolved
   discussions too. ntn has no comment command, so a script calls Notion's comment API through `ntn api`.
-  notion-mcp-server reads open comments and adds new ones through tools made from Notion's API.
+  notion-mcp-server reads open comments and adds new ones through tools made from Notion's API, but cannot reply
+  in a discussion.
 - **Files.** `notion files upload` adds a file from your computer to the end of a page as an image, video, audio, PDF
   or file block, and sends a file over 20 MB in parts. Notion MCP gives the AI app an address to upload to, and the app
   sends the file itself, in one part of up to 20 MiB. `ntn files create` uploads a file to Notion, and its command

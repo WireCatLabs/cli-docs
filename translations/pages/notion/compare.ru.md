@@ -4,8 +4,8 @@ title: "Сравнение с другими инструментами"
 
 Держите страницы Notion на своем компьютере, и ваш ИИ-агент найдет их по смыслу без интернета, рядом с вашими
 чатами и почтой. Собственные инструменты Notion для агентов работают онлайн, внутри Notion, и не хранят копию на вашем
-компьютере. `notion` хранит такую копию, а с вашего разрешения агент еще и оставит комментарий на странице или добавит
-к ней файл.
+компьютере. `notion` хранит такую копию, а агент еще и оставит комментарий на странице или добавит к ней файл.
+Каждое из этих действий можно запретить.
 
 Агент скажет, кто написал страницу, и покажет рядом сообщения и письма этого человека. Он найдет страницу, даже если в
 ней нет ваших слов. Вы увидите рядом, что дают `notion` и еще четыре инструмента, и выберете тот, что подходит для
@@ -58,7 +58,7 @@ title: "Сравнение с другими инструментами"
 | Выгрузить страницу и вложенные в нее страницы в файлы Markdown | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Запись** | | | | | |
 | Создать страницу или изменить ее текст из Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
-| Читать комментарии к странице и отвечать на них | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1391-L1515) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Читать комментарии к странице и отвечать на них | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1512-L1565) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Добавить на страницу файл с вашего компьютера | ✅ | [🟡](https://developers.notion.com/guides/mcp/tools-files-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [❌](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Агенты и безопасность** | | | | | |
 | ИИ-приложение работает с вашими страницами через MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -97,7 +97,7 @@ title: "Сравнение с другими инструментами"
   локальном хранилище, с именами и адресами почты из Notion. По адресу почты они объединяются с тем же человеком из
   вашей почты, чатов или других инструментов, поэтому `memo context` показывает страницы Notion среди файлов этого
   человека. Адреса почты Notion отдает, только если подключению разрешено читать сведения о пользователях вместе с
-  адресами почты. Без этого авторы хранятся по их id в Notion, и `notion sync` и `notion doctor` об этом говорят.
+  адресами почты. Без адресов авторы ни с кем не объединяются, и `notion sync` и `notion doctor` об этом говорят.
   Связь, которую ваш агент добавил к странице, ждет вашего подтверждения. Notion MCP находит страницы, которые
   пользователь создал в Notion, но не объединяет его ни с кем из ваших других сервисов.
 - **Строки базы данных по свойству.** `notion` хранит свойства каждой строки в копии строками вида `Status: Done`,
@@ -119,7 +119,7 @@ title: "Сравнение с другими инструментами"
   Notion не отдает. `notion comments create` начинает обсуждение, а `notion comments reply` отвечает в нем. Notion MCP
   читает и закрытые обсуждения. У ntn нет команды для комментариев, поэтому скрипт вызывает API комментариев Notion
   через `ntn api`. notion-mcp-server читает открытые комментарии и добавляет новые через инструменты, сделанные из API
-  Notion.
+  Notion, но ответить в обсуждении не может.
 - **Файлы.** `notion files upload` добавляет файл с вашего компьютера в конец страницы как изображение, видео, аудио,
   PDF или файл, а файл больше 20 МБ отправляет частями. Notion MCP дает ИИ-приложению адрес для загрузки, и файл
   приложение отправляет само, одной частью до 20 МиБ. `ntn files create` загружает файл в Notion, но в справочнике его
