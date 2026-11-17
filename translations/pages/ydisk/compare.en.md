@@ -7,6 +7,14 @@ or let an AI agent work with your files. This page lists those jobs and shows wh
 `ydisk` come from version 0.1.0, and marks for the other tools come from their own documentation and source. Everything
 was checked on 17 November 2026. A tool may do more than its pages say, and those cells are ➖.
 
+**On this page:**
+
+1. [What each tool does](#what-each-tool-does)
+2. [Where another tool fits better](#where-another-tool-fits-better)
+3. [Compared with an agent driving the Disk web page](#compared-with-a-browser-agent)
+4. [Install and licence](#install-and-licence)
+5. [How each mark was checked](#how-each-mark-was-checked)
+
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation · n/a does not apply
 
 The tools:
@@ -24,13 +32,15 @@ The tools:
 
 Not in the table: the [yadisk](https://github.com/ivknv/yadisk) Python library, for people who write their own
 scripts, and [yandex-workspace-mcp](https://github.com/denis-samatov/yandex-workspace-mcp), a new MCP server for Disk
-and Wiki that is read-only by default and whose README says it has not been checked against a live account yet.
+and Wiki that is read-only by default and whose README says a passing CI run is not evidence of a completed live check, which is opt-in.
 
 Other small Yandex Disk MCP servers exist, such as [Patr56/yadisk-mcp](https://github.com/Patr56/yadisk-mcp) and
 [Antiloop-git/yandex-disk-mcp](https://github.com/Antiloop-git/yandex-disk-mcp). The command line
 [ydcmd](https://github.com/abbat/ydcmd) lists, uploads and syncs files, and an
 [open issue](https://github.com/abbat/ydcmd/issues/59) reports that it stopped working. The official MCP Registry
 listed no Yandex Disk server on 17 November 2026.
+
+<a id="what-each-tool-does"></a>
 
 ## What each tool does
 
@@ -42,44 +52,50 @@ listed no Yandex Disk server on 17 November 2026.
 | Search your documents with no internet | ✅ | ❌ | 🟡¹ | 🟡¹ | ❌ |
 | Find a document together with your chats, mail and notes from other services | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Read a file** | | | | | |
-| An agent reads the text of a PDF, Word or Excel file | ✅ | 🟡² | ❌ | ❌ | 🟡² |
+| An agent reads the text of a PDF, Word or Excel file | ✅ | 🟡² | ❌ | ❌ | 🟡³ |
 | **Work with files on the Disk** | | | | | |
-| Upload, copy and move files | ✅ | ✅ | ✅ | 🟡³ | ✅ |
-| Delete to the trash and bring a file back | ✅ | 🟡⁴ | 🟡⁴ | ➖ | 🟡⁴ |
+| Upload, copy and move files | ✅ | ✅ | ✅ | 🟡⁴ | ✅ |
+| Delete to the trash and bring a file back | ✅ | 🟡⁵ | 🟡⁵ | ➖ | 🟡⁵ |
 | Make and close a public link | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Keep a copy of the files themselves on your computer | 🟡⁵ | ❌ | ✅ | ✅ | 🟡⁶ |
+| Keep a copy of the files themselves on your computer | 🟡⁶ | ❌ | ✅ | ✅ | 🟡⁷ |
 | Keep your own tags and notes on documents | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Agents and safety** | | | | | |
 | An AI app works with your Disk through MCP | ✅ | ✅ | ❌ | ❌ | ✅ |
-| An agent with a terminal runs it, with JSON output and a skill | ✅ | n/a | 🟡⁷ | ❌ | n/a |
-| An agent reads only, until you allow changes | ✅ | ➖ | ➖ | n/a | ➖ |
-| Allow or refuse deletes and public links separately | ✅ | 🟡⁸ | ➖ | n/a | ➖ |
+| An agent with a terminal runs it, with JSON output and a skill | ✅ | n/a | 🟡⁸ | ❌ | n/a |
+| An agent reads only, until you allow changes | 🟡⁹ | ➖ | ➖ | n/a | ➖ |
+| Allow or refuse deletes and public links separately | ✅ | 🟡¹⁰ | ➖ | n/a | ➖ |
 | See what a change would do before it is made | ✅ | ➖ | ✅ | ➖ | ➖ |
 | Use it from Claude or ChatGPT in the browser | ✅ | ➖ | ❌ | ❌ | ❌ |
 | **Setup** | | | | | |
 | Works with a free Yandex account | ✅ | ❌ | ✅ | ✅ | ✅ |
-| Sign in without registering your own Yandex app | ❌ | ✅ | ✅⁹ | ✅ | ❌ |
+| Sign in without registering your own Yandex app | ❌ | ✅ | ✅¹¹ | ✅ | ❌ |
 
 ¹ Both keep the files themselves in a folder on your computer, so your system's own search finds them. Neither has a
 search of its own.
 
-² It gives the agent a download link or saves the file, and the agent then has to read the file itself.
+² It gives the agent a download link, and the agent then has to read the file itself.
 
-³ It syncs a folder: you move files in that folder and the client sends the change.
+³ It downloads the file or folder when asked, and the agent then has to read the file itself.
 
-⁴ A delete goes to the trash, but there is no command to bring a file back.
+⁴ It syncs a folder: you move files in that folder and the client sends the change.
 
-⁵ `ydisk` keeps the text of PDF, Word, Excel, CSV and text files, not the files. `files download --output` saves one
+⁵ A delete goes to the trash, but there is no command to bring a file back.
+
+⁶ `ydisk` keeps the text of PDF, Word, Excel, CSV and text files, not the files. `files download --output` saves one
 file.
 
-⁶ It downloads a file or a folder when asked, but it does not keep the copy in sync.
+⁷ It downloads a file or a folder when asked, but it does not keep the copy in sync.
 
-⁷ `rclone lsjson` and other commands answer in JSON, but there is no skill for agents.
+⁸ `rclone lsjson` and other commands answer in JSON, but there is no skill for agents.
 
-⁸ By default the agent asks you before each change, including deletes and public links.
+⁹ The MCP server offers every command that changes the Disk, and a permission set to `ask` runs without asking over MCP. For a read-only agent, set `YDISK_READ_ONLY=1` or set the permissions to `deny`. `mcp add` asks for `--allow-writes` before it connects an agent.
 
-⁹ rclone signs in through its own Yandex app. In October 2026 users reported errors that went away with their own
+¹⁰ By default the agent asks you before each change, including deletes and public links.
+
+¹¹ rclone signs in through its own Yandex app unless you give it your own `client_id` ([rclone's Yandex page](https://rclone.org/yandex/)). In October 2026 users reported errors that went away with their own
 app ([issue 10067](https://github.com/rclone/rclone/issues/10067)).
+
+<a id="where-another-tool-fits-better"></a>
 
 ## Where another tool fits better
 
@@ -89,12 +105,16 @@ app ([issue 10067](https://github.com/rclone/rclone/issues/10067)).
   to Yandex's server with a ready sign-in link.
 - **Uploading videos or folders of many gigabytes from an agent**: yandex-disk-mcp. It runs long uploads in the
   background, resumes them and checks each file's MD5.
-- **Your own Python program**: the yadisk library, which covers the whole Disk API.
+- **Your own Python program**: the yadisk library, a client for the Disk REST API ([README](https://github.com/ivknv/yadisk)).
+
+<a id="compared-with-a-browser-agent"></a>
 
 ## Compared with an agent driving the Disk web page
 
 A browser agent opens disk.yandex.ru and clicks. `ydisk` and the other tools here call Yandex's API. This page makes
 no claim about which is faster, cheaper or more reliable, because there is no published measurement.
+
+<a id="install-and-licence"></a>
 
 ## Install and licence
 
@@ -102,10 +122,12 @@ no claim about which is faster, cheaper or more reliable, because there is no pu
 |---|---|---|---|---|---|
 | Install | npm, Node 22.16 or a later 22.x, or Node 24 or later | nothing: your AI app connects to Yandex's server | one binary, most package managers | deb and rpm packages | npm |
 | Platforms | macOS, Linux, Windows | any MCP app with HTTP | macOS, Linux, Windows and more | Linux | where Node.js runs |
-| Licence | Apache-2.0 | Yandex service, paid Yandex 360 subscription | MIT | Yandex licence | MIT |
+| Licence | Apache-2.0 | Yandex service, paid Yandex 360 subscription | MIT | not stated on its page | MIT |
 | Sign-in | a token from your own Yandex app, kept in the system keyring | a token from Yandex's ready link | rclone's own app in the browser, or yours | a code entered in the browser | a token from your own Yandex app, in the MCP settings |
 
 If `ydisk` fits, start with [installation](./installation.md).
+
+<a id="how-each-mark-was-checked"></a>
 
 ## How each mark was checked
 

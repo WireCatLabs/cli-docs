@@ -9,6 +9,10 @@
   "files": ["content/docs/*.{md,mdx}", "content/docs/desktop/*.{md,mdx}"],
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
+    "ydcmd",
+    "yadisk",
+    "Patr",
+    "Antiloop",
     "Cognee",
     "Deepgram",
     "Idial",
