@@ -4,6 +4,43 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.33.0 — 17.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Un llavero que no responde se nombra como tal, y ya no parece una sesión sin iniciar.** Cuando el llavero del
+  sistema falla (en Linux pasa tras reiniciar el bus de sesión) y el archivo de inicio de sesión no tiene la entrada,
+  `session status`, `session end` y cada comando que necesita Google responden `keyring.unreachable` con la solución:
+  cierra la sesión del sistema y vuelve a entrar, o define `DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus`.
+  Antes decían que el perfil no había iniciado sesión, y `session end` decía que no había nada que cerrar mientras el
+  inicio de sesión seguía en el llavero. `session list` muestra el mismo error en cada perfil.
+
+### Corregido
+
+- **`search all` encuentra palabras de las transcripciones de Google Meet.** `meetings sync` ahora crea el índice de
+  búsqueda de las reuniones, así que una transcripción se encuentra justo después de sincronizar. Antes, `search all`
+  encontraba una llamada solo por su título.
+- **Una ejecución detenida también detiene las lecturas de Meet.** `meetings list` y `show` pasan a Google Meet la
+  señal de parada de la ejecución. gcal usa cli-core 0.687.0 y cli-base 0.109.0.
+
+## 0.32.0 — 16.11.2026
+
+### Cambios — pueden romper scripts
+
+- **La skill del agente es más corta.** `SKILL.md` conserva lo que un agente necesita en cada turno (la regla del
+  perfil, responder desde el calendario, los límites de los cambios, la salida) en unos 7 KB en lugar de 17 KB, y
+  enlaza el resto en `skills/gcal-cli/references/`: eventos, preparación de reuniones y resúmenes, cambios en eventos,
+  Google Meet, calendarios y feeds, la Calendar API y MCP. No se quitó ninguna regla. La skill ahora también nombra
+  `meetings list --backend archive`, el horario laboral de `calendars busy --hours` y `--send-notifications false`
+  para compartir desde la línea de comandos. Un agente que lee la skill gasta unos 2.500 tokens menos en cada turno.
+
+### Corregido
+
+- **`gcal skill install` instala las `references/` de la skill junto a `SKILL.md`,** en `~/.claude/skills/gcal-cli/` y
+  `~/.agents/skills/gcal-cli/`, y `gcal skill show <name>` muestra una de ellas (`gcal skill show events`). Antes solo
+  se instalaba `SKILL.md`, y sus enlaces a las referencias no llevaban a ninguna parte. gcal usa cli-core 0.681.0 y
+  cli-base 0.106.0.
+
 ## 0.31.0 — 16.11.2026
 
 ### Añadido
