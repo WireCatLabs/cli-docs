@@ -116,6 +116,9 @@ importers:
       esbuild:
         specifier: ^0.28.2
         version: 0.28.2
+      fflate:
+        specifier: 0.8.3
+        version: 0.8.3
       lefthook:
         specifier: 2.2.2
         version: 2.2.2

@@ -2,6 +2,7 @@ import { createHash } from "node:crypto"
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
+import { unzipSync } from "fflate"
 import { afterEach, describe, expect, it } from "vitest"
 import {
   AGENT_SKILLS_DIR,
@@ -117,5 +118,52 @@ describe("publishSkills and writeSkillsIndex", () => {
     expect(skillIndexProblems(out)).toEqual([
       ".well-known/agent-skills/index.json: must have required property '$schema'",
     ])
+  })
+
+  it("publishes a skill's references beside SKILL.md, lists them, and ships them as one v0.2.0 archive", () => {
+    const root = folder()
+    const checkout = folder()
+    mkdirSync(join(checkout, "skills", "gcal-cli", "references"), { recursive: true })
+    writeFileSync(
+      join(checkout, "skills", "gcal-cli", "SKILL.md"),
+      `${skill("gcal-cli")}[Events](references/events.md)\n`,
+    )
+    writeFileSync(
+      join(checkout, "skills", "gcal-cli", "references", "events.md"),
+      "[Back](../SKILL.md) [Meet](meet.md)\n",
+    )
+    writeFileSync(join(checkout, "skills", "gcal-cli", "references", "meet.md"), "# Meet\n")
+    publishSkills(checkout, root, "0.33.0")
+    writeSkillsIndex(root)
+
+    const files = ["SKILL.md", "references/events.md", "references/meet.md"]
+    const index = JSON.parse(readFileSync(join(root, SKILLS_DIR, "index.json"), "utf8"))
+    expect(index.skills[0].files).toEqual(files)
+    const out = join(root, "public")
+    expect(skillIndexProblems(out)).toEqual([])
+
+    const agentIndex = JSON.parse(readFileSync(join(root, AGENT_SKILLS_DIR, "index.json"), "utf8"))
+    expect(agentIndex.skills[0]).toMatchObject({ type: "archive", url: "/.well-known/agent-skills/gcal-cli.zip" })
+    const archive = unzipSync(readFileSync(join(root, AGENT_SKILLS_DIR, "gcal-cli.zip")))
+    expect(Object.keys(archive).sort()).toEqual(files)
+    expect(Buffer.from(archive["SKILL.md"] ?? [])).toEqual(readFileSync(join(root, SKILLS_DIR, "gcal-cli", "SKILL.md")))
+
+    rmSync(join(root, SKILLS_DIR, "gcal-cli", "references", "meet.md"))
+    writeSkillsIndex(root)
+    expect(skillIndexProblems(out)).toEqual([
+      ".well-known/skills/gcal-cli/references/events.md: meet.md — the site does not publish it",
+    ])
+  })
+
+  it("refuses a release whose skill links a file outside its skill folder", () => {
+    const checkout = folder()
+    mkdirSync(join(checkout, "skills", "zoom-cli"), { recursive: true })
+    writeFileSync(
+      join(checkout, "skills", "zoom-cli", "SKILL.md"),
+      `${skill("zoom-cli")}[Setup](../../docs/setup.md)\n`,
+    )
+    expect(() => publishSkills(checkout, folder(), "0.79.0")).toThrow(
+      "SKILL.md: ../../docs/setup.md — the site does not publish it",
+    )
   })
 })
