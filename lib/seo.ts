@@ -98,13 +98,14 @@ export function documentationTitle(lang: string, slugs: string[], authored: stri
   const templates: Record<string, string> = words.pageTitles
   const template = guide || slugs.length !== 2 ? undefined : (templates[slugs.join("/")] ?? templates[slugs[1]])
   const product = (words.products as Record<string, string>)[tool.name] ?? tool.displayName ?? tool.name
-  if (template) {
-    const title = template.replaceAll("{product}", product)
-    return title.charAt(0).toUpperCase() + title.slice(1)
-  }
-  // People search for the product, not the command: "Telegram: People", not "People — tg".
-  return `${tool.displayName ?? { tg: "Telegram", max: "MAX" }[tool.name] ?? tool.name}: ${guide?.title ?? authored}`
+  if (template) return capitalize(template.replaceAll("{product}", product))
+  // People search for the product, not the command: "Telegram: People", not "People — tg". `products` is worded to
+  // fit inside a sentence (RU «почты»); `labels` names the product on its own.
+  const label = (words.labels as Record<string, string>)[tool.name] ?? capitalize(product)
+  return `${label}: ${guide?.title ?? authored}`
 }
+
+const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
 
 const pageDescription = (lang: string, slugs: string[]) =>
   (seoWords(lang).pageDescriptions as Record<string, string>)[slugs.join("/")]

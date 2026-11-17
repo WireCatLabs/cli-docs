@@ -1,3 +1,4 @@
+import { readdirSync, readFileSync } from "node:fs"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
@@ -80,6 +81,33 @@ describe("localized SEO", () => {
       "Memo: Keeping Memo up to date",
     )
     expect(documentationDescription(lang, ["tg", "mcp"], "Synced text")).toContain("Telegram")
+  })
+
+  it.each(seoLocales)("keeps every keyword title within 70 characters with the brand in %s", (lang) => {
+    const words = seoWords(lang)
+    const slugs = Object.keys(words.pageTitles).filter((key) => !key.includes("/"))
+    const titles = tools.flatMap((tool) => [
+      documentationTitle(lang, [tool.name], tool.name),
+      ...slugs.map((slug) => documentationTitle(lang, [tool.name, slug], slug)),
+    ])
+    for (const key of Object.keys(words.pageTitles).filter((key) => key.includes("/")))
+      titles.push(documentationTitle(lang, key.split("/"), key))
+    // Site pages carry their search title in frontmatter; tool pages synced from releases are checked by the export.
+    const suffix = lang === "en" ? /^[^.]+\.mdx?$/ : new RegExp(`^[^.]+\\.${lang}\\.mdx?$`)
+    for (const dir of ["content/docs", "content/docs/desktop"])
+      for (const file of readdirSync(dir).filter((name) => suffix.test(name)))
+        titles.push(/^title:\s*"?(.*?)"?$/m.exec(readFileSync(`${dir}/${file}`, "utf8"))?.[1] ?? file)
+    expect(titles.filter((title) => `${title} · WireCat`.length > 70)).toEqual([])
+  })
+
+  it("names the product on its own in subpage titles without a template", () => {
+    expect(documentationTitle("ru", ["mail", "providers"], "Подготовка почтового ящика")).toBe(
+      "Почта: Подготовка почтового ящика",
+    )
+    expect(documentationTitle("es", ["mail", "outlook"], "Conectar Outlook")).toBe("Correo: Conectar Outlook")
+    expect(documentationTitle("en", ["max", "limits"], "Limits")).toBe("MAX: Limits")
+    expect(documentationTitle("ru", ["gcal", "commands"], "x")).toContain("Google Calendar")
+    expect(seoWords("ru").toolTitles.gcal).toContain("Google Calendar")
   })
 
   it("does not announce a locale whose equivalent page is unavailable", () => {
