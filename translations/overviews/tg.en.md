@@ -1,85 +1,144 @@
 ---
 title: "Telegram: start here"
-description: "Connect your Telegram account to an agent, or use it from a terminal."
+description: "Your agent reads your Telegram, tells you who is waiting for an answer and finds any message offline. Nothing is marked read or sent unless you ask."
 ---
 
-`tg` is a command-line tool that lets your AI agent read Telegram, find messages and help you reply. It works with **your
-personal account** and its chats. You can also use it yourself with terminal commands.
-It runs on Windows, macOS and Linux.
+You see who is waiting for you without scrolling through chats. `tg` connects your own Telegram account to the AI agent
+you already use, such as Claude Code, Codex or Cursor. It keeps a copy of your chats on your computer, so your agent
+can search years of history, even offline.
 
-You are in the **Telegram** documentation. Use the messenger switch at the top to open MAX.
+Your agent tells you which chats need an answer, what you promised this week and where Alice sent the lease PDF. It
+answers with the messages it found, and it drafts a reply you can send or change. Setup takes about five minutes.
 
-**On this page**
+**On this page:**
 
-- [Choose how to start](#choose-how-to-start)
-- [Try it after connecting](#try-it-after-connecting)
-- [Find the guide for your task](#find-the-guide-for-your-task)
+1. [What you get](#what-you-get)
+2. [Things a newcomer would not guess](#things-a-newcomer-would-not-guess)
+3. [How it looks](#how-it-looks)
+4. [Why tg](#why-tg)
+5. [What it can do](#what-it-can-do)
+6. [How it works](#how-it-works)
+7. [Start in five minutes](#start-in-five-minutes)
+8. [Limits](#limits)
+9. [Find a guide for your task](#find-a-guide-for-your-task)
 
-## Choose how to start
+## What you get
 
-### Connect through your agent
+- **Never miss a reply you owe.** One request lists who is waiting for your answer, in every chat. Nobody sees that
+  you looked.
+- **Any message in seconds.** "When did we agree on the venue with Alice?" gives you the date and the message itself,
+  with no internet. Search finds a word in its other forms, and a whole discussion by what it was about.
+- **Promises kept.** "What did I promise this week, and what am I waiting for?" gets one answer across all your chats.
+- **Voice messages as text.** Voice notes become text on your computer, with no Telegram Premium. Text in files and
+  scans is searchable too.
+- **Calm groups.** Links, floods and unwanted people are handled by your rules. You see the questions nobody
+  answered, who joined and who left.
+- **Replies while you are away.** Auto-replies by your own rules, and you can keep them to the people you choose.
+- **A bot in the same tool.** Run any bot through the official Bot API, all 185 methods, next to ready commands for
+  sending and replies.
 
-If you use Codex, Claude Code, Cursor, Gemini CLI or Hermes, open the
-[agent installation guide](/en/docs/installation#tg). Copy the short request: your agent will
-install the tool, help you log in and check the connection. You scan the QR code and confirm the login.
+## Things a newcomer would not guess
 
-Then follow [the guide for your agent](/en/docs/agents). Apps that use an MCP server have a
-[separate MCP guide](/en/docs/agents#mcp-and-skills).
+- **`personal` is a name you choose.** It names one Telegram account, and it is the first word of every command. Add
+  `work` later for a second account. No command picks an account for you.
+- **Reading marks nothing read.** Only `tg personal chats mark-read` tells the other side you looked.
+- **Nothing is sent unless a command asks.** Sending, editing and deleting are separate commands, and you can make a
+  profile read-only.
+- **The copy fills as you read.** A chat you have not opened or downloaded yet is not in the copy, so an empty offline
+  search does not prove a message was never sent. `tg` knows which stretches of each chat it holds in full and says so.
 
-### Start in a terminal
+## How it looks
 
-Open [the installation guide](/en/docs/installation#tg) and choose the terminal instructions.
-After installing, run guided setup: it helps with app registration and login, checks your account and five chats, and installs agent skills. It reuses an existing session; downloading history remains a separate choice.
-
-```sh
-tg personal setup
+```text
+You:    What did I promise anyone in the last three days?
+Agent:  (runs tg personal review 'date>3d': 12 chats)
+        I owe
+        · Alice Example: the invoice by Friday. "Alice Example", 24.09
+        Waiting on others
+        · Bob Sample: the mock-up by 25.09. Not in "Design" yet
+You:    Remind Bob about the mock-up.
+Agent:  Draft: "Hi Bob, how is the mock-up going?" Send it?
+You:    Yes.
 ```
 
-```sh
-tg personal chats list --limit 5
+## Why tg
+
+- **No WireCat server.** `tg` talks only to Telegram, from your computer. There is no account with us.
+- **Signs in like Telegram's desktop app.** It uses Telegram's official API through your own app registration, and
+  becomes one more device on your account.
+- **Search the other tools do not document.** Of the five open Telegram tools on the [comparison](./compare.md), none
+  documents finding a message by its meaning, searching inside the files you received, or showing what you owe people
+  and what they owe you. `tg` does all of it.
+- **Limits you set for an agent.** Read only, writes only to the chats you list, and at most 30 sends an hour by
+  default. A send can ask you first at the terminal.
+- **The login stays in your system keyring.** No other tool on the comparison keeps it there.
+- **Free and open source.** Apache 2.0, on macOS, Linux and Windows.
+
+Another tool fits better when you mostly move files in bulk ([tdl](https://github.com/iyear/tdl)), or want the widest
+set of ready actions in Claude Desktop with no local copy ([telegram-mcp](https://github.com/chigwell/telegram-mcp)).
+
+## What it can do
+
+- **Catch up:** other people's unread messages in every chat, a review of what changed since last time, the questions
+  nobody answered. [Everyday commands](./usage.md)
+- **Find:** search by person, chat, date, file, link and tag, by meaning, and on Telegram's server at the same time.
+  [Search](./search.md)
+- **Reply:** send, reply, forward, edit, pin, react, polls, files and voice. Schedule a message for later.
+  [Everyday commands](./usage.md)
+- **Run a group:** members, join requests, topics, moderation rules, a summary of the week. [Your groups](./groups.md)
+- **Keep the history:** download a chat's full history once, export it to Markdown or JSONL.
+  [Message archive](./archive.md)
+- **One person across messengers:** link a person's Telegram and MAX accounts, and search your messages, mail and
+  notes on this computer at once. [People](./people.md)
+- **Agents everywhere:** a skill for terminal agents, an MCP server with ready prompts for Claude Desktop and Cursor,
+  and a secure link for ChatGPT and Claude in the browser. [Agents](/en/docs/agents)
+
+## How it works
+
+- **A copy on your computer.** Messages `tg` has read or downloaded sit in a local archive. Search, export and offline
+  reading answer from it, and a search can ask Telegram's server too. [Message archive](./archive.md)
+- **Login by QR code.** You register a Telegram app once, then scan a code in Telegram. `tg` becomes one more device
+  on your account.
+- **Made for scripts and agents.** One operation per call and one JSON answer with `--json`.
+  [MCP](./mcp.md)
+- **What is stored and what goes over the network.** [Security](./security.md)
+
+## Start in five minutes
+
+Paste this into your agent:
+
+```text prompt
+Use tg CLI. Install it with npm install -g @wirecat/tg-cli, help me run tg personal setup, then show me who is waiting for my answer.
 ```
 
-`personal` is the profile name: choose any name at the first login and repeat it in every command.
+Or in a terminal:
 
-First, the command asks for your phone number and a code sent in Telegram to obtain `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org/apps). Then it displays the QR code for account login. Open Telegram on your phone → Settings → Devices → Link Desktop Device and scan it. Wait for **Logged in as …** before listing chats. [Complete login steps](/en/docs/tg/sessions).
+```sh
+npm install -g @wirecat/tg-cli
+tg personal setup     # register your Telegram app, log in by QR code, install the agent skill
+tg personal inbox     # other people's unread messages, in every chat
+```
 
-> **What is a Telegram application and why is it needed?**
->
-> This is a registration record for the program connecting to Telegram, here the `tg` CLI. You fill in a form, without writing or downloading another application. Telegram issues `api_id` and `api_hash` to identify the program; QR or code confirmation then grants access to your account. The command can register or retrieve these credentials for you. [Explanation and browser fallback](/en/docs/tg/sessions#the-app-from-mytelegramorg).
+You need Node.js 22.19 or later on 22.x, or 24 and later, or Bun. `setup` opens
+[my.telegram.org](https://my.telegram.org/apps) for you: Telegram asks every program that connects to an account to
+register, and `tg` fills the form. [Installation](./installation.md)
 
-## Try it after connecting
+## Limits
 
-- **Catch up on unread messages.** Ask which chats are waiting for your reply.
-- **Recall agreements.** Ask what you promised this week and what you are waiting for from others.
-- **Find a message.** Ask for a conversation, date, link or file.
-- **Get help replying.** Give your agent context and ask it to draft or send a message.
+- Search by meaning needs a model you download once (219 MB, shared with `max`). Search by words works without it.
+- Call history, privacy settings and stickers are not in `tg` yet. [Roadmap](./roadmap.md)
 
-Reading **does not mark messages as read**. Sending, deleting and other changes require separate
-commands. You can restrict the agent's access: see [access and safety](/en/docs/tg/security).
-
-Word search asks both the local archive and the messenger by default (`--backend both`); use `--backend archive` for local-only results. The query language is strict Lucene and does not correct typos; `--discover` also tries close spellings in the local archive. Prepare saved history before archive-only search, counting or rankings, and check coverage before treating an empty result as proof that a message is absent. See [search](/en/docs/tg/search).
-
-## Find the guide for your task
+## Find a guide for your task
 
 | Task | Guide |
 |---|---|
-| Read, search and send messages | [Everyday commands](/en/docs/tg/usage) |
-| Log in, log out or add another account | [Login and profiles](/en/docs/tg/sessions) |
-| Search local history and export conversations | [Message archive](/en/docs/tg/archive) |
-| Write a precise search query, filters or dates | [Message search](/en/docs/tg/search) |
-| Follow questions and membership in a group | [Your groups](/en/docs/tg/groups) |
-| Find a ready request for your agent | [Usage recipes](/en/docs/tg/recipes) |
-| Check what Telegram bots currently support | [Bots: available capabilities](/en/docs/tg/bot) |
-| Fix an error | [Troubleshooting](/en/docs/tg/troubleshooting) |
-| Look up an exact command or option | [Command reference](/en/docs/tg/commands) |
-| Manage contacts, aliases and private notes | [People](/en/docs/tg/people) |
-| Compare activity and inspect ranking evidence | [Rankings](/en/docs/tg/rankings) |
-| Send, download and read files | [File commands](/en/docs/tg/usage) |
-| Transcribe voice messages locally | [Voice commands](/en/docs/tg/usage) |
-| Configure optional model APIs | [Model settings](/en/docs/tg/configuration-reference) |
-| Restrict reads, writes and confirmations | [Permissions](/en/docs/tg/permissions) |
-| Choose a personal or bot profile | [Profiles and bots](/en/docs/tg/profiles) |
-| Look up setting types and precedence | [Configuration reference](/en/docs/tg/configuration-reference) |
-
-The left sidebar keeps Getting started and expandable Telegram/MAX guides available. The right sidebar lists sections of the current
-page. Use the command reference when you need an exact option; installation and everyday tasks are enough to get started.
+| Install, log in, add another account | [Installation](./installation.md), [Login and profiles](./sessions.md) |
+| Read, search and send messages | [Everyday commands](./usage.md) |
+| Write a precise search | [Message search](./search.md) |
+| Run a group | [Your groups](./groups.md) |
+| A ready request for your agent | [Recipes](./recipes.md) |
+| Decide what an agent may do | [Permissions](./permissions.md) |
+| A bot | [Bots](./bot.md) |
+| An exact command or option | [Command reference](./commands.md) |
+| Something does not work | [Troubleshooting](./troubleshooting.md) |
+| How tg differs from other Telegram tools | [Comparison](./compare.md) |

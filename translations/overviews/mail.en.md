@@ -1,119 +1,138 @@
 ---
 title: "Mail: start here"
-description: "Connect your mailbox to an agent: search it offline, see what needs an answer, tidy it with undo, and draft or send replies."
+description: "Your agent searches your mail offline, tells you which emails you owe an answer and drafts replies you approve. Moves and deletions can be undone."
 ---
 
-This page explains what `mail` is, what you get from it, which mailboxes it works with and where to start.
+You find the invoice from last spring, or the thread where a price was agreed, by asking. `mail` keeps a copy of your
+mailbox on your computer, so the AI agent you already use, such as Claude Code or Codex, searches it there, even
+without the internet. It works with Gmail, Outlook, iCloud, Fastmail, Yandex and any other mail server that offers
+IMAP.
 
-**On this page**
+Your agent tells you which emails you owe an answer, what a PDF attachment says, and files this week's newsletters for
+you. Moves and deletions can be undone, and mail to anyone but you waits for your yes.
 
-- [What mail is](#what-mail-is)
-- [What you get](#what-you-get)
-- [Supported providers](#supported-providers)
-- [Features](#features)
-- [Start here](#start-here)
-- [Find the guide for your task](#find-the-guide-for-your-task)
+**On this page:**
 
-## What mail is
-
-`mail` is a command-line tool that keeps a copy of your mailbox on your computer. Your AI agent, or you, can then
-search and work with that copy, even without an internet connection. It is part of WireCat, the set of tools that give
-your agent access to your messages. It runs on Windows, macOS and Linux.
+1. [What you get](#what-you-get)
+2. [Things a newcomer would not guess](#things-a-newcomer-would-not-guess)
+3. [How it looks](#how-it-looks)
+4. [Why mail](#why-mail)
+5. [What it can do](#what-it-can-do)
+6. [How it works](#how-it-works)
+7. [Start](#start)
+8. [Limits](#limits)
+9. [Find the guide for your task](#find-the-guide-for-your-task)
 
 ## What you get
 
-- **Mail your agent can use.** Ask for the invoice from last spring, the thread where a price was agreed, or what a
-  PDF attachment says. The agent searches the local copy and shows the email it found.
-- **A short list of what needs you.** Ask which threads have new mail, which emails you owe an answer to, and which
-  are waiting for someone else.
-- **Fewer newsletters and alerts.** You choose which senders, mailing lists or kinds of mail to skip or keep as a
-  short record only, and you can look at a mailbox by sender before you copy it.
-- **A tidier mailbox, with an undo.** Moves, flags and deletion go to the mail server first. Deleted mail goes to
-  Trash, and every change can be undone.
-- **Drafts and replies you approve.** Your agent can save a draft in your own Drafts folder. Mail to anyone but you
-  asks you first; an agent over MCP may send mail only to you unless you allow more.
-- **One place for all your messages.** The same store holds your Telegram, MAX and WhatsApp history, so
-  [Memo](/en/docs/memo/mail) can search mail together with your chats and notes.
+- **Mail your agent can use.** Ask for an email by what it said, who sent it or what is in its attachment. The agent
+  shows the email it found.
+- **A short list of what needs you.** Which threads have new mail, which emails you owe an answer, which wait for
+  someone else.
+- **Fewer newsletters and alerts.** Choose which senders, lists or kinds of mail to skip or keep only as a short
+  record. Look at a mailbox by sender before you copy it.
+- **A tidier mailbox, with undo.** Moves, flags and deletion happen on the mail server. Deleted mail goes to Trash,
+  and a move or a deletion can be undone while Trash still holds it.
+- **Drafts and replies you approve.** Your agent saves a draft in your own Drafts folder, so it shows in every mail
+  app. Mail to anyone but you asks you first.
+- **Mail beside your chats.** The same store holds your Telegram, MAX and WhatsApp history, so
+  [Memo](/en/docs/memo/mail) searches mail together with your chats and notes.
 
-Your app password stays in your computer's keyring. `mail` reads mail only from your provider's IMAP server and sends
-it only through your provider's SMTP server, both encrypted. See [access and safety](/en/docs/mail/security).
+## Things a newcomer would not guess
 
-## Supported providers
+- **Most providers want an app password.** It is a password made for one program, which you can revoke. Outlook and
+  Microsoft 365 use a browser sign-in instead. [Prepare the mailbox](./providers.md)
+- **The first sync reads the last 30 days.** Add a start date to go further back, or bring in a Google Takeout file.
+- **`personal` is a name you choose** for one mailbox. No command picks a mailbox for you.
+- **Text in an email is someone else's.** Your agent treats it as data, never as an instruction.
 
-`mail` reads mail over IMAP and sends it over SMTP. Both are standard mail protocols that most providers offer.
+## How it looks
+
+```text
+You:    Which emails from this week do I still owe an answer?
+Agent:  (runs mail personal review --unanswered 1d, then mail personal messages show on each)
+        · Ann Example asked on Tuesday whether the invoice can move to December.
+        · Bob Sample sent the contract on Wednesday and asked for comments by Friday.
+You:    Draft a reply to Ann: yes, December is fine.
+Agent:  Saved a draft in your Drafts folder, in Ann's thread. Nothing is sent.
+```
+
+## Why mail
+
+- **One store with your chats.** Of the mail tools on the [comparison](./compare.md) (Himalaya, mu, gog, Google
+  Workspace MCP, Microsoft 365 MCP), none documents keeping mail in one store with chats, meetings and notes and
+  searching them together.
+- **Undo for what it changed.** No other tool on the comparison documents an undo for what it changed on the server.
+- **An agent over MCP mails only you** until you allow more. A deletion or a change of many emails asks first.
+- **Your password stays in the system keyring.** `mail` talks only to your provider's mail servers, over encrypted
+  connections.
+- **Free and open source.** Apache 2.0.
+
+Another tool fits better when your organisation turns IMAP off (Microsoft 365 MCP), or you use Gmail only and want
+Calendar and Drive in the same tool ([gog](https://github.com/openclaw/gogcli)).
+
+## What it can do
+
+- **Read and search:** offline, by words, sender, date, size and attachment text. [Search your mail](./usage.md#search-your-mail)
+- **Review:** what is new, what you owe, what waits. [Review](./usage.md#review-what-is-new-what-you-owe-what-waits)
+- **Organise:** rules for what to keep, flags, folders, Trash, with an undo. [Organise the mailbox](./usage.md#organise-the-mailbox)
+- **Write:** drafts, send, reply and forward with attachments. [Send, reply and forward](./usage.md#send-reply-and-forward)
+- **Keep:** export to mbox or Maildir, count mail by day or sender, add your own tags. [Your own tags](./usage.md#your-own-tags)
+- **Hand triage to an agent:** with Memo, a scheduled agent proposes tasks and facts for you to confirm.
+  [Mail in Memo](/en/docs/memo/mail)
 
 | Provider | How you sign in | Guide |
 |---|---|---|
-| Gmail | An app password (default), or OAuth, with WireCat's Google app or your own | [Prepare the mailbox](/en/docs/mail/providers), [Gmail with your own Google app](/en/docs/mail/oauth-google) |
-| Outlook.com, Hotmail, Microsoft 365 | OAuth only: you sign in to Microsoft in your browser | [Connect Outlook](/en/docs/mail/outlook), [Register a Microsoft app](/en/docs/mail/oauth-microsoft) |
-| iCloud, Fastmail | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
-| Any other IMAP server | An app password, if the provider offers one; `mail` finds the server from your address, or you pass the host and port | [Any other provider](/en/docs/mail/providers) |
-| Yandex | An app password | [Prepare the mailbox](/en/docs/mail/providers) |
+| Gmail | An app password, or a Google sign-in | [Prepare the mailbox](./providers.md) |
+| Outlook.com, Hotmail, Microsoft 365 | A Microsoft sign-in in your browser | [Connect Outlook](./outlook.md) |
+| iCloud, Fastmail, Yandex | An app password | [Prepare the mailbox](./providers.md) |
+| Any other IMAP server | An app password, if the provider has one | [Prepare the mailbox](./providers.md) |
 
-An app password is a password made for one program only, which you can revoke. Each provider needs IMAP switched on
-and, for most, an app password first: the steps for each one are in [Prepare the mailbox](/en/docs/mail/providers).
-Gmail OAuth uses WireCat's Google app unless you name your own. Making a shared Google app public for mail is complex, so Google may refuse the sign-in; if it does, use your own Google app or an app password.
+## How it works
 
-A Gmail profile can also add a Google Takeout archive (an `.mbox` file) to its stored mail; see [look before you sync, and bring in an archive](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive).
+- **A copy on your computer.** `sync` reads your mail into the local store that the other WireCat tools share. Search
+  and reading answer from it. A timer keeps it current. [Everyday use](./usage.md)
+- **Changes happen on the server.** A move or a deletion changes your real mailbox, so every mail app sees it. Each
+  change keeps what it needs to undo itself.
+- **Made for scripts and agents.** One operation per call, one JSON answer with `--json`, a skill for terminal agents
+  and an MCP server.
+- **What is stored and what is sent.** [Access and safety](./security.md)
 
-## Features
+## Start
 
-- Read your mailbox offline and keep it current on a timer. [Connect a mailbox](/en/docs/mail/usage#connect-a-mailbox)
-- Search by words, sender, date, size and the text inside attachments. [Search your mail](/en/docs/mail/usage#search-your-mail)
-- See what is new, which emails you owe an answer and which wait for a reply. [Review](/en/docs/mail/usage#review-what-is-new-what-you-owe-what-waits)
-- Look at a mailbox by sender before you copy it, and bring in a Google Takeout archive. [Look before you sync](/en/docs/mail/usage#look-before-you-sync-and-bring-in-an-archive)
-- Set rules to skip a sender or list, keep only its envelope, or protect it from cleanup. [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
-- Tidy the mailbox on the server, with a preview before big changes and an undo. [Organise the mailbox](/en/docs/mail/usage#organise-the-mailbox)
-- Save drafts, then send, reply and forward, with attachments. [Send, reply and forward](/en/docs/mail/usage#send-reply-and-forward)
-- Add your own tags, export mail and count it by day, week or sender. [Your own tags](/en/docs/mail/usage#your-own-tags)
-- Let a scheduled agent triage new mail and propose tasks and facts for you to confirm, with Memo. [Mail in Memo](/en/docs/memo/mail)
+Paste this into your agent:
 
-## Start here
+```text prompt
+Use mail CLI. Install it with npm install -g @wirecat/mail-cli, help me prepare my mailbox, sign in with mail personal session start, sync the last 30 days and show which emails I owe an answer.
+```
 
-### Connect through your agent
-
-Follow [the guide for your agent](/en/docs/agents), then open the [Mail installation guide](/en/docs/mail/installation).
-Your agent installs the tool; you make the app password or approve the Microsoft sign-in.
-
-### Start in a terminal
-
-1. [Install `mail`](/en/docs/mail/installation) from npm.
-2. [Prepare the mailbox](/en/docs/mail/providers): turn on IMAP and make an app password. For Outlook or Microsoft 365,
-   [connect Outlook](/en/docs/mail/outlook) instead.
-3. Create a profile, check the login, read your mail and search it. `personal` is a profile name you choose for one mailbox.
+Or in a terminal. Turn on IMAP and make an app password first ([steps per provider](./providers.md)):
 
 ```sh
-mail personal session start --address me@example.com
-mail personal account check
-mail personal sync
+npm install -g @wirecat/mail-cli
+mail personal session start          # asks for the address, finds the server, asks for the app password
+mail personal sync                   # the last 30 days
 mail personal search messages invoice
+mail skill install                   # optional: instructions for your agent
 ```
 
-`session start` finds the mail server, asks for the app password and keeps it in the OS keyring. `sync` reads the last 30 days
-by default; add `--since-time 2026-01-01` to go further back.
+You need Node.js 22.16 or later on 22.x, or 24 and later. [Installation](./installation.md)
 
-4. Optional: install the tool's instructions for your agent.
+## Limits
 
-```sh
-mail skill install
-```
+- `mail` reads mail over IMAP. A mailbox reached only through JMAP or Microsoft Graph needs another tool.
+- A deleted draft does not come back, and Gmail empties Trash after 30 days, so an undo works only until then.
 
 ## Find the guide for your task
 
 | Task | Guide |
 |---|---|
-| Connect a mailbox and read mail | [Everyday use](/en/docs/mail/usage) |
-| Prepare Gmail, iCloud, Fastmail, Yandex or another server | [Prepare the mailbox](/en/docs/mail/providers) |
-| Connect Outlook.com or Microsoft 365 | [Connect Outlook](/en/docs/mail/outlook) |
-| Use Gmail without an app password | [Gmail with your own Google app](/en/docs/mail/oauth-google) |
-| Search mail with your agent, link senders to people and spot scams | [Email with Memo](/en/docs/mail/email) |
-| Have an agent triage new mail | [Mail in Memo](/en/docs/memo/mail) |
-| Look up a command or option | [Command reference](/en/docs/mail/commands) |
-| Change a setting or a permission | [Settings](/en/docs/mail/configuration) |
-| Fix an error | [Troubleshooting](/en/docs/mail/troubleshooting) |
-| See what `mail` stores, sends and never sends | [Access and safety](/en/docs/mail/security), [privacy](/en/privacy) |
-| Compare `mail` with other mail tools | [Comparison](/en/docs/mail/compare) |
-| See what is planned | [Roadmap](/en/docs/mail/roadmap) |
-
-`mail` follows the same standards as the other WireCat tools, with one shared store and one query language: see the
-[WireCat CLI standards](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/README.md).
+| Connect a mailbox and read mail | [Everyday use](./usage.md) |
+| Prepare Gmail, iCloud, Fastmail, Yandex or another server | [Prepare the mailbox](./providers.md) |
+| Connect Outlook or Microsoft 365 | [Connect Outlook](./outlook.md) |
+| Search mail with your chats, spot scams | [Email with Memo](./email.md) |
+| An exact command | [Command reference](./commands.md) |
+| Change a setting or a permission | [Settings](./configuration.md) |
+| Something does not work | [Troubleshooting](./troubleshooting.md) |
+| What mail stores and sends | [Access and safety](./security.md) |
+| How mail differs from other mail tools | [Comparison](./compare.md) |
