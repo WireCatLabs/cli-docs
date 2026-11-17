@@ -131,7 +131,7 @@ Choose which actions your agent may perform: reading messages, sending replies o
 |---|---|
 | `deny` | The action is refused, including reading. |
 | `readonly` | Reading works; changes are refused. |
-| `ask` | A change requires confirmation in the terminal. |
+| `ask` | In a terminal, a change waits for your confirmation. Over MCP it runs without a question. |
 | `allow` | The action can run without another question. |
 
 A refusal tells you to check the requested action and settings. It does not mean your account
@@ -180,8 +180,9 @@ for the commands to manage these controls.
 
 Add `--permission messages.send=deny` to the server startup command to refuse sending for that
 process. Saved settings stay the same. The flag only tightens: an override that would loosen the profile's
-level is refused at startup, so to allow more, change the profile's permissions. Over MCP, `ask` does not require a confirmation form on the server: the app controls
-its own approvals and may allow a call without asking again. Use `deny` or `readonly` to refuse changes. [Browser setup](./browser-apps.mdx) explains the full connection.
+level is refused at startup, so to allow more, change the profile's permissions. Over MCP, the server asks nothing at the `ask` level, and the agent writes and deletes at once. Only your AI app
+may show its own confirmation. To keep the agent from changing data, give the profile `readonly` or `deny`, for
+example `tg work config set permissions.messages readonly`. [Browser setup](./browser-apps.mdx) explains the full connection.
 
 ### Lock a whole run to reading
 
