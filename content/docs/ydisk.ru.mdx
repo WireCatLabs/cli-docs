@@ -55,7 +55,7 @@ ydisk doctor
 2. Получите токен. Яндекс выдает его приложению, которое вы регистрируете, а получить его можно по одной ссылке
    ([инструкция Яндекса](https://yandex.ru/dev/id/doc/ru/tokens/debug-token)):
    - Зарегистрируйте приложение на [oauth.yandex.ru](https://oauth.yandex.ru/client/new/). На шаге "Платформы
-     приложения" укажите Redirect URI `https://oauth.yandex.ru/verification_code`.
+     приложения" выберите "Веб-сервисы" и укажите Redirect URI `https://oauth.yandex.ru/verification_code`.
    - Дайте ему доступы `cloud_api:disk.read`, `cloud_api:disk.info` и, чтобы менять файлы, `cloud_api:disk.write`.
    - Откройте `https://oauth.yandex.ru/authorize?response_type=token&client_id=<ClientID>` с ClientID вашего
      приложения, нажмите "Разрешить" и скопируйте токен со страницы.
@@ -83,7 +83,7 @@ ydisk personal sync
 ydisk personal search "quarterly budget"
 ```
 
-Одна синхронизация проходит примерно до 10 000 элементов и запоминает, где остановилась. Запустите ее снова, чтобы
+Одна синхронизация читает до 200 файлов (`--limit`), проходит примерно до 10 000 элементов и запоминает, где остановилась. Запустите ее снова, чтобы
 продолжить, а позже, чтобы получить изменения. `ydisk personal status` показывает последнюю синхронизацию и оставшуюся
 работу. `documents show` выводит весь текст одного найденного файла.
 

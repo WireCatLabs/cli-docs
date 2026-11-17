@@ -115,7 +115,8 @@ turn on [picture search](./search.md#search-images-by-what-they-show). For a nat
 footnotes across tabs are indexed. Images, headers, footers, comments and suggested edits are not.
 
 Sign-in opens Google's consent screen in your browser, and you approve access to your own account. You do not need a
-Google Cloud project: WireCat's Google app is ready to use, and your own Desktop OAuth client is an option. Folder
+Google Cloud project: WireCat's Google app is ready to use. If Google refuses it, use your own Desktop OAuth client
+([installation](./installation.md#google-shows-an-unverified-app-warning)). Folder
 selection limits what is copied, while Google's read access covers the whole account's Drive.
 
 Start with [installation and Google connection](./installation.md), then follow

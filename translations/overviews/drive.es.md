@@ -135,8 +135,8 @@ documento de Google Docs se indexan el cuerpo, las tablas y las notas al pie de 
 encabezados, los pies de página, los comentarios y las sugerencias no se indexan.
 
 El inicio de sesión abre la pantalla de consentimiento de Google en tu navegador, y tú apruebas el acceso a tu propia
-cuenta. No necesitas un proyecto de Google Cloud: la aplicación de Google de WireCat ya está lista, y tu propio cliente
-OAuth de escritorio es una opción. Elegir carpetas limita lo que se copia, mientras que el acceso de lectura de Google
+cuenta. No necesitas un proyecto de Google Cloud: la aplicación de Google de WireCat ya está lista. Si Google la rechaza, usa tu propio
+cliente OAuth de escritorio ([instalación](./installation.md#google-shows-an-unverified-app-warning)). Elegir carpetas limita lo que se copia, mientras que el acceso de lectura de Google
 abarca todo el Drive de la cuenta.
 
 Empieza por la [instalación y la conexión con Google](./installation.md) y sigue con

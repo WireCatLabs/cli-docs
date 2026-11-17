@@ -49,8 +49,8 @@ ydisk doctor
 
 2. Get a token. Yandex gives one to an app you register, and you open one link to receive it
    ([Yandex's guide](https://yandex.ru/dev/id/doc/en/tokens/debug-token)):
-   - Register an app at [oauth.yandex.com](https://oauth.yandex.com/client/new/). At the "App platforms" step, enter
-     the redirect URI `https://oauth.yandex.ru/verification_code`.
+   - Register an app at [oauth.yandex.com](https://oauth.yandex.com/client/new/). At the "App platforms" step, choose
+     "Web services" and enter the redirect URI `https://oauth.yandex.ru/verification_code`.
    - Give it the access `cloud_api:disk.read`, `cloud_api:disk.info` and, to change files, `cloud_api:disk.write`.
    - Open `https://oauth.yandex.com/authorize?response_type=token&client_id=<ClientID>` with your app's ClientID, click
      Allow and copy the token from the page.
@@ -76,7 +76,7 @@ ydisk personal sync
 ydisk personal search "quarterly budget"
 ```
 
-One sync walks up to about 10,000 entries and saves where it stopped. Run it again to go on, and later to bring in what
+One sync reads up to 200 files (`--limit`), walks up to about 10,000 entries and saves where it stopped. Run it again to go on, and later to bring in what
 changed. `ydisk personal status` shows the last sync and the pending work. `documents show` prints the whole text of
 one file found by search.
 
