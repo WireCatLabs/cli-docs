@@ -11,9 +11,10 @@ Un agente con acceso a tus documentos encuentra el pasaje donde se escribió una
 documento y su enlace de Google. También puede leer un árbol de carpetas, enumerar los archivos que no pudo leer y
 cambiar un archivo de Google cuando se lo permitas.
 
-`drive` guarda la copia en el almacén local, un archivo en tu ordenador que comparten todas las herramientas de
-WireCat. Tus chats, tu correo y tus notas también están ahí, así que [Memo](/es/docs/memo) puede encontrar un documento
-junto con la conversación sobre él. Para empezar, necesitas una cuenta de Google con acceso a las carpetas.
+`drive` guarda la copia en el almacén local, un archivo de base de datos SQLite en tu ordenador que comparten todas
+las herramientas de WireCat. Tus chats, tu correo y tus notas también están ahí, así que [Memo](/es/docs/memo) puede
+encontrar un documento junto con la conversación sobre él. Para empezar, necesitas una cuenta de Google con acceso a
+las carpetas.
 
 **En esta página:**
 
@@ -106,9 +107,10 @@ No cambies archivos de Google.
 | Carpetas y su árbol | Recorrer el árbol, listar una carpeta, etiquetarla y añadirle notas |
 | Tus etiquetas, notas, vínculos con personas o proyectos, y recuerdos | Conservar el contexto entre tareas |
 
-Los archivos cuyo contenido no se puede leer quedan en la copia con su nombre y tipo. `catalog search` los encuentra
-por nombre, tipo y propietario. Los permisos, comentarios, el historial de revisiones y la actividad se leen en directo
-de Google y no se guardan.
+Puedes [recorrer sin conexión las carpetas copiadas](./usage.md#browse-and-organize-the-local-catalog). Los archivos
+cuyo contenido no se puede leer quedan en la copia con su nombre y tipo. `catalog search` los encuentra por nombre,
+tipo y propietario. Los permisos, comentarios, el historial de revisiones y la actividad se leen en directo de Google
+y no se guardan.
 
 ## Qué lee
 
