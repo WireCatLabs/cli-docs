@@ -61,6 +61,11 @@ and the docs sidebar). WireCat Desktop copies its own from here. Each was checke
 | beeline.svg | Beeline striped ball | https://moskva.beeline.ru/favicon.svg (https://beeline.ru links no icon of its own), retrieved 2026-11-17 | Beeline (VEON) trademark | unchanged, line endings made LF |
 | telegram-disc.svg | not Telegram's logo: a paper plane on a blue disc | Lucide `send` (https://lucide.dev/icons/send, lucide-react 1.61.0, ISC) | ISC | white 2.25 stroke on a #0EA5E9 disc, as WireCat Desktop draws Telegram. Telegram's API terms 2.4 (https://core.telegram.org/api/terms) forbid its official logo in another app |
 
+Served under other names in `public/logos/`: `telegram.svg` is `telegram-disc.svg` (the paper plane on a disc, not
+Telegram's logo), `zoom.svg` is `zoom-tile.svg`, and `google-drive.svg`, `google-calendar.svg` and `bitrix24.svg`
+are the files of the same name above. `whatsapp.svg` is the green glyph (#25D366) of the WhatsApp row above with its
+background left out, colours unchanged.
+
 Kept as line icons: Email (one tool for every mail provider), Asterisk (owner, 2026-11-17: few people know its mark;
 Simple Icons has one, `icons/asterisk.svg`, #F68F1E, if that changes) and Memo (WireCat's own).
 
