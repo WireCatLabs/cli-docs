@@ -118,6 +118,8 @@ Cómo entra cada herramienta:
 | Google Drive, Google Calendar | Tu navegador |
 | Correo | Primero tu dirección de correo. Gmail entra con Google (**Entrar con Google**, recomendado), sin configurar nada tuyo en Google Cloud. Una cuenta de Microsoft abre el inicio de sesión de Microsoft. Otros servidores de correo, y Gmail en **Otras formas**, usan una contraseña de aplicación, una contraseña creada solo para este programa, con pasos guiados. [Preparar el buzón](../mail/providers.md) muestra cómo la crea cada proveedor |
 | Bitrix24 | Un webhook entrante o una aplicación local de tu portal. Mira [Bitrix24: un webhook o una aplicación local](#bitrix24-un-webhook-o-una-aplicación-local) |
+| Asterisk | Dónde están tus llamadas: la ruta de Master.csv, o la dirección de una base de llamadas MySQL o PostgreSQL y la contraseña de un usuario de solo lectura. Después, los países de tus líneas, para que quien llama sin prefijo de país se enlace con el contacto correcto |
+| Notion | Un token de Notion que pegas en la ventana. Después eliges las páginas y bases de datos que se copian. Mientras no eliges ninguna, Notion copia todo lo que ve el token |
 
 Si una herramienta no tiene ventana de inicio de sesión, **Abrir terminal** abre una terminal que ejecuta la
 configuración propia de la herramienta.
@@ -178,6 +180,13 @@ arranca, y un anillo vacío que no está instalada. Cada fila tiene un botón: *
 versión, **Arreglar** o **Gestionar**, y una herramienta que sincroniza tiene además un botón para sincronizar. Cada
 servicio muestra su logo, con su nombre en una descripción emergente.
 
+Las herramientas están en grupos: **Herramientas incluidas**, **Herramientas adicionales de WireCat**, **Herramientas
+de la comunidad** y **Herramientas que WireCat no ha revisado**. Un grupo vacío no se muestra. **Instalar todo**
+instala todas las herramientas incluidas que aún no están instaladas, y **Actualizar todo** actualiza todas las
+herramientas instaladas que tienen una versión nueva, una tras otra. Cada fila muestra su propio progreso.
+**Actualizar todo** deja fuera tus propias herramientas, porque cada actualización suya pasa por su revisión.
+**Añadir tu propia herramienta** está debajo de la lista: mira [Añadir tu propia herramienta](#añadir-tu-propia-herramienta).
+
 Todas las herramientas guardan tus mensajes y notas en un almacenamiento compartido, y una versión nueva de una
 herramienta puede pasarlo a un formato más nuevo. Antes de **Instalar** o **Actualizar a**, la aplicación lo
 comprueba. Si otra herramienta instalada necesita su propia versión nueva para seguir leyendo el almacenamiento,
@@ -207,6 +216,10 @@ formato lee, como Zoom, queda fuera de la comprobación.
     no cambia nada que no pueda arreglar con seguridad. Si el almacén de mensajes de la herramienta está dañado, la
     comprobación muestra qué pasó y los pasos para arreglarlo, con **Ejecutar** junto a cada paso seguro.
   - **Elegir carpetas** (Google Drive): qué carpetas copiar, también después de iniciar sesión.
+  - **Reglas de correo** (Correo): las reglas de correo de la cuenta, solo para leer. Cada regla muestra qué
+    encuentra, qué hace, sus etiquetas y quién la creó, y encima de la lista está el comando para añadir una regla.
+    Una regla puede guardar como reuniones las notas que [Yandex Telemost](../telemost.mdx#la-regla-en-wirecat-desktop)
+    envía por correo después de una llamada.
   - **Ajustes:** los ajustes propios de la cuenta.
   - **Iniciar sesión** o **Reconectar**: cuando una sesión ha terminado, la fila lo dice y ofrece **Reconectar**. El
     texto de la propia herramienta está en **Detalles**.
@@ -228,7 +241,9 @@ formato lee, como Zoom, queda fuera de la comprobación.
   nunca envía nada. Necesita Memo, y se ejecuta en el agente que eliges en Ajustes, en
   [Agente para tareas en segundo plano](./ai-model.mdx#agente-para-tareas-en-segundo-plano). Con Claude Code, una
   ejecución cuesta como mucho 1 $.
-- **Configura tus notas**, **Reescribir registros para buscar mejor** y **Buscar a fondo** (solo Memo): mira
+- **Configura tus notas** (solo Memo): conecta una bóveda de Obsidian o una carpeta con archivos Markdown, mira
+  [Configura tus notas](./ai-model.mdx#configura-tus-notas).
+- **Reescribir registros para buscar mejor** y **Buscar a fondo** (solo Memo): mira
   [Modelo de IA y mejor búsqueda](./ai-model.mdx).
 - **Desinstalar:** quita la herramienta. Sus datos se quedan en este ordenador hasta que los borres, y el
   diálogo ofrece **Desinstalar y borrar datos**.
@@ -329,7 +344,30 @@ configuran. [Resúmenes](./digests.mdx) muestra cómo.
 ### Clientes
 
 Las negociaciones y los prospectos de tu CRM como tabla o como tablero por etapas. Un cambio a otra etapa llega
-también a Bitrix24. [Clientes](./clients.mdx) muestra cómo importarlos y asignar las etapas de cada CRM a las tuyas.
+también a Bitrix24. [Clientes](./clients.mdx) muestra cómo importarlos y asignar las etapas de cada CRM a las tuyas. La
+ficha de una negociación lista las llamadas con sus personas, y su empresa se abre en una ficha propia.
+
+### Reuniones
+
+Todas tus reuniones, llamadas y eventos del calendario en una lista, de todas las cuentas. Un evento del calendario y
+su reunión de Zoom o Meet son una sola fila. Las reuniones vienen de Zoom, Google Calendar y Google Meet, y las
+llamadas de una centralita como Asterisk o Beeline. Elige **Semana**, **Mes** o **Tabla**. Las reuniones a la misma
+hora se ven una junto a otra, como en Google Calendar. **Buscar reuniones** acepta palabras del título o un campo como
+`kind:call`, y sugiere mientras escribes. **Solo con transcripción** oculta las demás.
+
+Abre una reunión para ver su ficha: los participantes y su respuesta a la invitación, los enlaces para unirse, el
+lugar, los documentos, el resumen y la transcripción. **Buscar en la transcripción** encuentra una palabra en ella.
+Desde la ficha, el evento se abre en su calendario. Una llamada con su grabación en este equipo tiene **Escuchar**. Un
+archivo grande o un formato poco común se abre en tu propio reproductor. Un enlace a una reunión, desde un resumen o
+la ficha de un cliente, abre su ficha aquí. La página necesita Memo.
+
+### Documentos
+
+Todos los documentos que guarda WireCat, de todas las cuentas: archivos de Google Drive, tus carpetas de notas,
+archivos que añadiste e importaciones. A la izquierda hay un árbol de carpetas por cuenta y a la derecha una tabla.
+**Buscar documentos** acepta palabras o un campo como `kind:pdf`, y **Solo con texto** oculta los archivos sin texto.
+Abre un documento para leer su texto, sus etiquetas, las personas que nombra y sus reuniones, o ábrelo donde está. La
+página necesita Memo.
 
 ### Guías
 
@@ -465,7 +503,9 @@ fallidas, con los datos personales ocultos. No se envía nada hasta que lo enví
 ## Añadir tu propia herramienta
 
 WireCat Desktop puede instalar herramientas que WireCat no hace: una herramienta de la comunidad de la lista que revisa
-WireCat, o cualquier herramienta hecha con las bibliotecas de WireCat, añadida por su nombre en npm.
+WireCat, o cualquier herramienta hecha con las bibliotecas de WireCat, añadida por su nombre en npm. Una herramienta de WireCat
+que esta versión aún no incluye, como `@wirecat/beeline-cli` para las llamadas de Beeline Cloud PBX, se añade igual y
+lleva la etiqueta **Verificada por WireCat**.
 [Añadir tu propia herramienta](./own-tools.mdx) muestra cómo, qué te dice la pantalla de revisión antes de instalar
 nada y qué necesita el autor de una herramienta para que WireCat pueda añadirla.
 
