@@ -50,7 +50,8 @@
       "drive": "Connect Google Drive and Docs to your AI agent",
       "gcal": "Connect Google Calendar to your AI agent",
       "mail": "IMAP mail MCP server and CLI with offline search",
-      "b24": "Connect Bitrix24 CRM to your AI agent"
+      "b24": "Connect Bitrix24 CRM to your AI agent",
+      "hubspot": "HubSpot CRM MCP server and CLI"
     }
   },
   "ru": {
@@ -104,7 +105,8 @@
       "drive": "Подключите Google Drive и Google Docs к ИИ-агенту",
       "gcal": "Подключите Google Calendar к ИИ-агенту",
       "mail": "MCP-сервер почты по IMAP с поиском без интернета",
-      "b24": "Подключите CRM Bitrix24 к ИИ-агенту"
+      "b24": "Подключите CRM Bitrix24 к ИИ-агенту",
+      "hubspot": "Подключите CRM HubSpot к ИИ-агенту"
     }
   },
   "es": {
@@ -158,7 +160,8 @@
       "drive": "Conecta Google Drive y Docs a tu agente de IA",
       "gcal": "Conecta Google Calendar a tu agente de IA",
       "mail": "Servidor MCP de correo IMAP con búsqueda sin conexión",
-      "b24": "Conecta el CRM Bitrix24 a tu agente de IA"
+      "b24": "Conecta el CRM Bitrix24 a tu agente de IA",
+      "hubspot": "Conecta el CRM de HubSpot a tu agente de IA"
     }
   }
 }
