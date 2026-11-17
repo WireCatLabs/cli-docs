@@ -4,6 +4,19 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.34.0 — 17.11.2026
+
+### Cambios — pueden romper scripts
+
+- **`meetings people` responde con el envoltorio estándar.** Antes imprimía las claves propias del informe de
+  participantes (`coverage`, `ambiguity` y otras) junto a `items` en el nivel superior de la respuesta, y el esquema
+  de respuesta no lo acepta. Ahora el informe es el `item` de la respuesta, y el paso a la página siguiente es su
+  `next`.
+- **`meetings list` indica su página siguiente.** Una lista con más filas tiene en `next` un paso `page.next` con
+  `--page`. Los comandos de reuniones compartidos responden mediante `meetingAnswerBody` de cli-core.
+- **Construido sobre cli-core 0.691.0** (antes 0.687.0); cli-base sigue en 0.109.0. El almacén pasa al esquema 69: las
+  demás CLI de WireCat que lo usan necesitan una versión que lo entienda.
+
 ## 0.33.0 — 17.11.2026
 
 ### Cambios — pueden romper scripts
