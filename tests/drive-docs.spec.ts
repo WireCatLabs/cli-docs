@@ -95,7 +95,8 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(page.locator("main")).toContainText("0.1.0")
     await expect(page.locator("main")).toContainText("0.7.0")
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /Google Drive/)
-    await expect(page.locator("#nd-sidebar").getByRole("link", { name: title, exact: true })).toHaveAttribute(
+    const menuName = { en: "Changelog", ru: "История изменений", es: "Historial de cambios" }[lang]
+    await expect(page.locator("#nd-sidebar").getByRole("link", { name: menuName, exact: true })).toHaveAttribute(
       "href",
       `/${lang}/docs/drive/changelog`,
     )
