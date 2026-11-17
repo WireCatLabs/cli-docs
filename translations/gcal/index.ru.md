@@ -2,16 +2,46 @@
 title: "Google Calendar"
 ---
 
-`gcal` читает ваш Google Календарь из терминала, из скриптов и через ИИ-агентов. У Google он просит доступ только на
-чтение, если вы не войдёте с `--grant write`, чтобы создавать, менять и удалять события.
+Смотрите свою неделю сразу во всех аккаунтах Google и находите прошлые события по словам или по смыслу. Календари
+копируются на ваш компьютер, поэтому поиск работает без сети. Расшифровки звонков в Google Meet тоже остаются у
+вас, даже после того как Google их удалит.
 
-Он входит в Google (`session start`, `session status`, `session end`), синхронизирует ваши календари в локальное
-хранилище WireCat (`sync`, `store status`, `calendars`) и читает их оттуда: `events`, `search events`, `people` и `links`.
-С `--grant meetings` команда `meetings` сохраняет ваши звонки Google Meet: кто подключился и расшифровку.
-`calendars busy` спрашивает у Google, когда люди свободны. С правом записи `events create | update | delete | move |
-respond` меняют Google Календарь. Есть и команды, общие для всех CLI WireCat: `doctor`, `commands`, `guide`, `config`,
-`skill`, `mcp`, `runs` и `upgrade`. Начните с [установки](./installation.md), затем перейдите к [работе с инструментом](./usage.md).
+Вы или ваш ИИ-агент ответите на вопрос «Что у меня на этой неделе и что пересекается?», найдёте время, когда Ана
+свободна, и назначите встречу, или вспомните, о чём договорились на последнем звонке с ней. Один поиск находит
+ваши встречи рядом с чатами и заметками, которые хранят на этом компьютере другие инструменты WireCat.
+
+`gcal` работает с Google Calendar и Google Meet из командной строки и входит в инструменты WireCat. Он просит у
+Google доступ только на чтение. События он меняет, только когда вы входите с `--grant write`, а `--grant meetings`
+добавляет звонки Meet. Расшифровки бывают только в аккаунтах Google Workspace, и Google показывает только звонки,
+которые организовали вы. Для начала нужен Node.js, как описано в [установке](./installation.md).
+
+**На этой странице:**
+
+1. [Начать за несколько минут](#start-in-a-few-minutes)
+2. [Работа с агентом](#use-it-with-your-agent)
+3. [Чем gcal отличается от других инструментов](#how-it-differs-from-other-tools)
+
+## Начать за несколько минут
+
+```sh
+npm install -g @wirecat/gcal-cli
+gcal personal session start         # sign in to Google in the browser, read-only
+gcal personal sync                  # copy your calendars, then only what changed
+gcal personal events list           # your events from today on, earliest first
+```
+
+`personal` — имя, которое вы даёте этому аккаунту Google. Позже можно добавить `work` или любое другое. Все шаги и что
+делать, если Google не пускает войти: [установка](./installation.md). Потом читайте события, ищите их и назначайте
+новые: [работа с инструментом](./usage.md).
+
+## Работа с агентом
+
+Агенты с терминалом, например Claude Code или Codex, запускают `gcal` сами, когда `gcal skill install` научит их
+этому. Claude Desktop, Cursor и другие приложения с MCP подключаются к `gcal personal mcp serve`. MCP — стандартный
+способ, которым такое приложение вызывает инструмент.
 
 Чтобы пользоваться им из ChatGPT или Claude в браузере или на телефоне: [удалённое подключение](./remote.md).
+
+## Чем gcal отличается от других инструментов
 
 Чем `gcal` отличается от других инструментов для Google Календаря: [сравнение](./compare.md).
