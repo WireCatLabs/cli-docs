@@ -44,6 +44,8 @@ This page explains what you get, how the copy works and how to connect your work
 - **Database rows as pages.** Each row of a database is copied like a page, with its Notion link.
 - **Your own notes on a page.** Add tags, notes and facts to a page. They stay on your computer and never reach
   Notion.
+- **Writing to Notion.** Create, change and restore pages, add comments and upload files. Deleting a page
+  asks first. `WCNOTION_READ_ONLY=1` or the [`permissions` setting](./configuration.md#permissions) turns writing off.
 - **Live reading when you need it.** Read one page from Notion as Markdown, or list the databases the token sees,
   without copying anything.
 - **Your agent connected.** Install the tool's skill for a terminal agent such as Claude Code, or serve the tool over
@@ -99,9 +101,6 @@ An MCP app gets the server, as described in [use it](./usage.md#agents).
 ## What it does not do yet
 
 - It does not search database rows by their properties, such as status or owner. Search finds rows by their text.
-- It has no ready commands to write to Notion yet. The raw `api` commands can create and change pages, and they are
-  allowed by default. `WCNOTION_READ_ONLY=1` or the [`permissions` setting](./configuration.md#permissions) turns
-  them off.
 - It does not keep a folder of Markdown files in step with a Notion page tree.
 
 ## Find a guide for your task

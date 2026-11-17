@@ -46,6 +46,9 @@ Esta página explica qué obtienes, cómo funciona la copia y cómo conectar tu 
   Notion.
 - **Tus propias notas en una página.** Añade etiquetas, notas y hechos a una página. Se quedan en tu ordenador y nunca
   llegan a Notion.
+- **Escritura en Notion.** Crea, cambia y restaura páginas, añade comentarios y sube archivos. Antes de
+  borrar una página, pregunta. `WCNOTION_READ_ONLY=1` o el [ajuste `permissions`](./configuration.md#permissions)
+  desactivan la escritura.
 - **Lectura en directo cuando la necesitas.** Lee una página de Notion como Markdown, o lista las bases de datos que
   ve el token, sin copiar nada.
 - **Tu agente conectado.** Instala la skill de la herramienta para un agente de terminal como Claude Code, o sirve la
@@ -103,9 +106,6 @@ Una aplicación con MCP se conecta al servidor, como se explica en [úsalo](./us
 
 - No busca filas de una base de datos por sus propiedades, como el estado o el responsable. La búsqueda encuentra las
   filas por su texto.
-- No tiene todavía comandos listos para escribir en Notion. Los comandos `api` ya pueden crear y cambiar páginas, y
-  están permitidos por defecto. `WCNOTION_READ_ONLY=1` o el [ajuste `permissions`](./configuration.md#permissions)
-  los desactivan.
 - No mantiene una carpeta de archivos Markdown al día con un árbol de páginas de Notion.
 
 ## Encuentra una guía para tu tarea
