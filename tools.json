@@ -55,7 +55,7 @@
     "repo": "WireCatLabs/notion-cli",
     "package": "@wirecat/notion-cli",
     "lang": "en",
-    "docsRef": "v0.2.0",
+    "docsRef": "v0.5.0",
     "summary": {
       "en": "Keep your Notion pages and databases on your computer, search them offline and give your AI agent the context.",
       "ru": "Храните страницы и базы данных Notion на своём компьютере, ищите по ним без интернета и давайте ИИ-агенту контекст.",
@@ -121,7 +121,7 @@
     "repo": "WireCatLabs/bitrix24-cli",
     "package": "@wirecat/bitrix24-cli",
     "lang": "en",
-    "docsRef": "v0.15.0",
+    "docsRef": "v0.24.0",
     "tier": "extra",
     "category": "crm",
     "summary": {
@@ -136,7 +136,7 @@
     "repo": "WireCatLabs/asterisk-cli",
     "package": "@wirecat/asterisk-cli",
     "lang": "en",
-    "docsRef": "v0.7.1",
+    "docsRef": "v0.7.2",
     "tier": "extra",
     "category": "calls",
     "summary": {

@@ -105,6 +105,7 @@ export const sidebarIcons = {
   business: Wallet,
   "how-it-works": Lightbulb,
   meetings: Video,
+  calls: PhoneCall,
   zm: Video,
   "google-meet": Video,
   telemost: Video,

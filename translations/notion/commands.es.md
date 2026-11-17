@@ -157,10 +157,12 @@ notion folders browse [options]
 | Option | What it does |
 |---|---|
 | `--parent <id>` | page id or Notion link to list inside; the top of the workspace without it. |
+| `--limit <n>` | at most this many; 100 if not given. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it, with the same --parent. |
 
-**Returns:** notion folder — id, name, kind, url, chosen; every field: notion commands info folders browse
+**Returns:** notion folder — id, name, kind, url, parent, added; every field: notion commands info folders browse
 
-**Example:** `notion personal folders browse`, `notion personal folders browse --parent PAGE_ID --json`
+**Example:** `notion personal folders browse`, `notion personal folders browse --parent PAGE_ID --json`, `notion personal folders browse --limit 20 --cursor CURSOR`
 
 ### `notion folders remove`
 
@@ -294,6 +296,79 @@ notion documents get <page>
 **Returns:** document markdown — id, markdown, truncated, missing_block_ids, signed_links_removed; every field: notion commands info documents get
 
 **Example:** `notion personal documents get https://www.notion.so/Roadmap-0123456789abcdef0123456789abcdef`, `notion personal documents get 0123456789abcdef0123456789abcdef --json`
+
+### `notion documents create`
+
+create a Notion page under another page, from Notion-flavoured Markdown. With no --title, Notion takes the text's first # heading as the title
+
+**Changes something in the service.**
+
+```sh
+notion documents create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--parent <id>` | the parent page's id or its Notion link. |
+| `--title <title>` | the page's title. |
+| `--text <text>` | the text, as Notion-flavoured Markdown. |
+| `--file <file>` | read the text from this file; - reads stdin. |
+
+**Example:** `notion personal documents create --parent PAGE_ID --title "Meeting notes" --text "Discussed the roadmap"`, `notion personal documents create --parent https://www.notion.so/Projects-0123456789abcdef0123456789abcdef --file notes.md`, `notion personal documents create --parent PAGE_ID --file notes.md --dry-run`
+
+### `notion documents update`
+
+replace a Notion page's whole text with Notion-flavoured Markdown. A child page or database whose tag the new text leaves out is refused unless --allow-deleting-content is given, which asks as documents delete does
+
+**Changes something in the service.**
+
+```sh
+notion documents update <page> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the text, as Notion-flavoured Markdown. |
+| `--file <file>` | read the text from this file; - reads stdin. |
+| `--allow-deleting-content` | let Notion delete the child pages and databases the new text leaves out. |
+
+**Example:** `notion personal documents update PAGE_ID --file notes.md`, `notion personal documents update PAGE_ID --text "# Plan" --dry-run`, `notion personal documents update PAGE_ID --file page.md --allow-deleting-content`
+
+### `notion documents delete`
+
+move a Notion page, with the pages under it, to Notion's trash; documents restore brings it back. Notion's API deletes nothing for good. Asks first, as the profile's documents.delete permission says
+
+**Changes something in the service.**
+
+```sh
+notion documents delete <page>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+
+**Example:** `notion personal documents delete PAGE_ID`, `notion personal documents delete PAGE_ID --dry-run`
+
+### `notion documents restore`
+
+bring a Notion page back from Notion's trash, where documents delete put it
+
+**Changes something in the service.**
+
+```sh
+notion documents restore <page>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+
+**Example:** `notion personal documents restore PAGE_ID`, `notion personal documents restore PAGE_ID --dry-run`
 
 ### `notion documents add`
 
@@ -1027,6 +1102,97 @@ notion databases show <database>
 **Returns:** database — id, title, description, url, parent, is_inline, in_trash, created_time, and 2 more; every field: notion commands info databases show
 
 **Example:** `notion personal databases show 0123456789abcdef0123456789abcdef`, `notion personal databases show https://www.notion.so/0123456789abcdef0123456789abcdef --json`
+
+## `notion comments`
+
+read and write the comments on Notion pages, live
+
+### `notion comments list`
+
+list the comments on a Notion page or block, live. Notion's API lists only unresolved comments: a resolved discussion is not shown. Reply to one with comments reply and its discussion_id
+
+```sh
+notion comments list <page> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's or block's id, or its Notion link. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | at most this many, up to 100; 50 if not given. |
+| `--cursor <cursor>` | go on from where the last page stopped; page.next gives it. |
+
+**Returns:** notion comment — id, discussion_id, parent, author_id, author_name, text, attachments, created_time, and 1 more; every field: notion commands info comments list
+
+**Example:** `notion personal comments list PAGE_ID`, `notion personal comments list PAGE_ID --limit 20 --json`
+
+### `notion comments create`
+
+start a discussion on a Notion page with a comment. Notion keeps inline Markdown only: bold, italic, strikethrough, code and links
+
+**Changes something in the service.**
+
+```sh
+notion comments create <page> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the comment, as Markdown: bold, italic, code, links. |
+| `--file <file>` | read the comment from this file; - reads stdin. |
+
+**Example:** `notion personal comments create PAGE_ID --text "Looks good"`, `notion personal comments create PAGE_ID --file note.md --dry-run`
+
+### `notion comments reply`
+
+add a comment to a discussion that comments list shows, by its discussion_id. It checks comments.create too, so denying that stops replies as well
+
+**Changes something in the service.**
+
+```sh
+notion comments reply <discussion> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `discussion` | required | the discussion_id from comments list. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the comment, as Markdown: bold, italic, code, links. |
+| `--file <file>` | read the comment from this file; - reads stdin. |
+
+**Example:** `notion personal comments reply DISCUSSION_ID --text "Done"`
+
+## `notion files`
+
+upload files to Notion pages
+
+### `notion files upload`
+
+upload a file and add it to the end of a Notion page, as an image, video, audio, PDF or file block by its type. Up to 20 MB goes in one request, a larger file in parts of 10 MB. Notion's plan limits the size; a file too large for it is refused. Only a regular file is sent, never a link, a system file or a credential file
+
+**Changes something in the service.**
+
+```sh
+notion files upload <file> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the file to upload. |
+
+| Option | What it does |
+|---|---|
+| `--parent <id>` | the page to add the file to: its id or its Notion link. |
+
+**Example:** `notion personal files upload report.pdf --parent PAGE_ID`, `notion personal files upload photo.png --parent PAGE_ID --dry-run`
 
 ## `notion api`
 

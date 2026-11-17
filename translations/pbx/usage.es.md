@@ -40,6 +40,7 @@ varios registros para una llamada. Tú la ves como una sola llamada, con:
 
 - **Las personas:** quien llama, el empleado que hizo la llamada y cada uno que contestó. Los empleados se nombran a
   partir del identificador de llamada (el nombre que la centralita muestra al llamar) de las llamadas que hacen.
+  `memo context` y WireCat Desktop muestran en cada llamada su dirección, el empleado y el número de quien llama.
 - **La misma persona en todas partes:** si el móvil de quien llama está en tu CRM o en tus chats, es la misma persona
   allí. Así sus llamadas están junto a sus negocios, mensajes y correo. Un fijo solo se propone como coincidencia,
   porque mucha gente comparte un mismo número de oficina.

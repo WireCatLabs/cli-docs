@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/asterisk-cli`. Una sección por versión, la más reciente primero.
 
+## 0.7.2 — 16.11.2026
+
+### Corregido
+
+- **Una llamada muestra su dirección, el empleado y el número de quien llama en `memo context` y WireCat Desktop.**
+  `pbx` los guardaba solo en los detalles de la llamada, así que otras herramientas mostraban la llamada como un
+  título sin más. Una llamada sincronizada antes de esta versión los recibe en una sincronización que la vuelve a
+  leer: `pbx office meetings sync --since-time <the first call's date>` (la fecha de la primera llamada). Una llamada
+  interna, entre dos extensiones, no tiene ninguno. Consulta [lo que obtienes de cada
+  llamada](./usage.md#what-you-get-from-each-call).
+
 ## 0.7.1 — 16.11.2026
 
 ### Corregido
@@ -238,7 +249,7 @@ Cambios destacados de `@wirecat/asterisk-cli`. Una sección por versión, la má
   de cli-core: reintentos si se corta la conexión, tiempos de espera y cada petición en la traza de la ejecución. La
   clave del servidor se fija con `sftp_host_key` antes de enviar ninguna contraseña o clave, y el primer
   `session start` muestra la huella para comprobarla. Consulta
-  [conecta tu Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.1/docs/asterisk.md#files-on-the-pbx-over-sftp).
+  [conecta tu Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.2/docs/asterisk.md#files-on-the-pbx-over-sftp).
 
 ### Corregido
 

@@ -44,7 +44,7 @@ title: "Сравнение с другими инструментами"
 | Держать на компьютере копию выбранных страниц и баз данных, которую обновляет каждая синхронизация | ✅ | ➖ | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [🟡](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | Выгрузить страницу и вложенные в нее страницы в файлы Markdown | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Запись** | | | | | |
-| Создать страницу или изменить ее текст из Markdown | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Создать страницу или изменить ее текст из Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Агенты и безопасность** | | | | | |
 | ИИ-приложение работает с вашими страницами через MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Работать из Claude или ChatGPT в браузере | ✅ | [✅](https://www.notion.com/help/notion-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L345) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -84,10 +84,10 @@ title: "Сравнение с другими инструментами"
 - **Экспорт.** `notion documents export` записывает одну страницу из копии в файл Markdown. `ntn pages get` выводит
   одну страницу в Markdown. notion-exporter записывает все дерево страниц, а базу данных в файл CSV. Ни один
   инструмент здесь не держит папку файлов Markdown в согласии с Notion в обе стороны. В `notion` это запланировано.
-- **Запись.** Готовой команды для записи страницы в `notion` пока нет. Его команды сырого API, например
-  `api post-page` и `api update-page-markdown`, создают страницу и меняют ее Markdown, а тело запроса в JSON агент
-  пишет сам. У каждой из них свое разрешение и `--dry-run`. notion-mcp-server пишет так же, через инструменты,
-  сделанные из API Notion.
+- **Запись.** `notion documents create` создает страницу из Markdown внутри другой страницы, а
+  `notion documents update` заменяет текст страницы. У каждой записи свое разрешение и `--dry-run`. Изменение, которое
+  удалило бы вложенную страницу или базу, отклоняется, пока вы его не разрешите. notion-mcp-server пишет через
+  инструменты, сделанные из API Notion, а тело запроса в JSON агент пишет сам.
 - **Только чтение.** Настройка `permissions` дает команде уровень `readonly` или `deny`, а `WCNOTION_READ_ONLY=1`
   отклоняет любую запись. По умолчанию MCP-сервер предлагает и команды записи, а через MCP уровень `ask` пропускает
   команду. Подробнее в [настройках](./configuration.md#permissions). notion-mcp-server только читает, если у токена

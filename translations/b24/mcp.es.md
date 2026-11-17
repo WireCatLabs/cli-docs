@@ -36,8 +36,9 @@ El servidor tiene tres herramientas:
 - `b24_write` ejecuta un comando que escribe: `{ "command": "deals move", "arguments": { "deal": "deal:12", ... } }`.
 
 Un comando se nombra como en la línea de comandos, sin el perfil, y comprueba la misma clave de permiso. Estos nunca se
-ofrecen por MCP: `api call`, `schedule`, `session start` y `session end`. El agente te pide que los ejecutes en una
-terminal.
+ofrecen por MCP: `api call`, `session start` y `session end`. El agente te pide que los ejecutes en una terminal. De
+`schedule`, MCP ejecuta `list`, `run` y `exec`. Los comandos que añaden, cambian o quitan un temporizador se rechazan
+salvo que `permissions.mcp.authority` sea `allow`.
 
 El texto del portal llega marcado como `untrusted`: los títulos de negociaciones y prospectos, los nombres de embudos y
 etapas, los nombres de contactos, empresas y empleados, los valores de campos personalizados, teléfonos, correos y

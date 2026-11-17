@@ -108,8 +108,8 @@ Notes on the `b24` column:
   list field's option by its label. Deals and leads read the labels that the last `sync` stored.
 - **A write is sent once.** A write that got no answer is not sent again. It ends as `outcome_unknown` with its
   `operation_id`. Check the portal before you write it again, since Bitrix24 makes a repeated write a second time.
-- **Only one call.** `api call` is kept for you at a terminal, and no MCP tool offers it. It reads contacts and
-  companies for a Bitrix24 administrator only.
+- **Only one call.** `api call` is kept for you at a terminal, and no MCP tool offers it. It reads leads, contacts
+  and companies for a Bitrix24 administrator only.
 - **ChatGPT or Claude in the browser.** `mcp serve --http` serves the tool behind an HTTPS tunnel that you set up and
   keep running yourself, so this row is partly. See [MCP](./mcp.md#chatgpt-and-claude-in-the-browser).
 - **Speed and cost against a browser agent.** `b24` calls the portal's REST API, reads its own copy and opens no

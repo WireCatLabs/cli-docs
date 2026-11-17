@@ -20,13 +20,15 @@ otros usuarios del ordenador pueden leer los ajustes. Siguiente paso: [úsalo](.
 
 ## Iniciar sesión
 
-La forma rápida es un webhook entrante: `b24 work session start` te pide su dirección. Los pasos están en
-[iniciar sesión](./usage.md#sign-in).
+La forma rápida es un webhook entrante. `b24 work setup` te guía paso a paso, con los mismos pasos que muestra
+WireCat Desktop. `b24 work session start` solo pide la dirección. Los pasos y los permisos de acceso que hay que
+marcar están en [iniciar sesión](./usage.md#sign-in).
 
 Con una aplicación local, `b24` actúa con los permisos del empleado que inicia sesión, no con los de quien creó un
 webhook. Créala una vez en el portal (Developer resources → Common use cases → Other → Local application), en modo
 **Server**, con **Your handler path** `https://wirecat.dev/webhooks/apps/b24-callback`, el campo **Initial
 installation path** vacío, sin texto para el elemento de menú y con los permisos de acceso `crm`, `user_basic` y
-`department`. Luego ejecuta `b24 work session start --portal example.bitrix24.ru --client-id <Application ID>` y
-escribe la Application key cuando te la pida. Los pasos están en
-[con una aplicación local](./usage.md#with-a-local-application).
+`department`, `task` para las tareas, `telephony` para las llamadas, y `disk` y `documentgenerator` para los
+archivos y documentos. Luego ejecuta
+`b24 work session start --portal example.bitrix24.ru --client-id <Application ID>` y escribe la Application key cuando
+te la pida. Los pasos están en [con una aplicación local](./usage.md#with-a-local-application).
