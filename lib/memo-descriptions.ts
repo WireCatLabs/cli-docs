@@ -2,7 +2,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
   en: {
     remote: "Connect a browser or phone app through your HTTPS tunnel, log in with a terminal code and revoke access.",
     compare: "Compare Memo with other memory tools by sources, search, agent access and local data limits.",
-    index: "Keep notes, mail and Telegram or MAX messages in one place your AI agent can search and cite.",
+    index:
+      "Everything about a person or a project in one answer: your notes, mail and chats on your computer, searched by your AI agent, each answer with its source.",
     installation: "Install Memo with npm, check what each source needs and find where its files are kept.",
     usage: "Import changes, find something, prepare for a conversation and review what your agent suggested.",
     "how-it-works": "Where Memo keeps your text, what an import changes, how links and references work.",
@@ -33,7 +34,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
   ru: {
     remote: "Подключите приложение в браузере или на телефоне через HTTPS-туннель, войдите по коду и отзовите доступ.",
     compare: "Сравните Memo с другими инструментами памяти по источникам, поиску, доступу агента и хранению данных.",
-    index: "Храните заметки, почту и сообщения Telegram или MAX в одном месте для поиска ИИ-агентом.",
+    index:
+      "Все о человеке или проекте в одном ответе: заметки, почта и чаты на вашем компьютере. ИИ-агент ищет по ним и показывает источник каждого ответа.",
     installation: "Установите Memo через npm, проверьте требования источников и узнайте, где лежат файлы.",
     usage: "Импортируйте изменения, ищите, готовьтесь к разговору и проверяйте предложения агента.",
     "how-it-works": "Где Memo хранит текст, что меняет импорт и как работают ссылки и ссылки на источники.",
@@ -63,7 +65,8 @@ export const memoDescriptions: Record<string, Record<string, string>> = {
     remote:
       "Conecta una app del navegador o teléfono por tu túnel HTTPS, inicia sesión con un código y revoca el acceso.",
     compare: "Compara Memo con otras herramientas de memoria por fuentes, búsqueda, acceso del agente y datos locales.",
-    index: "Reúne notas, correo y mensajes de Telegram o MAX en un lugar que tu agente de IA puede buscar.",
+    index:
+      "Todo sobre una persona o un proyecto en una respuesta: tus notas, correo y chats en tu ordenador. Tu agente de IA busca en ellos y cita cada fuente.",
     installation: "Instala Memo con npm, revisa qué necesita cada fuente y dónde guarda sus archivos.",
     usage: "Importa cambios, busca, prepara una conversación y revisa lo que sugirió tu agente.",
     "how-it-works": "Dónde guarda Memo tu texto, qué cambia una importación y cómo funcionan enlaces y referencias.",

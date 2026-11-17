@@ -58,61 +58,73 @@ En la terminal: `memo guide decision-trail`
 
 ## Una persona en todas las herramientas
 
-Sabe todo sobre una persona antes de una llamada — mensajes en tg y MAX, correo, notas, reuniones y documentos de Drive — con una fuente para cada línea.
+Sabe todo sobre una persona antes de una llamada — mensajes en tg, MAX y WhatsApp, correo, llamadas, notas, reuniones, oportunidades del CRM y documentos de Drive — con una fuente para cada línea.
 
 1. ```sh
    memo context telegram:Kai
    ```
 
-   sus mensajes, correo, notas y tareas abiertas en una sola respuesta, cada uno con un enlace a su fuente; email:kai@example.com la encuentra por dirección
+   sus mensajes, correo, notas y tareas abiertas en una sola respuesta, cada uno con un enlace a su fuente. Abre con el historial: lo último que pasó en mensajes, correo y llamadas, primero lo más reciente. email:kai@example.com la encuentra por dirección
 
 2. ```sh
+   memo context person:42 --before-time 2026-10-01T00:00:00Z
+   ```
+
+   el historial más atrás. history.before_time da la hora que hay que pasar para la siguiente página más antigua, y --since-time 30d la limita
+
+3. ```sh
+   pbx office meetings transcript 7
+   ```
+
+   la llamada completa de la que el historial muestra un fragmento, por el id de reunión de su referencia
+
+4. ```sh
    memo facts list subject:"person:42"
    ```
 
    decisiones, promesas y preguntas ya registradas sobre la persona; la referencia de la persona sale de la respuesta de context
 
-3. ```sh
+5. ```sh
    memo memories list subject:"person:42"
    ```
 
    preferencias y resúmenes guardados sobre la persona
 
-4. ```sh
+6. ```sh
    memo search meetings Kai
    ```
 
    reuniones que la mencionan, con el pasaje para citar
 
-5. ```sh
+7. ```sh
    tg personal contacts context Kai
    ```
 
    chats de Telegram compartidos, los últimos mensajes en cada sentido y dónde la mencionaron otros
 
-6. ```sh
+8. ```sh
    max personal contacts context Kai
    ```
 
    lo mismo para MAX
 
-7. ```sh
+9. ```sh
    zm personal meetings context person:42
    ```
 
    lo que dicen de ella las reuniones de Zoom guardadas, mediante las identidades vinculadas a esa persona
 
-8. ```sh
-   drive personal search Kai
-   ```
+10. ```sh
+    drive personal search Kai
+    ```
 
-   documentos de Drive que la nombran
+    documentos de Drive que la nombran
 
-9. ```sh
-   memo answers create "what is open with Kai?" --all
-   ```
+11. ```sh
+    memo answers create "what is open with Kai?" --all
+    ```
 
-   un paquete de evidencia citada de todas las cuentas y las notas, listo para dárselo a tu agente
+    un paquete de evidencia citada de todas las cuentas y las notas, listo para dárselo a tu agente
 
 Qué mirar:
 

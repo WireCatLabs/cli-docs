@@ -98,8 +98,9 @@ fuente que no leyó, con el motivo. La respuesta reúne:
   su cuenta. `meetings show` de la herramienta dueña de la cuenta abre una;
 - la nota sobre ella, las notas que enlazan a ella y las notas que escribiste sobre ella en Memo;
 - las tareas abiertas que tratan sobre ella o que tiene asignadas.
-- los archivos de Google Drive que posee o que editó por última vez, tal como los indica Google. No has revisado estos
-  vínculos: vienen del propio registro de archivos de Google, no de una suposición.
+- los archivos y páginas de Google Drive, Notion u otra fuente de documentos que posee o que editó por última vez, tal
+  como los indica esa fuente. No has revisado estos vínculos: vienen del propio registro de la fuente, no de una
+  suposición.
 - `business`: las organizaciones a las que pertenece con su rol y su cargo, a quién reporta y quién le reporta, las
   oportunidades y los leads en los que está, sus proyectos y categorías como `client`. Cada relación tiene un
   `standing`: `confirmed` (tuya), `reported` (lo dice una cuenta del CRM, que queda nombrada, y nadie lo confirmó),
@@ -131,13 +132,31 @@ sugerir. La prueba que rechazaste nunca lo hace.
 
 Algunas señales solo sugieren un vínculo. Por ejemplo, un número de teléfono que solo comparten contactos del CRM o
 tarjetas, un número de teléfono o una dirección que comparten tres o más personas, una dirección que un invitado a una reunión escribió para sí mismo o una suposición de un agente. Estas esperan como
-coincidencias:
+coincidencias.
+
+Un `memo people link … --reason` de un agente une a dos personas al momento solo con una prueba fuerte que memo
+encuentra por sí mismo, nunca por la palabra del agente. Es un número de móvil o una dirección personal que nadie más
+tiene, o que cada uno de sus titulares tiene desde una fuente distinta, como la ficha del CRM de un cliente, WhatsApp y
+una llamada, se llamen como se llamen. Tiene que venir de dos fuentes distintas, y para un teléfono al menos una debe
+ser un mensajero o una llamada. Un fijo, un número o una dirección que comparten dos registros de una misma fuente, la
+línea de una empresa, una dirección de rol, un nombre, lo que dice un CRM o una frase de un chat no es una prueba
+fuerte, y el vínculo te espera. Memo guarda qué agente unió, en qué ejecución, por qué y con qué prueba.
+`memo people review --kind merged` lista las uniones de agentes que siguen vigentes, y `memo people unmerge <merge>`
+deshace una. Pon `agent_merges` en `propose` (`memo config set agent_merges propose`) y cada vínculo de un agente te
+esperará.
 
 ```sh
 memo people review
+memo people review --full
+memo people review --kind merged
 memo people confirm 17090
 memo people reject 17091 --reason "two people"
 ```
+
+Cada coincidencia en `people review` dice qué comparten las dos personas y por qué no basta (`strength`), y muestra
+cada lado: identidades por fuente, los últimos mensajes o llamadas con fechas, empresas y oportunidades. `--full` añade
+teléfonos, direcciones, cuentas y más texto, y `--brief` deja fuera los lados.
+
 `memo people confirm` y `memo people reject` toman ids y rangos (`17090-17095`) tal como los lista `people review`, o
 `all`: todo lo que `people review` lista con el mismo `--kind` (`link`, `split` o `all`) y `--limit`. `all` muestra lo
 que haría y no cambia nada hasta que añades `--yes`. Cada propuesta se decide por separado, así que una que cambió
@@ -236,7 +255,7 @@ Lo tuyo se aplica al momento, en un terminal o en WireCat Desktop. Después, nin
 unir a esas personas. Un `unlink` o `unmerge` de un agente necesita `--reason` y solo propone la separación: espera en
 `memo people review` con el motivo, y solo tu `memo people confirm` la lleva a cabo. Una separación que rechazas no se
 vuelve a proponer mientras esas identidades sigan en esa persona, y `people links check` deja de listarlas. Un
-`memo people link … --reason` de un agente espera igual.
+`memo people link … --reason` de un agente espera igual, salvo que memo encuentre una prueba fuerte (ver arriba).
 
 Para elegir la nota principal sobre la persona, consulta [la nota sobre una persona](./notes.md#the-note-about-a-person).
 

@@ -343,7 +343,7 @@ pbx meetings transcribe [query] [options]
 | `--max-meetings <n>` | at most this many calls transcribed, newest first. Default: `20`. |
 | `--model <model>` | local speech model, when the profile transcribes locally. Default: `gigaam-v3`. |
 
-**Returns:** call transcription report — transcribed, audio_seconds, failed, without_recording, remaining, stopped; every field: pbx commands info meetings transcribe
+**Returns:** call transcription report — transcribed, audio_ms, failed, remaining, stopped; every field: pbx commands info meetings transcribe
 
 **Example:** `pbx office meetings transcribe --max-meetings 20 --json`, `pbx office meetings transcribe duration_ms>=60000 --json`, `pbx office meetings transcribe id:12 --replace --json`
 

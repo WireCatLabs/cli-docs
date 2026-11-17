@@ -2,7 +2,7 @@ export const pbxDescriptions: Record<string, Record<string, string>> = {
   en: {
     compare: "Compare tools for Asterisk and FreePBX calls: transcripts, where recordings go, agent access and setup.",
     index:
-      "Connect Asterisk or FreePBX calls to your AI agent: transcribed locally, one caller across chats, mail and CRM.",
+      "Your AI agent reads your Asterisk or FreePBX calls: who called, which calls nobody returned and what was said, transcribed on your computer.",
     installation: "Install the Asterisk CLI with npm on your own computer, check Node.js and run doctor.",
     asterisk:
       "Connect Master.csv or the CDR database and the recordings folder of your Asterisk or FreePBX, read-only.",
@@ -18,7 +18,7 @@ export const pbxDescriptions: Record<string, Record<string, string>> = {
   ru: {
     compare: "Сравните инструменты для звонков Asterisk и FreePBX: расшифровки, куда уходят записи, доступ агента.",
     index:
-      "Подключите звонки Asterisk или FreePBX к ИИ-агенту: расшифровка на компьютере, один клиент в чатах, почте и CRM.",
+      "ИИ-агент читает звонки Asterisk или FreePBX: кто звонил, кому не перезвонили и что было сказано. Записи расшифровываются на вашем компьютере.",
     installation: "Установите CLI Asterisk через npm на свой компьютер, проверьте Node.js и запустите doctor.",
     asterisk:
       "Подключите Master.csv или базу CDR и папку аудиозаписей вашей АТС Asterisk или FreePBX, только для чтения.",
@@ -34,7 +34,7 @@ export const pbxDescriptions: Record<string, Record<string, string>> = {
     compare:
       "Compara herramientas para llamadas de Asterisk y FreePBX: transcripciones, grabaciones y acceso del agente.",
     index:
-      "Conecta las llamadas de Asterisk o FreePBX a tu agente de IA: transcritas en local, un cliente en chats, correo y CRM.",
+      "Tu agente de IA lee las llamadas de Asterisk o FreePBX: quién llamó, qué llamadas nadie devolvió y qué se dijo, transcrito en tu ordenador.",
     installation: "Instala la CLI de Asterisk con npm en tu propio ordenador, comprueba Node.js y ejecuta doctor.",
     asterisk: "Conecta Master.csv o la base de datos del CDR y la carpeta de grabaciones de tu Asterisk o FreePBX.",
     usage: "Lista y lee tus llamadas, transcribe sus grabaciones y deja que tu agente las use por MCP o con una skill.",

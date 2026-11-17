@@ -74,7 +74,8 @@ La misma persona puede tener una cuenta de Telegram, una cuenta de MAX y una dir
 como una sola persona cuando comparten exactamente la misma dirección de correo y ninguna tercera persona la tiene,
 o un número de teléfono que nadie más tiene y que una de ellas tiene en Telegram, MAX o WhatsApp, o después de que
 tú las enlaces con `memo people link`, `tg personal contacts link` o `max personal contacts link`. Un nombre, un
-usuario o un dominio de correo que coinciden nunca bastan. Una señal más débil, o una suposición de un agente, te
+usuario o un dominio de correo que coinciden nunca bastan. El vínculo de un agente une al momento solo con una prueba
+fuerte que memo encuentra por sí mismo: el mismo número de móvil o la misma dirección personal desde dos fuentes. Una señal más débil, o una suposición de un agente, te
 espera como coincidencia en `memo people review`. Toda fusión se puede deshacer ([cómo](./people.md#undo-a-link)).
 
 ## Referencias

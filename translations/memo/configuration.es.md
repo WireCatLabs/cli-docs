@@ -116,6 +116,19 @@ Las decisiones del propietario siguen disponibles en el terminal. En el terminal
 antes de que una decisión cuente como tuya. El ajuste no cambia el permiso separado para confirmar conclusiones de reuniones
 ni sustituye las demás comprobaciones de permisos de la herramienta.
 
+## `agent_merges`
+
+`strong`, el valor por defecto: un `memo people link` de un agente une a dos personas al momento cuando memo mismo
+encuentra una prueba fuerte. Es un número de móvil o una dirección personal que nadie más tiene, o que cada titular
+tiene desde una fuente distinta, se llamen como se llamen, y que dan dos fuentes distintas ([cómo](./people.md#link-a-persons-accounts)). Todo lo más débil te espera en `memo people review`. `propose`: cada
+vínculo de un agente te espera, como antes. `agent_decisions` no cambia esto, y las coincidencias las sigues confirmando tú.
+
+```json
+{
+  "agent_merges": "propose"
+}
+```
+
 ## Variables de entorno
 
 | Variable | Significado |
