@@ -73,17 +73,19 @@ describe("one persistent documentation sidebar", () => {
       "Install",
       "Что можно сделать",
       "Search",
-      "Telegram",
-      "MAX",
+      "Messengers",
     ])
-    for (const item of tree.children) {
-      if (item.type === "folder") {
-        expect(item.root).toBe(false)
-        expect(item.defaultOpen).toBe(false)
-        expect(item.children[0]).toHaveProperty("icon")
-      }
+    const messengers = tree.children[4]
+    if (messengers.type !== "folder") throw new Error("no Messengers group")
+    expect(messengers.defaultOpen).toBe(true)
+    expect(messengers.children.map((item) => item.name)).toEqual(["Telegram", "MAX"])
+    for (const item of messengers.children) {
+      if (item.type !== "folder") throw new Error(`${item.name} is not a tool folder`)
+      expect(item.root).toBe(false)
+      expect(item.defaultOpen).toBe(false)
+      expect(item.children[0]).toHaveProperty("icon")
     }
-    expect(tree.children[4]).toMatchObject({ index: { url: "/ru/docs/tg" } })
+    expect(messengers.children[0]).toMatchObject({ index: { url: "/ru/docs/tg" } })
   })
   it("does not modify the source tree used by breadcrumbs, Markdown and search", () => {
     unifiedDocsTree(original)
@@ -154,10 +156,12 @@ describe("tool folders in the sidebar", () => {
       index: { type: "page", name: tool, url: `/en/docs/${tool}` },
       children: [],
     })
-    const icons = unifiedDocsTree({ name: "Docs", children: ["gcal", "wa", "max"].map(folder) }).children.map((node) =>
-      node.type === "folder" ? (node.icon as ReactElement).type : undefined,
-    )
-    expect(icons).toEqual([CalendarDays, WhatsAppIcon, MessageSquare])
+    const iconsOf = (nodes: Node[]) =>
+      nodes.map((node) => (node.type === "folder" ? (node.icon as ReactElement).type : undefined))
+    const tree = unifiedDocsTree({ name: "Docs", children: ["gcal", "wa", "max"].map(folder) })
+    expect(iconsOf(tree.children)).toEqual([CalendarDays, MessageSquare])
+    const messengers = tree.children[1]
+    expect(messengers.type === "folder" && iconsOf(messengers.children)).toEqual([WhatsAppIcon, MessageSquare])
   })
 
   it("puts Zoom, Google Meet, Telemost and Asterisk in an open Meetings & Calls group and Bitrix24 in a closed CRM group, keeping their URLs", () => {
@@ -189,7 +193,7 @@ describe("tool folders in the sidebar", () => {
         urls: ["/ru/docs/zm", "/ru/docs/google-meet", "/ru/docs/telemost", "/ru/docs/pbx"],
       },
       { name: "CRM", open: false, urls: ["/ru/docs/b24"] },
-      "memo",
+      "Заметки (Memo)",
     ])
   })
 
@@ -320,5 +324,18 @@ describe("short sidebar names of tool pages", () => {
     expect(toolSidebarTitle("desktop/memory.mdx", "en")).toBeUndefined()
     expect(toolSidebarTitle("tg/usage.md", "en")).toBeUndefined()
     expect(toolSidebarTitle("index.mdx", "en")).toBeUndefined()
+  })
+})
+
+describe("pages for Russian readers only", () => {
+  it("lists the Beeline Cloud PBX guide in the Russian sidebar only", () => {
+    for (const [file, listed] of [
+      ["meta.json", false],
+      ["meta.es.json", false],
+      ["meta.ru.json", true],
+    ] as const) {
+      const { pages } = JSON.parse(readFileSync(`content/docs/${file}`, "utf8")) as { pages: string[] }
+      expect(pages.includes("beeline")).toBe(listed)
+    }
   })
 })
