@@ -131,7 +131,7 @@ Elige qué puede hacer tu agente: leer mensajes, enviar respuestas o cambiar un 
 |---|---|
 | `deny` | Se rechaza la acción, incluso leer. |
 | `readonly` | Permite leer, pero no cambiar. |
-| `ask` | Un cambio requiere confirmación en el terminal. |
+| `ask` | En el terminal, un cambio espera tu confirmación. Por MCP se ejecuta sin preguntar. |
 | `allow` | Puede ejecutarse sin otra pregunta. |
 
 Un rechazo indica que debes revisar acción y ajustes, no que la conexión esté rota.
@@ -178,8 +178,9 @@ Las instrucciones están en la seguridad de [Telegram](./tg/security.md) y [MAX]
 
 Añade `--permission messages.send=deny` al inicio del servidor para impedir enviar durante
 ese proceso. No cambia los ajustes guardados. La opción solo endurece: una anulación que aflojaría el nivel
-del perfil se rechaza al iniciar, así que para permitir más cambia los permisos del perfil. Por MCP, `ask` no exige un formulario de confirmación en el servidor: la app
-controla sus aprobaciones y puede permitir otra llamada sin preguntar. Usa `deny` o `readonly` para impedir cambios. Consulta [la conexión web](./browser-apps.mdx).
+del perfil se rechaza al iniciar, así que para permitir más cambia los permisos del perfil. Por MCP, con el nivel `ask` el servidor no pregunta nada, y el agente escribe y borra en el momento. Solo tu app
+de IA puede mostrar su propia confirmación. Para que el agente no cambie datos, da al perfil `readonly` o `deny`,
+por ejemplo `tg work config set permissions.messages readonly`. Consulta [la conexión web](./browser-apps.mdx).
 
 ### Bloquear toda una ejecución en solo lectura
 
