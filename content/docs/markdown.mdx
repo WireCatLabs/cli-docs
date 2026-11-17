@@ -1,0 +1,102 @@
+---
+title: "Markdown and Obsidian"
+description: "Give your agent a folder of Markdown notes or an Obsidian vault: it searches them on your computer, next to your chats and mail."
+---
+
+Your notes are already on your computer: a folder of Markdown files, an Obsidian vault, the docs of a project. Give
+that folder to Memo, and your AI agent finds what you wrote about a person, a decision or a project, with the file it
+came from. It sees your notes next to your chats, mail and meetings, and your files stay as they are.
+
+Memo is the WireCat tool that searches the whole local store at once. You need it
+[installed](./memo/installation.md). This page explains how Memo reads a notes folder, how to add one and how to
+ask your agent about it. The full reference is [Notes and folders](./memo/notes.md).
+
+**On this page:**
+
+1. [How it works](#how-it-works)
+2. [Add your folder](#add-your-folder)
+3. [Ask your agent](#ask-your-agent)
+4. [Which files Memo reads](#which-files-memo-reads)
+5. [Keep it up to date](#keep-it-up-to-date)
+6. [Markdown in Google Drive or Yandex Disk](#markdown-in-google-drive-or-yandex-disk)
+
+## How it works
+
+- **Memo reads, your files stay.** Memo reads every file in the folder and the folders inside it, and saves the text,
+  links and tags in the local store, one file on your computer that every WireCat tool shares. Importing never changes
+  your files.
+- **Markdown or Obsidian.** A folder with Obsidian's own `.obsidian` folder in it, or above it, is read as an Obsidian
+  vault: `[[links]]`, `#tags` and `aliases:` work. Any other folder is plain Markdown: links are ordinary Markdown
+  links and tags come from the `tags:` field at the top of a file. You do not need Obsidian, and it does not need to
+  be open.
+- **Two kinds of notes.** A note from your files lives in the file: to change it, edit the file. A note you write
+  through Memo, about a person, a message or a project, lives in the store.
+- **Only changes are read again.** After the first import, each sync reads only the files you added or edited.
+
+## Add your folder
+
+The easiest way is to ask your agent:
+
+```text prompt
+Use memo CLI to add my notes folder at /path/to/notes and import it.
+Tell me how many notes it found and which files it could not read.
+```
+
+Or run the commands yourself. Replace `/path/to/notes` with the full path of your folder.
+
+```sh
+memo folders add /path/to/notes
+memo sync --only notes --no-embed
+```
+
+The sync reports what it found, for example `/path/to/notes: 24 notes, 24 changed, 0 moved, 0 gone`. `--no-embed`
+skips the preparation for search by meaning, so you can start without the search model. You can add more than one
+folder. `memo folders list` shows them all.
+
+## Ask your agent
+
+```text prompt
+Use memo CLI. Find what I wrote in my notes about the office move.
+Quote the passage and name the file it is in.
+```
+
+The agent searches the imported notes and answers with the file. To search yourself:
+
+```sh
+memo search notes 'office move'
+memo search notes 'budget' --filter 'tag:work'
+memo notes show document:3
+```
+
+Each result shows the file and the first matching line. `memo notes show` shows one note with its tags, the notes it
+links to and the notes that link to it. Search the notes together with your chats and mail with
+[Memo's search](./memo/search.md).
+
+## Which files Memo reads
+
+Besides Markdown (`.md`, `.markdown`) and text files, Memo reads tables (`.csv`, `.xlsx` and more), PDF and Word
+files, slides, e-books and saved web pages. It cannot read scanned PDFs, old `.xls` files or files larger than 50 MiB.
+Each sync lists the files it could not read, and why. The full table is in
+[files Memo can read](./memo/notes.md#files-memo-can-read).
+
+To keep some files out, list them under `notes.ignore` in Memo's settings, as
+[skip some files](./memo/notes.md#skip-some-files) shows.
+
+## Keep it up to date
+
+Run the sync again after you add or edit notes:
+
+```sh
+memo sync --only notes
+```
+
+To stop reading a folder, run `memo folders remove /path/to/notes`. Its notes stay searchable until you remove them
+too, as [remove a folder](./memo/notes.md#remove-a-folder) explains. Your files are never touched.
+
+## Markdown in Google Drive or Yandex Disk
+
+Markdown files you keep in the cloud do not need a local folder. [Google Drive](./drive/index.md) and
+[Yandex Disk](./ydisk.mdx) read `.md` files in the folders you choose and save their text in the same local store. Each tool searches them, and
+Memo finds the Google Drive ones next to your notes.
+
+Next: [label your notes with tags](./memo/tags.md), or [write your own notes about people and projects](./memo/notes.md#write-your-own-notes).

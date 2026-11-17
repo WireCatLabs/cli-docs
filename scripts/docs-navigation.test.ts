@@ -193,6 +193,34 @@ describe("tool folders in the sidebar", () => {
     ])
   })
 
+  it("puts Markdown, Notion, Yandex Disk and Google Drive in an open Documents & files group, keeping their URLs", () => {
+    const folder = (tool: string): Node => ({
+      type: "folder",
+      name: tool,
+      index: { type: "page", name: tool, url: `/es/docs/${tool}` },
+      children: [],
+    })
+    const page = (slug: string): Node => ({ type: "page", name: slug, url: `/es/docs/${slug}` })
+    const children = [
+      folder("mail"),
+      page("markdown"),
+      folder("notion"),
+      page("ydisk"),
+      folder("drive"),
+      folder("gcal"),
+    ]
+    const [mail, group, gcal] = unifiedDocsTree({ name: "Docs", children }, "es").children
+    expect(group).toMatchObject({ type: "folder", name: "Documentos y archivos", defaultOpen: true })
+    const urls =
+      group.type === "folder"
+        ? group.children.map((child) =>
+            child.type === "folder" ? child.index?.url : child.type === "page" ? child.url : undefined,
+          )
+        : []
+    expect(urls).toEqual(["/es/docs/markdown", "/es/docs/notion", "/es/docs/ydisk", "/es/docs/drive"])
+    expect([mail.name, gcal.name]).toEqual(["mail", "gcal"])
+  })
+
   it("lists Google Calendar right after Google Drive in every language", () => {
     for (const suffix of ["", ".ru", ".es"]) {
       const { pages } = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }

@@ -1,0 +1,118 @@
+---
+title: "Markdown y Obsidian"
+description: "Dale a tu agente una carpeta de notas en Markdown o una bóveda de Obsidian: las busca en tu ordenador, junto a tus chats y tu correo."
+---
+
+Tus notas ya están en tu ordenador: una carpeta de archivos Markdown, una bóveda de Obsidian, la documentación de un
+proyecto. Dale esa carpeta a Memo, y tu agente de IA encuentra lo que escribiste sobre una persona, una decisión o un
+proyecto, con el archivo de donde sale. Ve tus notas junto a tus chats, tu correo y tus reuniones, y tus archivos se
+quedan como están.
+
+Memo es la herramienta de WireCat que busca en todo el almacén local a la vez. Necesitas tenerla
+[instalada](./memo/installation.md). Esta página explica cómo lee Memo una carpeta de notas, cómo añadirla y cómo
+preguntarle a tu agente por ella. La referencia completa es [Notas y carpetas](./memo/notes.md).
+
+**En esta página:**
+
+1. [Cómo funciona](#how-it-works)
+2. [Añade tu carpeta](#add-your-folder)
+3. [Pregunta a tu agente](#ask-your-agent)
+4. [Qué archivos lee Memo](#which-files-memo-reads)
+5. [Mantenla al día](#keep-it-up-to-date)
+6. [Markdown en Google Drive o Yandex Disk](#markdown-in-google-drive-or-yandex-disk)
+
+<a id="how-it-works"></a>
+
+## Cómo funciona
+
+- **Memo lee, tus archivos se quedan.** Memo lee todos los archivos de la carpeta y de sus subcarpetas, y guarda el
+  texto, los enlaces y las etiquetas en el almacén local, un archivo de tu ordenador que comparten todas las
+  herramientas de WireCat. Importar nunca cambia tus archivos.
+- **Markdown u Obsidian.** Una carpeta que tiene dentro, o por encima, la carpeta propia de Obsidian, `.obsidian`, se
+  lee como bóveda de Obsidian: funcionan los `[[enlaces]]`, las `#etiquetas` y `aliases:`. Cualquier otra carpeta es
+  Markdown normal: los enlaces son enlaces de Markdown y las etiquetas salen del campo `tags:` al principio del
+  archivo. No necesitas Obsidian, ni tenerlo abierto.
+- **Dos tipos de notas.** Una nota de tus archivos vive en el archivo: para cambiarla, edita el archivo. Una nota que
+  escribes con Memo, sobre una persona, un mensaje o un proyecto, vive en el almacén.
+- **Solo se vuelve a leer lo que cambia.** Después de la primera importación, cada sincronización lee solo los
+  archivos que añadiste o editaste.
+
+<a id="add-your-folder"></a>
+
+## Añade tu carpeta
+
+Lo más fácil es pedírselo a tu agente:
+
+```text prompt
+Usa memo CLI para añadir mi carpeta de notas /path/to/notes e importarla.
+Dime cuántas notas encontró y qué archivos no pudo leer.
+```
+
+O ejecuta tú los comandos. Sustituye `/path/to/notes` por la ruta completa de tu carpeta.
+
+```sh
+memo folders add /path/to/notes
+memo sync --only notes --no-embed
+```
+
+La sincronización informa de lo que encontró, por ejemplo `/path/to/notes: 24 notes, 24 changed, 0 moved, 0 gone`.
+`--no-embed` se salta la preparación para la búsqueda por significado, así que puedes empezar sin el modelo de
+búsqueda. Puedes añadir más de una carpeta. `memo folders list` las muestra todas.
+
+<a id="ask-your-agent"></a>
+
+## Pregunta a tu agente
+
+```text prompt
+Usa memo CLI. Busca lo que escribí en mis notas sobre la mudanza de la oficina.
+Cita el fragmento y dime en qué archivo está.
+```
+
+El agente busca en las notas importadas y responde con el archivo. Para buscar tú:
+
+```sh
+memo search notes 'office move'
+memo search notes 'budget' --filter 'tag:work'
+memo notes show document:3
+```
+
+Cada resultado muestra el archivo y la primera línea que coincide. `memo notes show` muestra una nota con sus
+etiquetas, las notas a las que enlaza y las notas que enlazan a ella. Busca en las notas junto con tus chats y tu
+correo con la [búsqueda de Memo](./memo/search.md).
+
+<a id="which-files-memo-reads"></a>
+
+## Qué archivos lee Memo
+
+Además de Markdown (`.md`, `.markdown`) y archivos de texto, Memo lee tablas (`.csv`, `.xlsx` y otras), PDF y Word,
+presentaciones, libros electrónicos y páginas web guardadas. No puede leer PDF escaneados, archivos `.xls` antiguos ni
+archivos de más de 50 MiB. Cada sincronización lista los archivos que no pudo leer, y por qué. La tabla completa está
+en [archivos que Memo puede leer](./memo/notes.md#files-memo-can-read).
+
+Para dejar fuera algunos archivos, lístalos en `notes.ignore` en los ajustes de Memo, como muestra
+[omitir algunos archivos](./memo/notes.md#skip-some-files).
+
+<a id="keep-it-up-to-date"></a>
+
+## Mantenla al día
+
+Vuelve a sincronizar después de añadir o editar notas:
+
+```sh
+memo sync --only notes
+```
+
+Para dejar de leer una carpeta, ejecuta `memo folders remove /path/to/notes`. Sus notas siguen en la búsqueda hasta
+que también las quites, como explica [quitar una carpeta](./memo/notes.md#remove-a-folder). Tus archivos nunca se
+tocan.
+
+<a id="markdown-in-google-drive-or-yandex-disk"></a>
+
+## Markdown en Google Drive o Yandex Disk
+
+Los archivos Markdown que guardas en la nube no necesitan una carpeta local. [Google Drive](./drive/index.md) y
+[Yandex Disk](./ydisk.mdx) leen los archivos `.md` de las carpetas que eliges y guardan su texto en el mismo almacén
+local. Cada herramienta busca en ellos, y Memo encuentra los de Google Drive junto a tus notas.
+
+Siguiente: [etiqueta tus notas](./memo/tags.md) o
+[escribe tus propias notas sobre personas y proyectos](./memo/notes.md#write-your-own-notes).

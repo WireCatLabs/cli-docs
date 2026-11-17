@@ -38,6 +38,8 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I keep track of what waits on me in my chats? | `tasks.md` | Task guide and explanation | Keep planned sections marked until cli-core ships them |
 | How do I recover a meeting decision and connect it to other sources? | `zm/meetings.md` (Meetings, written on this site) | Task guide | Keep participant identity, project links and cited findings explicit |
 | How do I make Yandex Telemost's emailed meeting notes searchable as meetings? | `telemost.mdx` | Task guide | Keep in step with mail-cli's `meeting-notes` rule and Yandex's notes conditions |
+| How do I give my agent a folder of Markdown notes or an Obsidian vault? | `markdown.mdx` (Documents & files) | Task guide | Keep in step with memo's `folders` and `notes` pages at its reviewed release |
+| How do I make my Yandex Disk files searchable and work with them? | `ydisk.mdx` (Documents & files) | Start page | Written from the code and docs of ydisk before its first release; move into a `ydisk` tool section once `tools.json` lists it |
 | How do I keep my Google Meet calls and transcripts so my agent can search them? | `google-meet.mdx` | Task guide | Keep in step with gcal's `meetings` commands and Google's 30-day and transcript limits |
 | How do I connect a browser AI app? | `agents.mdx` (Use from web or mobile) | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |

@@ -22,6 +22,7 @@ import {
   FileInput,
   FilePlus2,
   FileSearch,
+  Files,
   FileText,
   FlaskConical,
   FolderOpen,
@@ -30,6 +31,7 @@ import {
   Globe,
   GlobeLock,
   Handshake,
+  HardDrive,
   History,
   Import,
   KeyRound,
@@ -89,6 +91,8 @@ export const sidebarIcons = {
   organize: Layers,
   drive: FolderOpen,
   notion: NotebookText,
+  markdown: FileText,
+  ydisk: HardDrive,
   email: Mail,
   mail: Mail,
   b24: Handshake,
@@ -250,6 +254,7 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // place of the group's first tool.
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
+  documentsFiles: { tools: ["markdown", "notion", "ydisk", "drive"], open: true, icon: Files },
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "voip", "beeline"], open: true, icon: Phone },
   crm: { tools: ["b24"], open: false, icon: Handshake },
 } as const
