@@ -11,9 +11,9 @@ An agent with access to your documents finds the passage where a decision was wr
 you the document's title and its Google link. It can also read a folder tree, list the files it could not read, and
 change a Google file when you allow it.
 
-`drive` keeps the copy in the local store, one file on your computer that every WireCat tool shares. Your chats, mail
-and notes are there too, so [Memo](/en/docs/memo) can find a document together with the conversation about it. To
-start, you need a Google account with access to the folders.
+`drive` keeps the copy in the local store, one SQLite database file on your computer that every WireCat tool shares.
+Your chats, mail and notes are there too, so [Memo](/en/docs/memo) can find a document together with the conversation
+about it. To start, you need a Google account with access to the folders.
 
 **On this page:**
 
@@ -105,8 +105,9 @@ Do not change Google files.
 | Folders and their tree | Browse the folder tree, list a folder, tag a folder and add notes to it |
 | Your tags, notes, links to people or projects, and memories | Keep context across repeated work |
 
-Files whose content cannot be read stay in the copy by name and type. `catalog search` finds them by name, type and
-owner. Permissions, comments, revision history and activity are read live from Google and are not kept.
+You can [browse the copied folders offline](./usage.md#browse-and-organize-the-local-catalog). Files whose content
+cannot be read stay in the copy by name and type. `catalog search` finds them by name, type and owner. Permissions,
+comments, revision history and activity are read live from Google and are not kept.
 
 ## What it reads
 
