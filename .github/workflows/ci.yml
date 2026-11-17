@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sample: [1, 2, 3]
+        sample: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -26,19 +26,18 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
       - run: nproc && free -m
-      - name: next build with a memory sampler
+      - name: next build in a 13 GB cgroup, reporting its memory peak
+        timeout-minutes: 15
         run: |
-          ( while :; do echo "=== $(date -u +%T)"; free -m | sed -n 2,3p; ps -eo rss,etime,args --sort=-rss | head -5 | cut -c1-160; sleep 15; done ) > sampler.log 2>&1 &
-          timeout 840 pnpm exec next build --debug 2>&1 | grep -v -E '│|┆' ; echo "build exit ${PIPESTATUS[0]}"
+          sudo systemd-run --unit=nextbuild --wait --collect -p MemoryMax=13G -p MemorySwapMax=0 \
+            -p User=runner -p WorkingDirectory="$PWD" -E PATH="$PATH" -E HOME="$HOME" -E CI=true \
+            -p StandardOutput=file:"$PWD/build.log" -p StandardError=file:"$PWD/build.log" \
+            "$(command -v pnpm)" exec next build && rc=0 || rc=$?
+          sudo systemd-run --version | head -1
+          echo "build exit $rc"
+          grep -v -E '│|┆' build.log | grep -E 'Compiled|static pages|Error|Killed' | tail -6
+          exit $rc
       - name: Memory and OOM report
         if: always()
         run: |
           sudo dmesg | grep -i -E 'oom|killed process' || echo "no oom in dmesg"
-          awk '/^ +[0-9]+ +[0-9]+ +[0-9]+/{print}' sampler.log | sort -k3 -n | tail -2
-          tail -40 sampler.log
-      - if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: sampler-${{ matrix.sample }}
-          path: sampler.log
-          retention-days: 3
