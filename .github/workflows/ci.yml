@@ -8,51 +8,12 @@ permissions:
   contents: read
 
 jobs:
-  check:
+  build-diag:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm search:check
-      # Translations are reviewed against released documentation, matching the deployment build.
-      - run: pnpm sync
-      - run: pnpm docs:release-notes
-      - run: pnpm test
-      - run: pnpm docs:contracts
-      - run: pnpm docs:check
-      - run: pnpm typecheck
-      - run: pnpm exec next build
-      - run: pnpm check:assets
-      - run: pnpm check:links
-      - run: pnpm check:seo
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm exec playwright test tests/site-quality.spec.ts tests/mobile-delivery.spec.ts tests/onboarding-merge.spec.ts tests/stable-home.spec.ts tests/browser-platform-setup.spec.ts tests/documentation-diagrams.spec.ts tests/about-project.spec.ts tests/user-docs-refresh.spec.ts tests/command-reference.spec.ts tests/file-attachments.spec.ts tests/reader-security.spec.ts tests/reader-guides.spec.ts tests/drive-docs.spec.ts tests/legal-pages.spec.ts tests/zoom-docs.spec.ts tests/scenario-pages.spec.ts
-        env:
-          PLAYWRIGHT_EXPORT: "1"
-      - run: pnpm check:browser-timings
-      - name: Save browser diagnostics
-        if: always()
-        continue-on-error: true
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: playwright-${{ github.job }}-${{ github.run_attempt }}
-          path: |
-            playwright-report/results.json
-            test-results/
-          if-no-files-found: ignore
-          retention-days: 7
-          compression-level: 1
-
-  search-playground:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sample: [1, 2, 3]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -64,27 +25,20 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
-      - run: pnpm docs:release-notes
-      - run: pnpm exec next build
-      - run: pnpm check:assets
-      - run: pnpm exec playwright install --with-deps chromium
-      # The dev server compiles each route on its first request; parallel workers time out waiting for it.
-      - run: pnpm exec playwright test tests/heading-fonts.spec.ts tests/search-playground.spec.ts tests/doc-hints.spec.ts
-        env:
-          PLAYWRIGHT_EXPORT: "1"
-      - run: pnpm check:browser-timings
-      - name: Save browser diagnostics
+      - run: nproc && free -m
+      - name: next build with a memory sampler
+        run: |
+          ( while :; do echo "=== $(date -u +%T)"; free -m | sed -n 2,3p; ps -eo rss,etime,args --sort=-rss | head -5 | cut -c1-160; sleep 15; done ) > sampler.log 2>&1 &
+          timeout 840 pnpm exec next build --debug 2>&1 | grep -v -E '│|┆' ; echo "build exit ${PIPESTATUS[0]}"
+      - name: Memory and OOM report
         if: always()
-        continue-on-error: true
+        run: |
+          sudo dmesg | grep -i -E 'oom|killed process' || echo "no oom in dmesg"
+          awk '/^ +[0-9]+ +[0-9]+ +[0-9]+/{print}' sampler.log | sort -k3 -n | tail -2
+          tail -40 sampler.log
+      - if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: playwright-${{ github.job }}-${{ github.run_attempt }}
-          path: |
-            playwright-report/results.json
-            test-results/
-          if-no-files-found: ignore
-          retention-days: 7
-          compression-level: 1
-
-  windows_install:
-    uses: ./.github/workflows/windows-install.yml
+          name: sampler-${{ matrix.sample }}
+          path: sampler.log
+          retention-days: 3
