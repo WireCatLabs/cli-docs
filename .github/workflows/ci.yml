@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sample: [1, 2]
+        variant: [worker-threads-noswap, worker-threads-noswap-2, swapfile-8g, swapfile-8g-2]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -25,6 +25,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
+      - name: Variant setup
+        run: |
+          case "${{ matrix.variant }}" in
+            worker-threads*) sed -i 's/  reactStrictMode: true,/  reactStrictMode: true,\n  experimental: { turbopackPluginRuntimeStrategy: "workerThreads" },/' next.config.mjs; sudo swapoff -a ;;
+            swapfile*) sudo swapoff -a; sudo fallocate -l 8G /mnt/build.swap && sudo chmod 600 /mnt/build.swap && sudo mkswap /mnt/build.swap && sudo swapon /mnt/build.swap ;;
+          esac
+          grep -n experimental next.config.mjs || true
       - run: nproc && free -m
       - name: next build in a 15.5 GB cgroup with swap, reporting its memory peak
         timeout-minutes: 15
