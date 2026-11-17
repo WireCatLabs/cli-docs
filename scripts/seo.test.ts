@@ -59,11 +59,28 @@ describe("localized SEO", () => {
       expect(documentationTitle(lang, ["max"], "MAX")).toContain("MAX")
       expect(documentationTitle(lang, ["max"], "MAX")).toContain("CLI")
       expect(documentationTitle(lang, ["agents"], "Connect your agent")).toBe("Connect your agent")
-      expect(documentationTitle(lang, ["tg", "search"], "Search")).toBe("Search — Telegram")
-      expect(documentationTitle(lang, ["pbx", "usage"], "Use it")).toBe("Use it — Asterisk")
+      expect(documentationTitle(lang, ["tg", "limits"], "Limits")).toBe("Telegram: Limits")
+      expect(documentationTitle(lang, ["pbx", "usage"], "Use it")).toContain("Asterisk")
       expect(documentationTitle(lang, ["pbx"], "Asterisk")).toContain("FreePBX")
     },
   )
+
+  it.each(seoLocales)("leads search titles with the service and MCP or CLI in %s", (lang) => {
+    for (const tool of tools) {
+      const titles = ["mcp", "installation", "commands"].map((slug) =>
+        documentationTitle(lang, [tool.name, slug], slug),
+      )
+      for (const title of titles) {
+        expect(title).not.toContain("{")
+        expect(title).toMatch(/MCP|CLI/)
+      }
+      expect(seoWords(lang).toolTitles).toHaveProperty(tool.name)
+    }
+    expect(documentationTitle(lang, ["memo", "archive"], "Keeping Memo up to date")).toBe(
+      "Memo: Keeping Memo up to date",
+    )
+    expect(documentationDescription(lang, ["tg", "mcp"], "Synced text")).toContain("Telegram")
+  })
 
   it("does not announce a locale whose equivalent page is unavailable", () => {
     expect(pageAlternates("ru", "/docs/tg/new", ["en", "ru"]).languages).not.toHaveProperty("es")

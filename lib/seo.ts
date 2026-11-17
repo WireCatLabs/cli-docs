@@ -90,15 +90,27 @@ export function pageMetadata({
 export function documentationTitle(lang: string, slugs: string[], authored: string): string {
   const tool = tools.find((candidate) => candidate.name === slugs[0])
   if (!tool) return authored
-  if (slugs.length === 1)
-    return seoWords(lang).toolTitles[tool.name as "tg" | "max" | "memo"] ?? tool.displayName ?? authored
-  // People search for the product, not the command: "Search — Telegram", not "Search — tg".
-  const product = tool.displayName ?? { tg: "Telegram", max: "MAX" }[tool.name] ?? tool.name
-  return `${readerGuide(slugs, lang)?.title ?? authored} — ${product}`
+  const words = seoWords(lang)
+  if (slugs.length === 1) return words.toolTitles[tool.name as "tg" | "max" | "memo"] ?? tool.displayName ?? authored
+  const guide = readerGuide(slugs, lang)
+  // Search titles lead with what people type ("Telegram MCP server", "Install the Telegram CLI"); an empty entry keeps
+  // the page's own title.
+  const templates: Record<string, string> = words.pageTitles
+  const template = guide || slugs.length !== 2 ? undefined : (templates[slugs.join("/")] ?? templates[slugs[1]])
+  const product = (words.products as Record<string, string>)[tool.name] ?? tool.displayName ?? tool.name
+  if (template) {
+    const title = template.replaceAll("{product}", product)
+    return title.charAt(0).toUpperCase() + title.slice(1)
+  }
+  // People search for the product, not the command: "Telegram: People", not "People — tg".
+  return `${tool.displayName ?? { tg: "Telegram", max: "MAX" }[tool.name] ?? tool.name}: ${guide?.title ?? authored}`
 }
 
+const pageDescription = (lang: string, slugs: string[]) =>
+  (seoWords(lang).pageDescriptions as Record<string, string>)[slugs.join("/")]
+
 export function documentationDescription(lang: string, slugs: string[], authored?: string): string {
-  const taskDescription = readerGuide(slugs, lang)?.description
+  const taskDescription = readerGuide(slugs, lang)?.description ?? pageDescription(lang, slugs)
   if (taskDescription) return taskDescription
   if (authored?.trim()) return authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])

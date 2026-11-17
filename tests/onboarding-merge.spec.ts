@@ -30,7 +30,12 @@ for (const lang of ["en", "ru", "es"] as const) {
             await expect(main.locator("pre").filter({ hasText: "node --version" }).first()).toBeVisible()
           else {
             const title = { en: "Start here", ru: "Начните здесь", es: "Empieza aquí" }[lang]
-            await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible()
+            const heading = {
+              en: "Connect your AI agent to your chats, mail and documents",
+              ru: "Подключите ИИ-агента к чатам, почте и документам",
+              es: "Conecta tu agente de IA a tus chats, correo y documentos",
+            }[lang]
+            await expect(page.getByRole("heading", { level: 1, name: heading, exact: true })).toBeVisible()
             const mobile = width === 390
             if (mobile) await page.locator('#nd-subnav button[aria-controls="nd-sidebar-mobile"]').click()
             const sidebar = page.locator(mobile ? "#nd-sidebar-mobile" : "#nd-sidebar")
