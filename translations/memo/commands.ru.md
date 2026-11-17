@@ -33,12 +33,14 @@ memo context <person> [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | most messages, notes and events of each kind. Default: `20`. |
+| `--limit <n>` | most messages, notes and events of each kind, and history items. Default: `20`. |
+| `--since-time <time>` | the history from this time: hours or days back (12h, 7d) or a date (2026-11-01); the newest when left out. |
+| `--before-time <time>` | the history before this ISO time or date: what `history.before_time` gives, to page back. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--source <accounts>` | the accounts to read: every one when left out, or the group's in a group run; for <messenger>:<name>, the one account of that messenger. |
 | `--trimmed` | each email's own text, without quoted earlier mail or the signature — for an agent's reads. |
 
-**Example:** `memo context telegram:'Kai Sample'`, `memo context person:7 --json`, `memo context email:kai@example.com --limit 5 --json`
+**Example:** `memo context telegram:'Kai Sample'`, `memo context email:kai@example.com --limit 5 --json`, `memo context person:7 --before-time 2026-10-01T00:00:00Z --json`
 
 ## `memo show`
 
@@ -854,7 +856,7 @@ memo people show <who> [options]
 
 ### `memo people review`
 
-what waits for the owner about who is who: matches (people that may be one) and splits (identities an agent says are not this person), highest score first, then newest; people confirm or people reject answers them, and people resolve company answers a match on a shared mailbox
+what waits for the owner about who is who: matches (people that may be one) and splits (identities an agent says are not this person), highest score first, then newest; each match says what the two share and why it is not strong enough for an agent to merge, and each side: identities by source, the last messages or calls with dates, companies and deals (--full: more of each, with phones, addresses and accounts; --brief: no sides). --kind merged lists what agents merged on strong evidence, each with the people unmerge that undoes it. people confirm or people reject answers a match or a split, and people resolve company answers a match on a shared mailbox
 
 ```sh
 memo people review [options]
@@ -862,7 +864,9 @@ memo people review [options]
 
 | Option | What it does |
 |---|---|
-| `--kind <kind>` | all, link, split (default all). Default: `all`. |
+| `--kind <kind>` | all, link, split, merged (default all). Default: `all`. |
+| `--brief` | each match without its two sides. |
+| `--full` | each side with phones, addresses, accounts, and more messages and calls in full. |
 | `--limit <n>` | most proposals, up to 500. Default: `50`. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
@@ -1009,7 +1013,7 @@ memo people scan [options]
 
 ### `memo people link`
 
-say two identities are one person: yours links them, an agent's waits for you as a match
+say two identities are one person: yours links them; an agent's merges them at once when the store finds strong evidence (one mobile number or personal address no one else has, or each source has once, from two sources, one of them a messenger or a call for a phone), and otherwise waits for you as a match that says why; agent_merges: propose makes every agent's link wait; memo people unmerge undoes a merge
 
 This command changes the local store or your files.
 
@@ -1746,7 +1750,7 @@ memo organizations list [query] [options]
 
 ### `memo organizations context`
 
-one organization by its id or organization:<id>: its people by role, customers, suppliers and partners, projects, open deals and leads, invoices, payments and orders, how much its people wrote, open tasks and categories, each relationship with its standing; then the notes about it and its tags. `coverage` names what was not read
+one organization by its id or organization:<id>: its people by role, customers, suppliers and partners, projects, open deals and leads, invoices, payments and orders, what its people wrote, newest first, open tasks and categories, each relationship with its standing; then the notes about it and its tags. `coverage` names what was not read
 
 ```sh
 memo organizations context <organization> [options]
@@ -1910,7 +1914,7 @@ memo projects evidence <project> [options]
 | `--sync-first` | first sync the linked chats the store does not hold back to --since-time, through their messenger CLI; off by default. |
 | `--sync-time <duration>` | time for all of --sync-first's syncs together. Default: `3m`. |
 | `--sync-profile <tool=profile>` | the messenger profile to sync as when several are signed in to a chat's account, such as max=default; repeat for another tool. It must be signed in to that account. |
-| `--purpose <purpose>` | the linked chats' purposes to read, comma-separated: work, sales, support, other, or all; default work. |
+| `--purposes <purposes>` | the linked chats' purposes to read, comma-separated: work, sales, support, other, or all; default work. |
 | `--include-proposed` | also read chats and members proposed for the project, after the confirmed ones. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
@@ -1934,7 +1938,7 @@ memo projects status <project> [options]
 | `--before-time <time>` | fixed exclusive end: ISO 8601 timestamp with UTC offset; days back count from it. |
 | `--context-query <words>` | words that all appear in one text; reports their last mention per side. Repeat for another. Default: ``. |
 | `--sync-profile <tool=profile>` | the messenger profile the next steps name when several are signed in to a chat's account, such as max=default; repeat for another tool. |
-| `--purpose <purpose>` | the linked chats' purposes to read, comma-separated: work, sales, support, other, or all; default work. |
+| `--purposes <purposes>` | the linked chats' purposes to read, comma-separated: work, sales, support, other, or all; default work. |
 | `--compact` | one line per signal, chat and next step, for an agent. |
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
@@ -3241,7 +3245,7 @@ memo facts reject <ref> [options]
 
 ### `memo facts remove`
 
-forget a fact: erase its text, its links to sources and its tags
+forget a fact: erase its text, its links to sources and its tags. memo facts history keeps who removed it, when and why, never what it said
 
 This command changes the local store or your files.
 
@@ -3260,7 +3264,23 @@ memo facts remove <ref> [options]
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 | `--reason <text>` | why, in a few words; required when an agent decides for you. |
 
-**Example:** `memo facts remove fact:4`
+**Example:** `memo facts remove fact:4 --reason 'recorded twice'`
+
+### `memo facts history`
+
+the facts removed, newest first: who removed each, when and why, never what it said
+
+```sh
+memo facts history [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | most removals on a page, up to 500. Default: `100`. |
+| `--page <n>` | which page, from 1. Default: `1`. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Example:** `memo facts history --limit 20`
 
 ### `memo facts challenge`
 
@@ -3680,7 +3700,7 @@ memo pipelines list [query] [options]
 |---|---|
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 3 more; every field: memo commands info pipelines list
+**Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 9 more; every field: memo commands info pipelines list
 
 **Example:** `memo pipelines list`, `memo pipelines list kind:lead --json`
 
@@ -3701,7 +3721,7 @@ memo pipelines show <pipeline> [options]
 | `--since-time <time>` | count only deals or leads made since this day, such as 2026-09-01. |
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 3 more; every field: memo commands info pipelines show
+**Returns:** pipeline — id, ref, name, kind, account, external_id, stages, created_at, and 9 more; every field: memo commands info pipelines show
 
 **Example:** `memo pipelines show pipeline:2`, `memo pipelines show Sales --since-time 2026-09-01`
 
@@ -3748,7 +3768,7 @@ memo deals list [query] [options]
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 | `--limit <n>` | most deals, up to 500. Default: `100`. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info deals list
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info deals list
 
 **Example:** `memo deals list status:open project:HRB`, `memo deals list stage:Quote --json`
 
@@ -3768,7 +3788,7 @@ memo deals show <ref> [options]
 |---|---|
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info deals show
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info deals show
 
 **Example:** `memo deals show deal:5`
 
@@ -3813,7 +3833,7 @@ memo deals update <ref> [options]
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 | `--project <project>` | the project: its key or project:<id>. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info deals update
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info deals update
 
 **Example:** `memo deals update deal:5 --project HRB`
 
@@ -3845,7 +3865,7 @@ memo deals add <title> <stage> [amount] [currency] [options]
 | `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info deals add
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info deals add
 
 **Example:** `memo deals add 'Site for the clinic' Call 500000.00 RUB --organization organization:3 --project HRB`, `memo deals add 'Support contract' Sales/Quote --person person:7 --role decision-maker --due 2026-12-01`
 
@@ -3868,7 +3888,7 @@ memo deals move <ref> <stage> [options]
 |---|---|
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info deals move
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info deals move
 
 **Example:** `memo deals move deal:5 Quote`, `memo deals move deal:5 stage:5`
 
@@ -3893,7 +3913,7 @@ memo deals close <ref> <outcome> [options]
 | `--reason <text>` | why it was won or lost, kept with it. |
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info deals close
+**Returns:** deal — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info deals close
 
 **Example:** `memo deals close deal:5 won`, `memo deals close deal:6 lost --reason 'chose a cheaper studio'`
 
@@ -3918,7 +3938,7 @@ memo leads list [query] [options]
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 | `--limit <n>` | most leads, up to 500. Default: `100`. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info leads list
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info leads list
 
 **Example:** `memo leads list status:open`
 
@@ -3938,7 +3958,7 @@ memo leads show <ref> [options]
 |---|---|
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info leads show
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info leads show
 
 **Example:** `memo leads show lead:3`
 
@@ -3983,7 +4003,7 @@ memo leads update <ref> [options]
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 | `--project <project>` | the project: its key or project:<id>. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info leads update
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info leads update
 
 **Example:** `memo leads update lead:3 --project HRB`
 
@@ -4015,7 +4035,7 @@ memo leads add <title> [stage] [amount] [currency] [options]
 | `--evidence <ref...>` | what shows it, up to 8: msg:, note:, document: or another reference. |
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info leads add
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info leads add
 
 **Example:** `memo leads add 'Call from the site'`, `memo leads add 'Clinic in Kazan' contacted --person person:9`
 
@@ -4038,7 +4058,7 @@ memo leads move <ref> <stage> [options]
 |---|---|
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info leads move
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info leads move
 
 **Example:** `memo leads move lead:3 qualified`, `memo leads move lead:3 stage:5`
 
@@ -4063,7 +4083,7 @@ memo leads close <ref> <outcome> [options]
 | `--reason <text>` | why it was won or lost, kept with it. |
 | `--json` | print JSON; --json=ref,title keeps only those fields. |
 
-**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 29 more; every field: memo commands info leads close
+**Returns:** lead — id, ref, kind, title, summary, pipeline, pipeline_name, stage, and 30 more; every field: memo commands info leads close
 
 **Example:** `memo leads close lead:3 lost --reason 'no budget'`
 
@@ -6134,6 +6154,49 @@ memo models local-only set <state> [options]
 
 **Example:** `memo models local-only set on`, `memo models local-only set off`
 
+### `memo models chats`
+
+whether chat text may go to a model off this computer: allowed, ask or denied
+
+#### `memo models chats show`
+
+whether chat text may go to a model outside this computer, and since when
+
+```sh
+memo models chats show [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--json` | print JSON. |
+
+**Returns:** chat sending — mode, meaning, since, changed; every field: memo commands info models chats show
+
+**Example:** `memo models chats show`
+
+#### `memo models chats set`
+
+allowed: no yes needed; ask: --yes needed, an agent may pass it; denied: refused even with --yes. Only you make it less strict
+
+This command changes the local store or your files.
+
+```sh
+memo models chats set <mode> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `mode` | required | allowed, ask or denied. |
+
+| Option | What it does |
+|---|---|
+| `--from-app` | you did this in WireCat Desktop. |
+| `--json` | print JSON. |
+
+**Returns:** chat sending — mode, meaning, since, changed; every field: memo commands info models chats set
+
+**Example:** `memo models chats set allowed`, `memo models chats set ask`, `memo models chats set denied`
+
 ### `memo models picture-reading`
 
 let your coding agent read the text of a picture you choose: never (the default) or on request
@@ -6477,7 +6540,7 @@ memo search meetings <query> [options]
 | `--source <accounts>` | the meeting account: provider:account (zoom:me@example.com), or a provider that has one. |
 | `--json` | print the standard JSON answer. |
 
-**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, language, line, and 5 more; every field: memo commands info search meetings
+**Returns:** meeting hit — ref, meeting, scope, id, excerpt, offset_ms, language, line, and 8 more; every field: memo commands info search meetings
 
 **Next usually:** `memo meetings show <meeting>`
 
@@ -7423,7 +7486,7 @@ memo skill show [name] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | optional | one of the skills shipped for a task: search, projects, meetings, mail, proposals, money, mcp, vocabulary, mail-triage, morning-digest. |
+| `name` | optional | a part of this skill, or a skill shipped for a task: vocabulary, search, proposals, projects, money, meetings, mcp, mail, mail-triage, morning-digest. |
 
 | Option | What it does |
 |---|---|

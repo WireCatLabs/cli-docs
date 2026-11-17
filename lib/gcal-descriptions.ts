@@ -2,7 +2,8 @@ export const gcalDescriptions: Record<string, Record<string, string>> = {
   en: {
     remote: "Connect ChatGPT or Claude in the browser to Google Calendar through your own HTTPS tunnel and login code.",
     compare: "Compare Google Calendar tools for offline search, free times, event changes and agent permissions.",
-    index: "Keep your Google Calendar on your computer, search events offline and let your AI agent read them.",
+    index:
+      "See your week across every Google account, find a free slot and keep Meet transcripts after Google deletes them. Read-only until you allow more.",
     installation: "Install the Google Calendar CLI with npm, check the Node.js version and run doctor.",
     usage: "Sign in to Google, sync calendars, read and search events, find free times and change events.",
     scenarios: "Step-by-step Google Calendar tasks: give an agent access, find a time, copy chosen calendars.",
@@ -16,7 +17,8 @@ export const gcalDescriptions: Record<string, Record<string, string>> = {
   ru: {
     remote: "Подключите ChatGPT или Claude в браузере к Google Календарю через свой HTTPS-туннель и код входа.",
     compare: "Сравните инструменты Google Календаря: поиск без сети, свободное время, изменения и права агента.",
-    index: "Храните Google Календарь на компьютере, ищите встречи без сети и дайте ИИ-агенту их читать.",
+    index:
+      "Неделя по всем аккаунтам Google, свободное окно для встречи и расшифровки Meet, которые остаются после удаления в Google. Только чтение, пока вы не разрешите изменения.",
     installation: "Установите CLI Google Календаря через npm, проверьте версию Node.js и запустите doctor.",
     usage: "Войдите в Google, синхронизируйте календари, ищите события, находите свободное время и меняйте события.",
     scenarios: "Пошаговые задачи Google Календаря: доступ для агента, поиск общего времени, копия календарей.",
@@ -30,7 +32,8 @@ export const gcalDescriptions: Record<string, Record<string, string>> = {
   es: {
     remote: "Conecta ChatGPT o Claude en el navegador a Google Calendar con tu propio túnel HTTPS y código de acceso.",
     compare: "Compara herramientas de Google Calendar: búsqueda sin conexión, huecos libres, cambios y permisos.",
-    index: "Guarda tu Google Calendar en tu ordenador, busca eventos sin conexión y deja que tu agente de IA los lea.",
+    index:
+      "Tu semana en todas tus cuentas de Google, un hueco libre y las transcripciones de Meet guardadas aunque Google las borre. Solo lectura hasta que lo permitas.",
     installation: "Instala la CLI de Google Calendar con npm, comprueba la versión de Node.js y ejecuta doctor.",
     usage: "Inicia sesión en Google, sincroniza calendarios, busca eventos, encuentra huecos libres y cambia eventos.",
     scenarios: "Tareas de Google Calendar paso a paso: acceso para un agente, buscar hora, copiar calendarios.",

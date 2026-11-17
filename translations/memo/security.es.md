@@ -89,7 +89,9 @@ nada y te avisa.
   número de teléfono que nadie más tiene y una de ellas lo tiene en Telegram, MAX o WhatsApp. Y después de que las
   enlaces. Coincidir en nombre, nombre de usuario o dominio de correo nunca basta, y un par que rechazaste nunca se
   une. Las nuevas pruebas sobre él te esperan otra vez. Una dirección de rol solo propone, y una dirección no-reply
-  no une ni propone a nadie. Una señal más débil, o la suposición de un agente, te espera en `memo people review`, y
+  no une ni propone a nadie. El vínculo de un agente une al momento solo con una prueba fuerte que memo encuentra por
+  sí mismo (un número de móvil o una dirección personal que nadie más tiene, o que cada titular tiene desde una fuente
+  distinta, y que dan dos fuentes), nunca por la palabra del agente. Una señal más débil, o la suposición de un agente, te espera en `memo people review`, y
   solo tú deshaces un enlace (`memo people unlink`, `memo people unmerge`).
 
 ## Un lector que propone hechos

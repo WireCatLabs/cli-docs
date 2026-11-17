@@ -4,6 +4,14 @@ title: "История изменений"
 
 Заметные изменения `@wirecat/asterisk-cli`. Один раздел на версию, новые сверху.
 
+## 0.8.0 — 17.11.2026
+
+### Изменено — может сломать скрипты
+
+- **`meetings transcribe` отдает тот же отчет, что и другие CLI для телефонии (beeline, b24).** Длительность аудио
+  теперь `audio_ms`, в миллисекундах (было `audio_seconds`). У каждого звонка с ошибкой есть `ref`. Звонок без записи
+  попадает в `failed` с причиной `recording.missing`, а `without_recording` больше нет.
+
 ## 0.7.2 — 16.11.2026
 
 ### Исправлено
@@ -245,7 +253,7 @@ title: "История изменений"
   повторы при обрыве соединения, тайм-ауты и каждый запрос в трассировке запуска. Ключ сервера закрепляется через
   `sftp_host_key` до отправки пароля или ключа, а первый `session start` показывает отпечаток для проверки.
   См.
-  [подключите Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.2/docs/asterisk.md#files-on-the-pbx-over-sftp).
+  [подключите Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp).
 
 ### Исправлено
 

@@ -2819,20 +2819,45 @@
     "replacements": {
       "en": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.2/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ],
       "ru": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.2/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ],
       "es": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.7.2/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "memo",
+    "slug": "people",
+    "reason": "memo 0.144.0 has no `config set` command (only show, migrate and unset), so agent_merges is set in the config file, as the configuration page shows.",
+    "replacements": {
+      "en": [
+        {
+          "before": "(`memo config set agent_merges propose`)",
+          "after": "([in the config file](./configuration.md#agent_merges))"
+        }
+      ],
+      "ru": [
+        {
+          "before": "(`memo config set agent_merges propose`)",
+          "after": "([в файле настроек](./configuration.md#agent_merges))"
+        }
+      ],
+      "es": [
+        {
+          "before": "(`memo config set agent_merges propose`)",
+          "after": "([en el archivo de configuración](./configuration.md#agent_merges))"
         }
       ]
     }
