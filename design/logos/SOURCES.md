@@ -41,6 +41,34 @@ Claude files carry an inline `<style>` block (plain CSS fills only). Overview: `
 | openclaw-horizontal.svg | mascot + dark wordmark (site file `openclaw-horizontal-dark-text.svg`) | https://openclaw.ai/brand/openclaw-horizontal-dark-text.svg | yes | for light bg |
 | openclaw-banner-dark.png | README banner, 1280x358, dark, with tagline | https://raw.githubusercontent.com/openclaw/openclaw/main/docs/assets/openclaw-banner-dark.png (github.com/openclaw/openclaw) | yes | cross-check only |
 
+### Service logos on the website (added 2026-11-17)
+
+The website shows these as `<img>` files from `public/logos/` (the landing page's source row, tool table and setup picker,
+and the docs sidebar). WireCat Desktop copies its own from here. Each was checked: no `<script>`, no external `href`,
+`<image>`, `@import` or `url(http…)`, no event handlers (`url(#…)` in bitrix24.svg and beeline.svg points inside the file).
+
+| File | Brand / what | Exact source | Licence | How drawn |
+|---|---|---|---|---|
+| google-meet.svg | Google Meet 2020+ camera | https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v8/192px.svg (the same product-logo set as Drive and Calendar; v1 to v8 are identical), retrieved 2026-11-17 | Google trademark, same rules as Drive | unchanged |
+| zoom-tile.svg | Zoom wordmark on its blue tile | the Zoom path of Simple Icons (https://github.com/simple-icons/simple-icons, `icons/zoom.svg` in simple-icons 13.21.0; its source https://brand.zoom.us/media-library/), retrieved 2026-11-11, copied from WireCat Desktop `src/assets/logos/zoom.svg` | Simple Icons CC0-1.0; Zoom trademark | white on a #0B5CFF tile, rounded corners (rx 5 of 16), the way the Zoom Workplace app icon shows it |
+| bitrix24.svg | Bitrix24 icon | https://www.bitrix24.de/favicon.svg (the icon of https://www.bitrix24.com/), retrieved 2026-11-10, copied from Desktop | Bitrix24 trademark | unchanged |
+| notion.svg | Notion "N" | the Notion path of Simple Icons (`icons/notion.svg` in simple-icons 13.21.0; its source https://www.notion.so), retrieved 2026-11-17, copied from Desktop | Simple Icons CC0-1.0; Notion trademark | not Notion's own file (the owner accepted a close lookalike); #000000 on a white tile with a thin #D4D4D4 border, rx 5 of 16, so it reads on both themes |
+| amocrm.png | amoCRM "a" | https://www.amocrm.ru/favicon.ico (100 px), retrieved 2026-11-17, copied from Desktop | amoCRM trademark | the blue "a" redrawn white on a #008CC7 tile, rx 5 of 16, 96 px |
+| max.png | MAX logo, 96 px | `max.svg` above (https://max.ru/favicon.svg), rendered to 96 px by Desktop | see MAX above | the 72 KB SVG draws the same at icon size |
+| markdown.svg | Markdown mark ("M↓" in a box) | the Markdown path of Simple Icons (`icons/markdown.svg` in simple-icons 13.21.0, https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/markdown.svg; its source https://github.com/dcurtis/markdown-mark), retrieved 2026-11-17 | CC0-1.0 (Simple Icons; dcurtis/markdown-mark is public domain) | #000000 on a white tile with a thin #D4D4D4 border, rx 5 of 16, as notion.svg |
+| yandex-disk.png | Yandex Disk app icon (blue saucer), 96 px | App Store artwork of "Яндекс Диск", seller Direct Cursus Computer Systems Trading LLC: https://apps.apple.com/ru/app/id553266487 ; image https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f8/9e/24/f89e244a-e496-53c2-b477-43a75d2fe819/AppIconDisk-0-0-1x_U007epad-0-1-sRGB-85-220.png/128x128bb.png , retrieved 2026-11-17 | Yandex trademark | scaled to 96 px, corners rounded (rx 30 of 96). The favicon of https://disk.yandex.ru (an orange mark) is not the Disk icon, so it was not used |
+| telemost.png | Yandex Telemost app icon (camera in a speech bubble on green), 96 px | https://yastatic.net/s3/chat-static/favicons/tm/apple-touch-icon-180.png (the touch icon https://telemost.yandex.ru links), retrieved 2026-11-17 | Yandex trademark | scaled to 96 px, corners rounded (rx 30 of 96) |
+| beeline.svg | Beeline striped ball | https://moskva.beeline.ru/favicon.svg (https://beeline.ru links no icon of its own), retrieved 2026-11-17 | Beeline (VEON) trademark | unchanged, line endings made LF |
+| telegram-disc.svg | not Telegram's logo: a paper plane on a blue disc | Lucide `send` (https://lucide.dev/icons/send, lucide-react 1.61.0, ISC) | ISC | white 2.25 stroke on a #0EA5E9 disc, as WireCat Desktop draws Telegram. Telegram's API terms 2.4 (https://core.telegram.org/api/terms) forbid its official logo in another app |
+
+Served under other names in `public/logos/`: `telegram.svg` is `telegram-disc.svg` (the paper plane on a disc, not
+Telegram's logo), `zoom.svg` is `zoom-tile.svg`, and `google-drive.svg`, `google-calendar.svg` and `bitrix24.svg`
+are the files of the same name above. `whatsapp.svg` is the green glyph (#25D366) of the WhatsApp row above with its
+background left out, colours unchanged.
+
+Kept as line icons: Email (one tool for every mail provider), Asterisk (owner, 2026-11-17: few people know its mark;
+Simple Icons has one, `icons/asterisk.svg`, #F68F1E, if that changes) and Memo (WireCat's own).
+
 ## Brand rules that matter
 
 - **WhatsApp**: Meta Brand Resource Center, https://www.meta.com/brand/resources/whatsapp/whatsapp-brand/ (opened as the es-es page). Rule read there: do not modify the assets, do not change their colours, resizing only, never make the logo the most prominent element. So `whatsapp-dark.svg` (white) is outside what I read; prefer the green glyph. The official logo pack zip sits behind an "I accept the rules" checkbox; I did not accept terms on your behalf and did not download it.

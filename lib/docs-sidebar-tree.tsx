@@ -60,7 +60,6 @@ import {
   Route,
   ScrollText,
   Search,
-  Send,
   Server,
   Settings2,
   ShieldCheck,
@@ -77,7 +76,7 @@ import {
   Webhook,
   Wrench,
 } from "lucide-react"
-import { WhatsAppIcon } from "../components/brand-icons"
+import { ServiceLogo } from "../components/brand-icons"
 import { commandGroupCopy, commandGroups, commandLanguage } from "./command-groups"
 import { readerGuide } from "./reader-guides"
 import { type Tool, tools } from "./shared"
@@ -187,18 +186,34 @@ export const sidebarIcons = {
 }
 
 const folderIcons = {
-  tg: Send,
-  max: MessageSquare,
-  wa: WhatsAppIcon,
-  drive: FolderOpen,
-  notion: NotebookText,
-  gcal: CalendarDays,
   mail: Mail,
   memo: NotebookPen,
-  b24: Handshake,
   pbx: PhoneCall,
-  zm: Video,
   desktop: Monitor,
+}
+
+// A service's own mark, by its tool folder or its single page, wins over the line icons above. Telegram's terms forbid
+// its logo in another product, so its file is a plain paper plane on a blue disc. Email, Asterisk and Memo keep a line
+// icon: Email covers every mail provider, and few people know Asterisk's mark.
+const serviceLogos: Record<string, string> = {
+  tg: "telegram.svg",
+  max: "max.png",
+  wa: "whatsapp.svg",
+  drive: "google-drive.svg",
+  gcal: "google-calendar.svg",
+  "google-meet": "google-meet.svg",
+  zm: "zoom.svg",
+  telemost: "telemost.png",
+  notion: "notion.svg",
+  markdown: "markdown.svg",
+  ydisk: "yandex-disk.png",
+  b24: "bitrix24.svg",
+  beeline: "beeline.svg",
+}
+
+const serviceLogo = (key: string | undefined) => {
+  const file = serviceLogos[key ?? ""]
+  return file ? <ServiceLogo file={file} /> : undefined
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
@@ -337,7 +352,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
         name: folderNames[tool]?.[lang] ?? node.name,
         root: false,
         defaultOpen: false,
-        icon: node.icon ?? <Icon aria-hidden="true" />,
+        icon: node.icon ?? serviceLogo(tool) ?? <Icon aria-hidden="true" />,
         children: node.children.map(decorate),
       }
     }
@@ -348,7 +363,8 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
     const task = /^\/(en|ru|es)\/docs\/(tg|max|wa)\/(usage|rankings|bot|groups)\/?$/.exec(node.url)
     const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined
-    const page = { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
+    const icon = node.icon ?? serviceLogo(slug) ?? <Icon aria-hidden="true" />
+    const page = { ...node, name: title ?? node.name, icon }
     const commands = /^\/(en|ru|es)\/docs\/(?:tg|max|wa)\/commands\/?$/.exec(node.url)
     return commands ? commandFolder(page, commands[1]) : page
   }

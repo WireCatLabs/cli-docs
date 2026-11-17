@@ -70,6 +70,16 @@
 .integrations-desktop>svg{width:20px;height:20px;margin-top:2px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .integrations-desktop p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
 .integrations-desktop .text-link{margin-top:10px}
+.landing5 .integrations{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"intro desktop" "table table";row-gap:36px}
+.landing5 .integrations>div:first-child{grid-area:intro}
+.landing5 .integrations>.integrations-desktop{grid-area:desktop;margin-top:0;justify-self:end}
+.landing5 .integration-table{grid-area:table;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:56px}
+.landing5 .integration-table>details{grid-column:1/-1}
+@media(max-width:900px){.landing5 .integrations{grid-template-columns:minmax(0,1fr);grid-template-areas:"intro" "desktop" "table";row-gap:28px}.landing5 .integrations>.integrations-desktop{justify-self:start}}
+@media(max-width:760px){.landing5 .integration-table{grid-template-columns:minmax(0,1fr)}}
+.service-logo{display:block;width:18px;height:18px;flex-shrink:0;object-fit:contain}
+.integration-table>a>span>.service-logo,.integration-entry>span>.service-logo{width:19px;height:19px}
+.integration-entry>span>.service-logo{margin-top:2px}
 .cli-picker{position:relative;margin:12px 0 10px}
 .cli-picker-button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;font-size:14px;text-align:left;cursor:pointer;transition:border-color .15s ease-out}
 .cli-picker-button:hover,.cli-picker-button[aria-expanded="true"]{border-color:color-mix(in srgb,var(--line) 40%,var(--accent))}
