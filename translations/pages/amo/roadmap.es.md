@@ -16,7 +16,8 @@ MCP. Mira [empieza aquí](./index.md).
 
 ## Siguiente
 
-- Conectar amoCRM en WireCat Desktop. Hoy `amo work setup` hace las mismas preguntas en la terminal.
+- Conectar amoCRM en WireCat Desktop. Hoy `amo work setup` hace las mismas preguntas.
+- Archivos de negociaciones y contactos: leer y descargar los archivos adjuntos a una negociación o a un cliente.
 
 ## Más adelante
 

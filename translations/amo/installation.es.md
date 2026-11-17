@@ -2,14 +2,18 @@
 title: "Instala y conecta"
 ---
 
-amoCRM y Kommo guardan tus negociaciones, contactos y empresas en la nube, y un agente de IA no tiene forma de
-leerlos ni de actualizar una negociación por ti. Al terminar esta página, `amo` está instalado y conectado a tu
-cuenta, y tú o tu agente podéis leer y cambiar el CRM desde una terminal, desde un script o por MCP. `amo` es una
-herramienta de línea de comandos de WireCat, un programa que ejecutas escribiendo su nombre en una terminal. Solo
-cambia tu cuenta hasta donde lo permiten los permisos que pongas.
+Conecta tu cuenta de amoCRM o Kommo una vez, y desde entonces tu agente de IA puede leer y actualizar tus
+negociaciones. El CRM guarda tus negociaciones, contactos y empresas en la nube, y solo deja entrar a un programa a
+través de una integración privada que crea un administrador de la cuenta.
 
-`amo` se conecta una vez por cuenta. Un administrador de la cuenta crea una integración privada en amoCRM o Kommo, y
-las dos formas de iniciar sesión la usan: una clave que pegas o un inicio de sesión en el navegador.
+Después tu agente te dice qué negociaciones están abiertas, pasa una negociación a la siguiente etapa o encuentra a
+un cliente, desde una terminal o por MCP, hasta donde lo permiten los permisos que pongas. Tú ejecutas los mismos
+comandos, o desde un script.
+
+`amo` es una herramienta de línea de comandos de WireCat, un programa que tú o tu agente ejecutáis por su nombre. Lo
+conectas una vez por cuenta, y `amo work setup` hace cada pregunta por turno. Una sola integración privada sirve para
+las dos formas de iniciar sesión: un token que pegas o un inicio de sesión en el navegador. El único requisito es un
+administrador de la cuenta, que crea la integración.
 
 **En esta página:**
 
@@ -18,7 +22,7 @@ las dos formas de iniciar sesión la usan: una clave que pegas o un inicio de se
 3. [Inicia sesión con una clave](#sign-in-with-a-key)
 4. [Inicia sesión con la integración](#sign-in-through-the-integration)
 5. [Cuál elegir](#which-one-to-choose)
-6. [Conecta en WireCat Desktop](#connect-in-wirecat-desktop)
+6. [Conecta paso a paso](#connect-step-by-step)
 7. [Cierra la sesión y retira el acceso](#sign-out-and-revoke-access)
 8. [Siguiente: la primera sincronización](#next-the-first-sync)
 
@@ -30,22 +34,18 @@ Instala `amo` una vez en cada ordenador donde lo uses tú o un agente. Necesitas
 ```sh
 npm install -g @wirecat/amo-cli
 amo --version
+amo skill install   # the agent skill, for Claude Code, Codex, Gemini CLI and OpenClaw
 amo doctor
 ```
 
-`amo doctor` no usa la red ni abre el llavero. Muestra la versión, dónde están los ajustes, qué perfiles existen y si
-otros usuarios del ordenador pueden leer los ajustes.
-
-WireCat Desktop instalará `amo` por ti cuando amoCRM esté en su catálogo. Eso llega con la próxima versión de Desktop.
+Un agente sin terminal, como Claude Desktop, usa `amo` por [MCP](./mcp.md). `amo doctor` no usa la red ni abre el
+llavero. Muestra la versión, dónde están los ajustes, qué perfiles existen y si otros usuarios del ordenador pueden
+leer los ajustes.
 
 ## Crea la integración
 
 Lo hace un administrador de la cuenta, una vez. La misma integración sirve para la clave y para el inicio de sesión
 en el navegador.
-
-<!-- TODO screenshots, when the files exist:
-  src/setup/assets/01-amomarket-menu.png (the ⋯ menu in амоМаркет)
-  src/setup/assets/02-integration-form.png (the integration form) -->
 
 En amoCRM (`<subdomain>.amocrm.ru`):
 
@@ -71,18 +71,14 @@ defecto. Deja sin marcar **Duplicate control** y **Multiple sources**, y guarda.
 
 La clave es el token de larga duración de amoCRM. Actúa con los permisos del administrador que la creó.
 
-<!-- TODO screenshots, when the files exist:
-  src/setup/assets/03-keys-tab.png (the «Ключи» tab)
-  src/setup/assets/04-generate-token.png (the end date and the token) -->
-
 1. En la integración, abre la pestaña **«Ключи»** (en Kommo, **Keys and scopes**) y pulsa
    **«Сгенерировать токен»** (en Kommo, **Generate long-lived token**).
 2. Elige una fecha de fin, de un día a cinco años.
 3. Copia el token. Solo se muestra una vez
    ([amoCRM: paso a paso](https://www.amocrm.ru/developers/content/oauth/step-by-step),
    [Kommo: token de larga duración](https://developers.kommo.com/docs/long-lived-token)).
-4. Elige un nombre de perfil para esta cuenta, como `work`, da la dirección de la cuenta y pega el token cuando `amo`
-   lo pida:
+4. Elige un nombre de perfil para esta cuenta, como `work`. Ejecuta los comandos de abajo con la dirección de tu
+   cuenta en lugar del ejemplo `https://example.amocrm.ru`, y pega el token cuando `amo` lo pida:
 
    ```sh
    amo work session start --host https://example.amocrm.ru
@@ -101,10 +97,11 @@ permisos.
 
 1. En la pestaña **«Ключи»** de la integración (en Kommo, **Keys and scopes**), copia el ID de la integración. Ten
    también a mano la clave secreta.
-2. Ejecuta, con tu dirección y tu ID:
+2. Ejecuta el comando de abajo con tu dirección y tu ID de integración en lugar de los ejemplos
+   `https://example.amocrm.ru` y `0123abcd-4567-89ef-0123-456789abcdef`:
 
    ```sh
-   amo work session start --host https://example.amocrm.ru --client-id <integration ID>
+   amo work session start --host https://example.amocrm.ru --client-id 0123abcd-4567-89ef-0123-456789abcdef
    ```
 
 3. Pega la clave secreta cuando `amo` la pida. No se muestra. También puede darla `AMO_AMOCRM_CLIENT_SECRET`.
@@ -123,10 +120,9 @@ perfil.
   funcionando mientras `amo` se ejecute al menos una vez cada 3 meses. Tras una pausa más larga, vuelve a iniciar
   sesión ([amoCRM: paso a paso](https://www.amocrm.ru/developers/content/oauth/step-by-step)).
 
-## Conecta en WireCat Desktop
+## Conecta paso a paso
 
-Llega con la próxima versión de Desktop, cuando amoCRM esté en su catálogo. Desktop hará las mismas preguntas que
-describe el propio `amo`, así que coinciden con la terminal:
+`amo work setup` hace las preguntas una a una, comprueba las respuestas y solo las guarda si la comprobación sale bien:
 
 1. **¿Qué cuenta?** La dirección en la que abres el CRM.
 2. **Crea una integración privada.** Los pasos de [crea la integración](#create-the-integration).
@@ -135,8 +131,8 @@ describe el propio `amo`, así que coinciden con la terminal:
    la cuenta responde. Un token rechazado te devuelve al paso del token.
 5. **Conectado.** El perfil está listo.
 
-Desktop inicia sesión con la clave. El inicio de sesión en el navegador es el comando de terminal que aparece en
-**Advanced** en el último paso.
+Inicia sesión con la clave. El inicio de sesión en el navegador es el comando que aparece en **Advanced** en el último
+paso.
 
 ## Cierra la sesión y retira el acceso
 

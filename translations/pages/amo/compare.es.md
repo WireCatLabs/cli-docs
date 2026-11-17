@@ -91,7 +91,7 @@ Notas sobre la columna de `amo`:
   `readonly` hace lo mismo para una clave. Sin ninguno de los dos, un perfil nuevo deja que un agente cree, cambie,
   mueva y cierre negociaciones, y cree y cambie contactos y empresas.
 - **Permitir, preguntar o negar.** Cada comando y cada operación de la API tiene su clave, como `deals.update` o
-  `api.leads.patch`, con `allow`, `ask`, `readonly` o `deny` en [los ajustes](./configuration.md#permissions).
+  `api.leads.patch`, con `allow`, `ask`, `readonly` o `deny` en [los ajustes](./permissions.md).
   `mcp serve --permission` hace una clave más estricta solo para un servidor. Un agente por MCP no puede cambiar estos
   ajustes.
 - **Confirmación.** `ask` pregunta en una terminal. Por MCP no hay nadie para responder, así que `ask` deja seguir al

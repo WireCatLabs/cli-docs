@@ -16,7 +16,8 @@ change deals, contacts and companies within the permissions you set, over the co
 
 ## Next
 
-- Connect amoCRM in WireCat Desktop. Today `amo work setup` asks the same questions in the terminal.
+- Connect amoCRM in WireCat Desktop. Today `amo work setup` asks the same questions.
+- Files on deals and contacts: read and download the files attached to a deal or a client.
 
 ## Later
 

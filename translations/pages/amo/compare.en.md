@@ -85,7 +85,7 @@ Notes on the `amo` column:
   for one key. Without either, a new profile lets an agent create, update, move and close deals, and create and update
   contacts and companies.
 - **Allow, ask or refuse.** Each command and each API operation has its key, such as `deals.update` or
-  `api.leads.patch`, set to `allow`, `ask`, `readonly` or `deny` in [the settings](./configuration.md#permissions).
+  `api.leads.patch`, set to `allow`, `ask`, `readonly` or `deny` in [the settings](./permissions.md).
   `mcp serve --permission` makes a key stricter for one server only. An agent over MCP cannot change these settings.
 - **Confirmation.** `ask` asks at a terminal. Over MCP nobody is there to answer, so `ask` lets the agent go ahead,
   and this row is partly. To stop an agent from writing, set the key to `deny` or `readonly`.

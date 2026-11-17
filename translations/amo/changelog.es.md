@@ -4,7 +4,7 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nueva primero.
 
-## Unreleased
+## 0.1.0 — 17.11.2026
 
 ### Añadido
 
@@ -52,3 +52,19 @@ Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nue
   solo por los ids que nombran sus negociaciones. Un cliente de un compañero que no está en ninguna de tus
   negociaciones nunca entra en la copia, y un registro recuperado de la papelera de amoCRM vuelve sea cual sea el orden
   en que amoCRM lista los eventos.
+
+### Cambiado — puede romper llamadas
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Antes iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del ordenador sin que el propietario
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: una CLI nunca elige una cuenta por el propietario
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)). Atención: un cliente configurado desde la entrada antigua mantiene `--profiles all` hasta que se configure de nuevo. Un
+  servidor añadido a mano o con `mcp config` no cambia.
+
+### Corregido
+
+- Un inicio de sesión con `AMO_TOKEN` y `AMO_HOST` ahora encuentra a su usuario: cada comando pregunta a la cuenta de
+  quién es el token, como hace `session start`, así que `deals list` y las demás lecturas de la copia muestran las
+  negociaciones de ese usuario en lugar de ninguna. El token no se guarda en ningún sitio. Con `--offline` no se
+  pregunta a nadie, y las lecturas no muestran ninguna.
