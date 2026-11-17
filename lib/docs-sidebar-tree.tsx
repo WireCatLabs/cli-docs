@@ -94,7 +94,6 @@ export const sidebarIcons = {
   b24: Handshake,
   asterisk: Server,
   pbx: PhoneCall,
-  voip: Phone,
   beeline: PhoneCall,
   notes: StickyNote,
   sources: FilePlus2,
@@ -250,7 +249,8 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // place of the group's first tool.
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
-  meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "voip", "beeline"], open: true, icon: Phone },
+  messengers: { tools: ["tg", "max", "wa"], open: true, icon: MessageSquare },
+  meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   crm: { tools: ["b24"], open: false, icon: Handshake },
 } as const
 
@@ -320,13 +320,20 @@ export function withFoldingSections(children: Node[]): Node[] {
   return out
 }
 
+// A tool's menu name, where it differs from its name elsewhere on the site.
+const folderNames: Record<string, Record<string, string>> = {
+  memo: { en: "Notes (Memo)", ru: "Заметки (Memo)", es: "Notas (Memo)" },
+}
+
 /** One navigation tree on every page: tool folders expand, never replace the shared menu. */
 export function unifiedDocsTree(tree: Root, lang = "en"): Root {
   const decorate = (node: Node): Node => {
     if (node.type === "folder") {
-      const Icon = folderIcons[folderTool(node) as keyof typeof folderIcons] ?? FolderOpen
+      const tool = folderTool(node) ?? ""
+      const Icon = folderIcons[tool as keyof typeof folderIcons] ?? FolderOpen
       return {
         ...node,
+        name: folderNames[tool]?.[lang] ?? node.name,
         root: false,
         defaultOpen: false,
         icon: node.icon ?? <Icon aria-hidden="true" />,
