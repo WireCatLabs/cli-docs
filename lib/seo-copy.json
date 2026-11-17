@@ -117,6 +117,7 @@
       "mail/email": "Email in Memo: your mail beside notes and chats"
     },
     "pageDescriptions": {
+      "ydisk/compare": "Compare ydisk with the Yandex Disk MCP server, rclone, Yandex Disk for Linux and yandex-disk-mcp by the job you want done, with sources and a date.",
       "gcal": "Google Calendar MCP server and CLI. Keep your events on your computer, search them offline and let your AI agent read your schedule before it plans.",
       "memo": "Memo is one MCP server for your notes, Obsidian vault, mail and Telegram or MAX chats. Your AI agent searches them in one place and cites each source.",
       "b24": "Bitrix24 MCP server and CLI. Your AI agent reads and updates deals, leads, contacts and companies, and a local copy lets you search the CRM offline.",
@@ -245,6 +246,7 @@
       "mail/email": "Почта в Memo: письма рядом с заметками и чатами"
     },
     "pageDescriptions": {
+      "ydisk/compare": "Сравнение ydisk с MCP-сервером Яндекс Диска, rclone, Яндекс Диском для Linux и yandex-disk-mcp по задачам, с источниками и датой проверки.",
       "gcal": "MCP-сервер и CLI для Google Calendar. События хранятся на вашем компьютере, поиск работает без интернета, а ИИ-агент учитывает ваше расписание.",
       "memo": "Memo - один MCP-сервер для заметок, хранилища Obsidian, почты и чатов Telegram и MAX. ИИ-агент ищет по ним в одном месте и указывает источник.",
       "b24": "MCP-сервер и CLI для Битрикс24. ИИ-агент читает и меняет сделки, лиды, контакты и компании, а локальная копия позволяет искать по CRM без интернета.",
@@ -373,6 +375,7 @@
       "mail/email": "Correo en Memo: tus correos junto a notas y chats"
     },
     "pageDescriptions": {
+      "ydisk/compare": "Compara ydisk con el servidor MCP de Yandex Disk, rclone, Yandex Disk para Linux y yandex-disk-mcp según el trabajo que quieres hacer, con fuentes y fecha.",
       "gcal": "Servidor MCP y CLI para Google Calendar. Guarda tus eventos en el ordenador, búscalos sin conexión y deja que tu agente de IA consulte tu agenda antes de planificar.",
       "memo": "Memo es un servidor MCP para tus notas, tu bóveda de Obsidian, el correo y los chats de Telegram o MAX. Tu agente de IA busca en todo a la vez y cita cada fuente.",
       "b24": "Servidor MCP y CLI para Bitrix24. Tu agente de IA lee y actualiza negocios, prospectos, contactos y empresas, y una copia local permite buscar en el CRM sin conexión.",
