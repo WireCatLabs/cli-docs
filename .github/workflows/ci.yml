@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sample: [1, 2, 3]
+        sample: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -26,25 +26,17 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
       - run: nproc && free -m
-      - name: next build with a watchdog
+      - name: next build in a 13 GB cgroup, reporting its memory peak
+        timeout-minutes: 15
         run: |
-          setsid pnpm exec next build --debug > build.log 2>&1 &
-          pid=$!
-          for i in $(seq 1 60); do
-            sleep 15
-            echo "=== t=$((i*15))s $(free -m | awk '/Mem:/{print "used",$3,"avail",$7} /Swap:/{print "swap",$3}' | tr '\n' ' ')"
-            grep -v -E '│|┆' build.log | grep -E 'Compiled|static pages|Collecting|Error|error' | tail -2
-            kill -0 $pid 2>/dev/null || break
-          done
-          if kill -0 $pid 2>/dev/null; then
-            echo "=== STILL RUNNING after $((i*15))s: process tree"
-            ps -eo pid,ppid,stat,rss,pcpu,etime,wchan:20,args --forest | grep -E 'node|next|pnpm' | grep -v grep | cut -c1-220
-            for p in $(pgrep -f 'next' ); do echo "--- $p"; cat /proc/$p/status | grep -E 'State|VmRSS|Threads'; done
-            echo "=== build.log tail"; grep -v -E '│|┆' build.log | tail -60
-            kill -TERM -- -$pid; sleep 5; kill -KILL -- -$pid 2>/dev/null
-            exit 1
-          fi
-          wait $pid && rc=0 || rc=$?; echo "build exit $rc"; grep -v -E '│|┆' build.log | tail -25; exit $rc
+          sudo systemd-run --unit=nextbuild --wait --collect -p MemoryMax=13G -p MemorySwapMax=0 \
+            -p User=runner -p WorkingDirectory="$PWD" -E PATH="$PATH" -E HOME="$HOME" -E CI=true \
+            -p StandardOutput=file:"$PWD/build.log" -p StandardError=file:"$PWD/build.log" \
+            "$(command -v pnpm)" exec next build && rc=0 || rc=$?
+          sudo systemd-run --version | head -1
+          echo "build exit $rc"
+          grep -v -E '│|┆' build.log | grep -E 'Compiled|static pages|Error|Killed' | tail -6
+          exit $rc
       - name: Memory and OOM report
         if: always()
         run: |
