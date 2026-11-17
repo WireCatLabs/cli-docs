@@ -12,3 +12,7 @@ An item moves to [BACKLOG.md](BACKLOG.md) when it becomes P2; it keeps its id. R
 - **DOCS-11 · P3 · Check outside links weekly** with lychee (inside links: `pnpm check:links`).
 - **DOCS-12 · P3 · Contact links show `/cdn-cgi/l/email-protection` to readers without JavaScript.**
   Cloudflare's email obfuscation rewrites `mailto:` links on 84 pages; turn it off for the zone or accept it.
+- **DOCS-14 · P3 · Remove the picomatch audit workaround (GHSA-fc5q-39xc-vjpf)** once picomatch ships a fix or
+  cli-base's `release-checks.yml` takes an ignore input: the `audit.ignore` entry in `pnpm-workspace.yaml`,
+  `.github/workflows/audit.yml` with its jq filter and its three callers, and `dependencies: true` again in deploy,
+  monthly and security-release.
