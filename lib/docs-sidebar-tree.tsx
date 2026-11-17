@@ -22,7 +22,9 @@ import {
   FileInput,
   FilePlus2,
   FileSearch,
+  Files,
   FileText,
+  FileType,
   FlaskConical,
   FolderOpen,
   Gauge,
@@ -30,6 +32,7 @@ import {
   Globe,
   GlobeLock,
   Handshake,
+  HardDrive,
   History,
   Import,
   KeyRound,
@@ -88,6 +91,8 @@ export const sidebarIcons = {
   organize: Layers,
   drive: FolderOpen,
   notion: NotebookText,
+  markdown: FileType,
+  ydisk: HardDrive,
   email: Mail,
   mail: Mail,
   b24: Handshake,
@@ -267,6 +272,7 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 const toolGroups = {
   messengers: { tools: ["tg", "max", "wa"], open: true, icon: MessageSquare },
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
+  documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
   crm: { tools: ["b24"], open: false, icon: Handshake },
 } as const
 

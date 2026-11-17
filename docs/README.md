@@ -39,6 +39,8 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I recover a meeting decision and connect it to other sources? | `zm/meetings.md` (Meetings, written on this site) | Task guide | Keep participant identity, project links and cited findings explicit |
 | How do I make Yandex Telemost's emailed meeting notes searchable as meetings? | `telemost.mdx` | Task guide | Keep in step with mail-cli's `meeting-notes` rule and Yandex's notes conditions |
 | How do I keep my Google Meet calls and transcripts so my agent can search them? | `google-meet.mdx` | Task guide | Keep in step with gcal's `meetings` commands and Google's 30-day and transcript limits |
+| How do I make my Markdown notes or Obsidian vault searchable by my agent? | `markdown.mdx` | Task guide | Keep in step with memo's `folders` and `notes` commands and its readable file types |
+| How do I make my Yandex Disk files searchable and work with them? | `ydisk.mdx` (Documents & files) | Start page | Written from ydisk before its first release; move it into a `ydisk` tool section once `tools.json` lists it, keeping the URL |
 | How do I connect a browser AI app? | `agents.mdx` (Use from web or mobile) | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | How do I review a reply in my messaging app or use an auto-reply template? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
@@ -69,9 +71,13 @@ Cloud API business-number bots have separate setup paths; the shared command cat
 WhatsApp paths, which are explained in its guides.
 
 Google Drive uses the same source-owned structure under `drive/`, pinned to its reviewed npm
-release. Its compact reader path is overview → installation → usage/search/recipes;
-configuration, security, troubleshooting and generated commands remain discoverable references.
-It is listed next to Telegram/MAX under Tools, without implying it has messenger capabilities.
+release. The portal owns its overview (`translations/overviews/drive.*.md`), as for Notion. Its compact reader path
+is overview → installation → usage/search/recipes; configuration, security, troubleshooting and generated commands
+remain discoverable references.
+
+Google Drive, Notion, the site-owned `ydisk.mdx` (Yandex Disk, before its first release) and `markdown.mdx` (Markdown
+folders and Obsidian vaults, read by `memo`) sit in the Documents & files group of the sidebar (`toolGroups` in
+`lib/docs-sidebar-tree.tsx`). Their URLs do not change.
 
 Zoom uses the source-owned structure under `zm/`, pinned to its reviewed npm release. It is listed
 immediately after Google Drive under Tools. The shared Meetings guide is written on this site and lives in the Zoom tab at

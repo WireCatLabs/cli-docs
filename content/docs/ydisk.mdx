@@ -1,0 +1,132 @@
+---
+title: "Yandex Disk"
+description: "Copy the text of the Yandex Disk folders you choose to your computer, so your agent finds a file by what it says, and works with files when you allow it."
+---
+
+Your contracts, reports and notes sit on Yandex Disk, and an AI agent on your computer cannot read them unless you
+download each file and paste it into the chat. The `ydisk` command-line tool copies the text of the Disk folders you
+choose to your computer. Your agent then finds the file that mentions a budget, a client or a date, quotes it and
+gives you its path on the Disk, even without the internet. When you need it, the same tool lists, downloads, uploads,
+moves and shares files on the Disk.
+
+To start, you need Node.js 22.16 or a later 22.x, or 24 or later, and a Yandex OAuth token: a key that lets the tool use your Disk. This page
+explains how the copy works, how to get the token and how to connect your first folder.
+
+**On this page:**
+
+1. [How it works](#how-it-works)
+2. [Install and sign in](#install-and-sign-in)
+3. [Copy a folder and search it](#copy-a-folder-and-search-it)
+4. [Connect your agent](#connect-your-agent)
+5. [Work with files on the Disk](#work-with-files-on-the-disk)
+6. [Limits](#limits)
+7. [Reference](#reference)
+
+## How it works
+
+- **A copy of the text on your computer.** `ydisk` reads the folders you choose and saves the text of their files in
+  the local store, one database file on your computer that every WireCat tool shares. Search reads this copy, not the
+  Disk.
+- **Only the folders you choose.** Add a few folders, not the whole Disk. Yandex Disk does not tell the tool what
+  changed, so each sync lists every chosen folder and its subfolders again and downloads only the files that changed.
+- **Text, not copies of files.** The tool reads Markdown, plain text, PDF with a text layer, Word `.docx`, Excel
+  `.xlsx`, CSV and TSV. Other files, such as photos, are kept by name. The files themselves stay on the Disk.
+- **A profile for each account.** A profile is a name you choose for one Yandex account, such as `personal` or `work`.
+  Every command that uses an account names it first: `ydisk personal search budget`.
+- **Live commands change the Disk.** `files` commands go to Yandex directly. Deleting moves a file to the Disk's trash.
+  At a terminal the tool asks before it deletes, overwrites or makes a public link. Over MCP nothing asks, so set those
+  permissions to `deny` for an agent that must not do it.
+
+## Install and sign in
+
+**Coming soon.** `ydisk` is not on npm yet. The command below installs it once its first release is out.
+
+1. Install the tool from npm and check it:
+
+```sh
+npm install -g @wirecat/yandex-disk-cli
+ydisk --version
+ydisk doctor
+```
+
+2. Get a token. Yandex gives one to an app you register, and you open one link to receive it
+   ([Yandex's guide](https://yandex.ru/dev/id/doc/en/tokens/debug-token)):
+   - Register an app at [oauth.yandex.com](https://oauth.yandex.com/client/new/). At the "App platforms" step, choose
+     "Web services" and enter the redirect URI `https://oauth.yandex.ru/verification_code`.
+   - Give it the access `cloud_api:disk.read`, `cloud_api:disk.info` and, to change files, `cloud_api:disk.write`.
+   - Open `https://oauth.yandex.com/authorize?response_type=token&client_id=<ClientID>` with your app's ClientID, click
+     Allow and copy the token from the page.
+
+3. Sign in under a profile name you choose. The tool asks for the token hidden, checks it with Yandex and keeps it in
+   the system keyring, or in a private file where there is no keyring.
+
+```sh
+ydisk personal session start
+ydisk personal session status --check
+```
+
+When Yandex stops accepting the token, run `session start` again with a new one.
+
+## Copy a folder and search it
+
+`folders browse` lists the Disk one level at a time, so you can pick a folder by its path:
+
+```sh
+ydisk personal folders browse
+ydisk personal folders add /Documents
+ydisk personal sync
+ydisk personal search "quarterly budget"
+```
+
+One sync reads up to 200 files (`--limit`), walks up to about 10,000 entries and saves where it stopped. Run it again to go on, and later to bring in what
+changed. `ydisk personal status` shows the last sync and the pending work. `documents show` prints the whole text of
+one file found by search.
+
+## Connect your agent
+
+A terminal agent such as Claude Code gets the tool's skill:
+
+```sh
+ydisk skill install
+```
+
+Then ask in plain words:
+
+```text prompt
+Use ydisk CLI with profile personal. Find the contract with Harbour Ltd in my Disk folders.
+Quote the payment terms and give me the file's path on the Disk. Do not change any files.
+```
+
+The agent searches the local copy first. A file outside the chosen folders it reads live from the Disk. An app that
+connects to MCP servers gets the same commands with `ydisk personal mcp serve`.
+
+## Work with files on the Disk
+
+```sh
+ydisk personal files list --folder /Documents
+ydisk personal files download /Documents/plan.pdf --output ./plan.pdf
+ydisk personal files upload ./notes.md --folder /Documents
+ydisk personal files move /Documents/old.pdf --folder /Archive
+ydisk personal files delete /Documents/old.pdf
+ydisk personal files publish /Documents/plan.pdf
+```
+
+`files delete` moves the file to the Disk's trash, and `files restore` brings it back. `files publish` makes a link
+that anyone who has it can open. At a terminal the tool asks before a delete, an overwrite with `--replace` or a public
+link. Over MCP there is no one to ask, so for an agent that must not do these, set the permissions
+`files.delete=deny` and `files.share=deny`. `YDISK_READ_ONLY=1` refuses every change.
+
+## Limits
+
+- Scanned PDFs and pictures have no text to search.
+- A chosen folder that you rename or move on the Disk stops syncing and its copies leave the store. Add it again under
+  its new path.
+- Sign-in is by a pasted token. There is no sign-in in the browser yet.
+
+## Reference
+
+Every command and option: [commands](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/commands.md). Settings and
+permissions: [settings](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/configuration.md). What reaches the disk and
+the network: [security](https://github.com/WireCatLabs/ydisk-cli/blob/main/docs/security.md).
+
+Next: [give your agent a folder of Markdown notes too](./markdown.mdx).
