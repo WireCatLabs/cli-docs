@@ -10,22 +10,33 @@ to your AI agents like any other tool. Here you learn how to turn this on, what 
 anything installs, and what the risk is. If you build such a tool, [For tool authors](#for-tool-authors) says what it
 needs so WireCat can add it and show it well.
 
-**On this page:** [Three kinds of tool](#three-kinds-of-tool) · [The risk](#the-risk-plainly) ·
-[Community tools](#community-tools) · [Add by npm name](#add-a-tool-by-its-npm-name) ·
-[The review screen](#the-review-screen) · [Update](#update-it) and [remove](#remove-it) ·
-[If it does not work](#if-it-does-not-work) · [For tool authors](#for-tool-authors)
+**On this page:**
 
-## Three kinds of tool
+1. [Kinds of tool](#kinds-of-tool)
+2. [The risk](#the-risk-plainly)
+3. [Community tools](#community-tools)
+4. [Additional WireCat tools](#additional-wirecat-tools)
+5. [Add by npm name](#add-a-tool-by-its-npm-name)
+6. [The review screen](#the-review-screen)
+7. [Update](#update-it) and [remove](#remove-it)
+8. [If it does not work](#if-it-does-not-work)
+9. [For tool authors](#for-tool-authors)
 
-A tool you add can be your own, a colleague's, or one from a private repository. The Tools page can show three kinds:
+<a id="three-kinds-of-tool" />
+
+## Kinds of tool
+
+A tool you add can be your own, a colleague's, or one from a private repository. The Tools page shows each kind under
+its own heading:
 
 | Kind | Where it comes from | Badge |
 | --- | --- | --- |
-| WireCat's own | Built into the app | none |
-| Community | A list that WireCat reviews and signs | **Community** |
-| Your own | Added by you, by its npm name | **Not verified** |
+| Built-in tools | Built into the app | none |
+| Additional WireCat tools | A WireCat tool that this version does not include yet, added by its npm name | **Verified by WireCat** |
+| Community tools | A list that WireCat reviews and signs | **Community** |
+| Tools WireCat has not checked | Added by you, by its npm name | **Not verified** |
 
-The second and third kinds are off by default. Settings has one switch for each, side by side on a wide window:
+Community tools and tools WireCat has not checked are off by default. Settings has one switch for each, side by side on a wide window:
 **Enable community tools** and **Allow tools WireCat has not checked**. **Enable community tools** takes effect at the
 next start, and the page offers **Restart now**. **Allow tools WireCat has not checked** takes effect at once.
 
@@ -59,13 +70,23 @@ working." Until a new list arrives, the row of a community tool says why its **I
 Uninstall still works. Your own tools and WireCat's own tools do not use the list. The notice shows only while
 community tools are on.
 
+## Additional WireCat tools
+
+WireCat makes some tools that this version of the app does not include yet, such as `@wirecat/beeline-cli` for the
+calls of Beeline Cloud PBX. Add one by its npm name, as in [the next section](#add-a-tool-by-its-npm-name). It needs
+no switch in Settings. It goes through the same review, and the review says that WireCat makes it, without the
+warning about unknown authors. On the Tools page it stands under **Additional WireCat tools** with the badge
+**Verified by WireCat**. A tool like beeline can say how its calls open, so they open from a client card and from
+the Meetings page.
+
 ## Add a tool by its npm name
 
-1. In Settings, turn on **Allow tools WireCat has not checked**. A warning opens: a tool you add this way runs as you
-   on this computer, so it can read everything WireCat keeps, add only tools whose authors you trust completely, and
-   WireCat takes no responsibility for what they do. Confirm it with **Allow**.
-2. On the Tools page, click **Add your own tool**, at the top next to **Check again**. Type the npm name, such as
-   `@scope/name`, and click **Check package**. WireCat only reads npm. Nothing is installed, and no code of the
+1. On the Tools page, click **Add your own tool**, under the tool list. For a package outside `@wirecat`, the setting
+   **Allow tools WireCat has not checked** must be on. If it is off, the dialog first shows its warning: a tool you
+   add this way runs as you on this computer, so it can read everything WireCat keeps, add only tools whose authors
+   you trust completely, and WireCat takes no responsibility for what they do. **Allow and continue** turns the
+   setting on, as the switch in Settings does.
+2. Type the npm name, such as `@scope/name`, and click **Check package**. WireCat only reads npm. Nothing is installed, and no code of the
    package runs.
 3. Read the review screen (below), then click **Add**.
 4. WireCat asks "Check `@scope/name` before you install it?" and offers your AI agent first. There is one
@@ -79,12 +100,14 @@ community tools are on.
 5. A second question asks: "Install and run `@scope/name`? Its install scripts and first run use your permissions."
    Only **Install and run** installs the package. **Back** returns to the review.
 6. After the install, WireCat checks that the program describes itself as the review showed. The tool is on the Tools
-   page at once, with the **Not verified** badge. No restart is needed.
+   page at once, with the **Not verified** badge, or **Verified by WireCat** for a WireCat tool. No restart is needed.
 
-Only some packages work. The package must have a scope (`@scope/name`, not `@wirecat/`), be written in TypeScript on
+Only some packages work. The package must have a scope (`@scope/name`), be written in TypeScript on
 [cli-base](https://github.com/WireCatLabs/cli-base), and ship its manifest `contracts/wirecat.json`: a file that
 describes the tool's commands to WireCat. A program on your PATH or a package without a scope cannot be added. A maker
-builds such a tool as [Create your CLI](../build-create-cli.md#make-it-addable-in-wirecat-desktop) shows.
+builds such a tool as [Create your CLI](../build-create-cli.md#make-it-addable-in-wirecat-desktop) shows. A `@wirecat`
+package that is already built into the app is refused with "This tool is already built into WireCat": install it on
+the Tools page.
 
 <DesktopShot
   shot="own-name"

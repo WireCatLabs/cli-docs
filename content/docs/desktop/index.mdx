@@ -109,6 +109,8 @@ The ways in, by tool:
 | Google Drive, Google Calendar | Your browser |
 | Email | Your mail address first. Gmail signs in with Google (**Sign in with Google**, recommended), with no Google Cloud setup of your own. A Microsoft account opens Microsoft's sign-in. Other mail servers, and Gmail under **Other ways**, use an app password, a password made only for this program, with guided steps. [Prepare the mailbox](../mail/providers.md) shows how each provider makes one |
 | Bitrix24 | An incoming webhook or a local application from your portal. See [Bitrix24: a webhook or a local application](#bitrix24-a-webhook-or-a-local-application) |
+| Asterisk | Where your calls are: the path of Master.csv, or the address of a MySQL or PostgreSQL call database and a read-only user's password. Then the countries of your phone lines, so a caller without a country code is linked to the right contact |
+| Notion | A Notion token that you paste in the window. Then choose the pages and databases to copy. Until you choose one, Notion copies everything the token sees |
 
 Where a tool has no sign-in window, **Open terminal** opens a terminal that runs the tool's own setup.
 
@@ -164,6 +166,12 @@ but it does not start, and a hollow ring means not installed. Each row has one b
 **Install**, **Update to** a version, **Fix** or **Manage**, and a tool that syncs also has **Sync**. Each service
 shows its logo, with its name in a tooltip.
 
+The tools stand in groups: **Built-in tools**, **Additional WireCat tools**, **Community tools** and **Tools WireCat
+has not checked**. An empty group is not shown. **Install all** installs every built-in tool that is not installed
+yet, and **Update all** updates every installed tool that has a newer version, one after another. Each row shows its
+own progress. **Update all** leaves your own tools out, because each of their updates goes through its review.
+**Add your own tool** is under the list: see [Add your own tool](#add-your-own-tool).
+
 All tools keep your messages and notes in one shared storage, and a new version of a tool can move it to a newer
 format. Before **Install** or **Update to**, the app checks this. When another installed tool needs its own new
 version to keep reading the storage, the app updates that tool too, right after the one you chose, and the progress
@@ -190,6 +198,9 @@ such as Zoom, is left out of the check.
     tool keeps the file as it was, and changes nothing it cannot fix safely. When the tool's message store is
     damaged, the check shows what happened and the steps to fix it, with **Run** beside each safe one.
   - **Choose folders** (Google Drive): which folders to copy, also after sign-in.
+  - **Mail rules** (Email): the account's mail rules, read only. Each rule shows what it matches, what it does, its
+    tags and who made it, and the command to add a rule is above the list. A rule can save the meeting notes that
+    [Yandex Telemost](../telemost.mdx#see-the-rule-in-wirecat-desktop) mails after a call as meetings.
   - **Settings:** the account's own settings.
   - **Sign in** or **Reconnect**: when a sign-in has ended, the row says so and offers **Reconnect**. The tool's
     own text is under **Details**.
@@ -312,8 +323,30 @@ a name, chat or task in it opens in one click. The **Settings** tab is where you
 
 ### Clients
 
-Your CRM deals and leads as a table or as a board by stage. A move to another stage goes to Bitrix24 too.
+Your CRM deals and leads as a table or as a board by stage. A move to another stage goes to Bitrix24 too. A deal's
+card lists the calls with its people, and its company opens in a card of its own.
 [Clients](./clients.mdx) shows how to import them and map each CRM's stages onto yours.
+
+### Meetings
+
+All your meetings, calls and calendar events in one list, from every account. A calendar event and its Zoom or Meet
+meeting are one row. Meetings come from Zoom, Google Calendar and Google Meet, and calls from a phone system such as
+Asterisk or Beeline. Choose **Week**, **Month** or **Table**. Meetings at the same time stand side by side, as in
+Google Calendar. **Search meetings** takes words of the title or a field such as `kind:call`, and suggests as you
+type. **Only with a transcript** hides the rest.
+
+Open a meeting to see its card: the participants and their answers to the invitation, the join links, the place, the
+documents, the summary and the transcript. **Find in transcript** finds a word in it. **Open in Google Calendar** opens
+the event in its calendar. A call with a recording on this computer has **Listen**. A large file or an unusual format
+opens in your own player. A link to a meeting, from a digest or a client card, opens its card here. The page needs
+Memo.
+
+### Documents
+
+Every document WireCat keeps, from every account: Google Drive files, your notes folders, files you added and imports.
+A folder tree per account is on the left and a table on the right. **Search documents** takes words or a field such
+as `kind:pdf`, and **Only with text** hides files with no text. Open a document to read its text, its tags, the people
+it names and its meetings, or open it where it lives. The page needs Memo.
 
 ### Guides
 
@@ -443,8 +476,10 @@ details hidden. Nothing is sent until you send it. **Privacy** in the **Help** m
 ## Add your own tool
 
 WireCat Desktop can install tools that WireCat does not make: a community tool from the list WireCat reviews, or any
-tool built on WireCat's libraries, added by its npm name. [Add your own tool](./own-tools.mdx) shows how, what the
-review screen tells you before anything installs, and what a tool's author needs so WireCat can add it.
+tool built on WireCat's libraries, added by its npm name. A WireCat tool that this version does not include yet, such
+as `@wirecat/beeline-cli` for Beeline Cloud PBX calls, is added the same way and is marked **Verified by WireCat**.
+[Add your own tool](./own-tools.mdx) shows how, what the review screen tells you before anything installs, and what a
+tool's author needs so WireCat can add it.
 
 ## The tools stay command-line tools
 

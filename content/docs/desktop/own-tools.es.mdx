@@ -11,24 +11,33 @@ activarlo, qué muestra la pantalla de revisión antes de instalar nada y cuál 
 así, [Para autores de herramientas](#para-autores-de-herramientas) dice qué necesita para que WireCat pueda añadirla y
 mostrarla bien.
 
-**En esta página:** [Tres tipos de herramienta](#tres-tipos-de-herramienta) · [El riesgo](#el-riesgo-sin-rodeos) ·
-[Herramientas de la comunidad](#herramientas-de-la-comunidad) ·
-[Añadir por nombre en npm](#añadir-una-herramienta-por-su-nombre-en-npm) ·
-[La pantalla de revisión](#la-pantalla-de-revisión) · [Actualízala](#actualízala) y [quítala](#quítala) ·
-[Si no funciona](#si-no-funciona) · [Para autores de herramientas](#para-autores-de-herramientas)
+**En esta página:**
 
-## Tres tipos de herramienta
+1. [Tipos de herramienta](#tipos-de-herramienta)
+2. [El riesgo](#el-riesgo-sin-rodeos)
+3. [Herramientas de la comunidad](#herramientas-de-la-comunidad)
+4. [Herramientas adicionales de WireCat](#herramientas-adicionales-de-wirecat)
+5. [Añadir por nombre en npm](#añadir-una-herramienta-por-su-nombre-en-npm)
+6. [La pantalla de revisión](#la-pantalla-de-revisión)
+7. [Actualízala](#actualízala) y [quítala](#quítala)
+8. [Si no funciona](#si-no-funciona)
+9. [Para autores de herramientas](#para-autores-de-herramientas)
 
-Una herramienta que añades puede ser tuya, de un colega o de un repositorio privado. La página Herramientas puede
-mostrar tres tipos:
+<a id="tres-tipos-de-herramienta" />
+
+## Tipos de herramienta
+
+Una herramienta que añades puede ser tuya, de un colega o de un repositorio privado. La página Herramientas muestra
+cada tipo bajo su propio título:
 
 | Tipo | De dónde viene | Etiqueta |
 | --- | --- | --- |
-| Las de WireCat | Incluidas en la aplicación | ninguna |
-| De la comunidad | Una lista que WireCat revisa y firma | **Comunidad** |
-| Las tuyas | Añadidas por ti, por su nombre en npm | **Sin verificar** |
+| Herramientas incluidas | Incluidas en la aplicación | ninguna |
+| Herramientas adicionales de WireCat | Una herramienta de WireCat que esta versión aún no incluye, añadida por su nombre en npm | **Verificada por WireCat** |
+| Herramientas de la comunidad | Una lista que WireCat revisa y firma | **Comunidad** |
+| Herramientas que WireCat no ha revisado | Añadidas por ti, por su nombre en npm | **Sin verificar** |
 
-El segundo y el tercer tipo están desactivados por defecto. Ajustes tiene un interruptor para cada uno, uno junto al
+Las herramientas de la comunidad y las que WireCat no ha revisado están desactivadas por defecto. Ajustes tiene un interruptor para cada uno, uno junto al
 otro en una ventana ancha: **Activar herramientas de la comunidad** y **Permitir herramientas que WireCat no ha
 revisado**. **Activar herramientas de la comunidad** vale desde el próximo inicio, y la página ofrece **Reiniciar
 ahora**. **Permitir herramientas que WireCat no ha revisado** vale al momento.
@@ -66,14 +75,24 @@ herramienta de la comunidad explica por qué **Instalar** o **Actualizar** no fu
 propias herramientas y las de WireCat no usan la lista. El aviso solo aparece mientras las herramientas de la comunidad
 están activadas.
 
+## Herramientas adicionales de WireCat
+
+WireCat hace algunas herramientas que esta versión de la aplicación aún no incluye, como `@wirecat/beeline-cli` para
+las llamadas de Beeline Cloud PBX. Añade una por su nombre en npm, como en
+[la sección siguiente](#añadir-una-herramienta-por-su-nombre-en-npm). No necesita ningún interruptor en Ajustes. Pasa
+por la misma revisión, y la revisión dice que la hace WireCat, sin el aviso sobre autores desconocidos. En la página
+Herramientas aparece en **Herramientas adicionales de WireCat** con la etiqueta **Verificada por WireCat**. Una
+herramienta como beeline puede decir cómo se abren sus llamadas, y entonces se abren desde la ficha de un cliente y
+desde la página Reuniones.
+
 ## Añadir una herramienta por su nombre en npm
 
-1. En Ajustes, activa **Permitir herramientas que WireCat no ha revisado**. Se abre un aviso: una herramienta añadida
-   así se ejecuta como tú en este equipo, así que puede leer todo lo que guarda WireCat; añade solo herramientas de
-   autores en quienes confíes por completo, y WireCat no se hace responsable de lo que hagan. Confírmalo con
-   **Permitir**.
-2. En la página Herramientas, pulsa **Añadir tu propia herramienta**, arriba junto a **Comprobar de nuevo**. Escribe
-   el nombre en npm, como `@scope/name`, y pulsa **Comprobar paquete**. WireCat solo lee npm. No se instala nada y no
+1. En la página Herramientas, pulsa **Añadir tu propia herramienta**, debajo de la lista de herramientas. Un paquete
+   fuera de `@wirecat` necesita el ajuste **Permitir herramientas que WireCat no ha revisado**. Si está desactivado,
+   el diálogo muestra primero su aviso: una herramienta añadida así se ejecuta como tú en este equipo, así que puede
+   leer todo lo que guarda WireCat. Añade solo herramientas de autores en quienes confíes por completo. WireCat no se
+   hace responsable de lo que hagan. **Permitir y continuar** activa el ajuste, igual que el interruptor de Ajustes.
+2. Escribe el nombre en npm, como `@scope/name`, y pulsa **Comprobar paquete**. WireCat solo lee npm. No se instala nada y no
    se ejecuta ningún código del paquete.
 3. Lee la pantalla de revisión (abajo) y pulsa **Añadir**.
 4. WireCat pregunta «¿Revisar `@scope/name` antes de instalarla?» y ofrece primero tu agente de IA. Hay un botón por
@@ -87,13 +106,15 @@ están activadas.
 5. Una segunda pregunta dice: «¿Instalar y ejecutar `@scope/name`? Sus scripts de instalación y su primera ejecución
    usan tus permisos.» Solo **Instalar y ejecutar** instala el paquete. **Atrás** vuelve a la revisión.
 6. Tras la instalación, WireCat comprueba que el programa se describe igual que en la revisión. La herramienta aparece
-   al momento en la página Herramientas con la etiqueta **Sin verificar**. No hace falta reiniciar.
+   al momento en la página Herramientas con la etiqueta **Sin verificar**, o **Verificada por WireCat** si es de
+   WireCat. No hace falta reiniciar.
 
-No vale cualquier paquete. El paquete debe tener ámbito (`@scope/name`, no `@wirecat/`), estar escrito en TypeScript
+No vale cualquier paquete. El paquete debe tener ámbito (`@scope/name`), estar escrito en TypeScript
 sobre [cli-base](https://github.com/WireCatLabs/cli-base) e incluir su manifiesto `contracts/wirecat.json`: un archivo
 que describe los comandos de la herramienta ante WireCat. Un programa de tu PATH o un paquete sin ámbito no se pueden
 añadir. Cómo construye un autor una herramienta así lo explica
-[Crea tu CLI](../build-create-cli.md#prepárala-para-wirecat-desktop).
+[Crea tu CLI](../build-create-cli.md#prepárala-para-wirecat-desktop). Un paquete `@wirecat` que ya viene incluido
+en la aplicación se rechaza con «Esta herramienta ya viene incluida en WireCat»: instálala en la página Herramientas.
 
 <DesktopShot
   shot="own-name"
