@@ -8,6 +8,9 @@ terminal, desde scripts y desde agentes de IA. Lee y cambia negociaciones, prosp
 negociaciones y prospectos al almacén local de WireCat, del que leen `deals`, `leads`, `pipelines` y `stages`, también
 sin conexión; los contactos, las empresas, los productos y los empleados se leen del portal.
 
+Si los teléfonos de la empresa funcionan con la telefonía de Bitrix24, `meetings sync` copia también sus llamadas, y `meetings
+transcribe` convierte sus grabaciones en texto en este ordenador. Consulta [Llamadas](./calls.md).
+
 Inicia sesión con un webhook entrante del portal y actúa con los derechos del empleado que creó ese webhook.
 `b24 work session status --check` dice quién es, para el perfil `work`.
 

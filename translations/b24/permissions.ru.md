@@ -46,9 +46,19 @@ b24 work config show                                  # each key with its level 
 
 Через `api call` запрещены семейства `im`, `imopenlines`, `imbot`, `imconnector`, `log.blogpost`, SMS
 (`messageservice`), почта (`mailservice`), телефония (`telephony`, `voximplant`), бизнес-процессы (`bizproc`,
-`crm.automation`), дела CRM (`crm.activity`), задачи (`tasks`, `task`), `user.add`, публичные ссылки на файлы,
+`crm.automation`), дела CRM (`crm.activity`), задачи (`tasks`, `task`), `user.add`, публичные ссылки на файлы и
+документы (`disk.*.getexternallink`, `crm.documentgenerator.document.enablepublicurl`,
+`documentgenerator.document.enablepublicurl`, `crm.invoice.getexternallink`, `salescenter.payment.getpublicurl`),
 `event.bind` и `batch`. `b24 work api show <method>` называет ключ метода, его уровень и ключи, которые он проверяет
 заодно.
+
+История звонков тоже остается запрещенной через `api call` (`api.voximplant.statistic.get`): в ее ответе есть ссылки
+на записи вместе с их токенами. `meetings sync` читает ее под своим ключом, `meetings.sync`. См. [Звонки](./calls.md).
+
+`calls export` записывает звонок через `telephony.externalCall.register` и `finish`. Команда проверяет `calls.export`
+и собственные ключи обоих методов, `api.telephony.externalcall.register` и `api.telephony.externalcall.finish`. Они
+остаются запрещенными вместе с остальной `telephony`, пока вы не разрешите эти два. Разрешение открывает только эти
+два метода. См. [Звонки](./calls.md#write-other-phone-systems-calls-into-bitrix24).
 
 ## Одна команда может проверять несколько ключей
 
@@ -108,7 +118,8 @@ b24 work config set permissions.leads.move ask
 - **Вебхук сотрудника не может удалять или очищать.** Если пользователь вебхука не администратор Битрикс24, `b24`
   отклоняет любое удаление, изменение, которое очищает поле, отвязку, объединение дублей и `api call batch`
   (причина `employee.*`).
-- **Чтение контактов и компаний через `api call`** доступно только администратору.
+- **Чтение контактов, компаний и лидов через `api call`** доступно только администратору: в лиде хранятся его
+  собственные телефоны и почта.
 - **Телефоны и почта** клиентов, которые не принадлежат пользователю вебхука: не больше 100 таких контактов и
   компаний в день через `people show` и `organizations show`, на пользователя и его агентов вместе. Счетчик хранится
   на этом компьютере, поэтому он остановит случайность или агента, но не того, кто хочет забрать базу.

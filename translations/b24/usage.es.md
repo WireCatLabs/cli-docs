@@ -17,9 +17,21 @@ es el único: un comando sin perfil se detiene con el código de salida 2 y mues
 
 ## Iniciar sesión
 
-Crea un webhook entrante en Bitrix24 (Developer resources → Other → Incoming webhook) con los permisos de acceso `crm`,
-`user_basic` (o `user`) y `department`, y copia su dirección. Sin `user_basic` la sincronización no recibe el correo
-de ningún empleado, y sin `department` no recibe quién depende de quién. Más en [Quién es quién](#who-is-who). Luego:
+Crea un webhook entrante en Bitrix24 (Developer resources → Common use cases → Other → Inbound webhook). En
+**Assign permissions** («права доступа» en un portal en ruso), marca estos permisos y copia la dirección del webhook:
+
+| Permiso | En Bitrix24 (EN / RU) | Para qué sirve |
+|---|---|---|
+| `crm` | CRM | Obligatorio: negociaciones, prospectos, contactos, empresas, productos y actividades. |
+| `user_basic` (o `user`) | Users (basic) / Пользователи (базовый) | Obligatorio: quién creó el webhook, y los nombres y correos de los empleados. |
+| `department` | Company Structure / Структура компании | Quién depende de quién. Más en [Quién es quién](#who-is-who). |
+| `task` | Tasks / Задачи | Las tareas de Bitrix24 de tus negociaciones ([Actividades y tareas](#activities-and-tasks-on-a-deal)). |
+| `telephony` | Telephony / Телефония | Las llamadas del portal ([Llamadas](./calls.md)). El empleado también necesita el permiso para ver las estadísticas de llamadas. |
+| `disk` | Drive / Диск | Los documentos de los clientes, los archivos de las negociaciones y sus adjuntos, para la función de archivos que llegará después. |
+| `documentgenerator` | Document Generator / Генератор документов | Documentos hechos a partir de plantillas. La documentación de Bitrix24 nombra `crm` en las páginas de los métodos y este permiso en la tabla de permisos, así que marca los dos. |
+
+`b24 work setup` muestra los mismos pasos en la terminal, y WireCat Desktop los muestra en su ventana. O inicia sesión
+directamente:
 
 ```sh
 b24 work session start
@@ -52,7 +64,7 @@ permiso para ello:
 2. Elige el modo **Server**. En **Your handler path** pon `https://wirecat.dev/webhooks/apps/b24-callback`. Deja
    vacíos **Initial installation path** y los textos del elemento de menú, y desmarcada **Application completes the
    installation itself**, para que el portal la instale al guardar.
-3. Marca los permisos de acceso `crm`, `user_basic` (o `user`) y `department`, y guarda.
+3. En **Assign permissions**, marca los mismos permisos que para un webhook (la tabla de arriba), y guarda.
 4. Copia el **Application ID (client_id)** y la **Application key (client_secret)** que muestra Bitrix24.
 
 Luego inicia sesión:
@@ -138,6 +150,12 @@ La copia de un portal pertenece a un usuario. La primera sincronización recuerd
 `crm.bitrix24:<portal>.self`. Una sincronización con el webhook de otro usuario se rechaza, y
 `b24 work config unset crm.bitrix24:example.bitrix24.ru.self` da la copia al siguiente.
 
+Sin conexión con el portal, un perfil lee solo lo que puede leer su propio usuario. El administrador del portal, tal
+como lo encontró el último `sync`, lee toda la copia. Cualquier otro lee solo las negociaciones y los prospectos
+asignados a él, incluso en una copia que hizo su propia sincronización. Los que no tienen asignación y los de los
+usuarios que eligió quedan fuera de las listas, de `show` (`not_found`), del embudo y de `search all`. Un inicio de
+sesión que no nombra a ningún usuario del portal no lee nada. Volver a ejecutar `session start` lo arregla.
+
 ### Quién es quién
 
 La sincronización también guarda quién pertenece a dónde, como relaciones entre personas, organizaciones y
@@ -189,6 +207,11 @@ así que un empleado no se une a la misma persona de tu correo. Un portal que no
 empleados sin empresa. La sincronización guarda estos dos casos como huecos de la cuenta, que nombran las respuestas de
 memo, no en `issues`.
 
+### Llamadas
+
+`meetings sync` copia las llamadas del portal, y `meetings transcribe` las convierte en texto en este ordenador.
+Tienen su propia página: [Llamadas](./calls.md).
+
 ### Mantenerla al día
 
 `schedule` instala un temporizador (un temporizador de usuario de systemd en Linux, un agente de launchd en macOS, una
@@ -213,11 +236,38 @@ b24 work config set crm.bitrix24:example.bitrix24.ru.stage-tasks \
 b24 work sync          # moves since the last sync open their tasks
 ```
 
+b24 lee el historial de etapas del propio portal, así que una negociación que pasó por una etapa entre dos
+sincronizaciones también recibe la tarea de esa etapa. Un paso de "New" por "Quote" a "Won" en un mismo día abre las
+tareas de "Quote" y de "Won".
 Los pasos hechos antes de poner el ajuste por primera vez no abren ninguna, y tampoco la primera copia de una
 negociación. La tarea nombra la negociación, su etapa y su embudo, y vence `due_days` días después de la
 sincronización. Solo tú pones este ajuste, a un agente se le rechaza. Para pararlo,
 `b24 work config unset crm.bitrix24:example.bitrix24.ru.stage-tasks`. En el propio portal, el robot "Create task" de
 Bitrix24 hace lo mismo con una tarea del portal.
+
+### Actividades y tareas de una negociación
+
+Con `activities` activado, cada sincronización también lee las llamadas, los correos, las reuniones y los pendientes
+de las negociaciones y los prospectos que guarda, las tareas de Bitrix24 vinculadas a ellos y los comentarios de su
+línea de tiempo. `deals show` y `leads show` los muestran, primero los abiertos, con su texto: el cuerpo de un correo,
+la descripción de una tarea, un comentario. La primera sincronización lee los últimos 90 días, y cada una de las
+siguientes lo que cambió desde entonces. Solo se leen las actividades, tareas y comentarios de las negociaciones y los
+prospectos que guarda la copia.
+
+```sh
+b24 work config set crm.bitrix24:example.bitrix24.ru.activities on
+b24 work sync
+b24 work deals show deal:12
+```
+
+Está desactivado hasta que lo actives, y solo tú puedes hacerlo: a un agente se le rechaza. El número de teléfono o
+la dirección de correo del cliente en una llamada o un correo nunca se copia. Las tareas necesitan el permiso `task`
+del webhook o de la aplicación. Sin él, la sincronización lee las actividades y dice que las tareas no se leyeron.
+
+El portal da los comentarios de una negociación o un prospecto por petición. Por eso una sincronización pregunta por
+cada negociación y prospecto abierto de la copia, y por cada uno cerrado que cambió desde la última sincronización.
+Un comentario no cambia su negociación. Uno dejado en una negociación ya ganada o perdida, sin ningún otro cambio, se
+lee cuando la negociación cambie. Un comentario editado conserva su primer texto.
 
 ### Preguntar a memo por un cliente
 
@@ -247,18 +297,19 @@ respuesta en todas las herramientas de CRM. Una negociación o un prospecto resp
 `close_date`, y `amount` como decimal en su `currency`; `--offline` lee lo mismo. Los prospectos de Bitrix24 no tienen
 embudos, así que están en un único embudo llamado `Leads`.
 
-`people` y `organizations` leen el propio portal. Su `show` da los campos propios del portal en
-`provider_metadata`, cada uno por su código con su etiqueta; un campo de lista da la etiqueta de su opción, y el id de
-la opción como `option_id`. `b24 work fields list deals` muestra esos campos con su tipo y sus opciones, tal como los
+`people`, `organizations` y `users` también son comandos de CRM compartidos y leen el propio portal, así que
+`--offline` los rechaza. Una persona u organización da los campos propios del portal en `provider_metadata`, cada uno
+por su código con su etiqueta. Un campo de lista da la etiqueta de su opción, y el id de la opción como `option_id`.
+El sector, los ingresos y la moneda de una empresa también están ahí. `b24 work fields list deals` muestra esos campos con su tipo y sus opciones, tal como los
 guardó el último `sync`; `leads`, `people` y `organizations` funcionan igual. Sus listas también filtran por esos
 campos, por código o por etiqueta, cuando el portal puede filtrar por ellos, y `--json` puede añadirlos:
 
 ```sh
-b24 work organizations list industry:IT
+b24 work organizations list type:CUSTOMER
 b24 work organizations list --json=id,name,provider_metadata.UF_CRM_1745512486047
 ```
 
-Una lista muestra primero lo más reciente: `--limit`, `--page` y, para `people` y `organizations`, `--all` lo cambian.
+Una lista muestra primero lo más reciente: `--limit` y `--page` lo cambian.
 Los campos por los que puede filtrar una lista están en su ayuda, `b24 help deals list`.
 
 Los teléfonos y correos solo se ven en tus clientes, salvo que seas administrador de Bitrix24. Tus clientes son los
@@ -278,21 +329,22 @@ b24 work deals close deal:12 won
 b24 work deals delete deal:12                   # asks first
 b24 work leads update lead:7 --field UF_CRM_SOURCE=Website
 b24 work people create --first-name Anna --last-name Ivanova
-b24 work organizations update 9 --field "Lead source=Fair" --body '{"revenue":1000}'
+b24 work organizations update 9 --name "Example LLC" --field "Lead source=Fair"
 ```
 
-Una escritura de negociación o prospecto envía una petición y luego vuelve a leer el elemento en el almacén. `--stage`
+Una escritura envía una petición y luego vuelve a leer el elemento en el almacén. `--stage`
 recibe una etapa del propio embudo del elemento por nombre o id, y también comprueba la clave `move`; una etapa ganada o
 perdida comprueba además la clave `close`. `close` lo mueve a la primera etapa ganada o perdida de su embudo.
 `--field <label or code>=<value>` fija uno de los campos propios del portal, como los nombra `fields list`; un campo
 de lista recibe la etiqueta o el id de su opción, y un valor vacío vacía el campo. Se rechaza un campo que nombra una
 etapa, un embudo o un responsable: esos tienen sus propias opciones.
 
-Para `people` y `organizations`, `--field "<label or code>=<value>"` también recibe la etiqueta, y un campo con varios
-valores recibe `--field` una vez por valor; `--body` recibe los demás campos con los nombres de la REST 3.0 de
-Bitrix24.
+Un campo con varios valores recibe `--field` una vez por valor. Una etiqueta funciona cuando un `sync` ya guardó los
+campos. Antes de eso, nombra el campo por su código. `people` y `organizations` reciben sus nombres, `--position` y
+`--owner` como opciones. `api call` escribe cualquier otro campo.
 
-Cada escritura responde un `operation_id`, que guarda el diario de la ejecución. Una escritura se envía una vez. Si
+Cada escritura responde un `operation_id`, que guarda el diario de la ejecución. Una escritura se envía una vez, y otra
+vez solo cuando el portal la rechazó por su límite de peticiones, cosa que hace antes de crear nada. Si
 termina con `outcome_unknown`, puede que el portal la hiciera: mira primero el elemento (`sync` y luego `show`) y
 repítela solo si no está, porque Bitrix24 haría la repetición por segunda vez. `--dry-run` no envía nada y nombra cada clave de permiso que
 comprueba el comando, con la opción que añade cada una: las claves de mover y cerrar de una etapa, y
@@ -301,8 +353,9 @@ porque Bitrix24 avisa a ese empleado: `b24 work config set permissions.crm.assig
 
 `b24 work api call crm.deal.get --body '{"id":12}'` llama a cualquier otro método de Bitrix24, aquí una lectura de la negociación 12. Comprueba los mismos permisos
 que el comando que hace lo mismo, y rechaza las escrituras que envían mensajes, ponen en marcha la automatización del
-portal o crean tareas hasta que las permitas. Solo un administrador de Bitrix24 lee contactos o empresas con él
-(`crm.contact.*`, `crm.company.*`, `crm.item.*` de tipo 3 o 4, requisitos, direcciones y búsquedas de duplicados). A
+portal o crean tareas hasta que las permitas. Solo un administrador de Bitrix24 lee contactos, empresas o prospectos
+con él (`crm.contact.*`, `crm.company.*`, `crm.lead.*`, `crm.item.*` de tipo 1, 3 o 4, requisitos, direcciones y
+búsquedas de duplicados). A
 cualquier otro se le rechazan, digan lo que digan los permisos. `b24 api list` y `b24 api show crm.deal.update` muestran qué comprueba cada
 método.
 

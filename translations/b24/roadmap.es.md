@@ -31,7 +31,8 @@ la [referencia de comandos](./commands.md).
 ## Más adelante
 
 - **Eventos del portal.** Una cola de eventos del portal, para que `b24` sepa qué cambió sin una pasada completa.
-- **Actividades, tareas pendientes y comentarios del historial** en negociaciones, prospectos, contactos y empresas.
+- **Actividades, tareas pendientes y comentarios del historial en contactos y empresas.** Los de negociaciones y
+  prospectos ya se leen.
 - **Presupuestos, facturas inteligentes y procesos inteligentes.**
 - **Una comprobación de duplicados antes de crear.** `b24` avisa cuando ya existe un contacto, una empresa o un
   prospecto parecido al nuevo.

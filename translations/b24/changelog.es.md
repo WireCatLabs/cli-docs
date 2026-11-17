@@ -4,6 +4,277 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.24.0 — 17.11.2026
+
+### Añadido
+
+- **Construido sobre cli-core 0.683.0** (antes 0.670.0), con sus novedades del CRM. `deals list` y `leads list`
+  aceptan `updated:`, `created:`, `closed:` y `owner:` (`owner:me` es tu propio usuario del portal).
+  `pipelines show --since-time --until-time` muestra el embudo de un periodo con las negociaciones cerradas, la
+  duración del ciclo, los responsables y los motivos de pérdida. `deals show` responde `stage_history` a partir del
+  propio historial de etapas del portal. `stages list` responde `stage_task`. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`people create` y `organizations create` aceptan `--email` y `--phone`.** Un teléfono solo se acepta en formato
+  internacional (`+…`). `people update` y `organizations update` los siguen rechazando: Bitrix24 añadiría los nuevos
+  a los antiguos en lugar de sustituirlos.
+- **`calls export` escribe las llamadas de otras centralitas en el contacto del cliente en Bitrix24**, una vez cada
+  una, con `telephony.externalCall.register` y `finish`. Viene desactivado. Necesita el ajuste `export_calls`, los
+  permisos de los dos métodos y el inicio de sesión con la aplicación local, porque Bitrix24 no deja que ningún
+  webhook escriba una llamada. `--dry-run` muestra los campos de cada llamada y dónde acaba, y no envía nada.
+  Consulta [Llamadas](./calls.md).
+- **Las llamadas de la telefonía de Bitrix24 en el almacén.** `meetings sync` copia el historial de llamadas del
+  portal. Cada llamada es una reunión de tipo llamada con su dirección, el número del cliente, el empleado, el tiempo
+  de conversación y cómo terminó. Se copian las del usuario que inició sesión o las de los usuarios elegidos en
+  `unassigned`, nunca las de todo el portal. El empleado es el usuario del portal en la copia. El cliente se une al
+  contacto, a la cuenta de mensajería o a las llamadas de otra centralita con el mismo número de móvil.
+  `meetings list`, `show`, `transcript`, `export` y `people` las leen, y `memo context` las muestra en el historial
+  de una persona. El webhook necesita el ámbito `telephony`. Consulta [Llamadas](./calls.md).
+- **`meetings transcribe` y `models`** pasan las grabaciones de las llamadas a texto con un modelo de voz local, en
+  este ordenador.
+- **`download_recordings`** guarda la grabación de cada llamada en la carpeta de estado, para que WireCat Desktop la
+  reproduzca. **`phone_region`** lee los números que el portal escribe sin `+`.
+- **`b24 setup` te guía para conectar un portal**, y WireCat Desktop muestra los mismos pasos: crear un webhook
+  entrante, marcar sus permisos y pegar su dirección. `b24 setup show --json` imprime los pasos (formato de
+  configuración v1). `b24 work setup apply` comprueba la dirección en el portal como lo hace `session start`, y solo
+  entonces la guarda. Para una aplicación local sigue bastando un `session start --portal … --client-id …`, que se
+  muestra al final.
+- **Los permisos que hay que marcar nombran ahora `task` para las tareas de Bitrix24, `telephony` para las llamadas,
+  y `disk` y `documentgenerator` para los archivos y documentos de los clientes**, junto a `crm`, `user_basic` y
+  `department`. Si marcas `disk` ahora, no tendrás que volver a editar el webhook cuando llegue la función de
+  archivos.
+- **`changes list`** de cli-core 0.678.0: qué cambió en la copia del CRM en un periodo, y `--format report` para un
+  resumen por la mañana.
+- **`sync` copia también las llamadas del portal**, después del CRM, como hace `meetings sync`, así que la
+  sincronización de WireCat Desktop y la que sigue a la instalación traen las llamadas. Un paso de llamadas que
+  falla, por ejemplo por un webhook sin el ámbito telephony, queda como una nota, y la sincronización del CRM termina
+  bien. El ajuste `sync_calls` (activado si no se pone) las deja fuera. Cuando llegan llamadas y `phone_region` no
+  está puesto, la nota dice cómo ponerlo. Consulta [Llamadas](./calls.md).
+
+### Cambios — pueden romper scripts
+
+- **`sync` lee el historial de etapas del portal cada vez**, 90 días hacia atrás la primera vez, así que el embudo y
+  `deals show` cuentan las etapas por las que una negociación pasó de verdad. Un webhook sin el permiso de
+  `crm.stagehistory.list` lo nombra en los `issues`.
+- **Las lecturas del CRM sin conexión leen el inicio de sesión guardado para saber tu usuario del portal**, de
+  `B24_TOKEN`, del llavero del sistema o del archivo de credenciales, sin red. Donde no se alcanza ningún llavero, la
+  lectura avisa y usa el archivo. Si no encuentra ningún inicio de sesión, no muestra negociaciones ni prospectos.
+- **`pipelines list`, `stages list` y `pipelines show` omiten una etapa que el portal quitó**, salvo que haya una
+  negociación en ella.
+- **La skill del agente es más corta.** `SKILL.md` guarda lo que un agente necesita en cada turno (la regla del
+  perfil, responder desde el CRM, los límites de las escrituras, el `ask` de MCP que no pregunta, la salida) en unos
+  8 KB en lugar de 18 KB, y enlaza el resto en `skills/bitrix24-cli/references/`: lectura, escritura, MCP, salida y
+  configuración. No se quitó ninguna regla. La skill dice ahora qué cambió desde que se escribió. Las actividades,
+  las tareas y los comentarios de las negociaciones se leen cuando el dueño los activa. `deals list` acepta
+  `updated:`, `created:`, `closed:` y `owner:me`. `pipelines show` cuenta el embudo de un periodo. `people create` y
+  `organizations create` aceptan `--email` y `--phone`, mientras que `update` los rechaza. Un perfil que no es el
+  administrador lee sin conexión solo sus propias negociaciones y prospectos. Un agente que lee la skill gasta unos
+  2.500 tokens menos en cada turno.
+- **`people`, `organizations` y `users` son ahora los comandos compartidos del CRM de WireCat**, con las mismas
+  palabras, consulta y respuesta que en todas las herramientas de CRM. Una empresa responde `type` y `own` en lugar
+  de `type_id`. Su sector, sus ingresos y su moneda pasan a `provider_metadata`, y `industry_id:` ya no es un filtro.
+  Cada lista y cada vista en vivo dan los campos personalizados en `provider_metadata`, cada elemento nombra sus
+  campos `untrusted`, y `--offline` los sigue rechazando. Un usuario es la entidad `crm_user`, no `user`. Un nombre
+  que encaja con varios registros da `crm.record-ambiguous`, no `organization.ambiguous` ni `person.ambiguous`.
+- **Estas tres listas se paginan con `--limit` (de 1 a 250, 50 si no se pone) y `--page`.** `--all`, un límite mayor
+  de 250 y el `defaults.limit` del perfil ya no se aplican a ellas. `users list name:` busca una parte del nombre
+  completo entre todos los empleados, no con la búsqueda por nombre del propio portal.
+- **`people create`, `people update`, `organizations create` y `organizations update` son las escrituras
+  compartidas.** Aceptan `--name`, `--owner`, `--field` y, para las personas, `--first-name`, `--last-name` y
+  `--position`. `--body` desaparece (`api call` escribe cualquier otro campo). Cada una responde el registro tal como
+  lo tiene el portal, y lo guarda.
+- **Una etiqueta en `--field` necesita antes un `sync`.** Hasta entonces, nombra el campo por su código, como lo
+  imprime `fields list`.
+- **La cuenta de 100 contactos y empresas ajenos al día es ahora de cli-core** y vuelve a empezar desde cero. Su
+  mensaje y su motivo (`crm.foreign-contacts-spent`) son los compartidos, y `api call` rechaza las lecturas de
+  clientes con `crm.client-reads-admin-only`.
+- **Vuelve a iniciar sesión tras actualizar si usas una aplicación local (`session start --app`).** El inicio de
+  sesión guardado pasó a la forma de cli-core y el antiguo ya no se lee. Un inicio de sesión con webhook no se ve
+  afectado.
+- **Una ejecución con carpetas movidas (`B24_CONFIG_DIR`, `B24_STATE_DIR`) ya no renueva un inicio de sesión de
+  aplicación caducado.** Bitrix24 sustituye el token de renovación en cada renovación, así que una ejecución movida
+  que lo renovara cerraría la sesión de las ejecuciones del propio dueño. Lo dice. Renuévalo en una ejecución sin
+  carpetas movidas.
+
+### Corregido
+
+- **Un contacto dado a un compañero sale de la copia en el siguiente `sync`**, con su teléfono y su correo. Antes, su
+  único teléfono y su único correo se quedaban hasta un `sync --rescan`.
+- **Un campo que el portal no describe se muestra igualmente**, a partir de `userfield.list`, sin etiqueta: `sync` lo
+  guarda y `--field` puede ponerlo.
+- **`api call` rechaza las lecturas de prospectos a quien no sea administrador de Bitrix24**, como ya rechaza las de
+  contactos y empresas. Un prospecto guarda su propio nombre, teléfonos y correos, así que `crm.lead.list` daba a un
+  empleado los datos de contacto de los prospectos de todo el portal saltándose la regla de 100 al día.
+- **Las etapas de ganada y perdida leídas de `EXTRA.SEMANTICS` son ganadas y perdidas, no abiertas.** Una etapa que
+  el portal lista sin el `SEMANTICS` corto solo lleva `success`, `failure` o `apology`, y `sync` la guardaba como
+  abierta. Sus negociaciones contaban como abiertas y `deals close` no encontraba ninguna etapa ganada.
+- **Una ronda de actividades repartida entre varias ejecuciones de `sync` ya no pierde lo que cambió mientras
+  duraba.** Terminaba con la hora de la última ejecución, así que el `since` de la ronda siguiente se saltaba cada
+  actividad, tarea y comentario cambiados entre medias. Una tarea completada en ese tiempo seguía abierta en la copia
+  hasta que volvía a cambiar. Ahora la ronda termina con la hora de su primera página.
+
+### Seguridad
+
+- **Un perfil que no es el administrador del portal lee sin conexión solo las negociaciones y los prospectos
+  asignados a él.** La copia se guarda por portal, así que el perfil de un empleado normal en el mismo portal que el
+  del administrador leía cada negociación que el administrador había sincronizado, y `search all` las encontraba por
+  los correos y teléfonos de sus contactos. Ahora la negociación de otro usuario da `not_found` y los informes solo
+  cuentan las propias. Un perfil cuyo inicio de sesión no nombra ningún usuario del portal no lee ninguna
+  negociación de la copia, lo dice y sale con 1. Vuelve a iniciar sesión con `session start`. El administrador, según
+  lo encontró su último `sync`, lee toda la copia como antes. Hasta que se ejecute un `sync` de esta versión, cada
+  perfil lee solo sus propias negociaciones y prospectos: ejecuta `sync` una vez tras actualizar.
+- **Ningún enlace de descarga de archivos en la copia ni en la salida.** Un archivo en un campo personalizado de un
+  registro del CRM se guarda ahora como su id de archivo, en `sync` y en cada respuesta de `show`, `list` y de
+  escritura: el enlace de descarga de Bitrix24 (`urlMachine`, `downloadUrl`) lleva un token de acceso. Un archivo sin
+  id y un enlace del portal con un token se muestran como `[link removed]`. Un campo de sitio web o de enlace escrito
+  a mano se queda. `api call` imprime `[link removed]` en lugar de cada enlace de descarga, de cada `publicUrl` de un
+  documento generado y de cada enlace del portal con un token. Una copia sincronizada antes de esta versión puede
+  guardar todavía esos enlaces. `b24 work sync --rescan` reescribe los registros que el portal sigue listando. Un
+  registro borrado o fuera del alcance de la sincronización conserva lo que tenía hasta
+  `account remove --delete-data`. Consulta [Seguridad](./security.md).
+- **`api call` rechaza los métodos que crean un enlace público**: `enablePublicUrl` de los documentos generados,
+  `crm.invoice.getExternalLink` y `salescenter.payment.getPublicUrl`, tanto lecturas como escrituras, como ya
+  rechazaba `disk.*.getExternalLink`.
+- **La descarga de una grabación de llamada se registra sin el código del webhook**: su registro de ejecución guarda
+  `/rest/:user/:token/…`, nunca el enlace.
+
+## 0.23.0 — 14.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Un nivel `readonly` ya no detiene `b24 sync`** (cli-core 0.662.0, antes 0.659.0). Un comando que solo trae datos
+  de Bitrix24 al almacén local se ejecuta en `readonly`. `deny` lo sigue rechazando. Los comandos que escriben los
+  archivos del dueño o llaman a otro servicio siguen bloqueados por `readonly`. Un perfil que usaba `readonly` para
+  detener la sincronización pone la clave en `deny`.
+
+## 0.22.0 — 14.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.659.0** (antes 0.654.0). Una configuración compartida de WireCat
+  (`~/.config/WireCat/config.json`) con una marca de orden de bytes, un comentario, una coma final o una coma que
+  falta entre dos líneas se repara ahora al leerla, y el archivo antiguo queda al lado como
+  `config.json.bak-<time>`. Para otros daños, el mensaje nombra la línea y el arreglo probable. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.21.0 — 14.11.2026
+
+### Añadido
+
+- **Comentarios de la línea de tiempo en negociaciones y prospectos.** Con `activities` activado, `sync` lee los
+  comentarios de la línea de tiempo de cada negociación y prospecto abiertos de la copia, y de cada uno cerrado que
+  cambió desde la última sincronización. `deals show`, `leads show` y `search all` los ven. El portal responde una
+  negociación o un prospecto por petición, así que una copia de 100 negociaciones abiertas necesita unas 100
+  peticiones por sincronización. Un comentario en una negociación cerrada que nada más cambió espera hasta que la
+  negociación cambie. Consulta
+  [actividades y tareas de una negociación](./usage.md#activities-and-tasks-on-a-deal).
+
+### Corregido
+
+- **Solo se leen las tareas de las negociaciones y los prospectos de la copia.** `sync` pedía al portal cada tarea
+  cambiada en 90 días y descartaba las de otras negociaciones. Ahora filtra por las negociaciones y los prospectos de
+  la copia, 50 por petición.
+
+## 0.20.0 — 13.11.2026
+
+### Añadido
+
+- **Un agente puede ejecutar una programación por MCP.** `schedule list`, `schedule run` y `schedule exec` son
+  herramientas de MCP, cada una tras su propia clave de permiso. Añadir, pausar, reanudar o quitar un temporizador
+  por MCP sigue rechazado salvo que `permissions.mcp.authority` sea `allow`. Antes, b24 dejaba todo `schedule` fuera
+  de MCP. Consulta [MCP](./mcp.md).
+- `b24 --help` lista `pbx`, la herramienta de Asterisk, en "Works with" (cli-core 0.651.0).
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.651.0** (antes 0.650.0). Una huella de proyecto de reuniones desfasada es ahora
+  `conflict`, no `configuration_error`. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Construido sobre cli-core 0.654.0** (antes 0.651.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **`sync` funciona en una instalación nueva.** Una configuración compartida de WireCat que no se podía leer (una
+  marca de orden de bytes, un JSON roto, una carpeta en su lugar, una forma antigua de `setup`) hacía que b24
+  rechazara `sync` con "setup's answer keeps every WireCat tool read-only". Ahora solo la propia respuesta de «solo
+  lectura» del dueño limita b24, y aun así `sync` funciona: solo lee el portal al almacén local (cli-core 0.654.0).
+
+## 0.19.0 — 13.11.2026
+
+### Añadido
+
+- **Una tarea de etapa se abre para una etapa recorrida entre dos sincronizaciones.** Mientras `stage-tasks` nombra
+  una etapa, `sync` lee el historial de etapas del portal (`crm.stagehistory.list`). Así, una negociación que en un
+  día pasó de «Nueva» por «Presupuesto» a «Ganada» abre las tareas de «Presupuesto» y de «Ganada». Antes, solo las de
+  «Ganada». El historial se lee desde la última sincronización, una o dos páginas al día, y nada sin el ajuste
+  (cli-core 0.650.0).
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.650.0** (antes 0.648.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- `sync` guarda el importe de una negociación o un prospecto tal como lo escribió el portal. A partir de unos 10 mil
+  millones con céntimos o kopeks, el redondeo antiguo añadía cifras como `98765432109.869995`, y la copia dejaba
+  fuera esa negociación. Un importe que la copia no puede guardar, de más de unos 90 billones o con más decimales de
+  los que tiene su moneda, se sigue nombrando en los `issues` de `sync` y se deja fuera, como antes.
+- Dos perfiles en un mismo portal comparten ahora un mismo ritmo de peticiones. Bitrix24 cuenta las peticiones por
+  portal, así que antes podían ir el doble de rápido de lo que el portal permite y recibir rechazos.
+- Una escritura que el portal rechazó por su límite de peticiones se vuelve a enviar tras la espera que pide el
+  portal, igual que una lectura. El portal rechaza esa petición antes de hacer nada, así que no se hace dos veces. Una
+  escritura que no recibió respuesta sigue sin volver a enviarse nunca.
+- `sync` pasa a la copia cada teléfono y cada correo de un contacto, no solo el primero, así que una llamada o un
+  chat desde cualquiera de ellos se puede asociar al contacto.
+
+## 0.18.0 — 13.11.2026
+
+### Añadido
+
+- **`search all` encuentra una negociación o un prospecto por las palabras de sus actividades.** Con las
+  actividades activadas, el asunto y el texto de cada llamada, correo, reunión, pendiente y tarea de una negociación
+  cuentan como sus palabras, junto a su título, su empresa y sus contactos.
+  `b24 work search all warehouse lease` encuentra la negociación cuyo correo hablaba de ello (cli-core 0.648.0).
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.648.0 y cli-base 0.98.0** (antes 0.647.0 y 0.97.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Un perfil que este ordenador nunca ha visto da `not_found`** con el motivo `profile.unknown`, los perfiles de
+  aquí y la pista para iniciar sesión, código de salida 6. Antes era `authentication_error`, código de salida 4. Un
+  perfil puesto en el entorno mantiene el rechazo de inicio de sesión.
+- **`store reset` ya no se ofrece por MCP**: necesita `--yes`, que una llamada de MCP no puede pasar.
+
+## 0.17.0 — 12.11.2026
+
+### Corregido
+
+- `crm sync` con las actividades activadas guarda también un correo, una llamada o una reunión cuyo propio dueño es
+  un contacto o una empresa y que solo está vinculado a tu negociación o prospecto. Antes, esa actividad nunca
+  llegaba a `deals show`.
+- `crm sync` con las actividades activadas lee solo las actividades de tus propias negociaciones y prospectos,
+  cincuenta por petición, en lugar de todas las actividades del portal. La primera lectura de un portal grande tardaba
+  unos cuatro minutos para un puñado de actividades. Ahora hace tantas peticiones como negociaciones y prospectos
+  tengas, divididas entre cincuenta.
+
+## 0.16.0 — 12.11.2026
+
+### Añadido
+
+- **Actividades y tareas en negociaciones y prospectos.** Con `crm.bitrix24:<portal>.activities` en `on`, `sync` lee
+  también las llamadas, los correos, las reuniones y los pendientes de las negociaciones y los prospectos que guarda,
+  y las tareas de Bitrix24 vinculadas a ellos. `deals show` y `leads show` los listan, primero los abiertos. La
+  primera sincronización lee 90 días. El teléfono o el correo del cliente en una actividad nunca se copia. Viene
+  desactivado y solo lo pone el dueño. Las tareas necesitan el ámbito `task`.
+  ([uso](./usage.md#activities-and-tasks-on-a-deal))
+
+### Corregido
+
+- **Construido sobre cli-core 0.647.0** (antes 0.645.0). `doctor --help` vuelve a mostrar su Returns y su Example. Lo
+  que cambió está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
 ## 0.15.0 — 12.11.2026
 
 ### Añadido
@@ -30,7 +301,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 - **`b24` te avisa cuando sale una versión nueva**, tras un comando que terminó bien, por stderr. `update_check: false`
   o `B24_NO_UPDATE_CHECK=1` lo desactiva.
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - **Sobre cli-core 0.644.0.** Una página de una lista del CRM responde `hasMore` y `nextCursor`, la forma única de las
   listas de cli-core.
@@ -81,13 +352,13 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ### Corregido
 
-- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.15.0/README.md)
+- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.24.0/README.md)
   ahora elige de quién copiar negociaciones y prospectos antes del primer `sync`, que hasta entonces no copia nada.
   Ya no dice que un administrador copia todo el CRM, dice que por MCP un borrado con `ask` se ejecuta, y nombra
   `wcat-b24` para cuando se encuentra primero el comando `b24` de otro paquete.
   [Solución de problemas](./troubleshooting.md) incluye el error "no CRM user is chosen".
 - **Por MCP, `ask` no detiene una escritura.** El
-  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.15.0/README.md), [seguridad](./security.md) y la
+  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.24.0/README.md), [seguridad](./security.md) y la
   primera pantalla recomendaban poner `deals.move` en `ask` frente a los robots del portal, pero eso solo detiene un
   movimiento en una terminal. Por MCP nadie responde, así que la escritura sigue adelante. Ahora dicen que se ponga
   `readonly` o `deny`, o que se active la aprobación en el cliente del agente.
@@ -109,7 +380,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ## 0.13.0 — 11.11.2026
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - **Solo el webhook de un administrador de Bitrix24 borra o vacía datos en el CRM.** Para cualquier otro webhook,
   `b24` rechaza `deals delete`, `leads delete`, un `api call` a un método que borra (su nombre termina en `.delete`,
@@ -141,7 +412,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
   guardar o quitar el vínculo de una negociación con una persona ya no lee todos esos vínculos. Lo que cambió está en
   el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - Una sincronización copia solo las negociaciones y prospectos de los usuarios que el propietario elige en
   `crm.bitrix24:<portal>.unassigned`, y sus clientes. Por defecto no hay nadie elegido, tampoco el usuario del propio
@@ -168,7 +439,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ## 0.11.0 — 10.11.2026
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - Con `scope mine` una sincronización copia solo los clientes del usuario: los contactos y empresas asignados a él o
   a un usuario sin asignar, y los que nombran las negociaciones y prospectos que copia. Antes copiaba toda la base de
@@ -195,7 +466,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 - `session start` y `session status --check` responden si el usuario del webhook es `manager` (un administrador de
   Bitrix24 o el jefe de un departamento), junto a `admin`.
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - Solo un responsable copia todas las negociaciones y prospectos: una sincronización con
   `crm.bitrix24:<portal>.scope all` se rechaza (`configuration_error`) salvo que el usuario del webhook sea
@@ -233,7 +504,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 - La copia de un portal pertenece a un solo usuario: una sincronización con el webhook de un usuario distinto al de la
   primera sincronización se rechaza hasta `config unset crm.bitrix24:<portal>.self`.
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - Los `people` de una negociación y de un prospecto ahora incluyen al empleado responsable, con el rol `owner`, junto
   a sus contactos. Atención: el código que tomaba cada entrada de `people` por un contacto de un cliente.
@@ -295,7 +566,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
   `b24 --wcat-describe` imprime qué es la herramienta, su versión y su página de documentación.
 - `config set owner_languages` indica los idiomas que lee el propietario.
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - Una búsqueda sin ninguna letra ni dígito se rechaza (`validation_error`). `""`, un `?` solo o un emoji solo no
   encontraban nada y no decían nada. Un `*` solo sigue leyéndose como comodín.
@@ -321,7 +592,7 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
   moneda, y en una terminal imprime una tabla de las etapas con el total abierto, las ganadas, las perdidas y la tasa
   de éxito. El embudo se puede omitir cuando el portal tiene solo uno.
 
-### Cambiado — puede romper llamadas
+### Cambios — pueden romper scripts
 
 - Un campo personalizado que el portal no tiene, nombrado en la consulta de una lista o en `--json`, se rechaza con
   `param` igual a `--query` o `--json`, donde antes decía `--field`.

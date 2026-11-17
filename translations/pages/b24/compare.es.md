@@ -117,8 +117,8 @@ Notas sobre la columna de `b24`:
 - **Una escritura se envía una vez.** Una escritura sin respuesta no se envía de nuevo. Termina como
   `outcome_unknown` con su `operation_id`. Revisa el portal antes de repetirla, porque Bitrix24 hace una escritura
   repetida por segunda vez.
-- **Solo una llamada.** `api call` queda para ti en una terminal, y ninguna herramienta MCP la ofrece. Lee contactos y
-  empresas solo para un administrador de Bitrix24.
+- **Solo una llamada.** `api call` queda para ti en una terminal, y ninguna herramienta MCP la ofrece. Lee prospectos,
+  contactos y empresas solo para un administrador de Bitrix24.
 - **ChatGPT o Claude en el navegador.** `mcp serve --http` sirve la herramienta detrás de un túnel HTTPS que tú
   configuras y mantienes, así que esta fila es en parte. Consulta [MCP](./mcp.md#chatgpt-and-claude-in-the-browser).
 - **Velocidad y coste frente a un agente de navegador.** `b24` llama a la API REST del portal, lee su propia copia y

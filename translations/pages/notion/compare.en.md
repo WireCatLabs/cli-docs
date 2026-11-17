@@ -40,7 +40,7 @@ The tools:
 | Keep a copy of chosen pages and databases on your computer, updated by each sync | ✅ | ➖ | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [🟡](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | Export a page and the pages under it as Markdown files | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Write** | | | | | |
-| Create a page or change its text from Markdown | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
+| Create a page or change its text from Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Agents and safety** | | | | | |
 | An AI app works with your pages over MCP | ✅ | [✅](https://developers.notion.com/guides/mcp/get-started-with-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L333) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Use it from Claude or ChatGPT on the web | ✅ | [✅](https://www.notion.com/help/notion-mcp) | [❌](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L345) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -80,10 +80,10 @@ Notes on the marks:
 - **Export.** `notion documents export` writes one page from the copy to a Markdown file. `ntn pages get` prints one
   page as Markdown. notion-exporter writes the whole page tree, and a database as a CSV file. No tool here keeps a
   folder of Markdown files in step with Notion both ways. `notion` plans one.
-- **Write.** `notion` has no ready command to write a page yet. Its raw API commands, such as `api post-page` and
-  `api update-page-markdown`, create a page and change its Markdown, and an agent writes the JSON body itself. Each
-  one has its own permission and `--dry-run`. notion-mcp-server writes the same way, through tools made from Notion's
-  API.
+- **Write.** `notion documents create` makes a page under another page from Markdown, and `notion documents update`
+  replaces a page's text. Each write has its own permission and `--dry-run`. An update that would delete a child page
+  or database is refused unless you allow it. notion-mcp-server writes through tools made from Notion's API, and an
+  agent writes the JSON body itself.
 - **Limited to reading.** The `permissions` setting gives a command the level `readonly` or `deny`, and
   `WCNOTION_READ_ONLY=1` refuses every write. By default the MCP server offers the writes too, and over MCP an `ask`
   level lets a command run. See [settings](./configuration.md#permissions). notion-mcp-server reads only with a

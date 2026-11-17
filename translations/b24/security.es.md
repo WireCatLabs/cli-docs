@@ -29,9 +29,24 @@ El webhook actúa con los derechos del empleado que lo creó. Un webhook creado 
 lea y cambie todo el CRM. `session status --check` dice de quién son los derechos que lleva; crea el webhook con un
 empleado cuyos derechos se ajusten al trabajo, y solo con los permisos de acceso que necesita. `sync` usa `crm`,
 `user_basic` para las direcciones de correo de los empleados y `department` para la estructura de la empresa.
-`user_basic` basta: `sync` nunca cambia a un empleado, y el permiso completo `user` añade el derecho de invitarlos y
-editarlos. La sincronización guarda el nombre, la dirección de correo, el cargo y el jefe de departamento de cada
-empleado en el almacén local, donde cualquier herramienta de WireCat puede leerlos.
+`meetings sync` lee el historial de llamadas con `telephony`, y la grabación de una llamada solo con
+`download_recordings` activado ([Llamadas](./calls.md)). `user_basic` basta: `sync` nunca cambia a un empleado, y el
+permiso completo `user` añade el derecho de invitarlos y editarlos. La sincronización guarda el nombre, la dirección
+de correo, el cargo y el jefe de departamento de cada empleado en el almacén local, donde cualquier herramienta de
+WireCat puede leerlos.
+
+Un archivo en un campo personalizado de un elemento del CRM se guarda solo como su id de archivo, en la copia y en
+cada respuesta, nunca sus enlaces: el enlace de descarga de Bitrix24 lleva un token de acceso, y quien lo tenga
+obtiene el archivo. Un archivo sin id y un enlace al portal con un token dentro (`/rest/…?auth=`, el
+`/rest/<user>/<code>/` de un webhook) se muestran como `[link removed]`. Un sitio web o un campo de enlace que
+escribiste tú se queda como está. `api call` imprime `[link removed]` en lugar de cada enlace de descarga, cada enlace
+público de un documento generado (`publicUrl`) y cada enlace al portal con un token. Una copia sincronizada antes de
+esta regla aún puede contener esos enlaces. `b24 work sync --rescan` reescribe cada elemento que el portal todavía
+lista para el perfil. Una copia grande puede necesitar varias ejecuciones, y `b24 work store status` muestra cuánto
+lleva hecho. Un elemento borrado en el portal, o fuera del alcance de la sincronización, conserva lo que tenía.
+`b24 work account remove --delete-data` elimina toda la copia de la cuenta, y la siguiente sincronización después de
+volver a iniciar sesión la crea de nuevo. SQLite puede conservar bytes antiguos en el espacio libre del archivo del
+almacén hasta que lo reutilice.
 
 Salvo que el usuario del webhook sea administrador de Bitrix24, la sincronización copia solo sus propios clientes: los
 contactos y las empresas asignados a él o nombrados en sus negociaciones y prospectos. Las listas muestran teléfonos y
@@ -56,9 +71,9 @@ responsable. Borrar una negociación o un prospecto pregunta antes. `api.crm.dea
 los tipos que se le pidieron, se rechaza.
 
 `api call` funciona con una lista de permitidos. Permite las lecturas de CRM, catálogo, usuarios y departamentos que
-hace el propio `b24`, y las escrituras de negociaciones, prospectos, contactos y empresas. Las lecturas de contactos y
-empresas son solo de un administrador, digan lo que digan los permisos. Tanto las lecturas como las escrituras
-comprueban la clave del comando que lee o escribe los mismos elementos: `api call crm.deal.list` comprueba
+hace el propio `b24`, y las escrituras de negociaciones, prospectos, contactos y empresas. Las lecturas de contactos,
+empresas y prospectos son solo de un administrador, digan lo que digan los permisos. Tanto las lecturas como las
+escrituras comprueban la clave del comando que lee o escribe los mismos elementos: `api call crm.deal.list` comprueba
 `deals.list`, y `crm.item.update` con `entityTypeId` 2 comprueba `deals.update`.
 `department.get` comprueba `users.list`, y `crm.mycompany.*` comprueba `organizations.list`. Se rechazan antes de enviar nada un
 cuerpo que nombra un campo dos veces con cualquier grafía (`assignedById` y `ASSIGNED_BY_ID`, `fields` y `FIELDS`), un
@@ -66,14 +81,18 @@ cuerpo que nombra un campo dos veces con cualquier grafía (`assignedById` y `AS
 Cualquier otro método también pregunta, y se rechaza sin terminal salvo que pases `--yes`. Los métodos que envían
 mensajes a personas, publican o sacan datos se rechazan hasta que los permitas: `im`, `imopenlines`, `imbot`,
 `imconnector`, `log.blogpost`, SMS, correo, telefonía, procesos de negocio, actividades del CRM, tareas, `user.add`,
-enlaces públicos a archivos, `event.bind` y `batch`. También se rechazan sus lecturas, porque contienen mensajes,
-correos y tareas. `api show <method>` indica el nivel de un método. `api call` no se ofrece por MCP.
+enlaces públicos a archivos y documentos (`disk.*.getExternalLink`, el `enablePublicUrl` de los documentos
+generados, `crm.invoice.getExternalLink`, `salescenter.payment.getPublicUrl`), `event.bind` y `batch`.
+También se rechazan sus lecturas, porque contienen mensajes, correos y tareas. `api show <method>` indica el nivel de
+un método. `api call` no se ofrece por MCP.
 
 `schedule command` instala un temporizador (systemd, launchd o el Programador de tareas) que ejecuta `b24` por su
 cuenta, sin terminal. El temporizador ejecuta `b24 schedule exec <file>`, y el archivo de la programación, en la
 carpeta de estado, guarda las palabras, el perfil, tu `PATH` y las carpetas que usa `b24` (`B24_CONFIG_DIR`,
 `B24_STATE_DIR`, `MESSAGING_STORE`), nunca la dirección del webhook. Cada ejecución vuelve a comprobar los permisos.
-`B24_READ_ONLY` rechaza `schedule command`, `remove`, `run` y `exec`, y ninguna herramienta MCP ofrece `schedule`.
+`B24_READ_ONLY` rechaza `schedule command`, `remove`, `run` y `exec`. Por MCP un agente puede ejecutar `schedule run` y
+`schedule exec`, cada uno con su propia clave de permiso (`schedule.run`, `schedule.exec`). Añadir, pausar, reanudar o
+quitar un temporizador por MCP se rechaza salvo que el perfil ponga `permissions.mcp.authority` en `allow`.
 
 Una escritura que no recibió respuesta no se vuelve a enviar: queda como `outcome_unknown` con su `operation_id`.
 Comprueba el portal y repítela solo si el cambio no está: Bitrix24 haría la repetición por segunda vez.

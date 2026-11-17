@@ -48,8 +48,19 @@ lo ejecutes tú en una terminal.
 Las familias denegadas por `api call` son `im`, `imopenlines`, `imbot`, `imconnector`, `log.blogpost`, SMS
 (`messageservice`), correo (`mailservice`), telefonía (`telephony`, `voximplant`), procesos de negocio (`bizproc`,
 `crm.automation`), actividades del CRM (`crm.activity`), tareas (`tasks`, `task`), `user.add`, enlaces públicos a
-archivos, `event.bind` y `batch`. `b24 work api show <method>` indica la clave de un método, su nivel y las claves que
-también comprueba.
+archivos y documentos (`disk.*.getexternallink`, `crm.documentgenerator.document.enablepublicurl`,
+`documentgenerator.document.enablepublicurl`, `crm.invoice.getexternallink`, `salescenter.payment.getpublicurl`),
+`event.bind` y `batch`. `b24 work api show <method>` indica la clave de un método, su nivel y las claves que también
+comprueba.
+
+El historial de llamadas sigue denegado por `api call` también (`api.voximplant.statistic.get`): su respuesta contiene
+los enlaces a las grabaciones con sus tokens. `meetings sync` lo lee con su propia clave, `meetings.sync`. Consulta
+[Llamadas](./calls.md).
+
+`calls export` escribe una llamada con `telephony.externalCall.register` y `finish`. Comprueba `calls.export` y las
+claves propias de los dos métodos, `api.telephony.externalcall.register` y `api.telephony.externalcall.finish`, que
+siguen denegadas con el resto de `telephony` hasta que permitas estas dos. Permitirlas abre solo estos dos métodos.
+Consulta [Llamadas](./calls.md#write-other-phone-systems-calls-into-bitrix24).
 
 ## Un comando puede comprobar varias claves
 
@@ -110,7 +121,8 @@ Nunca aflojan el perfil. Ver [MCP](./mcp.md).
 - **El webhook de un empleado no puede borrar ni vaciar.** Salvo que el usuario del webhook sea administrador de
   Bitrix24, `b24` rechaza todo borrado, una actualización que deja un campo vacío, una desvinculación, una fusión de
   duplicados y `api call batch` (motivo `employee.*`).
-- **Las lecturas de contactos y empresas por `api call`** son solo de un administrador.
+- **Las lecturas de contactos, empresas y prospectos por `api call`** son solo de un administrador: un prospecto
+  guarda sus propios teléfonos y correos.
 - **Teléfonos y correos** de clientes que no son del usuario del webhook: como mucho 100 de esos contactos y empresas
   al día con `people show` y `organizations show`, entre el usuario y sus agentes. La cuenta se lleva en este
   ordenador, así que frena un descuido o a un agente, no a alguien que quiera llevarse la base.
