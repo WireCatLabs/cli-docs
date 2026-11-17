@@ -17,3 +17,10 @@ overrides:
 
 patchedDependencies:
   '@fumadocs/base-ui@16.17.8': patches/@fumadocs__base-ui@16.17.8.patch
+
+audit:
+  ignore:
+    # picomatch ReDoS on attacker-written extglob patterns; no fixed version exists (<= 4.0.7). It comes in through
+    # fumadocs-core and fumadocs-mdx (tinyglobby, fdir) to find content files at build time with the site's own patterns.
+    # The static export sends visitors no picomatch code. Remove when picomatch ships a fix.
+    - GHSA-fc5q-39xc-vjpf
