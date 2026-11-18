@@ -39,6 +39,8 @@ decidimos qué viene después.
   sin conexión, y la incidencia que asumes guardada como tu tarea.
 - **[Attio](./attio/index.md)**: tus negociaciones y las personas y empresas que nombran en tu ordenador, en la
   búsqueda junto a tus mensajes, y el resto de Attio se busca en directo.
+- **[HubSpot](./hubspot/index.md)**: tus negociaciones de HubSpot con sus contactos y empresas en tu ordenador, con
+  lo que cambió desde ayer, en la búsqueda junto a tus mensajes.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al
   evento del calendario y guardadas en tu ordenador después de que Google las borre.
 
@@ -112,6 +114,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de Bitrix24](./b24/roadmap.md)
 - [Hoja de ruta de amoCRM](./amo/roadmap.md)
 - [Hoja de ruta de Attio](./attio/roadmap.md)
+- [Hoja de ruta de HubSpot](./hubspot/roadmap.md)
 - [Hoja de ruta de Yandex Disk](./ydisk/roadmap.md)
 - [Hoja de ruta de Asterisk](./pbx/roadmap.md)
 - [Hoja de ruta de WordPress](./wordpress/roadmap.md)

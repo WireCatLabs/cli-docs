@@ -300,7 +300,40 @@
     "pages": ["attio/configuration.md", "attio/troubleshooting.md"],
     "families": { "attio": ["config", "doctor", "runs", "upgrade"] }
   },
-
+  {
+    "id": "crm-hubspot-connect",
+    "pages": ["hubspot/installation.md", "hubspot/mcp.md", "hubspot/security.md"],
+    "families": { "hubspot": ["session", "account", "setup", "skill", "mcp"] }
+  },
+  {
+    "id": "crm-hubspot-read-change",
+    "pages": ["hubspot/usage.md", "hubspot/commands.md"],
+    "families": {
+      "hubspot": [
+        "sync",
+        "schedule",
+        "store",
+        "deals",
+        "leads",
+        "pipelines",
+        "stages",
+        "people",
+        "organizations",
+        "users",
+        "activities",
+        "changes",
+        "fields",
+        "search",
+        "api",
+        "commands"
+      ]
+    }
+  },
+  {
+    "id": "crm-hubspot-upkeep",
+    "pages": ["hubspot/configuration.md", "hubspot/permissions.md", "hubspot/troubleshooting.md"],
+    "families": { "hubspot": ["config", "doctor", "runs", "upgrade"] }
+  },
   {
     "id": "files-ydisk-connect",
     "pages": ["ydisk/installation.md", "ydisk/mcp.md", "ydisk/security.md"],

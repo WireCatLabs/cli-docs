@@ -182,6 +182,12 @@ describe("localized SEO", () => {
       for (const slug of [...slugs, "changelog", "compare", "roadmap", "mcp", "permissions"])
         expect(() => documentationDescription(lang, ["attio", slug]), `${lang} attio/${slug}`).not.toThrow()
   })
+  it("describes every page the HubSpot CLI publishes in every locale", () => {
+    const slugs = ["index", "installation", "usage", "commands", "configuration", "troubleshooting", "security"]
+    for (const lang of seoLocales)
+      for (const slug of [...slugs, "changelog", "compare", "roadmap", "mcp", "permissions"])
+        expect(() => documentationDescription(lang, ["hubspot", slug]), `${lang} hubspot/${slug}`).not.toThrow()
+  })
   it("describes every page the Yandex Disk CLI publishes in every locale", () => {
     for (const lang of seoLocales)
       for (const slug of [

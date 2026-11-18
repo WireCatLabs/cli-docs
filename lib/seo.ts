@@ -5,6 +5,7 @@ import { attioDescriptions } from "./attio-descriptions"
 import { b24Descriptions } from "./b24-descriptions"
 import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
+import { hubspotDescriptions } from "./hubspot-descriptions"
 import { linearDescriptions } from "./linear-descriptions"
 import { mailDescriptions } from "./mail-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
@@ -145,6 +146,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     b24: b24Descriptions,
     drive: driveDescriptions,
     gcal: gcalDescriptions,
+    hubspot: hubspotDescriptions,
     mail: mailDescriptions,
     memo: memoDescriptions,
     notion: notionDescriptions,

@@ -41,6 +41,9 @@ export const siteOwnedPages: { tool?: string; slug: string; after?: string }[] =
   { tool: "linear", slug: "roadmap", after: "changelog" },
 ]
 export const siteOwnedFor = (tool: string) => siteOwnedPages.filter((page) => !page.tool || page.tool === tool)
+/** A tool may ship its own page of a site page's name in its release; the site's copy wins only while it exists. */
+export const siteWrittenFor = (root: string, tool: string) =>
+  siteOwnedFor(tool).filter(({ slug }) => existsSync(join(root, "translations/pages", tool, `${slug}.en.md`)))
 
 /** Reviewed release errata are separate from translation and apply to every locale. */
 export function correctDocumentation(text: string, replacements: { before: string; after: string }[]): string {
@@ -218,11 +221,12 @@ export const withSitePages = (pages: string[], tool: string): string[] => {
   return result
 }
 
-/** Site pages with no English master. */
+/** Site pages with no English master here and no reviewed translation of the release's own page. */
 export const missingSitePages = (root: string, tools: { name: string }[]): string[] =>
   tools.flatMap((tool) =>
     siteOwnedFor(tool.name)
       .filter(({ slug }) => !existsSync(join(root, "translations/pages", tool.name, `${slug}.en.md`)))
+      .filter(({ slug }) => !existsSync(join(root, "translations", tool.name, `${slug}.ru.md`)))
       .map(({ slug }) => `${tool.name}/${slug}`),
   )
 
@@ -254,7 +258,7 @@ export function localizeTool(root: string, tool: Tool) {
         )
   for (const file of pages) {
     const slug = file.slice(0, -3)
-    if (siteOwnedFor(tool.name).some((page) => page.slug === slug)) continue
+    if (siteWrittenFor(root, tool.name).some((page) => page.slug === slug)) continue
     const original = readFileSync(join(source, file), "utf8")
     // Scenario files are English in every tool, whatever language its other pages use.
     const sourceLang = slug === "scenarios" ? "en" : tool.lang
