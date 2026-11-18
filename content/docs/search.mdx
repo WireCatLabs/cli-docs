@@ -1,6 +1,7 @@
 ---
-title: "Searching"
-description: "Find a message, person, chat or file using words, word forms, typos or meaning."
+title: "Search messages and chats by words or meaning"
+sidebarTitle: "Searching"
+description: "Search Telegram and MAX messages saved on your computer by words, word forms, typos or meaning, and find the person, chat or file you need."
 ---
 
 Find messages, agreements, people, chats and documents across your chats. Learn what you can search, how to choose a search method and how to check the source messages, even when you remember only part of a phrase or its subject.
@@ -20,6 +21,30 @@ and [MAX](./max/search.md#текст-внутри-файлов). See [People](./
 For word forms, typo handling and meaning-based search, see [How search works](./search-architecture.mdx).
 
 Which kinds of content are indexed, and what each one needs (a command, a model or a setting): [What gets indexed](./what-is-indexed.md).
+
+**On this page:**
+
+1. [Fetch the relevant chat history first](#fetch-the-relevant-chat-history-first)
+2. [Search everything at once](#search-everything-at-once)
+3. [Search CRM deals and keep work apart](#search-crm-deals-and-keep-work-apart)
+4. [Find a word or phrase](#find-a-word-or-phrase)
+5. [When you don't remember the exact wording](#when-you-dont-remember-the-exact-wording)
+6. [Narrow the conversation](#narrow-the-conversation)
+7. [Choose the command](#choose-the-command)
+8. [Narrow first, then search](#narrow-first-then-search)
+9. [The operators](#the-operators)
+10. [Words, forms and meaning](#words-forms-and-meaning)
+11. [Page through the results](#page-through-the-results)
+12. [Keep the output small](#keep-the-output-small)
+13. [Read the evidence, then widen](#read-the-evidence-then-widen)
+14. [Recipes](#recipes)
+15. [Common mistakes](#common-mistakes)
+16. [If a result is missing](#if-a-result-is-missing)
+17. [Try it with sample messages](#try-it-with-sample-messages)
+18. [Build a Lucene query](#build-a-lucene-query)
+19. [Check the result](#check-the-result)
+20. [More precise queries and technical details](#more-precise-queries-and-technical-details)
+21. [Search pages](#search-pages)
 
 ## Fetch the relevant chat history first
 
@@ -52,8 +77,8 @@ max personal search all invoice
 ```
 
 Each result says whether it is a message or a note. `tg` and `max` do not search mail: `memo search mail`
-does, and `memo search all invoice` searches messages, mail and notes at once. The sections below search one
-kind.
+does, and `memo search all invoice` searches messages, mail and notes at once. The next sections, from
+[search CRM deals](#search-crm-deals-and-keep-work-apart) on, search one kind.
 
 ## Search CRM deals and keep work apart
 

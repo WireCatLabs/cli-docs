@@ -22,7 +22,9 @@ import {
   FileInput,
   FilePlus2,
   FileSearch,
+  Files,
   FileText,
+  FileType,
   FlaskConical,
   FolderOpen,
   Gauge,
@@ -30,6 +32,7 @@ import {
   Globe,
   GlobeLock,
   Handshake,
+  HardDrive,
   History,
   Import,
   KeyRound,
@@ -60,7 +63,6 @@ import {
   Route,
   ScrollText,
   Search,
-  Send,
   Server,
   Settings2,
   ShieldCheck,
@@ -77,7 +79,7 @@ import {
   Webhook,
   Wrench,
 } from "lucide-react"
-import { WhatsAppIcon } from "../components/brand-icons"
+import { ServiceLogo } from "../components/brand-icons"
 import { commandGroupCopy, commandGroups, commandLanguage } from "./command-groups"
 import { readerGuide } from "./reader-guides"
 import { type Tool, tools } from "./shared"
@@ -89,13 +91,14 @@ export const sidebarIcons = {
   organize: Layers,
   drive: FolderOpen,
   notion: NotebookText,
+  markdown: FileType,
+  ydisk: HardDrive,
   email: Mail,
   mail: Mail,
   b24: Handshake,
   amo: Handshake,
   asterisk: Server,
   pbx: PhoneCall,
-  voip: Phone,
   beeline: PhoneCall,
   notes: StickyNote,
   sources: FilePlus2,
@@ -106,6 +109,7 @@ export const sidebarIcons = {
   business: Wallet,
   "how-it-works": Lightbulb,
   meetings: Video,
+  calls: PhoneCall,
   zm: Video,
   "google-meet": Video,
   telemost: Video,
@@ -188,19 +192,35 @@ export const sidebarIcons = {
 }
 
 const folderIcons = {
-  tg: Send,
-  max: MessageSquare,
-  wa: WhatsAppIcon,
-  drive: FolderOpen,
-  notion: NotebookText,
-  gcal: CalendarDays,
   mail: Mail,
   memo: NotebookPen,
-  b24: Handshake,
-  amo: Handshake,
   pbx: PhoneCall,
-  zm: Video,
   desktop: Monitor,
+}
+
+// A service's own mark, by its tool folder or its single page, wins over the line icons above. Telegram's terms forbid
+// its logo in another product, so its file is a plain paper plane on a blue disc. Email, Asterisk and Memo keep a line
+// icon: Email covers every mail provider, and few people know Asterisk's mark.
+const serviceLogos: Record<string, string> = {
+  tg: "telegram.svg",
+  max: "max.png",
+  wa: "whatsapp.svg",
+  drive: "google-drive.svg",
+  gcal: "google-calendar.svg",
+  "google-meet": "google-meet.svg",
+  zm: "zoom.svg",
+  telemost: "telemost.png",
+  notion: "notion.svg",
+  markdown: "markdown.svg",
+  ydisk: "yandex-disk.png",
+  b24: "bitrix24.svg",
+  amo: "amocrm.png",
+  beeline: "beeline.svg",
+}
+
+const serviceLogo = (key: string | undefined) => {
+  const file = serviceLogos[key ?? ""]
+  return file ? <ServiceLogo file={file} /> : undefined
 }
 
 const commandIcons = { personal: UserRound, bot: Bot, admin: ShieldCheck, setup: Wrench }
@@ -252,7 +272,9 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // place of the group's first tool.
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
-  meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "voip", "beeline"], open: true, icon: Phone },
+  messengers: { tools: ["tg", "max", "wa"], open: true, icon: MessageSquare },
+  meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
+  documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
   crm: { tools: ["b24", "amo"], open: false, icon: Handshake },
 } as const
 
@@ -322,16 +344,23 @@ export function withFoldingSections(children: Node[]): Node[] {
   return out
 }
 
+// A tool's menu name, where it differs from its name elsewhere on the site.
+const folderNames: Record<string, Record<string, string>> = {
+  memo: { en: "Notes (Memo)", ru: "Заметки (Memo)", es: "Notas (Memo)" },
+}
+
 /** One navigation tree on every page: tool folders expand, never replace the shared menu. */
 export function unifiedDocsTree(tree: Root, lang = "en"): Root {
   const decorate = (node: Node): Node => {
     if (node.type === "folder") {
-      const Icon = folderIcons[folderTool(node) as keyof typeof folderIcons] ?? FolderOpen
+      const tool = folderTool(node) ?? ""
+      const Icon = folderIcons[tool as keyof typeof folderIcons] ?? FolderOpen
       return {
         ...node,
+        name: folderNames[tool]?.[lang] ?? node.name,
         root: false,
         defaultOpen: false,
-        icon: node.icon ?? <Icon aria-hidden="true" />,
+        icon: node.icon ?? serviceLogo(tool) ?? <Icon aria-hidden="true" />,
         children: node.children.map(decorate),
       }
     }
@@ -342,7 +371,8 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
     const task = /^\/(en|ru|es)\/docs\/(tg|max|wa)\/(usage|rankings|bot|groups)\/?$/.exec(node.url)
     const title = task ? readerGuide([task[2], task[3]], task[1])?.title : undefined
-    const page = { ...node, name: title ?? node.name, icon: node.icon ?? <Icon aria-hidden="true" /> }
+    const icon = node.icon ?? serviceLogo(slug) ?? <Icon aria-hidden="true" />
+    const page = { ...node, name: title ?? node.name, icon }
     const commands = /^\/(en|ru|es)\/docs\/(?:tg|max|wa)\/commands\/?$/.exec(node.url)
     return commands ? commandFolder(page, commands[1]) : page
   }

@@ -55,7 +55,7 @@
     "repo": "WireCatLabs/notion-cli",
     "package": "@wirecat/notion-cli",
     "lang": "en",
-    "docsRef": "v0.2.0",
+    "docsRef": "v0.5.0",
     "summary": {
       "en": "Keep your Notion pages and databases on your computer, search them offline and give your AI agent the context.",
       "ru": "Храните страницы и базы данных Notion на своём компьютере, ищите по ним без интернета и давайте ИИ-агенту контекст.",
@@ -68,7 +68,7 @@
     "repo": "WireCatLabs/gcal-cli",
     "package": "@wirecat/gcal-cli",
     "lang": "en",
-    "docsRef": "v0.31.0",
+    "docsRef": "v0.34.0",
     "summary": {
       "en": "Keep your Google Calendar on your computer, search meetings offline and know who the attendees are in your other chats.",
       "ru": "Храните Google Календарь на своём компьютере, ищите встречи без интернета и узнавайте участников из других ваших чатов.",
@@ -108,11 +108,11 @@
     "package": "@wirecat/cli-memo",
     "lang": "en",
     "summary": {
-      "en": "Your notes, mail and messages in one place for your AI agent: search, tags, people and memories, on your computer.",
-      "ru": "Заметки, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
-      "es": "Tus notas, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
+      "en": "Your notes, files, Obsidian vaults, mail and messages in one place for your AI agent: search, tags, people and memories, on your computer.",
+      "ru": "Заметки, файлы, хранилища Obsidian, почта и сообщения в одном месте для вашего ИИ-агента: поиск, теги, люди и память, на вашем компьютере.",
+      "es": "Tus notas, archivos, bóvedas de Obsidian, correo y mensajes en un solo lugar para tu agente de IA: búsqueda, etiquetas, personas y recuerdos, en tu ordenador."
     },
-    "docsRef": "v0.135.0",
+    "docsRef": "v0.144.0",
     "profile": false
   },
   {
@@ -121,7 +121,7 @@
     "repo": "WireCatLabs/bitrix24-cli",
     "package": "@wirecat/bitrix24-cli",
     "lang": "en",
-    "docsRef": "v0.15.0",
+    "docsRef": "v0.24.0",
     "tier": "extra",
     "category": "crm",
     "summary": {
@@ -151,7 +151,7 @@
     "repo": "WireCatLabs/asterisk-cli",
     "package": "@wirecat/asterisk-cli",
     "lang": "en",
-    "docsRef": "v0.7.1",
+    "docsRef": "v0.8.0",
     "tier": "extra",
     "category": "calls",
     "summary": {

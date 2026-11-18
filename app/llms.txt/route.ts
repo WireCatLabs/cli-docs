@@ -2,7 +2,7 @@ import type { Node } from "fumadocs-core/page-tree"
 import { isCommunity, isSecondaryPage, toolSections } from "@/lib/agent-docs"
 import { blogMarkdownPath, blogPosts } from "@/lib/blog"
 import { i18n } from "@/lib/i18n"
-import { documentationDescription } from "@/lib/seo"
+import { documentationDescription, documentationTitle } from "@/lib/seo"
 import { appName, getPageMarkdownUrl, siteUrl, tools } from "@/lib/shared"
 import { source } from "@/lib/source"
 import { wordsFor } from "@/lib/words"
@@ -21,9 +21,11 @@ type Page = ReturnType<typeof source.getPages>[number]
 // Absolute links, because agents copy this file out of its origin; https://llmstxt.org
 const markdownLink = (page: Page) => `${siteUrl}${getPageMarkdownUrl(page).url}`
 
+const titleOf = (page: Page) => documentationTitle(i18n.defaultLanguage, page.slugs, page.data.title)
+
 const entry = (page: Page) => {
   const note = documentationDescription(i18n.defaultLanguage, page.slugs, page.data.description)
-  return `- [${page.data.title}](${markdownLink(page)}): ${note.replace(/\s+/g, " ").trim()}`
+  return `- [${titleOf(page)}](${markdownLink(page)}): ${note.replace(/\s+/g, " ").trim()}`
 }
 
 const isSecondary = (page: Page) => isSecondaryPage(page.slugs)
@@ -55,7 +57,7 @@ export function GET() {
   const text = [
     `# ${appName}`,
     "",
-    "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's Telegram and MAX accounts, Zoom meetings, Google Drive documents, Google Calendar and Memo notes. Every link below is the page as Markdown.",
+    "> Command line tools that connect an AI agent (Claude Code, Codex, Cursor, Gemini CLI) to the user's chats, mail, meetings, phone calls, CRM, documents, calendar and notes: Telegram, WhatsApp, MAX, email, Google Drive, Google Calendar, Google Meet, Zoom, Notion, Yandex Disk, Bitrix24, Asterisk and Memo. Every link below is the page as Markdown.",
     "",
     `${siteUrl}/llms-full.txt is every English page in one file, without changelogs and the per-group command pages. The same pages exist in Russian and Spanish: insert the language after /llms.mdx/docs/, for example ${localized.join(" or ")}.`,
     "",
@@ -87,11 +89,7 @@ export function GET() {
     ).flatMap((block) => [block, ""]),
     "## Optional",
     "",
-    ...ordered
-      .filter(isSecondary)
-      .map(
-        (page) => `- [${page.slugs.length > 1 ? `${page.slugs[0]}: ` : ""}${page.data.title}](${markdownLink(page)})`,
-      ),
+    ...ordered.filter(isSecondary).map((page) => `- [${titleOf(page)}](${markdownLink(page)})`),
     "",
   ].join("\n")
   return new Response(text, { headers: { "Content-Type": "text/plain; charset=utf-8" } })

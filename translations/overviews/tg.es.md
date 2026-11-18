@@ -1,86 +1,151 @@
 ---
 title: "Telegram: empieza aquí"
-description: "Conecta tu cuenta de Telegram a un agente o úsala desde la terminal."
+description: "Tu agente lee tu Telegram, te dice quién espera respuesta y encuentra cualquier mensaje sin conexión. Nada se marca como leído ni se envía sin que lo pidas."
 ---
 
-`tg` es una herramienta de línea de comandos que permite que tu agente de IA lea Telegram, encuentre mensajes y te ayude a responder. Trabaja
-con **tu cuenta personal** y sus chats. También puedes usarla directamente con comandos en la
-terminal. Funciona en Windows, macOS y Linux.
+Ves quién te espera sin recorrer los chats. `tg` conecta tu propia cuenta de Telegram con el agente de IA que ya
+usas, como Claude Code, Codex o Cursor. Guarda una copia de tus chats en tu ordenador, así que tu agente busca en años
+de historial, incluso sin conexión.
 
-Estás en la documentación de **Telegram**. En la barra izquierda tienes las guías de inicio y las secciones Telegram y MAX; abre MAX para consultar el otro mensajero.
+Tu agente te dice qué chats esperan respuesta, qué prometiste esta semana y dónde te mandó Alicia el PDF del alquiler.
+Responde con los mensajes que encontró y prepara un borrador que puedes enviar o cambiar. La configuración lleva unos
+cinco minutos.
 
-**En esta página**
+**En esta página:**
 
-- [Elige cómo empezar](#elige-cómo-empezar)
-- [Qué probar después de conectar](#qué-probar-después-de-conectar)
-- [Encuentra la guía para tu tarea](#encuentra-la-guía-para-tu-tarea)
+1. [Qué obtienes](#qué-obtienes)
+2. [Lo que no es obvio al principio](#lo-que-no-es-obvio-al-principio)
+3. [Cómo se ve](#cómo-se-ve)
+4. [Por qué tg](#por-qué-tg)
+5. [Qué puede hacer](#qué-puede-hacer)
+6. [Cómo funciona](#cómo-funciona)
+7. [Empieza en cinco minutos](#empieza-en-cinco-minutos)
+8. [Límites](#límites)
+9. [Encuentra la guía para tu tarea](#encuentra-la-guía-para-tu-tarea)
 
-## Elige cómo empezar
+## Qué obtienes
 
-### Conectar desde tu agente
+- **Ninguna respuesta pendiente se te escapa.** Una sola petición muestra quién espera tu respuesta, en todos los
+  chats. Nadie ve que miraste.
+- **Cualquier mensaje en segundos.** "¿Cuándo quedamos con Alicia en el sitio?" te da la fecha y el mensaje, sin
+  internet. La búsqueda encuentra una palabra en sus otras formas, y una conversación entera por su tema.
+- **Promesas cumplidas.** "¿Qué prometí esta semana y qué espero de otros?" tiene una sola respuesta para todos tus
+  chats.
+- **Notas de voz en texto.** Las notas de voz se convierten en texto en tu ordenador, sin Telegram Premium. El texto
+  de archivos y documentos escaneados también se busca.
+- **Grupos tranquilos.** Tus reglas se ocupan de los enlaces, los mensajes en masa y la gente no deseada. Ves las
+  preguntas que nadie respondió, quién entró y quién salió.
+- **Respuestas mientras no estás.** Respuestas automáticas con tus propias reglas, y puedes limitarlas a las personas
+  que elijas.
+- **Un bot en la misma herramienta.** Cualquier bot con la Bot API oficial, sus 185 métodos, junto a comandos listos
+  para enviar y responder.
 
-Si usas Codex, Claude Code, Cursor, Gemini CLI o Hermes, abre la
-[guía de instalación con un agente](/es/docs/installation#tg). Copia la petición breve: tu agente
-instalará la herramienta, te ayudará a iniciar sesión y comprobará la conexión. Tú escaneas el QR
-y confirmas el acceso.
+## Lo que no es obvio al principio
 
-Después sigue [la guía de tu agente](/es/docs/agents). Las aplicaciones que necesitan un servidor
-MCP tienen una [guía de MCP](/es/docs/agents#mcp-y-skills).
+- **`personal` es un nombre que eliges tú.** Nombra una cuenta de Telegram y es la primera palabra de cada comando.
+  Puedes añadir `work` más tarde para otra cuenta. Ningún comando elige una cuenta por ti.
+- **Leer no marca nada como leído.** Solo `tg personal chats mark-read` le dice al otro que lo viste.
+- **Nada se envía si un comando no lo pide.** Enviar, editar y borrar son comandos aparte, y puedes dejar un perfil en
+  solo lectura.
+- **La copia se llena mientras lees.** Un chat que aún no abriste ni descargaste no está en la copia, así que una
+  búsqueda sin conexión vacía no prueba que el mensaje no exista. `tg` sabe qué tramos de cada chat tiene completos y
+  te lo dice.
 
-### Empezar desde la terminal
+## Cómo se ve
 
-Abre [la guía de instalación](/es/docs/installation#tg) y elige las instrucciones para terminal.
-Tras instalar la herramienta, ejecuta la configuración guiada y consulta algunos chats:
-
-```sh
-tg personal setup
+```text
+Tú:     ¿Qué le prometí a alguien en los últimos tres días?
+Agente: (ejecuta tg personal review 'date>3d': 12 chats)
+        Debes
+        · Alicia Ejemplo: la factura antes del viernes. "Alicia Ejemplo", 24.09
+        Esperas de otros
+        · Bruno Muestra: la maqueta para el 25.09. Aún no está en "Diseño"
+Tú:     Recuérdale a Bruno lo de la maqueta.
+Agente: Borrador: "Hola Bruno, ¿cómo va la maqueta?" ¿Lo envío?
+Tú:     Sí.
 ```
 
-```sh
-tg personal chats list --limit 5
+## Por qué tg
+
+- **Sin servidor de WireCat.** `tg` solo habla con Telegram, desde tu ordenador. No necesitas una cuenta con nosotros.
+- **Entra como la aplicación de escritorio de Telegram.** Usa la API oficial de Telegram con tu propio registro de
+  aplicación y pasa a ser un dispositivo más de tu cuenta.
+- **Búsquedas que las demás no documentan.** De las cinco herramientas abiertas para Telegram de la
+  [comparativa](./compare.md), ninguna documenta buscar un mensaje por su significado, buscar dentro de los archivos
+  recibidos o mostrar lo que debes a la gente y lo que te deben. `tg` lo hace todo.
+- **Límites que tú pones al agente.** Solo lectura, escritura solo en los chats de tu lista y como mucho 30 envíos por
+  hora por defecto. Antes de enviar puede preguntarte en la terminal.
+- **Tu sesión queda en el llavero del sistema.** Ninguna otra herramienta de la comparativa la guarda ahí.
+- **Gratis y de código abierto.** Apache 2.0, en macOS, Linux y Windows.
+
+Otra herramienta te conviene más si sobre todo mueves archivos en bloque ([tdl](https://github.com/iyear/tdl)), o si
+quieres el mayor número de acciones listas en Claude Desktop sin copia local
+([telegram-mcp](https://github.com/chigwell/telegram-mcp)).
+
+## Qué puede hacer
+
+- **Ponerte al día:** los no leídos de otras personas en todos los chats, un repaso de lo que cambió desde la última
+  vez, las preguntas sin respuesta. [Comandos de uso diario](./usage.md)
+- **Encontrar:** por persona, chat, fecha, archivo, enlace y etiqueta, por significado y en el servidor de Telegram a
+  la vez. [Búsqueda](./search.md)
+- **Responder:** enviar, responder, reenviar, editar, fijar, reaccionar, encuestas, archivos y voz. Programar un
+  mensaje para más tarde. [Comandos de uso diario](./usage.md)
+- **Llevar un grupo:** miembros, solicitudes de entrada, temas, reglas de moderación, resumen de la semana.
+  [Tus grupos](./groups.md)
+- **Guardar el historial:** descarga una vez todo el historial de un chat y expórtalo a Markdown o JSONL.
+  [Archivo de mensajes](./archive.md)
+- **Una persona en varios servicios:** une las cuentas de Telegram y MAX de una persona, y busca a la vez en tus
+  mensajes, correo y notas de este ordenador. [Personas](./people.md)
+- **Agentes en cualquier sitio:** una skill para agentes de terminal, un servidor MCP con peticiones listas para Claude
+  Desktop y Cursor, y un enlace seguro para ChatGPT y Claude en el navegador. [Agentes](/es/docs/agents)
+
+## Cómo funciona
+
+- **Una copia en tu ordenador.** Los mensajes que `tg` leyó o descargó quedan en un archivo local. La búsqueda, la
+  exportación y la lectura sin conexión responden desde ahí, y una búsqueda también puede preguntar al servidor de
+  Telegram. [Archivo de mensajes](./archive.md)
+- **Acceso con código QR.** Registras una aplicación de Telegram una vez y luego escaneas un código en Telegram. `tg`
+  pasa a ser un dispositivo más de tu cuenta.
+- **Hecho para scripts y agentes.** Una operación por llamada y una respuesta JSON con `--json`. [MCP](./mcp.md)
+- **Qué se guarda y qué sale por la red.** [Seguridad](./security.md)
+
+## Empieza en cinco minutos
+
+Pega esto en el chat con tu agente:
+
+```text prompt
+Usa tg CLI. Instálalo con npm install -g @wirecat/tg-cli, ayúdame a ejecutar tg personal setup y luego muéstrame quién espera mi respuesta.
 ```
 
-`personal` es el nombre del perfil: elige cualquiera en el primer inicio de sesión y repítelo en cada comando.
+O en una terminal:
 
-Reserva unos cinco minutos. Primero el comando pide el número y un código recibido en Telegram para obtener `api_id` y `api_hash` de [my.telegram.org](https://my.telegram.org/apps). Después muestra el QR para acceder a la cuenta. En el teléfono, abre Telegram → Ajustes → Dispositivos → Vincular dispositivo de escritorio y escanéalo. Setup comprueba los primeros cinco chats e instala las skills. Si ya tienes una sesión válida, la reutiliza. Espera a que termine antes de listar chats. [Pasos completos de acceso](/es/docs/tg/sessions).
+```sh
+npm install -g @wirecat/tg-cli
+tg personal setup     # registra tu aplicación de Telegram, entra con código QR, instala la skill del agente
+tg personal inbox     # los no leídos de otras personas, en todos los chats
+```
 
-> **¿Qué es una aplicación Telegram y para qué sirve?**
->
-> Es el registro del programa que se conecta a Telegram, aquí el CLI `tg`. Rellenas un formulario sin desarrollar ni descargar otra aplicación. Telegram entrega `api_id` y `api_hash` para identificar el programa; el QR o código confirma después el acceso a tu cuenta. El comando puede registrar u obtener estas credenciales. [Explicación y método manual](/es/docs/tg/sessions#the-app-from-mytelegramorg).
+Necesitas Node.js 22.19 o posterior en 22.x, 24 o posterior, o Bun. `setup` abre
+[my.telegram.org](https://my.telegram.org/apps) por ti: Telegram pide que se registre cada programa que se conecta a
+una cuenta, y `tg` rellena el formulario. [Instalación](./installation.md)
 
-El archivo local contiene solo lo que hayas leído o descargado; no incluye automáticamente todo tu historial. Por defecto, la búsqueda por palabras consulta el archivo local y el mensajero (`--backend both`); usa `--backend archive` para consultar solo el archivo. El lenguaje de consulta es Lucene estricto y no corrige erratas; `--discover` también prueba escrituras parecidas en el archivo local. Prepara el historial antes de buscar solo en el archivo, contar o clasificar, y comprueba la cobertura antes de considerar que un resultado vacío demuestra que no existe un mensaje. Consulta [búsqueda](/es/docs/tg/search).
+## Límites
 
-## Qué probar después de conectar
-
-- **Ponerte al día.** Pregunta qué chats esperan tu respuesta.
-- **Recordar acuerdos.** Pregunta qué prometiste esta semana y qué esperas de otras personas.
-- **Encontrar un mensaje.** Pide una conversación, fecha, enlace o archivo.
-- **Preparar una respuesta.** Da contexto a tu agente y pídele que redacte o envíe un mensaje.
-
-Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar otros cambios requiere
-comandos específicos. Puedes limitar el acceso del agente: consulta [acceso y seguridad](/es/docs/tg/security).
+- La búsqueda por significado necesita un modelo que descargas una vez (219 MB, compartido con `max`). La búsqueda por
+  palabras funciona sin él.
+- El historial de llamadas, los ajustes de privacidad y los stickers aún no están en `tg`. [Hoja de ruta](./roadmap.md)
 
 ## Encuentra la guía para tu tarea
 
 | Tarea | Guía |
 |---|---|
-| Leer, buscar y enviar mensajes | [Comandos cotidianos](/es/docs/tg/usage) |
-| Iniciar sesión, salir o añadir otra cuenta | [Acceso y perfiles](/es/docs/tg/sessions) |
-| Buscar palabras, frases o mensajes de varias cuentas | [Búsqueda de mensajes](/es/docs/tg/search) |
-| Descargar historial y exportar conversaciones | [Archivo de mensajes](/es/docs/tg/archive) |
-| Seguir las preguntas y los participantes de un grupo | [Tus grupos](/es/docs/tg/groups) |
-| Encontrar una petición preparada para el agente | [Recetas de uso](/es/docs/tg/recipes) |
-| Consultar qué admiten los bots de Telegram | [Bots: funciones disponibles](/es/docs/tg/bot) |
-| Resolver un error | [Solución de problemas](/es/docs/tg/troubleshooting) |
-| Consultar un comando o parámetro concreto | [Referencia de comandos](/es/docs/tg/commands) |
-| Gestionar contactos, alias y notas privadas | [Personas](/es/docs/tg/people) |
-| Comparar actividad y comprobar pruebas de una clasificación | [Clasificaciones](/es/docs/tg/rankings) |
-| Enviar, descargar y leer archivos | [Comandos de archivos](/es/docs/tg/usage) |
-| Transcribir notas de voz localmente | [Comandos de voz](/es/docs/tg/usage) |
-| Configurar API opcionales de modelos | [Ajustes de modelos](/es/docs/tg/configuration-reference) |
-| Limitar lectura, escritura y confirmaciones | [Permisos](/es/docs/tg/permissions) |
-| Elegir un perfil personal o de bot | [Perfiles y bots](/es/docs/tg/profiles) |
-| Consultar tipos y prioridad de ajustes | [Referencia de configuración](/es/docs/tg/configuration-reference) |
-
-La barra izquierda contiene las páginas de este apartado. La derecha muestra las secciones de
-la página abierta. La referencia sirve para consultar opciones concretas; para empezar, basta con la instalación y las tareas cotidianas.
+| Instalar, entrar, añadir otra cuenta | [Instalación](./installation.md), [Acceso y perfiles](./sessions.md) |
+| Leer, buscar y enviar mensajes | [Comandos de uso diario](./usage.md) |
+| Escribir una búsqueda precisa | [Búsqueda de mensajes](./search.md) |
+| Llevar un grupo | [Tus grupos](./groups.md) |
+| Una petición lista para tu agente | [Recetas](./recipes.md) |
+| Decidir qué puede hacer un agente | [Permisos](./permissions.md) |
+| Un bot | [Bots](./bot.md) |
+| Un comando u opción exactos | [Referencia de comandos](./commands.md) |
+| Algo no funciona | [Solución de problemas](./troubleshooting.md) |
+| En qué se diferencia tg de otras herramientas de Telegram | [Comparativa](./compare.md) |

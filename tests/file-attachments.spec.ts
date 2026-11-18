@@ -1,29 +1,32 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
 
-const titles = { en: "File attachments", ru: "Файловые вложения", es: "Archivos adjuntos" }
+const titles = {
+  en: { tg: "Send and download Telegram file attachments", max: "Send and download MAX messenger file attachments" },
+  ru: { tg: "Отправка и загрузка вложений в Telegram", max: "Отправка и загрузка вложений в MAX" },
+  es: { tg: "Envía y descarga archivos adjuntos de Telegram", max: "Envía y descarga archivos adjuntos de MAX" },
+}
 for (const lang of ["en", "ru", "es"] as const) {
   for (const width of [1440, 390]) {
-    for (const tool of ["tg", "max"]) {
+    for (const tool of ["tg", "max"] as const) {
       test(`${lang}/${tool}: attachments at ${width}px retain explanatory content and sidebar icons`, async ({
         page,
       }) => {
         await page.setViewportSize({ width, height: 900 })
         await page.goto(`/${lang}/docs/${tool}/attachments`)
-        await expect(page.locator("main h1")).toHaveText(`${titles[lang]} — ${tool === "tg" ? "Telegram" : "MAX"}`)
+        await expect(page.locator("main h1")).toHaveText(titles[lang][tool])
         await expect(page.locator("main")).toContainText("content:")
         await expect(page.locator("main table")).not.toHaveCount(0)
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true)
         if (width === 390) await page.locator('#nd-subnav button[aria-controls="nd-sidebar-mobile"]').click()
         const sidebar = page.locator(width === 390 ? "#nd-sidebar-mobile" : "#nd-sidebar")
         await expect(sidebar).toBeVisible()
-        const missing = await sidebar
-          .locator('[data-id$="-viewport"] a[href*="/docs/"]')
-          .evaluateAll((links) =>
-            links
-              .filter((link) => !(link.closest("summary") ?? link).querySelector('svg[aria-hidden="true"]'))
-              .map((link) => link.getAttribute("href")),
-          )
+        const missing = await sidebar.locator('[data-id$="-viewport"] a[href*="/docs/"]').evaluateAll((links) =>
+          links
+            // A service's own logo is a decorative <img alt="">, since #673.
+            .filter((link) => !(link.closest("summary") ?? link).querySelector('svg[aria-hidden="true"], img[alt=""]'))
+            .map((link) => link.getAttribute("href")),
+        )
         expect(missing, "every navigation link has a decorative subject icon").toEqual([])
         const attachment = sidebar.locator(`a[href="/${lang}/docs/${tool}/attachments"]`)
         await expect(attachment.locator("svg.lucide-paperclip")).toHaveCount(1)

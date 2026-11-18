@@ -19,6 +19,14 @@ b24 work config unset limit
 permiso. Por MCP `ask` no pregunta y la escritura sigue adelante. Las claves, sus niveles de serie y cómo hacer que
 las escrituras de un agente sigan siendo tuyas están en [Permisos](./permissions.md).
 
+## Llamadas
+
+`download_recordings` (`true` o `false`, `false` si no se define) descarga la grabación de cada llamada en
+`meetings sync` y la guarda en la carpeta de estado. `phone_region` (un código de país, como `ru`, o varios: `ru,kz`)
+es el país del número de quien llama cuando el portal lo escribe sin `+`. `sync_calls` (`true` si no se define) hace
+que `sync` copie también las llamadas. `export_calls` (`false` si no se define) permite que `calls export` escriba en
+Bitrix24 las llamadas de otras centralitas. Los cuatro están en [Llamadas](./calls.md).
+
 ## Relaciones del CRM
 
 Dos ajustes del almacén compartido, no de un perfil, dicen cómo guarda la sincronización las relaciones:

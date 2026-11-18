@@ -1,5 +1,6 @@
 ---
-title: "Hoja de ruta"
+title: "Hoja de ruta de WireCat"
+sidebarTitle: "Hoja de ruta"
 description: "Lo que WireCat construye a continuación: la aplicación Desktop, búsqueda y memoria, nuevas fuentes e inicio de sesión verificado."
 ---
 
@@ -27,6 +28,8 @@ decidimos qué viene después.
   en la búsqueda junto a tus mensajes.
 - **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
   junto a tus mensajes.
+- **[Yandex Disk](./ydisk.mdx)**: el texto de las carpetas del Disk que elijas en tu ordenador, en la búsqueda sin
+  conexión, y los archivos del Disk subidos, movidos y compartidos cuando lo permitas.
 - **[amoCRM y Kommo](./amo/index.md)**: tus negociaciones y sus clientes en tu ordenador, con lo que cambió desde ayer,
   en la búsqueda junto a tus mensajes.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al

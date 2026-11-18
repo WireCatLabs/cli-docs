@@ -34,9 +34,15 @@ jobs:
       actions: read
       security-events: write
     uses: WireCatLabs/cli-base/.github/workflows/release-checks.yml@34a442be7352a59598b0bdcccc03186ae1f6a728 # v0.85.1
+    with:
+      # audit.yml runs the dependency audits until picomatch is fixed (DOCS-14).
+      dependencies: false
+
+  audit:
+    uses: ./.github/workflows/audit.yml
 
   build:
-    needs: [platform, security]
+    needs: [platform, security, audit]
     runs-on: ubuntu-latest
     env:
       REF: ${{ inputs.ref }}
@@ -64,6 +70,14 @@ jobs:
             pnpm docs:check
           fi
       - run: pnpm typecheck
+      # next build peaks near 17 GB (Turbopack plus its loader processes), above the runner's 16 GB, and some runners
+      # have no swap: there the build stalls instead of failing. 8 GB of swap lets it finish in about 4 minutes.
+      - name: Add swap for next build
+        run: |
+          sudo fallocate -l 8G /mnt/next-build.swap
+          sudo chmod 600 /mnt/next-build.swap
+          sudo mkswap /mnt/next-build.swap
+          sudo swapon /mnt/next-build.swap
       # The download page lists WireCat Desktop releases at build time; without a token GitHub allows 60 calls an hour.
       - run: pnpm exec next build
         env:

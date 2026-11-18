@@ -1,9 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs"
 import type { Node, Root } from "fumadocs-core/page-tree"
-import { CalendarDays, MessageSquare } from "lucide-react"
+import { Mail, PhoneCall } from "lucide-react"
 import type { ReactElement } from "react"
 import { describe, expect, it } from "vitest"
-import { WhatsAppIcon } from "../components/brand-icons"
+import { ServiceLogo } from "../components/brand-icons"
 import { isGettingStarted, messengerHref } from "../lib/docs-navigation"
 import { sidebarIcons, unifiedDocsTree, withCommunityGroup, withFoldingSections } from "../lib/docs-sidebar-tree"
 import { toolSidebarTitle } from "../lib/tool-sidebar-titles"
@@ -73,17 +73,19 @@ describe("one persistent documentation sidebar", () => {
       "Install",
       "Что можно сделать",
       "Search",
-      "Telegram",
-      "MAX",
+      "Messengers",
     ])
-    for (const item of tree.children) {
-      if (item.type === "folder") {
-        expect(item.root).toBe(false)
-        expect(item.defaultOpen).toBe(false)
-        expect(item.children[0]).toHaveProperty("icon")
-      }
+    const messengers = tree.children[4]
+    if (messengers.type !== "folder") throw new Error("no Messengers group")
+    expect(messengers.defaultOpen).toBe(true)
+    expect(messengers.children.map((item) => item.name)).toEqual(["Telegram", "MAX"])
+    for (const item of messengers.children) {
+      if (item.type !== "folder") throw new Error(`${item.name} is not a tool folder`)
+      expect(item.root).toBe(false)
+      expect(item.defaultOpen).toBe(false)
+      expect(item.children[0]).toHaveProperty("icon")
     }
-    expect(tree.children[4]).toMatchObject({ index: { url: "/ru/docs/tg" } })
+    expect(messengers.children[0]).toMatchObject({ index: { url: "/ru/docs/tg" } })
   })
   it("does not modify the source tree used by breadcrumbs, Markdown and search", () => {
     unifiedDocsTree(original)
@@ -147,17 +149,47 @@ describe("sidebar icon coverage", () => {
 })
 
 describe("tool folders in the sidebar", () => {
-  it("gives Google Calendar a calendar and WhatsApp its own mark", () => {
+  it("shows each service's own logo, and a line icon for Email and Asterisk", () => {
     const folder = (tool: string): Node => ({
       type: "folder",
       name: tool,
       index: { type: "page", name: tool, url: `/en/docs/${tool}` },
       children: [],
     })
-    const icons = unifiedDocsTree({ name: "Docs", children: ["gcal", "wa", "max"].map(folder) }).children.map((node) =>
-      node.type === "folder" ? (node.icon as ReactElement).type : undefined,
+    const tools = ["tg", "wa", "max", "gcal", "zm", "b24", "mail", "pbx"]
+    const folders = unifiedDocsTree({ name: "Docs", children: tools.map(folder) }).children.flatMap((node) =>
+      node.type === "folder" && !node.index ? node.children : [node],
     )
-    expect(icons).toEqual([CalendarDays, WhatsAppIcon, MessageSquare])
+    const icons = Object.fromEntries(
+      folders.map((node) => {
+        const icon = node.icon as ReactElement<{ file?: string }>
+        return [node.name, icon.type === ServiceLogo ? icon.props.file : icon.type]
+      }),
+    )
+    expect(icons).toEqual({
+      tg: "telegram.svg",
+      wa: "whatsapp.svg",
+      max: "max.png",
+      gcal: "google-calendar.svg",
+      zm: "zoom.svg",
+      b24: "bitrix24.svg",
+      mail: Mail,
+      pbx: PhoneCall,
+    })
+  })
+
+  it("gives the Google Meet and Telemost pages their logos", () => {
+    const pages: Node[] = [
+      { type: "page", name: "Google Meet", url: "/en/docs/google-meet" },
+      { type: "page", name: "Telemost", url: "/ru/docs/telemost" },
+    ]
+    const files = unifiedDocsTree({ name: "Docs", children: pages }).children.flatMap((node) =>
+      node.type === "folder" ? node.children : [node],
+    )
+    expect(files.map((node) => (node.icon as ReactElement<{ file?: string }>).props.file)).toEqual([
+      "google-meet.svg",
+      "telemost.png",
+    ])
   })
 
   it("puts Zoom, Google Meet, Telemost and Asterisk in an open Meetings & Calls group and Bitrix24 and amoCRM in a closed CRM group, keeping their URLs", () => {
@@ -189,8 +221,33 @@ describe("tool folders in the sidebar", () => {
         urls: ["/ru/docs/zm", "/ru/docs/google-meet", "/ru/docs/telemost", "/ru/docs/pbx"],
       },
       { name: "CRM", open: false, urls: ["/ru/docs/b24", "/ru/docs/amo"] },
-      "memo",
+      "Заметки (Memo)",
     ])
+  })
+
+  it("puts Google Drive, Notion, Yandex Disk and Markdown in an open Documents & files group, keeping their URLs", () => {
+    const folder = (tool: string): Node => ({
+      type: "folder",
+      name: tool,
+      index: { type: "page", name: tool, url: `/es/docs/${tool}` },
+      children: [],
+    })
+    const markdown: Node = { type: "page", name: "Markdown y Obsidian", url: "/es/docs/markdown" }
+    const ydisk: Node = { type: "page", name: "Yandex Disk", url: "/es/docs/ydisk" }
+    const tree = unifiedDocsTree(
+      { name: "Docs", children: [folder("drive"), folder("gcal"), folder("notion"), ydisk, markdown] },
+      "es",
+    )
+    const [group, gcal] = tree.children
+    expect(group.type === "folder" && !group.index && group.defaultOpen).toBe(true)
+    expect(group.name).toBe("Documentos y archivos")
+    expect(
+      group.type === "folder" &&
+        group.children.map((child) =>
+          child.type === "folder" ? child.index?.url : child.type === "page" ? child.url : "",
+        ),
+    ).toEqual(["/es/docs/drive", "/es/docs/notion", "/es/docs/ydisk", "/es/docs/markdown"])
+    expect(gcal.name).toBe("gcal")
   })
 
   it("lists Google Calendar right after Google Drive in every language", () => {
@@ -320,5 +377,18 @@ describe("short sidebar names of tool pages", () => {
     expect(toolSidebarTitle("desktop/memory.mdx", "en")).toBeUndefined()
     expect(toolSidebarTitle("tg/usage.md", "en")).toBeUndefined()
     expect(toolSidebarTitle("index.mdx", "en")).toBeUndefined()
+  })
+})
+
+describe("pages for Russian readers only", () => {
+  it("lists the Beeline Cloud PBX guide in the Russian sidebar only", () => {
+    for (const [file, listed] of [
+      ["meta.json", false],
+      ["meta.es.json", false],
+      ["meta.ru.json", true],
+    ] as const) {
+      const { pages } = JSON.parse(readFileSync(`content/docs/${file}`, "utf8")) as { pages: string[] }
+      expect(pages.includes("beeline")).toBe(listed)
+    }
   })
 })

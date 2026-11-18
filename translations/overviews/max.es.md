@@ -1,89 +1,146 @@
 ---
 title: "MAX: empieza aquí"
-description: "Conecta tu cuenta personal de MAX o un bot a tu agente."
+description: "Tu agente lee tus chats de MAX, encuentra cualquier mensaje sin conexión y pasa las notas de voz a texto. Los bots usan la Bot API oficial."
 ---
 
-`max` es una herramienta de línea de comandos que permite que tu agente de IA lea MAX, encuentre mensajes y te ayude a responder. También
-puedes usarlo directamente desde la terminal. Funciona en Windows, macOS y Linux.
+Te pones al día en MAX en un minuto, sin revisar chat por chat. `max` conecta tu cuenta de MAX, o tu bot, con el agente de
+IA que ya usas, como Claude Code, Codex o Cursor. Guarda una copia de tus chats en tu ordenador, así que el agente
+busca en todo el historial, incluso sin conexión.
 
-Estás en la documentación de **MAX**. Usa el selector de mensajero de arriba para abrir Telegram.
+Tu agente te dice quién espera tu respuesta, qué prometiste esta semana y qué dijo Alicia en una nota de voz. Responde
+con los mensajes que encontró y prepara una respuesta que envías tú. La configuración lleva unos cinco minutos y un
+código QR.
 
-**En esta página**
+**En esta página:**
 
-- [Elige qué conectar](#elige-qué-conectar)
-- [Empieza con tu cuenta personal](#empieza-con-tu-cuenta-personal)
-- [Qué probar después de conectar](#qué-probar-después-de-conectar)
-- [Encuentra la guía para tu tarea](#encuentra-la-guía-para-tu-tarea)
+1. [Qué obtienes](#qué-obtienes)
+2. [Lo que no es obvio al principio](#lo-que-no-es-obvio-al-principio)
+3. [Cómo se ve](#cómo-se-ve)
+4. [Por qué max](#por-qué-max)
+5. [Qué puede hacer](#qué-puede-hacer)
+6. [Cómo funciona](#cómo-funciona)
+7. [Empieza en cinco minutos](#empieza-en-cinco-minutos)
+8. [Límites](#límites)
+9. [Encuentra la guía para tu tarea](#encuentra-la-guía-para-tu-tarea)
 
-## Elige qué conectar
+## Qué obtienes
 
-- **Cuenta personal:** tus chats, historial y contactos, como en otro dispositivo. Empieza con
-  [la instalación y el acceso](/es/docs/installation#max).
-- **Bot:** mensajes y acciones en nombre del bot, usando su token. Abre
-  [la guía de bots](/es/docs/max/bot).
+- **Ninguna respuesta pendiente se te escapa.** Una sola petición muestra quién espera tu respuesta en todos los
+  chats. Nada se marca como leído.
+- **Cualquier mensaje en segundos.** "¿Cuándo quedamos en vernos con Alicia?" te da la fecha y el mensaje, sin
+  internet. También encuentras una conversación por su tema, sin recordar las palabras exactas.
+- **Notas de voz en texto.** Las notas de voz se convierten en texto en tu ordenador, y ese texto también se busca.
+- **Promesas cumplidas.** "¿Qué prometí esta semana y qué espero de otros?" tiene una sola respuesta para todos los
+  chats.
+- **Grupos tranquilos.** Una revisión con tus reglas detecta enlaces, invitaciones a otros chats y mensajes en masa.
+  Por defecto solo los marca, y borra cuando tú lo permites. Ves quién entró y qué preguntas nadie respondió.
+- **Un bot en la misma herramienta.** Conecta un bot con su token y llama a cualquier operación de la Bot API oficial
+  de MAX, junto a comandos listos para enviar y moderar.
 
-Son conexiones distintas. Los bots usan la API oficial de MAX; las cuentas personales usan una
-API interna que puede cambiar sin aviso. Consulta [seguridad](/es/docs/max/security) para conocer
-las limitaciones y cómo se guardan las credenciales.
+## Lo que no es obvio al principio
 
-## Empieza con tu cuenta personal
+- **Dos formas de conectar.** Tu cuenta personal funciona como un dispositivo más, como web.max.ru. Un bot funciona con
+  su token a través de la Bot API oficial. Son perfiles distintos.
+- **`personal` es un nombre que eliges tú** para una cuenta, y es la primera palabra de cada comando. Ningún comando
+  elige una cuenta por ti.
+- **Leer no marca nada como leído**, y nada se envía si un comando no lo pide.
+- **La copia se llena mientras lees.** Un chat que no abriste ni descargaste no está en ella, así que una búsqueda sin
+  conexión vacía no prueba que el mensaje no exista.
 
-### Conectar desde tu agente
+## Cómo se ve
 
-Abre [la instalación con un agente](/es/docs/installation#max) y copia la petición breve. Tu
-agente instalará la herramienta, te ayudará a iniciar sesión y comprobará la conexión. Tú escaneas el QR.
-
-Después sigue [la guía de tu agente](/es/docs/agents): Codex, Claude Code, Cursor, Gemini CLI o
-Hermes. Las aplicaciones que usan MCP tienen una [guía de MCP](/es/docs/agents#mcp-y-skills).
-
-### Empezar desde la terminal
-
-Abre [la guía de instalación](/es/docs/installation#max) y elige las instrucciones para terminal.
-Tras instalar la herramienta, configura la cuenta y consulta algunos chats:
-
-```sh
-max personal setup
+```text
+Tú:     ¿Qué le prometí a alguien en los últimos tres días?
+Agente: (ejecuta max personal review 'date>3d': 12 chats, 3 notas de voz transcritas)
+        Debes
+        · Alicia Ejemplo: enviar la factura antes del viernes. Chat privado, 24.09
+        Esperas de otros
+        · Bruno Muestra: la maqueta para el 25.09. Aún no está en "Diseño"
+Tú:     Recuérdale a Bruno lo de la maqueta.
+Agente: Borrador: "Hola Bruno, ¿cómo va la maqueta?" ¿Lo envío?
+Tú:     Sí.
 ```
 
-```sh
-max personal chats list --limit 5
+## Por qué max
+
+- **Lo que ninguna otra herramienta de MAX de la [comparativa](./compare.md) documenta.** Los no leídos de todos los
+  chats con una petición, las respuestas que debes, la búsqueda por significado y sin conexión, las notas de voz a
+  texto en tu ordenador, un resumen matutino programado.
+- **Límites que tú pones al agente.** Solo lectura, envíos solo a los chats de tu lista y como mucho 30 envíos por hora
+  por defecto. Antes de enviar, `max` puede preguntarte. Ninguna otra herramienta de la comparativa documenta estos
+  límites.
+- **Sin servidor de WireCat.** `max` solo habla con MAX, desde tu ordenador. Tu sesión se guarda en el llavero del
+  sistema.
+- **Respetuoso con MAX.** Un solo ritmo de peticiones por perfil, compartido por todos los comandos y agentes. Cuando
+  MAX dice "demasiadas peticiones", `max` se detiene en lugar de reintentar.
+- **Gratis y de código abierto.** Apache 2.0, en macOS, Linux y Windows.
+
+Otra herramienta te conviene más si necesitas llamadas y videomensajes (la aplicación de MAX), o un bot oficial para una
+organización sin instalar nada ([mcp-max-messenger](https://github.com/woyaxnini/mcp-max-messenger) con la Bot API).
+
+## Qué puede hacer
+
+- **Ponerte al día:** no leídos de todos los chats, un repaso de lo nuevo, las preguntas sin respuesta.
+  [Comandos de uso diario](./usage.md)
+- **Encontrar:** por persona, chat, fecha, archivo, enlace y etiqueta, por significado, sin conexión.
+  [Búsqueda](./search.md)
+- **Responder:** enviar, responder, reenviar, editar, fijar, reaccionar, encuestas, archivos, mensajes programados.
+  [Comandos de uso diario](./usage.md)
+- **Llevar un grupo:** revisión con tus reglas, quién entró, actividad, resumen de la semana. [Tus grupos](./groups.md)
+- **Voz y archivos:** notas de voz a texto, texto de los archivos guardados.
+  [Notas de voz](./audio-recognition.md), [Adjuntos](./attachments.md)
+- **Bots:** mensajes, botones y cualquier operación de la Bot API. [Bots](./bot.md)
+- **Con tus otras fuentes:** une las cuentas de MAX y Telegram de una persona, y busca a la vez en tus mensajes,
+  correo y notas de este ordenador. [Personas](./people.md)
+
+## Cómo funciona
+
+- **Una copia en tu ordenador.** Los mensajes que `max` ha visto quedan en un archivo local. La búsqueda, la exportación
+  y la lectura sin conexión responden desde ahí. [Archivo de mensajes](./archive.md)
+- **Acceso con código QR.** Escaneas un código en la aplicación de MAX y `max` pasa a ser un dispositivo más de tu
+  cuenta. Un bot entra con su token.
+- **Hecho para scripts y agentes.** Una operación por llamada, una respuesta JSON con `--json`, una skill para agentes
+  de terminal y un servidor MCP para aplicaciones como Claude Desktop. [MCP](./mcp.md)
+- **Qué se guarda y qué sale por la red.** [Seguridad](./security.md)
+
+## Empieza en cinco minutos
+
+Pega esto en el chat con tu agente:
+
+```text prompt
+Usa max CLI. Instálalo con npm install -g @wirecat/max-cli, ayúdame a ejecutar max personal setup y luego muéstrame quién espera mi respuesta.
 ```
 
-`personal` es el nombre del perfil: elige cualquiera en el primer inicio de sesión y repítelo en cada comando.
+O en una terminal:
 
-`setup` guía el acceso con QR e instala los skills de los agentes. Reutiliza la sesión al repetirlo; no descarga todo el historial.
+```sh
+npm install -g @wirecat/max-cli
+max personal setup     # acceso con código QR y la skill del agente
+max personal inbox     # no leídos de todos los chats, nada se marca como leído
+```
 
-Consulta [acceso y perfiles](/es/docs/max/sessions) para otros métodos de acceso y cuentas adicionales.
+Escaneas el código QR en la aplicación de MAX. Necesitas Node.js 22.16 o posterior en 22.x, 24 o posterior, o Bun.
+[Instalación](./installation.md)
 
-## Qué probar después de conectar
+## Límites
 
-Pide a tu agente que revise los mensajes pendientes, encuentre un mensaje, recuerde acuerdos o
-prepare una respuesta. Leer **no marca los mensajes como leídos**. Enviar, eliminar y realizar
-otros cambios requiere comandos específicos; puedes limitar el acceso del agente.
-
-`max search all` busca a la vez en los mensajes, el correo importado y las notas guardados en este equipo. Por defecto, la búsqueda de mensajes (`max search messages`) consulta el archivo local y el mensajero (`--backend both`); usa `--backend archive` para consultar solo el archivo. El lenguaje de consulta es Lucene estricto y no corrige erratas; `--discover` también prueba escrituras parecidas en el archivo local. Prepara el historial antes de buscar solo en el archivo, contar o clasificar, y comprueba la cobertura antes de considerar que un resultado vacío demuestra que no existe un mensaje. Sin chat, el servidor de MAX devuelve la mejor coincidencia de cada chat. Los recuentos, las clasificaciones y las consultas que el servidor no admite usan el historial guardado. [Guía de búsqueda](/es/docs/max/search).
+- Para una cuenta personal, `max` usa la API interna de MAX, la misma que la versión web. MAX puede cambiarla sin
+  aviso. El acuerdo de usuario de MAX no permite programas automáticos sin el consentimiento de la empresa, y una
+  cuenta puede quedar restringida. [Seguridad](./security.md) explica cómo reducir ese riesgo. Los bots usan la Bot API
+  oficial y esto no les afecta.
+- Las llamadas y los videomensajes siguen en la aplicación de MAX.
 
 ## Encuentra la guía para tu tarea
 
 | Tarea | Guía |
 |---|---|
-| Leer, buscar y enviar mensajes en tu nombre | [Comandos cotidianos](/es/docs/max/usage) |
-| Iniciar sesión, salir o añadir otra cuenta | [Acceso y perfiles](/es/docs/max/sessions) |
-| Conectar un bot, enviar mensajes y añadir botones | [Bots](/es/docs/max/bot) |
-| Seguir preguntas pendientes y moderar un grupo | [Tus grupos](/es/docs/max/groups) |
-| Buscar mensajes con campos, fechas y filtros | [Búsqueda](/es/docs/max/search) |
-| Buscar en el historial local y exportar conversaciones | [Archivo de mensajes](/es/docs/max/archive) |
-| Encontrar una petición preparada para el agente | [Recetas de uso](/es/docs/max/recipes) |
-| Resolver un error | [Solución de problemas](/es/docs/max/troubleshooting) |
-| Consultar un comando o parámetro concreto | [Referencia de comandos](/es/docs/max/commands) |
-| Gestionar contactos, alias y notas privadas | [Personas](/es/docs/max/people) |
-| Comparar actividad y comprobar pruebas de una clasificación | [Clasificaciones](/es/docs/max/rankings) |
-| Enviar, descargar y leer archivos | [Adjuntos](/es/docs/max/attachments) |
-| Transcribir notas de voz localmente | [Transcripción de voz](/es/docs/max/audio-recognition) |
-| Configurar API opcionales de modelos | [Modelos externos](/es/docs/max/external-models) |
-| Limitar lectura, escritura y confirmaciones | [Permisos](/es/docs/max/permissions) |
-| Elegir un perfil personal o de bot | [Perfiles y bots](/es/docs/max/profiles) |
-| Consultar tipos y prioridad de ajustes | [Referencia de configuración](/es/docs/max/configuration-reference) |
-
-La barra izquierda contiene las guías comunes y las páginas de Telegram y MAX. La derecha muestra las secciones de la página
-actual. Empieza con la instalación; usa la referencia detallada cuando tengas una tarea concreta.
+| Instalar, entrar, añadir una cuenta | [Instalación](./installation.md), [Acceso y perfiles](./sessions.md) |
+| Leer, buscar y enviar | [Comandos de uso diario](./usage.md) |
+| Conectar un bot | [Bots](./bot.md) |
+| Llevar un grupo | [Tus grupos](./groups.md) |
+| Una petición lista para tu agente | [Recetas](./recipes.md) |
+| Decidir qué puede hacer un agente | [Permisos](./permissions.md) |
+| Conectar una aplicación por MCP | [MCP](./mcp.md) |
+| Un comando exacto | [Referencia de comandos](./commands.md) |
+| Algo no funciona | [Solución de problemas](./troubleshooting.md) |
+| En qué se diferencia max de otras herramientas de MAX | [Comparativa](./compare.md) |

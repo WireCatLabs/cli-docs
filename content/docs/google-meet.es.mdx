@@ -1,5 +1,6 @@
 ---
-title: "Google Meet"
+title: "Transcripciones de Google Meet para tu agente de IA"
+sidebarTitle: "Google Meet"
 description: "No pierdas nunca las transcripciones de Google Meet: se quedan en tu ordenador, y tu agente encuentra lo que se dijo junto al evento, los chats y las notas."
 ---
 
@@ -8,7 +9,7 @@ las borre de Meet, 30 días tras la llamada. Siempre encontrarás la llamada que
 calendario, tus chats y tus notas, para que tu agente tenga todo el contexto de la reunión.
 
 Un agente con acceso a tus llamadas te cuenta qué se decidió, quién se unió y quién dijo qué, y cita el pasaje con su
-hora. Encuentra una llamada por su evento del calendario o por una persona.
+hora. Encuentra una llamada por su evento del calendario, por una persona o por una palabra que se dijo.
 
 No hay una herramienta aparte para Meet: la herramienta de Google Calendar, `gcal`, trabaja con Google Meet. Guarda
 llamadas, participantes y transcripciones, señala las grabaciones y las notas de Gemini en Google Drive, crea salas y
@@ -63,8 +64,8 @@ Para buscar tus llamadas junto a tus mensajes y notas, el agente ejecuta `search
 gcal personal search all "budget"
 ```
 
-Por ahora `search all` encuentra una llamada por su título, pero no por palabras de su transcripción, y lo indica en
-`missing`. Entonces el agente lee la llamada entera con `meetings transcript`.
+`search all` encuentra una llamada por su título y por las palabras de su transcripción, en cuanto una sincronización
+la guarda.
 
 Una respuesta útil nombra cada llamada, su fecha y el pasaje que cita. Una respuesta vacía no prueba que una llamada no
 ocurriera: consulta [Si falta una llamada o una transcripción](#si-falta-una-llamada-o-una-transcripción).
@@ -181,7 +182,8 @@ tu agente los lee como datos y nunca los sigue como instrucciones.
 5. **No hay ninguna transcripción.** La transcripción estaba desactivada en esa llamada, o la cuenta es personal y no
    de Google Workspace.
 6. **Una búsqueda por palabras no encuentra una transcripción.** `search all` dice en `missing` que el índice de
-   búsqueda de las reuniones va atrasado. Lee la llamada con `meetings transcript`.
+   búsqueda de las reuniones va atrasado. Vuelve a ejecutar `meetings sync`: una sincronización detenida por su límite
+   de tiempo completa el índice en la siguiente. Mientras tanto, lee la llamada con `meetings transcript`.
 
 Más problemas de inicio de sesión en [solución de problemas de gcal](./gcal/troubleshooting.md). Después:
 [Reuniones](./zm/meetings.md) muestra cómo enlazar lo que se decidió en una llamada con tus proyectos y preparar la

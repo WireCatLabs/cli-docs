@@ -1,5 +1,6 @@
 ---
-title: "Create your CLI"
+title: "Build your own CLI and MCP server for any service"
+sidebarTitle: "Create your CLI"
 description: "Connect a service WireCat does not support yet: build your own tool with our template and your AI agent, with guides for every step."
 ---
 
@@ -7,6 +8,22 @@ You can build your own command-line tool for any service or API — quickly, wit
 CRM, a task tracker or a notes app that WireCat does not support yet? Add it yourself.
 
 This page shows what it takes, what you get, and where to start. The guides after it walk you through each part.
+
+**On this page:**
+
+1. [Two ways to use it](#two-ways-to-use-it)
+2. [How to build it, in short](#how-to-build-it-in-short)
+3. [What WireCat gives your tool](#what-wirecat-gives-your-tool)
+4. [What you need](#what-you-need)
+5. [Start from the template](#start-from-the-template)
+6. [What happens next](#what-happens-next)
+7. [If you get stuck](#if-you-get-stuck)
+8. [Show it on wirecat.dev](#show-it-on-wirecatdev)
+9. [Make it addable in WireCat Desktop](#make-it-addable-in-wirecat-desktop)
+10. [End to end, with an example](#end-to-end-with-an-example)
+11. [Keep it current](#keep-it-current)
+12. [Template details](#template-details)
+13. [Where to go next](#where-to-go-next)
 
 ## Two ways to use it
 

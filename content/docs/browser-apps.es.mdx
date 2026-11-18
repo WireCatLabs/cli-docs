@@ -1,11 +1,27 @@
 ---
-title: Usar desde la web o el móvil
+title: "Telegram y MAX en ChatGPT, Claude o Gemini desde la web"
+sidebarTitle: "Usar desde la web o el móvil"
 description: "Conecta Telegram y MAX a un chat de IA como ChatGPT, Claude o Gemini en el navegador o la aplicación móvil. No necesitas sus aplicaciones de escritorio."
 ---
 
 Usa Telegram y MAX desde un chat de IA en el navegador o la aplicación móvil: encuentra mensajes, reúne contexto y prepara respuestas. Se configura con unos comandos y una dirección en los ajustes del chat. No necesitas instalar ChatGPT o Claude en el ordenador. La aplicación debe admitir MCP remoto por HTTP y un acceso OAuth compatible con este servidor; elige tu aplicación abajo.
 
 Esta guía conecta el servicio de mensajería que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al servicio de mensajería; tu chat de IA llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al agente. A continuación obtendremos la dirección y la añadiremos a la aplicación. Mantén el ordenador encendido y el servidor MCP de la herramienta de línea de comandos y el túnel HTTPS en ejecución mientras uses la conexión. No necesitas la aplicación de escritorio del servicio de mensajería.
+
+**En esta página:**
+
+1. [Antes de empezar](#antes-de-empezar)
+2. [1. Preparar una dirección pública](#1-preparar-una-dirección-pública)
+3. [2. Obtener la dirección e iniciar la conexión](#2-obtener-la-dirección-e-iniciar-la-conexión)
+4. [3. Añadir la conexión a tu chat de IA](#3-añadir-la-conexión-a-tu-chat-de-ia)
+5. [Probar primero la lectura](#probar-primero-la-lectura)
+6. [Elegir qué puede hacer el agente](#elegir-qué-puede-hacer-el-agente)
+7. [Antes funcionaba y ahora no conecta](#antes-funcionaba-y-ahora-no-conecta)
+8. [Ambos servicios de mensajería a la vez](#ambos-servicios-de-mensajería-a-la-vez)
+9. [Detener, reiniciar o revocar](#detener-reiniciar-o-revocar)
+10. [Si algo falla](#si-algo-falla)
+11. [Cómo funciona la conexión](#cómo-funciona-la-conexión)
+12. [Conectar sin mantener encendido el portátil](#conectar-sin-mantener-encendido-el-portátil)
 
 ## Antes de empezar
 

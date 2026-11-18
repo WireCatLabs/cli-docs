@@ -29,6 +29,14 @@ jobs:
       - run: pnpm docs:contracts
       - run: pnpm docs:check
       - run: pnpm typecheck
+      # next build peaks near 17 GB (Turbopack plus its loader processes), above the runner's 16 GB, and some runners
+      # have no swap: there the build stalls instead of failing. 8 GB of swap lets it finish in about 4 minutes.
+      - name: Add swap for next build
+        run: |
+          sudo fallocate -l 8G /mnt/next-build.swap
+          sudo chmod 600 /mnt/next-build.swap
+          sudo mkswap /mnt/next-build.swap
+          sudo swapon /mnt/next-build.swap
       - run: pnpm exec next build
       - run: pnpm check:assets
       - run: pnpm check:links
@@ -65,6 +73,14 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm sync
       - run: pnpm docs:release-notes
+      # next build peaks near 17 GB (Turbopack plus its loader processes), above the runner's 16 GB, and some runners
+      # have no swap: there the build stalls instead of failing. 8 GB of swap lets it finish in about 4 minutes.
+      - name: Add swap for next build
+        run: |
+          sudo fallocate -l 8G /mnt/next-build.swap
+          sudo chmod 600 /mnt/next-build.swap
+          sudo mkswap /mnt/next-build.swap
+          sudo swapon /mnt/next-build.swap
       - run: pnpm exec next build
       - run: pnpm check:assets
       - run: pnpm exec playwright install --with-deps chromium

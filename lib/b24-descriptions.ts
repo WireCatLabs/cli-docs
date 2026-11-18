@@ -1,7 +1,8 @@
 export const b24Descriptions: Record<string, Record<string, string>> = {
   en: {
     compare: "Compare Bitrix24 CRM tools for agents: offline copy, deal and lead changes, permissions and setup.",
-    index: "Read and change your Bitrix24 CRM from the terminal or your AI agent, with a local copy to search offline.",
+    index:
+      "Ask your AI agent where every deal stands and what a client said on the phone. It reads a copy of your Bitrix24 CRM on your computer, even offline.",
     installation: "Install the Bitrix24 CLI with npm, check the Node.js version and run doctor.",
     usage: "Sign in with a Bitrix24 webhook or local app, sync the CRM, read deals and leads, change records.",
     commands: "Find every Bitrix24 CLI command, option and exit code in the generated reference.",
@@ -9,6 +10,7 @@ export const b24Descriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Fix Bitrix24 webhook, scope, rate-limit, settings-file and refused-write problems.",
     roadmap: "See what the Bitrix24 CLI already does and what is planned next, such as contacts kept offline.",
     security: "What the Bitrix24 CLI keeps, where the webhook or app sign-in lives and what an agent may change.",
+    calls: "Copy Bitrix24 telephony calls to your computer, transcribe recordings locally and find a client's calls.",
     mcp: "Connect an agent to the Bitrix24 CLI over MCP, see what it is offered and keep its writes yours.",
     permissions: "Choose what an agent may change in Bitrix24 and which checks hold whatever the settings say.",
     scenarios: "Common Bitrix24 CLI tasks step by step: the first sync, keeping the copy fresh, safe agent writes.",
@@ -16,7 +18,8 @@ export const b24Descriptions: Record<string, Record<string, string>> = {
   },
   ru: {
     compare: "Сравните инструменты для CRM Битрикс24: локальная копия, изменения сделок и лидов, права агента.",
-    index: "Читайте и меняйте CRM Битрикс24 из терминала или через ИИ-агента, с локальной копией для поиска.",
+    index:
+      "Спросите ИИ-агента, на какой стадии каждая сделка и что клиент сказал по телефону. Он читает копию CRM Битрикс24 на вашем компьютере, даже без интернета.",
     installation: "Установите CLI Битрикс24 через npm, проверьте версию Node.js и запустите doctor.",
     usage: "Войдите через вебхук или приложение Битрикс24, синхронизируйте CRM, читайте и меняйте сделки.",
     commands: "Все команды, параметры и коды выхода CLI Битрикс24 в справочнике, созданном из программы.",
@@ -24,6 +27,7 @@ export const b24Descriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Решайте проблемы с вебхуком, правами доступа, лимитом запросов, файлом настроек и записью.",
     roadmap: "Что CLI Битрикс24 уже умеет и что запланировано дальше, например контакты без интернета.",
     security: "Что хранит CLI Битрикс24, где лежит вход через вебхук или приложение и что может менять агент.",
+    calls: "Скопируйте звонки телефонии Битрикс24 на компьютер, расшифруйте записи локально и найдите звонки клиента.",
     mcp: "Подключите агента к CLI Битрикс24 через MCP, посмотрите, что ему доступно, и оставьте запись за собой.",
     permissions: "Выберите, что агент может менять в Битрикс24, и какие проверки действуют при любых настройках.",
     scenarios: "Частые задачи CLI Битрикс24 по шагам: первая синхронизация, свежая копия, безопасная запись агента.",
@@ -31,7 +35,8 @@ export const b24Descriptions: Record<string, Record<string, string>> = {
   },
   es: {
     compare: "Compara herramientas para el CRM de Bitrix24: copia local, cambios en negociaciones, permisos.",
-    index: "Lee y cambia tu CRM de Bitrix24 desde la terminal o con tu agente de IA, con una copia local para buscar.",
+    index:
+      "Pregunta a tu agente de IA cómo va cada negociación y qué dijo un cliente por teléfono. Lee tu CRM de Bitrix24 desde una copia local, incluso sin conexión.",
     installation: "Instala la CLI de Bitrix24 con npm, comprueba la versión de Node.js y ejecuta doctor.",
     usage: "Inicia sesión con un webhook o una app de Bitrix24, sincroniza el CRM, lee y cambia negociaciones.",
     commands: "Consulta todos los comandos, opciones y códigos de salida de la CLI de Bitrix24.",
@@ -39,6 +44,8 @@ export const b24Descriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Resuelve problemas de webhook, permisos, límite de peticiones, archivo de ajustes y escrituras.",
     roadmap: "Consulta qué hace ya la CLI de Bitrix24 y qué está planificado, como contactos sin conexión.",
     security: "Qué guarda la CLI de Bitrix24, dónde vive el inicio de sesión y qué puede cambiar un agente.",
+    calls:
+      "Copia las llamadas de la telefonía de Bitrix24, transcribe las grabaciones en local y encuentra las de un cliente.",
     mcp: "Conecta un agente a la CLI de Bitrix24 por MCP, mira qué se le ofrece y mantén tuyas sus escrituras.",
     permissions: "Elige qué puede cambiar un agente en Bitrix24 y qué controles valen digan lo que digan los ajustes.",
     scenarios: "Tareas comunes de la CLI de Bitrix24 paso a paso: la primera sincronización, la copia al día y más.",

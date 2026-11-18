@@ -9,9 +9,14 @@ what each one sends out of your computer. When you are done, the features work w
 know where your data goes. Everything here is off until you turn it on. Without a model, your own AI agent does this
 work when you ask it.
 
-**On this page:** [AI model](#set-the-ai-model) · [Agent for background jobs](#agent-for-background-jobs) ·
-[Only this computer](#only-this-computer) · [Reading pictures](#reading-pictures) ·
-[Reading for facts](#reading-for-facts) · [Better search](#better-search)
+**On this page:**
+
+1. [AI model](#set-the-ai-model)
+2. [Agent for background jobs](#agent-for-background-jobs)
+3. [Only this computer](#only-this-computer)
+4. [Reading pictures](#reading-pictures)
+5. [Reading for facts](#reading-for-facts)
+6. [Better search](#better-search)
 
 <DesktopShot
   shot="settings"
@@ -114,9 +119,24 @@ computer. Choose a reader and click **Use this reader**.
 Two helpers can make search find more. Both are off by default, and both send data to the model you choose, so each
 asks first. They live in Memo's details: on the Tools page, click **Manage** on Memo's row.
 
-Before turning them on, set up your notes on the same panel. The card **Set up your notes** has three steps: choose
-your notes folders, read your notes, and **Search by meaning (optional)**. The last step offers the local search
-models; the recommended one is labelled **Best local model**. It runs on your computer and sends nothing.
+Before turning them on, set up your notes on the same panel.
+
+### Set up your notes
+
+Bring your Obsidian vault or any folder of Markdown files into search. Your files stay as they are: Memo keeps a
+searchable copy in its own store. The card **Set up your notes** has three steps.
+
+1. **Choose your notes folders.** Under **Obsidian vaults on this computer** you see the vaults Obsidian already
+   knows. Click **Connect** next to one. **Connect an Obsidian vault…** opens the folder window for a vault that is
+   not listed, and **Choose a folder…** for any other folder. WireCat sees whether a folder belongs to a vault, so
+   tags and `[[links]]` read the way Obsidian reads them, and a `#word` in a plain Markdown folder stays a word. Each
+   folder shows **Obsidian** or **Markdown**. The vault list shows only vaults Memo does not read yet, and it is
+   hidden when there are none. A folder you choose that holds vaults one or two levels down gets them offered one by
+   one, or you add it as plain Markdown. A folder added before Desktop chose the format keeps **Obsidian** until you
+   add it again here. An up-to-date Memo then reads its notes again in the new format.
+2. **Read your notes.** Click **Read my notes**. A few hundred notes take under a minute.
+3. **Search by meaning (optional).** It offers the local search models. The recommended one is labelled **Best local
+   model**. It runs on your computer and sends nothing.
 
 ### Rewrite records for better search
 

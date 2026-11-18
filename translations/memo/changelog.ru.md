@@ -8,6 +8,148 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
+## 0.144.0 — 17.11.2026
+
+### Changed — may break callers
+
+- **`review agenda`'s `crm` section lists what the CRM copy says changed**, read by cli-core's `store.crm.changes`:
+  deals and leads made, moved between stages, won, lost or given another owner, and activities added or done on them,
+  newest first. An edit that is none of these is no longer listed, and the 500 newest deals and leads are no longer the
+  limit. A line no longer names the company.
+
+### Fixed
+
+- `memo context` lists under `files` the pages a person owns or last edited in any documents source, Notion
+  included, not only Google Drive. The text answer heads them "Files, as their source reports".
+- `memo context person:<id> --source …` and a group run list under `files` only the files of the documents accounts
+  they read. Before, a file from any Google Drive or Notion account showed up.
+- `memo context person:<id> --source …`, and `context`, `organizations context` and `projects context` in a group
+  run, leave out the notes of a notes folder or documents account they do not read. Sources you added by hand are an
+  account of their own and follow the same rule. The notes you wrote in memo belong to no account and always stay,
+  while `search notes --source` reads them only when the list names `notes:internal`.
+
+### Security
+
+- **memo shows a CRM copy only as far as the user its sync signed in as may read it**: `deals` and `leads` `list`,
+  `show` and `context`, `projects status`, `pipelines list` and `show`, `show`, `search all` and the agenda leave out
+  the deals and leads of a copy assigned to another CRM user, as the CRM's own CLI does for that profile, and `deals`
+  and `leads` `update`, `move` and `close` refuse them as not found. `show` marks such a reference unavailable and
+  names nothing of it. A copy synced by the CRM's administrator, or by a CRM that limits nobody, shows whole as before.
+  When a copy's sync named no user, or no sync of cli-core 0.678.0 or later recorded who may read it, the answer says
+  why and carries `complete: false`.
+- **The contexts around a CRM deal name none a CRM user may not read**: `organizations context`, `context` of a person,
+  `deals` and `leads` `context`, `people review` and `relationships list` leave out the deals and leads of a copy
+  assigned to another CRM user, and the relationships whose end is one, as the deal lists already did. When a copy's
+  sync named no user, these answers say why and carry `complete: false`.
+
+## 0.143.0 — 16.11.2026
+
+### Added
+
+- **`memo organizations context` lists what its people wrote, newest first.** A "History" section and `history` in
+  JSON: their messages, mail, events and calls, each with the start of its text and, for a call, its direction, length
+  and the employee, in this computer's time zone. Counts stay under "Written by its people". The texts are other
+  people's words: `untrusted` names them.
+
+### Fixed
+
+- **memo starts on cli-core 0.680.0 and cli-base 0.106.0.** The shared `skill show` now takes `[name]`, a part of
+  the skill or a skill shipped for a task, so memo's reviewed overrides of the shared `skill` command name that
+  argument. Before this, memo refused to start against cli-core 0.680.0 with `contract.unacknowledged-override`.
+
+## 0.142.0 — 16.11.2026
+
+### Added
+
+- **`memo context` leads with the person's history: what happened last, across every source, newest first.** Their
+  one-to-one messages with the start of each text, mail, calendar events and phone calls, each call with its
+  direction, length, the employee who took it and the start of what was said, in one list (`history` in JSON). `--limit`
+  ends the page; `history.before_time` gives the time for `--before-time` to read the page before it, and `--since-time` bounds
+  it (`30d`, a date). A recorded call or meeting under `meetings` has `snippet`, the start of its transcript. The texts
+  are other people's words: `untrusted` names them. See [the person-brief scenario](https://github.com/WireCatLabs/cli-memo/blob/v0.144.0/scenarios/person-brief.md).
+
+### Fixed
+
+- **`memo context` shows times in this computer's time zone and names it** (`times in Europe/Madrid`), not in UTC. A
+  call at 16:30 in Madrid read 15:30 before. JSON keeps ISO times in UTC.
+
+## 0.141.0 — 16.11.2026
+
+### Added
+
+- **An agent's `memo people link` merges at once on strong evidence**, and only uncertain matches wait for you. Memo
+  decides, never the agent's word: one mobile number or personal address that only these two people have, from two
+  different sources, and for a phone at least one of them a messenger or a call. The answer is `merged` with the
+  evidence and the merge id, or `proposed` with `evidence.weak` saying why it waits. `people show` names the agent,
+  run, reason and evidence of each agent's merge, and `memo people unmerge` undoes it. `agent_merges: propose` makes
+  every agent's link wait as before ([configuration](./configuration.md#agent_merges)).
+- **`memo people review` carries the context to decide.** Each match says what the two people share and why it is
+  not strong (`strength`), and `sides`: each person's identities by source, last messages or calls with dates,
+  companies and deals; `--full` adds phones, addresses, accounts and more text, and `--brief` leaves the sides out.
+  `--kind merged` lists the agents' merges still in place, each with the command that undoes it
+  ([people](./people.md#link-a-persons-accounts)).
+
+## 0.140.0 — 16.11.2026
+
+### Added
+
+- **`memo facts history` lists the facts removed, newest first** (cli-core 0.674.0). Each row says which fact it was,
+  what it was about, who removed it (you or an agent), when and why. It never shows what the fact said: removing still
+  forgets that. `memo facts remove --reason <text>` keeps the reason there, and `memo facts reverse --reason <text>`
+  keeps it on the reversed decision. An agent can read the log over MCP; only you can remove a fact.
+- **memo ships its WireCat manifest, `contracts/wirecat.json`.** WireCat Desktop reads it out of the package before it
+  installs memo, and shows the hosts memo may contact: the default addresses of the readers and AI models, this
+  computer, and the shared update and model downloads. `memo --wcat-describe` answers format 2.
+
+### Changed — may break callers
+
+- **`memo projects evidence` and `memo projects status` take `--purposes`** for the comma list of chat purposes to
+  read, as the family's flags name a list. `--purpose` still works for one more version, hidden from help and the
+  command list. `memo relationships update --purpose` is unchanged: it sets one chat's purpose.
+
+### Fixed
+
+- **`memo notes export` and `memo notes edit --export` write a note's first subject as a link.** Only
+  `memo notes add --export` wrote it before; the others left the first `--subject` out of the file (cli-core 0.674.0).
+
+## 0.139.0 — 15.11.2026
+
+### Fixed
+
+- **`memo meetings list` counts Google Meet's transcript or Gemini notes as a transcript** (cli-core 0.668.0).
+  `has_transcript` and the `has_transcript:true` filter now also count a Drive document that Meet named as the
+  meeting's transcript or notes, and an imported Drive document on the calendar event whose title holds a transcript
+  word ("Transcript", "Notes by Gemini", and their Russian and Spanish forms). Before, a Meet meeting with only Gemini
+  notes was left out of the filter. An agenda or other document on the event does not count.
+
+## 0.138.0 — 15.11.2026
+
+### Added
+
+- **A meeting carries its calendar page, the invitation answers, its series and its Drive files** (cli-core 0.665.0,
+  was 0.664.0). `meetings list` and `meetings show` give each calendar's link to the event (Google's `https` link),
+  your answer and the conference name, each participant's answer, how the meeting repeats, and the event's Drive
+  files. WireCat Desktop's meeting card uses them for "Open in Google Calendar".
+
+## 0.137.0 — 15.11.2026
+
+### Added
+
+- **`memo models chats show` and `memo models chats set <mode>`** (cli-core 0.664.0). They say whether chat text may
+  go to a model off this computer: `allowed`, `ask` (needs `--yes`) or `denied` (refused even with `--yes`).
+
+### Fixed
+
+- **`memo review agenda` and the morning digest no longer crash** (cli-core 0.664.0). A project link from a chat that
+  was since deleted made them stop with `command.crashed`. Such a link is now left out.
+
+## 0.136.0 — 15.11.2026
+
+### Fixed
+
+- On macOS and Windows, `memo folders add` and `memo doctor` now see `~/Notes` and `~/notes/Daily` as overlapping
+  folders. These disks ignore case, so memo read the shared files twice.
+
 ## 0.135.0 — 14.11.2026
 
 ### Changed — may break callers

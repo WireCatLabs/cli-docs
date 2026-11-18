@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test"
 
 const titles = { en: "Meetings", ru: "Встречи", es: "Reuniones" }
 const startTitles = {
-  en: "Connect Zoom transcripts and recordings to your AI agent",
-  ru: "Подключите расшифровки и записи Zoom к ИИ-агенту",
-  es: "Conecta las transcripciones y grabaciones de Zoom a tu agente de IA",
+  en: "Zoom transcripts MCP server and CLI",
+  ru: "MCP-сервер и CLI для расшифровок Zoom",
+  es: "Servidor MCP y CLI para transcripciones de Zoom",
 }
 const ownershipRecovery = {
   en: "lost or changed writer ownership",
@@ -100,7 +100,7 @@ for (const lang of ["en", "ru", "es"] as const) {
   test(`${lang}: Meetings keeps readable cross-source workflow`, async ({ page, request }) => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto(`/${lang}/docs/zm/meetings`)
-    await expect(page.getByRole("heading", { level: 1, name: `${titles[lang]} — Zoom`, exact: true })).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1, name: `Zoom: ${titles[lang]}`, exact: true })).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/zm/search"]`)).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/drive"]`)).toBeVisible()
     await expect(page.locator(`main a[href="/${lang}/docs/memo"]`)).toBeVisible()
