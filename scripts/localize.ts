@@ -36,6 +36,7 @@ export const siteOwnedPages: { tool?: string; slug: string; after?: string }[] =
   { tool: "mail", slug: "email", after: "usage" },
   { tool: "zm", slug: "meetings", after: "usage" },
   { tool: "notion", slug: "roadmap", after: "changelog" },
+  { tool: "amo", slug: "roadmap", after: "changelog" },
 ]
 export const siteOwnedFor = (tool: string) => siteOwnedPages.filter((page) => !page.tool || page.tool === tool)
 

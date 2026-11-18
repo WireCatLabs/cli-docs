@@ -51,7 +51,8 @@
       "gcal": "Google Calendar MCP server and CLI, offline search",
       "mail": "IMAP mail MCP server and CLI with offline search",
       "b24": "Bitrix24 MCP server and CLI for your CRM",
-      "notion": "Notion MCP server and CLI with offline search"
+      "notion": "Notion MCP server and CLI with offline search",
+      "amo": "amoCRM and Kommo MCP server and CLI for your CRM"
     },
     "products": {
       "tg": "Telegram",
@@ -64,7 +65,8 @@
       "pbx": "Asterisk",
       "max": "MAX messenger",
       "mail": "email",
-      "b24": "Bitrix24"
+      "b24": "Bitrix24",
+      "amo": "amoCRM"
     },
     "labels": {
       "max": "MAX",
@@ -182,7 +184,8 @@
       "gcal": "MCP-сервер и CLI для Google Calendar",
       "mail": "MCP-сервер почты по IMAP с поиском без интернета",
       "b24": "Битрикс24 MCP-сервер и CLI для CRM",
-      "notion": "Notion MCP-сервер и CLI с поиском без интернета"
+      "notion": "Notion MCP-сервер и CLI с поиском без интернета",
+      "amo": "amoCRM и Kommo: MCP-сервер и CLI для CRM"
     },
     "products": {
       "tg": "Telegram",
@@ -195,7 +198,8 @@
       "pbx": "Asterisk",
       "max": "MAX",
       "mail": "почты",
-      "b24": "Битрикс24"
+      "b24": "Битрикс24",
+      "amo": "amoCRM"
     },
     "labels": {
       "mail": "Почта"
@@ -311,7 +315,8 @@
       "gcal": "Servidor MCP y CLI de Google Calendar",
       "mail": "Servidor MCP de correo IMAP con búsqueda sin conexión",
       "b24": "Servidor MCP y CLI para el CRM de Bitrix24",
-      "notion": "Servidor MCP y CLI de Notion con búsqueda sin conexión"
+      "notion": "Servidor MCP y CLI de Notion con búsqueda sin conexión",
+      "amo": "Servidor MCP y CLI para el CRM de amoCRM y Kommo"
     },
     "products": {
       "tg": "Telegram",
@@ -324,7 +329,8 @@
       "pbx": "Asterisk",
       "max": "MAX",
       "mail": "correo",
-      "b24": "Bitrix24"
+      "b24": "Bitrix24",
+      "amo": "amoCRM"
     },
     "labels": {
       "mail": "Correo"

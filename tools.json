@@ -131,6 +131,21 @@
     }
   },
   {
+    "name": "amo",
+    "displayName": "amoCRM",
+    "repo": "WireCatLabs/amo-cli",
+    "package": "@wirecat/amo-cli",
+    "lang": "en",
+    "docsRef": "v0.1.1",
+    "tier": "extra",
+    "category": "crm",
+    "summary": {
+      "en": "Read and change your amoCRM or Kommo CRM from the terminal or your AI agent: deals, contacts and companies, with a local copy of your own deals to search offline.",
+      "ru": "Читайте и меняйте CRM amoCRM или Kommo из терминала или через ИИ-агента: сделки, контакты и компании, с локальной копией ваших сделок для поиска без интернета.",
+      "es": "Lee y cambia tu CRM de amoCRM o Kommo desde la terminal o con tu agente de IA: negociaciones, contactos y empresas, con una copia local de tus negociaciones para buscar sin conexión."
+    }
+  },
+  {
     "name": "pbx",
     "displayName": "Asterisk",
     "repo": "WireCatLabs/asterisk-cli",

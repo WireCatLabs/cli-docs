@@ -29,6 +29,8 @@ what comes next.
   messages.
 - **[Yandex Disk](./ydisk.mdx)**: the text of the Disk folders you choose on your computer, searchable offline,
   and the files on the Disk listed, uploaded, moved and shared when you allow it.
+- **[amoCRM and Kommo](./amo/index.md)**: your own deals and their clients on your computer, with what changed since
+  yesterday, searchable next to your messages.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -94,6 +96,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [Google Calendar roadmap](./gcal/roadmap.md)
 - [Mail roadmap](./mail/roadmap.md)
 - [Bitrix24 roadmap](./b24/roadmap.md)
+- [amoCRM roadmap](./amo/roadmap.md)
 - [Asterisk roadmap](./pbx/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)

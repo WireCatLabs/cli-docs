@@ -96,6 +96,7 @@ export const sidebarIcons = {
   email: Mail,
   mail: Mail,
   b24: Handshake,
+  amo: Handshake,
   asterisk: Server,
   pbx: PhoneCall,
   beeline: PhoneCall,
@@ -213,6 +214,7 @@ const serviceLogos: Record<string, string> = {
   markdown: "markdown.svg",
   ydisk: "yandex-disk.png",
   b24: "bitrix24.svg",
+  amo: "amocrm.png",
   beeline: "beeline.svg",
 }
 
@@ -273,7 +275,7 @@ const toolGroups = {
   messengers: { tools: ["tg", "max", "wa"], open: true, icon: MessageSquare },
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
-  crm: { tools: ["b24"], open: false, icon: Handshake },
+  crm: { tools: ["b24", "amo"], open: false, icon: Handshake },
 } as const
 
 export const toolGroupId = (group: string, lang: string) => `tools-${group}-${lang}`
@@ -363,7 +365,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|b24|pbx)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|b24|amo|pbx)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
