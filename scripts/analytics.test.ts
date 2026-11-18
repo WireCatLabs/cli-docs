@@ -1,6 +1,6 @@
 import type { PostHog } from "posthog-js"
 import { describe, expect, it, vi } from "vitest"
-import { analyticsEnabled, applyConsent, posthogOptions, startConsentedFeatures } from "../lib/analytics"
+import { analyticsEnabled, applyConsent, posthogOptions, privateText, startConsentedFeatures } from "../lib/analytics"
 
 const client = (status: "granted" | "denied" | "pending") =>
   ({
@@ -26,7 +26,7 @@ describe("analytics consent", () => {
       autocapture: false,
       capture_performance: false,
       enable_recording_console_log: false,
-      session_recording: { maskAllInputs: true, maskTextSelector: "*" },
+      session_recording: { maskAllInputs: true, maskTextSelector: privateText },
     })
   })
   it("starts recording only after an explicit acceptance", () => {

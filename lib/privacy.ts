@@ -8,7 +8,7 @@ export const privacyCopy: Record<
     title: "Privacy Policy",
     intro:
       "How WireCat handles Google, Microsoft, Zoom and email account data, local documents, optional AI processing, WireCat Desktop's update and news checks and bug reports, and visits to wirecat.dev. Learn what is shared and how to disconnect or delete your local copy.",
-    updated: "Last updated: 16 November 2026",
+    updated: "Last updated: 18 November 2026",
     contact: "Questions and requests about your data:",
     sections: [
       {
@@ -148,7 +148,7 @@ export const privacyCopy: Record<
         title: "If you accept",
         paragraphs: [
           "PostHog stores a random identifier in a cookie and in your browser's local storage for this site, so a return visit counts as the same visitor.",
-          "We also record sessions: page layout, scrolling, clicks and mouse movement. All page text and everything typed into fields is masked in your browser before it is sent. Recordings show us which pages are hard to use.",
+          "We also record sessions: page layout, scrolling, clicks and mouse movement. Recordings show the site's own text. Everything typed into fields, and your name and email address on the ideas pages, are masked in your browser before they are sent. Recordings show us which pages are hard to use.",
         ],
       },
       {
@@ -185,7 +185,7 @@ export const privacyCopy: Record<
     title: "Политика конфиденциальности",
     intro:
       "Как WireCat обрабатывает данные аккаунтов Google, Microsoft, Zoom и почты, локальные документы, дополнительные ИИ-запросы, проверку обновлений и новостей и отчёты об ошибках в WireCat Desktop и посещения wirecat.dev. Узнайте, что передаётся и как отключить доступ или удалить локальную копию.",
-    updated: "Обновлено: 16 ноября 2026 г.",
+    updated: "Обновлено: 18 ноября 2026 г.",
     contact: "Вопросы и запросы о ваших данных:",
     sections: [
       {
@@ -325,7 +325,7 @@ export const privacyCopy: Record<
         title: "Если вы согласились",
         paragraphs: [
           "PostHog сохраняет случайный идентификатор в cookie и в локальном хранилище браузера для этого сайта, чтобы повторный визит считался тем же посетителем.",
-          "Мы также записываем сессии: расположение элементов, прокрутку, клики и движения мыши. Весь текст страницы и всё, что вводится в поля, скрывается в браузере до отправки. Записи показывают, какими страницами неудобно пользоваться.",
+          "Мы также записываем сессии: расположение элементов, прокрутку, клики и движения мыши. В записи виден текст самого сайта. Всё, что вводится в поля, а также ваше имя и адрес почты на страницах идей скрываются в браузере до отправки. Записи показывают, какими страницами неудобно пользоваться.",
         ],
       },
       {
@@ -362,7 +362,7 @@ export const privacyCopy: Record<
     title: "Política de privacidad",
     intro:
       "Cómo WireCat trata los datos de cuentas de Google, Microsoft, Zoom y correo, los documentos locales, el procesamiento opcional con IA, las comprobaciones de actualizaciones y novedades y los informes de errores de WireCat Desktop, y las visitas a wirecat.dev. Conoce qué se comparte y cómo desconectar o borrar tu copia local.",
-    updated: "Última actualización: 16 de noviembre de 2026",
+    updated: "Última actualización: 18 de noviembre de 2026",
     contact: "Preguntas y solicitudes sobre tus datos:",
     sections: [
       {
@@ -502,7 +502,7 @@ export const privacyCopy: Record<
         title: "Si aceptas",
         paragraphs: [
           "PostHog guarda un identificador aleatorio en una cookie y en el almacenamiento local de tu navegador para este sitio, de modo que una nueva visita cuenta como el mismo visitante.",
-          "También grabamos sesiones: la disposición de la página, el desplazamiento, los clics y el movimiento del ratón. Todo el texto de la página y todo lo que se escribe en los campos se oculta en tu navegador antes de enviarse. Las grabaciones nos muestran qué páginas son difíciles de usar.",
+          "También grabamos sesiones: la disposición de la página, el desplazamiento, los clics y el movimiento del ratón. Las grabaciones muestran el texto del propio sitio. Todo lo que se escribe en los campos, y tu nombre y tu correo en las páginas de ideas, se ocultan en tu navegador antes de enviarse. Las grabaciones nos muestran qué páginas son difíciles de usar.",
         ],
       },
       {
