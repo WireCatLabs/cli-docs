@@ -1,7 +1,7 @@
 ---
 title: Cómo acelerar un reranker en un portátil, en cuatro actos
 description: Procesar por lotes un reranker cuantizado cambió sus respuestas, no su velocidad. Una biblioteca nativa lo hizo 2 veces más rápido, no 10. Distribuirla no necesitó paquetes npm nuevos, y para Windows la biblioteca que hacía falta solo estaba dentro de un archivo npm.
-date: 2026-10-27
+date: 2026-11-18
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
 coverAlt: "Cincuenta mensajes impresos con una banda top 50, uno leído bajo una lupa, cinco ordenados del 1 al 5 con el primero marcado en verde y un cronómetro en 3,2 segundos"
@@ -20,7 +20,7 @@ glance:
   - value: "5 + Alpine"
     label: "sistemas que CI comprueba en nativo; Alpine sigue con WebAssembly"
     href: "#cuarto-acto-la-biblioteca-de-windows-solo-estaba-dentro-de-un-archivo-npm"
-draft: true
+draft: false
 ---
 
 Nuestras CLI buscan en un archivo de mensajería en el propio ordenador del dueño.

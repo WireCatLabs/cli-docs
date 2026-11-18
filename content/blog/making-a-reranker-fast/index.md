@@ -1,7 +1,7 @@
 ---
 title: Making a reranker fast on a laptop, in four acts
 description: Batching a quantized reranker changed its answers, not its speed. A native runtime made it 2× faster, not 10×. Shipping that runtime took no new npm packages, and on Windows the library we needed was only inside an npm tarball.
-date: 2026-10-27
+date: 2026-11-18
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
 coverAlt: "Fifty printed message cards banded as top 50, one card read under a loupe, five cards ranked 1 to 5 with the first marked green, and a stopwatch at 3.2 seconds"
@@ -20,7 +20,7 @@ glance:
   - value: "5 + Alpine"
     label: "systems CI now runs natively; Alpine stays on WebAssembly"
     href: "#act-four-the-windows-library-was-only-inside-an-npm-tarball"
-draft: true
+draft: false
 ---
 
 Our CLIs search a messenger archive on the owner's own machine. `search messages --discover` finds
