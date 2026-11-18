@@ -80,3 +80,5 @@ Antes de esto, CI solo ejecutaba un modelo de prueba diminuto a través del paqu
 - Un modelo sin cuantizar (fp32), que no debería depender de sus vecinos de lote, pero es más grande y más lento.
 
 Las mediciones sintéticas, su configuración y los scripts están en [cli-testing](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/rerank-speed/README.md), se pueden repetir. De mi archivo real solo hay totales, las preguntas y las filas por pregunta son privadas. Si a ti lo nativo te salió más rápido con textos largos, cuéntame con qué mediste y lo comparo con mis números.
+
+P.D. Mientras este post esperaba a publicarse, el 17 de noviembre a las 22:20 UTC `github.com/microsoft/onnxruntime` empezó a responder 404, descargas de releases incluidas, y `models download` volvió a WebAssembly para todos. Así que al final sí necesito paquetes por plataforma: estoy pasando la biblioteca a mis propios paquetes npm, y de paso Windows descargará unos 11 MB en lugar de 113. Los paquetes aún no están publicados, lo contaré aparte.

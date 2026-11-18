@@ -80,3 +80,5 @@ Before this, CI ran only a tiny test model through the npm package, and nothing 
 - A model without quantization (fp32), which shouldn't depend on its batch neighbours but is bigger and slower.
 
 The synthetic runs, their setup and scripts are in [cli-testing](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/rerank-speed/README.md), you can repeat them. From my real archive there are only totals, the questions and per-question rows stay private. If native came out faster for you on long texts, tell me what you measured on and I'll compare with my numbers.
+
+P.S. While this post waited to go out, at 22:20 UTC on 17 November `github.com/microsoft/onnxruntime` started answering 404, release downloads included, and `models download` fell back to WebAssembly for everyone. So I do need packages per platform after all: I'm moving the library into my own npm packages, and Windows will download about 11 MB instead of 113 on the way. The packages aren't published yet, I'll write about it separately.
