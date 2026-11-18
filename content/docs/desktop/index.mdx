@@ -109,8 +109,11 @@ The ways in, by tool:
 | Google Drive, Google Calendar | Your browser |
 | Email | Your mail address first. Gmail signs in with Google (**Sign in with Google**, recommended), with no Google Cloud setup of your own. A Microsoft account opens Microsoft's sign-in. Other mail servers, and Gmail under **Other ways**, use an app password, a password made only for this program, with guided steps. [Prepare the mailbox](../mail/providers.md) shows how each provider makes one |
 | Bitrix24 | An incoming webhook or a local application from your portal. See [Bitrix24: a webhook or a local application](#bitrix24-a-webhook-or-a-local-application) |
+| amoCRM, Kommo | The account's address and a long-lived token from a private integration. See [amoCRM: a private integration](#amocrm-a-private-integration) |
 | Asterisk | Where your calls are: the path of Master.csv, or the address of a MySQL or PostgreSQL call database and a read-only user's password. Then the countries of your phone lines, so a caller without a country code is linked to the right contact |
 | Notion | A Notion token that you paste in the window. Then choose the pages and databases to copy. Until you choose one, Notion copies everything the token sees |
+| Yandex Disk | A Yandex OAuth token, from an app you register once at oauth.yandex.com. Then choose the folders to copy |
+| beeline | An API token for Beeline Cloud PBX, from the Beeline cabinet |
 
 Where a tool has no sign-in window, **Open terminal** opens a terminal that runs the tool's own setup.
 
@@ -143,6 +146,24 @@ To sign in with a local application:
 The key stays on this computer, in the system keyring. Signing in this way replaces the profile's webhook, and a new
 webhook replaces the application's sign-in. If the browser does not come back to WireCat, try again.
 Some Bitrix24 plans give applications no access: the window then says so, and the incoming webhook still works.
+
+### amoCRM: a private integration
+
+amoCRM and Kommo let a program in only through a private integration that an account administrator makes once. The
+window asks for the account's address first, such as `mycompany.amocrm.ru`, then lists what to do in amoCRM: where to
+create the integration, the redirect address to copy and the access to tick. On a Kommo account, open **On Kommo**.
+
+<DesktopShot
+  shot="amo-integration"
+  folder="desktop/docs"
+  lang="en"
+  alt="The amoCRM sign-in at the integration step, with the four steps in amoCRM and the support waiver warning"
+  caption="WireCat lists what to do in amoCRM, then takes the integration's long-lived token."
+/>
+
+Then paste the long-lived token from the integration's «Ключи» tab. WireCat asks the account who the token belongs to
+and saves the address and the token only if it answers. [Install and connect](../amo/installation.md) has the steps
+in full, and the browser sign-in through the same integration.
 
 ## What you can do in the app
 
