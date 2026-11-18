@@ -28,7 +28,7 @@ evento del calendario, y un botón abre el propio evento en Google Calendar.
 
 Google Meet guarda sus transcripciones y las notas de Gemini en el Drive de quien organiza, a menudo fuera de las
 carpetas que elegiste para WireCat. Ahora, después de iniciar sesión en Drive, WireCat te pregunta si quieres
-añadirlas, y así también aparecen en la ficha de la reunión.
+añadirlas.
 
 ## Escucha tus llamadas junto a tus clientes
 
@@ -52,8 +52,8 @@ La ficha de notas tiene ahora **Conectar una bóveda de Obsidian**, y muestra la
 una con su botón para conectarla.
 
 La nueva página **Documentos** muestra todos los documentos que guarda WireCat, de Drive, de tus carpetas de notas y de
-tus importaciones, como un árbol de carpetas por cuenta y una tabla. Abre uno para leer su texto y ver las personas y
-reuniones que menciona.
+tus importaciones, en una tabla que puedes filtrar por cuenta o por carpeta. Abre uno para leer su texto y ver las
+personas y reuniones que menciona.
 
 ![La página Documentos con una tabla de documentos de Google, hojas de cálculo, PDF y notas, dónde está cada uno y cuándo cambió](./documents-es.webp "Todos los documentos que guarda WireCat, en una tabla.")
 
@@ -76,8 +76,8 @@ quedan fuera, porque cada una de sus actualizaciones pasa por su propia revisió
 
 Si tienes la 0.6, la app te ofrece la actualización ella sola. ¿Eres nuevo? Descarga WireCat en
 [wirecat.dev/es/download](/es/download) para macOS, Windows o Linux. La [guía de Desktop](/es/docs/desktop) cubre
-cada página, y la lista completa de cambios está en las
-[notas de la versión en GitHub](https://github.com/WireCatLabs/wirecat-desktop/releases/tag/v0.7.0).
+cada página, y cada versión de la 0.6.2 a la 0.7.0 tiene sus propias
+[notas de la versión en GitHub](https://github.com/WireCatLabs/wirecat-desktop/releases).
 
 Reuniones y Documentos están marcadas como beta, con una β pequeña junto al nombre. Las ideas de qué hacer después van
 en [la página de ideas](/es/ideas), y las preguntas en [Discord](https://discord.gg/DebENqbRrJ) o en

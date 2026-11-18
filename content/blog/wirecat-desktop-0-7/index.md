@@ -26,7 +26,7 @@ where you can find any word. The card also lists the files attached to the calen
 Google Calendar** takes you to the event itself.
 
 Google Meet keeps its transcripts and Gemini notes in the organizer's Drive, often outside the folders you picked for
-WireCat. After you sign in to Drive, WireCat now asks whether to add them, so they show up on the meeting's card too.
+WireCat. After you sign in to Drive, WireCat now asks whether to add them.
 
 ## Hear your calls next to your clients
 
@@ -49,8 +49,8 @@ to your computer, so you can search them and your agent can read them.
 The notes card now has **Connect an Obsidian vault**, and it lists the vaults Obsidian already knows, each with its
 own Connect button.
 
-The new **Documents** page shows every document WireCat keeps, from Drive, your notes folders and your imports, as a
-folder tree per account and a table. Open one to read its text and see the people and meetings it names.
+The new **Documents** page shows every document WireCat keeps, from Drive, your notes folders and your imports, in one
+table you can narrow to an account or a folder. Open one to read its text and see the people and meetings it names.
 
 ![The Documents page with a table of Google Docs, sheets, PDFs and notes, where each lives and when it changed](./documents-en.webp "Every document WireCat keeps, in one table.")
 
@@ -72,8 +72,8 @@ its own review.
 
 If you have 0.6, the app offers the update itself. New here? Download WireCat from
 [wirecat.dev/download](/en/download) for macOS, Windows or Linux. The [Desktop guide](/en/docs/desktop) covers each
-page, and the full list of changes is in the
-[release notes on GitHub](https://github.com/WireCatLabs/wirecat-desktop/releases/tag/v0.7.0).
+page, and every version from 0.6.2 to 0.7.0 has its own
+[release notes on GitHub](https://github.com/WireCatLabs/wirecat-desktop/releases).
 
 Meetings and Documents are marked beta, with a small β beside the name. Ideas for what to build next go on
 [the ideas page](/en/ideas), and questions to [Discord](https://discord.gg/DebENqbRrJ) or
