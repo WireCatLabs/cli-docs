@@ -2,7 +2,7 @@
 title: "Ajustes"
 ---
 
-Cambia cómo se comporta `ydisk` para un perfil o para todos: qué puede cambiar un agente en tu Disco, cuánto tiempo se
+Cambia cómo se comporta `ydisk` para un perfil o para todos: qué puede cambiar un agente en tu Disk, cuánto tiempo se
 guardan los registros de ejecución y cómo ordena la búsqueda sus resultados. Los ajustes están en un solo archivo,
 `config.json`, en la carpeta que muestra `ydisk doctor`. Cada perfil tiene su propia parte, y `defaults` valen para
 todos los perfiles.
@@ -47,7 +47,7 @@ comprueba y su nivel, sin hacer el cambio.
 
 `YDISK_READ_ONLY=1` rechaza cualquier cambio, digan lo que digan los permisos. Solo para un servidor MCP,
 `--permission
-files.delete=deny` hace una clave más estricta. Mira [conecta tu agente](./mcp.md#decide-what-the-agent-may-change).
+files.delete=deny` hace una clave más estricta. Mira [la conexión del agente](./mcp.md#decide-what-the-agent-may-change).
 
 ## Registros de ejecución
 

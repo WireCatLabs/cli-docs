@@ -23,7 +23,7 @@ WireCat, como el llavero, los permisos, MCP y lo que nunca llega a un registro, 
 | Tus etiquetas, notas y recuerdos sobre documentos | El almacén local | `tags remove`, `notes remove` |
 | Ajustes y registros de ejecución | Las carpetas que muestra `ydisk doctor` | `ydisk runs list` los muestra. Caducan tras los días indicados en los [ajustes](./configuration.md#run-records) |
 
-Los archivos en sí se quedan en el Disco. Solo se guarda una copia de un archivo cuando ejecutas
+Los archivos en sí se quedan en el Disk. Solo se guarda una copia de un archivo cuando ejecutas
 `files download --output`. La sincronización no guarda los enlaces públicos (`public_url`). Nada va a WireCat: no hay
 servidor de WireCat ni una cuenta con nosotros.
 
@@ -47,7 +47,7 @@ solo del propietario. `files upload` rechaza los archivos de credenciales, los p
 WireCat salvo que el propietario añada `--allow-any-file`. `files delete`, `--replace` y los comandos de enlaces
 públicos preguntan primero en una terminal. Por MCP solo los detiene `deny`, así que define `files.delete=deny` y
 `files.share=deny` para un agente que no deba hacerlo, y `files.upload=deny` para uno que no deba poner ningún archivo
-local en el Disco.
+local en el Disk.
 
 `ydisk personal mcp serve --http` escucha solo en `127.0.0.1`, para aplicaciones del navegador que llegan a él por tu
 propio túnel. Cada aplicación inicia sesión con un código de un solo uso, y el servidor guarda un hash de cada inicio

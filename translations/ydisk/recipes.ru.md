@@ -72,7 +72,7 @@ ydisk personal files unpublish /Documents/Flat/lease-2026.pdf
 ```
 
 Файл откроет любой, у кого есть публичная ссылка. В терминале инструмент сначала спрашивает. Через MCP он учитывает
-разрешение `files.share`, см. [подключите агента](./mcp.md#decide-what-the-agent-may-change).
+разрешение `files.share`, см. [подключение агента](./mcp.md#decide-what-the-agent-may-change).
 
 ## Положите на Диск отчет, который написал агент
 

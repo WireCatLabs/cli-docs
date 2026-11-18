@@ -45,9 +45,8 @@ ydisk personal config set permissions.files.upload deny
 `deny` останавливает и `api resources-move`. `--dry-run` у любого изменения показывает каждый проверяемый ключ и его
 уровень, но само изменение не делает.
 
-`YDISK_READ_ONLY=1` отклоняет любое изменение, что бы ни говорили разрешения. Только для одного MCP-сервера
-`--permission
-files.delete=deny` делает ключ строже. См. [подключите агента](./mcp.md#decide-what-the-agent-may-change).
+`YDISK_READ_ONLY=1` отклоняет любое изменение, что бы ни говорили разрешения. Для одного MCP-сервера `--permission
+files.delete=deny` делает ключ строже, но не мягче. См. [подключение агента](./mcp.md#decide-what-the-agent-may-change).
 
 ## Записи запусков
 

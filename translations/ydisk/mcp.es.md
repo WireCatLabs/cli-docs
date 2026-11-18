@@ -45,8 +45,8 @@ ydisk personal mcp add claude-code --allow-writes
 ydisk personal mcp add codex --allow-writes
 ```
 
-`--allow-writes` confirma que sabes que el servidor ofrece los comandos que cambian el Disco. Los permisos del perfil
-siguen decidiendo qué se ejecuta. Mira [Decide qué puede cambiar el agente](#decide-what-the-agent-may-change).
+`--allow-writes` confirma que sabes que el servidor ofrece los comandos que cambian el Disk. Los permisos del perfil
+siguen decidiendo qué se ejecuta. Mira [qué puede cambiar el agente](#decide-what-the-agent-may-change).
 
 ## Claude Desktop, Cursor y otras aplicaciones MCP
 
@@ -82,7 +82,7 @@ navegador inicia sesión con un código de un solo uso que imprimen `server star
 
 ## Decide qué puede cambiar el agente
 
-El servidor MCP ofrece todos los comandos, también los que cambian el Disco. En un terminal la herramienta pregunta
+El servidor MCP ofrece todos los comandos, también los que cambian el Disk. En un terminal la herramienta pregunta
 antes de borrar, sobrescribir o crear un enlace público, pero por MCP no hay nadie a quien preguntar, así que se
 ejecutan. Elige una de estas opciones para un agente:
 
@@ -100,6 +100,6 @@ ejecutan. Elige una de estas opciones para un agente:
 
 Por MCP un agente lee el texto de un archivo con `files download`, pero no puede guardar un archivo en una ruta de tu
 ordenador. Todas las claves de permisos están en los [ajustes](./configuration.md#permissions), y lo que llega a tu
-disco y a la red está en [seguridad](./security.md).
+Disk y a la red está en [seguridad](./security.md).
 
 Siguiente: [peticiones para probar](./recipes.md).

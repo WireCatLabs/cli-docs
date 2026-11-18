@@ -11,7 +11,7 @@ función que falta: puede que ya esté en camino. El orden puede cambiar y no ha
 `ydisk` inicia sesión en tu Yandex Disk con un token de Yandex que creas una sola vez. Copia a tu ordenador el texto de
 las carpetas que elijas, y tú y tu agente lo buscáis por palabras, por significado y por nombre de archivo, incluso sin
 internet. La misma herramienta lista, descarga, sube, mueve y comparte archivos del Disk dentro de los permisos que
-fijes, por la línea de comandos o por MCP. Mira [empieza aquí](./index.md).
+fijes, por la línea de comandos o por MCP. Mira la [introducción](./index.md).
 
 ## Siguiente
 

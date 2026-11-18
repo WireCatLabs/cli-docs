@@ -100,6 +100,7 @@
       "attachments": "Send and download {product} file attachments",
       "topic-search": "Search {product} conversations by topic",
       "drive/search": "Search Google Drive documents with your AI agent",
+      "ydisk/search": "Search Yandex Disk documents with your AI agent",
       "drive/usage": "Import and organize Google Drive documents",
       "memo/search": "Search notes, mail and messages with Memo",
       "memo/archive": "",
@@ -203,10 +204,11 @@
       "mail": "почты",
       "b24": "Битрикс24",
       "amo": "amoCRM",
-      "ydisk": "Яндекс Диск"
+      "ydisk": "Яндекс Диска"
     },
     "labels": {
-      "mail": "Почта"
+      "mail": "Почта",
+      "ydisk": "Яндекс Диск"
     },
     "pageTitles": {
       "installation": "Установка CLI и MCP-сервера {product}",
@@ -234,6 +236,8 @@
       "attachments": "Отправка и загрузка вложений в {product}",
       "topic-search": "Поиск по темам переписки в {product}",
       "drive/search": "Поиск документов Google Drive через ИИ-агента",
+      "ydisk/search": "Поиск документов Яндекс Диска через ИИ-агента",
+      "ydisk/recipes": "Рецепты для ИИ-агента с Яндекс Диском",
       "drive/usage": "Импорт и упорядочивание документов Google Drive",
       "memo/search": "Поиск по заметкам, почте и сообщениям в Memo",
       "memo/archive": "",
@@ -367,6 +371,7 @@
       "attachments": "Envía y descarga archivos adjuntos de {product}",
       "topic-search": "Busca conversaciones de {product} por tema",
       "drive/search": "Busca documentos de Google Drive con tu agente de IA",
+      "ydisk/search": "Busca documentos de Yandex Disk con tu agente de IA",
       "drive/usage": "Importa y organiza documentos de Google Drive",
       "memo/search": "Busca en notas, correo y mensajes con Memo",
       "memo/archive": "",

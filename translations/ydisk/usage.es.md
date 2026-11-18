@@ -86,7 +86,7 @@ ydisk personal documents export 1a2b3c --output ./contract.md
 
 `documents show` imprime el texto completo de un documento, que encuentras por su id en `search` o `documents list`. El
 id de arriba es un ejemplo. `documents export` lo escribe en un archivo Markdown nuevo. Las etiquetas, las notas y los
-recuerdos se quedan con el documento y nunca llegan al Disk. Consulta [encuentra un documento](./search.md).
+recuerdos se quedan con el documento y nunca llegan al Disk. Consulta [búsqueda de documentos](./search.md).
 
 ## Trabaja con archivos en vivo
 
@@ -127,4 +127,4 @@ Todos los comandos salvo `mcp serve` aceptan `--json` e imprimen un único valor
 JSON por stderr, con un `code` para ramificar, y cada tipo de fallo tiene su propio código de salida. La
 [referencia de comandos](./commands.md) los lista.
 
-Siguiente: [encuentra un documento](./search.md) o [conecta tu agente](./mcp.md).
+Siguiente: [búsqueda de documentos](./search.md) o [conexión del agente](./mcp.md).

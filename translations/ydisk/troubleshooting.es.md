@@ -32,16 +32,16 @@ ydisk personal doctor --online
 | "refused the token", código de salida 4 | El token es incorrecto, se revocó o caducó. [Consigue un token nuevo](./installation.md#get-a-yandex-token) y vuelve a ejecutar `ydisk personal session start`. |
 | Un cambio falla con el código de salida 5 | El token no tiene el permiso `cloud_api:disk.write`, o lo rechazan los permisos del perfil o `YDISK_READ_ONLY`. Revisa los [ajustes](./configuration.md#permissions). Para el permiso, registra la aplicación de nuevo con él y consigue un token nuevo. |
 | "the OS keyring did not answer" en Linux | El bus de sesión se reinició. Cierra la sesión y vuelve a entrar, o inicia sesión con `session start --credential-storage file`. |
-| "no such item, or this token cannot see it", código de salida 6 | Comprueba la ruta con `files list --folder` en su carpeta superior. Una ruta del Disco empieza por `/`, como en `/Documents/plan.pdf`. |
+| "no such item, or this token cannot see it", código de salida 6 | Comprueba la ruta con `files list --folder` en su carpeta superior. Una ruta del Disk empieza por `/`, como en `/Documents/plan.pdf`. |
 | "asked to slow down", código de salida 8 | Yandex recibió demasiadas peticiones de esta cuenta. Espera un minuto y vuelve a ejecutar el comando. |
 | Una sincronización se detiene antes del final | Una sincronización lee hasta 200 archivos. Ejecuta `sync` otra vez hasta que `status` no muestre trabajo pendiente. |
-| Faltan los documentos de una carpeta elegida | La carpeta se renombró o se movió en el Disco. Añádela de nuevo con su ruta nueva con `folders add`. |
+| Faltan los documentos de una carpeta elegida | La carpeta se renombró o se movió en el Disk. Añádela de nuevo con su ruta nueva con `folders add`. |
 | La búsqueda no encuentra un archivo que sabes que está | Mira [cuando la búsqueda no encuentra nada](./search.md#when-search-finds-nothing). |
 | Un PDF se encuentra por el nombre pero no por su texto | Es un escaneo sin capa de texto, o pesa más de 50 MB. `status` lista esos archivos con el motivo. |
-| Una subida falla porque el Disco está lleno | Libera espacio en el Disco o vacía su papelera. Reintentar no sirve hasta que haya sitio. |
+| Una subida falla porque el Disk está lleno | Libera espacio en el Disk o vacía su papelera. Reintentar no sirve hasta que haya sitio. |
 | Se rechaza una subida grande | Yandex limita el tamaño de un archivo según el plan: 1 GB sin un plan de Yandex 360, más con uno ([límites de Yandex](https://yandex.ru/support/yandex-360/customers/disk/web/ru/uploading)). |
 | Un cambio terminó con "outcome_unknown", código de salida 14 | Yandex falló durante el cambio, así que puede que se hiciera o puede que no. Comprueba con `files show` antes de volver a ejecutarlo. |
-| Un agente cambió un archivo que no querías que cambiara | Por MCP el nivel ask deja que un comando se ejecute. Deniega `files.delete` y `files.share`, o define `YDISK_READ_ONLY=1`. Mira [conecta a tu agente](./mcp.md#decide-what-the-agent-may-change). Un archivo borrado está en la papelera del Disco: `files restore`. |
+| Un agente cambió un archivo que no querías que cambiara | Por MCP el nivel ask deja que un comando se ejecute. Deniega `files.delete` y `files.share`, o define `YDISK_READ_ONLY=1`. Mira [la conexión del agente](./mcp.md#decide-what-the-agent-may-change). Un archivo borrado está en la papelera del Disk: `files restore`. |
 | El archivo de ajustes no se lee | `doctor` lista cada problema del archivo en `config.issues`. Ejecuta el `config unset` que da cada uno, `config repair`, o corrige el archivo a mano. |
 | `doctor` lista `files.problems` | Otros usuarios del ordenador pueden leer `config.json` o entrar en su carpeta. Ejecuta cada `chmod` que `doctor` imprime después de "to make it private:". |
 

@@ -12,7 +12,7 @@ ejecuta. Dan por hecho que ya has [iniciado sesión](./installation.md), elegido
 2. [Responde a partir de un archivo fuera de las carpetas elegidas](#answer-from-a-file-outside-the-chosen-folders)
 3. [Ordena las facturas del año pasado en un archivo](#tidy-last-years-invoices-into-an-archive)
 4. [Comparte un archivo y cierra el enlace después](#share-a-file-and-close-the-link-later)
-5. [Pon en el Disco un informe que escribió el agente](#put-a-report-the-agent-wrote-on-the-disk)
+5. [Pon en el Disk un informe que escribió el agente](#put-a-report-the-agent-wrote-on-the-disk)
 6. [Deshaz un borrado](#undo-a-delete)
 7. [Mantén la copia al día cada mañana](#keep-the-copy-current-every-morning)
 
@@ -72,9 +72,9 @@ ydisk personal files unpublish /Documents/Flat/lease-2026.pdf
 ```
 
 Cualquiera que tenga un enlace público puede abrir el archivo. En un terminal la herramienta pregunta antes. Por MCP
-sigue el permiso `files.share`, mira [conecta tu agente](./mcp.md#decide-what-the-agent-may-change).
+sigue el permiso `files.share`, mira [conexión del agente](./mcp.md#decide-what-the-agent-may-change).
 
-## Pon en el Disco un informe que escribió el agente
+## Pon en el Disk un informe que escribió el agente
 
 ```text prompt
 Use ydisk CLI with profile personal. Save the summary you just wrote as summary.md in /Reports on my Disk.
@@ -85,7 +85,7 @@ ydisk personal files upload ./summary.md --folder /Reports
 ```
 
 Una subida rechaza los archivos de credenciales, los perfiles de navegador y las carpetas de WireCat, así que un
-agente no puede enviarlos al Disco por error.
+agente no puede enviarlos al Disk por error.
 
 ## Deshaz un borrado
 
@@ -98,7 +98,7 @@ ydisk personal api trash-resources-list --json
 ydisk personal files restore trash:/old.pdf
 ```
 
-`files delete` mueve un archivo a la papelera del Disco, así que puede volver hasta que se vacíe la papelera.
+`files delete` mueve un archivo a la papelera del Disk, así que puede volver hasta que se vacíe la papelera.
 
 ## Mantén la copia al día cada mañana
 

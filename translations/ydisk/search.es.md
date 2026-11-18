@@ -2,7 +2,7 @@
 title: "Encuentra un documento"
 ---
 
-Encuentra un contrato, una cifra o una decisión en tus carpetas del Disco por lo que dice el documento, aunque no
+Encuentra un contrato, una cifra o una decisión en tus carpetas del Disk por lo que dice el documento, aunque no
 recuerdes su nombre. La búsqueda lee la copia de tu ordenador, así que responde sin internet y no cuesta ninguna
 petición a Yandex. Cubre las carpetas que elegiste y sincronizaste. Mira [carpetas y sincronización](./usage.md).
 
@@ -30,10 +30,10 @@ ydisk personal search "invoice 2026" --exact
 
 La búsqueda encuentra otras formas de una palabra: "договор" también encuentra "договора" y "договоре", y "budgets"
 encuentra "budget". `--exact` busca las palabras tal como están escritas. Cada resultado trae el id del documento,
-su ruta en el Disco y un fragmento. Pasa el id a `documents show` para ver el texto completo.
+su ruta en el Disk y un fragmento. Pasa el id a `documents show` para ver el texto completo.
 
 Un campo acota los resultados: `tag:` encuentra los documentos con una etiqueta tuya, y `date:` busca por la fecha
-del último cambio en el Disco.
+del último cambio en el Disk.
 
 ```sh
 ydisk personal search "budget tag:follow-up"
@@ -69,11 +69,11 @@ ydisk personal catalog tree
 ```
 
 Un archivo fuera de las carpetas elegidas se encuentra en directo: `files list --folder /Documents` lista una carpeta
-del Disco.
+del Disk.
 
 ## Etiquetas y notas
 
-Las etiquetas y las notas son tuyas y se quedan en tu ordenador. El Disco nunca las ve. Se quedan con el documento
+Las etiquetas y las notas son tuyas y se quedan en tu ordenador. El Disk nunca las ve. Se quedan con el documento
 cuando el archivo se mueve.
 
 ```sh
@@ -88,12 +88,12 @@ documento con sus etiquetas, notas y recuerdos.
 ## En tus otras fuentes
 
 La copia vive en el almacén local que comparten las otras herramientas de WireCat. Con
-[Memo](https://wirecat.dev/en/docs/memo), una sola búsqueda encuentra un documento del Disco junto al chat de
+[Memo](https://wirecat.dev/en/docs/memo), una sola búsqueda encuentra un documento del Disk junto al chat de
 Telegram o al correo donde se habló de él.
 
 ## Cuando la búsqueda no encuentra nada
 
-Un resultado vacío significa que nada coincidió en la copia, no que el Disco no tenga ese archivo. Comprueba, por
+Un resultado vacío significa que nada coincidió en la copia, no que el Disk no tenga ese archivo. Comprueba, por
 este orden:
 
 1. `ydisk personal folders list`: ¿está elegida la carpeta del archivo?
