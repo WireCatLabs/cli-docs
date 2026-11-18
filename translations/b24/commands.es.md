@@ -5,12 +5,22 @@ title: "Comandos b24"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 
-Todos los comandos, opciones y códigos de salida, generados a partir del propio programa. Para obtener la misma lista en
-JSON, ejecuta `b24 commands --json`. Las descripciones conservan el idioma de la ayuda.
+Consulta cualquier comando de `b24`: qué hace, sus argumentos y opciones, qué responde y
+cómo puede fallar. Cada entrada se genera a partir del propio programa, así que coincide con esa versión de `b24`.
+
+Aquí están, para ti o para tu agente, las palabras exactas de cada tarea, como los campos de consulta de `deals list`
+o las opciones de `deals move`. Para obtener la misma lista en JSON, un agente ejecuta `b24 commands --json`. Las
+descripciones conservan el idioma de la ayuda.
 
 **La primera palabra es el perfil**, un nombre que eliges tú: `b24 work config show`. `B24_PROFILE`
 hace lo mismo para toda una sesión de la terminal. Nunca se da un perfil por supuesto: un comando que usa una cuenta
 se detiene si no lo tiene y muestra los perfiles de este ordenador.
+
+**En esta página:**
+
+1. [Opciones para todos los comandos](#options-for-every-command)
+2. [Los comandos](#b24-commands), una sección por grupo, de `commands` a `runs`
+3. [Códigos de salida](#exit-codes)
 
 ## Opciones para todos los comandos
 
@@ -1321,7 +1331,7 @@ b24 meetings transcribe [query] [options]
 | `--max-meetings <n>` | at most this many calls transcribed, newest first. Default: `20`. |
 | `--model <model>` | local speech model. Default: `gigaam-v3`. |
 
-**Returns:** call transcription report — transcribed, audio_seconds, failed, without_recording, remaining, stopped; every field: b24 commands info meetings transcribe
+**Returns:** call transcription report — transcribed, audio_ms, failed, remaining, stopped; every field: b24 commands info meetings transcribe
 
 **Example:** `b24 work meetings transcribe --max-meetings 20 --json`, `b24 work meetings transcribe "duration_ms>=60000" --json`
 

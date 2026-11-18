@@ -2,7 +2,28 @@
 title: "Uso"
 ---
 
-Esta página explica cómo se construye un comando y cómo usa la herramienta un agente. Léela antes de tu primer comando.
+Encuentra una negociación, muévela o mira qué cambió durante la noche con un comando corto, el mismo que ejecuta tu
+agente. La API REST de Bitrix24 habla con nombres de métodos, códigos de campo como `UF_CRM_…` e ids de etapa como
+`C1:WON`, y `b24` acepta en su lugar nombres de etapa y etiquetas de campo.
+
+Encuentras las negociaciones atascadas en una etapa, o cierras una como ganada, en una línea. Un agente hace lo mismo
+a partir de lo que le pides.
+
+Cada comando empieza por un perfil, el nombre que diste al inicio de sesión de un portal. `sync` copia tus
+negociaciones y prospectos al almacén local de WireCat, donde los encuentran las lecturas. `api call` llega a
+cualquier otro método de Bitrix24. Necesitas un perfil con la sesión iniciada: [instalar](./installation.md) te
+prepara uno.
+
+**En esta página:**
+
+1. [El perfil va primero](#the-profile-comes-first)
+2. [Iniciar sesión](#sign-in)
+3. [Sincronizar](#sync)
+4. [Leer](#read)
+5. [Qué cambió](#what-changed)
+6. [Escribir](#write)
+7. [Salida para scripts](#output-for-scripts)
+8. [Agentes](#agents)
 
 ## El perfil va primero
 
@@ -43,7 +64,7 @@ la dirección se usa antes que cualquiera de los dos. La dirección es la contra
 que el empleado del webhook.
 
 `b24 work session status --check` muestra el empleado con el que actúa el webhook y si es administrador.
-`b24 work session end` olvida la dirección en este ordenador; el webhook sigue en Bitrix24 hasta que lo borres allí.
+`b24 work session end` olvida la dirección en este ordenador. El webhook sigue en Bitrix24 hasta que lo borres allí.
 `b24 session list` muestra los perfiles de este ordenador.
 
 Un webhook pertenece a un solo perfil. `session start` rechaza un webhook que ya usa otro perfil de este ordenador (el
@@ -84,7 +105,7 @@ ordenador. Bitrix24 no permite revocarlos, así que para pararlos borra la aplic
 
 ```sh
 b24 work account remove --keep-data --dry-run   # what it would remove and keep, changing nothing
-b24 work account remove --keep-data             # forget the profile; its copy of the portal stays searchable
+b24 work account remove --keep-data             # forget the profile, its copy of the portal stays searchable
 b24 work account remove --delete-data --yes     # also delete the portal's deals, leads, contacts and companies
 ```
 
@@ -99,14 +120,14 @@ Las negociaciones, los prospectos, los embudos y las etapas se leen del almacén
 buscan todas las herramientas de WireCat. `sync` lo pone al día:
 
 ```sh
-b24 work sync                    # what changed since the last sync; everything on the first one
+b24 work sync                    # what changed since the last sync, everything on the first one
 b24 work sync --rescan           # everything again, every id too
 b24 work store status            # how far each kind is, and how many are stored
 ```
 
 Una sincronización lee por la hora de cambio de cada elemento, con un solapamiento, así que un elemento que cambió
 mientras se ejecutaba vuelve a llegar la próxima vez. Una vez al día también lista todos los ids y marca como borrados
-los que el portal ya no tiene; una lista que marcaría más de la mitad se retiene, porque un webhook que perdió sus
+los que el portal ya no tiene. Una lista que marcaría más de la mitad se retiene, porque un webhook que perdió sus
 derechos no lista ninguno. Una sincronización se detiene antes de su plazo o de `--max-pages`, y la siguiente sigue
 desde ahí.
 
@@ -122,7 +143,7 @@ Cualquier otro cliente lo encuentras en el propio portal.
 ```sh
 b24 work users list                                                    # who is who on the portal
 b24 work config set crm.bitrix24:example.bitrix24.ru.unassigned 3327   # copy the deals and leads of user 3327
-b24 work config set crm.bitrix24:example.bitrix24.ru.scope mine        # the default; an old "all" is refused
+b24 work config set crm.bitrix24:example.bitrix24.ru.scope mine        # the default, an old "all" is refused
 b24 work people list name:ivan*                                        # any contact, read from the portal now
 ```
 
@@ -294,14 +315,14 @@ b24 work people show "Anna Ivanova"             # contacts and companies by id, 
 
 `deals`, `leads`, `pipelines` y `stages` son los comandos de CRM que comparte WireCat: las mismas palabras, consulta y
 respuesta en todas las herramientas de CRM. Una negociación o un prospecto responde su `pipeline`, `stage`, `status`,
-`close_date`, y `amount` como decimal en su `currency`; `--offline` lee lo mismo. Los prospectos de Bitrix24 no tienen
+`close_date`, y `amount` como decimal en su `currency`. `--offline` lee lo mismo. Los prospectos de Bitrix24 no tienen
 embudos, así que están en un único embudo llamado `Leads`.
 
 `people`, `organizations` y `users` también son comandos de CRM compartidos y leen el propio portal, así que
 `--offline` los rechaza. Una persona u organización da los campos propios del portal en `provider_metadata`, cada uno
 por su código con su etiqueta. Un campo de lista da la etiqueta de su opción, y el id de la opción como `option_id`.
 El sector, los ingresos y la moneda de una empresa también están ahí. `b24 work fields list deals` muestra esos campos con su tipo y sus opciones, tal como los
-guardó el último `sync`; `leads`, `people` y `organizations` funcionan igual. Sus listas también filtran por esos
+guardó el último `sync`. `leads`, `people` y `organizations` funcionan igual. Sus listas también filtran por esos
 campos, por código o por etiqueta, cuando el portal puede filtrar por ellos, y `--json` puede añadirlos:
 
 ```sh
@@ -319,6 +340,27 @@ contactos y empresas al día (UTC), contando juntos a ti y a tus agentes. Volver
 tus propios clientes nunca cuentan. La cuenta se guarda en este ordenador, así que protege de un descuido y de un
 agente, no de alguien que quiere llevarse la base. Para eso están los permisos de acceso del propio Bitrix24.
 
+## Qué cambió
+
+`changes list` muestra lo que las sincronizaciones vieron cambiar en la copia: negociaciones y prospectos creados,
+movidos, ganados, perdidos o pasados a otro responsable, actividades añadidas y hechas, y contactos nuevos, primero los
+más recientes. Lee el último día salvo que `at:` diga otra cosa.
+
+```sh
+b24 work changes list "at>=1d"
+b24 work changes list change:won "at>=7d" --json
+```
+
+`--format report` convierte esa ventana en un resumen matutino. Si lo ejecuta una programación, cada resumen empieza
+donde terminó el anterior:
+
+```sh
+b24 work schedule command morning --at 08:00 -- changes list "at>=1d" --format report
+```
+
+La programación muestra cada resumen como un aviso en el escritorio. `--deliver-to` también te lo envía a Telegram o
+a tu buzón de correo con tu propia herramienta `tg` o de correo, como muestra `b24 help schedule command`.
+
 ## Escribir
 
 ```sh
@@ -333,9 +375,9 @@ b24 work organizations update 9 --name "Example LLC" --field "Lead source=Fair"
 ```
 
 Una escritura envía una petición y luego vuelve a leer el elemento en el almacén. `--stage`
-recibe una etapa del propio embudo del elemento por nombre o id, y también comprueba la clave `move`; una etapa ganada o
+recibe una etapa del propio embudo del elemento por nombre o id, y también comprueba la clave `move`. Una etapa ganada o
 perdida comprueba además la clave `close`. `close` lo mueve a la primera etapa ganada o perdida de su embudo.
-`--field <label or code>=<value>` fija uno de los campos propios del portal, como los nombra `fields list`; un campo
+`--field <label or code>=<value>` fija uno de los campos propios del portal, como los nombra `fields list`. Un campo
 de lista recibe la etiqueta o el id de su opción, y un valor vacío vacía el campo. Se rechaza un campo que nombra una
 etapa, un embudo o un responsable: esos tienen sus propias opciones.
 

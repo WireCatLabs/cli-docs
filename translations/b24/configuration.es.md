@@ -2,8 +2,25 @@
 title: "Ajustes"
 ---
 
+Cambia cómo funciona `b24` para un portal, o para todos los portales de este ordenador, con un solo comando, y mira
+de dónde salió cada valor. Cambias solo los pocos ajustes que te importan, y el resto conserva su valor por defecto o
+queda sin definir.
+
+Decides, por ejemplo, qué puede hacer un agente o si se copian las grabaciones de las llamadas. Solo tú puedes
+relajar un permiso: a un agente que lo intenta se le rechaza.
+
 Los ajustes están en un único archivo, `config.json`, en la carpeta que muestra `b24 doctor`. Cada perfil tiene su
-propia sección, y `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.
+propia sección, y `defaults` se aplica a todos los perfiles. `b24 work config` los muestra y los cambia.
+
+**En esta página:**
+
+1. [Ver y cambiar un ajuste](#see-and-change-a-setting)
+2. [Permisos](#permissions)
+3. [Llamadas](#calls)
+4. [Relaciones del CRM](#crm-relationships)
+5. [Registros de ejecución](#run-records)
+
+## Ver y cambiar un ajuste
 
 ```sh
 b24 work config show
@@ -37,6 +54,6 @@ de empresa). [Quién es quién](./usage.md#who-is-who) explica los dos.
 
 Un comando que falla se guarda como ejecución, para `b24 runs list` y `runs show`. Un comando que llama al portal se
 guarda también cuando sale bien, con las peticiones que hizo, salvo que `record` sea `false` (entonces solo los fallos)
-o que se ejecutara con `--no-record`. `record_input` decide si una ejecución guarda las palabras que escribiste; es
-`true` salvo que lo pongas en `false`. Los secretos se ocultan en ambos casos; consulta
+o que se ejecutara con `--no-record`. `record_input` decide si una ejecución guarda las palabras que escribiste. Es
+`true` salvo que lo pongas en `false`. Los secretos se ocultan en ambos casos. Consulta
 [Seguridad](./security.md).

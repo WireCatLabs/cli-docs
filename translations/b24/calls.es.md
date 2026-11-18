@@ -2,16 +2,26 @@
 title: "Llamadas"
 ---
 
-Lee esta página si los teléfonos de tu empresa funcionan con la telefonía de Bitrix24. Explica cómo copiar las
-llamadas del portal al almacén local de WireCat, convertir sus grabaciones en texto en este ordenador y encontrar las
-llamadas de un cliente junto a sus negociaciones, mensajes y correo. Al final, `memo context` muestra las llamadas de
-un cliente en su historial.
+Guarda en tu ordenador las llamadas de los teléfonos de Bitrix24, con lo que se dijo como texto, en el mismo almacén
+local que las negociaciones, los mensajes y el correo del cliente. El portal guarda sus llamadas en el historial de
+llamadas (Telephony → Call history), y `b24` las copia de ahí.
 
-Palabras que usa esta página:
+Luego un agente te dice cuándo llamó un cliente por última vez, cómo terminó la llamada y qué se dijo en ella. Las
+llamadas de otra centralita también pueden llegar al contacto del cliente en Bitrix24, para que el CRM las muestre.
 
-- **Historial de llamadas**: la lista de llamadas que el portal guarda en Telephony → Call history. b24 la lee con el
-  método `voximplant.statistic.get`.
-- **Perfil**: el nombre del inicio de sesión de un portal, como `work`. Es la primera palabra de un comando.
+`meetings sync` copia las llamadas al almacén local de WireCat, y cada `sync` también lo hace. `meetings transcribe`
+convierte las grabaciones en texto con un modelo de voz que funciona en este ordenador. `calls export` escribe en
+Bitrix24 las llamadas de otras centralitas. Necesitas el permiso `telephony` del webhook.
+
+**En esta página:**
+
+1. [Antes de la primera sincronización](#before-the-first-sync)
+2. [Copiar las llamadas](#copy-the-calls)
+3. [El cliente y el empleado](#the-client-and-the-employee)
+4. [Grabaciones](#recordings)
+5. [Convertir las llamadas en texto](#turn-calls-into-text)
+6. [Permisos](#permissions)
+7. [Escribir en Bitrix24 las llamadas de otras centralitas](#write-other-phone-systems-calls-into-bitrix24)
 
 ## Antes de la primera sincronización
 
@@ -31,7 +41,7 @@ igualmente. Para dejar las llamadas fuera de `sync`: `b24 work config set sync_c
 solo las llamadas:
 
 ```sh
-b24 work meetings sync                                   # calls since the last sync; the first reads 30 days
+b24 work meetings sync                                   # calls since the last sync, the first reads 30 days
 b24 work meetings sync --since-time 2026-11-01T00:00:00Z # calls from a date on
 b24 work meetings list                                   # newest first, from the store, offline too
 b24 work meetings show 12                                # one call: who, when, how it ended
@@ -126,8 +136,14 @@ Las llamadas de otra centralita, como pbx, pueden llegar al contacto del cliente
 muestre junto a las llamadas del propio portal. Está desactivado hasta que lo actives, y escribe cada llamada una vez.
 
 Bitrix24 solo deja escribir una llamada a una aplicación, no a un webhook. Primero inicia la sesión del perfil como
-aplicación local:
-`b24 work session start --portal <portal> --client-id <id>`. Luego actívalo y permite sus dos métodos:
+aplicación local ([con una aplicación local](./usage.md#with-a-local-application)), con el host de tu portal y tu
+Application ID en lugar de estos ejemplos:
+
+```sh
+b24 work session start --portal example.bitrix24.ru --client-id local.0123abcd.45678901
+```
+
+Luego actívalo y permite sus dos métodos:
 
 ```sh
 b24 work config set export_calls true

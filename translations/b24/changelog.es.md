@@ -4,6 +4,21 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.25.0 — 17.11.2026
+
+### Cambios — pueden romper scripts
+
+- **`meetings transcribe` devuelve el mismo informe que beeline.** La duración del audio es `audio_ms`, en
+  milisegundos (antes `audio_seconds`). Cada llamada fallida tiene su `ref`. Una llamada sin grabación en el portal
+  aparece en `failed` con el motivo `recording.missing`, y `without_recording` ya no existe. Antes, b24 y beeline
+  devolvían el mismo informe con dos formas, así que un script escrito para uno no podía leer el otro.
+
+### Corregido
+
+- **Un inicio de sesión con una aplicación local guardado por una versión anterior de b24 sigue funcionando tras
+  actualizar.** Las versiones anteriores guardaban el portal con otro nombre en el inicio de sesión, y el nuevo
+  almacén de inicios de sesión respondía "the saved sign-in cannot be read; sign in again".
+
 ## 0.24.0 — 17.11.2026
 
 ### Añadido
@@ -352,13 +367,13 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ### Corregido
 
-- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.24.0/README.md)
+- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.25.0/README.md)
   ahora elige de quién copiar negociaciones y prospectos antes del primer `sync`, que hasta entonces no copia nada.
   Ya no dice que un administrador copia todo el CRM, dice que por MCP un borrado con `ask` se ejecuta, y nombra
   `wcat-b24` para cuando se encuentra primero el comando `b24` de otro paquete.
   [Solución de problemas](./troubleshooting.md) incluye el error "no CRM user is chosen".
 - **Por MCP, `ask` no detiene una escritura.** El
-  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.24.0/README.md), [seguridad](./security.md) y la
+  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.25.0/README.md), [seguridad](./security.md) y la
   primera pantalla recomendaban poner `deals.move` en `ask` frente a los robots del portal, pero eso solo detiene un
   movimiento en una terminal. Por MCP nadie responde, así que la escritura sigue adelante. Ahora dicen que se ponga
   `readonly` o `deny`, o que se active la aprobación en el cliente del agente.

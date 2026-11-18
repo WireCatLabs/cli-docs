@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.35.0 — 18.11.2026
+
+### Cambios — pueden romper scripts
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Antes iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del ordenador sin que el dueño las
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: una CLI nunca elige una cuenta por el dueño
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)). Ten en cuenta: un cliente configurado con la entrada antigua mantiene `--profiles all` hasta que lo
+  configures de nuevo. Un servidor añadido a mano o con `mcp config` no cambia.
+
 ## 0.34.0 — 17.11.2026
 
 ### Cambios — pueden romper scripts
