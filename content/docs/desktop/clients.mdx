@@ -4,10 +4,12 @@ sidebarTitle: "Clients"
 description: Your CRM deals and leads as a table or as a board by stage. Move a deal to another stage, map each CRM's stages onto yours, and choose whose deals are copied.
 ---
 
-You keep your deals in a CRM, today Bitrix24, and talk to the same clients in chats and mail. The **Clients** page in
-WireCat Desktop shows those deals and leads as a table or as a board by stage. Use it to see where each deal stands
-and to move a deal to its next stage without opening the CRM. A move here goes to Bitrix24 too. Your agents read the same deals, so they can answer "what is open with Acme?" from the
-same picture. The page needs Memo, and moving a card also needs the Bitrix24 tool.
+You keep your deals in a CRM, such as Bitrix24, amoCRM, Attio or HubSpot, and talk to the same clients in chats and
+mail. The **Clients** page in WireCat Desktop shows those deals and leads as a table or as a board by stage. Use it to
+see where each deal stands and to move a deal to its next stage without opening the CRM. A move here goes to the CRM
+too. Your agents read the same deals, so they can answer "what is open with Acme?" from the same picture. The page
+needs Memo, and moving a card also needs that CRM's tool. HubSpot leads and Attio cards are read only on the board:
+change them in the CRM, then sync.
 
 **On this page:**
 
@@ -31,13 +33,15 @@ Clients is marked beta: you see a β beside its name. The section is new and lig
 
 ## Before you start
 
-1. On the Tools page, install Bitrix24 and sign in. Sign in with an incoming webhook or a local application:
-   [Bitrix24: a webhook or a local application](./index.mdx#bitrix24-a-webhook-or-a-local-application).
+1. On the Tools page, install your CRM's tool and sign in. Bitrix24 signs in with an incoming webhook or a local
+   application: [Bitrix24: a webhook or a local application](./index.mdx#bitrix24-a-webhook-or-a-local-application).
+   HubSpot signs in with a service key: [HubSpot: make a key](../hubspot/installation.md#make-a-key).
 2. A sync copies your own deals and leads, those of the user who signed in, and the clients on them, never the whole
    portal. To copy other users' deals, choose them, and yourself too if you want your own:
-   [Whose deals are copied](../people.md#whose-deals-are-copied) shows the commands.
-3. On the Clients page, click **Import from Bitrix24**. With more than one Bitrix24 profile, **Import from a CRM**
-   asks which.
+   [Whose deals are copied](../people.md#whose-deals-are-copied) shows the commands. HubSpot copies the whole
+   account, because its key names no user.
+3. On the Clients page, click **Import from** and your CRM, such as **Import from Bitrix24**. With more than one
+   CRM profile, **Import from a CRM** asks which.
 
 The line **Sync** under the buttons names the CRM account and **Chosen users**. Its ⓘ repeats what is copied. If an
 account is set to copy everyone's deals, the page says that its sync stops and offers **Only mine**.
@@ -60,8 +64,8 @@ Do it in one of three places:
 - In the table, choose a stage in the row's **Stage** list.
 - Open the deal and choose its stage in the card.
 
-If one column holds two stages of the deal's pipeline, a dialog asks which one. The move is sent to Bitrix24. Without
-the Bitrix24 tool, or with a version too old to move deals, the page is **Read only**, and the chip says what to
+If one column holds two stages of the deal's pipeline, a dialog asks which one. The move is sent to the CRM. Without
+the CRM's tool, or with a version too old to move deals, the page is **Read only**, and the chip says what to
 install or update.
 
 ## Open a deal
