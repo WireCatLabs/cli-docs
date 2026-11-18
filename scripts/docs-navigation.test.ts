@@ -233,9 +233,8 @@ describe("tool folders in the sidebar", () => {
       children: [],
     })
     const markdown: Node = { type: "page", name: "Markdown y Obsidian", url: "/es/docs/markdown" }
-    const ydisk: Node = { type: "page", name: "Yandex Disk", url: "/es/docs/ydisk" }
     const tree = unifiedDocsTree(
-      { name: "Docs", children: [folder("drive"), folder("gcal"), folder("notion"), ydisk, markdown] },
+      { name: "Docs", children: [folder("drive"), folder("gcal"), folder("notion"), folder("ydisk"), markdown] },
       "es",
     )
     const [group, gcal] = tree.children

@@ -13,6 +13,7 @@ import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 import { homePath } from "./site-routes"
 import { whatsappDescriptions } from "./whatsapp-descriptions"
+import { ydiskDescriptions } from "./ydisk-descriptions"
 import { zoomDescriptions } from "./zoom-descriptions"
 
 export type SiteLocale = keyof typeof seoCopy
@@ -126,6 +127,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     notion: notionDescriptions,
     pbx: pbxDescriptions,
     wa: whatsappDescriptions,
+    ydisk: ydiskDescriptions,
   }[selectedTool?.name ?? ""]
   if (reviewed) {
     const description = reviewed[localeOf(lang)][slugs[1] ?? "index"]
