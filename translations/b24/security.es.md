@@ -2,8 +2,31 @@
 title: "Seguridad"
 ---
 
-Lo que comparten las CLI de WireCat —el llavero, los permisos, MCP y lo que nunca llega a un registro— está en la
-[página de seguridad común](https://wirecat.dev/en/docs/security). Esta página recoge solo lo propio de `b24`.
+Deja que un agente trabaje en tu CRM mientras la dirección del webhook y los datos de contacto de tus clientes quedan
+fuera de sus respuestas y de tus registros. La dirección del webhook es la contraseña del portal, así que cualquiera
+que la lea puede hacer lo mismo que su empleado.
+
+Sabrás dónde guarda `b24` el inicio de sesión, qué llega al portal y a ningún otro sitio, y qué límites se mantienen
+para un agente le digan lo que le digan.
+
+Lo que comparten las herramientas de WireCat, como el llavero, los permisos, MCP y lo que nunca llega a un registro,
+está en la [página de seguridad común](https://wirecat.dev/en/docs/security). Esta página recoge solo lo propio de
+`b24`.
+
+**En esta página:**
+
+1. [Dónde guarda cada cosa y con quién habla](#where-it-keeps-what-and-whom-it-talks-to)
+2. [Los derechos del webhook](#the-webhooks-rights)
+3. [Archivos y enlaces](#files-and-links)
+4. [Teléfonos y correos de los clientes](#clients-phones-and-e-mails)
+5. [Escrituras y búsqueda](#writes-and-search)
+6. [api call](#api-call)
+7. [Temporizadores](#timers)
+8. [MCP en el navegador](#mcp-in-the-browser)
+9. [Registros de ejecución](#run-records)
+10. [Permisos de archivos](#file-modes)
+
+## Dónde guarda cada cosa y con quién habla
 
 `b24` guarda sus ajustes en `config.json` y su estado en las carpetas que muestra `b24 doctor`. Solo se comunica con el
 portal del webhook o de la aplicación local del perfil, y con `oauth.bitrix.info` para los tokens de la aplicación,
@@ -25,8 +48,10 @@ que en tu navegador pasa el código de un solo uso a `b24` en este ordenador. El
 con la clave. Bitrix24 no tiene ninguna llamada que revoque un token: `session end` olvida el inicio de sesión aquí, y
 borrar la aplicación en el portal lo detiene.
 
+## Los derechos del webhook
+
 El webhook actúa con los derechos del empleado que lo creó. Un webhook creado por un administrador deja que un agente
-lea y cambie todo el CRM. `session status --check` dice de quién son los derechos que lleva; crea el webhook con un
+lea y cambie todo el CRM. `session status --check` dice de quién son los derechos que lleva. Crea el webhook con un
 empleado cuyos derechos se ajusten al trabajo, y solo con los permisos de acceso que necesita. `sync` usa `crm`,
 `user_basic` para las direcciones de correo de los empleados y `department` para la estructura de la empresa.
 `meetings sync` lee el historial de llamadas con `telephony`, y la grabación de una llamada solo con
@@ -34,6 +59,8 @@ empleado cuyos derechos se ajusten al trabajo, y solo con los permisos de acceso
 permiso completo `user` añade el derecho de invitarlos y editarlos. La sincronización guarda el nombre, la dirección
 de correo, el cargo y el jefe de departamento de cada empleado en el almacén local, donde cualquier herramienta de
 WireCat puede leerlos.
+
+## Archivos y enlaces
 
 Un archivo en un campo personalizado de un elemento del CRM se guarda solo como su id de archivo, en la copia y en
 cada respuesta, nunca sus enlaces: el enlace de descarga de Bitrix24 lleva un token de acceso, y quien lo tenga
@@ -48,6 +75,8 @@ lleva hecho. Un elemento borrado en el portal, o fuera del alcance de la sincron
 volver a iniciar sesión la crea de nuevo. SQLite puede conservar bytes antiguos en el espacio libre del archivo del
 almacén hasta que lo reutilice.
 
+## Teléfonos y correos de los clientes
+
 Salvo que el usuario del webhook sea administrador de Bitrix24, la sincronización copia solo sus propios clientes: los
 contactos y las empresas asignados a él o nombrados en sus negociaciones y prospectos. Las listas muestran teléfonos y
 correos solo de esos. `people
@@ -55,20 +84,27 @@ show` y `organizations show` los dan para los de otros, como mucho 100 al día e
 cuenta se lleva en este ordenador, así que frena un descuido o a un agente, no a alguien que quiera llevarse la base.
 Eso lo hacen los propios derechos de acceso de Bitrix24.
 
+## Escrituras y búsqueda
+
 Cada escritura se comprueba contra los permisos y se guarda en el diario de envíos. `B24_READ_ONLY=1` rechaza toda
 escritura. Asignar un elemento a otro empleado se rechaza hasta que lo permitas. Un cambio de etapa aún puede poner en
 marcha los robots del propio portal, que pueden escribir a tus clientes. Si tu portal tiene esos robots, pon
 `permissions.deals.move` y `permissions.leads.move` en `readonly` o `deny` antes de que un agente reciba el perfil por
 MCP, donde `ask` no pregunta
 ([permisos](./permissions.md#stage-changes-start-the-portals-robots)). Toda escritura que fija una etapa los
-comprueba; una etapa ganada o perdida, y `close`, comprueban además `deals.close` o `leads.close`, y `api call` con un
+comprueba. Una etapa ganada o perdida, y `close`, comprueban además `deals.close` o `leads.close`, y `api call` con un
 `stageId` comprueba ambos. Se rechaza un `--field` de negociación o prospecto que nombra una etapa, un embudo o un
 responsable. Borrar una negociación o un prospecto pregunta antes. `api.crm.deal.update: deny` también detiene
 `deals update`, `move` y `close`, y en `ask` también preguntan.
 
+Una escritura que no recibió respuesta no se vuelve a enviar: queda como `outcome_unknown` con su `operation_id`.
+Comprueba el portal y repítela solo si el cambio no está: Bitrix24 haría la repetición por segunda vez.
+
 `search all` lee lo que permiten las claves de las listas: con `deals.list: deny` deja fuera las negociaciones, con
 `leads.list: deny` los prospectos, y nombra cada tipo que dejó fuera en `missing` y en stderr. Si se le niegan todos
 los tipos que se le pidieron, se rechaza.
+
+## api call
 
 `api call` funciona con una lista de permitidos. Permite las lecturas de CRM, catálogo, usuarios y departamentos que
 hace el propio `b24`, y las escrituras de negociaciones, prospectos, contactos y empresas. Las lecturas de contactos,
@@ -86,6 +122,8 @@ generados, `crm.invoice.getExternalLink`, `salescenter.payment.getPublicUrl`), `
 También se rechazan sus lecturas, porque contienen mensajes, correos y tareas. `api show <method>` indica el nivel de
 un método. `api call` no se ofrece por MCP.
 
+## Temporizadores
+
 `schedule command` instala un temporizador (systemd, launchd o el Programador de tareas) que ejecuta `b24` por su
 cuenta, sin terminal. El temporizador ejecuta `b24 schedule exec <file>`, y el archivo de la programación, en la
 carpeta de estado, guarda las palabras, el perfil, tu `PATH` y las carpetas que usa `b24` (`B24_CONFIG_DIR`,
@@ -94,13 +132,14 @@ carpeta de estado, guarda las palabras, el perfil, tu `PATH` y las carpetas que 
 `schedule exec`, cada uno con su propia clave de permiso (`schedule.run`, `schedule.exec`). Añadir, pausar, reanudar o
 quitar un temporizador por MCP se rechaza salvo que el perfil ponga `permissions.mcp.authority` en `allow`.
 
-Una escritura que no recibió respuesta no se vuelve a enviar: queda como `outcome_unknown` con su `operation_id`.
-Comprueba el portal y repítela solo si el cambio no está: Bitrix24 haría la repetición por segunda vez.
+## MCP en el navegador
 
 `b24 work mcp serve --http` escucha solo en `127.0.0.1`, para aplicaciones del navegador que llegan a él a través
 de tu propio túnel. Cada aplicación inicia sesión con un código de un solo uso, y el servidor guarda un hash de cada
 inicio de sesión que concede, en la carpeta de estado, que solo tú puedes leer. `b24 work mcp revoke` los olvida
 todos.
+
+## Registros de ejecución
 
 Un registro de ejecución guarda la línea de comandos tal como la escribiste, así que `b24 runs show` te dice qué se
 ejecutó. Aun así, un secreto se guarda como `[redacted]`: una opción con nombre de token o de contraseña, una contraseña
@@ -118,6 +157,8 @@ Algunos secretos parecen palabras normales y se quedan: un valor solo de letras 
 espacio (`pin this message` se queda), una clave hexadecimal en mayúsculas, un hash de commit corto o un UUID, una
 contraseña corta escrita sin el nombre de un secreto delante, y un secreto dentro de un enlace o de una ruta de archivo,
 salvo que tenga un formato conocido o vaya tras el nombre de un secreto.
+
+## Permisos de archivos
 
 `config.json` se guarda de modo que solo tú puedas leerlo (`0600`), y su carpeta se crea solo para ti (`0700`). Un
 archivo o una carpeta que creó una versión anterior puede estar abierto a otros usuarios del ordenador: `b24 doctor`

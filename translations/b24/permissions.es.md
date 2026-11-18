@@ -2,17 +2,26 @@
 title: "Permisos"
 ---
 
-Lee esta página antes de dejar que un agente de IA, un script o un compañero cambie tu CRM a través de `b24`. Muestra
-cómo decidir, para cada perfil, qué solo se puede leer, qué te pregunta antes y qué puede seguir adelante. Al final
-puedes impedir que los agentes muevan negociaciones o borren, y sabes qué comprobaciones se mantienen digan lo que
-digan los permisos.
+Deja que un agente de IA trabaje en tu CRM a través de `b24` y conserva la última palabra sobre lo que cambia. El
+webhook lleva los derechos de su empleado en Bitrix24, así que sin tus propios límites un agente podría hacer mucho de
+lo que puede ese empleado.
 
-Palabras que usa esta página:
+Para cada perfil, el nombre que diste al inicio de sesión de un portal, decides qué solo puede leer un agente, qué te
+pregunta antes y qué sigue adelante. Puedes impedir que un agente mueva o borre negociaciones, y sabes qué
+comprobaciones se mantienen digan lo que digan los ajustes.
 
-- **Perfil**: el nombre que diste al inicio de sesión de un portal, como `work`. Es la primera palabra de un comando.
-- **Clave de permiso**: el nombre de un comando, como `deals.move`, o de un grupo de comandos, como `deals`. Una clave
-  más larga es más específica y gana.
-- **Nivel**: qué pasa cuando se ejecuta el comando: `deny`, `readonly`, `ask` o `allow`.
+Cada comando tiene una clave de permiso, su nombre como `deals.move`, o un grupo como `deals`, y gana la clave más
+larga. Cada clave tiene un nivel: `deny`, `readonly`, `ask` o `allow`. `b24 work config set` los fija, y `--dry-run`
+muestra qué claves comprueba un comando.
+
+**En esta página:**
+
+1. [Los niveles](#the-levels)
+2. [Lo que está fijado antes de que cambies nada](#what-is-set-before-you-change-anything)
+3. [Un comando puede comprobar varias claves](#one-command-can-check-several-keys)
+4. [Los cambios de etapa ponen en marcha los robots del portal](#stage-changes-start-the-portals-robots)
+5. [Agentes y MCP](#agents-and-mcp)
+6. [Comprobaciones que se mantienen digan lo que digan los permisos](#checks-that-hold-whatever-the-permissions-say)
 
 ## Los niveles
 
