@@ -2,8 +2,30 @@
 title: "Cuando algo falla"
 ---
 
-Empieza por el síntoma, haz la comprobación y vuelve a ejecutar el comando. Guarda el código de error y el nombre del
-perfil para una solicitud de soporte.
+Vuelve a poner `b24` en marcha a partir del síntoma que ves. La mayoría de los fallos vienen del inicio de sesión,
+de un permiso de acceso (scope) que le falta al webhook o de los permisos del perfil, y cada uno tiene una comprobación
+que nombra la causa.
+
+Busca tu síntoma en la tabla, haz la comprobación que indica y vuelve a ejecutar el comando. Si sigue fallando, ya
+tienes el código de error y el nombre del perfil para una solicitud de soporte.
+
+`b24 doctor` muestra qué está configurado sin red ni llavero. `b24 work session status --check` pregunta al portal
+con qué empleado actúa el webhook.
+
+**En esta página:**
+
+1. [Primeras comprobaciones](#first-checks)
+2. [Síntomas y qué hacer](#symptoms-and-what-to-do)
+3. [Pedir ayuda](#ask-for-help)
+
+## Primeras comprobaciones
+
+```sh
+b24 doctor                         # the version, the settings, the profiles, without the network
+b24 work session status --check    # the employee the webhook acts as, and whether they are an admin
+```
+
+## Síntomas y qué hacer
 
 | Síntoma | Qué hacer |
 | --- | --- |
@@ -18,8 +40,12 @@ perfil para una solicitud de soporte.
 | Falta el permiso de acceso para un método, o `ERROR_METHOD_NOT_FOUND` | Añade el permiso de acceso (`crm`, `user_basic`, `department`, y `telephony` para `meetings sync`) al webhook en Bitrix24: Developer resources → Integrations, edita el webhook. |
 | "this webhook may not read who made it" al iniciar sesión | Marca "Users (basic)" (`user_basic`) en el webhook, guarda y ejecuta `session start` otra vez con la dirección que muestra. Consulta [iniciar sesión](./usage.md#sign-in). |
 | "already uses this webhook" al iniciar sesión | Otro perfil lo tiene. Usa ese perfil, o quita ese perfil con `b24 <profile> account remove --keep-data` y vuelve a iniciar sesión. |
-| `rate_limited` | El portal permite unas 2 peticiones por segundo para todas sus aplicaciones juntas. `b24` espera por sí mismo una espera corta; si es larga, te avisa. |
+| `rate_limited` | El portal permite unas 2 peticiones por segundo para todas sus aplicaciones juntas. `b24` espera por sí mismo una espera corta y te avisa si es larga. |
 | `outcome_unknown` en una escritura | Puede que el portal hiciera el cambio. Mira primero el elemento (`sync` y luego `show`), y repite la escritura solo si el cambio no está: Bitrix24 haría la repetición por segunda vez. Consulta [escribir](./usage.md#write). |
-| Se rechaza una escritura | Lo impiden los permisos del perfil o `B24_READ_ONLY`; consulta los [permisos](./permissions.md). |
+| Se rechaza una escritura | Lo impiden los permisos del perfil o `B24_READ_ONLY`. Consulta los [permisos](./permissions.md). |
 
-Nunca pegues un token, una contraseña ni contenido privado en una solicitud de soporte.
+## Pedir ayuda
+
+Pregunta en [Discord](https://discord.gg/DebENqbRrJ) o abre una [issue](https://github.com/WireCatLabs/bitrix24-cli/issues)
+con el código de error, el nombre del perfil y el comando. Nunca pegues un token, una contraseña ni contenido privado
+en una solicitud de soporte.

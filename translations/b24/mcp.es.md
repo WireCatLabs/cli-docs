@@ -2,13 +2,23 @@
 title: "MCP"
 ---
 
-Usa esta página para dar a un agente de IA tu CRM por MCP (Model Context Protocol), la forma en que un agente pregunta
-a un programa qué sabe hacer y luego lo llama. A un agente con terminal, como Claude Code o Codex, le van mejor los
-comandos y la skill (`b24 skill install`). MCP es para un cliente que no puede ejecutar comandos: una aplicación de
-chat, un agente remoto, ChatGPT o Claude en el navegador.
+Da tu CRM de Bitrix24 a un agente de IA que no puede ejecutar comandos, como Claude Desktop, o ChatGPT y Claude en el
+navegador. MCP (Model Context Protocol) es la forma en que un agente así pregunta a un programa qué sabe hacer y luego
+lo llama, y `b24` ofrece sus comandos de esa forma.
 
-Antes de empezar, inicia sesión en el perfil (`b24 work session start`, con un webhook o una aplicación local) y lee
-[Permisos](./permissions.md), porque por MCP una escritura en `ask` sigue adelante.
+Así el agente lee tus negociaciones, prospectos y clientes, y los cambia hasta donde lo permiten los permisos del perfil.
+
+`b24 work mcp add` añade el servidor a Claude Code o Codex, y `b24 work mcp config` imprime la entrada para cualquier
+otro cliente. A un agente con terminal, como Claude Code o Codex, le van mejor los comandos y la skill
+(`b24 skill install`). Necesitas un perfil con la sesión iniciada, y antes conviene mirar
+[Permisos](./permissions.md): por MCP una escritura en `ask` sigue adelante.
+
+**En esta página:**
+
+1. [Añade b24 a un agente](#add-b24-to-an-agent)
+2. [Lo que ve el agente](#what-the-agent-sees)
+3. [Las escrituras siguen siendo tuyas](#keep-writes-yours)
+4. [ChatGPT y Claude en el navegador](#chatgpt-and-claude-in-the-browser)
 
 ## Añade b24 a un agente
 

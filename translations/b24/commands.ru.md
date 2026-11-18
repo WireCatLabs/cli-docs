@@ -5,13 +5,22 @@ title: "Команды b24"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 
-Все команды, параметры и коды выхода, созданные из самой программы. Тот же список в JSON выводит
-`b24 commands --json`.
+Здесь описана любая команда `b24`: что она делает, ее аргументы и параметры, что она отвечает и
+как может завершиться ошибкой. Каждая запись создана из самой программы, поэтому совпадает с этой версией `b24`.
+
+Здесь вы или ваш агент найдете точные слова для задачи, например поля запроса `deals list` или параметры
+`deals move`. Тот же список в JSON агент получает командой `b24 commands --json`.
 
 **Первым словом идет профиль**, имя, которое вы выбираете сами: `b24 work config show`. `B24_PROFILE`
 задает профиль для всего сеанса оболочки. Профиль никогда не подставляется сам: команда, которой нужен аккаунт, без
 профиля останавливается и показывает профили на этом компьютере. Описания команд и параметров ниже остаются на
 языке встроенной справки.
+
+**На этой странице:**
+
+1. [Параметры всех команд](#options-for-every-command)
+2. [Команды](#b24-commands), по разделу на каждую группу, от `commands` до `runs`
+3. [Коды выхода](#exit-codes)
 
 ## Параметры всех команд
 
@@ -1322,7 +1331,7 @@ b24 meetings transcribe [query] [options]
 | `--max-meetings <n>` | at most this many calls transcribed, newest first. Default: `20`. |
 | `--model <model>` | local speech model. Default: `gigaam-v3`. |
 
-**Returns:** call transcription report — transcribed, audio_seconds, failed, without_recording, remaining, stopped; every field: b24 commands info meetings transcribe
+**Returns:** call transcription report — transcribed, audio_ms, failed, remaining, stopped; every field: b24 commands info meetings transcribe
 
 **Example:** `b24 work meetings transcribe --max-meetings 20 --json`, `b24 work meetings transcribe "duration_ms>=60000" --json`
 

@@ -2,9 +2,18 @@
 title: "Próximas mejoras"
 ---
 
-Esta página reúne lo que está previsto para `b24` y todavía no tiene. Léela antes de montar una solución alternativa
-para algo que falta: puede que ya esté en camino. El orden es aproximado y puede cambiar. Para proponer algo, abre una
+Mira qué hace `b24` hoy y qué viene después, antes de montar una solución alternativa para algo que le falta. Puede
+que ya esté en camino.
+
+Sabrás con qué partes de tu Bitrix24 puede trabajar ya un agente, y cuáles llegan en las próximas versiones. El orden
+es aproximado y puede cambiar. Para proponer algo, abre una
 [issue en GitHub](https://github.com/WireCatLabs/bitrix24-cli/issues).
+
+**En esta página:**
+
+1. [Qué funciona hoy](#what-works-today)
+2. [Siguiente](#next)
+3. [Más adelante](#later)
 
 ## Qué funciona hoy
 
@@ -18,8 +27,12 @@ los contactos como miembros de sus empresas, los contactos y responsables de las
 propia empresa con su línea jerárquica. `pipelines show` es el tablero
 del embudo de ventas: las negociaciones o los prospectos de cada etapa, con su número y su total en cada moneda.
 `deals list`, `leads list`, `people list` y `organizations list` imprimen una página como tabla CSV para una hoja de
-cálculo con `--format csv`. `schedule` ejecuta `sync` con un temporizador. `b24 api` llega a cualquier método del portal por su nombre. Todos los comandos están en
-la [referencia de comandos](./commands.md).
+cálculo con `--format csv`. `schedule` ejecuta `sync` con un temporizador. `changes list` muestra qué cambió en la copia, y `--format
+report` lo convierte en un resumen matutino. Con `activities` activado, la sincronización también lee las llamadas, los correos,
+las tareas pendientes, las tareas y los comentarios de negociaciones y prospectos. `meetings sync` copia las llamadas
+del portal, `meetings transcribe` convierte sus grabaciones en texto en este ordenador, y `calls export` escribe en
+Bitrix24 las llamadas de otros sistemas telefónicos. `b24 api` llega a cualquier método del portal por su nombre.
+Todos los comandos están en la [referencia de comandos](./commands.md).
 
 ## Siguiente
 
@@ -27,6 +40,8 @@ la [referencia de comandos](./commands.md).
   negociaciones y los prospectos, así que leen del almacén local y funcionan sin conexión.
 - **Campos propios de los contactos guardados en local.** Los valores de los campos propios de tu portal en los
   contactos se guardan con el contacto, para que puedas leerlos sin conexión.
+- **Archivos y documentos de clientes.** Los archivos de las negociaciones y sus adjuntos, y los documentos creados con
+  las plantillas del portal. La configuración ya pide los permisos `disk` y `documentgenerator` que necesitan.
 
 ## Más adelante
 
