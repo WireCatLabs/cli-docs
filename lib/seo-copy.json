@@ -52,7 +52,8 @@
       "mail": "IMAP mail MCP server and CLI with offline search",
       "b24": "Bitrix24 MCP server and CLI for your CRM",
       "notion": "Notion MCP server and CLI with offline search",
-      "amo": "amoCRM and Kommo MCP server and CLI for your CRM"
+      "amo": "amoCRM and Kommo MCP server and CLI for your CRM",
+      "ydisk": "Yandex Disk MCP server and CLI with offline search"
     },
     "products": {
       "tg": "Telegram",
@@ -66,7 +67,8 @@
       "max": "MAX messenger",
       "mail": "email",
       "b24": "Bitrix24",
-      "amo": "amoCRM"
+      "amo": "amoCRM",
+      "ydisk": "Yandex Disk"
     },
     "labels": {
       "max": "MAX",
@@ -185,7 +187,8 @@
       "mail": "MCP-сервер почты по IMAP с поиском без интернета",
       "b24": "Битрикс24 MCP-сервер и CLI для CRM",
       "notion": "Notion MCP-сервер и CLI с поиском без интернета",
-      "amo": "amoCRM и Kommo: MCP-сервер и CLI для CRM"
+      "amo": "amoCRM и Kommo: MCP-сервер и CLI для CRM",
+      "ydisk": "Яндекс Диск: MCP-сервер и CLI с поиском без интернета"
     },
     "products": {
       "tg": "Telegram",
@@ -199,7 +202,8 @@
       "max": "MAX",
       "mail": "почты",
       "b24": "Битрикс24",
-      "amo": "amoCRM"
+      "amo": "amoCRM",
+      "ydisk": "Яндекс Диск"
     },
     "labels": {
       "mail": "Почта"
@@ -316,7 +320,8 @@
       "mail": "Servidor MCP de correo IMAP con búsqueda sin conexión",
       "b24": "Servidor MCP y CLI para el CRM de Bitrix24",
       "notion": "Servidor MCP y CLI de Notion con búsqueda sin conexión",
-      "amo": "Servidor MCP y CLI para el CRM de amoCRM y Kommo"
+      "amo": "Servidor MCP y CLI para el CRM de amoCRM y Kommo",
+      "ydisk": "Servidor MCP y CLI de Yandex Disk con búsqueda sin conexión"
     },
     "products": {
       "tg": "Telegram",
@@ -330,7 +335,8 @@
       "max": "MAX",
       "mail": "correo",
       "b24": "Bitrix24",
-      "amo": "amoCRM"
+      "amo": "amoCRM",
+      "ydisk": "Yandex Disk"
     },
     "labels": {
       "mail": "Correo"

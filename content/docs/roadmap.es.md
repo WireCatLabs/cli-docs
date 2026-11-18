@@ -28,7 +28,7 @@ decidimos qué viene después.
   en la búsqueda junto a tus mensajes.
 - **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
   junto a tus mensajes.
-- **[Yandex Disk](./ydisk.mdx)**: el texto de las carpetas del Disk que elijas en tu ordenador, en la búsqueda sin
+- **[Yandex Disk](./ydisk/index.md)**: el texto de las carpetas del Disk que elijas en tu ordenador, en la búsqueda sin
   conexión, y los archivos del Disk subidos, movidos y compartidos cuando lo permitas.
 - **[amoCRM y Kommo](./amo/index.md)**: tus negociaciones y sus clientes en tu ordenador, con lo que cambió desde ayer,
   en la búsqueda junto a tus mensajes.
@@ -104,6 +104,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de Mail](./mail/roadmap.md)
 - [Hoja de ruta de Bitrix24](./b24/roadmap.md)
 - [Hoja de ruta de amoCRM](./amo/roadmap.md)
+- [Hoja de ruta de Yandex Disk](./ydisk/roadmap.md)
 - [Hoja de ruta de Asterisk](./pbx/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
 - [Hoja de ruta de WhatsApp](./wa/roadmap.md)

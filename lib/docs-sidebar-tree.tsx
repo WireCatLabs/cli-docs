@@ -365,7 +365,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|b24|amo|pbx)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|pbx)\/?$/.test(node.url)
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText

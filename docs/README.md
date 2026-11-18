@@ -40,7 +40,6 @@ These pages and shared interface/Markdown behavior belong to this repository.
 | How do I make Yandex Telemost's emailed meeting notes searchable as meetings? | `telemost.mdx` | Task guide | Keep in step with mail-cli's `meeting-notes` rule and Yandex's notes conditions |
 | How do I keep my Google Meet calls and transcripts so my agent can search them? | `google-meet.mdx` | Task guide | Keep in step with gcal's `meetings` commands and Google's 30-day and transcript limits |
 | How do I make my Markdown notes or Obsidian vault searchable by my agent? | `markdown.mdx` | Task guide | Keep in step with memo's `folders` and `notes` commands and its readable file types |
-| How do I make my Yandex Disk files searchable and work with them? | `ydisk.mdx` (Documents & files) | Start page | Written from ydisk 0.1.0 while `tools.json` does not list it; move it into a `ydisk` tool section once `tools.json` lists it, keeping the URL |
 | How do I connect a browser AI app? | `agents.mdx` (Use from web or mobile) | Connection guide | Preserve current web setup instructions |
 | How do I ask for a useful result? | `prompting.mdx` | Task guidance | Cross-link to worked examples instead of duplicating dialogues |
 | How do I review a reply in my messaging app or use an auto-reply template? | `drafts-and-templates.mdx` | Task guide and explanation | Keep template facts in step with the tools' auto-reply guides |
@@ -75,7 +74,7 @@ release. The portal owns its overview (`translations/overviews/drive.*.md`), as 
 is overview → installation → usage/search/recipes; configuration, security, troubleshooting and generated commands
 remain discoverable references.
 
-Google Drive, Notion, the site-owned `ydisk.mdx` (Yandex Disk, until `tools.json` lists it) and `markdown.mdx` (Markdown
+Google Drive, Notion, Yandex Disk (`ydisk`, from its repository) and the site-owned `markdown.mdx` (Markdown
 folders and Obsidian vaults, read by `memo`) sit in the Documents & files group of the sidebar (`toolGroups` in
 `lib/docs-sidebar-tree.tsx`). Their URLs do not change.
 

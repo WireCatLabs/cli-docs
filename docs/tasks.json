@@ -270,6 +270,42 @@
     "families": { "amo": ["config", "doctor", "runs", "upgrade"] }
   },
   {
+    "id": "files-ydisk-connect",
+    "pages": ["ydisk/installation.md", "ydisk/mcp.md", "ydisk/security.md"],
+    "families": { "ydisk": ["session", "account", "skill", "mcp"] }
+  },
+  {
+    "id": "files-ydisk-find",
+    "pages": ["ydisk/usage.md", "ydisk/search.md", "ydisk/recipes.md"],
+    "families": {
+      "ydisk": [
+        "folders",
+        "sync",
+        "status",
+        "documents",
+        "search",
+        "catalog",
+        "tags",
+        "relationships",
+        "notes",
+        "memories",
+        "facts",
+        "identities",
+        "store"
+      ]
+    }
+  },
+  {
+    "id": "files-ydisk-work",
+    "pages": ["ydisk/usage.md", "ydisk/commands.md"],
+    "families": { "ydisk": ["files", "api", "commands"] }
+  },
+  {
+    "id": "files-ydisk-upkeep",
+    "pages": ["ydisk/configuration.md", "ydisk/troubleshooting.md"],
+    "families": { "ydisk": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
     "id": "calls-connect",
     "pages": ["pbx/installation.md", "pbx/usage.md", "pbx/security.md"],
     "families": { "pbx": ["session", "skill", "mcp"] }
