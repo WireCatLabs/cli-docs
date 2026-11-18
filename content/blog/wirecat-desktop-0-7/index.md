@@ -9,10 +9,7 @@ author: viacheslav-ptsarev
 draft: false
 ---
 
-WireCat Desktop is the app that installs the WireCat tools, signs you in and gives your AI agent your chats, mail,
-meetings, documents and notes, all kept on your computer. With 0.7 your meetings and calls sit next to your chats and
-your CRM. You see every meeting and call on one page, and a Bitrix24 deal shows the calls of its people, so you can
-listen to a recording without leaving the card.
+WireCat Desktop installs the WireCat tools, signs you in and gives your AI agent your chats, mail, meetings, documents and notes. It all stays on your computer. In 0.7 meetings and calls sit next to your chats and your CRM: you see all of them on one page, and a Bitrix24 deal shows the calls of its people, with the recording one click away.
 
 ## See every meeting and call on one page
 

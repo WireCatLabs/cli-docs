@@ -9,10 +9,7 @@ author: viacheslav-ptsarev
 draft: false
 ---
 
-WireCat Desktop es la app que instala las herramientas de WireCat, inicia sesión por ti y le da a tu agente de IA tus
-chats, correo, reuniones, documentos y notas, todo guardado en tu ordenador. Con la 0.7 tus reuniones y llamadas
-están junto a tus chats y tu CRM. Ves todas las reuniones y llamadas en una página, y una negociación de Bitrix24
-muestra las llamadas de sus personas, así que puedes escuchar una grabación sin salir de la ficha.
+WireCat Desktop instala las herramientas de WireCat, inicia sesión por ti y le da a tu agente de IA tus chats, correo, reuniones, documentos y notas. Todo queda en tu ordenador. En la 0.7 las reuniones y llamadas están junto a tus chats y tu CRM: las ves todas en una página, y una negociación de Bitrix24 muestra las llamadas de sus personas, con la grabación a un clic.
 
 ## Ve todas tus reuniones y llamadas en una página
 
