@@ -11,7 +11,7 @@ export const ydiskDescriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Fix a refused Yandex token, a folder that does not sync or a search that finds nothing.",
     security: "What the Yandex Disk CLI keeps, where the token lives, what it reaches and what a run record hides.",
     changelog: "Read Yandex Disk CLI release notes, including new capabilities, changes and fixes.",
-    roadmap: "See what the Yandex Disk CLI does today and what is planned next, such as setup in WireCat Desktop.",
+    roadmap: "See what the Yandex Disk CLI does today and what is planned next, such as two-way folder sync.",
     compare:
       "Compare ydisk with the Yandex Disk MCP server, rclone, Yandex Disk for Linux and yandex-disk-mcp by the job.",
   },
@@ -27,7 +27,8 @@ export const ydiskDescriptions: Record<string, Record<string, string>> = {
     troubleshooting: "Исправьте отклонённый токен Яндекса, папку, которая не копируется, или поиск без результатов.",
     security: "Что хранит CLI для Яндекс Диска, где лежит токен, куда он обращается и что скрывает запись запуска.",
     changelog: "История изменений CLI для Яндекс Диска: новые возможности, изменения и исправления.",
-    roadmap: "Что CLI для Яндекс Диска уже умеет и что запланировано дальше, например подключение в WireCat Desktop.",
+    roadmap:
+      "Что CLI для Яндекс Диска уже умеет и что запланировано дальше, например двусторонняя синхронизация папок.",
     compare:
       "Сравнение ydisk с MCP-сервером Яндекс Диска, rclone, Яндекс Диском для Linux и yandex-disk-mcp по задачам.",
   },
@@ -46,7 +47,8 @@ export const ydiskDescriptions: Record<string, Record<string, string>> = {
     security:
       "Qué guarda la CLI de Yandex Disk, dónde vive el token, a qué se conecta y qué oculta un registro de ejecución.",
     changelog: "Lee las notas de versión de la CLI de Yandex Disk: novedades, cambios y correcciones.",
-    roadmap: "Mira qué hace ya la CLI de Yandex Disk y qué está previsto, como conectarla en WireCat Desktop.",
+    roadmap:
+      "Mira qué hace ya la CLI de Yandex Disk y qué está previsto, como la sincronización de carpetas en ambos sentidos.",
     compare:
       "Compara ydisk con el servidor MCP de Yandex Disk, rclone, Yandex Disk para Linux y yandex-disk-mcp por tarea.",
   },

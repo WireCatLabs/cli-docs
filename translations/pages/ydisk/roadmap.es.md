@@ -15,6 +15,8 @@ fijes, por la línea de comandos o por MCP. Mira [empieza aquí](./index.md).
 
 ## Siguiente
 
-- Conectar Yandex Disk en WireCat Desktop, para iniciar sesión y elegir carpetas sin la terminal.
+- Sincronización en ambos sentidos de una carpeta local con una carpeta del Disk: los cambios de un lado llegan al otro.
+- Edición y creación de documentos (`.md`, `.txt`, `.docx` y `.xlsx`). Un archivo vuelve al Disk solo si nadie lo
+  cambió allí mientras tanto.
 
 Lo que cambió en cada versión está en el [registro de cambios](./changelog.md).

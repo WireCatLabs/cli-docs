@@ -15,6 +15,8 @@ command line or MCP. See [start here](./index.md).
 
 ## Next
 
-- Connect Yandex Disk in WireCat Desktop, so you sign in and choose folders without the terminal.
+- Two-way sync of a local folder with a Disk folder. Changes you make in either place reach the other.
+- Editing and creating documents (`.md`, `.txt`, `.docx` and `.xlsx`). A file goes back to the Disk only if nobody
+  changed it there in the meantime.
 
 What changed in each released version is in the [changelog](./changelog.md).
