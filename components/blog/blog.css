@@ -86,6 +86,10 @@
   gap: clamp(32px, 4vw, 56px);
   align-items: start;
 }
+/* A post's text fills its column up to the sidebar: a narrower measure left an empty strip that read as missing content. */
+.wirecat-blog .blog-article {
+  --blog-measure: 100%;
+}
 .wirecat-blog .blog-sidebar {
   position: sticky;
   top: 20px;

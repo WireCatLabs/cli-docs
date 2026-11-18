@@ -169,7 +169,7 @@ security), Project (changelog, roadmap).
 Index: the masthead (title, intro, search), topic pills with counts, then one list of posts — the newest as a
 lead story when there are three or more — and the series shelf; widgets on the right. Post: breadcrumb, title,
 intro and one meta line (author, date, reading time, languages), the series switcher, "At a glance", the
-cover at text width and the text; sidebar on the right; share, author, previous/next at the end. "On this page"
+cover at text width and the text, which fill the main column up to the sidebar; sidebar on the right; share, author, previous/next at the end. "On this page"
 folds above the text, and sits in the page margin only on screens at least 110rem wide, so it never narrows the
 text. Both pages use the editorial header and footer; the blog adds nothing to them.
 
