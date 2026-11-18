@@ -2847,5 +2847,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "installation",
+    "reason": "The app name example `ydisk on my laptop` reads as a command to the docs example check; ydisk main names it without the tool word.",
+    "replacements": {
+      "en": [
+        {
+          "before": "such as `ydisk on my laptop`",
+          "after": "such as `My laptop`"
+        }
+      ],
+      "ru": [
+        {
+          "before": "например `ydisk on my laptop`",
+          "after": "например `Мой ноутбук`"
+        }
+      ],
+      "es": [
+        {
+          "before": "como `ydisk on my laptop`",
+          "after": "como `Mi portátil`"
+        }
+      ]
+    }
   }
 ]
