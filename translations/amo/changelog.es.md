@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nueva primero.
 
+## 0.1.1 — 18.11.2026
+
+### Corregido
+
+- Publicado desde GitHub Actions con la firma de npm (provenance), así WireCat Desktop lo instala: Desktop rechaza la
+  versión de una herramienta integrada que no compiló el workflow de su propio repositorio, y 0.1.0 se publicó desde un
+  ordenador.
+- La documentación para usuarios está al nivel de la de bitrix24-cli: páginas de MCP y de permisos, una página de inicio
+  completa, `amo <profile> setup` en el inicio rápido del README, variables de entorno en la página de configuración y
+  más filas en la resolución de problemas.
+
 ## 0.1.0 — 17.11.2026
 
 ### Añadido
