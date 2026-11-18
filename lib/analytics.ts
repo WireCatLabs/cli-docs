@@ -6,6 +6,8 @@ export type ConsentChoice = "granted" | "denied" | "pending"
 const { posthogKey, posthogHost } = siteConfig.analytics
 const productionHostname = new URL(siteConfig.url).hostname
 
+export const privateText = ".ideas-identity-name, .ideas-identity-email, .ideas-member-who, .ideas-sign-in-who"
+
 export const openConsentEvent = "wirecat:open-consent"
 
 export function analyticsEnabled(hostname: string, key: string = posthogKey): boolean {
@@ -29,7 +31,8 @@ export const posthogOptions: Partial<PostHogConfig> = {
   enable_recording_console_log: false,
   disable_surveys: true,
   disable_session_recording: true,
-  session_recording: { maskAllInputs: true, maskTextSelector: "*" },
+  // Page text is public, so recordings show it; a member's own name and address stay hidden.
+  session_recording: { maskAllInputs: true, maskTextSelector: privateText },
 }
 
 export function startConsentedFeatures(posthog: PostHog): void {

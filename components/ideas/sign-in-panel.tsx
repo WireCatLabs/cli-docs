@@ -139,7 +139,7 @@ export function SignInPanel({ lang, next, embedded = false }: { lang: string; ne
     return (
       <section className="ideas-panel" aria-labelledby="sign-in-title">
         <Heading id="sign-in-title">{words.title}</Heading>
-        <p>{words.signedIn(maskEmail(member.email))}</p>
+        <p className="ideas-sign-in-who">{words.signedIn(maskEmail(member.email))}</p>
         <div className="ideas-actions">
           <Link className="ideas-button" href={returnTo}>
             {words.continue}
