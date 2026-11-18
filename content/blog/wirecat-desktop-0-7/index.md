@@ -1,7 +1,7 @@
 ---
 title: "WireCat Desktop 0.7: calls and meetings next to your chats and your CRM"
 description: See your meetings, calls and calendar events on one page, and the calls of a Bitrix24 deal right on its card, with the recording a click away. Notion is built in now, an Obsidian vault connects in one click, and the Tools page installs and updates everything at once.
-date: 2026-11-18
+date: 2026-11-17
 tags: [release-notes]
 cover: ./cover.jpg
 coverAlt: "WireCat Desktop 0.7 next to the Meetings page in dark mode, showing one week with standups, a design review, a vendor call, a board review and two phone calls in the grid."

@@ -1,7 +1,7 @@
 ---
 title: "WireCat Desktop 0.7: llamadas y reuniones junto a tus chats y tu CRM"
 description: Ve tus reuniones, llamadas y eventos del calendario en una página, y las llamadas de una negociación de Bitrix24 en su propia ficha, con la grabación a un clic. Notion viene incluido, una bóveda de Obsidian se conecta con un clic y la página Herramientas instala y actualiza todo de una vez.
-date: 2026-11-18
+date: 2026-11-17
 tags: [release-notes]
 cover: ./cover.es.jpg
 coverAlt: "WireCat Desktop 0.7 junto a la página Reuniones en modo oscuro, con una semana de standups, una revisión de diseño, una llamada con un proveedor, una revisión del consejo y dos llamadas de teléfono en la cuadrícula."

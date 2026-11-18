@@ -1,113 +1,82 @@
 ---
-title: Cómo acelerar un reranker en un portátil, en cuatro actos
-description: Procesar por lotes un reranker cuantizado cambió sus respuestas, no su velocidad. Una biblioteca nativa lo hizo 2 veces más rápido, no 10. Distribuirla no necesitó paquetes npm nuevos, y para Windows la biblioteca que hacía falta solo estaba dentro de un archivo npm.
+title: Cómo hice más rápido un reranker en mi propio ordenador
+description: Cuando activé el reranker por defecto, la búsqueda por significado de WireCat pasó de 1.9 a 5.1 segundos. Los lotes casi no ayudaron y cambiaron las puntuaciones, ONNX Runtime nativo puntuó 2 veces más rápido, no 10, y la DLL para Windows solo estaba dentro de un archivo npm.
 date: 2026-11-18
 tags: [search, benchmarks, cli]
 cover: ./cover.jpg
-coverAlt: "Cincuenta mensajes impresos con una banda top 50, uno leído bajo una lupa, cinco ordenados del 1 al 5 con el primero marcado en verde y un cronómetro en 3,2 segundos"
+coverAlt: "Un montón de 50 mensajes impresos con la etiqueta top 50, uno leído con una lupa, 5 ordenados con el primero marcado en verde, un cronómetro en 3.2 segundos"
 author: viacheslav-ptsarev
 series: laptop-search
 glance:
-  - value: "4,6 s → 3,2 s"
-    label: "un --discover real: WebAssembly frente a nativo"
-    href: "#segundo-acto-lo-nativo-fue-2-veces-más-rápido-no-10"
+  - value: "4.6 s → 3.2 s"
+    label: "--discover en un archivo real, con WebAssembly y en nativo"
+    href: "#en-nativo-puntuó-2-veces-más-rápido-no-10"
   - value: "≤ 15%"
-    label: "ahorraron los lotes, y las puntuaciones cambiaron"
-    href: "#primer-acto-los-lotes-cambiaron-las-respuestas-no-la-velocidad"
-  - value: "113,5 MB"
-    label: "el archivo npm con la única DLL de Windows que funcionó"
-    href: "#cuarto-acto-la-biblioteca-de-windows-solo-estaba-dentro-de-un-archivo-npm"
+    label: "lo máximo que ahorraron los lotes, y las puntuaciones se movieron"
+    href: "#los-lotes-ahorraron-un-15-y-movieron-las-puntuaciones"
+  - value: "113.5 MB"
+    label: "el archivo npm del que saco una DLL para Windows"
+    href: "#en-windows-la-dll-tuvo-que-salir-de-un-archivo-npm"
   - value: "5 + Alpine"
-    label: "sistemas que CI comprueba en nativo; Alpine sigue con WebAssembly"
-    href: "#cuarto-acto-la-biblioteca-de-windows-solo-estaba-dentro-de-un-archivo-npm"
+    label: "sistemas donde CI ejecuta los modelos en nativo, Alpine sigue en WebAssembly"
+    href: "#en-windows-la-dll-tuvo-que-salir-de-un-archivo-npm"
 draft: false
 ---
 
-Nuestras CLI buscan en un archivo de mensajería en el propio ordenador del dueño.
-`search messages --discover` encuentra candidatos por significado y por palabras, y después un modelo
-pequeño, el reranker (mMARCO, 8 bits), lee los 50 primeros y los ordena. Cuando el reranker pasó a estar
-activado por defecto, `--discover` pasó de 1,9 a 5,1 s en un archivo real. Estas son las cuatro cosas que
-hicimos y lo que nos enseñó cada una.
+Cuando activé el reranker por defecto en la búsqueda de WireCat, `search messages --discover` en mi archivo pasó de 1.9 a 5.1 segundos. Probé las 2 cosas obvias: lotes, y ONNX Runtime nativo en lugar de WebAssembly. Los lotes casi no ayudaron y encima cambiaron las puntuaciones, y en nativo la puntuación fue 2 veces más rápida, cuando mi estimación decía 4-10. Y en Windows la DLL que necesitaba solo estaba dentro de un archivo npm de 113.5 MB, así que tuve que sacarla de ahí.
 
-## Primer acto: los lotes cambiaron las respuestas, no la velocidad
+`--discover` busca candidatos por significado y por palabras, y luego un modelo pequeño, mMARCO (8 bits), lee los 50 primeros y los ordena, eso es el reranker. Todo corre en local, en la máquina del usuario, sin nube.
 
-La solución obvia es puntuar los 50 pares por lotes: una pasada del modelo para muchos pares en lugar de
-una por par. En WebAssembly ahorró como mucho un 15%, y solo con los pares ordenados por longitud. Con
-longitudes mezcladas fue más lento: cada par se rellena hasta el más largo, y el relleno cuesta tanto como
-el texto.
+## Los lotes ahorraron un 15% y movieron las puntuaciones
 
-Peor aún, las puntuaciones se movieron. El mismo par obtuvo 0,04 solo, 0,48 rellenado hasta 200 tokens y
-0,34 junto a otro par. El modelo de 8 bits probablemente fija su rango a partir de toda la entrada de cada
-pasada, así que los vecinos de lote cambian la puntuación de un par. Un orden que depende de qué
-resultados comparten lote no es un orden. Mantuvimos un par por pasada.
+Primero probé no ejecutar el modelo 50 veces, una pareja (pregunta y mensaje) cada vez, sino darle las parejas en lotes. En WebAssembly eso ahorró un 15% como mucho, y solo con las parejas ordenadas por longitud. Con parejas de longitudes distintas en un lote iba incluso más lento, porque cada pareja se rellena hasta la más larga y el relleno cuesta lo mismo que el texto real.
 
-| Puntuar 50 pares de longitud mixta | Tiempo | Mayor cambio de puntuación |
+Y las puntuaciones cambiaron. La misma pareja sacó 0.04 sola, 0.48 rellenada hasta 200 tokens y 0.34 junto a otra pareja. Creo que el modelo de 8 bits ajusta su rango de valores a toda la entrada de cada ejecución (cuantización dinámica), así que los vecinos del lote mueven la puntuación. Es una hipótesis, no lo investigué más. Pero aunque la causa sea otra, el orden de los resultados dependería de qué mensajes cayeron por azar en el mismo lote, así que me quedé con una pareja por ejecución.
+
+| 50 parejas de longitudes distintas | Tiempo | Mayor cambio de puntuación |
 | --- | ---: | ---: |
-| Uno a uno | 1,54 s | — |
-| Lotes de 5, ordenados por longitud | 1,33 s | 1,01 |
-| Un lote de 50 | 2,37 s | 0,85 |
+| Una a una | 1.54 s | |
+| Lotes de 5, ordenados por longitud | 1.33 s | 1.01 |
+| Lotes de 5, en orden de llegada | 2.12 s | 0.78 |
+| Un lote de 50 | 2.37 s | 0.85 |
 
-## Segundo acto: lo nativo fue 2 veces más rápido, no 10
+El texto de esta medición es sintético, las puntuaciones están en logits. La opción más rápida además mueve las puntuaciones más que las demás de la tabla, y los lotes de 25 las movían hasta 1.34. Solo medí en WebAssembly, si los lotes en nativo se comportan igual no lo comprobé.
 
-Después ejecutamos los mismos modelos con la biblioteca nativa de ONNX Runtime en lugar de su versión
-para WebAssembly. Una prueba con textos cortos prometía de 4 a 10 veces. En el archivo real, `--discover`
-pasó de 4,58 a 3,20 s, con una respuesta directa entre las cinco primeras en 6 de 6 preguntas conocidas en
-ambos casos.
+## En nativo puntuó 2 veces más rápido, no 10
 
-La diferencia está en la longitud de la entrada. La entrada real del reranker lleva el chat, el autor, la
-fecha y el mensaje al que se responde: una mediana de 153 tokens, y una de cada diez supera los 762. La
-mediana del conjunto sintético era 48. Por par, lo nativo fue de 2 a 2,5 veces más rápido. Las pruebas con
-textos cortos exageran la ganancia para textos largos.
+Después ejecuté los mismos modelos con la biblioteca nativa de ONNX Runtime en lugar de WebAssembly. Esperaba 4-10 veces, porque la versión de Python puntuaba 50 parejas sintéticas cortas en 0.2 segundos, y WebAssembly tardaba 0.9-1.7 en mi caso. Pero estaba comparando runtimes distintos de ejecuciones distintas. Cuando ejecuté Node con la biblioteca nativa y WebAssembly con las mismas parejas, salió 0.25-0.30 segundos contra 0.60, o sea 2-2.4 veces.
 
-Más tarde recortamos el mensaje al que se responde a 300 caracteres (esa historia tiene su propio
-artículo). Con ambos cambios, la CLI publicada ejecutó `--discover` en 2,91 s en nativo frente a 4,10 s
-con WebAssembly.
+En un archivo real salió igual. El reranker no lee solo el mensaje, también recibe el chat, el autor y el mensaje al que responde, así que la mediana fue de 153 tokens contra 48 en el conjunto sintético, y una de cada diez parejas pasaba de 762. Por pareja, nativo es 2-2.5 veces más rápido, pero el `--discover` entero pasó de 4.58 a 3.20 segundos (mediana de 18 llamadas), o sea un 30%. El resto se va en cargar los modelos y los tokenizadores (17 MB de JSON, igual en los dos runtimes), la recolección de basura y la búsqueda en sí.
 
-## Tercer acto: sin paquetes nuevos
+Las respuestas siguieron siendo las mismas. En mis 6 preguntas de control la respuesta directa estaba entre los 5 primeros en los dos casos, y de los 30 resultados del top 5 coincidieron 29. Los casi empates a veces cambian de sitio, porque los runtimes puntúan la misma pareja de forma un poco distinta. El punto de partida aquí es 4.58 y no 5.1 porque es otra build y otra carga en la máquina, así que la comparación con 5.1 es solo aproximada.
 
-Lo habitual para llevar una biblioteca nativa a los usuarios de npm es un paquete por plataforma. No
-queríamos publicar cinco paquetes nuevos ni agrandar la instalación de quien nunca descarga un modelo.
+También vi que el reranker a veces ni siquiera veía el mensaje encontrado. Esto lo medí aparte, en un solo chat. Ahí, en 18 de 119 parejas con respuesta, el mensaje al que respondía ocupaba los 512 tokens del modelo. Lo recorté a 300 caracteres, de eso escribiré aparte. Con los dos cambios, `--discover` en max 0.81.0 tardaba 2.91 segundos en nativo y 4.10 con WebAssembly.
 
-El paquete npm `onnxruntime-node` tiene dos partes por plataforma: un conector de 0,4 MB
-(`onnxruntime_binding.node`) y la biblioteca. El conector busca la biblioteca en su propia carpeta. Así
-que los conectores viajan dentro de un paquete que ya publicamos, y la biblioteca se descarga con los
-modelos desde el archivo oficial de la versión de Microsoft, comprobada con un hash sha256 fijado. Una
-búsqueda nunca descarga nada: la biblioteca llega solo cuando el usuario ejecuta `models download`. Si
-falta o no carga, los modelos funcionan con WebAssembly como antes. En 450 pares las puntuaciones
-coincidieron exactamente con las de la biblioteca del propio paquete npm.
+## Distribuir lo nativo sin paquetes nuevos
 
-## Cuarto acto: la biblioteca de Windows solo estaba dentro de un archivo npm
+Lo habitual para distribuir una biblioteca nativa por npm es un paquete aparte por plataforma. No quería más paquetes ni una instalación más pesada para quien nunca descarga modelos. `onnxruntime-node` ocupa 288 MB descomprimido, porque lleva las bibliotecas de todos los sistemas.
 
-En Windows el mismo truco falló. El conector de Windows importa una función de `onnxruntime.dll` por
-número, no por nombre: el ordinal 4, la función de configuración de DirectML, la capa de Windows para la
-tarjeta gráfica. La DLL de la versión de Microsoft es la compilación normal, sin esa función, así que el
-conector se negaba a cargarla.
+Para cada plataforma tiene 2 partes: un binding de 0.3-0.4 MB y la biblioteca. El binding busca la biblioteca en su propia carpeta, y eso es lo que aproveché - los bindings van en `@wirecat/cli-core-onnx`, que ya se publica, y la biblioteca se descarga con los modelos desde la release oficial de Microsoft y se comprueba contra un sha256 fijo. La búsqueda nunca descarga nada, la biblioteca aparece solo después de `models download`, y si falta o no carga, todo funciona con WebAssembly como antes. Comprobé las puntuaciones en 450 parejas, con la biblioteca de la release de Microsoft coincidieron bit a bit con la de npm.
 
-La compilación con DirectML de la versión 1.30.0 no está en el archivo de la versión de Microsoft, y su
-paquete NuGet se queda en una versión anterior. La encontramos en un solo sitio: dentro del propio
-archivo npm de `onnxruntime-node`, de 113,5 MB. Por eso en Windows `models download` descarga ese
-archivo una vez, conserva la única DLL y la comprueba con su propio hash fijado. La parte de DirectML solo
-se carga si se usa.
+## En Windows la DLL tuvo que salir de un archivo npm
 
-Después lo comprobamos de verdad. Un nuevo flujo de CI descarga la biblioteca y ejecuta dos modelos de
-prueba diminutos en nativo en Linux x64 y arm64, macOS con Apple silicon, Windows x64 y Windows arm64.
-También comprueba que a Alpine Linux, que no tiene compilación, no se le ofrece nada y sigue con
-WebAssembly. Los seis pasan; las tareas de Windows tardan entre 1,5 y 2 minutos.
+En Windows ese truco no funcionó. El binding de Windows toma una función de `onnxruntime.dll` no por nombre sino por el número 4, y es la función de DirectML (la capa de Windows para la tarjeta gráfica). La release de Microsoft trae la build normal para CPU sin ella, y Windows respondía a la carga solo con "The operating system cannot run %1", sin una palabra sobre lo que faltaba.
 
-## Lo que le diríamos a quien haga lo mismo
+El único sitio donde encontré la build con DirectML de la 1.30.0 fue dentro del propio archivo npm de `onnxruntime-node`, que pesa 113.5 MB. NuGet también la tiene, pero solo hasta la 1.24.4. Así que en Windows `models download` descarga ese archivo una vez, saca una DLL y la comprueba contra un sha256 fijo. DirectML.dll solo se carga si hace falta, así que en CPU todo funciona sin él. Un apaño, sí, pero sin paquetes nuevos.
 
-- Mide con la longitud real de tus entradas. El texto sintético corto hacía que la biblioteca nativa
-  pareciera hasta cinco veces mejor de lo que es.
-- No proceses por lotes un modelo con cuantización dinámica si las puntuaciones de distintos pares deben
-  ser comparables.
-- Una biblioteca nativa se puede descargar bajo demanda, fijada por hash, con WebAssembly como respaldo.
-  Puede que no necesites un paquete por plataforma.
-- Comprueba la biblioteca en cada sistema en CI. Leer la lista de archivos del paquete no es lo mismo que
-  cargarla.
+Antes de esto, CI solo ejecutaba un modelo de prueba diminuto a través del paquete npm, y nada comprobaba `models download` ni lo que de verdad corre para el usuario después. Ahora un workflow aparte descarga la biblioteca y ejecuta 2 modelos de prueba diminutos en nativo en 5 sistemas: Linux y Windows en x64 y arm64, más macOS en Apple silicon. En Alpine, que no tiene build, comprueba que ni siquiera se ofrece lo nativo y que todo va por WebAssembly. Los Mac Intel también se quedan en WebAssembly, el paquete no trae biblioteca para ellos (y CI tampoco los cubre).
 
-## Notas
+## Qué haría distinto
 
-Las mediciones, la configuración y los scripts son públicos:
-[velocidad del reranker](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/rerank-speed/README.md).
-Los mensajes reales se usaron solo como totales; las preguntas y las filas por pregunta siguen siendo
-privadas.
+- Compararía los runtimes con las mismas parejas y con la longitud real de la entrada. Mis 4-10 veces salieron de comparar ejecuciones distintas.
+- No usaría lotes con un modelo cuantizado si las puntuaciones de parejas distintas se comparan entre sí.
+- Una biblioteca nativa se puede descargar bajo demanda, con un hash fijo y WebAssembly para cuando no carga. Al final no necesité un paquete por plataforma.
+- Que los archivos estén en un paquete no significa que la biblioteca cargue. Ahora eso lo comprueba CI, que de verdad ejecuta un modelo en cada uno de los 5 sistemas.
+
+## Qué no medí
+
+- La velocidad en nativo en Windows, macOS y Linux arm64. CI comprueba que funciona ahí, pero no mide el tiempo.
+- El servidor MCP, donde los modelos ya están cargados y solo se acelera la puntuación.
+- Un modelo sin cuantizar (fp32), que no debería depender de sus vecinos de lote, pero es más grande y más lento.
+
+Las mediciones sintéticas, su configuración y los scripts están en [cli-testing](https://github.com/WireCatLabs/cli-testing/blob/main/performance/search/rerank-speed/README.md), se pueden repetir. De mi archivo real solo hay totales, las preguntas y las filas por pregunta son privadas. Si a ti lo nativo te salió más rápido con textos largos, cuéntame con qué mediste y lo comparo con mis números.

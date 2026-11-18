@@ -2,9 +2,8 @@
 /* Blog. Sections: frame · index · cards · widgets · post · article body · end of post · newsletter · small screens.
    Components and when each part shows: docs/DESIGN.md, "Blog". */
 .wirecat-blog {
-  --blog-measure: 46rem;
+  --blog-measure: 44rem;
   --blog-sidebar: 360px;
-  --blog-gap: clamp(32px, 4vw, 56px);
   --blog-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   background: var(--bg);
 }
@@ -84,13 +83,12 @@
 .wirecat-blog .blog-columns {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--blog-sidebar);
-  gap: var(--blog-gap);
+  gap: clamp(32px, 4vw, 56px);
   align-items: start;
 }
-/* A post's text stops at the measure, so its track does too: the sidebar sits beside the text, not a gap away. */
-.wirecat-blog .blog-article .blog-columns {
-  grid-template-columns: minmax(0, var(--blog-measure)) var(--blog-sidebar);
-  justify-content: center;
+/* A post's text fills its column up to the sidebar: a narrower measure left an empty strip that read as missing content. */
+.wirecat-blog .blog-article {
+  --blog-measure: 100%;
 }
 .wirecat-blog .blog-sidebar {
   position: sticky;
@@ -113,9 +111,6 @@
   }
   .wirecat-blog .blog-toc-top {
     display: none;
-  }
-  .wirecat-blog .blog-article .blog-margin {
-    right: calc(50% + (var(--blog-measure) + var(--blog-gap) + var(--blog-sidebar)) / 2 + 40px);
   }
 }
 
@@ -1241,8 +1236,7 @@ html.dark .wirecat-blog .blog-code pre span {
 
 /* Small screens: the sidebar follows the content, the masthead stacks. */
 @media (width < 64rem) {
-  .wirecat-blog .blog-columns,
-  .wirecat-blog .blog-article .blog-columns {
+  .wirecat-blog .blog-columns {
     grid-template-columns: minmax(0, 1fr);
   }
   .wirecat-blog .blog-sidebar {
