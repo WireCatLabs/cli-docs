@@ -101,6 +101,7 @@ export const sidebarIcons = {
   amo: Handshake,
   wordpress: Newspaper,
   linear: SquareKanban,
+  attio: Handshake,
   asterisk: Server,
   pbx: PhoneCall,
   beeline: PhoneCall,
@@ -259,7 +260,7 @@ const toolGroups = {
   messengers: { tools: ["tg", "max", "wa"], open: true, icon: MessageSquare },
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
-  crm: { tools: ["b24", "amo"], open: false, icon: Handshake },
+  crm: { tools: ["b24", "amo", "attio"], open: false, icon: Handshake },
   trackers: { tools: ["linear"], open: true, icon: SquareKanban },
 } as const
 
@@ -350,7 +351,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|pbx|wordpress|linear)\/?$/.test(
+    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|attio|pbx|wordpress|linear)\/?$/.test(
       node.url,
     )
       ? "index"

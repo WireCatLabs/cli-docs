@@ -159,6 +159,21 @@
     }
   },
   {
+    "name": "attio",
+    "displayName": "Attio",
+    "repo": "WireCatLabs/attio-cli",
+    "package": "@wirecat/attio-cli",
+    "lang": "en",
+    "docsRef": "v0.2.2",
+    "tier": "extra",
+    "category": "crm",
+    "summary": {
+      "en": "Read and change your Attio CRM from the terminal or your AI agent: deals, people and companies, with a local copy of your deals and their clients to search offline.",
+      "ru": "Читайте и меняйте CRM Attio из терминала или через ИИ-агента: сделки, людей и компании, с локальной копией ваших сделок и их клиентов для поиска без интернета.",
+      "es": "Lee y cambia tu CRM de Attio desde la terminal o con tu agente de IA: negociaciones, personas y empresas, con una copia local de tus negociaciones y sus clientes para buscar sin conexión."
+    }
+  },
+  {
     "name": "pbx",
     "displayName": "Asterisk",
     "repo": "WireCatLabs/asterisk-cli",

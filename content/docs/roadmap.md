@@ -36,6 +36,8 @@ what comes next.
   offline, and drafts written and published when you allow it.
 - **[Linear](./linear/index.md)**: your Linear issues, projects and comments on your computer, readable offline, and an
   issue you take on kept as your task.
+- **[Attio](./attio/index.md)**: your deals and the people and companies they name on your computer,
+  searchable next to your messages, with everyone else in Attio found live.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -102,6 +104,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [Mail roadmap](./mail/roadmap.md)
 - [Bitrix24 roadmap](./b24/roadmap.md)
 - [amoCRM roadmap](./amo/roadmap.md)
+- [Attio roadmap](./attio/roadmap.md)
 - [Yandex Disk roadmap](./ydisk/roadmap.md)
 - [Asterisk roadmap](./pbx/roadmap.md)
 - [WordPress roadmap](./wordpress/roadmap.md)
