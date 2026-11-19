@@ -35,53 +35,80 @@ export function shorten(text: string, limit: number): string {
   return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,.:;]+$/, "")}…`
 }
 
-/** The 1200×630 card every page shares as its link preview. */
-export function socialCard({
-  kicker,
-  headline,
-  footer,
-}: {
-  kicker?: { label: string; logo?: string }
-  headline: ReactNode
-  footer: string
-}) {
+const frame = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  background: "#101617",
+  color: "#ffffff",
+  fontFamily: "Unbounded Latin, Unbounded Cyrillic",
+} as const
+
+function brand(scale: number) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 18 * scale, fontSize: 40 * scale }}>
+        <svg width={64 * scale} height={64 * scale} viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="16" fill="#4b53f0" />
+          <path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="white" strokeWidth="2.4" strokeLinejoin="round" />
+        </svg>
+        WireCat
+      </div>
+      <span style={{ fontSize: 28 * scale, color: "#d3d9db" }}>wirecat.dev</span>
+    </div>
+  )
+}
+
+/** The site's own card: the homepage and the blog. */
+export function socialCard({ headline, footer }: { headline: ReactNode; footer: string }) {
   return new ImageResponse(
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        padding: "56px 56px",
-        background: "#101617",
-        color: "#ffffff",
-        fontFamily: "Unbounded Latin, Unbounded Cyrillic",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 40 }}>
-          <svg width="64" height="64" viewBox="0 0 32 32" aria-hidden="true">
+    <div style={{ ...frame, justifyContent: "space-between", padding: "56px 56px" }}>
+      {brand(1)}
+      <div style={{ display: "flex", flexDirection: "column", fontSize: 56, lineHeight: 1.2, gap: 8 }}>{headline}</div>
+      <div style={{ display: "flex", fontSize: 28, color: "#d3d9db" }}>{footer}</div>
+    </div>,
+    { width: 1200, height: 630, fonts },
+  )
+}
+
+/** A docs page's card: the title on the left, the site's mark on the right, the description across the width. */
+export function pageCard({
+  title,
+  description,
+  logo,
+  label,
+}: {
+  title: string
+  description: string
+  logo?: string
+  label?: string
+}) {
+  const size = title.length > 44 ? 52 : title.length > 28 ? 66 : 88
+  // A short title leaves room for more of the description; past four lines it is cut.
+  const text = shorten(description, title.length > 28 ? 120 : 170)
+  return new ImageResponse(
+    <div style={{ ...frame, justifyContent: "center", gap: 44, padding: "56px 64px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 40 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20, flexShrink: 1 }}>
+          {logo || label ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 30, color: "#b8afff" }}>
+              {/* biome-ignore lint/performance/noImgElement: the card is drawn by Satori, not rendered by Next. */}
+              {logo ? <img src={logo} width={52} height={52} alt="" /> : null}
+              {label}
+            </div>
+          ) : null}
+          <span style={{ fontSize: size, lineHeight: 1.1 }}>{title}</span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <svg width="96" height="96" viewBox="0 0 32 32" aria-hidden="true">
             <circle cx="16" cy="16" r="16" fill="#4b53f0" />
             <path d="M9 21V11l4 4 3-4 3 4 4-4v10" fill="none" stroke="white" strokeWidth="2.4" strokeLinejoin="round" />
           </svg>
-          WireCat
-        </div>
-        <span style={{ fontSize: 28, color: "#d3d9db" }}>wirecat.dev</span>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        {kicker ? (
-          <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 32, color: "#b8afff" }}>
-            {/* biome-ignore lint/performance/noImgElement: the card is drawn by Satori, not rendered by Next. */}
-            {kicker.logo ? <img src={kicker.logo} width={48} height={48} alt="" /> : null}
-            {kicker.label}
-          </div>
-        ) : null}
-        <div style={{ display: "flex", flexDirection: "column", fontSize: 56, lineHeight: 1.2, gap: 8 }}>
-          {headline}
+          <span style={{ fontSize: 22, color: "#d3d9db" }}>wirecat.dev</span>
         </div>
       </div>
-      <div style={{ display: "flex", fontSize: 26, lineHeight: 1.4, color: "#d3d9db" }}>{footer}</div>
+      <div style={{ display: "flex", fontSize: 36, lineHeight: 1.35, color: "#d3d9db" }}>{text}</div>
     </div>,
     { width: 1200, height: 630, fonts },
   )
