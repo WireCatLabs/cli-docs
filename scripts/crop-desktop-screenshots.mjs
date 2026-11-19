@@ -50,6 +50,7 @@ const docsScreens = [
   "digest-editor",
   "logs",
   "bitrix-app",
+  "amo-integration",
   "account-remove",
   "tailscale-funnel",
 ]

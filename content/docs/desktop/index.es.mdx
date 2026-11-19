@@ -118,8 +118,11 @@ Cómo entra cada herramienta:
 | Google Drive, Google Calendar | Tu navegador |
 | Correo | Primero tu dirección de correo. Gmail entra con Google (**Entrar con Google**, recomendado), sin configurar nada tuyo en Google Cloud. Una cuenta de Microsoft abre el inicio de sesión de Microsoft. Otros servidores de correo, y Gmail en **Otras formas**, usan una contraseña de aplicación, una contraseña creada solo para este programa, con pasos guiados. [Preparar el buzón](../mail/providers.md) muestra cómo la crea cada proveedor |
 | Bitrix24 | Un webhook entrante o una aplicación local de tu portal. Mira [Bitrix24: un webhook o una aplicación local](#bitrix24-un-webhook-o-una-aplicación-local) |
+| amoCRM, Kommo | La dirección de la cuenta y un token de larga duración de una integración privada. Mira [amoCRM: una integración privada](#amocrm-una-integración-privada) |
 | Asterisk | Dónde están tus llamadas: la ruta de Master.csv, o la dirección de una base de llamadas MySQL o PostgreSQL y la contraseña de un usuario de solo lectura. Después, los países de tus líneas, para que quien llama sin prefijo de país se enlace con el contacto correcto |
 | Notion | Un token de Notion que pegas en la ventana. Después eliges las páginas y bases de datos que se copian. Mientras no eliges ninguna, Notion copia todo lo que ve el token |
+| Yandex Disk | Un token OAuth de Yandex, de una aplicación que registras una vez en oauth.yandex.com. Después eliges las carpetas que se copian |
+| beeline | Un token de API de Beeline Cloud PBX, del panel de Beeline |
 
 Si una herramienta no tiene ventana de inicio de sesión, **Abrir terminal** abre una terminal que ejecuta la
 configuración propia de la herramienta.
@@ -155,6 +158,25 @@ La clave se queda en este ordenador, en el llavero del sistema. Entrar así sust
 webhook nuevo sustituye la sesión de la aplicación. Si el navegador no vuelve a WireCat, inténtalo de
 nuevo. Algunos planes de Bitrix24 no dan acceso a aplicaciones: la ventana lo dice, y el webhook entrante sigue
 funcionando.
+
+### amoCRM: una integración privada
+
+amoCRM y Kommo dejan entrar a un programa solo a través de una integración privada que un administrador de la cuenta
+crea una vez. La ventana pide primero la dirección de la cuenta, como `mycompany.amocrm.ru`, y después muestra qué
+hacer en amoCRM: dónde crear la integración, la dirección de redirección que copiar y el acceso que marcar. En una
+cuenta de Kommo, abre **En Kommo**.
+
+<DesktopShot
+  shot="amo-integration"
+  folder="desktop/docs"
+  lang="es"
+  alt="El inicio de sesión de amoCRM en el paso de la integración, con los cuatro pasos en amoCRM y el aviso de renuncia al soporte"
+  caption="WireCat muestra qué hacer en amoCRM y después recibe el token de larga duración de la integración."
+/>
+
+Después pega el token de larga duración de la pestaña «Ключи» de la integración. WireCat pregunta a la cuenta de quién
+es el token y guarda la dirección y el token solo si la cuenta responde. [Instalar y conectar](../amo/installation.md)
+tiene todos los pasos, y el inicio de sesión en el navegador con la misma integración.
 
 ## Qué puedes hacer en la aplicación
 
