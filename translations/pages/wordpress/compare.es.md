@@ -83,7 +83,8 @@ Notas sobre la columna de `wordpress`:
   categorías y usuarios, en el almacén local de WireCat. El texto se guarda en Markdown. `posts list`, `posts search` y
   `posts show` leen esta copia, también con `--offline`. Tu rol en WordPress decide cuánto se copia. Un Administrador
   obtiene todo. Un Editor obtiene todas las entradas y páginas, pero no los usuarios. Un Autor o un Colaborador obtiene
-  parte de las entradas y ninguna página, y un Colaborador solo ve sus propias entradas.
+  solo sus propias entradas y ninguna página, y un Colaborador solo sus borradores y sus entradas pendientes de
+  revisión.
 - **Una búsqueda.** Las entradas están en el mismo almacén local que los mensajes, las notas y las reuniones de las
   otras herramientas de WireCat del mismo ordenador. `posts search` solo encuentra entradas, así que esta fila es en
   parte.

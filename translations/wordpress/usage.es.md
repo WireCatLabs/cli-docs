@@ -54,11 +54,13 @@ primera sincronización lo lee todo. Las siguientes piden a WordPress solo las e
 Una vez al día, una sincronización encuentra también las entradas que el sitio borró para siempre. Una entrada en la
 papelera sigue en la copia, con su estado.
 
-Una sincronización puede terminar parcial y aun así salir bien: nombra cada hueco. Con un inicio de sesión de Autor o
-Colaborador, WordPress niega la lista de páginas, así que las entradas quedan parciales y los cambios en el sitio no
-llegan a la copia. Un Colaborador además ve solo sus propias entradas. Solo un Administrador obtiene la lista de
-usuarios, así que la copia de un Editor tiene todas las entradas y páginas, pero ningún usuario. Inicia sesión como
-Administrador para tener una copia completa.
+Una sincronización nombra cada hueco: lo que tu rol de WordPress no puede leer. Con un inicio de sesión de Autor o
+Colaborador, la sincronización copia tus propias entradas y omite las páginas, porque WordPress niega a los dos la
+lista de páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de revisión. Para los dos, cada
+sincronización vuelve a leer todas tus entradas, no solo los cambios, y una entrada que deja de estar a tu alcance se
+queda en la copia como estaba: una borrada para siempre, o una entrada de un Colaborador que publicó un Editor. Solo
+un Administrador obtiene la lista de usuarios, así que la copia de un Editor tiene todas las entradas y páginas, pero
+ningún usuario. Inicia sesión como Administrador para tener una copia completa.
 
 `--max-pages` limita las peticiones de una ejecución. La siguiente sincronización sigue donde se detuvo.
 

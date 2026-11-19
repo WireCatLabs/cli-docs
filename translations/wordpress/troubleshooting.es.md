@@ -37,8 +37,8 @@ wordpress blog session status --check    # asks your site whose password it is
 | No hay sección **Contraseñas de aplicación** en tu perfil | El sitio necesita WordPress 5.7 o posterior con https, y un plugin o el alojamiento puede desactivar la sección. Pregunta al administrador del sitio. |
 | Una dirección de WordPress.com | Los sitios de WordPress.com no son compatibles, solo WordPress autoalojado. |
 | `posts list` está vacío | Ejecuta antes `wordpress blog sync`. Las entradas se leen de la copia que crea. |
-| `sync` termina parcial, o faltan páginas | Un inicio de sesión de Autor o Colaborador no puede listar páginas, y un Colaborador ve solo sus propias entradas. Solo un Administrador lista los usuarios. Inicia sesión como Administrador para una copia completa, o como Editor para todas las entradas y páginas. |
-| Falta en la copia un cambio del sitio | Ejecuta `sync`. Si sigue terminando parcial, mira la fila anterior. |
+| `sync` nombra huecos, o faltan páginas | Un inicio de sesión de Autor o Colaborador no puede listar páginas y obtiene solo sus propias entradas, y un Colaborador solo sus borradores y sus entradas pendientes de revisión. Solo un Administrador lista los usuarios. Inicia sesión como Administrador para una copia completa, o como Editor para todas las entradas y páginas. |
+| Falta en la copia un cambio del sitio | Ejecuta `sync`. Si la entrada no es tuya y entras como Autor o Colaborador, mira la fila anterior. |
 | `content.conflict` | La entrada cambió en el sitio desde la última sincronización. Ejecuta `sync`, mira la entrada de nuevo y vuelve a intentarlo. |
 | `content.lossy-body` | La entrada tiene galerías, columnas, contenido incrustado o iframes que Markdown no puede conservar. Cambia solo su título, extracto, etiquetas o estado, o añade `--replace-body` para escribir el cuerpo de todos modos y aplanarlos. Consulta [cuando una escritura se detiene](./usage.md#when-a-write-stops). |
 | `content.schedule-past` | `--at-time` debe estar en el futuro. |
