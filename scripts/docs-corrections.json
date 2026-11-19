@@ -2873,5 +2873,71 @@
         }
       ]
     }
+  },
+  {
+    "tool": "linear",
+    "slug": "security",
+    "source": "https://github.com/WireCatLabs/linear-cli/blob/v0.1.0/docs/security.md",
+    "reason": "The released page keeps a sentence from cli-template's sample (\"the sample's made-up address never resolves\"). linear has no sample address: its api group calls Linear's GraphQL API at https://api.linear.app/graphql (spec in wirecat.config.ts at v0.1.0).",
+    "replacements": {
+      "en": [
+        {
+          "before": "Its `api` group reaches Linear; the sample's made-up address never resolves.",
+          "after": "Its `api` group reaches Linear's API."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "linear",
+    "slug": "commands",
+    "source": "https://github.com/WireCatLabs/linear-cli/blob/v0.1.0/docs/commands.md",
+    "reason": "The generated help of the api group says \"OpenAPI document\", but Linear's API is GraphQL and linear builds the group from its GraphQL schema (spec kind graphql in wirecat.config.ts at v0.1.0, CHANGELOG 0.1.0).",
+    "replacements": {
+      "en": [
+        {
+          "before": "the raw Linear API, one command per operation of its OpenAPI document",
+          "after": "the raw Linear API, one command per query and mutation of its GraphQL schema"
+        }
+      ],
+      "ru": [
+        {
+          "before": "the raw Linear API, one command per operation of its OpenAPI document",
+          "after": "the raw Linear API, one command per query and mutation of its GraphQL schema"
+        }
+      ],
+      "es": [
+        {
+          "before": "the raw Linear API, one command per operation of its OpenAPI document",
+          "after": "the raw Linear API, one command per query and mutation of its GraphQL schema"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "linear",
+    "slug": "configuration",
+    "source": "https://github.com/WireCatLabs/linear-cli/blob/v0.1.0/docs/configuration.md",
+    "reason": "The released Run records section keeps cli-template's developer note (\"a command you add\", `context.run`) and names a `comments` command that linear does not have (docs/commands.md at v0.1.0). The corrected text keeps only what holds for linear's own commands.",
+    "replacements": {
+      "en": [
+        {
+          "before": "A command you add that does its work\nin `context.run` is kept when it succeeds too, unless `record` is `false` (then only failures) or it ran with\n`--no-record`. `comments` and `session status --check` do their work in a run, so `--record` keeps them.",
+          "after": "With `record` set to `false` only failures\nare kept, and `--no-record` keeps nothing. `session status --check` does its work in a run, so `--record` keeps it."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Команда, которую вы\nдобавили и которая делает работу в `context.run`, сохраняется и при успехе, если только `record` не равен `false`\n(тогда только неудачи) или она не запущена с `--no-record`. `comments` и `session status --check` работают внутри\nзапуска, поэтому `--record` их сохраняет.",
+          "after": "Если `record` равен\n`false`, сохраняются только неудачи, а `--no-record` не сохраняет ничего. `session status --check` работает внутри\nзапуска, поэтому `--record` его сохраняет."
+        }
+      ],
+      "es": [
+        {
+          "before": "Un comando que añadas y que haga\nsu trabajo en `context.run` se guarda también cuando sale bien, salvo que `record` sea `false` (entonces solo los\nfallos) o que se haya ejecutado con `--no-record`. `comments` y `session status --check` trabajan dentro de una\nejecución, así que `--record` los guarda.",
+          "after": "Con `record` en `false` solo se\nguardan los fallos, y `--no-record` no guarda nada. `session status --check` trabaja dentro de una ejecución, así que\n`--record` lo guarda."
+        }
+      ]
+    }
   }
 ]

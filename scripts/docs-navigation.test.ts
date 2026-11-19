@@ -249,6 +249,23 @@ describe("tool folders in the sidebar", () => {
     expect(gcal.name).toBe("gcal")
   })
 
+  it("puts Linear in an open Issue trackers group, keeping its URL", () => {
+    const folder = (tool: string): Node => ({
+      type: "folder",
+      name: tool,
+      index: { type: "page", name: tool, url: `/ru/docs/${tool}` },
+      children: [],
+    })
+    const tree = unifiedDocsTree({ name: "Docs", children: [folder("wordpress"), folder("linear")] }, "ru")
+    const [wordpress, group] = tree.children
+    expect(wordpress.name).toBe("wordpress")
+    expect(group.type === "folder" && !group.index && group.defaultOpen).toBe(true)
+    expect(group.name).toBe("Трекеры задач")
+    expect(
+      group.type === "folder" && group.children.map((child) => child.type === "folder" && child.index?.url),
+    ).toEqual(["/ru/docs/linear"])
+  })
+
   it("lists Google Calendar right after Google Drive in every language", () => {
     for (const suffix of ["", ".ru", ".es"]) {
       const { pages } = JSON.parse(readFileSync(`content/docs/meta${suffix}.json`, "utf8")) as { pages: string[] }

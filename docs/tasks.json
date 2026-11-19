@@ -361,5 +361,20 @@
     "id": "content-wordpress-upkeep",
     "pages": ["wordpress/configuration.md", "wordpress/troubleshooting.md"],
     "families": { "wordpress": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
+    "id": "tracker-linear-connect",
+    "pages": ["linear/installation.md", "linear/usage.md", "linear/security.md"],
+    "families": { "linear": ["session", "skill", "mcp"] }
+  },
+  {
+    "id": "tracker-linear-read-write",
+    "pages": ["linear/index.md", "linear/commands.md"],
+    "families": { "linear": ["sync", "issues", "projects", "teams", "users", "states", "labels", "api", "commands"] }
+  },
+  {
+    "id": "tracker-linear-upkeep",
+    "pages": ["linear/configuration.md", "linear/troubleshooting.md"],
+    "families": { "linear": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

@@ -4,6 +4,7 @@ import { amoDescriptions } from "./amo-descriptions"
 import { b24Descriptions } from "./b24-descriptions"
 import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
+import { linearDescriptions } from "./linear-descriptions"
 import { mailDescriptions } from "./mail-descriptions"
 import { memoDescriptions } from "./memo-descriptions"
 import { notionDescriptions } from "./notion-descriptions"
@@ -145,6 +146,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     mail: mailDescriptions,
     memo: memoDescriptions,
     notion: notionDescriptions,
+    linear: linearDescriptions,
     pbx: pbxDescriptions,
     wa: whatsappDescriptions,
     wordpress: wordpressDescriptions,

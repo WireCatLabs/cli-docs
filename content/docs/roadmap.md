@@ -34,6 +34,8 @@ what comes next.
   yesterday, searchable next to your messages.
 - **[WordPress](./wordpress/index.md)**: the posts and pages of your WordPress site on your computer, searchable
   offline, and drafts written and published when you allow it.
+- **[Linear](./linear/index.md)**: your Linear issues, projects and comments on your computer, readable offline, and an
+  issue you take on kept as your task.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -103,6 +105,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [Yandex Disk roadmap](./ydisk/roadmap.md)
 - [Asterisk roadmap](./pbx/roadmap.md)
 - [WordPress roadmap](./wordpress/roadmap.md)
+- [Linear roadmap](./linear/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)
 
