@@ -20,7 +20,7 @@ jobs:
       contents: read
       actions: read
       security-events: write
-    uses: WireCatLabs/cli-base/.github/workflows/release-checks.yml@34a442be7352a59598b0bdcccc03186ae1f6a728 # v0.85.1
+    uses: WireCatLabs/cli-base/.github/workflows/release-checks.yml@2763f646d80609e415bcbbc0f4d75f9163647480 # v0.105.0
     with:
       # audit.yml runs the dependency audits until picomatch is fixed (DOCS-14).
       dependencies: false
