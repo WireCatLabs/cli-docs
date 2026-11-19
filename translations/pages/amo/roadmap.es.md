@@ -16,11 +16,16 @@ MCP. Mira [empieza aquí](./index.md).
 
 ## Siguiente
 
-- Conectar amoCRM en WireCat Desktop. Hoy `amo work setup` hace las mismas preguntas.
 - Archivos de negociaciones y contactos: leer y descargar los archivos adjuntos a una negociación o a un cliente.
+- Poner una tarea o añadir una nota a una negociación con un comando propio y su propio permiso, también por MCP. Hoy
+  una tarea o una nota solo se escribe con `api call` en la terminal, después de permitir su clave.
+- El embudo por comercial: cuántas negociaciones tiene cada comercial en cada etapa, la negociación media y la duración
+  del ciclo de venta.
+- Negociaciones paradas: las negociaciones abiertas que llevan en una etapa más tiempo del que fijes.
 
 ## Más adelante
 
 - Leer los productos de la cuenta.
+- Iniciar sesión con un botón en wirecat.dev, sin crear una integración privada en tu cuenta.
 
 Qué cambió en cada versión publicada está en el [historial de cambios](./changelog.md).
