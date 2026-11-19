@@ -172,6 +172,7 @@ describe("localized SEO", () => {
         "usage",
         "search",
         "recipes",
+        "mirrors",
         "mcp",
         "commands",
         "configuration",

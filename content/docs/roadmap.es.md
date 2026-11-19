@@ -29,7 +29,8 @@ decidimos qué viene después.
 - **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
   junto a tus mensajes.
 - **[Yandex Disk](./ydisk/index.md)**: el texto de las carpetas del Disk que elijas en tu ordenador, en la búsqueda sin
-  conexión, y los archivos del Disk subidos, movidos y compartidos cuando lo permitas.
+  conexión, los archivos del Disk subidos, movidos y compartidos cuando lo permitas, y las carpetas que elijas iguales
+  en tu ordenador y en el Disk, en ambos sentidos.
 - **[amoCRM y Kommo](./amo/index.md)**: tus negociaciones y sus clientes en tu ordenador, con lo que cambió desde ayer,
   en la búsqueda junto a tus mensajes.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al

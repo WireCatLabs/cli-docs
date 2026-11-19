@@ -21,10 +21,12 @@ WireCat, como el llavero, los permisos, MCP y lo que nunca llega a un registro, 
 | El token de Yandex | El llavero del sistema, o un archivo privado donde no lo hay | `ydisk personal session end` |
 | El texto de los archivos de las carpetas elegidas, con sus nombres, rutas, tamaños, fechas y sumas MD5 | El almacén local, `wirecat.db`, compartido con las demás herramientas de WireCat | `folders remove` con el id de la carpeta de `folders list`, y luego `sync` |
 | Tus etiquetas, notas y recuerdos sobre documentos | El almacén local | `tags remove`, `notes remove` |
+| El par de carpetas de cada espejo, su última sincronización y las versiones que una sincronización reemplazó o borró aquí | `profiles/<profile>/mirrors.json` y `profiles/<profile>/mirrors/` en la carpeta de estado, legibles solo por ti | `mirrors remove <id>` olvida el par; las versiones se quedan hasta que caducan ([espejos](./mirrors.md#earlier-versions-of-a-file)) |
+| Archivos que un espejo quitó de este ordenador porque se borraron en el Disk | `.wirecat-trash/` dentro de la carpeta sincronizada | Borra esa carpeta cuando ya no los necesites |
 | Ajustes y registros de ejecución | Las carpetas que muestra `ydisk doctor` | `ydisk runs list` los muestra. Caducan tras los días indicados en los [ajustes](./configuration.md#run-records) |
 
 Los archivos en sí se quedan en el Disk. Solo se guarda una copia de un archivo cuando ejecutas
-`files download --output`. La sincronización no guarda los enlaces públicos (`public_url`). Nada va a WireCat: no hay
+`files download --output`, o en una carpeta que [sincronizas con un espejo](./mirrors.md). La sincronización no guarda los enlaces públicos (`public_url`). Nada va a WireCat: no hay
 servidor de WireCat ni una cuenta con nosotros.
 
 ## Qué sale por la red
@@ -45,7 +47,9 @@ con el valor `openai` o `memories extract`. Por defecto la búsqueda por signifi
 Por MCP un agente lee el texto de un archivo con `files download`, pero no puede guardarlo en una ruta: `--output` es
 solo del propietario. `files upload` rechaza los archivos de credenciales, los perfiles de navegador y las carpetas de
 WireCat salvo que el propietario añada `--allow-any-file`. `files delete`, `--replace` y los comandos de enlaces
-públicos preguntan primero en una terminal. Por MCP solo los detiene `deny`, así que define `files.delete=deny` y
+públicos preguntan primero en una terminal. Una [sincronización de espejo](./mirrors.md#what-an-agent-may-do) comprueba
+`files.upload` para cada archivo que envía y `files.delete` para cada archivo que reemplaza o mueve a una papelera, en
+cualquier lado; un agente no puede añadir ni quitar un espejo. Por MCP solo los detiene `deny`, así que define `files.delete=deny` y
 `files.share=deny` para un agente que no deba hacerlo, y `files.upload=deny` para uno que no deba poner ningún archivo
 local en el Disk.
 

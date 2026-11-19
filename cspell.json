@@ -10,6 +10,10 @@
   "ignoreRegExpList": ["/<[^>]+>/g", "/^---[\\s\\S]*?^---/gm"],
   "words": [
     "ydcmd",
+    "bisync",
+    "Muévelo",
+    "Detenlo",
+    "inícialo",
     "yadisk",
     "Patr",
     "Antiloop",

@@ -170,7 +170,7 @@ ydisk folders list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** selected folder — id; every field: ydisk commands info folders list
+**Returns:** selected folder — id, name, path; every field: ydisk commands info folders list
 
 **Example:** `ydisk personal folders list`
 
@@ -1183,6 +1183,164 @@ ydisk files unpublish <path>
 | `path` | required | Disk path, like /Documents/plan.pdf or disk:/Documents/plan.pdf. |
 
 **Example:** `ydisk personal files unpublish /Documents/plan.pdf`
+
+## `ydisk mirrors`
+
+keep local folders and Yandex Disk folders the same, both ways, file by file
+
+### `ydisk mirrors add`
+
+mirror a local folder and a Disk folder both ways: checks the Disk folder and saves the pair; nothing is copied until mirrors sync
+
+**Changes something on this computer only.**
+
+```sh
+ydisk mirrors add <folder> <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | the Disk folder, by its path, like /Notes. |
+| `path` | required | the local folder. |
+
+**Example:** `ydisk personal mirrors add /Notes ./notes`
+
+### `ydisk mirrors list`
+
+list this profile's mirrors
+
+```sh
+ydisk mirrors list
+```
+
+**Example:** `ydisk personal mirrors list --json`
+
+### `ydisk mirrors status`
+
+show which local files the next sync would send or delete on Yandex Disk; the Disk is not asked
+
+```sh
+ydisk mirrors status [id]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+**Example:** `ydisk personal mirrors status --json`
+
+### `ydisk mirrors preview`
+
+list the Disk and show what mirrors sync would do: each upload, download, rename, trash and conflict; nothing is changed on either side
+
+```sh
+ydisk mirrors preview [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | settle each conflict: keep the local file, the Disk's, or both. One of: `local`, `disk`, `both`. |
+
+**Example:** `ydisk personal mirrors preview --json`, `ydisk personal mirrors preview 1a2b3c4d --keep disk`
+
+### `ydisk mirrors sync`
+
+sync mirrors both ways once: a change on one side is copied to the other, a deletion goes to the other side's trash, and a file changed on both sides is reported and left for --keep; mirrors preview shows the plan first
+
+**Changes something in the service.**
+
+```sh
+ydisk mirrors sync [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | settle each conflict: keep the local file, the Disk's, or both. One of: `local`, `disk`, `both`. |
+| `--allow-deletions <count>` | let this run delete up to this many files when the guard stops it. |
+| `--repin` | the Disk or local folder was replaced and the new one is right: record it and sync. |
+
+**Example:** `ydisk personal mirrors sync`, `ydisk personal mirrors sync 1a2b3c4d --keep disk`
+
+### `ydisk mirrors watch`
+
+keep syncing both ways until Ctrl-C or --timeout: on each local save, and when the Disk's revision moves; a file changed on both sides is reported and left for mirrors sync --keep
+
+**Changes something in the service.**
+
+```sh
+ydisk mirrors watch [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | how often to ask Yandex Disk whether anything changed. Default: `60s`. |
+
+**Example:** `ydisk personal mirrors watch`, `ydisk personal mirrors watch 1a2b3c4d --every 2m --jsonl`
+
+### `ydisk mirrors remove`
+
+stop mirroring a folder: nothing on Yandex Disk or in the local folder is changed; its kept versions stay
+
+**Changes something on this computer only.**
+
+```sh
+ydisk mirrors remove <id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+
+**Example:** `ydisk personal mirrors remove 1a2b3c4d`
+
+### `ydisk mirrors versions`
+
+the versions of a mirrored file that syncs replaced or deleted, kept on this computer
+
+#### `ydisk mirrors versions list`
+
+list what syncs did to a mirrored file, oldest first, and which versions are still kept
+
+```sh
+ydisk mirrors versions list <id> <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+
+**Example:** `ydisk personal mirrors versions list 1a2b3c4d notes/plan.md --json`
+
+#### `ydisk mirrors versions restore`
+
+put a kept version back into the local folder; the file there now is kept first, and the next mirrors sync sends the restored one to the Disk
+
+**Changes something on this computer only.**
+
+```sh
+ydisk mirrors versions restore <id> <path> <sha256>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+| `sha256` | required | the version's hash, old or new in mirrors versions list. |
+
+**Example:** `ydisk personal mirrors versions restore 1a2b3c4d notes/plan.md 9f86d081…`
 
 ## `ydisk store`
 
