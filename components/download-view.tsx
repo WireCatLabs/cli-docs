@@ -342,9 +342,11 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
             <p>{rich(words.linux.fuse)}</p>
             <External href={links.fuse}>{words.linux.fuseSource}</External>
             {latestDeb && (
-              <p>{rich(words.linux.deb.replace("{url}", latestDeb.url).replaceAll("{deb}", latestDeb.name))}</p>
+              <>
+                <p>{rich(words.linux.deb.replace("{url}", latestDeb.url).replaceAll("{deb}", latestDeb.name))}</p>
+                <p>{rich(words.linux.apt)}</p>
+              </>
             )}
-            <p>{rich(words.linux.apt)}</p>
             <p>{rich(words.linux.rpm.replace("{rpm}", fileName("rpm")))}</p>
           </TabsContent>
         </Tabs>
