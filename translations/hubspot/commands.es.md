@@ -137,7 +137,7 @@ hubspot account remove [options]
 
 ## `hubspot sync`
 
-bring the CRM's copy in the local store up to date: pipelines, companies, contacts, deals and leads that changed since the last sync, or everything with --rescan; a run stops before its deadline or --max-pages and the next one goes on from there. With the activities setting on, also the activities and tasks on the deals and leads it keeps. Then each deal or lead that moved into a stage the stage-tasks setting names opens a local task, once per move
+bring the CRM's copy in the local store up to date: pipelines, companies, contacts, deals and leads that changed since the last sync, or everything with --rescan; a run stops before its deadline or --max-pages and the next one goes on from there
 
 **Changes something on this computer only.**
 

@@ -70,5 +70,11 @@
     "roadmapSha256": "e311c296c68e5e940fc86cb2e254b68d45fd935656ca9d973cc69478954207d2",
     "reviewedAt": "2026-11-19",
     "conclusion": "First site release of attio, reviewed at 0.2.2 from its changelog and the pages it publishes. Sync copies every deal and the people and companies those deals name; everyone else in Attio is searched live. 0.2.2 fixed the pages that still said sync copies the whole workspace, and the RU and ES translations follow it. The roadmap's Next (changing deals, notes and tasks, one-click sign-in) and Later (custom objects and lists, webhooks) hold nothing that has shipped."
+  },
+  "hubspot": {
+    "version": "v0.4.0",
+    "roadmapSha256": "920e391af6d3016eb424cdd39e156e18c94a81308ce95c9adfe324b33590308a",
+    "reviewedAt": "2026-11-19",
+    "conclusion": "First review of hubspot on the site, at 0.4.0. May break callers: `deals.write`, `people.write` and `organizations.write` are gone, and an `api` write on deals, contacts or companies checks the key of the command that does the same, as amo and b24 do. Fixed: a read denied on a CRM command is denied through `api` too, notes read as clean text, the daily limit is never retried. The overview is a sales page, and the comparison and roadmap come from the release (NEED-2734). RU/ES of every page translated and accepted. The roadmap names connecting HubSpot in WireCat Desktop (next Desktop release) and signing in as yourself in the browser."
   }
 }

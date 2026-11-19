@@ -50,7 +50,9 @@ hubspot work config show                               # each key with its level
 | --- | --- | --- |
 | `deals create`, `update`, `move` и `close`, `people` и `organizations` `create` и `update` | свой, например `deals.update`. Смена стадии проверяет еще `deals.move`, а стадия выигрыша или проигрыша `deals.close` | `allow` |
 | `deals delete` | `deals.delete` | `ask` |
-| Запись через `api`, например `api deals-update` | `api.deals-update`, ключ `.write` своей группы (`deals.write`, `notes.write`) и ключ команды, которая делает то же самое. Стадия сделки проверяет еще `deals.move` и `deals.close` | `ask` |
+| Запись через `api` в сделки, контакты или компании, например `api deals-update` | `api.deals-update` и ключ команды, которая делает то же самое (`deals.update`), как в amoCRM и b24. Запись, для которой команды нет, например слияние, проверяет `<group>.update`. Стадия сделки проверяет еще `deals.move` и `deals.close` | `ask` |
+| Другая запись через `api`, например `api notes-create` | `api.notes-create` и ключ `.write` своей группы (`notes.write`) | `ask` |
+| Чтение через `api`, например `api contacts-list` | `api.contacts-list` и ключ команды, которая читает те же записи (`people.list`), поэтому `people: deny` останавливает и его | `allow` |
 | Удаление, архивирование или слияние через `api` | свой ключ `api.` и ключ `.delete` своей группы | `ask` |
 | Назначение ответственного у записи, любым путем | `crm.assign-others` | `deny` |
 | `api contacts-gdpr-delete`, который стирает контакт навсегда | еще `people.erase`, чтобы можно было запретить только его | `ask` |

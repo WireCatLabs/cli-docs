@@ -138,8 +138,9 @@ hubspot work api deals-list --all
 ```
 
 Cada operación comprueba su propia clave, `api.<command>`, así que `permissions.api deny` deja a un agente fuera de la
-API directa. Una escritura comprueba además la clave `.write` de su grupo y un borrado su clave `.delete`, y ambos
-preguntan antes en una terminal. Por MCP solo `readonly` o `deny` detienen a un agente.
+API directa. Una escritura en negociaciones, contactos o empresas comprueba además la clave de su comando
+(`deals.update`), otra escritura la clave `.write` de su grupo (`notes.write`) y un borrado su clave `.delete`. Preguntan
+antes en una terminal. Por MCP solo `readonly` o `deny` detienen a un agente.
 `--dry-run` muestra las claves sin enviar nada:
 
 ```sh

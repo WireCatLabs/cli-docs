@@ -51,7 +51,9 @@ que lo ejecutes tú mismo en una terminal.
 | --- | --- | --- |
 | `deals create`, `update`, `move` y `close`, `people` y `organizations` `create` y `update` | la suya, como `deals.update`. Un cambio de etapa comprueba también `deals.move`, y una etapa de ganada o perdida `deals.close` | `allow` |
 | `deals delete` | `deals.delete` | `ask` |
-| Una escritura con `api`, como `api deals-update` | `api.deals-update`, la clave `.write` de su grupo (`deals.write`, `notes.write`) y la clave del comando que hace lo mismo. Una etapa de negociación comprueba también `deals.move` y `deals.close` | `ask` |
+| Una escritura con `api` en negociaciones, contactos o empresas, como `api deals-update` | `api.deals-update` y la clave del comando que hace lo mismo (`deals.update`), como en amoCRM y b24. Una escritura sin comando, como una fusión, comprueba `<group>.update`. Una etapa de negociación comprueba también `deals.move` y `deals.close` | `ask` |
+| Otra escritura con `api`, como `api notes-create` | `api.notes-create` y la clave `.write` de su grupo (`notes.write`) | `ask` |
+| Una lectura con `api`, como `api contacts-list` | `api.contacts-list` y la clave del comando que lee los mismos registros (`people.list`), así que `people: deny` también la detiene | `allow` |
 | Un borrado, archivado o fusión con `api` | su propia clave `api.` y la clave `.delete` de su grupo | `ask` |
 | Un propietario puesto en un registro, por cualquier camino | `crm.assign-others` | `deny` |
 | `api contacts-gdpr-delete`, que borra un contacto para siempre | además `people.erase`, para que puedas negarlo solo a él | `ask` |
