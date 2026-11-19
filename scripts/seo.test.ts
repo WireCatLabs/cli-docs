@@ -161,7 +161,7 @@ describe("localized SEO", () => {
   it("describes every page the amoCRM CLI publishes in every locale", () => {
     const slugs = ["index", "installation", "usage", "commands", "configuration", "troubleshooting", "security"]
     for (const lang of seoLocales)
-      for (const slug of [...slugs, "changelog", "compare", "roadmap", "mcp", "permissions"])
+      for (const slug of [...slugs, "changelog", "compare", "roadmap", "mcp", "permissions", "scenarios"])
         expect(() => documentationDescription(lang, ["amo", slug]), `${lang} amo/${slug}`).not.toThrow()
   })
   it("describes every page the Yandex Disk CLI publishes in every locale", () => {

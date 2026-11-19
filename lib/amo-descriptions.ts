@@ -5,6 +5,7 @@ export const amoDescriptions: Record<string, Record<string, string>> = {
     installation:
       "Install the amoCRM CLI with npm, make a private integration and sign in with a token or in the browser.",
     usage: "Read and change deals, see the funnel, copy tasks and calls, get a morning digest and call the amoCRM API.",
+    scenarios: "Common amoCRM CLI tasks step by step: the first sync, keeping the copy fresh, safe agent writes.",
     mcp: "Connect an agent to the amoCRM CLI over MCP, see what it is offered and keep its writes yours.",
     permissions: "Choose what an agent may change in amoCRM and which checks hold whatever the settings say.",
     commands: "Find every amoCRM CLI command, option and exit code in the generated reference.",
@@ -19,6 +20,7 @@ export const amoDescriptions: Record<string, Record<string, string>> = {
     index: "Скопируйте сделки amoCRM или Kommo на компьютер, чтобы ИИ-агент читал их без сети и менял их безопасно.",
     installation: "Установите CLI для amoCRM из npm, создайте приватную интеграцию и войдите по токену или в браузере.",
     usage: "Читайте и меняйте сделки, смотрите воронку, копируйте задачи и звонки, получайте утреннюю сводку.",
+    scenarios: "Частые задачи CLI amoCRM по шагам: первая синхронизация, свежая копия, безопасная запись агента.",
     mcp: "Подключите агента к CLI для amoCRM через MCP, посмотрите, что ему доступно, и оставьте запись за собой.",
     permissions: "Выберите, что агент может менять в amoCRM, и какие проверки действуют при любых настройках.",
     commands: "Все команды, параметры и коды выхода CLI для amoCRM в сгенерированном справочнике.",
@@ -35,6 +37,7 @@ export const amoDescriptions: Record<string, Record<string, string>> = {
     installation:
       "Instala la CLI de amoCRM con npm, crea una integración privada e inicia sesión con un token o en el navegador.",
     usage: "Lee y cambia negociaciones, mira el embudo, copia tareas y llamadas y recibe un resumen cada mañana.",
+    scenarios: "Tareas comunes de la CLI de amoCRM paso a paso: la primera sincronización, la copia al día y más.",
     mcp: "Conecta un agente a la CLI de amoCRM por MCP, mira qué se le ofrece y mantén tuyas sus escrituras.",
     permissions: "Elige qué puede cambiar un agente en amoCRM y qué controles valen digan lo que digan los ajustes.",
     commands: "Consulta todos los comandos, opciones y códigos de salida de la CLI de amoCRM.",
