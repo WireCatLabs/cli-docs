@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/wordpress-cli`. Una sección por versión, la más nueva primero.
 
+## 0.1.1 — 19.11.2026
+
+### Corregido
+
+- **`posts delete --dry-run` también nombra `api.posts-delete`.** El borrado se envía con el delete del grupo `api`,
+  cuya propia clave comprueba la ejecución. Con `posts.delete` en `allow`, la vista previa decía `allow` y la
+  ejecución seguía preguntando.
+- **La cabecera de la skill del agente vuelve a ser YAML válido.** `skills/wordpress-cli/SKILL.md` tenía `site: posts`
+  en su `description` sin comillas, que un lector de YAML toma por una clave nueva y rechaza. Ahora los agentes y
+  wirecat.dev pueden leer la cabecera de la skill.
+
 ## 0.1.0 — 19.11.2026
 
 ### Añadido
