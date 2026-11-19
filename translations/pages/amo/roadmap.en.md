@@ -16,11 +16,16 @@ change deals, contacts and companies within the permissions you set, over the co
 
 ## Next
 
-- Connect amoCRM in WireCat Desktop. Today `amo work setup` asks the same questions.
 - Files on deals and contacts: read and download the files attached to a deal or a client.
+- Set a task or add a note on a deal with a command of its own and its own permission, over MCP too. Today a task or a
+  note goes only through `api call` at a terminal, after you allow its key.
+- The funnel by manager: how many deals each manager has in each stage, the average deal and the length of the sales
+  cycle.
+- Stalled deals: the open deals that have sat in one stage longer than you set.
 
 ## Later
 
 - Read the account's products.
+- Sign in through a button on wirecat.dev, without creating a private integration in your account.
 
 What changed in each released version is in the [changelog](./changelog.md).
