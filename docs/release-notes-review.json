@@ -60,9 +60,9 @@
     "conclusion": "Reviewed pbx 0.8.0 from its changelog and the docs diff since v0.7.2. May break callers: `meetings transcribe` answers the report the other phone CLIs give (`audio_ms` instead of `audio_seconds`, a `ref` on each failed call, a call without a recording under `failed` with `recording.missing`, no `without_recording`). The overview (index) is rewritten as a sales page: the reader's gain, the ideas a newcomer would not guess, an example from the bundled sample call log, why pbx against the tools on its comparison page, a start and plain limits. RU/ES index retranslated, changelog and commands updated and accepted, and the changelog link correction moved to v0.8.0. The roadmap did not change."
   },
   "wordpress": {
-    "version": "v0.1.0",
+    "version": "v0.1.1",
     "roadmapSha256": "05b7ba75bb38b50373ba7fe6aac2dacf5d540625732dc2863e925cae0da00f18",
     "reviewedAt": "2026-11-19",
-    "conclusion": "First release on the site. Reviewed the wordpress roadmap against its docs and commands at the release commit: what works today (application password sign-in, sync of posts, pages, tags, categories and users, posts list, search and show, the posts writes and the api group) is shipped, and Next (full sync for Authors and Contributors, browser sign-in, plugin fields) and Later (WordPress.com, view counts) are not. RU and ES translated and accepted."
+    "conclusion": "Reviewed wordpress 0.1.1 from its changelog and the docs diff since v0.1.0: two fixes, no new commands. `posts delete --dry-run` names `api.posts-delete` too, and the agent skill's header is valid YAML again, so the full sync publishes the skill. RU and ES changelog updated and accepted. The roadmap did not change. 0.1.0, the first release on the site: the roadmap was checked against the docs and commands at the release commit (application password sign-in, sync of posts, pages, tags, categories and users, the posts reads and writes and the api group are shipped; Next and Later are not)."
   }
 }
