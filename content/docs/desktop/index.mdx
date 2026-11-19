@@ -527,8 +527,9 @@ to copy. Right-click any web link in the app to copy it.
 
 On macOS, Windows and with the AppImage, the app updates itself: it offers a new version at the top of
 the window, then installs it and restarts. To check at any time, choose **Check for updates** in the **Help** menu. It
-says WireCat is up to date, offers the new version, or says why the check failed, with **Try again**. A .deb or .rpm copy downloads the new package
-itself and opens your system's installer, and also shows the `apt` or `dnf` command. **Open in terminal** runs
+says WireCat is up to date, offers the new version, or says why the check failed, with **Try again**. A .deb copy gets new versions from WireCat's apt repository, which the package adds when it
+installs: install them in **Software Updater** like your other updates. An .rpm copy downloads the new package
+itself and opens your system's installer, and also shows the `dnf` command. **Open in terminal** runs
 that command in your terminal: type your password there, then restart WireCat when the install ends. Your accounts and data
 will not be deleted. [Updates](/en/download#updates) and [uninstall](/en/download#uninstall) on the download page give the
 steps for each system. Removing the app leaves the tools and their data in place.

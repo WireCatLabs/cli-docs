@@ -344,6 +344,7 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
             {latestDeb && (
               <p>{rich(words.linux.deb.replace("{url}", latestDeb.url).replaceAll("{deb}", latestDeb.name))}</p>
             )}
+            <p>{rich(words.linux.apt)}</p>
             <p>{rich(words.linux.rpm.replace("{rpm}", fileName("rpm")))}</p>
           </TabsContent>
         </Tabs>
@@ -353,6 +354,7 @@ export function DownloadView({ lang, initial }: { lang: string; initial: Desktop
         <section id="updates" className="download-section" aria-labelledby="updates-title">
           <h2 id="updates-title">{words.updates.title}</h2>
           <p>{rich(words.updates.auto)}</p>
+          <p>{rich(words.updates.apt)}</p>
           <p>{rich(words.updates.packages)}</p>
         </section>
 
