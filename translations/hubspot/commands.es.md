@@ -61,7 +61,7 @@ keep this profile's HubSpot key and account id in the OS keyring
 
 ### `hubspot session start`
 
-sign this profile in: a service key (Development → Keys → Service keys) or a legacy private app's access token is asked hidden or read from stdin, never taken as an argument, checked against the account, and only then kept in the keyring with the account's id, or in a private file. The key reads what its scopes allow; hubspot changes nothing in this release
+sign this profile in: a service key (Development → Keys → Service keys) or a legacy private app's access token is asked hidden or read from stdin, never taken as an argument, checked against the account, and only then kept in the keyring with the account's id, or in a private file. The key reads and writes what its scopes allow
 
 **Changes something on this computer only.**
 

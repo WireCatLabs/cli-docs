@@ -179,7 +179,7 @@
     "repo": "WireCatLabs/hubspot-cli",
     "package": "@wirecat/hubspot-cli",
     "lang": "en",
-    "docsRef": "v0.3.0",
+    "docsRef": "v0.3.1",
     "tier": "extra",
     "category": "crm",
     "summary": {

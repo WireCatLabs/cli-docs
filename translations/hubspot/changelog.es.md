@@ -4,6 +4,17 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/hubspot-cli`. Una sección por versión, la más nueva primero.
 
+## 0.3.1 — 19.11.2026
+
+### Corregido
+
+- **Las notas, reuniones y tareas se leen como texto limpio.** Los códigos HTML como `&#8217;` y `&mdash;` se
+  convierten en los caracteres que representan y los bloques de estilo se descartan, así la búsqueda encuentra las
+  palabras. Antes solo se decodificaban seis códigos.
+- **El límite diario de HubSpot dice «no reintentar» en todos los caminos.** Los comandos del CRM lo daban por
+  reintentable y `api` no, así que un agente podía reintentar durante horas.
+- **`session start --help` ya no dice que hubspot no cambia nada.** La escritura llegó en 0.2.0.
+
 ## 0.3.0 — 18.11.2026
 
 ### Cambiado: puede romper a quien lo usa
