@@ -78,8 +78,8 @@ Notes on the `wordpress` column:
 - **Without the internet.** `sync` copies posts and pages with every status, the trash too, with their tags,
   categories and users, into the WireCat local store. Text is kept as Markdown. `posts list`, `posts search` and
   `posts show` read this copy, with `--offline` too. Your WordPress role decides how much is copied. An Administrator
-  gets everything. An Editor gets every post and page but no users. An Author or Contributor gets part of the posts
-  and no pages, and a Contributor sees only their own posts.
+  gets everything. An Editor gets every post and page but no users. An Author or Contributor gets only their own posts
+  and no pages, and a Contributor only their drafts and posts waiting for review.
 - **One search.** The posts sit in the same local store as the messages, notes and meetings of the other WireCat tools
   on the same computer. `posts search` itself finds posts only, so this row is partly.
 - **Drafts and publishing.** `posts create` always makes a draft, from a Markdown file or from stdin. `posts publish`

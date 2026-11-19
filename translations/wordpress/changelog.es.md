@@ -4,6 +4,15 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/wordpress-cli`. Una sección por versión, la más nueva primero.
 
+## 0.1.2 — 19.11.2026
+
+### Corregido
+
+- **Un inicio de sesión de Autor o Colaborador vuelve a sincronizar sus propias entradas.** WordPress niega a los dos
+  roles la lista de páginas, y esa negativa detenía toda la sincronización de entradas: después de la primera
+  ejecución, los cambios en el sitio ya no llegaban a la copia. Ahora, para un rol sin permiso para editar páginas, la
+  sincronización omite las páginas, lo dice en sus huecos y copia las entradas.
+
 ## 0.1.1 — 19.11.2026
 
 ### Corregido

@@ -27,8 +27,6 @@ la [referencia de comandos](./commands.md).
 
 ## Lo siguiente
 
-- **Sincronización completa para Autores y Colaboradores.** Copiar lo que un Autor o un Colaborador puede leer, sin
-  detenerse en la lista de páginas.
 - **Inicio de sesión en el navegador.** Aprobar la herramienta en wp-admin, en lugar de pegar una contraseña de
   aplicación.
 - **Campos de plugins.** Leer y poner campos de plugins habituales, como un título SEO, sin un `--body` sin procesar.
