@@ -31,6 +31,9 @@ export function logoDataUrl(file: string): string {
 
 export function shorten(text: string, limit: number): string {
   if (text.length <= limit) return text
+  // A whole first sentence reads better than a cut one.
+  const sentence = /^.+?[.!?](?=\s)/.exec(text)?.[0]
+  if (sentence && sentence.length <= limit && sentence.length >= limit / 4) return sentence
   const cut = text.slice(0, limit)
   return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,.:;]+$/, "")}…`
 }
@@ -85,8 +88,8 @@ export function pageCard({
   label?: string
 }) {
   const size = title.length > 44 ? 52 : title.length > 28 ? 66 : 88
-  // A short title leaves room for more of the description; past four lines it is cut.
-  const text = shorten(description, title.length > 28 ? 120 : 170)
+  // About two lines of description; a short title leaves room for a little more.
+  const text = shorten(description, title.length > 28 ? 80 : 100)
   return new ImageResponse(
     <div style={{ ...frame, justifyContent: "center", gap: 44, padding: "56px 64px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 40 }}>
