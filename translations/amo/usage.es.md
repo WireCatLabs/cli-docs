@@ -159,7 +159,8 @@ Los errores salen en JSON por stderr, con un código para decidir qué hacer. La
 
 `amo skill install` pone la skill de la herramienta donde la buscan Claude Code, Codex, Gemini CLI y OpenClaw.
 `amo skill install --for hermes` añade además esa carpeta a los ajustes de Hermes Agent, así que un `skill install`
-sin más deja fuera a Hermes. Un agente con una skill ejecuta los mismos comandos que tú.
+sin más deja fuera a Hermes. Un agente con una skill ejecuta los mismos comandos que tú. `amo guide` lista escenarios
+de tareas frecuentes, cada uno como comandos en orden y para qué sirve cada uno.
 
 Una aplicación sin terminal, como Claude Desktop, o ChatGPT y Claude en el navegador, se conecta a `amo` por MCP, como
 muestra [MCP](./mcp.md). Antes, decide qué puede cambiar, como muestran los [permisos](./permissions.md#agents-and-mcp):

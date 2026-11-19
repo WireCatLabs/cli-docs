@@ -23,8 +23,9 @@ administrador de la cuenta, que crea la integración.
 4. [Inicia sesión con la integración](#sign-in-through-the-integration)
 5. [Cuál elegir](#which-one-to-choose)
 6. [Conecta paso a paso](#connect-step-by-step)
-7. [Cierra la sesión y retira el acceso](#sign-out-and-revoke-access)
-8. [Siguiente: la primera sincronización](#next-the-first-sync)
+7. [Conecta en WireCat Desktop](#connect-in-wirecat-desktop)
+8. [Cierra la sesión y retira el acceso](#sign-out-and-revoke-access)
+9. [Siguiente: la primera sincronización](#next-the-first-sync)
 
 ## Instala
 
@@ -133,6 +134,13 @@ perfil.
 
 Inicia sesión con la clave. El inicio de sesión en el navegador es el comando que aparece en **Advanced** en el último
 paso.
+
+## Conecta en WireCat Desktop
+
+[WireCat Desktop](https://wirecat.dev/en/docs/desktop) instala `amo` desde su página Herramientas, a partir de la
+versión 0.7.1. Su ventana hace las mismas preguntas que `amo work setup`, porque las describe el propio `amo`, y
+comprueba el token igual antes de guardar nada. Como en el terminal, inicia sesión con la clave; el inicio de sesión en
+el navegador es el comando de **Advanced** en el último paso.
 
 ## Cierra la sesión y retira el acceso
 

@@ -4,6 +4,15 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nueva primero.
 
+## 0.2.0 — 19.11.2026
+
+### Añadido
+
+- **`amo guide` lista escenarios de tareas frecuentes**, cada uno como comandos en orden y para qué sirve cada uno: la
+  primera sincronización y el tablero del embudo, mantener la copia al día, y dejar que un agente cambie el CRM sin
+  sorpresas.
+- El README empieza con el banner de WireCat, y la página de instalación explica cómo WireCat Desktop conecta `amo`.
+
 ## 0.1.1 — 18.11.2026
 
 ### Corregido

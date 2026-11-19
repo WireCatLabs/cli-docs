@@ -1276,6 +1276,20 @@ amo skill status
 
 **Example:** `amo skill status`, `amo skill status --json`
 
+## `amo guide`
+
+scenarios: the commands for a common task, in order, and why each
+
+```sh
+amo guide [name]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | optional | one scenario; without it, the list. |
+
+**Example:** `amo guide`, `amo guide first-sync --json`
+
 ## `amo mcp`
 
 serve this profile to an agent over MCP and set it up — `claude mcp add amo -- amo <profile> mcp serve`

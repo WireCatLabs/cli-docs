@@ -160,7 +160,8 @@ amo work api call "PATCH /api/v4/leads/42" --body '{"price":1000}' --dry-run
 
 `amo skill install` кладет навык инструмента туда, где его ищут Claude Code, Codex, Gemini CLI и OpenClaw.
 `amo skill install --for hermes` еще и добавляет эту папку в настройки Hermes Agent, а простой `skill install`
-Hermes не трогает. Агент с навыком запускает те же команды, что и вы.
+Hermes не трогает. Агент с навыком запускает те же команды, что и вы. `amo guide` показывает сценарии частых задач:
+команды по порядку и зачем нужна каждая.
 
 Приложение без терминала, например Claude Desktop, ChatGPT или Claude в браузере, подключается к `amo` по MCP, как
 показано в разделе [MCP](./mcp.md). Прежде чем это сделать, решите, что оно может менять, как показано в разделе
