@@ -24,6 +24,7 @@ import { readerGuide } from "@/lib/reader-guides"
 import { commandReferences } from "@/lib/remark-doc-usability"
 import {
   absoluteUrl,
+  docsSocialImage,
   documentationDescription,
   documentationTitle,
   pageMetadata,
@@ -216,6 +217,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     description: documentationDescription(lang, page.slugs, page.data.description),
     available: seoLocales.filter((locale) => source.getPage(page.slugs, locale)),
     article: true,
+    socialImage: { pathname: docsSocialImage(lang, page.slugs), alt: title },
   })
   return {
     ...metadata,

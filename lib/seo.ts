@@ -104,8 +104,27 @@ export function documentationTitle(lang: string, slugs: string[], authored: stri
   if (template) return capitalize(template.replaceAll("{product}", product))
   // People search for the product, not the command: "Telegram: People", not "People — tg". `products` is worded to
   // fit inside a sentence (RU «почты»); `labels` names the product on its own.
-  const label = (words.labels as Record<string, string>)[tool.name] ?? capitalize(product)
-  return `${label}: ${guide?.title ?? authored}`
+  return `${toolLabel(lang, tool.name)}: ${guide?.title ?? authored}`
+}
+
+/** The product's name on its own (RU «Почта»), as a page title or a link preview shows it. */
+export function toolLabel(lang: string, name: string): string {
+  const words = seoWords(lang)
+  const tool = tools.find((candidate) => candidate.name === name)
+  const product = (words.products as Record<string, string>)[name] ?? tool?.displayName ?? name
+  return (words.labels as Record<string, string>)[name] ?? capitalize(product)
+}
+
+// A tool's index image (`b24.png`) sits beside its pages' folder (`b24/`); the docs home is `index.png`.
+export const docsSocialImageSlug = (slugs: string[]) => [
+  ...(slugs.length ? slugs : ["index"]).slice(0, -1),
+  `${(slugs.length ? slugs : ["index"]).at(-1)}.png`,
+]
+export const docsSocialImage = (lang: string, slugs: string[]) =>
+  `/og/docs/${lang}/${docsSocialImageSlug(slugs).join("/")}`
+export const docsSlugsOfImage = (slug: string[]) => {
+  const path = slug.join("/").replace(/\.png$/, "")
+  return path === "index" ? [] : path.split("/")
 }
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)

@@ -33,8 +33,11 @@ now handle their messages safely, and installs a tool or connects their agent.
 
 ## Positioning
 
-Owner, 2026-11-02. Slogan: **"Everything you've said. Ready for your agent."** (RU «Всё, что вы
-сказали — под рукой у агента.», ES «Todo lo que has dicho. Listo para tu agente.»). WireCat
+Owner, 2026-11-19. Slogan: **"Memory for your agent. Connect all your chats, mail and meetings, then find
+anything."** (RU «Память для вашего агента. Подключите все чаты, почту, встречи и найдите всё.», ES «Memoria
+para tu agente. Conecta todos tus chats, correo y reuniones y encuéntralo todo.»). WireCat does two things: it
+copies the user's data out of private sources, and it gives the agent one memory with search over all of it.
+Running the agent and its tasks is the harness's job (Claude Code, Codex, OpenClaw, pi), not WireCat's. WireCat
 connects the AI agent the user already uses (Claude, ChatGPT, Codex…) to their chats, mail,
 meetings, documents, calendar and notes, and keeps them on the user's computer. Messengers lead: they
 are the obvious first use, because nothing else gives an agent easy access to them. Name the
@@ -67,8 +70,9 @@ sets limits (allowed chats, sends per hour, read-only profiles) — a fact, stat
   live watch of new messages; CLI and MCP share profile permissions; most writes are allowed by default, while deletion asks for confirmation. Read-only permissions and confirmation forms can restrict access.
 - Safety by design: nothing is sent, marked read or deleted unless the command asked for it.
 - Site languages: English, Russian, Spanish. Tool guides are localized from reviewed releases; the generated Telegram Bot API method appendix retains its English descriptions with an explicit locale-specific notice.
-- Hero headline (implemented, 2026-11-02): "Everything you've said. Ready for your agent." Until then
-  it was "Memory for your messages. Context for your agent." The selected editorial landing is released in English, Russian and Spanish, with reviewed localized copy. Its open Personal/Bots/Admin capability lists, paper outcomes band, complete conversations, trust strip and editable estimate retain the owner-selected composition.
+- Hero headline (implemented, 2026-11-19): "Memory for your agent. Connect all your chats, mail and meetings, then
+  find anything." From 2026-11-02 it was "Everything you've said. Ready for your agent.", before that "Memory for
+  your messages. Context for your agent." The selected editorial landing is released in English, Russian and Spanish, with reviewed localized copy. Its open Personal/Bots/Admin capability lists, paper outcomes band, complete conversations, trust strip and editable estimate retain the owner-selected composition.
 
 ## Brand Commitments
 

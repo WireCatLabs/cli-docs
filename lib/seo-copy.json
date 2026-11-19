@@ -4,8 +4,8 @@
     "homeDescription": "Give Claude Code, Codex or Cursor a memory of your chats, mail, notes, documents and meetings. It all runs on your computer, free and open source.",
     "homeLabel": "Home",
     "docsLabel": "Documentation",
-    "socialTitle": "Everything you’ve said. Ready for your agent.",
-    "socialDescription": "Connect your chats, mail, meetings, documents and notes",
+    "socialTitle": "Memory for your agent. Connect all your chats, mail and meetings, then find anything.",
+    "socialDescription": "Everything stays on your computer",
     "reference": {
       "installation": "Install the {messenger} CLI on Windows, macOS or Linux, check requirements, update it and find its local files.",
       "usage": "Read {messenger} conversations, prepare replies and choose when your agent may send them.",
@@ -143,8 +143,8 @@
     "homeDescription": "Память для Claude Code, Codex и Cursor о ваших чатах, почте, заметках, документах и встречах. Работает на вашем компьютере, бесплатно и с открытым кодом.",
     "homeLabel": "Главная",
     "docsLabel": "Документация",
-    "socialTitle": "Всё, что вы сказали — под рукой у агента.",
-    "socialDescription": "Подключите чаты, почту, встречи, документы и заметки",
+    "socialTitle": "Память для вашего агента. Подключите все чаты, почту, встречи и найдите всё.",
+    "socialDescription": "Всё хранится на вашем компьютере",
     "reference": {
       "installation": "Установите CLI для {messenger} на Windows, macOS или Linux: требования, обновление и расположение локальных файлов.",
       "usage": "Читайте переписки {messenger}, готовьте ответы и выбирайте, когда агент может их отправлять.",
@@ -282,8 +282,8 @@
     "homeDescription": "Dale a Claude Code, Codex o Cursor memoria de tus chats, correo, notas, documentos y reuniones. Todo funciona en tu ordenador, gratis y de código abierto.",
     "homeLabel": "Inicio",
     "docsLabel": "Documentación",
-    "socialTitle": "Todo lo que has dicho. Listo para tu agente.",
-    "socialDescription": "Conecta chats, correo, reuniones, documentos y notas",
+    "socialTitle": "Memoria para tu agente. Conecta todos tus chats, correo y reuniones y encuéntralo todo.",
+    "socialDescription": "Todo se queda en tu ordenador",
     "reference": {
       "installation": "Instala la CLI de {messenger} en Windows, macOS o Linux: requisitos, actualizaciones y ubicación de los archivos locales.",
       "usage": "Lee conversaciones de {messenger}, prepara respuestas y decide cuándo puede enviarlas tu agente.",
