@@ -7,7 +7,7 @@ Claude Desktop, una copia de las entradas y páginas de tu WordPress en tu orden
 también sin conexión. Escribe borradores en tu sitio y los publica cuando tú lo permites.
 
 Pregunta qué publicaste el mes pasado, qué borradores esperan o qué dice hoy una página. Dale tus notas al agente y
-prepara un borrador con título, extracto y etiquetas. Necesitas un sitio WordPress autoalojado, 5.6 o posterior con
+prepara un borrador con título, extracto y etiquetas. Necesitas un sitio WordPress autoalojado, 5.7 o posterior con
 https, y un usuario en él.
 
 **En esta página:**
@@ -137,7 +137,8 @@ crear la contraseña.
   `posts stats` muestra solo lo que tiene la copia.
 - Los campos de plugins, como los de un plugin de SEO o de campos personalizados, no tienen opciones propias. El grupo
   `api` los envía en un `--body` sin procesar.
-- Las escrituras trabajan con entradas. Los medios, los comentarios y los menús se alcanzan con el grupo `api`.
+- Las escrituras trabajan con entradas. Los comentarios y los menús se alcanzan con el grupo `api`. El grupo `api`
+  solo envía JSON, así que no puede subir un archivo a la biblioteca de medios.
 
 ## Encuentra una guía para tu tarea
 

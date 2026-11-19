@@ -32,9 +32,9 @@ wordpress blog session status --check    # asks your site whose password it is
 | No se encuentra `wordpress` | Abre una terminal nueva y comprueba que la carpeta global de npm está en `PATH`. |
 | Escribiste `wp` | Ese es el WP-CLI oficial. Esta herramienta es `wordpress`. |
 | "name a profile" | Pon el perfil primero, como en `wordpress blog config show`, o define `WCWP_PROFILE`. |
-| "not signed in" | Ejecuta `wordpress blog session start --site <address> --login <user>`. Consulta [inicia sesión](./installation.md#sign-in). |
+| "not signed in" | Ejecuta `wordpress blog session start --site blog.example.com --login anna`, con tu sitio y tu nombre de usuario. Consulta [inicia sesión](./installation.md#sign-in). |
 | La contraseña se rechaza | Se anuló, se escribió mal o es de otro usuario. Crea una nueva ([cómo](./installation.md#make-an-application-password-in-wordpress)) y ejecuta `session start` de nuevo con el `--login` correcto. |
-| No hay sección **Contraseñas de aplicación** en tu perfil | El sitio necesita WordPress 5.6 o posterior con https, y un plugin o el alojamiento puede desactivar la sección. Pregunta al administrador del sitio. |
+| No hay sección **Contraseñas de aplicación** en tu perfil | El sitio necesita WordPress 5.7 o posterior con https, y un plugin o el alojamiento puede desactivar la sección. Pregunta al administrador del sitio. |
 | Una dirección de WordPress.com | Los sitios de WordPress.com no son compatibles, solo WordPress autoalojado. |
 | `posts list` está vacío | Ejecuta antes `wordpress blog sync`. Las entradas se leen de la copia que crea. |
 | `sync` termina parcial, o faltan páginas | Un inicio de sesión de Autor o Colaborador no puede listar páginas, y un Colaborador ve solo sus propias entradas. Solo un Administrador lista los usuarios. Inicia sesión como Administrador para una copia completa, o como Editor para todas las entradas y páginas. |
@@ -44,7 +44,7 @@ wordpress blog session status --check    # asks your site whose password it is
 | `content.schedule-past` | `--at-time` debe estar en el futuro. |
 | `content.already-published` | Una entrada publicada no se puede programar. Ejecuta antes `posts unpublish`. |
 | `content.empty` | La escritura no nombra ningún campo. Añade `--title`, `--text-file` u otro campo. |
-| `posts publish` falla con 403 | Tu rol en WordPress no puede publicar. Un Colaborador no puede. Pide ayuda a un Editor, o inicia sesión como uno. |
+| `posts publish` falla con `permission_error` (WordPress respondió HTTP 403) | Tu rol en WordPress no puede publicar. Un Colaborador no puede. Pide ayuda a un Editor, o inicia sesión como uno. |
 | `posts stats` no muestra visitas | WordPress no guarda recuentos de visitas, y las estadísticas de Jetpack no son compatibles. |
 | Un campo de plugin, como un título SEO, no tiene opción | Los campos de plugins no están en la descripción de la API. Envíalos en un `--body` sin procesar con `wordpress blog api`. |
 | El archivo de ajustes no se lee | `doctor` enumera cada problema del archivo en `config.issues`. Ejecuta el `config unset` que da cada uno, o corrige el archivo a mano. |

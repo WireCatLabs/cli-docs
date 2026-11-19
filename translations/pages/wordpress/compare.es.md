@@ -107,10 +107,12 @@ Notas sobre la columna de `wordpress`:
   `--replace-body` escribe el texto de todos modos.
 - **Subir un archivo.** El grupo `api` lista los medios con `api media-list` y cambia sus datos con `api media-update`.
   Solo acepta el cuerpo de la petición en JSON, así que no puede enviar el archivo en sí.
-- **El grupo api.** `wordpress blog api` ejecuta cualquiera de las 150 operaciones `wp/v2` de WordPress 6.9.4, con las
-  mismas claves de publicar y borrar. La ruta por lotes de WordPress nunca se ofrece, porque una llamada por lotes
-  haría escrituras sin pasar por sus claves.
-- **WordPress.com.** Solo WordPress autoalojado 5.6 o posterior con https. Los sitios de WordPress.com inician sesión
+- **El grupo api.** `wordpress blog api` ejecuta cualquiera de las 147 operaciones `wp/v2` de WordPress 6.9.4, con las
+  mismas claves de publicar y borrar. Instalar un plugin, cambiar los ajustes del sitio, los usuarios y los
+  comentarios, y los cambios en plantillas, widgets, menús y navegación preguntan por defecto. La ruta por lotes de
+  WordPress nunca se ofrece, porque una llamada por lotes haría escrituras sin pasar por sus claves. Crear una
+  contraseña de aplicación tampoco se ofrece, porque WordPress responde con la nueva contraseña en claro.
+- **WordPress.com.** Solo WordPress autoalojado 5.7 o posterior con https. Los sitios de WordPress.com inician sesión
   con OAuth y no son compatibles. El comando es `wordpress`, no `wp`, así que convive con WP-CLI en un mismo ordenador.
 - **ChatGPT o Claude en el navegador.** `mcp serve --http` sirve la herramienta detrás de un túnel que tú configuras y
   mantienes en marcha, así que esta fila es en parte.

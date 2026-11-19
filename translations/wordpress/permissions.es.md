@@ -65,6 +65,14 @@ lo ejecutes tú en una terminal.
   `draft`, `pending` o `private`.
 - **Borrar** necesita `<route>.delete`. Con `force=true`, que borra para siempre, necesita también
   `<route>.delete.force`. Las dos preguntan por defecto.
+- **Las escrituras como las de los comandos `posts` también comprueban sus claves.** `api posts-create` y
+  `api pages-create` comprueban `posts.create`, y `api posts-update` y `api pages-update` comprueban `posts.update`.
+  Así, `posts.create` en `deny` detiene los borradores por cualquier camino.
+- **Las escrituras de todo el sitio preguntan.** Instalar un plugin, cambiar los ajustes del sitio, crear o cambiar un
+  usuario (también su rol), un comentario nuevo o cambiado, y los cambios en plantillas, partes de plantilla, widgets,
+  barras laterales, menús y navegación preguntan por defecto: `api.plugins-create`, `api.comments-create` y otras. Las
+  demás escrituras de api, como medios, etiquetas y categorías, se ejecutan sin pregunta.
+- Crear una contraseña de aplicación nunca se ofrece: WordPress responde con la nueva contraseña en claro.
 - La ruta de lotes de WordPress (`batch/v1`) nunca se ofrece: una llamada de lote ejecutaría escrituras de otras rutas
   sin pasar por sus claves.
 
@@ -85,8 +93,8 @@ Cualquiera de estas deja la cara pública de tu sitio en tus manos:
 
 Por MCP nadie está ante una terminal para responder, y el servidor no muestra ningún formulario, así que una escritura
 en `ask` sigue adelante. Con los niveles de serie, un agente por MCP puede publicar y borrar para siempre. El autor lo
-eligió así: un agente debe poder terminar el trabajo que le dieron. `wordpress blog runs list` registra cada
-publicación.
+eligió así: un agente debe poder terminar el trabajo que le dieron. `wordpress blog runs list` muestra cada
+publicación durante 7 días (`keep_successful_runs_for_days`).
 
 Si quieres publicar tú, pon `posts.publish` en `deny` antes de conectar una app, como arriba. O deja los niveles y
 activa la aprobación de la herramienta `wordpress_write` en el cliente de tu agente, para que el cliente te pregunte

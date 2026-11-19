@@ -32,11 +32,12 @@ más comunes:
 
 | Ajuste | Por defecto | Qué hace |
 |---|---|---|
-| `limit` | `20` | Cuántos elementos muestra una lista a la vez. |
+| `limit` | `20` | Cuántos elementos muestra a la vez una lista del grupo `api`. `posts list`, `tags list` y `users list` muestran 50, usa `--limit`. |
 | `permissions` | ninguno | Qué puede hacer cada comando. Consulta [Permisos](#permissions). |
 | `record` | `true` | Guarda cada ejecución. `false` guarda solo las ejecuciones fallidas. |
 | `record_input` | `true` | Guarda las palabras que escribiste en una ejecución. |
 | `keep_runs_for_days` | `30` | Cuánto tiempo se guarda una ejecución. |
+| `keep_successful_runs_for_days` | `7` | Cuánto tiempo se guarda una ejecución que funcionó. |
 | `update_check` | `true` | Comprueba una vez al día si hay una versión más nueva. |
 
 ## Permisos

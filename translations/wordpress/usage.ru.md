@@ -151,7 +151,7 @@ wordpress blog posts delete 63 --allow-delete                  # for good, past 
 
 `wordpress blog api` выполняет любую операцию REST API WordPress (`wp/v2`), по команде на каждую, со своими флагами и
 справкой. Так вы достаете то, у чего нет своей команды: медиафайлы, комментарии, меню, пользователей, настройки и
-другое. В группе 150 операций, взятых из чистого WordPress 6.9.4.
+другое. В группе 147 операций, взятых из чистого WordPress 6.9.4.
 
 ```sh
 wordpress blog api list                               # every operation, without calling WordPress

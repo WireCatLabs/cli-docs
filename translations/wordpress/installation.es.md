@@ -19,7 +19,7 @@ hasta donde lo permiten tus permisos.
 
 ## Lo que necesitas
 
-- Un sitio WordPress autoalojado, versión 5.6 o posterior, con acceso por https. WordPress crea contraseñas de
+- Un sitio WordPress autoalojado, versión 5.7 o posterior, con acceso por https. WordPress crea contraseñas de
   aplicación solo ahí. Los sitios de WordPress.com no son compatibles.
 - Un usuario en el sitio. Para una copia completa, el usuario debe ser Administrador. Un Editor obtiene todas las
   entradas y páginas, pero WordPress muestra la lista de usuarios solo a un Administrador. Un Autor o un Colaborador

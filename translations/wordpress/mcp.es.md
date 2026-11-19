@@ -66,7 +66,8 @@ trabajo que le diste.
 Dos cosas te mantienen al mando:
 
 - **Cada publicación queda registrada.** `wordpress blog runs list` muestra cada escritura que hizo el agente, y
-  `runs show` lo que envió.
+  `runs show` lo que envió. Una ejecución que funcionó se guarda 7 días (`keep_successful_runs_for_days`), una que
+  falló, 30.
 - **Una línea lo detiene.** Estas dejan en tus manos la publicación y el borrado para siempre, y el agente sigue
   escribiendo borradores:
 

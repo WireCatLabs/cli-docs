@@ -102,10 +102,12 @@ Notes on the `wordpress` column:
   anyway.
 - **Upload a file.** The `api` group lists media with `api media-list` and changes its details with `api media-update`.
   It takes a request body as JSON only, so it cannot send the file itself.
-- **The api group.** `wordpress blog api` runs any of the 150 `wp/v2` operations of WordPress 6.9.4, with the same
-  publishing and deleting keys. WordPress's batch route is never offered, since one batch call would run writes past
-  their keys.
-- **WordPress.com.** Only self-hosted WordPress 5.6 or later over https. WordPress.com sites sign in with OAuth and are
+- **The api group.** `wordpress blog api` runs any of the 147 `wp/v2` operations of WordPress 6.9.4, with the same
+  publishing and deleting keys. Installing a plugin, changing the site's settings, users and comments, and changes to
+  templates, widgets, menus and navigation ask by default. WordPress's batch route is never offered, since one batch
+  call would run writes past their keys. Making an application password is never offered either, since WordPress
+  answers with the new password in clear.
+- **WordPress.com.** Only self-hosted WordPress 5.7 or later over https. WordPress.com sites sign in with OAuth and are
   not supported. The command is `wordpress`, not `wp`, so it lives beside WP-CLI on one computer.
 - **ChatGPT or Claude in the browser.** `mcp serve --http` serves the tool behind a tunnel that you set up and keep
   running yourself, so this row is partly.

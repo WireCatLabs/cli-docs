@@ -47,6 +47,8 @@ y los ajustes. Inicia sesión con el rol que necesita el trabajo, y limita lo qu
 que escriben, en el almacén local de WireCat de este ordenador, donde cualquier herramienta de WireCat puede leerlos.
 De un usuario se guardan su nombre, su correo y su slug. Los borradores y las entradas privadas también están en la
 copia, así que protege este ordenador como proteges tu acceso a wp-admin.
+`api posts-get --context edit` también devuelve la contraseña propia de una entrada, la que la oculta a los lectores.
+Abre solo esa entrada, no tu sitio.
 
 El texto de WordPress, como los títulos, el texto y los extractos de entradas y páginas, y los nombres de etiquetas,
 categorías y autores, llega a un agente marcado como `untrusted`. El agente lo lee como datos, no como una

@@ -2452,55 +2452,6 @@ wordpress api users-delete [options]
 
 **Example:** `wordpress personal api users-delete --id <value> --reassign <value>`
 
-### `wordpress api users-application-passwords-list`
-
-getWpV2UsersByUserIdApplicationPasswords — read (GET /wp/v2/users/{user_id}/application-passwords)
-
-```sh
-wordpress api users-application-passwords-list [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--user-id <value>` | user_id. |
-| `--context <value>` | Scope under which the request is made; determines fields present in response. |
-
-**Example:** `wordpress personal api users-application-passwords-list --user-id <value>`
-
-### `wordpress api users-application-passwords-create`
-
-postWpV2UsersByUserIdApplicationPasswords — write (POST /wp/v2/users/{user_id}/application-passwords)
-
-**Changes something in the service.**
-
-```sh
-wordpress api users-application-passwords-create [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--user-id <value>` | user_id. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Example:** `wordpress personal api users-application-passwords-create --user-id <value>`
-
-### `wordpress api users-application-passwords-delete-all`
-
-deleteWpV2UsersByUserIdApplicationPasswords — destructive (DELETE /wp/v2/users/{user_id}/application-passwords)
-
-**Changes something in the service.**
-
-```sh
-wordpress api users-application-passwords-delete-all [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--user-id <value>` | user_id. |
-
-**Example:** `wordpress personal api users-application-passwords-delete-all --user-id <value>`
-
 ### `wordpress api users-application-passwords-get`
 
 getWpV2UsersByUserIdApplicationPasswordsByUuid — read (GET /wp/v2/users/{user_id}/application-passwords/{uuid})

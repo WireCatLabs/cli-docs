@@ -153,7 +153,7 @@ Cada escritura pregunta antes en una terminal. Consulta los [permisos](./permiss
 
 `wordpress blog api` ejecuta cualquier operación de la API REST de WordPress (`wp/v2`), un comando por operación, con
 sus propias opciones y su ayuda. Alcanza lo que no tiene comando propio: medios, comentarios, menús, usuarios, ajustes
-y más. Tiene 150 operaciones, de un WordPress 6.9.4 sin cambios.
+y más. Tiene 147 operaciones, de un WordPress 6.9.4 sin cambios.
 
 ```sh
 wordpress blog api list                               # every operation, without calling WordPress

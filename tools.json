@@ -180,6 +180,7 @@
     "package": "@wirecat/wordpress-cli",
     "lang": "en",
     "docsRef": "v0.1.0",
+    "category": "content",
     "summary": {
       "en": "Read and write your self-hosted WordPress site from the terminal or your AI agent: posts, pages, tags and drafts, with a local copy to search offline.",
       "ru": "Читайте и пишите на своем сайте WordPress из терминала или через ИИ-агента: посты, страницы, метки и черновики, с локальной копией для поиска без интернета.",
