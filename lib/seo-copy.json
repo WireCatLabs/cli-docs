@@ -53,7 +53,8 @@
       "b24": "Bitrix24 MCP server and CLI for your CRM",
       "notion": "Notion MCP server and CLI with offline search",
       "amo": "amoCRM and Kommo MCP server and CLI for your CRM",
-      "ydisk": "Yandex Disk MCP server and CLI with offline search"
+      "ydisk": "Yandex Disk MCP server and CLI with offline search",
+      "wordpress": "WordPress MCP server and CLI with offline posts"
     },
     "products": {
       "tg": "Telegram",
@@ -68,7 +69,8 @@
       "mail": "email",
       "b24": "Bitrix24",
       "amo": "amoCRM",
-      "ydisk": "Yandex Disk"
+      "ydisk": "Yandex Disk",
+      "wordpress": "WordPress"
     },
     "labels": {
       "max": "MAX",
@@ -190,7 +192,8 @@
       "b24": "Битрикс24 MCP-сервер и CLI для CRM",
       "notion": "Notion MCP-сервер и CLI с поиском без интернета",
       "amo": "amoCRM и Kommo: MCP-сервер и CLI для CRM",
-      "ydisk": "Яндекс Диск: MCP-сервер и CLI с поиском без интернета"
+      "ydisk": "Яндекс Диск: MCP-сервер и CLI с поиском без интернета",
+      "wordpress": "WordPress: MCP-сервер и CLI с постами без интернета"
     },
     "products": {
       "tg": "Telegram",
@@ -205,7 +208,8 @@
       "mail": "почты",
       "b24": "Битрикс24",
       "amo": "amoCRM",
-      "ydisk": "Яндекс Диска"
+      "ydisk": "Яндекс Диска",
+      "wordpress": "WordPress"
     },
     "labels": {
       "mail": "Почта",
@@ -327,7 +331,8 @@
       "b24": "Servidor MCP y CLI para el CRM de Bitrix24",
       "notion": "Servidor MCP y CLI de Notion con búsqueda sin conexión",
       "amo": "Servidor MCP y CLI para el CRM de amoCRM y Kommo",
-      "ydisk": "Servidor MCP y CLI de Yandex Disk con búsqueda sin conexión"
+      "ydisk": "Servidor MCP y CLI de Yandex Disk con búsqueda sin conexión",
+      "wordpress": "Servidor MCP y CLI de WordPress con entradas sin conexión"
     },
     "products": {
       "tg": "Telegram",
@@ -342,7 +347,8 @@
       "mail": "correo",
       "b24": "Bitrix24",
       "amo": "amoCRM",
-      "ydisk": "Yandex Disk"
+      "ydisk": "Yandex Disk",
+      "wordpress": "WordPress"
     },
     "labels": {
       "mail": "Correo"

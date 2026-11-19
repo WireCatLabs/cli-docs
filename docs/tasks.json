@@ -346,5 +346,20 @@
     "id": "notion-upkeep",
     "pages": ["notion/configuration.md", "notion/troubleshooting.md"],
     "families": { "notion": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
+    "id": "content-wordpress-connect",
+    "pages": ["wordpress/installation.md", "wordpress/mcp.md", "wordpress/security.md"],
+    "families": { "wordpress": ["session", "skill", "mcp"] }
+  },
+  {
+    "id": "content-wordpress-read-write",
+    "pages": ["wordpress/usage.md", "wordpress/permissions.md", "wordpress/commands.md"],
+    "families": { "wordpress": ["sync", "channels", "posts", "users", "tags", "api", "commands"] }
+  },
+  {
+    "id": "content-wordpress-upkeep",
+    "pages": ["wordpress/configuration.md", "wordpress/troubleshooting.md"],
+    "families": { "wordpress": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

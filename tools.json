@@ -172,5 +172,19 @@
       "ru": "Звонки вашей АТС Asterisk на вашем компьютере: записи о звонках, расшифровка записей локально, поиск без интернета и доступ для ИИ-агента.",
       "es": "Las llamadas de la centralita Asterisk de tu empresa en tu ordenador: registros de llamadas, grabaciones transcritas en local, búsqueda sin conexión y acceso para tu agente de IA."
     }
+  },
+  {
+    "name": "wordpress",
+    "displayName": "WordPress",
+    "repo": "WireCatLabs/wordpress-cli",
+    "package": "@wirecat/wordpress-cli",
+    "lang": "en",
+    "docsRef": "v0.1.1",
+    "category": "content",
+    "summary": {
+      "en": "Read and write your self-hosted WordPress site from the terminal or your AI agent: posts, pages, tags and drafts, with a local copy to search offline.",
+      "ru": "Читайте и пишите на своем сайте WordPress из терминала или через ИИ-агента: посты, страницы, метки и черновики, с локальной копией для поиска без интернета.",
+      "es": "Lee y escribe en tu sitio WordPress autoalojado desde la terminal o con tu agente de IA: entradas, páginas, etiquetas y borradores, con una copia local para buscar sin conexión."
+    }
   }
 ]

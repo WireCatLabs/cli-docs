@@ -13,6 +13,7 @@ import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 import { homePath } from "./site-routes"
 import { whatsappDescriptions } from "./whatsapp-descriptions"
+import { wordpressDescriptions } from "./wordpress-descriptions"
 import { ydiskDescriptions } from "./ydisk-descriptions"
 import { zoomDescriptions } from "./zoom-descriptions"
 
@@ -127,6 +128,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     notion: notionDescriptions,
     pbx: pbxDescriptions,
     wa: whatsappDescriptions,
+    wordpress: wordpressDescriptions,
     ydisk: ydiskDescriptions,
   }[selectedTool?.name ?? ""]
   if (reviewed) {

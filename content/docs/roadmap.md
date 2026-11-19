@@ -32,6 +32,8 @@ what comes next.
   computer and on the Disk, both ways.
 - **[amoCRM and Kommo](./amo/index.md)**: your own deals and their clients on your computer, with what changed since
   yesterday, searchable next to your messages.
+- **[WordPress](./wordpress/index.md)**: the posts and pages of your WordPress site on your computer, searchable
+  offline, and drafts written and published when you allow it.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -100,6 +102,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [amoCRM roadmap](./amo/roadmap.md)
 - [Yandex Disk roadmap](./ydisk/roadmap.md)
 - [Asterisk roadmap](./pbx/roadmap.md)
+- [WordPress roadmap](./wordpress/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)
 
