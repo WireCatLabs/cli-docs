@@ -457,5 +457,19 @@
   "wordpress/changelog.ru": "7e2f61658adcc851641182f68bc5eb158170f1dd20e9ef8ed1df081d112c07c3",
   "wordpress/changelog.es": "7e2f61658adcc851641182f68bc5eb158170f1dd20e9ef8ed1df081d112c07c3",
   "wordpress/commands.ru": "3ca550b95a83a416fb5025cf6000027b344a6a3701807cb4ced46076e7e29d41",
-  "wordpress/commands.es": "3ca550b95a83a416fb5025cf6000027b344a6a3701807cb4ced46076e7e29d41"
+  "wordpress/commands.es": "3ca550b95a83a416fb5025cf6000027b344a6a3701807cb4ced46076e7e29d41",
+  "linear/installation.ru": "d4370ffef4238400c34ddad2600da9cefabe865717713a35b1acdcd4fdbc4045",
+  "linear/installation.es": "d4370ffef4238400c34ddad2600da9cefabe865717713a35b1acdcd4fdbc4045",
+  "linear/usage.ru": "c68aad0deb57200fd6c05ee1aa3c408f93ad5db36177c60233475792c9fbf7ff",
+  "linear/usage.es": "c68aad0deb57200fd6c05ee1aa3c408f93ad5db36177c60233475792c9fbf7ff",
+  "linear/configuration.ru": "92a4328ee8ee59c56a057c0570775785974a938efc121e99fefe84ef41a73f48",
+  "linear/configuration.es": "92a4328ee8ee59c56a057c0570775785974a938efc121e99fefe84ef41a73f48",
+  "linear/troubleshooting.ru": "78cfd970f576c0c8d139820f15c441c37ad9d551d919540cd993816179ca7673",
+  "linear/troubleshooting.es": "78cfd970f576c0c8d139820f15c441c37ad9d551d919540cd993816179ca7673",
+  "linear/security.ru": "c89d2dcbb9faf2e4bcf78f8dc20e0b2c1d7ba6e607726002a418dd8c7db3f8a6",
+  "linear/security.es": "c89d2dcbb9faf2e4bcf78f8dc20e0b2c1d7ba6e607726002a418dd8c7db3f8a6",
+  "linear/changelog.ru": "753e6c24b3ad691f5253c06c124bbd7030d672a91ae9c7e24fb4c705ee7b2d74",
+  "linear/changelog.es": "753e6c24b3ad691f5253c06c124bbd7030d672a91ae9c7e24fb4c705ee7b2d74",
+  "linear/commands.ru": "7c72d73f5a4df5365ebb96587bf3340573f6fcf7573006cbf38b9f2c4f406b6f",
+  "linear/commands.es": "7c72d73f5a4df5365ebb96587bf3340573f6fcf7573006cbf38b9f2c4f406b6f"
 }

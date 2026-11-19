@@ -164,6 +164,12 @@ describe("localized SEO", () => {
       for (const slug of [...slugs, "changelog", "compare", "roadmap", "mcp", "permissions", "scenarios"])
         expect(() => documentationDescription(lang, ["amo", slug]), `${lang} amo/${slug}`).not.toThrow()
   })
+  it("describes every page the Linear CLI publishes in every locale", () => {
+    const slugs = ["index", "installation", "usage", "commands", "configuration", "troubleshooting", "security"]
+    for (const lang of seoLocales)
+      for (const slug of [...slugs, "changelog", "compare", "roadmap"])
+        expect(() => documentationDescription(lang, ["linear", slug]), `${lang} linear/${slug}`).not.toThrow()
+  })
   it("describes every page the WordPress CLI publishes in every locale", () => {
     const slugs = ["index", "installation", "usage", "commands", "configuration", "troubleshooting", "security"]
     for (const lang of seoLocales)

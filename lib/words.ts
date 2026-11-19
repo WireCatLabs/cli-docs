@@ -19,6 +19,7 @@ export type Words = {
     documentsFiles: string
     meetingsCalls: string
     crm: string
+    trackers: string
     messenger: string
     language: string
     menu: string
@@ -137,6 +138,7 @@ export const words: Record<string, Words> = {
       documentsFiles: "Documents & files",
       meetingsCalls: "Meetings & Calls",
       crm: "CRM",
+      trackers: "Issue trackers",
       messenger: "Choose a messenger",
       language: "Choose a language",
       menu: "Open documentation menu",
@@ -191,6 +193,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       documentsFiles: "Документы и файлы",
       meetingsCalls: "Встречи и звонки",
       crm: "CRM",
+      trackers: "Трекеры задач",
       messenger: "Выбрать мессенджер",
       language: "Выбрать язык",
       menu: "Открыть меню документации",
@@ -246,6 +249,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       documentsFiles: "Documentos y archivos",
       meetingsCalls: "Reuniones y llamadas",
       crm: "CRM",
+      trackers: "Gestores de incidencias",
       messenger: "Elegir servicio de mensajería",
       language: "Elegir idioma",
       menu: "Abrir el menú de documentación",

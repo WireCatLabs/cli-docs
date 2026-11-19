@@ -67,6 +67,7 @@ import {
   Settings2,
   ShieldCheck,
   SlidersHorizontal,
+  SquareKanban,
   StickyNote,
   Store,
   Tag,
@@ -99,6 +100,7 @@ export const sidebarIcons = {
   b24: Handshake,
   amo: Handshake,
   wordpress: Newspaper,
+  linear: SquareKanban,
   asterisk: Server,
   pbx: PhoneCall,
   beeline: PhoneCall,
@@ -258,6 +260,7 @@ const toolGroups = {
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
   crm: { tools: ["b24", "amo"], open: false, icon: Handshake },
+  trackers: { tools: ["linear"], open: true, icon: SquareKanban },
 } as const
 
 export const toolGroupId = (group: string, lang: string) => `tools-${group}-${lang}`
@@ -347,7 +350,9 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
       }
     }
     if (node.type !== "page") return node
-    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|pbx|wordpress)\/?$/.test(node.url)
+    const slug = /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|pbx|wordpress|linear)\/?$/.test(
+      node.url,
+    )
       ? "index"
       : (node.url.split("/").filter(Boolean).at(-1) ?? "")
     const Icon = sidebarIcons[slug as keyof typeof sidebarIcons] ?? FileText
