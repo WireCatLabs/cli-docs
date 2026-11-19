@@ -149,7 +149,7 @@
     "repo": "WireCatLabs/amo-cli",
     "package": "@wirecat/amo-cli",
     "lang": "en",
-    "docsRef": "v0.1.1",
+    "docsRef": "v0.2.0",
     "tier": "extra",
     "category": "crm",
     "summary": {
