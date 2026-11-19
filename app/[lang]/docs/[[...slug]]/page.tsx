@@ -19,11 +19,13 @@ import { DocsTocPopover } from "@/components/docs-toc-popover"
 import { getMDXComponents } from "@/components/mdx"
 import { ReaderGuide } from "@/components/reader-guide"
 import { StructuredData } from "@/components/structured-data"
+import { docsPage } from "@/lib/docs-pages"
 import { guideOrientation, guideStartLink } from "@/lib/guide-orientation"
 import { readerGuide } from "@/lib/reader-guides"
 import { commandReferences } from "@/lib/remark-doc-usability"
 import {
   absoluteUrl,
+  docsSocialImage,
   documentationDescription,
   documentationTitle,
   pageMetadata,
@@ -216,6 +218,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     description: documentationDescription(lang, page.slugs, page.data.description),
     available: seoLocales.filter((locale) => source.getPage(page.slugs, locale)),
     article: true,
+    // A page missing from the frontmatter list keeps the site's card rather than naming an image the build skips.
+    socialImage: docsPage(lang, page.slugs) ? { pathname: docsSocialImage(lang, page.slugs), alt: title } : undefined,
   })
   return {
     ...metadata,
