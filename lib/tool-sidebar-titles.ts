@@ -56,6 +56,9 @@ const byTool: Record<string, Record<string, Names>> = {
   drive: {
     mirrors: { en: "Local mirrors", ru: "Локальные копии", es: "Copias locales" },
   },
+  ydisk: {
+    mirrors: { en: "Mirrors", ru: "Зеркала", es: "Espejos" },
+  },
 }
 
 /** The short menu name of a tool page at `tool/slug[.lang].md`, or undefined to keep its title. */

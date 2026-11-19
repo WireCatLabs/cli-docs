@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 Cambios notables en `@wirecat/yandex-disk-cli`. Una sección por versión, las más nuevas arriba.
 
+## 0.3.0 — 19.11.2026
+
+### Añadido
+
+- **Espejos: una carpeta local y una del Disk iguales, en ambos sentidos.** `mirrors add <disk folder> <local folder>`,
+  y luego `mirrors sync`, o `mirrors watch` para seguir sincronizando. Un cambio en un lado se copia al otro; un
+  archivo cambiado en los dos lados se informa y se resuelve con `--keep local|disk|both`. Un borrado va a la papelera
+  del otro lado, la del Disk o `.wirecat-trash/` en la carpeta, y solo cuando la sincronización puede demostrarlo: un
+  archivo que falta en una lista incompleta, o en una carpeta que se reemplazó, nunca se borra. `mirrors preview`
+  muestra el plan, y una ejecución que borraría muchos archivos espera a `--allow-deletions`. Consulta
+  [espejos](./mirrors.md).
+- `mirrors versions list|restore`: la versión que una sincronización reemplazó o borró, en tu ordenador o en el Disk,
+  se guarda 30 días y se puede devolver.
+
+### Corregido
+
+- `folders list` nombra cada carpeta elegida y da su ruta en el Disk, no solo su id.
+- `api public-settings-update` ya no informa de una escritura que no pudo confirmar cuando el Disk responde sin cuerpo.
+- Los pasos del token sugieren un nombre de aplicación como `My laptop`.
+
 ## 0.2.0 — 18.11.2026
 
 ### Añadido

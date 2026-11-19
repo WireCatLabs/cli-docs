@@ -296,6 +296,11 @@
     }
   },
   {
+    "id": "files-ydisk-mirror",
+    "pages": ["ydisk/mirrors.md"],
+    "families": { "ydisk": ["mirrors"] }
+  },
+  {
     "id": "files-ydisk-work",
     "pages": ["ydisk/usage.md", "ydisk/commands.md"],
     "families": { "ydisk": ["files", "api", "commands"] }

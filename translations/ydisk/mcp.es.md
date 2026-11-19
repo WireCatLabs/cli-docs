@@ -98,6 +98,11 @@ ejecutan. Elige una de estas opciones para un agente:
   `mcp server start` hace un permiso más estricto para ese servidor, nunca más laxo:
   `ydisk personal mcp add claude-code --allow-writes --permission files.delete=deny`.
 
+Un agente puede sincronizar los [espejos](./mirrors.md) que añadiste (`mirrors list`, `mirrors status`,
+`mirrors preview`, `mirrors sync`). No puede añadir ni quitar uno, ejecutar `mirrors watch` ni pasar
+`--allow-deletions` o `--repin`. Una sincronización que reemplaza o borra un archivo comprueba `files.delete`, así que
+`deny` ahí limita las sincronizaciones del agente a los archivos nuevos.
+
 Por MCP un agente lee el texto de un archivo con `files download`, pero no puede guardar un archivo en una ruta de tu
 ordenador. Todas las claves de permisos están en los [ajustes](./configuration.md#permissions), y lo que llega a tu
 Disk y a la red está en [seguridad](./security.md).

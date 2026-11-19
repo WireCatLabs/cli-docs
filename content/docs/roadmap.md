@@ -28,7 +28,8 @@ what comes next.
 - **[Notion](./notion/index.md)**: your Notion pages and databases on your computer, searchable offline next to your
   messages.
 - **[Yandex Disk](./ydisk/index.md)**: the text of the Disk folders you choose on your computer, searchable offline,
-  and the files on the Disk listed, uploaded, moved and shared when you allow it.
+  the files on the Disk listed, uploaded, moved and shared when you allow it, and chosen folders kept the same on your
+  computer and on the Disk, both ways.
 - **[amoCRM and Kommo](./amo/index.md)**: your own deals and their clients on your computer, with what changed since
   yesterday, searchable next to your messages.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
