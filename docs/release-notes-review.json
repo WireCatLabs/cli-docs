@@ -64,5 +64,11 @@
     "roadmapSha256": "db37ad928f544284aafbd4243f54c61e37921d15919512911ebb6877079cfbfe",
     "reviewedAt": "2026-11-19",
     "conclusion": "Reviewed wordpress 0.1.2 from its changelog and the docs diff since v0.1.1: one fix, no new commands. An Author or Contributor sign-in syncs their own posts again; the pages stay out of reach, as WordPress refuses the pages list without the right to edit pages, and the sync names that gap. The shipped item \"Full sync for Authors and Contributors\" left Next; the rest of the roadmap did not change. RU and ES changelog, index, usage, troubleshooting and roadmap updated and accepted. The release's installation guide still says the posts sync stays partial for both roles, so a site correction gives the index's wording in EN, RU and ES, and the comparison page says their own posts too."
+  },
+  "attio": {
+    "version": "v0.2.2",
+    "roadmapSha256": "e311c296c68e5e940fc86cb2e254b68d45fd935656ca9d973cc69478954207d2",
+    "reviewedAt": "2026-11-19",
+    "conclusion": "First site release of attio, reviewed at 0.2.2 from its changelog and the pages it publishes. Sync copies every deal and the people and companies those deals name; everyone else in Attio is searched live. 0.2.2 fixed the pages that still said sync copies the whole workspace, and the RU and ES translations follow it. The roadmap's Next (changing deals, notes and tasks, one-click sign-in) and Later (custom objects and lists, webhooks) hold nothing that has shipped."
   }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import siteConfig from "../site.config.json"
 import { amoDescriptions } from "./amo-descriptions"
+import { attioDescriptions } from "./attio-descriptions"
 import { b24Descriptions } from "./b24-descriptions"
 import { driveDescriptions } from "./drive-descriptions"
 import { gcalDescriptions } from "./gcal-descriptions"
@@ -140,6 +141,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
   const selectedTool = tools.find((candidate) => candidate.name === slugs[0])
   const reviewed = {
     amo: amoDescriptions,
+    attio: attioDescriptions,
     b24: b24Descriptions,
     drive: driveDescriptions,
     gcal: gcalDescriptions,

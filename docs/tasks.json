@@ -270,6 +270,38 @@
     "families": { "amo": ["config", "doctor", "runs", "upgrade"] }
   },
   {
+    "id": "crm-attio-connect",
+    "pages": ["attio/installation.md", "attio/usage.md", "attio/security.md"],
+    "families": { "attio": ["session", "skill", "mcp"] }
+  },
+  {
+    "id": "crm-attio-read-change",
+    "pages": ["attio/usage.md", "attio/commands.md"],
+    "families": {
+      "attio": [
+        "sync",
+        "store",
+        "deals",
+        "pipelines",
+        "stages",
+        "people",
+        "organizations",
+        "users",
+        "changes",
+        "fields",
+        "search",
+        "api",
+        "commands"
+      ]
+    }
+  },
+  {
+    "id": "crm-attio-upkeep",
+    "pages": ["attio/configuration.md", "attio/troubleshooting.md"],
+    "families": { "attio": ["config", "doctor", "runs", "upgrade"] }
+  },
+
+  {
     "id": "files-ydisk-connect",
     "pages": ["ydisk/installation.md", "ydisk/mcp.md", "ydisk/security.md"],
     "families": { "ydisk": ["session", "account", "skill", "mcp"] }

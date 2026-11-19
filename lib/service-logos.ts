@@ -17,5 +17,6 @@ export const serviceLogos: Record<string, string> = {
   amo: "amocrm.png",
   wordpress: "wordpress.svg",
   linear: "linear.svg",
+  attio: "attio.png",
   beeline: "beeline.svg",
 }
