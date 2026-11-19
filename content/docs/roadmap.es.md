@@ -33,6 +33,8 @@ decidimos qué viene después.
   en tu ordenador y en el Disk, en ambos sentidos.
 - **[amoCRM y Kommo](./amo/index.md)**: tus negociaciones y sus clientes en tu ordenador, con lo que cambió desde ayer,
   en la búsqueda junto a tus mensajes.
+- **[WordPress](./wordpress/index.md)**: las entradas y páginas de tu sitio WordPress en tu ordenador, en la búsqueda
+  sin conexión, y borradores escritos y publicados cuando lo permitas.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al
   evento del calendario y guardadas en tu ordenador después de que Google las borre.
 
@@ -107,6 +109,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de amoCRM](./amo/roadmap.md)
 - [Hoja de ruta de Yandex Disk](./ydisk/roadmap.md)
 - [Hoja de ruta de Asterisk](./pbx/roadmap.md)
+- [Hoja de ruta de WordPress](./wordpress/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
 - [Hoja de ruta de WhatsApp](./wa/roadmap.md)
 

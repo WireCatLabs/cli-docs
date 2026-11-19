@@ -58,5 +58,11 @@
     "roadmapSha256": "25591a315aae916afedbf430578dd007223487120a9656ec55bb9c834203577d",
     "reviewedAt": "2026-11-17",
     "conclusion": "Reviewed pbx 0.8.0 from its changelog and the docs diff since v0.7.2. May break callers: `meetings transcribe` answers the report the other phone CLIs give (`audio_ms` instead of `audio_seconds`, a `ref` on each failed call, a call without a recording under `failed` with `recording.missing`, no `without_recording`). The overview (index) is rewritten as a sales page: the reader's gain, the ideas a newcomer would not guess, an example from the bundled sample call log, why pbx against the tools on its comparison page, a start and plain limits. RU/ES index retranslated, changelog and commands updated and accepted, and the changelog link correction moved to v0.8.0. The roadmap did not change."
+  },
+  "wordpress": {
+    "version": "v0.1.0",
+    "roadmapSha256": "05b7ba75bb38b50373ba7fe6aac2dacf5d540625732dc2863e925cae0da00f18",
+    "reviewedAt": "2026-11-19",
+    "conclusion": "First release on the site. Reviewed the wordpress roadmap against its docs and commands at the release commit: what works today (application password sign-in, sync of posts, pages, tags, categories and users, posts list, search and show, the posts writes and the api group) is shipped, and Next (full sync for Authors and Contributors, browser sign-in, plugin fields) and Later (WordPress.com, view counts) are not. RU and ES translated and accepted."
   }
 }
