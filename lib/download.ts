@@ -4,6 +4,12 @@ import type { Format, Platform } from "@/lib/desktop-releases"
 
 // The first version with a signed Windows installer and the Open in terminal update. If 0.5.0 is re-cut, change it here.
 const signedVersion = "0.5.0"
+// The first .deb that adds the apt repository at apt.wirecat.dev.
+const aptVersion = "0.7.4"
+const aptAdd =
+  "sudo wget -qO /usr/share/keyrings/wirecat-archive-keyring.gpg https://apt.wirecat.dev/wirecat-archive-keyring.gpg && sudo wget -qO /etc/apt/sources.list.d/wirecat.sources https://apt.wirecat.dev/wirecat.sources && sudo apt update && sudo apt install wirecat"
+const aptUpdate = "sudo apt update && sudo apt install wirecat"
+const aptFingerprint = "43982617F046390F83F6C11C2AE6E41E7B91E5C5"
 const publisher = "Open Source Developer Viacheslav Ptsarev"
 type Words = {
   title: string
@@ -32,7 +38,7 @@ type Words = {
     macos: { steps: string[] }
     windows: { steps: string[]; source: string; smartAppControl: string; smartAppSource: string }
   }
-  linux: { appimage: string; setup: string; fuse: string; fuseSource: string; deb: string; rpm: string }
+  linux: { appimage: string; setup: string; fuse: string; fuseSource: string; deb: string; apt: string; rpm: string }
   appimageSetup: {
     title: string
     started: string
@@ -46,7 +52,7 @@ type Words = {
     prompt: (file: string) => string
     hide: string
   }
-  updates: { title: string; auto: string; packages: string }
+  updates: { title: string; auto: string; apt: string; packages: string }
   uninstall: { title: string; macos: string; windows: string; appimage: string; packages: string; tools: string }
   next: { title: string; docs: string; terminal: string }
   gallery: {
@@ -118,6 +124,7 @@ const en: Words = {
     fuse: "If it says **AppImages require FUSE to run**, install FUSE 2: `sudo apt install libfuse2t64` on Ubuntu 24.04 and later, `sudo apt install libfuse2` on older Ubuntu and Debian.",
     fuseSource: "AppImage: FUSE",
     deb: "Install the .deb package from a terminal: `wget -O ~/Downloads/{deb} {url} && sudo install -m 644 ~/Downloads/{deb} /var/cache/apt/archives/ && sudo apt install /var/cache/apt/archives/{deb}`. The package is copied into apt's own folder, which only the system can write to: apt then reads it without a notice, and no other user of the computer can swap the file. The install ends with what to do next.",
+    apt: `The package also adds WireCat's apt repository, so new versions arrive in **Software Updater** with your other updates. You can also add the repository yourself and install from it: \`${aptAdd}\`. The repository is signed with the key "WireCat Packages", fingerprint \`${aptFingerprint}\`.`,
     rpm: "Install the .rpm package: `sudo dnf install ./{rpm}`. If you installed version 0.1.0 from an .rpm, remove it first: `sudo dnf remove wire-cat`.",
   },
   appimageSetup: {
@@ -148,7 +155,8 @@ Before you overwrite or delete any file that already exists, show it to me and a
   updates: {
     title: "Updates",
     auto: "On macOS, Windows and with the AppImage, WireCat updates itself. When a new version is out, the app offers it at the top of the window: choose **Install and restart**. Your accounts and data will not be deleted.",
-    packages: `From version 0.1.3 a .deb or .rpm copy updates too: choose **Download and install**. WireCat downloads the new package and opens your system's installer, which asks for your password; it also shows the \`apt\` or \`dnf\` command if you prefer a terminal. From version ${signedVersion} **Open in terminal** runs that command in your terminal: type your password there, then restart WireCat when the install ends. A copy on 0.4.0 or earlier stops with "The update's package has an unexpected name": install the new package from this page once, and later updates work from the app. An older copy only tells you that a new version is out: download the package from this page and install it the same way. From version 0.1.1 the package is called \`wirecat\`; the .deb replaces \`wire-cat\` from 0.1.0 by itself.`,
+    apt: `A .deb copy from version ${aptVersion} gets new versions from WireCat's apt repository. Install them in **Software Updater**, or run \`${aptUpdate}\`. When WireCat finds a new version, it shows the same command instead of downloading the package.`,
+    packages: `From version 0.1.3 an .rpm copy, and a .deb copy before ${aptVersion}, update from the app: choose **Download and install**. WireCat downloads the new package and opens your system's installer, which asks for your password. It also shows the \`apt\` or \`dnf\` command if you prefer a terminal. From version ${signedVersion} **Open in terminal** runs that command in your terminal: type your password there, then restart WireCat when the install ends. A copy on 0.4.0 or earlier stops with "The update's package has an unexpected name": install the new package from this page once, and later updates work from the app. An older copy only tells you that a new version is out: download the package from this page and install it the same way. From version 0.1.1 the package is called \`wirecat\`, and the .deb replaces \`wire-cat\` from 0.1.0 by itself.`,
   },
   uninstall: {
     title: "Uninstall",
@@ -157,7 +165,7 @@ Before you overwrite or delete any file that already exists, show it to me and a
       "**Windows:** select **Start > Settings > Apps > Installed apps**, find WireCat, then select **More > Uninstall**.",
     appimage: "**AppImage:** delete the file.",
     packages:
-      "**.deb or .rpm:** `sudo apt remove wirecat` or `sudo dnf remove wirecat`. Version 0.1.0 used the name `wire-cat`.",
+      "**.deb or .rpm:** `sudo apt remove wirecat` or `sudo dnf remove wirecat`. Removing the .deb also removes WireCat's apt repository, and installing it again adds it back. Version 0.1.0 used the name `wire-cat`.",
     tools:
       "Removing the app leaves the tools it installed and their data in place. To remove a tool too, uninstall it on the app's **Tools** page first.",
   },
@@ -271,6 +279,7 @@ const ru: Words = {
     fuse: "Если появится **AppImages require FUSE to run**, установите FUSE 2: `sudo apt install libfuse2t64` в Ubuntu 24.04 и новее, `sudo apt install libfuse2` в более старых Ubuntu и Debian.",
     fuseSource: "AppImage: FUSE",
     deb: "Установите пакет .deb из терминала: `wget -O ~/Downloads/{deb} {url} && sudo install -m 644 ~/Downloads/{deb} /var/cache/apt/archives/ && sudo apt install /var/cache/apt/archives/{deb}`. Пакет копируется в собственную папку apt, куда может писать только система: apt читает его без предупреждения, и другой пользователь компьютера не может подменить файл. В конце установки появится подсказка, что делать дальше.",
+    apt: `Пакет также добавляет apt-репозиторий WireCat, и новые версии приходят в программу **Обновление приложений** вместе с другими обновлениями. Можно и самим добавить репозиторий и установить WireCat из него: \`${aptAdd}\`. Репозиторий подписан ключом "WireCat Packages", отпечаток \`${aptFingerprint}\`.`,
     rpm: "Установите пакет .rpm: `sudo dnf install ./{rpm}`. Если раньше вы ставили версию 0.1.0 из .rpm, сначала удалите её: `sudo dnf remove wire-cat`.",
   },
   appimageSetup: {
@@ -301,7 +310,8 @@ const ru: Words = {
   updates: {
     title: "Обновления",
     auto: "В macOS, Windows и в AppImage WireCat обновляется сам. Когда выходит новая версия, приложение предлагает её вверху окна: нажмите **Установить и перезапустить**. Ваши аккаунты и данные не удалятся.",
-    packages: `С версии 0.1.3 копия из .deb или .rpm тоже обновляется: нажмите **Скачать и установить**. WireCat скачает новый пакет и откроет установщик программ вашей системы — там нужно будет ввести пароль; если удобнее терминал, приложение покажет команду \`apt\` или \`dnf\`. С версии ${signedVersion} кнопка **Открыть в терминале** запускает эту команду в вашем терминале: введите там пароль и перезапустите WireCat после установки. Копия версии 0.4.0 или старше останавливается с ошибкой «The update's package has an unexpected name»: один раз установите новый пакет с этой страницы, дальше обновления работают из приложения. Более старая копия только сообщает о новой версии: скачайте пакет на этой странице и установите его так же, как первый. С версии 0.1.1 пакет называется \`wirecat\`; .deb сам заменяет \`wire-cat\` из версии 0.1.0.`,
+    apt: `Копия из .deb с версии ${aptVersion} получает новые версии из apt-репозитория WireCat. Установите их в программе **Обновление приложений** или выполните \`${aptUpdate}\`. Когда WireCat находит новую версию, он показывает эту же команду и ничего не скачивает.`,
+    packages: `С версии 0.1.3 копия из .rpm, а также из .deb до версии ${aptVersion}, обновляется из приложения: нажмите **Скачать и установить**. WireCat скачает новый пакет и откроет установщик программ вашей системы, там нужно будет ввести пароль. Если удобнее терминал, приложение покажет команду \`apt\` или \`dnf\`. С версии ${signedVersion} кнопка **Открыть в терминале** запускает эту команду в вашем терминале: введите там пароль и перезапустите WireCat после установки. Копия версии 0.4.0 или старше останавливается с ошибкой «The update's package has an unexpected name»: один раз установите новый пакет с этой страницы, дальше обновления работают из приложения. Более старая копия только сообщает о новой версии: скачайте пакет на этой странице и установите его так же, как первый. С версии 0.1.1 пакет называется \`wirecat\`, и .deb сам заменяет \`wire-cat\` из версии 0.1.0.`,
   },
   uninstall: {
     title: "Удаление",
@@ -310,7 +320,7 @@ const ru: Words = {
       "**Windows:** выберите **Пуск > Параметры > Приложения > Установленные приложения**, найдите WireCat и выберите **Дополнительно > Удалить**.",
     appimage: "**AppImage:** удалите файл.",
     packages:
-      "**.deb или .rpm:** `sudo apt remove wirecat` или `sudo dnf remove wirecat`. В версии 0.1.0 пакет назывался `wire-cat`.",
+      "**.deb или .rpm:** `sudo apt remove wirecat` или `sudo dnf remove wirecat`. Удаление .deb убирает и apt-репозиторий WireCat, а повторная установка возвращает его. В версии 0.1.0 пакет назывался `wire-cat`.",
     tools:
       "Инструменты, которые установило приложение, и их данные после удаления остаются. Чтобы убрать и инструмент, сначала удалите его на странице **Инструменты** в приложении.",
   },
@@ -418,6 +428,7 @@ const es: Words = {
     fuse: "Si aparece **AppImages require FUSE to run**, instala FUSE 2: `sudo apt install libfuse2t64` en Ubuntu 24.04 o posterior, `sudo apt install libfuse2` en Ubuntu y Debian anteriores.",
     fuseSource: "AppImage: FUSE",
     deb: "Instala el paquete .deb desde una terminal: `wget -O ~/Downloads/{deb} {url} && sudo install -m 644 ~/Downloads/{deb} /var/cache/apt/archives/ && sudo apt install /var/cache/apt/archives/{deb}`. El paquete se copia en la carpeta propia de apt, donde solo escribe el sistema: apt lo lee sin avisos y ningún otro usuario del equipo puede cambiar el archivo. Al terminar, la instalación indica los siguientes pasos.",
+    apt: `El paquete también añade el repositorio apt de WireCat, así que las versiones nuevas llegan al **Actualizador de software** con el resto de actualizaciones. También puedes añadir el repositorio tú mismo e instalar desde él: \`${aptAdd}\`. El repositorio está firmado con la clave "WireCat Packages", huella \`${aptFingerprint}\`.`,
     rpm: "Instala el paquete .rpm: `sudo dnf install ./{rpm}`. Si instalaste la versión 0.1.0 desde un .rpm, quítala primero: `sudo dnf remove wire-cat`.",
   },
   appimageSetup: {
@@ -448,7 +459,8 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
   updates: {
     title: "Actualizaciones",
     auto: "En macOS, Windows y con el AppImage, WireCat se actualiza sola. Cuando sale una versión nueva, la aplicación la ofrece en la parte superior de la ventana: elige **Instalar y reiniciar**. Tus cuentas y tus datos no se borran.",
-    packages: `Desde la versión 0.1.3, una copia instalada desde .deb o .rpm también se actualiza: elige **Descargar e instalar**. WireCat descarga el paquete nuevo y abre el instalador de tu sistema, que te pedirá la contraseña; si prefieres la terminal, muestra el comando de \`apt\` o \`dnf\`. Desde la versión ${signedVersion}, **Abrir en la terminal** ejecuta ese comando en tu terminal: escribe ahí tu contraseña y reinicia WireCat cuando termine la instalación. Una copia de la 0.4.0 o anterior se detiene con «The update's package has an unexpected name»: instala una vez el paquete nuevo desde esta página y las siguientes actualizaciones funcionan desde la app. Una copia anterior solo avisa de la versión nueva: descarga el paquete en esta página e instálalo igual que el primero. Desde la versión 0.1.1 el paquete se llama \`wirecat\`; el .deb sustituye por sí solo a \`wire-cat\` de la 0.1.0.`,
+    apt: `Una copia instalada desde .deb a partir de la versión ${aptVersion} recibe las versiones nuevas del repositorio apt de WireCat. Instálalas en el **Actualizador de software** o ejecuta \`${aptUpdate}\`. Cuando WireCat encuentra una versión nueva, muestra ese mismo comando y no descarga nada.`,
+    packages: `Desde la versión 0.1.3, una copia instalada desde .rpm, o desde .deb antes de la ${aptVersion}, se actualiza desde la aplicación: elige **Descargar e instalar**. WireCat descarga el paquete nuevo y abre el instalador de tu sistema, que te pedirá la contraseña. Si prefieres la terminal, muestra el comando de \`apt\` o \`dnf\`. Desde la versión ${signedVersion}, **Abrir en la terminal** ejecuta ese comando en tu terminal: escribe ahí tu contraseña y reinicia WireCat cuando termine la instalación. Una copia de la 0.4.0 o anterior se detiene con «The update's package has an unexpected name»: instala una vez el paquete nuevo desde esta página y las siguientes actualizaciones funcionan desde la app. Una copia anterior solo avisa de la versión nueva: descarga el paquete en esta página e instálalo igual que el primero. Desde la versión 0.1.1 el paquete se llama \`wirecat\`, y el .deb sustituye por sí solo a \`wire-cat\` de la 0.1.0.`,
   },
   uninstall: {
     title: "Desinstalar",
@@ -457,7 +469,7 @@ Antes de sobrescribir o borrar un archivo que ya exista, enséñamelo y pregúnt
       "**Windows:** selecciona **Inicio > Configuración > Aplicaciones > Aplicaciones instaladas**, busca WireCat y selecciona **Más > Desinstalar**.",
     appimage: "**AppImage:** borra el archivo.",
     packages:
-      "**.deb o .rpm:** `sudo apt remove wirecat` o `sudo dnf remove wirecat`. La versión 0.1.0 usaba el nombre `wire-cat`.",
+      "**.deb o .rpm:** `sudo apt remove wirecat` o `sudo dnf remove wirecat`. Al quitar el .deb también se quita el repositorio apt de WireCat, y al instalarlo de nuevo vuelve. La versión 0.1.0 usaba el nombre `wire-cat`.",
     tools:
       "Al quitar la aplicación, las herramientas que instaló y sus datos se quedan. Para quitar también una herramienta, desinstálala antes en la página **Herramientas** de la aplicación.",
   },
