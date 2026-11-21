@@ -46,9 +46,9 @@ if (port >= 1024 && port <= 65535) {
   Object.assign(button.dataset, {
     name: "WireCat",
     description: encodeURIComponent(text.description),
-    redirect_uri: "https://wirecat.dev/webhooks/apps/amo-callback",
-    secrets_uri: "https://wirecat.dev/api/amo/secrets",
-    logo: "https://wirecat.dev/connect/wirecat-amo-logo.png",
+    redirect_uri: "https://connect.wirecat.dev/webhooks/apps/amo-callback",
+    secrets_uri: "https://connect.wirecat.dev/api/amo/secrets",
+    logo: "https://connect.wirecat.dev/connect/wirecat-amo-logo.png",
     scopes: "crm",
     title: text.button,
     state,
