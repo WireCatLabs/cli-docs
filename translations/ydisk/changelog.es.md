@@ -4,6 +4,50 @@ title: "Historial de cambios"
 
 Cambios notables en `@wirecat/yandex-disk-cli`. Una sección por versión, las más nuevas arriba.
 
+## 0.4.0 — 19.11.2026
+
+### Añadido
+
+- **Espejo de todo el Disk.** `mirrors add / ~/YandexDisk` guarda todo el Disk en una carpeta propia, leído con la
+  lista plana de archivos de Yandex, hasta 100 000 archivos. Consulta [todo el Disk](./mirrors.md#the-whole-disk).
+- **Dejar carpetas fuera de un espejo.** `mirrors add --ignore <path>` (repetido, una ruta o un patrón) y
+  `mirrors update <id> --ignore <path>…` amplían la lista, y `--clear` la vacía primero. Una ruta ignorada nunca se
+  borra en ningún lado: ignorarla no manda nada a la papelera, y una que deja de ignorarse se sincroniza como una
+  carpeta nueva. Consulta [deja carpetas fuera](./mirrors.md#leave-folders-out).
+- **Una sincronización comprueba primero el espacio libre.** Se detiene con `mirror.no-space` cuando sus descargas y
+  las versiones que guarda dejarían demasiado poco libre: una décima parte de lo que escribe, al menos 100 MB y como
+  mucho 1 GB.
+- **`ydisk <profile> files serve [path]` muestra una carpeta del Disk, o todo el Disk, como una carpeta de solo
+  lectura en este ordenador.** Sirve la carpeta por WebDAV en 127.0.0.1 tras una dirección aleatoria creada en cada
+  ejecución, y el cliente propio del sistema la monta: `gio mount` en Linux, Finder en macOS, `net use` en Windows. A
+  través de ella nada puede escribir, renombrar ni borrar en el Disk. Funciona hasta Ctrl-C, nunca se ofrece a los
+  agentes por MCP y se rechaza donde `files.download` está denegado ([montar](./mount.md)).
+
+### Cambiado — puede romper llamadas
+
+- **Muchos cambios a la vez siempre esperan tu aprobación.** Una sincronización se detiene antes de más de 10 borrados
+  o más de 50 reemplazos de archivos existentes, sea cual sea el tamaño del espejo (antes pasaban 40 borrados de 1000
+  archivos). El error nombra las cifras y el comando exacto; `--replace` se une a `--allow-deletions`, los dos solo
+  para ti, nunca para un agente por MCP, y los dos necesitan el id del espejo cuando tienes más de uno. Un espejo
+  detenido ya no frena a los demás, y `mirrors watch` informa de la parada en cada ciclo que sincroniza el espejo.
+  Consulta [muchos cambios a la vez](./mirrors.md#many-changes-at-once).
+- **Un borrado en un Disk con actividad sigue demostrándose.** Un archivo que falta en la lista se borra aquí solo
+  cuando el Disk, al que se pide por su ruta después de la lista, no tiene nada allí. La lista ya no se lee hasta tres
+  veces mientras el Disk cambia, así que un móvil que sube fotos ya no bloquea todos los borrados.
+- **La carpeta personal nunca se sincroniza con un espejo**, aunque las carpetas propias de la CLI estén fuera de ella.
+- Requiere `@wirecat/cli-core` 0.711.0.
+
+### Corregido
+
+- `mirrors add` rechaza la raíz de una unidad en Windows, como `D:\`, incluso en una unidad sin carpeta personal.
+- `mirrors sync` ya no falla a los 30 segundos en un Disk grande. Puede durar 15 minutos en una terminal y 45 segundos
+  para un agente, se detiene antes por su cuenta, conserva lo hecho y responde parcial: cada espejo dice cuántos
+  archivos del Disk listó y si la lista estaba completa, y `next` nombra la ejecución que sigue. Una lista cortada no
+  borra nada: los archivos del Disk a los que no llegó se cuentan en `unlisted`.
+- `mirrors preview` puede listar 5 minutos en una terminal y 45 segundos para un agente, y falla con `timeout` y el
+  plan cortado cuando la lista no cabe.
+- Una página de la lista de todo el Disk puede tardar 2 minutos en vez de 30 segundos.
+
 ## 0.3.0 — 19.11.2026
 
 ### Añadido

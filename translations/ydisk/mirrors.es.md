@@ -10,21 +10,25 @@ cualquiera de los dos lados. Un archivo cambiado en los dos lados nunca se sobre
 
 Usa un espejo cuando trabajas con archivos con herramientas locales, como un editor, un script o un agente, y los
 quieres también en el Disk, sin instalar la aplicación de Yandex Disk. Los archivos quedan como son: un PDF sigue siendo
-un PDF y una nota sigue siendo un archivo Markdown.
+un PDF y una nota sigue siendo un archivo Markdown. Un espejo también puede guardar todo tu Disk, como hace la
+aplicación de Yandex Disk, sin las carpetas que elijas dejar fuera.
 
 **En esta página:**
 
 1. [Conecta una carpeta](#connect-a-folder)
-2. [La primera sincronización](#the-first-sync)
-3. [Las sincronizaciones de cada día](#everyday-syncs)
-4. [Un archivo cambiado en los dos lados](#a-file-changed-on-both-sides)
-5. [Borrado o solo ausente](#deleted-or-only-missing)
-6. [Adónde van los archivos borrados](#where-deleted-files-go)
-7. [Versiones anteriores de un archivo](#earlier-versions-of-a-file)
-8. [Una carpeta que se reemplazó](#a-folder-that-was-replaced)
-9. [Sincronizar en segundo plano](#keep-syncing-in-the-background)
-10. [Qué puede hacer un agente](#what-an-agent-may-do)
-11. [Qué no se sincroniza](#what-is-not-synced)
+2. [Todo el Disk](#the-whole-disk)
+3. [Deja carpetas fuera](#leave-folders-out)
+4. [La primera sincronización](#the-first-sync)
+5. [Las sincronizaciones de cada día](#everyday-syncs)
+6. [Un archivo cambiado en los dos lados](#a-file-changed-on-both-sides)
+7. [Borrado o solo ausente](#deleted-or-only-missing)
+8. [Muchos cambios a la vez](#many-changes-at-once)
+9. [Adónde van los archivos borrados](#where-deleted-files-go)
+10. [Versiones anteriores de un archivo](#earlier-versions-of-a-file)
+11. [Una carpeta que se reemplazó](#a-folder-that-was-replaced)
+12. [Sincronizar en segundo plano](#keep-syncing-in-the-background)
+13. [Qué puede hacer un agente](#what-an-agent-may-do)
+14. [Qué no se sincroniza](#what-is-not-synced)
 
 ## Conecta una carpeta
 
@@ -37,13 +41,64 @@ ydisk personal mirrors add /Notes ~/notes
 La herramienta comprueba que las dos son carpetas y guarda el par. Todavía no copia nada. `mirrors list` muestra tus
 espejos con sus id; los comandos de esta página aceptan un id cuando tienes más de un espejo.
 
-Algunas carpetas nunca se sincronizan, porque una sincronización enviaría al Disk cada archivo que contienen: carpetas
-de credenciales como `~/.ssh`, `~/.gnupg` y los llaveros, perfiles de navegador, las carpetas de las aplicaciones de
-WireCat y cualquier carpeta que guarde los ajustes o el estado del propio `ydisk`. `files upload` rechaza los mismos
-lugares.
+Algunas carpetas nunca se sincronizan, porque una sincronización enviaría al Disk cada archivo que contienen: tu propia
+carpeta personal, carpetas de credenciales como `~/.ssh`, `~/.gnupg` y los llaveros, perfiles de navegador, las
+carpetas de las aplicaciones de WireCat y cualquier carpeta que guarde los ajustes o el estado del propio `ydisk`.
+`files upload` rechaza los mismos lugares. Sincroniza una carpeta propia, como `~/notes`.
 
 Un espejo pertenece a la cuenta con la que el perfil había iniciado sesión cuando lo añadiste. Una sincronización con
 otra cuenta se rechaza.
+
+## Todo el Disk
+
+Indica `/` como carpeta del Disk, y una carpeta propia en tu ordenador:
+
+```sh
+ydisk personal mirrors add / ~/YandexDisk --ignore Photos --ignore "*.iso"
+ydisk personal mirrors preview
+ydisk personal mirrors sync
+```
+
+La sincronización lee todo el Disk con la lista plana de archivos de Yandex, más o menos una petición por cada mil
+archivos. Un espejo de todo el Disk funciona como cualquier otro: todo lo de esta página vale para él. En un Disk
+grande pesan más dos cosas:
+
+- **Espacio libre.** Cada sincronización, de cualquier espejo, suma primero lo que va a descargar y las versiones
+  anteriores que va a guardar. Se detiene con `mirror.no-space` cuando eso dejaría demasiado poco libre en la unidad
+  (una décima parte de lo que escribe, al menos 100 MB y como mucho 1 GB), y dice cuánto necesita. Deja fuera las
+  carpetas grandes para que quepa. Las versiones anteriores se guardan 30 días.
+- **Tamaño.** Un espejo admite hasta 100 000 archivos, sin contar los que dejas fuera.
+- **Tiempo.** Una sincronización dura hasta 15 minutos en una terminal y 45 segundos cuando la ejecuta un agente. Se
+  detiene antes por su cuenta, conserva lo hecho y dice hasta dónde llegó: `listed` de cada espejo muestra cuántos
+  archivos del Disk listó y si la lista estaba completa. Ejecuta `mirrors sync` otra vez para seguir. La primera
+  sincronización de un Disk grande lleva varias ejecuciones. Cuando la lista sola llena la ejecución, no se sincroniza
+  nada y la respuesta sugiere un `--timeout` más largo, como `ydisk personal mirrors sync --timeout 1h`. Una lista
+  cortada no borra nada: los archivos del Disk a los que no llegó solo se cuentan, en `unlisted`.
+
+## Deja carpetas fuera
+
+Una ruta ignorada se deja en paz en los dos lados: no se envía, no se baja y nunca se borra. Indica las rutas al
+añadir el espejo (`--ignore`, repetido), o añade más después. `mirrors list` muestra la lista. `--clear` la vacía
+primero, así que `--clear` con `--ignore` conserva solo las rutas que indicas: así deja de ignorarse una ruta.
+
+```sh
+ydisk personal mirrors update 1a2b3c4d --ignore Photos --ignore "*.iso"
+ydisk personal mirrors update 1a2b3c4d --clear --ignore "*.iso"
+```
+
+- Un patrón sin `/` es un nombre a cualquier profundidad: `node_modules`, `*.iso`, `Backups`.
+- Un patrón con `/` es una ruta desde la carpeta del espejo: `/Photos` (solo la de arriba), `Work/2019`,
+  `Work/**/build`.
+- `*` y `?` coinciden dentro de un nombre. `**` coincide con cualquier número de carpetas.
+
+Añadir una exclusión no borra nada en ningún lado, ni ahora ni después: los archivos se quedan donde están y la
+sincronización deja de mirarlos. Quitar una exclusión sincroniza la ruta como una carpeta nueva: los archivos de un
+solo lado se copian, los idénticos se dan por sincronizados y los distintos son conflictos. No se borra nada.
+`mirrors list` muestra las exclusiones de cada espejo.
+
+Un archivo ya sincronizado que luego se mueve en el Disk a una carpeta excluida se mueve también aquí, y después se
+deja en paz. Un archivo movido aquí a una carpeta excluida parece borrado para la sincronización: la copia del Disk va
+a la papelera del Disk.
 
 ## La primera sincronización
 
@@ -93,24 +148,42 @@ Una sincronización borra un archivo en un lado solo cuando puede demostrar que 
 como borrado solo si se cumple todo esto:
 
 - La última sincronización vio el archivo.
-- El lado donde falta se leyó entero. Una carpeta del Disk que el token no puede leer, más de 10 000 archivos o un Disk
-  que cambia mientras se lista dejan la lista incompleta. La lista se vuelve a leer, hasta tres veces, cuando algo
-  cambió en el Disk durante la lectura.
+- El lado donde falta se leyó entero. Una carpeta del Disk que el token no puede leer, o más de 100 000 archivos,
+  dejan la lista incompleta.
+- En el lado del Disk, el archivo sigue sin estar cuando la sincronización lo pide por su ruta, después de la lista.
+  Una lista leída página a página puede saltarse un archivo cuando otra cosa cambia en el Disk mientras tanto, como
+  hace todo el rato un móvil que sube fotos. Pedir el archivo directamente no puede saltárselo, así que un archivo que
+  solo falta en una lista nunca se borra. Así los borrados siguen funcionando en un Disk que nunca está quieto.
 - La carpeta de ese lado sigue siendo la misma: la carpeta del Disk tiene el mismo id que en la primera sincronización,
   y la carpeta local existe, es la misma y no está vacía. Una carpeta local vacía puede ser una unidad sin montar.
 
 Un archivo que solo falta, por cualquier otro motivo, aparece en `unknown`, y no se borra nada por él. Si falta la
 carpeta del Disk, todo el espejo se detiene con un error y no se borra nada.
 
-Una sincronización se detiene antes de cambiar nada cuando borraría más de 50 archivos, o más de una cuarta parte de
-ellos (a partir de 3 archivos). Revisa la lista con `mirrors preview` y luego permite ese número:
-
-```sh
-ydisk personal mirrors sync 1a2b3c4d --allow-deletions 60
-```
-
 Un archivo renombrado o movido en el Disk también se renombra aquí: el Disk conserva el id de un archivo al moverlo. Un
 archivo renombrado aquí se envía como archivo nuevo, y el nombre antiguo va a la papelera del Disk.
+
+## Muchos cambios a la vez
+
+Una sincronización se detiene antes de cambiar nada, en cualquier lado, cuando:
+
+- borraría más de 10 archivos, o
+- reemplazaría más de 50 archivos que ya existen, como haría un editor que reescribe todos los archivos o un ransomware
+  que cifra la carpeta.
+
+Esto vale sea cual sea el tamaño del espejo. El error nombra las cifras y el comando exacto que las permite. Revisa
+antes la lista:
+
+```sh
+ydisk personal mirrors preview 1a2b3c4d
+ydisk personal mirrors sync 1a2b3c4d --allow-deletions 40 --replace
+```
+
+`--allow-deletions` permite hasta ese número de borrados, y `--replace` cualquier número de reemplazos, para esa
+ejecución. Cada archivo reemplazado se guarda antes como versión. Con más de un espejo, los dos necesitan el id del
+espejo, así que una aprobación nunca cubre otro espejo. Un espejo detenido no frena a los demás: se sincronizan como
+siempre. `mirrors watch` vuelve a informar de la parada en cada ciclo que sincroniza el espejo, hasta que permitas la
+ejecución o devuelvas los archivos.
 
 ## Adónde van los archivos borrados
 
@@ -167,7 +240,9 @@ ydisk personal mirrors watch
 
 `watch` sincroniza al empezar, luego otra vez unos segundos después de que guardes un archivo, y cuando el Disk cambió.
 Pregunta al Disk su revisión cada 60 segundos (`--every` para cambiarlo, al menos 10 s): una petición pequeña, y la
-carpeta solo se vuelve a leer cuando la revisión cambió. Detenlo con Ctrl-C, o dale un `--timeout`.
+carpeta solo se vuelve a leer cuando la revisión cambió. Detenlo con Ctrl-C, o dale un `--timeout`. Un espejo
+que la protección detuvo (consulta [muchos cambios a la vez](#many-changes-at-once)) aparece en cada ciclo que lo
+sincroniza, nunca se salta en silencio.
 
 Un reemplazo o un borrado pide primero `files.delete`. Un `watch` que queda en marcha sin terminal no puede
 responder, así que inícialo con `--yes` o permite `files.delete` para el perfil.
@@ -186,8 +261,8 @@ reemplazo o borrado que se saltó. `YDISK_READ_ONLY=1` rechaza una sincronizaci�
 siguen funcionando.
 
 Por MCP un agente puede ejecutar `mirrors list`, `mirrors status`, `mirrors preview` y `mirrors sync`, pero no
-`--allow-deletions` ni `--repin`. Por MCP nadie puede responder una pregunta, así que un nivel en `ask` deja pasar la
-escritura: pon `files.delete` en `deny` para un agente que no deba reemplazar ni borrar archivos. Añadir o quitar un
+`--allow-deletions`, `--replace` ni `--repin`: solo tú apruebas muchos cambios a la vez. Por MCP nadie puede responder una pregunta, así que un nivel en `ask` deja pasar la
+escritura: pon `files.delete` en `deny` para un agente que no deba reemplazar ni borrar archivos. Añadir, cambiar o quitar un
 espejo, `versions` y `watch` son solo para ti. Consulta [conecta tu agente](./mcp.md#decide-what-the-agent-may-change).
 
 ## Qué no se sincroniza
@@ -195,7 +270,8 @@ espejo, `versions` y `watch` son solo para ti. Consulta [conecta tu agente](./mc
 - Archivos y carpetas ocultos (un nombre que empieza por `.`), `node_modules` y restos de editores (`~$name`, nombres
   que terminan en `~`, `.swp` o `.tmp`), en los dos lados. Una carpeta así del Disk ni siquiera se lista.
 - Enlaces simbólicos. Un archivo bajo un enlace nunca se borra por su causa.
-- Un espejo de más de 10 000 archivos.
+- Las rutas que [dejaste fuera](#leave-folders-out).
+- Un espejo de más de 100 000 archivos.
 - Carpetas vacías.
 
 `mirrors remove <id>` olvida el par. No cambia nada en el Disk ni en la carpeta local, y las versiones guardadas se

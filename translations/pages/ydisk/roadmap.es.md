@@ -12,8 +12,10 @@ función que falta: puede que ya esté en camino. El orden puede cambiar y no ha
 las carpetas que elijas, y tú y tu agente lo buscáis por palabras, por significado y por nombre de archivo, incluso sin
 internet. La misma herramienta lista, descarga, sube, mueve y comparte archivos del Disk dentro de los permisos que
 fijes, por la línea de comandos o por MCP. Una carpeta que [sincronizas en ambos sentidos](./mirrors.md) queda igual
-en tu ordenador y en el Disk, y se guarda cada archivo que una sincronización borra o reemplaza. Mira la
-[introducción](./index.md).
+en tu ordenador y en el Disk, y se guarda cada archivo que una sincronización borra o reemplaza. Un espejo puede
+guardar todo el Disk, sin las carpetas que dejes fuera, y se detiene antes de muchos borrados o sobrescrituras a la vez
+hasta que los permitas. También puedes [abrir el Disk como una carpeta](./mount.md) en tu gestor de archivos, en solo
+lectura. Mira la [introducción](./index.md).
 
 ## Siguiente
 

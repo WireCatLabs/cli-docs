@@ -135,6 +135,7 @@ export const sidebarIcons = {
   limits: Gauge,
   compare: ArrowRightLeft,
   mirrors: ArrowRightLeft,
+  mount: FolderOpen,
   replies: Reply,
   index: BookOpen,
   installation: Download,

@@ -367,7 +367,7 @@
   },
   {
     "id": "files-ydisk-work",
-    "pages": ["ydisk/usage.md", "ydisk/commands.md"],
+    "pages": ["ydisk/usage.md", "ydisk/mount.md", "ydisk/commands.md"],
     "families": { "ydisk": ["files", "api", "commands"] }
   },
   {
