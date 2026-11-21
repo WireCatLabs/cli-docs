@@ -22,9 +22,10 @@ hasta donde lo permiten tus permisos.
 - Un sitio WordPress autoalojado, versión 5.7 o posterior, con acceso por https. WordPress crea contraseñas de
   aplicación solo ahí. Los sitios de WordPress.com no son compatibles.
 - Un usuario en el sitio. Para una copia completa, el usuario debe ser Administrador. Un Editor obtiene todas las
-  entradas y páginas, pero WordPress muestra la lista de usuarios solo a un Administrador. Un Autor o un Colaborador
-  obtiene solo una parte del sitio. WordPress les niega la lista de páginas, así que la sincronización de entradas
-  queda parcial. Un Colaborador además ve solo sus propias entradas.
+  entradas y páginas, pero WordPress da todos los usuarios y su correo solo a un Administrador: un Editor obtiene los
+  autores con entradas publicadas. Un Autor o un Colaborador obtiene solo sus propias entradas y ninguna página:
+  WordPress les niega la lista de páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de
+  revisión.
 - Para la línea de comandos: Node.js 22.16 o un 22.x posterior, o Node.js 24 o posterior. Node 23 no es compatible.
 
 ## Instala la herramienta

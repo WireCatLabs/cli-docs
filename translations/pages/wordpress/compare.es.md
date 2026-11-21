@@ -82,7 +82,7 @@ Notas sobre la columna de `wordpress`:
 - **Sin conexión.** `sync` copia las entradas y páginas con cualquier estado, también la papelera, con sus etiquetas,
   categorías y usuarios, en el almacén local de WireCat. El texto se guarda en Markdown. `posts list`, `posts search` y
   `posts show` leen esta copia, también con `--offline`. Tu rol en WordPress decide cuánto se copia. Un Administrador
-  obtiene todo. Un Editor obtiene todas las entradas y páginas, pero no los usuarios. Un Autor o un Colaborador obtiene
+  obtiene todo. Un Editor obtiene todas las entradas y páginas, y los autores con entradas publicadas, sin su correo. Un Autor o un Colaborador obtiene
   solo sus propias entradas y ninguna página, y un Colaborador solo sus borradores y sus entradas pendientes de
   revisión.
 - **Una búsqueda.** Las entradas están en el mismo almacén local que los mensajes, las notas y las reuniones de las
@@ -90,8 +90,8 @@ Notas sobre la columna de `wordpress`:
   parte.
 - **Borradores y publicación.** `posts create` siempre crea un borrador, desde un archivo Markdown o desde stdin.
   `posts publish` publica ahora, o más tarde con `--at-time`. `posts unpublish` devuelve una entrada a borrador.
-  `posts delete` mueve una entrada a la papelera, y `--allow-delete` la borra para siempre. Estos comandos escriben
-  entradas. Una página se lee desde la copia y solo se cambia con el grupo `api`.
+  `posts delete` mueve una entrada a la papelera, y `--allow-delete` la borra para siempre. Los mismos comandos
+  escriben páginas: `posts create --type page` crea una.
 - **Solo lectura.** `WCWP_READ_ONLY=1` rechaza cualquier escritura, digan lo que digan los ajustes. El nivel
   `readonly` hace lo mismo para una clave, como `posts` o `api`.
 - **Permitir, preguntar o rechazar.** Cada comando y cada operación de la API tiene su clave, como `posts.publish` o

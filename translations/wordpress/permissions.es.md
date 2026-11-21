@@ -56,6 +56,13 @@ lo ejecutes tú en una terminal.
 | `posts.delete.force` | `ask` | `posts delete --allow-delete`, que borra para siempre. |
 | Cada lectura | `allow` | `sync`, `posts list`, `posts show` y las demás lecturas. |
 
+Una escritura en una página pasa por las rutas de páginas, así que también comprueba sus claves: `pages.publish`
+cuando publica o programa la página, o cambia una página publicada o programada; `pages.delete` cuando borra la
+página, a la papelera o para siempre; y `pages.delete.force` con `--allow-delete`. Cada una pregunta por defecto. Tras
+un sí a la clave de `posts`, la misma acción en la página no se vuelve a preguntar. `posts publish` y
+`posts unpublish` todavía preguntan `posts.update` una segunda vez, para una entrada y una página, hasta la próxima
+versión de cli-core.
+
 ## El grupo api
 
 `wordpress blog api` alcanza cualquier operación de WordPress, y comprueba las mismas claves de publicar y borrar:

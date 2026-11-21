@@ -130,10 +130,10 @@ crear la contraseña.
 - Solo WordPress autoalojado con contraseñas de aplicación. Los sitios de WordPress.com no son compatibles.
 - Pegas la contraseña de aplicación tú. El inicio de sesión en el navegador está en la [hoja de ruta](./roadmap.md).
 - Un Autor o un Colaborador obtiene solo sus propias entradas y ninguna página: WordPress niega a los dos la lista de
-  páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de revisión. Para los dos, una entrada
-  que deja de estar a su alcance se queda en la copia como estaba: una borrada para siempre, o una entrada de un
-  Colaborador que publicó un Editor. Solo un Administrador obtiene la lista de usuarios. La sincronización avisa de
-  cada uno de estos huecos.
+  páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de revisión. Una entrada que deja de estar a
+  su alcance y que ya no pueden leer se queda en la copia como estaba, como una entrada de un Colaborador que publicó
+  un Editor. Solo un Administrador obtiene todos los usuarios con su correo; los demás roles obtienen los autores con
+  entradas publicadas. La sincronización avisa de cada uno de estos huecos.
 - Sin recuentos de visitas. WordPress no guarda ninguno, y las estadísticas de Jetpack no son compatibles.
   `posts stats` muestra solo lo que tiene la copia.
 - Los campos de plugins, como los de un plugin de SEO o de campos personalizados, no tienen opciones propias. El grupo

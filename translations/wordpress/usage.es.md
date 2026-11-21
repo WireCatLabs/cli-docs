@@ -56,11 +56,12 @@ papelera sigue en la copia, con su estado.
 
 Una sincronización nombra cada hueco: lo que tu rol de WordPress no puede leer. Con un inicio de sesión de Autor o
 Colaborador, la sincronización copia tus propias entradas y omite las páginas, porque WordPress niega a los dos la
-lista de páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de revisión. Para los dos, cada
-sincronización vuelve a leer todas tus entradas, no solo los cambios, y una entrada que deja de estar a tu alcance se
-queda en la copia como estaba: una borrada para siempre, o una entrada de un Colaborador que publicó un Editor. Solo
-un Administrador obtiene la lista de usuarios, así que la copia de un Editor tiene todas las entradas y páginas, pero
-ningún usuario. Inicia sesión como Administrador para tener una copia completa.
+lista de páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de revisión. Las sincronizaciones
+siguientes leen solo los cambios también para estos roles. Una vez al día la sincronización vuelve a leer, por su id,
+cada entrada que tu lista ya no muestra: una entrada borrada para siempre se marca como borrada, y una que ya no puedes
+leer (una entrada de un Colaborador que publicó un Editor) se queda en la copia como estaba. Solo un Administrador
+obtiene todos los usuarios con su correo. Los demás roles obtienen los autores con entradas publicadas, por su nombre.
+Inicia sesión como Administrador para tener una copia completa.
 
 `--max-pages` limita las peticiones de una ejecución. La siguiente sincronización sigue donde se detuvo.
 
@@ -105,7 +106,8 @@ wordpress blog channels list   # the site this profile copies
 ```
 
 `posts create --tags` y el filtro `tag:` usan los ids que muestra `tags list`. `users list` también nombra a la
-persona que el almacén conoce por el mismo correo, de tus otras herramientas de WireCat.
+persona que el almacén conoce por el mismo correo, de tus otras herramientas de WireCat. Solo la copia de un
+Administrador tiene los correos.
 
 ## Escribe un borrador
 
@@ -114,12 +116,14 @@ wordpress blog posts create --title "Version 3" --text-file notes.md --descripti
 cat notes.md | wordpress blog posts create --title "Version 3" --text-file -
 wordpress blog posts update 63 --title "Version 3 is out"
 wordpress blog posts update 63 --text-file notes-v2.md --slug version-3
+wordpress blog posts create --type page --title "Contact" --text-file contact.md
 ```
 
 `posts create` siempre crea un borrador. Publicar es un paso aparte. El texto es Markdown, de un archivo o de stdin con
 `--text-file -`. `--description` pone el extracto, el texto corto que muestran las listas. `--tags` toma ids de
 etiquetas y categorías y sustituye los que tenía la entrada. `--slug` es la última parte de la dirección de la
-entrada.
+entrada. `--type page` crea una página. Las demás escrituras averiguan por sí mismas si el id es una página. Una
+página no tiene etiquetas, así que `--tags` en una página se detiene con `content.write-unsupported`.
 
 `posts update` cambia los campos que nombras. Un cambio en una entrada publicada o programada es público, así que
 comprueba también `posts.publish`.

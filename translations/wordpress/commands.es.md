@@ -2452,40 +2452,21 @@ wordpress api users-delete [options]
 
 **Example:** `wordpress personal api users-delete --id <value> --reassign <value>`
 
-### `wordpress api users-application-passwords-get`
+### `wordpress api users-application-passwords-delete-all`
 
-getWpV2UsersByUserIdApplicationPasswordsByUuid — read (GET /wp/v2/users/{user_id}/application-passwords/{uuid})
-
-```sh
-wordpress api users-application-passwords-get [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--user-id <value>` | user_id. |
-| `--uuid <value>` | uuid. |
-| `--context <value>` | Scope under which the request is made; determines fields present in response. |
-
-**Example:** `wordpress personal api users-application-passwords-get --user-id <value> --uuid <value>`
-
-### `wordpress api users-application-passwords-update`
-
-postWpV2UsersByUserIdApplicationPasswordsByUuid — write (POST /wp/v2/users/{user_id}/application-passwords/{uuid})
+deleteWpV2UsersByUserIdApplicationPasswords — destructive (DELETE /wp/v2/users/{user_id}/application-passwords)
 
 **Changes something in the service.**
 
 ```sh
-wordpress api users-application-passwords-update [options]
+wordpress api users-application-passwords-delete-all [options]
 ```
 
 | Option | What it does |
 |---|---|
 | `--user-id <value>` | user_id. |
-| `--uuid <value>` | uuid. |
-| `--body <json>` | the request body as JSON; - reads it from stdin. |
-| `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Example:** `wordpress personal api users-application-passwords-update --user-id <value> --uuid <value>`
+**Example:** `wordpress personal api users-application-passwords-delete-all --user-id <value>`
 
 ### `wordpress api users-application-passwords-delete`
 
@@ -2503,21 +2484,6 @@ wordpress api users-application-passwords-delete [options]
 | `--uuid <value>` | uuid. |
 
 **Example:** `wordpress personal api users-application-passwords-delete --user-id <value> --uuid <value>`
-
-### `wordpress api users-application-passwords-introspect-list`
-
-getWpV2UsersByUserIdApplicationPasswordsIntrospect — read (GET /wp/v2/users/{user_id}/application-passwords/introspect)
-
-```sh
-wordpress api users-application-passwords-introspect-list [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--user-id <value>` | user_id. |
-| `--context <value>` | Scope under which the request is made; determines fields present in response. |
-
-**Example:** `wordpress personal api users-application-passwords-introspect-list --user-id <value>`
 
 ### `wordpress api users-me-get`
 
