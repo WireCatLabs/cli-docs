@@ -38,6 +38,8 @@ what comes next.
   issue you take on kept as your task.
 - **[Attio](./attio/index.md)**: your deals and the people and companies they name on your computer,
   searchable next to your messages, with everyone else in Attio found live.
+- **[HubSpot](./hubspot/index.md)**: your HubSpot deals with their contacts and companies on your computer, with what
+  changed since yesterday, searchable next to your messages.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -105,6 +107,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [Bitrix24 roadmap](./b24/roadmap.md)
 - [amoCRM roadmap](./amo/roadmap.md)
 - [Attio roadmap](./attio/roadmap.md)
+- [HubSpot roadmap](./hubspot/roadmap.md)
 - [Yandex Disk roadmap](./ydisk/roadmap.md)
 - [Asterisk roadmap](./pbx/roadmap.md)
 - [WordPress roadmap](./wordpress/roadmap.md)

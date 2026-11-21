@@ -710,7 +710,8 @@
     "b24 · deals, leads, contacts and companies": "b24 · сделки, лиды, контакты и компании",
     "pbx · your phone system’s calls, transcribed on your computer": "pbx · звонки вашей АТС, расшифровка на компьютере",
     "beeline · Cloud PBX calls, transcribed on your computer": "beeline · звонки Облачной АТС, расшифровка на компьютере",
-    "linear · your issues and projects, readable offline": "linear · тикеты и проекты, без интернета"
+    "linear · your issues and projects, readable offline": "linear · тикеты и проекты, без интернета",
+    "hubspot · deals, contacts and companies": "hubspot · сделки, контакты и компании"
   },
   "es": {
     "Personal chats": "Chats personales",
@@ -1418,6 +1419,7 @@
     "notion · pages and databases, searched on your computer": "notion · páginas y bases de datos, búsqueda en tu ordenador",
     "b24 · deals, leads, contacts and companies": "b24 · negociaciones, prospectos, contactos y empresas",
     "pbx · your phone system’s calls, transcribed on your computer": "pbx · las llamadas de tu centralita, transcritas en tu ordenador",
-    "linear · your issues and projects, readable offline": "linear · tus incidencias y proyectos, sin conexión"
+    "linear · your issues and projects, readable offline": "linear · tus incidencias y proyectos, sin conexión",
+    "hubspot · deals, contacts and companies": "hubspot · negociaciones, contactos y empresas"
   }
 }

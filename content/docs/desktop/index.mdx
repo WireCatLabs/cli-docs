@@ -53,7 +53,7 @@ sidebar opens it again at the step you reached.
 2. **Your computer:** the app checks the system, Node.js and npm. **Check again** repeats the check after
    you fix something.
 3. **Choose tools:** pick the services your agent should reach: Telegram, MAX, WhatsApp, Zoom,
-   Google Drive, Google Calendar, Memo, Email or Bitrix24. You can add or remove tools later on the **Tools** page.
+   Google Drive, Google Calendar, Memo, Email, Bitrix24 or HubSpot. You can add or remove tools later on the **Tools** page.
 4. **Install:** each tool is installed from npm and checked that it starts. One install runs at a time.
    A bar shows the progress: looking up packages, downloading, unpacking, setting up and checking that the
    tool starts, with the time so far and an estimate of what is left. A tool usually takes a minute or
@@ -110,6 +110,7 @@ The ways in, by tool:
 | Email | Your mail address first. Gmail signs in with Google (**Sign in with Google**, recommended), with no Google Cloud setup of your own. A Microsoft account opens Microsoft's sign-in. Other mail servers, and Gmail under **Other ways**, use an app password, a password made only for this program, with guided steps. [Prepare the mailbox](../mail/providers.md) shows how each provider makes one |
 | Bitrix24 | An incoming webhook or a local application from your portal. See [Bitrix24: a webhook or a local application](#bitrix24-a-webhook-or-a-local-application) |
 | amoCRM, Kommo | The account's address and a long-lived token from a private integration. See [amoCRM: a private integration](#amocrm-a-private-integration) |
+| HubSpot | A service key, or the token of a private app you already have, with read scopes, pasted in the window. The window lists the scopes and where to click. See [HubSpot: make a key](../hubspot/installation.md#make-a-key) |
 | Asterisk | Where your calls are: the path of Master.csv, or the address of a MySQL or PostgreSQL call database and a read-only user's password. Then the countries of your phone lines, so a caller without a country code is linked to the right contact |
 | Notion | A Notion token that you paste in the window. Then choose the pages and databases to copy. Until you choose one, Notion copies everything the token sees |
 | Yandex Disk | A Yandex OAuth token, from an app you register once at oauth.yandex.com. Then choose the folders to copy |

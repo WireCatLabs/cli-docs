@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
 import { structureProblems } from "@wirecat/cli-base/release"
 import { type Desktop, desktopProblems, registryProblems } from "./desktop-registry.ts"
-import { captureUpstream, localizeTool, siteOwnedFor } from "./localize.ts"
+import { captureUpstream, localizeTool, siteWrittenFor } from "./localize.ts"
 import { crossToolScenarios, readScenarios, type Scenario, scenarioPage } from "./scenarios.ts"
 import { publishSkills, writeSkillsIndex } from "./skills-index.ts"
 import { checkoutCommit, checkoutSource, sourceInstallation } from "./source-install.ts"
@@ -223,8 +223,8 @@ export const syncTool = (tool: Tool, root: string, ref?: string, captureOnly = f
 
     const docs = join(checkout, "docs")
     const allFiles = readdirSync(docs).filter((name) => name.endsWith(".md") && name !== "README.md")
-    // Site pages are written and checked here, not taken from the tool's release.
-    const owned = siteOwnedFor(tool.name).map(({ slug }) => slug)
+    // A site page written here replaces the release's page of that name; without one the release's page is used.
+    const owned = siteWrittenFor(root, tool.name).map(({ slug }) => slug)
     const files = allFiles.filter((name) => !owned.includes(name.slice(0, -3)))
     const guides = new Map<string, { text: string; ref: string }>()
     let changelogGuide: { text: string; ref: string } | undefined
