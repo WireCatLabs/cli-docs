@@ -197,6 +197,7 @@ describe("localized SEO", () => {
         "search",
         "recipes",
         "mirrors",
+        "mount",
         "mcp",
         "commands",
         "configuration",

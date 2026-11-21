@@ -58,6 +58,7 @@ const byTool: Record<string, Record<string, Names>> = {
   },
   ydisk: {
     mirrors: { en: "Mirrors", ru: "Зеркала", es: "Espejos" },
+    mount: { en: "Disk as a folder", ru: "Диск как папка", es: "Disk como carpeta" },
   },
 }
 

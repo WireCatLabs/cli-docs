@@ -12,6 +12,7 @@ export const ydiskDescriptions: Record<string, Record<string, string>> = {
     security: "What the Yandex Disk CLI keeps, where the token lives, what it reaches and what a run record hides.",
     changelog: "Read Yandex Disk CLI release notes, including new capabilities, changes and fixes.",
     mirrors: "Keep a folder on your computer and a Yandex Disk folder the same, both ways, with deleted files kept.",
+    mount: "Open a Yandex Disk folder or the whole Disk in your file manager, read-only, with nothing to download.",
     roadmap: "See what the Yandex Disk CLI does today and what is planned next, such as editing documents.",
     compare:
       "Compare ydisk with the Yandex Disk MCP server, rclone, Yandex Disk for Linux and yandex-disk-mcp by the job.",
@@ -30,6 +31,7 @@ export const ydiskDescriptions: Record<string, Record<string, string>> = {
     changelog: "История изменений CLI для Яндекс Диска: новые возможности, изменения и исправления.",
     mirrors:
       "Держите папку на компьютере и папку на Яндекс Диске одинаковыми в обе стороны, а удаленные файлы сохраняются.",
+    mount: "Откройте папку Яндекс Диска или весь Диск в файловом менеджере, только для чтения и без скачивания.",
     roadmap: "Что CLI для Яндекс Диска уже умеет и что запланировано дальше, например правка документов.",
     compare:
       "Сравнение ydisk с MCP-сервером Яндекс Диска, rclone, Яндекс Диском для Linux и yandex-disk-mcp по задачам.",
@@ -51,6 +53,8 @@ export const ydiskDescriptions: Record<string, Record<string, string>> = {
     changelog: "Lee las notas de versión de la CLI de Yandex Disk: novedades, cambios y correcciones.",
     mirrors:
       "Mantén igual una carpeta de tu ordenador y una de Yandex Disk, en ambos sentidos, y guarda los archivos borrados.",
+    mount:
+      "Abre una carpeta de Yandex Disk o todo el Disk en tu gestor de archivos, solo lectura y sin descargar nada.",
     roadmap: "Mira qué hace ya la CLI de Yandex Disk y qué está previsto, como editar documentos.",
     compare:
       "Compara ydisk con el servidor MCP de Yandex Disk, rclone, Yandex Disk para Linux y yandex-disk-mcp por tarea.",

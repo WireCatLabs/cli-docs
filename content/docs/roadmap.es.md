@@ -29,8 +29,8 @@ decidimos qué viene después.
 - **[Notion](./notion/index.md)**: tus páginas y bases de datos de Notion en tu ordenador, en la búsqueda sin conexión
   junto a tus mensajes.
 - **[Yandex Disk](./ydisk/index.md)**: el texto de las carpetas del Disk que elijas en tu ordenador, en la búsqueda sin
-  conexión, los archivos del Disk subidos, movidos y compartidos cuando lo permitas, y las carpetas que elijas iguales
-  en tu ordenador y en el Disk, en ambos sentidos.
+  conexión, los archivos del Disk subidos, movidos y compartidos cuando lo permitas, las carpetas que elijas o todo el
+  Disk iguales en tu ordenador y en el Disk, en ambos sentidos, y el Disk abierto como una carpeta de solo lectura.
 - **[amoCRM y Kommo](./amo/index.md)**: tus negociaciones y sus clientes en tu ordenador, con lo que cambió desde ayer,
   en la búsqueda junto a tus mensajes.
 - **[WordPress](./wordpress/index.md)**: las entradas y páginas de tu sitio WordPress en tu ordenador, en la búsqueda

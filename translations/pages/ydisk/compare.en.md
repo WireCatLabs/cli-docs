@@ -4,9 +4,10 @@ title: "Compared with other tools"
 
 Pick a tool for your Yandex Disk by the job you want done: find a document by what it says, keep a folder the same on
 your computer and on the Disk, back up whole folders, or let an AI agent work with your files. This page lists those
-jobs and shows which tool does each one. Marks for `ydisk` come from version 0.3.0, and marks for the other tools come
-from their own documentation and source. The `ydisk` marks and the folder sync rows were checked on 19 November 2026,
-the rest on 17 November 2026. A tool may do more than its pages say, and those cells are ➖.
+jobs and shows which tool does each one. Marks for `ydisk` come from version 0.4.0, and marks for the other tools come
+from their own documentation and source. The `ydisk` marks and the rows for the whole Disk, a mounted folder and many
+changes at once were checked on 21 November 2026, the other folder sync rows on 19 November 2026, and the rest on 17
+November 2026. A tool may do more than its pages say, and those cells are ➖.
 
 **On this page:**
 
@@ -60,22 +61,25 @@ listed no Yandex Disk server on 17 November 2026.
 | Delete to the trash and bring a file back | ✅ | 🟡⁵ | 🟡⁵ | ➖ | 🟡⁵ |
 | Make and close a public link | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Keep your own tags and notes on documents | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Keep a folder in step with the Disk** | | | | | |
+| **Your Disk on your computer** | | | | | |
 | Keep a copy of the files themselves on your computer | ✅⁶ | ❌ | ✅ | ✅ | 🟡⁷ |
-| Sync a folder both ways: a change on either side reaches the other | ✅ | ❌ | 🟡⁸ | ✅ | ❌ |
-| Delete a file on the other side only when it surely was deleted, otherwise delete nothing | ✅ | n/a | 🟡⁹ | ➖ | n/a |
-| Keep deleted and replaced files, and bring them back | ✅ | n/a | 🟡¹⁰ | ➖ | n/a |
+| Open Disk files in your file manager without downloading them first (a mount) | 🟡⁸ | ❌ | ✅⁹ | ❌ | ❌ |
+| Sync a folder both ways: a change on either side reaches the other | ✅ | ❌ | 🟡¹⁰ | ✅ | ❌ |
+| Sync the whole Disk, leaving out the folders you choose | ✅¹¹ | ❌ | 🟡¹² | ✅ | ❌ |
+| Delete a file on the other side only when it surely was deleted, otherwise delete nothing | ✅ | n/a | 🟡¹³ | ➖ | n/a |
+| Stop before many deletions or overwrites at once, until you allow them | ✅¹⁴ | n/a | 🟡¹⁵ | ➖ | n/a |
+| Keep deleted and replaced files, and bring them back | ✅ | n/a | 🟡¹⁶ | ➖ | n/a |
 | **Agents and safety** | | | | | |
 | An AI app works with your Disk through MCP | ✅ | ✅ | ❌ | ❌ | ✅ |
-| An agent with a terminal runs it, with JSON output and a skill | ✅ | n/a | 🟡¹¹ | ❌ | n/a |
-| An agent reads only, until you allow changes | 🟡¹² | ➖ | ➖ | n/a | ➖ |
-| Allow or refuse deletes and public links separately | ✅ | 🟡¹³ | ➖ | n/a | ➖ |
-| Let an agent sync a folder but not delete or replace files | ✅¹⁴ | n/a | ➖ | n/a | n/a |
+| An agent with a terminal runs it, with JSON output and a skill | ✅ | n/a | 🟡¹⁷ | ❌ | n/a |
+| An agent reads only, until you allow changes | 🟡¹⁸ | ➖ | ➖ | n/a | ➖ |
+| Allow or refuse deletes and public links separately | ✅ | 🟡¹⁹ | ➖ | n/a | ➖ |
+| Let an agent sync a folder but not delete or replace files | ✅²⁰ | n/a | ➖ | n/a | n/a |
 | See what a change would do before it is made | ✅ | ➖ | ✅ | ➖ | ➖ |
 | Use it from Claude or ChatGPT in the browser | ✅ | ➖ | ❌ | ❌ | ❌ |
 | **Setup** | | | | | |
 | Works with a free Yandex account | ✅ | ❌ | ✅ | ✅ | ✅ |
-| Sign in without registering your own Yandex app | ❌ | ✅ | ✅¹⁵ | ✅ | ❌ |
+| Sign in without registering your own Yandex app | ❌ | ✅ | ✅²¹ | ✅ | ❌ |
 
 ¹ Both keep the files themselves in a folder on your computer, so your system's own search finds them. Neither has a
 search of its own.
@@ -93,37 +97,61 @@ PDF, Word, Excel, CSV and text files, for search.
 
 ⁷ It downloads a file or a folder when asked, but it does not keep the copy in sync.
 
-⁸ `rclone sync` is one-way. `rclone bisync` syncs both ways, and its page calls it "an advanced command, so use with
+⁸ `files serve` shows a Disk folder, or the whole Disk, through the system's own WebDAV client: GNOME Files, Finder
+or `net use`. It is read-only on purpose: a writable folder would go around the trash, the versions and the stop on
+mass changes that a [mirror](./mirrors.md) has. Changes go through `files` commands or a mirror. See
+[open the Disk as a folder](./mount.md).
+
+⁹ `rclone mount` reads and writes. It needs FUSE: macFUSE or FUSE-T on macOS and WinFsp on Windows. Its page says
+many programs need `--vfs-cache-mode writes` to save files there.
+
+¹⁰ `rclone sync` is one-way. `rclone bisync` syncs both ways, and its page calls it "an advanced command, so use with
 care". Each run is started by you or a scheduler, and the first run needs `--resync`.
 
-⁹ `rclone bisync` refuses a run when either folder is empty, and stops without changes when more than 50% of the files
+¹¹ A mirror of `/` with `--ignore` for the paths you leave out, up to 100,000 files.
+
+¹² rclone works on the whole Disk (`yandex:`) and leaves paths out with filter flags such as `--exclude`. Both ways
+only through `rclone bisync`, which its page calls "an advanced command".
+
+¹³ `rclone bisync` refuses a run when either folder is empty, and stops without changes when more than 50% of the files
 would be deleted (`--max-delete`). Its docs do not describe a check that each deletion was made on purpose.
 
-¹⁰ A file changed on both sides is kept twice, renamed `.conflict1` and `.conflict2`. A deleted or replaced file is
+¹⁴ A sync stops before it deletes more than 10 files or replaces more than 50 existing files, however big the
+mirror. Only you can allow more, with `--allow-deletions` and `--replace`, never an agent over MCP. Each replaced file
+is kept as a version first.
+
+¹⁵ `rclone bisync` aborts without changes when more than 50% of the files would be deleted (`--max-delete`).
+`rclone sync` limits deletes only when you set `--max-delete`, and then stops the operation in progress. Its pages
+describe no stop before many overwrites.
+
+¹⁶ A file changed on both sides is kept twice, renamed `.conflict1` and `.conflict2`. A deleted or replaced file is
 kept only when you set `--backup-dir1` and `--backup-dir2`, and there is no command to bring it back. On Yandex Disk,
 rclone's deletes go to the trash unless `--yandex-hard-delete` is set.
 
-¹¹ `rclone lsjson` and other commands answer in JSON, but there is no skill for agents.
+¹⁷ `rclone lsjson` and other commands answer in JSON, but there is no skill for agents.
 
-¹² The MCP server offers every command that changes the Disk, and a permission set to `ask` runs without asking over MCP. For a read-only agent, set `YDISK_READ_ONLY=1` or set the permissions to `deny`. `mcp add` asks for `--allow-writes` before it connects an agent.
+¹⁸ The MCP server offers every command that changes the Disk, and a permission set to `ask` runs without asking over MCP. For a read-only agent, set `YDISK_READ_ONLY=1` or set the permissions to `deny`. `mcp add` asks for `--allow-writes` before it connects an agent.
 
-¹³ By default the agent asks you before each change, including deletes and public links.
+¹⁹ By default the agent asks you before each change, including deletes and public links.
 
-¹⁴ Set `files.delete` to `deny` for the agent. Its syncs then send and bring down new files, and list each replace or
+²⁰ Set `files.delete` to `deny` for the agent. Its syncs then send and bring down new files, and list each replace or
 deletion they skipped. Over MCP a permission at `ask` lets the change through, and an agent cannot pass
-`--allow-deletions` or `--repin`.
+`--allow-deletions`, `--replace` or `--repin`.
 
-¹⁵ rclone signs in through its own Yandex app unless you give it your own `client_id` ([rclone's Yandex page](https://rclone.org/yandex/)). In October 2026 users reported errors that went away with their own
+²¹ rclone signs in through its own Yandex app unless you give it your own `client_id` ([rclone's Yandex page](https://rclone.org/yandex/)). In October 2026 users reported errors that went away with their own
 app ([issue 10067](https://github.com/rclone/rclone/issues/10067)).
 
 <a id="where-another-tool-fits-better"></a>
 
 ## Where another tool fits better
 
-- **A one-way backup of whole folders, photos and videos included, or the Disk mounted as a drive**: rclone or Yandex
-  Disk for Linux. rclone has `mount`, and `ydisk` does not. Yandex Disk for Linux syncs the whole Disk to one folder on
-  your computer, except the folders you exclude. `ydisk` mirrors only the folders you choose, both ways, and keeps the
-  versions it replaces.
+- **The Disk mounted as a drive that programs can also save to**: rclone `mount`. `ydisk` mounts read-only on
+  purpose, so a program or a mistaken `rm -rf` cannot delete files on the Disk through the folder.
+- **A one-way backup of whole folders, photos and videos included**: rclone `sync` or `copy`.
+- **A whole Disk of more than 100,000 files on your computer, kept in sync by a background service**: Yandex Disk for
+  Linux. A `ydisk` mirror holds up to 100,000 files, not counting the ones you leave out, and syncs when you run it or
+  while `mirrors watch` runs. In return it keeps the versions it replaces and stops before many deletions or
+  overwrites at once.
 - **No install and no app to register, and you already pay for Yandex 360**: Yandex Disk MCP. Your AI app connects
   to Yandex's server with a ready sign-in link.
 - **Uploading videos or folders of many gigabytes from an agent**: yandex-disk-mcp. It runs long uploads in the
@@ -154,14 +182,18 @@ If `ydisk` fits, start with [installation](./installation.md).
 
 ## How each mark was checked
 
-`ydisk` marks were checked on the published 0.3.0 package with an empty home folder and no sign-in: `ydisk commands`,
+`ydisk` marks were checked on the published 0.4.0 package with an empty home folder and no sign-in: `ydisk commands`,
 each command's `--help`, and `--dry-run` on each change to read the permission it checks. Search by meaning needs a
 text model downloaded once, and the browser connection needs your own tunnel. For the folder sync rows,
 `mirrors sync --dry-run` names the permissions a sync checks: `files.upload` for each file it sends and `files.delete`
 for each file it replaces or moves to a trash. Without a sign-in the MCP server offers only a few tools, so what an
 agent may run over MCP was read in the source of
 [mirrors.ts](https://github.com/WireCatLabs/ydisk-cli/blob/v0.3.0/src/commands/mirrors.ts): adding, removing and
-`versions` are not offered, and `--allow-deletions` and `--repin` are for the owner only.
+`versions` are not offered, and `--allow-deletions`, `--replace` and `--repin` are for the owner only. The same
+`--help` shows `mirrors add --ignore` and `files serve`. `files serve` runs until it is stopped, as `mirrors watch`
+does, so it is not offered over MCP
+([mount.ts](https://github.com/WireCatLabs/ydisk-cli/blob/v0.4.0/src/commands/mount.ts)). The limits of 10 deletions,
+50 replacements and 100,000 files come from the 0.4.0 changelog and the help.
 
 Other tools' marks come from their own pages. A search that finds nothing in those pages gives ➖, never ❌, except
 where a tool's list of commands or tools is complete.
@@ -174,17 +206,21 @@ where a tool's list of commands or tools is complete.
   subscription". The agent asks before a change "by default". The page shows set-up for Codex and Claude Code, not
   for browser apps, so that row is ➖. It runs on Yandex's servers, so nothing is searched offline.
 - **rclone** ([Yandex page](https://rclone.org/yandex/), [commands](https://rclone.org/commands/),
-  [bisync](https://rclone.org/bisync/)). No command searches inside files. It has `copy`, `move`, `sync` and `mount`.
+  [bisync](https://rclone.org/bisync/), [mount](https://rclone.org/commands/rclone_mount/),
+  [filtering](https://rclone.org/filtering/), [flags](https://rclone.org/docs/)). No command searches inside files. It has `copy`, `move`, `sync` and `mount`.
   `rclone link` makes a public link. `delete` goes to the trash unless `--yandex-hard-delete`, and `cleanup` empties
   it, with no restore. `--dry-run` on every change. No MCP command. The sign-in uses rclone's own client unless you set
   `client_id`. `bisync` is "an advanced command, so use with care". It refuses a run when either folder is empty, aborts above
   `--max-delete` (50% by default) "without making any changes", renames both copies of a conflict, and keeps deleted
-  files only with `--backup-dir1` and `--backup-dir2`. Neither page mentions file versions.
+  files only with `--backup-dir1` and `--backup-dir2`. Neither page mentions file versions. `mount` lists
+  `--read-only` as an option, so it writes by default. `--max-delete` for other commands: "not to delete more than N
+  files", then "stop the operation in progress".
 - **Yandex Disk for Linux** ([console commands](https://yandex.ru/support/disk-desktop-linux/cli-commands.html)).
   Its full command list: `start`, `stop`, `status`, `sync`, `publish`, `unpublish`, `token` and set-up options. No
   search, move, delete or trash command, and changes are made in the synced folder. `start` and `sync` sync «все
   папки, кроме указанных в списке исключений» (all folders except those in `exclude-dirs`). Two-way sync is the default: `--read-only` is the
-  option that stops changes on the Disk's side. Its pages say nothing about deleted files, a trash or file versions,
+  option that stops changes on the Disk's side. There is no mount command, and no file limit or stop before many
+  deletions is described. Its pages say nothing about deleted files, a trash or file versions,
   so those rows are ➖.
 - **yandex-disk-mcp** ([README](https://github.com/gorokhovdenis/yandex-disk-mcp/blob/main/README.md)). Its full
   tool list: info, list, metadata, compare, create folder, upload, download, delete, copy, move, last uploaded. No

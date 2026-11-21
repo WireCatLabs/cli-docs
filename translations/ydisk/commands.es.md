@@ -981,7 +981,7 @@ ydisk identities link <document> <disk-id> <person>
 
 ## `ydisk files`
 
-the files on Yandex Disk, live: list, read, download, upload and change them
+the files on Yandex Disk, live: list, read, download, upload, change, serve
 
 ### `ydisk files list`
 
@@ -1184,26 +1184,48 @@ ydisk files unpublish <path>
 
 **Example:** `ydisk personal files unpublish /Documents/plan.pdf`
 
+### `ydisk files serve`
+
+show a Disk folder, or the whole Disk, as a read-only folder on this computer: it serves the folder over WebDAV on 127.0.0.1 behind a random address, which the system's own client mounts; nothing can be written, renamed or deleted through it. Runs until Ctrl-C or --timeout
+
+```sh
+ydisk files serve [path] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | optional | the Disk folder to show, like /Documents; the whole Disk without it. |
+
+| Option | What it does |
+|---|---|
+| `--port <port>` | the local port to serve on; a free one without it. |
+
+**Example:** `ydisk personal files serve`, `ydisk personal files serve /Documents --port 8090`
+
 ## `ydisk mirrors`
 
 keep local folders and Yandex Disk folders the same, both ways, file by file
 
 ### `ydisk mirrors add`
 
-mirror a local folder and a Disk folder both ways: checks the Disk folder and saves the pair; nothing is copied until mirrors sync
+mirror a local folder and a Disk folder both ways: checks the Disk folder and saves the pair; nothing is copied until mirrors sync. / mirrors the whole Disk into a folder of its own
 
 **Changes something on this computer only.**
 
 ```sh
-ydisk mirrors add <folder> <path>
+ydisk mirrors add <folder> <path> [options]
 ```
 
 | Argument | | What it is |
 |---|---|---|
-| `folder` | required | the Disk folder, by its path, like /Notes. |
+| `folder` | required | the Disk folder, by its path, like /Notes, or / for the whole Disk. |
 | `path` | required | the local folder. |
 
-**Example:** `ydisk personal mirrors add /Notes ./notes`
+| Option | What it does |
+|---|---|
+| `--ignore <path>` | leave this path out on both sides, a path or a glob; repeat it for more: a name at any depth (node_modules, *.iso) or a path from the mirror's root (/Photos). |
+
+**Example:** `ydisk personal mirrors add /Notes ./notes`, `ydisk personal mirrors add / ~/YandexDisk --ignore Photos --ignore "*.iso"`
 
 ### `ydisk mirrors list`
 
@@ -1249,7 +1271,7 @@ ydisk mirrors preview [id] [options]
 
 ### `ydisk mirrors sync`
 
-sync mirrors both ways once: a change on one side is copied to the other, a deletion goes to the other side's trash, and a file changed on both sides is reported and left for --keep; mirrors preview shows the plan first
+sync mirrors both ways once: a change on one side is copied to the other, a deletion goes to the other side's trash, and a file changed on both sides is reported and left for --keep; mirrors preview shows the plan first. A run stops before its deadline, keeps what it did, and the next sync goes on from there
 
 **Changes something in the service.**
 
@@ -1265,6 +1287,7 @@ ydisk mirrors sync [id] [options]
 |---|---|
 | `--keep <side>` | settle each conflict: keep the local file, the Disk's, or both. One of: `local`, `disk`, `both`. |
 | `--allow-deletions <count>` | let this run delete up to this many files when the guard stops it. |
+| `--replace` | let this run overwrite more than 50 existing files when the guard stops it; each is kept as a version first. |
 | `--repin` | the Disk or local folder was replaced and the new one is right: record it and sync. |
 
 **Example:** `ydisk personal mirrors sync`, `ydisk personal mirrors sync 1a2b3c4d --keep disk`
@@ -1288,6 +1311,27 @@ ydisk mirrors watch [id] [options]
 | `--every <duration>` | how often to ask Yandex Disk whether anything changed. Default: `60s`. |
 
 **Example:** `ydisk personal mirrors watch`, `ydisk personal mirrors watch 1a2b3c4d --every 2m --jsonl`
+
+### `ydisk mirrors update`
+
+add paths to what a mirror ignores, as mirrors list shows it. --clear empties the list first, so --clear with --ignore keeps only the paths given: that is how one path stops being ignored. An ignored path is left alone on both sides and never deleted, now or later; one no longer ignored is synced as a new folder, copying one-sided files and reporting different ones as conflicts, deleting nothing
+
+**Changes something on this computer only.**
+
+```sh
+ydisk mirrors update <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+
+| Option | What it does |
+|---|---|
+| `--ignore <path>` | leave this path out on both sides, a path or a glob; repeat it for more: a name at any depth (node_modules, *.iso) or a path from the mirror's root (/Photos). |
+| `--clear` | empty the list before adding any --ignore paths; alone, sync every path again. |
+
+**Example:** `ydisk personal mirrors update 1a2b3c4d --ignore Photos --ignore "*.iso"`, `ydisk personal mirrors update 1a2b3c4d --clear --ignore Photos`
 
 ### `ydisk mirrors remove`
 
@@ -1386,9 +1430,9 @@ ydisk api show <operation>
 
 | Argument | | What it is |
 |---|---|---|
-| `operation` | required | the operation, as api list prints it. |
+| `operation` | required | the operation as api list prints it (quoted), its old name, or its operation id. |
 
-**Example:** `ydisk personal api show disk-get --json`
+**Example:** `ydisk personal api show "disk-get" --json`
 
 ### `ydisk api disk-get`
 

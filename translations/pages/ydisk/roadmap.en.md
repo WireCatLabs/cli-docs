@@ -12,7 +12,9 @@ feature: it may already be on the way. The order can change, and there are no da
 your computer, so you and your agent search it by words, by meaning and by file name, even without the internet. The
 same tool lists, downloads, uploads, moves and shares files on the Disk within the permissions you set, over the
 command line or MCP. A folder you [mirror](./mirrors.md) stays the same on your computer and on the Disk, both ways,
-and a file a sync deletes or replaces is kept. See [start here](./index.md).
+and a file a sync deletes or replaces is kept. A mirror can hold the whole Disk, with the folders you choose left
+out, and stops before many deletions or overwrites at once until you allow them. You can also
+[open the Disk as a folder](./mount.md) in your file manager, read-only. See [start here](./index.md).
 
 ## Next
 
