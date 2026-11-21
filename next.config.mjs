@@ -11,6 +11,9 @@ const config = {
   output: "export",
   images: { unoptimized: true },
   reactStrictMode: true,
+  // Next starts one worker per core but one, about 23 here, each 1 to 2 GB, and several agents build at once on one
+  // machine. CI keeps Next's default.
+  ...(process.env.CI ? {} : { experimental: { cpus: 4 } }),
 }
 
 export default withMDX(config)
