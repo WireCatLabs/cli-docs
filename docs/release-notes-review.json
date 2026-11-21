@@ -60,10 +60,10 @@
     "conclusion": "Reviewed pbx 0.8.0 from its changelog and the docs diff since v0.7.2. May break callers: `meetings transcribe` answers the report the other phone CLIs give (`audio_ms` instead of `audio_seconds`, a `ref` on each failed call, a call without a recording under `failed` with `recording.missing`, no `without_recording`). The overview (index) is rewritten as a sales page: the reader's gain, the ideas a newcomer would not guess, an example from the bundled sample call log, why pbx against the tools on its comparison page, a start and plain limits. RU/ES index retranslated, changelog and commands updated and accepted, and the changelog link correction moved to v0.8.0. The roadmap did not change."
   },
   "wordpress": {
-    "version": "v0.1.2",
+    "version": "v0.2.0",
     "roadmapSha256": "db37ad928f544284aafbd4243f54c61e37921d15919512911ebb6877079cfbfe",
-    "reviewedAt": "2026-11-19",
-    "conclusion": "Reviewed wordpress 0.1.2 from its changelog and the docs diff since v0.1.1: one fix, no new commands. An Author or Contributor sign-in syncs their own posts again; the pages stay out of reach, as WordPress refuses the pages list without the right to edit pages, and the sync names that gap. The shipped item \"Full sync for Authors and Contributors\" left Next; the rest of the roadmap did not change. RU and ES changelog, index, usage, troubleshooting and roadmap updated and accepted. The release's installation guide still says the posts sync stays partial for both roles, so a site correction gives the index's wording in EN, RU and ES, and the comparison page says their own posts too."
+    "reviewedAt": "2026-11-21",
+    "conclusion": "Reviewed wordpress 0.2.0 from its changelog and the docs diff since v0.1.2: pages are written (posts create --type page and every write to a page), an Editor or Author gets the authors with published posts, an Author or Contributor sync reads only the changes and marks a post deleted for good only after a direct read answers 404, and the api group drops the application-password calls whose answers hold a secret. The roadmap did not change. RU and ES changelog, commands, index, installation, permissions, troubleshooting and usage updated and accepted. The release's installation guide now gives the index's wording, so the site correction for it is gone."
   },
   "attio": {
     "version": "v0.2.2",

@@ -209,7 +209,7 @@
     "repo": "WireCatLabs/wordpress-cli",
     "package": "@wirecat/wordpress-cli",
     "lang": "en",
-    "docsRef": "v0.1.2",
+    "docsRef": "v0.2.0",
     "category": "content",
     "summary": {
       "en": "Read and write your self-hosted WordPress site from the terminal or your AI agent: posts, pages, tags and drafts, with a local copy to search offline.",

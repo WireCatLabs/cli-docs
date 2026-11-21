@@ -78,14 +78,14 @@ Notes on the `wordpress` column:
 - **Without the internet.** `sync` copies posts and pages with every status, the trash too, with their tags,
   categories and users, into the WireCat local store. Text is kept as Markdown. `posts list`, `posts search` and
   `posts show` read this copy, with `--offline` too. Your WordPress role decides how much is copied. An Administrator
-  gets everything. An Editor gets every post and page but no users. An Author or Contributor gets only their own posts
+  gets everything. An Editor gets every post and page, and the authors with published posts without their e-mail. An Author or Contributor gets only their own posts
   and no pages, and a Contributor only their drafts and posts waiting for review.
 - **One search.** The posts sit in the same local store as the messages, notes and meetings of the other WireCat tools
   on the same computer. `posts search` itself finds posts only, so this row is partly.
 - **Drafts and publishing.** `posts create` always makes a draft, from a Markdown file or from stdin. `posts publish`
   publishes now, or later with `--at-time`. `posts unpublish` takes a post back to a draft. `posts delete` moves a post
-  to the trash, and `--allow-delete` deletes it for good. These commands write posts. A page is read from the copy, and
-  is changed only through the `api` group.
+  to the trash, and `--allow-delete` deletes it for good. The same commands write pages: `posts create --type page`
+  makes one.
 - **Read-only.** `WCWP_READ_ONLY=1` refuses every write, whatever the settings say. The `readonly` level does the same
   for one key, such as `posts` or `api`.
 - **Allow, ask or refuse.** Each command and each API operation has its key, such as `posts.publish` or

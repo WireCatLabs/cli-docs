@@ -2849,32 +2849,6 @@
     }
   },
   {
-    "tool": "wordpress",
-    "slug": "installation",
-    "source": "https://github.com/WireCatLabs/wordpress-cli/blob/v0.1.2/docs/index.md#limits",
-    "reason": "wordpress 0.1.2 syncs an Author's or Contributor's own posts (CHANGELOG, Fixed); its installation guide still says their posts sync stays partial. Wording follows the release's own index limits.",
-    "replacements": {
-      "en": [
-        {
-          "before": "An Author or Contributor gets only part of the site: WordPress\n  refuses them the pages list, so the posts sync stays partial. A Contributor also sees only their own posts.",
-          "after": "An Author or Contributor gets only their own posts, and no pages:\n  WordPress refuses them the pages list. A Contributor gets only their drafts and posts waiting for review."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Автор или участник получает только часть сайта:\n  WordPress не отдает им список страниц, поэтому синхронизация постов остается неполной. Участник к тому же видит\n  только свои посты.",
-          "after": "Автор или участник получает только свои\n  посты и не получает страниц: WordPress не отдает им список страниц. Участник получает только свои черновики и посты\n  на проверке."
-        }
-      ],
-      "es": [
-        {
-          "before": "Un Autor o un Colaborador\n  obtiene solo una parte del sitio. WordPress les niega la lista de páginas, así que la sincronización de entradas\n  queda parcial. Un Colaborador además ve solo sus propias entradas.",
-          "after": "Un Autor o un Colaborador\n  obtiene solo sus propias entradas y ninguna página: WordPress les niega la lista de páginas. Un Colaborador obtiene\n  solo sus borradores y sus entradas pendientes de revisión."
-        }
-      ]
-    }
-  },
-  {
     "tool": "linear",
     "slug": "security",
     "source": "https://github.com/WireCatLabs/linear-cli/blob/v0.1.0/docs/security.md",
