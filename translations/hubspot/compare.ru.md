@@ -55,7 +55,7 @@ title: "Сравнение с другими инструментами"
 | Создавать и менять контакты и компании | ✅ | [✅](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [✅](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#core-commands) | [✅](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L191-L238) | [✅](https://composio.dev/toolkits/hubspot) |
 | Перенести сделку на стадию по названию стадии | ✅ | [🟡](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [🟡](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#properties) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [🟡](https://composio.dev/toolkits/hubspot) |
 | Закрыть сделку проигранной с причиной за один шаг | ✅ | [🟡](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [🟡](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#properties) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [🟡](https://composio.dev/toolkits/hubspot) |
-| Поставить задачу или добавить заметку к сделке | 🟡 | [✅](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [✅](https://developers.hubspot.com/docs/build-with-ai/agent-cli#when-to-use-the-agent-cli) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [✅](https://composio.dev/toolkits/hubspot) |
+| Поставить задачу или добавить заметку к сделке | ✅ | [✅](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [✅](https://developers.hubspot.com/docs/build-with-ai/agent-cli#when-to-use-the-agent-cli) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [✅](https://composio.dev/toolkits/hubspot) |
 | Вызвать любую другую операцию CRM API HubSpot | ✅ | [🟡](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#available-tools) | [🟡](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#core-commands) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [🟡](https://composio.dev/toolkits/hubspot) |
 | **Сводки и изменения** | | | | | |
 | Воронка: сколько сделок дошло до каждой стадии | ✅ | ➖ | ➖ | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | ➖ |
@@ -100,10 +100,11 @@ title: "Сравнение с другими инструментами"
 - **Другой ответственный.** Ключ не называет человека, поэтому `hubspot` не может отличить ваши записи от записей
   коллеги. Назначение ответственного у любой записи, командой или через `api`, запрещено, пока вы не поставите
   `crm.assign-others` на `allow`.
-- **Задачи, заметки и тикеты.** Своей команды для них нет. Они записываются через `api`, например
-  `api notes-create` или `api tasks-create`, с телом в JSON, поэтому в этих строках частично. Запись через API в
-  терминале сначала спрашивает, а через MCP `ask` ее пропускает. Заметки, звонки, письма, встречи и задачи по вашим
-  сделкам читаются через `activities list`, когда вы включите настройку активностей.
+- **Задачи, заметки и тикеты.** `activities create` добавляет заметку или задачу к сделке, контакту или компании, а
+  `activities close` отмечает задачу выполненной. Для тикетов своей команды нет: они записываются через `api`,
+  например `api tickets-create`, с телом в JSON, поэтому в этой строке частично. Запись через API в терминале сначала
+  спрашивает, а через MCP `ask` ее пропускает. Заметки, звонки, письма, встречи и задачи по вашим сделкам читаются
+  через `activities list`, когда вы включите настройку активностей.
 - **Весь API.** `api list` показывает все операции CRM API HubSpot, всего 157, каждая это
   команда со своим ключом разрешения. Агенту через MCP они тоже доступны.
 - **Без интернета.** `sync` копирует воронки, сделки с их контактами и компаниями и лиды, а потом спрашивает только

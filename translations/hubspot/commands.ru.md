@@ -111,30 +111,6 @@ hubspot session list
 
 **Example:** `hubspot session list`, `hubspot session list --json`
 
-## `hubspot account`
-
-this profile on this computer
-
-### `hubspot account remove`
-
-sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
-
-**Changes something on this computer only.**
-
-```sh
-hubspot account remove [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--keep-data` | leave what the store holds of this account, still searchable. |
-| `--delete-data` | delete what the store and the tool's own files hold of this account. |
-| `--dry-run` | list what it would remove and keep, and change nothing. |
-
-**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: hubspot commands info account remove
-
-**Example:** `hubspot personal account remove --keep-data --dry-run`, `hubspot personal account remove --delete-data --yes`
-
 ## `hubspot sync`
 
 bring the CRM's copy in the local store up to date: pipelines, companies, contacts, deals and leads that changed since the last sync, or everything with --rescan; a run stops before its deadline or --max-pages and the next one goes on from there
@@ -908,6 +884,50 @@ hubspot activities list [query] [options]
 
 **Example:** `hubspot work activities list overdue:true`, `hubspot work activities list due:today --json`, `hubspot work activities list deal:12 status:done`
 
+### `hubspot activities create`
+
+add a comment or task to records of the CRM, then store the CRM's copy of it when the activities setting is on
+
+**Changes something in the service.**
+
+```sh
+hubspot activities create <kind> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `kind` | required | what to add. One of: `comment`, `task`. |
+
+| Option | What it does |
+|---|---|
+| `--subject <ref>` | a record it is on: deal:<id> or lead:<id> as a list shows it, or person:<id> or organization:<id> by the CRM's id as people list and organizations list print it; repeat it for more. Default: ``. |
+| `--title <title>` | a task's title, needed for a task; a comment's title where the CRM keeps one. |
+| `--text <text>` | a comment's text, needed for a comment; a task's description. |
+| `--due <time>` | a task's deadline: an ISO 8601 time, a date (its end), today, or 2h, 3d from now; in your time zone. |
+| `--owner <user>` | the CRM user a task is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+
+**Returns:** crm activity write — operation_id, stored, activity, untrusted; every field: hubspot commands info activities create
+
+**Example:** `hubspot work activities create comment --subject deal:12 --text "Example: asked for a discount"`, `hubspot work activities create task --subject deal:12 --title "Example: call back" --due 2026-12-01T10:00`
+
+### `hubspot activities close`
+
+mark a task done in the CRM, then store the CRM's copy of it when the activities setting is on
+
+**Changes something in the service.**
+
+```sh
+hubspot activities close <task>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `task` | required | the task's id in the CRM, as activities list prints its external_id. |
+
+**Returns:** crm activity write — operation_id, stored, activity, untrusted; every field: hubspot commands info activities close
+
+**Example:** `hubspot work activities close 42`
+
 ## `hubspot changes`
 
 what changed in the CRM's deals, leads, activities and contacts, as the syncs copied it
@@ -989,6 +1009,30 @@ hubspot search all <query> [options]
 **Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: hubspot commands info search all
 
 **Example:** `hubspot work search all Example LLC`, `hubspot work search all website --only crm --json`
+
+## `hubspot account`
+
+this profile on this computer
+
+### `hubspot account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something on this computer only.**
+
+```sh
+hubspot account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: hubspot commands info account remove
+
+**Example:** `hubspot personal account remove --keep-data --dry-run`, `hubspot personal account remove --delete-data --yes`
 
 ## `hubspot api`
 

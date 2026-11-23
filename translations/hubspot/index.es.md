@@ -93,8 +93,8 @@ ordenador, con tu propio inicio de sesión y tus propios permisos de HubSpot (el
 ## Qué puede hacer
 
 - **Negociaciones y leads:** listarlos por etapa, embudo, propietario o fecha, mostrar uno con sus personas, crear,
-  actualizar, mover, cerrar como ganada o perdida y exportar una lista a un archivo CSV para una hoja de cálculo. Los
-  leads necesitan Sales Hub Professional o Enterprise. [Úsalo](./usage.md)
+  actualizar, mover y cerrar negociaciones como ganadas o perdidas y exportar una lista a un archivo CSV para una hoja
+  de cálculo. Los leads necesitan Sales Hub Professional o Enterprise. [Úsalo](./usage.md)
 - **El embudo:** cada etapa con su número y su suma, cuántas llegaron a ella y siguieron, y la tasa de éxito en el
   periodo que elijas. [Úsalo](./usage.md#read-your-deals)
 - **Contactos, empresas y propietarios:** encontrar cualquiera en la cuenta, crear y actualizar contactos y empresas.
@@ -120,7 +120,8 @@ ordenador, con tu propio inicio de sesión y tus propios permisos de HubSpot (el
 
 ## Empieza en unos minutos
 
-Pega esto en tu agente:
+En WireCat Desktop, instala HubSpot en la página **Herramientas** e inicia sesión en **Gestionar**, como
+muestra [la instalación](./installation.md#in-wirecat-desktop). O pega esto en tu agente:
 
 ```text prompt
 Instala hubspot con npm install -g @wirecat/hubspot-cli. Ayúdame a crear una clave de servicio de HubSpot y a ejecutar hubspot work session start, luego sincroniza y muéstrame mis negociaciones abiertas.

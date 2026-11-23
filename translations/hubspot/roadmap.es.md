@@ -17,8 +17,6 @@ comandos o por MCP. Cada operación de la API del CRM de HubSpot es un comando p
 
 ## Lo siguiente
 
-- Conectar HubSpot en WireCat Desktop pegando la misma clave, sin terminal. Llega con la próxima versión de Desktop.
-  Hoy `hubspot work setup` hace las mismas preguntas.
 - Iniciar sesión como tú en el navegador, para que `hubspot` actúe con los permisos de tu propio usuario de HubSpot y
   `owner:me` encuentre tus negociaciones. Hoy la clave pertenece a la cuenta.
 

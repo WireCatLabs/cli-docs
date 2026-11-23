@@ -100,8 +100,7 @@ hubspot work organizations update 9 --name "Example LLC"
 
 У контакта одна почта и два номера, телефон и мобильный. У компании один номер и нет почты. `--phone` и `--email`
 заменяют весь список, поэтому один `--phone` у контакта стирает его мобильный номер, а `--name` задает и имя, и
-фамилию. Заметки, задачи,
-лиды и контакты и компания сделки записываются через [API](#call-the-api).
+фамилию. Лиды, тикеты и контакты и компания сделки записываются через [API](#call-the-api).
 
 Ключ принадлежит аккаунту, а не вам, поэтому назначение ответственного через `--owner` проверяет `crm.assign-others`,
 а он стоит на `deny`, пока вы его не разрешите ([разрешения](./permissions.md)). HubSpot не принимает ключ
@@ -117,6 +116,17 @@ hubspot work organizations update 9 --name "Example LLC"
 hubspot work config set crm.hubspot:12345678.activities on
 hubspot work sync
 hubspot work activities list overdue:true
+```
+
+Заметку или задачу можно поставить на сделку по ссылке на источник, а на контакт или компанию по id в HubSpot, по
+одному `--subject` на каждую запись. Она записывается в HubSpot, включена настройка активностей или нет, а в
+локальном хранилище сохраняется, только когда настройка включена. Чтобы закрыть задачу, нужен ее id из
+`activities list`:
+
+```sh
+hubspot work activities create comment --subject deal:12 --text "Agreed on the price"
+hubspot work activities create task --subject deal:12 --subject person:4021 --title "Send the contract" --due 2026-12-01
+hubspot work activities close tasks:5501
 ```
 
 `changes list` показывает, какие изменения увидели синхронизации: созданные, перенесенные, выигранные и проигранные
@@ -146,7 +156,7 @@ hubspot work api deals-list --all
 `--dry-run` показывает ключи, ничего не отправляя:
 
 ```sh
-hubspot work api notes-create --body-file note.json --dry-run
+hubspot work api tickets-create --body-file ticket.json --dry-run
 ```
 
 ```sh

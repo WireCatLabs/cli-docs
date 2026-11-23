@@ -57,7 +57,7 @@ para toda la cuenta y no para una persona
 | Crear y actualizar contactos y empresas | ✅ | [✅](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [✅](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#core-commands) | [✅](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L191-L238) | [✅](https://composio.dev/toolkits/hubspot) |
 | Mover una negociación a una etapa por el nombre de la etapa | ✅ | [🟡](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [🟡](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#properties) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [🟡](https://composio.dev/toolkits/hubspot) |
 | Cerrar una negociación como perdida, con su motivo, en un solo paso | ✅ | [🟡](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [🟡](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#properties) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [🟡](https://composio.dev/toolkits/hubspot) |
-| Poner una tarea o añadir una nota en una negociación | 🟡 | [✅](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [✅](https://developers.hubspot.com/docs/build-with-ai/agent-cli#when-to-use-the-agent-cli) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [✅](https://composio.dev/toolkits/hubspot) |
+| Poner una tarea o añadir una nota en una negociación | ✅ | [✅](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#write-access) | [✅](https://developers.hubspot.com/docs/build-with-ai/agent-cli#when-to-use-the-agent-cli) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [✅](https://composio.dev/toolkits/hubspot) |
 | Llamar a cualquier otra operación de la API del CRM de HubSpot | ✅ | [🟡](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#available-tools) | [🟡](https://developers.hubspot.com/docs/developer-tooling/local-development/agent-cli/guide#core-commands) | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | [🟡](https://composio.dev/toolkits/hubspot) |
 | **Resúmenes y cambios** | | | | | |
 | Embudo: cuántas negociaciones llegaron a cada etapa | ✅ | ➖ | ➖ | [❌](https://github.com/baryhuang/mcp-hubspot/blob/4a8345f2507b4159fc84eb500c74669329076f53/src/mcp_server_hubspot/server.py#L186-L281) | ➖ |
@@ -104,10 +104,11 @@ Notas sobre la columna de `hubspot`:
 - **Otro propietario.** La clave no nombra a ninguna persona, así que `hubspot` no distingue tus registros de los de
   un compañero. Poner un propietario en cualquier registro, con un comando o con `api`, se rechaza hasta que pongas
   `crm.assign-others` en `allow`.
-- **Tareas, notas y tickets.** No tienen comando propio. Se escriben con `api`, como `api notes-create` o
-  `api tasks-create`, con un cuerpo JSON, así que estas filas son en parte. Una escritura con la API pregunta antes en
-  una terminal, y por MCP `ask` la deja pasar. Las notas, llamadas, correos, reuniones y tareas de tus negociaciones se
-  leen con `activities list`, cuando activas el ajuste de actividades.
+- **Tareas, notas y tickets.** `activities create` añade una nota o una tarea a una negociación, un contacto o una
+  empresa, y `activities close` marca una tarea como hecha. Los tickets no tienen comando propio: se escriben con
+  `api`, como `api tickets-create`, con un cuerpo JSON, así que esa fila es en parte. Una escritura con la API pregunta
+  antes en una terminal, y por MCP `ask` la deja pasar. Las notas, llamadas, correos, reuniones y tareas de tus
+  negociaciones se leen con `activities list`, cuando activas el ajuste de actividades.
 - **Toda la API.** `api list` muestra todas las operaciones de la API del CRM de HubSpot, 157 en total, cada una un
   comando con su propia clave de permiso. También llegan a un agente por MCP.
 - **Sin internet.** `sync` copia los embudos, las negociaciones con sus contactos y empresas, y los leads, y después

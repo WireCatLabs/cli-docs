@@ -72,9 +72,9 @@
     "conclusion": "First site release of attio, reviewed at 0.2.2 from its changelog and the pages it publishes. Sync copies every deal and the people and companies those deals name; everyone else in Attio is searched live. 0.2.2 fixed the pages that still said sync copies the whole workspace, and the RU and ES translations follow it. The roadmap's Next (changing deals, notes and tasks, one-click sign-in) and Later (custom objects and lists, webhooks) hold nothing that has shipped."
   },
   "hubspot": {
-    "version": "v0.5.0",
-    "roadmapSha256": "920e391af6d3016eb424cdd39e156e18c94a81308ce95c9adfe324b33590308a",
+    "version": "v0.6.0",
+    "roadmapSha256": "481db726286eb760acdc9dd259c8faf6b5982ab247206908af8556c9f813925f",
     "reviewedAt": "2026-11-23",
-    "conclusion": "Reviewed hubspot 0.5.0 from its changelog and the docs diff since v0.4.0. May break callers: `api contacts-gdpr-delete` (key `people.erase`) is `deny` by default, so a GDPR erase stays off until allowed. Fixed: a denied `api` call answers `permission_error` before its body is read. The roadmap did not change in the release; its item on connecting HubSpot in WireCat Desktop shipped in Desktop 0.7.4, so a site correction drops it. RU and ES changelog, commands and permissions updated and accepted."
+    "conclusion": "Reviewed hubspot 0.6.0 from its changelog and the docs diff since v0.5.0. Added: `activities create comment|task` and `activities close`, so notes and tasks no longer need `api`. Changed: `account remove` and the second sign-in check are cli-core shared CRM ones, `--delete-data` refuses when another profile account is unknown, and `session start` refuses the profile names `files` and `foreign-contacts`. Fixed: `api notes-create` and `api tasks-create` also check `activities.create`. The roadmap drops the Desktop sign-in item, which shipped in Desktop 0.7.4 (the site correction for it is removed); its remaining item, browser sign-in as yourself, did not ship and stays planned. RU and ES changelog, commands, compare, index, permissions, roadmap and usage updated and accepted."
   }
 }

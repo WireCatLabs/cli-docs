@@ -4,6 +4,36 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/hubspot-cli`. Una sección por versión, la más nueva primero.
 
+## 0.6.0 — 23.11.2026
+
+### Añadido
+
+- `activities create comment|task` añade una nota o una tarea a una negociación, un contacto o una empresa, y
+  `activities close` marca una tarea como hecha, con las escrituras de actividades del CRM comunes de cli-core. El
+  texto de una nota o una tarea conserva sus saltos de línea.
+
+### Cambiado: puede romper a quien lo usa
+
+- **`account remove` y la comprobación contra un segundo inicio de sesión en la misma cuenta son ahora las comunes
+  del CRM, de cli-core** (`@wirecat/cli-core` 0.722.0). Los motivos siguen siendo `account-remove.account-shared` y
+  `session.duplicate`, con los mismos detalles, y la vista previa sigue avisando. El rechazo dice ahora
+  `HubSpot account <id>`. `account remove` también olvida una entrada `oauth:hubspot:<profile>` del llavero del
+  sistema, que hubspot hoy nunca escribe.
+- **`account remove --delete-data` se niega cuando hubspot no puede saber qué cuenta tiene otro perfil**
+  (`account-remove.account-unknown`, detalle `profile`): un perfil cuyo inicio de sesión guardado no se puede leer y
+  que `session start` nunca recordó. Con `--keep-data` se sigue eliminando.
+- **`session start` rechaza un perfil llamado `files` o `foreign-contacts`** (`profile.reserved`): todas las cuentas
+  comparten esas carpetas dentro de la carpeta de estado.
+
+### Corregido
+
+- **`account remove` y `account rename` de un perfil que no existe fallan igual, con `profile.unknown`.**
+  Respondían con dos motivos distintos para un mismo fallo (cli-core 0.721.0).
+- `api notes-create`, `api tasks-create` y sus creaciones por lotes también comprueban `activities.create`, así que
+  denegarla detiene una nota o una tarea por cualquier camino.
+- La skill nombraba un grupo `api-<object>` que no existe. Ahora nombra los cuatro grupos reales y los ids que lleva
+  una nota en una negociación.
+
 ## 0.5.0 — 21.11.2026
 
 ### Cambiado: puede romper a quien lo usa
