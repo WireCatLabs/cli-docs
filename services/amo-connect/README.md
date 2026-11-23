@@ -15,7 +15,7 @@ are in Russia and cannot reach Cloudflare, which serves wirecat.dev.
 | Path | What |
 | --- | --- |
 | `GET /connect/amo.html` | The page with the button that opens amoCRM's consent. `amo` opens it with `#state=<port>.<random>`. |
-| `GET /connect/amo.js`, `/connect/wirecat-amo-logo.png` | Its script and the logo amoCRM shows. |
+| `GET /connect/amo.js`, `/connect/wirecat-amo-logo.png` | Its script, and the logo's source file. amoCRM shows a copy on `i.postimg.cc`: its consent page loads images only from its own hosts and that one. |
 | `GET /webhooks/apps/amo-callback` | The new integration's Redirect URI. It forwards `code` and `state` to `http://127.0.0.1:<port>`. |
 | `POST /api/amo/secrets` | amoCRM's webhook: JSON or a form with `client_id`, `client_secret`, `state`. Empty 200. |
 | `POST /api/amo/claim` | `{"state": …}` returns the pair once, then forgets it. `404 {"error":"not_ready"}` before. |

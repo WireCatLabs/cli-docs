@@ -48,7 +48,9 @@ const consentUrl = () => {
     description: text.description,
     redirect_uri: CALLBACK,
     secrets_uri: "https://connect.wirecat.dev/api/amo/secrets",
-    logo: "https://connect.wirecat.dev/connect/wirecat-amo-logo.png",
+    // amoCRM's consent page allows images only from its own hosts and i.postimg.cc (its img-src policy); this is
+    // static/connect/wirecat-amo-logo.png, uploaded there.
+    logo: "https://i.postimg.cc/M6xrHsqs/wirecat-amo-logo.png",
   })
   query.append("scopes[]", "crm")
   return `https://www.amocrm.ru/oauth/?${query}`
