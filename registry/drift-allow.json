@@ -2,17 +2,17 @@
   {
     "tool": "max",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "max",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "max",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "tg",
@@ -27,17 +27,17 @@
   {
     "tool": "tg",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "tg",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "tg",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "wa",
@@ -47,37 +47,37 @@
   {
     "tool": "wa",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "wa",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "wa",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "drive",
     "key": "doctor",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "drive",
     "key": "profiles.shape",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "drive",
     "key": "mcpServer.config",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "drive",
     "key": "sync.last",
-    "why": "FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
+    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
   },
   {
     "tool": "drive",
@@ -87,7 +87,7 @@
   {
     "tool": "drive",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "ydisk",
@@ -97,22 +97,22 @@
   {
     "tool": "ydisk",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "ydisk",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "ydisk",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "notion",
     "key": "sync.last",
-    "why": "FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
+    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
   },
   {
     "tool": "notion",
@@ -122,47 +122,47 @@
   {
     "tool": "notion",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "gcal",
     "key": "doctor",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "gcal",
     "key": "mcpServer",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "gcal",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "gcal",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "gcal",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "email",
     "key": "doctor",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "email",
     "key": "mcpServer",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "email",
     "key": "sync.last",
-    "why": "FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
+    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
   },
   {
     "tool": "email",
@@ -172,131 +172,131 @@
   {
     "tool": "email",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "email",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "zm",
     "key": "doctor",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "zm",
     "key": "setup",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "zm",
     "key": "mcpServer",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "zm",
     "key": "sync.run",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "zm",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "memo",
     "key": "skill.install",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "memo",
     "key": "skill.show",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "memo",
     "key": "sync.last",
-    "why": "FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
+    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
   },
   {
     "tool": "memo",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "bitrix",
     "key": "setup",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "bitrix",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "bitrix",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "bitrix",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "amo",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "amo",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "amo",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "attio",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "attio",
     "key": "signIn.gives",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "hubspot",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "pbx",
     "key": "setup",
-    "why": "FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "pbx",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "wordpress",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "linear",
     "key": "tagline",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "linear",
     "key": "signIn.asks",
-    "why": "FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   }
 ]
