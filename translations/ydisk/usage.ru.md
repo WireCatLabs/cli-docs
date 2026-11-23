@@ -13,9 +13,10 @@ title: "Папки и синхронизация"
 3. [Синхронизация](#sync)
 4. [Что хранит копия](#what-the-copy-holds)
 5. [Читайте синхронизированный документ](#read-a-synced-document)
-6. [Работа с файлами вживую](#work-with-files-live)
-7. [Правка файла на Диске](#edit-a-file-on-the-disk)
-8. [Вывод для скриптов](#output-for-scripts)
+6. [Прежние версии и что изменилось](#earlier-versions-and-what-changed)
+7. [Работа с файлами вживую](#work-with-files-live)
+8. [Правка файла на Диске](#edit-a-file-on-the-disk)
+9. [Вывод для скриптов](#output-for-scripts)
 
 ## Сначала профиль
 

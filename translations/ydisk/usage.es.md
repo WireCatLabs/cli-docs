@@ -13,9 +13,10 @@ permites. Da por hecho que ya [iniciaste sesión](./installation.md).
 3. [Sincroniza](#sync)
 4. [Qué guarda la copia](#what-the-copy-holds)
 5. [Lee un documento sincronizado](#read-a-synced-document)
-6. [Trabaja con archivos en vivo](#work-with-files-live)
-7. [Edita un archivo en el Disk](#edit-a-file-on-the-disk)
-8. [Salida para scripts](#output-for-scripts)
+6. [Versiones anteriores y qué cambió](#earlier-versions-and-what-changed)
+7. [Trabaja con archivos en vivo](#work-with-files-live)
+8. [Edita un archivo en el Disk](#edit-a-file-on-the-disk)
+9. [Salida para scripts](#output-for-scripts)
 
 ## Primero el perfil
 
