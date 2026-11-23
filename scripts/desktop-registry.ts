@@ -1,6 +1,7 @@
 /**
- * The community tools WireCat Desktop may offer: every `"community": true` entry of tools.json with a `desktop`
- * object, as the catalog entry the app reads. The deploy signs the file with minisign and serves it at
+ * The tools WireCat Desktop may offer. `tools`: every `"community": true` entry of tools.json with a `desktop`
+ * object, as the catalog entry the app reads. `official`: WireCat's own tools, from their manifests and
+ * registry/official.json (official-tools.ts); older apps ignore the key. The deploy signs the file with minisign and serves it at
  * `https://wirecat.dev/registry/v1/desktop-tools.json`; the app checks it again with its own rules
  * (wirecat-desktop `src-tauri/src/community.rs`), which these mirror so a pull request fails here first.
  *
@@ -12,6 +13,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import { parseArgs } from "node:util"
+import { MANIFESTS_FILE, type Manifests, OVERLAY_FILE, type Overlays, officialEntries } from "./official-tools.ts"
 import type { Tool } from "./sync.ts"
 
 export const REGISTRY_URL = "https://wirecat.dev/registry/v1/desktop-tools.json"
@@ -184,7 +186,7 @@ export const registryEntry = (tool: Tool & { desktop: Desktop }) => ({
  * `version` is the build time in seconds, so every deploy's list is newer than the one before; the app never takes a
  * lower one. `expires_at` makes a list the deploy stopped refreshing stop working rather than linger.
  */
-export function buildRegistry(tools: readonly Tool[], now: Date) {
+export function buildRegistry(tools: readonly Tool[], now: Date, overlays: Overlays = {}, manifests: Manifests = {}) {
   const problems = [...tools.flatMap(desktopProblems), ...registryProblems(tools)]
   if (problems.length) throw new Error(`tools.json:\n${problems.join("\n")}`)
   const listed = tools.filter(
@@ -196,16 +198,24 @@ export function buildRegistry(tools: readonly Tool[], now: Date) {
     generated_at: now.toISOString(),
     expires_at: new Date(now.getTime() + LIFETIME_DAYS * 24 * 60 * 60 * 1000).toISOString(),
     tools: listed.map(registryEntry),
+    official: officialEntries(tools, overlays, manifests),
   }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
   const { values } = parseArgs({ options: { out: { type: "string", default: "out/registry/v1/desktop-tools.json" } } })
-  const tools = JSON.parse(readFileSync(join(root, "tools.json"), "utf8")) as Tool[]
-  const registry = buildRegistry(tools, new Date())
+  const read = <T>(file: string) => JSON.parse(readFileSync(join(root, file), "utf8")) as T
+  const registry = buildRegistry(
+    read<Tool[]>("tools.json"),
+    new Date(),
+    read<Overlays>(OVERLAY_FILE),
+    read<Manifests>(MANIFESTS_FILE),
+  )
   const out = resolve(root, values.out)
   mkdirSync(dirname(out), { recursive: true })
   writeFileSync(out, `${JSON.stringify(registry, null, 2)}\n`)
-  console.log(`${out}: ${registry.tools.length} community tools, version ${registry.version}`)
+  console.log(
+    `${out}: ${registry.tools.length} community and ${registry.official.length} official tools, version ${registry.version}`,
+  )
 }
