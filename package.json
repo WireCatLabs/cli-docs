@@ -6,6 +6,8 @@
   "scripts": {
     "sync": "node --experimental-strip-types scripts/sync.ts",
     "docs:localize": "node --experimental-strip-types scripts/localize.ts",
+    "registry:official": "node --experimental-strip-types scripts/official-tools.ts",
+    "registry:drift": "node --experimental-strip-types scripts/official-tools.ts --check",
     "docs:data-model": "node --experimental-strip-types scripts/data-model-tables.ts",
     "docs:translation": "node --experimental-strip-types scripts/translation.ts",
     "dev": "next dev",

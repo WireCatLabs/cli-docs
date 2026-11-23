@@ -159,6 +159,35 @@ The signing key's secret half is only in this repository's `production` environm
 here and `src-tauri/registry-key.pub` in wirecat-desktop. Each deploy signs a list with a newer `version` that expires
 after 30 days, so the daily deploy keeps it alive and a list nobody re-signs stops working.
 
+## Official tools in WireCat Desktop
+
+The same signed list carries WireCat's own tools in a key of their own, `official`, which Desktop releases older than
+the change ignore. That is how a new official CLI appears in Desktop, translated and with its icon, without a Desktop
+release. The design is in wirecat-desktop
+[docs/dev/cli-registry.md, "Official tools"](https://github.com/WireCatLabs/wirecat-desktop/blob/main/docs/dev/cli-registry.md#official-tools).
+
+- **Facts come from the CLI.** `pnpm registry:official` reads `contracts/wirecat.json` out of each of our tools' latest
+  npm package, after checking it against npm's integrity, and writes `registry/official-manifests.json`. That file is
+  committed, so the job that signs the list reads only reviewed files. The manifest is what the CLI's
+  `--wcat-describe` prints, so nothing is installed or run.
+- **The rest comes from `registry/official.json`,** keyed by the tools.json name: `id` when Desktop's id is another
+  (`b24` is `bitrix`), `name`, `icon` (one SVG path on a 24 by 24 box, path commands and numbers only),
+  `mcpPort` (from 8700 to 8769, one per tool), `screen` (the Desktop id whose sign-in screens the tool uses, never a
+  bot's) and `i18n` with `en`, `ru` and `es` texts: `name`, `tagline`, `summary`, `gives`, `asks`, `syncNote`.
+- **A tool built into Desktop** takes only `i18n`, `icon` and `screen` from the list. Its commands stay the ones its
+  catalog entry was tested with. **A tool Desktop does not have yet** takes everything: the manifest's commands, the
+  site's summaries in `summaries`, and the texts above.
+- **The drift check,** `pnpm registry:drift` and the Registry drift workflow (daily and on pull requests that touch the
+  registry), fails when `official-manifests.json` is behind npm, or when Desktop's compiled catalog says something
+  else than a manifest. Each known difference is a line in `registry/drift-allow.json` with why; a line that no
+  longer differs fails too. A CLI release that changes its manifest turns the check red until someone runs
+  `pnpm registry:official` and commits the result.
+
+To add a new official CLI: list it in `tools.json` like any of our tools, give it an entry in
+`registry/official.json` (at least `mcpPort` when it has an MCP server, and the Russian and Spanish texts), run
+`pnpm registry:official`, and merge. The next deploy signs the list, and each Desktop picks it up at its next start
+after the daily fetch.
+
 ## Required evidence before merge or release
 
 The PR description should state what the reader can do after the change, the pages/locales
