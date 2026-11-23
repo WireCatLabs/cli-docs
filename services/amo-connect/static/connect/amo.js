@@ -1,5 +1,6 @@
-// A file, not an inline script, so the CSP can refuse inline code: amoCRM's button script moves this window to any
-// `url` posted to it, and without 'unsafe-inline' a posted javascript: URL cannot run.
+// amoCRM's own button script (www.amocrm.ru/auth/button.min.js) did not draw its button in some browsers: it waits
+// for window.onload, and blockers drop it. This page builds the same consent URL and opens it itself, so no outside
+// script runs here. A file, not an inline script, so the CSP can refuse inline code.
 const TEXT = {
   en: {
     title: "Connect amoCRM",
@@ -30,32 +31,58 @@ document.title = `amo: ${text.title}`
 document.getElementById("title").textContent = text.title
 
 const state = new URLSearchParams(location.hash.slice(1)).get("state") ?? ""
-// The button script appends location.href to amoCRM's URL unencoded: a fragment left here would swallow the
-// parameters after it, and would send the state to amoCRM as the origin.
+// location.href goes to amoCRM as the origin, so the state must not stay in it.
 history.replaceState(null, "", location.pathname)
 const match = /^(\d{4,5})\.[A-Za-z0-9_-]{43,128}$/.exec(state)
 const port = match ? Number(match[1]) : 0
 const status = document.getElementById("status")
 
-if (port >= 1024 && port <= 65535) {
-  status.textContent = text.ready
-  const button = document.createElement("script")
-  button.className = "amocrm_oauth"
-  button.src = "https://www.amocrm.ru/auth/button.min.js"
-  // The button script puts these values into amoCRM's URL as they are, so free text is encoded here.
-  Object.assign(button.dataset, {
-    name: "WireCat",
-    description: encodeURIComponent(text.description),
-    redirect_uri: "https://connect.wirecat.dev/webhooks/apps/amo-callback",
-    secrets_uri: "https://connect.wirecat.dev/api/amo/secrets",
-    logo: "https://connect.wirecat.dev/connect/wirecat-amo-logo.png",
-    scopes: "crm",
-    title: text.button,
+const CALLBACK = "https://connect.wirecat.dev/webhooks/apps/amo-callback"
+const AMOCRM_ORIGIN = /^https:\/\/([a-z0-9-]+\.)*amocrm\.ru$/
+
+const consentUrl = () => {
+  const query = new URLSearchParams({
     state,
     mode: "popup",
+    origin: location.href,
+    name: "WireCat",
+    description: text.description,
+    redirect_uri: CALLBACK,
+    secrets_uri: "https://connect.wirecat.dev/api/amo/secrets",
+    logo: "https://connect.wirecat.dev/connect/wirecat-amo-logo.png",
   })
-  // Inserted while the page still parses, so the script's window.onload handler still runs.
-  document.getElementById("button").append(button)
+  query.append("scopes[]", "crm")
+  return `https://www.amocrm.ru/oauth/?${query}`
+}
+
+const openConsent = () => {
+  const width = 750
+  const height = 580
+  const left = Math.round(window.screenX + (window.outerWidth - width) / 2)
+  const top = Math.round(window.screenY + (window.outerHeight - height) / 2)
+  const popup = window.open(
+    consentUrl(),
+    "amocrm_oauth",
+    `popup,width=${width},height=${height},left=${left},top=${top}`,
+  )
+  if (!popup) location.assign(consentUrl())
+}
+
+// amoCRM's consent window may hand this page the address to go on to. Only our own callback is followed, so a
+// message cannot send this window anywhere else.
+window.addEventListener("message", (event) => {
+  if (!AMOCRM_ORIGIN.test(event.origin)) return
+  const url = typeof event.data?.url === "string" ? event.data.url : ""
+  if (url.startsWith(`${CALLBACK}?`)) location.assign(url)
+  else if (event.data?.error) status.textContent = String(event.data.error)
+})
+
+if (port >= 1024 && port <= 65535) {
+  status.textContent = text.ready
+  const button = document.getElementById("button")
+  button.textContent = text.button
+  button.hidden = false
+  button.addEventListener("click", openConsent)
 } else {
   status.textContent = text.missing
 }

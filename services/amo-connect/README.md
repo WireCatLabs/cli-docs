@@ -1,7 +1,7 @@
 # amo-connect
 
-The server side of amo's one-click amoCRM sign-in. amoCRM's button creates a WireCat integration in the chosen
-account and posts the integration's ID and secret key to this service. `amo` on the person's computer then claims
+The server side of amo's one-click amoCRM sign-in. amoCRM's consent for an external integration creates a WireCat
+integration in the chosen account and posts the integration's ID and secret key to this service. `amo` on the person's computer then claims
 them once. It runs on neirox (Selectel, Saint Petersburg) as `https://connect.wirecat.dev`, because amoCRM's servers
 are in Russia and cannot reach Cloudflare, which serves wirecat.dev.
 
@@ -14,7 +14,7 @@ are in Russia and cannot reach Cloudflare, which serves wirecat.dev.
 
 | Path | What |
 | --- | --- |
-| `GET /connect/amo.html` | The page with amoCRM's button. `amo` opens it with `#state=<port>.<random>`. |
+| `GET /connect/amo.html` | The page with the button that opens amoCRM's consent. `amo` opens it with `#state=<port>.<random>`. |
 | `GET /connect/amo.js`, `/connect/wirecat-amo-logo.png` | Its script and the logo amoCRM shows. |
 | `GET /webhooks/apps/amo-callback` | The new integration's Redirect URI. It forwards `code` and `state` to `http://127.0.0.1:<port>`. |
 | `POST /api/amo/secrets` | amoCRM's webhook: JSON or a form with `client_id`, `client_secret`, `state`. Empty 200. |
@@ -68,10 +68,12 @@ its certificate from Let's Encrypt once the record resolves.
 
 ## Security notes
 
-- The connect page removes the `#state` fragment before amoCRM's button script runs. That script appends
-  `location.href` to amoCRM's URL unencoded, so a fragment would swallow the parameters after it.
-- Both pages load their script from a file, so the CSP needs no `'unsafe-inline'`. amoCRM's button script moves
-  the window to any `url` posted to it; without inline scripts a posted `javascript:` URL cannot run.
+- The connect page draws its own button and opens amoCRM's consent URL itself, the same URL amoCRM's button script
+  (`www.amocrm.ru/auth/button.min.js`) builds. That script waited for `window.onload` and did not draw its button in
+  every browser, and it moves the window to any `url` posted to it. No outside script runs on either page.
+- The page follows a `url` posted from an `amocrm.ru` window only when it is this service's callback.
+- The connect page removes the `#state` fragment first: `location.href` goes to amoCRM as the origin.
+- Both pages load their script from a file, so the CSP is `script-src 'self'` with no `'unsafe-inline'`.
 - Every answer carries HSTS, `nosniff`, `Referrer-Policy: no-referrer`, `X-Frame-Options: DENY` and `noindex`.
 - Bodies over 4 KB are refused. A refused webhook logs only its content type and field names, never a value.
   Nothing else is logged.

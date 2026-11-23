@@ -11,9 +11,6 @@ const TTL_MS = 600_000
 const MAX_ENTRIES = 1000
 
 const PAGE_CSP =
-  "default-src 'none'; script-src 'self' https://www.amocrm.ru; style-src 'unsafe-inline'; base-uri 'none'; " +
-  "form-action 'none'; frame-ancestors 'none'"
-const CALLBACK_CSP =
   "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; " +
   "frame-ancestors 'none'"
 const DATA_CSP = "default-src 'none'; frame-ancestors 'none'"
@@ -30,12 +27,7 @@ const STATIC = {
   "/connect/amo.html": ["connect/amo.html", "text/html; charset=utf-8", PAGE_CSP, "no-cache"],
   "/connect/amo.js": ["connect/amo.js", "text/javascript; charset=utf-8", DATA_CSP, "no-cache"],
   "/connect/wirecat-amo-logo.png": ["connect/wirecat-amo-logo.png", "image/png", DATA_CSP, "public, max-age=86400"],
-  "/webhooks/apps/amo-callback": [
-    "webhooks/apps/amo-callback.html",
-    "text/html; charset=utf-8",
-    CALLBACK_CSP,
-    "no-cache",
-  ],
+  "/webhooks/apps/amo-callback": ["webhooks/apps/amo-callback.html", "text/html; charset=utf-8", PAGE_CSP, "no-cache"],
   "/webhooks/apps/amo-callback.js": [
     "webhooks/apps/amo-callback.js",
     "text/javascript; charset=utf-8",

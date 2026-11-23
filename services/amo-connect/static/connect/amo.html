@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://www.amocrm.ru; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
 <title>amo: connect amoCRM</title>
 <style>
   :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
   body { max-width: 36rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5; }
-  #button { margin-top: 1.5rem; }
+  #button { margin-top: 1.5rem; padding: .75rem 1.25rem; border: 1px solid #006f9f; border-radius: .375rem;
+    background: #339dc7; color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  #button:hover { background: #2a87ad; }
 </style>
 </head>
 <body>
 <h1 id="title">Connect amoCRM</h1>
 <p id="status">Loading…</p>
-<div id="button"></div>
+<button id="button" type="button" hidden></button>
 <script src="/connect/amo.js"></script>
 </body>
 </html>

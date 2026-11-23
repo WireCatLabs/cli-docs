@@ -136,7 +136,7 @@ describe("amo-connect service", () => {
   })
 
   it.each([
-    ["/connect/amo.html", "text/html; charset=utf-8", "script-src 'self' https://www.amocrm.ru"],
+    ["/connect/amo.html", "text/html; charset=utf-8", "script-src 'self';"],
     ["/connect/amo.js", "text/javascript; charset=utf-8", "default-src 'none'"],
     ["/connect/wirecat-amo-logo.png", "image/png", "default-src 'none'"],
     ["/webhooks/apps/amo-callback", "text/html; charset=utf-8", "script-src 'self';"],
@@ -158,8 +158,9 @@ describe("amo-connect service", () => {
   it("points the button at this host", async () => {
     const { base } = await start()
     const script = await (await fetch(`${base}/connect/amo.js`)).text()
-    expect(script).toContain('redirect_uri: "https://connect.wirecat.dev/webhooks/apps/amo-callback"')
+    expect(script).toContain('CALLBACK = "https://connect.wirecat.dev/webhooks/apps/amo-callback"')
     expect(script).toContain('secrets_uri: "https://connect.wirecat.dev/api/amo/secrets"')
+    expect(script).not.toContain('createElement("script")')
     expect(script).toContain('logo: "https://connect.wirecat.dev/connect/wirecat-amo-logo.png"')
   })
 
