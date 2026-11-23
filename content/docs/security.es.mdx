@@ -39,7 +39,8 @@ El [método de auditoría de seguridad](https://github.com/WireCatLabs/cli-testi
 ## Elegir qué puede hacer el agente
 
 Los [permisos](./configuration.mdx#permisos) permiten leer, pedir confirmación antes de cambiar algo o
-rechazar una acción. También puedes limitar destinatarios y envíos por hora. Estos controles
+rechazar una acción. La pregunta solo llega en una terminal: por MCP, un cambio en `ask` se ejecuta sin preguntarte.
+Para detener a un agente por MCP, pon ese cambio en `readonly` o `deny`. También puedes limitar destinatarios y envíos por hora. Estos controles
 ayudan a evitar un envío equivocado o un bucle que envía demasiados mensajes.
 
 Un rechazo significa que los ajustes actuales no permiten esa acción. Comprueba el destinatario

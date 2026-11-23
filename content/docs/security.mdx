@@ -39,7 +39,8 @@ The [security audit method](https://github.com/WireCatLabs/cli-testing/blob/main
 ## Decide what the agent can do
 
 [Permissions](./configuration.mdx#permissions) can let an agent read, ask before changing something, or
-refuse an action. You can also restrict recipients and set an hourly send limit. These controls
+refuse an action. The question comes only in a terminal: over MCP, a change set to `ask` runs without asking you. To
+stop an agent over MCP, set the change to `readonly` or `deny`. You can also restrict recipients and set an hourly send limit. These controls
 are useful for preventing a mistaken send or a loop that sends too many messages.
 
 A refusal means the requested action is not allowed by the current settings. Check the recipient

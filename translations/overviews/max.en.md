@@ -66,7 +66,7 @@ You:    Yes.
   request, the replies you owe, search by meaning and with no internet, voice to text on your computer, a scheduled
   morning digest.
 - **Limits you set for an agent.** Read only, sends only to the chats you list, and at most 30 sends an hour by default.
-  Sending can ask you first. None of the other tools on the comparison documents these limits.
+  Sending can ask you first in the terminal. None of the other tools on the comparison documents these limits.
 - **No WireCat server.** `max` talks only to MAX, from your computer. Your login is kept in the system keyring.
 - **Polite to MAX.** One request pace per profile, shared by every command and agent. When MAX says "too many
   requests", `max` stops instead of retrying.
