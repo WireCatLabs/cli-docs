@@ -53,7 +53,12 @@ ydisk personal status
 ```
 
 `sync` descarga los archivos nuevos o cuyo contenido cambió desde la última sincronización y lee su texto. Un archivo
-borrado en el Disk sale de la copia. Un archivo movido dentro de las carpetas elegidas conserva sus etiquetas y notas.
+movido dentro de las carpetas elegidas conserva sus etiquetas y notas.
+
+Un archivo que la sincronización ya no encuentra en el Disk sale de las listas y de la búsqueda, pero su texto se
+queda en la copia, marcado como ya no visible. El Disk no le dice a la sincronización si el archivo se borró, se movió
+fuera o se perdió con un recurso compartido, así que la sincronización nunca lo trata como borrado. Cuando el archivo
+vuelve a aparecer, regresa tal como estaba.
 
 Una sincronización lee hasta 200 archivos (`--limit`) y lista hasta unas 10 000 entradas, y luego guarda dónde se
 detuvo. Una carpeta grande necesita varias ejecuciones: ejecuta `sync` otra vez hasta que `status` no muestre trabajo
@@ -88,6 +93,21 @@ ydisk personal documents export 1a2b3c --output ./contract.md
 `documents show` imprime el texto completo de un documento, que encuentras por su id en `search` o `documents list`. El
 id de arriba es un ejemplo. `documents export` lo escribe en un archivo Markdown nuevo. Las etiquetas, las notas y los
 recuerdos se quedan con el documento y nunca llegan al Disk. Consulta [búsqueda de documentos](./search.md).
+
+## Versiones anteriores y qué cambió
+
+```sh
+ydisk personal documents history 1a2b3c
+ydisk personal documents history 1a2b3c --revision 2
+ydisk personal changes --since 7d
+ydisk personal changes --since 1d --event unavailable
+```
+
+Cada sincronización guarda el texto, el título y el front matter de un documento antes de que cambie o salga de la
+copia. `documents history` lista esas versiones, y `--revision` muestra una. `changes` lista lo que se añadió, cambió,
+dejó de estar visible, salió de las carpetas elegidas o volvió, lo más nuevo primero. Ambos leen solo la copia, así
+que funcionan sin conexión y por MCP. Las versiones y el registro de cambios se guardan durante
+`keep_versions_for_days`, un año por defecto.
 
 ## Trabaja con archivos en vivo
 
