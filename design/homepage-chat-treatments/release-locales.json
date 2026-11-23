@@ -699,8 +699,8 @@
     "Contacts, tasks and memory on your computer.": "Контакты, задачи и память на вашем компьютере.",
     "You approve what agents remember.": "Память одобряете вы.",
     "Sets up your tools and your agent.": "Настраивает инструменты и агента.",
-    "Start with the tools you use. Each one adds a part of your context: chats, mail, meetings and calls, documents, your CRM and notes. Markdown notes, including Obsidian, join the same agent workflow.": "Начните с тех инструментов, которыми пользуетесь. Каждый добавляет часть вашего контекста: переписку, почту, встречи и звонки, документы, CRM и заметки. Markdown-заметки, в том числе из Obsidian, работают вместе с ними через вашего агента.",
-    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, calls, documents, your CRM and notes. Markdown notes can live in Obsidian or another editor.": "Ваш агент координирует подключенные инструменты и отвечает с учетом всего вашего контекста, а не одного приложения. WireCat дает инструменты для переписки, почты, встреч, звонков, документов, CRM и заметок. Markdown-заметки могут лежать в Obsidian или другом редакторе.",
+    "Start with the tools you use. Each one adds a part of your context: chats, mail, meetings and calls, documents, your CRM, your website and notes. Markdown notes, including Obsidian, join the same agent workflow.": "Начните с тех инструментов, которыми пользуетесь. Каждый добавляет часть вашего контекста: переписку, почту, встречи и звонки, документы, CRM, ваш сайт и заметки. Markdown-заметки, в том числе из Obsidian, работают вместе с ними через вашего агента.",
+    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, calls, documents, your CRM, your website and notes. Markdown notes can live in Obsidian or another editor.": "Ваш агент координирует подключенные инструменты и отвечает с учетом всего вашего контекста, а не одного приложения. WireCat дает инструменты для переписки, почты, встреч, звонков, документов, CRM, вашего сайта и заметок. Markdown-заметки могут лежать в Obsidian или другом редакторе.",
     "Yandex Telemost": "Яндекс Телемост",
     "Bitrix24": "Битрикс24",
     "Beeline": "Билайн",
@@ -711,6 +711,7 @@
     "pbx · your phone system’s calls, transcribed on your computer": "pbx · звонки вашей АТС, расшифровка на компьютере",
     "beeline · Cloud PBX calls, transcribed on your computer": "beeline · звонки Облачной АТС, расшифровка на компьютере",
     "linear · your issues and projects, readable offline": "linear · тикеты и проекты, без интернета",
+    "wordpress · your agent reads your site’s posts and pages and writes drafts": "wordpress · агент читает посты и страницы вашего сайта и пишет черновики",
     "hubspot · deals, contacts and companies": "hubspot · сделки, контакты и компании"
   },
   "es": {
@@ -1412,14 +1413,15 @@
     "Contacts, tasks and memory on your computer.": "Contactos, tareas y memoria en tu ordenador.",
     "You approve what agents remember.": "Tú apruebas lo que recuerdan los agentes.",
     "Sets up your tools and your agent.": "Prepara tus herramientas y tu agente.",
-    "Start with the tools you use. Each one adds a part of your context: chats, mail, meetings and calls, documents, your CRM and notes. Markdown notes, including Obsidian, join the same agent workflow.": "Empieza por las herramientas que usas. Cada una añade una parte de tu contexto: chats, correo, reuniones y llamadas, documentos, tu CRM y notas. Las notas Markdown, también las de Obsidian, se suman al mismo trabajo con tu agente.",
-    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, calls, documents, your CRM and notes. Markdown notes can live in Obsidian or another editor.": "Tu agente coordina las herramientas conectadas, así que responde con todo tu contexto personal, no con una sola app. WireCat aporta las herramientas para chats, correo, reuniones, llamadas, documentos, tu CRM y notas. Las notas Markdown pueden estar en Obsidian u otro editor.",
+    "Start with the tools you use. Each one adds a part of your context: chats, mail, meetings and calls, documents, your CRM, your website and notes. Markdown notes, including Obsidian, join the same agent workflow.": "Empieza por las herramientas que usas. Cada una añade una parte de tu contexto: chats, correo, reuniones y llamadas, documentos, tu CRM, tu sitio web y notas. Las notas Markdown, también las de Obsidian, se suman al mismo trabajo con tu agente.",
+    "Your agent coordinates the tools you connect, so it answers from your whole personal context, not one app at a time. WireCat supplies the tools for chats, mail, meetings, calls, documents, your CRM, your website and notes. Markdown notes can live in Obsidian or another editor.": "Tu agente coordina las herramientas conectadas, así que responde con todo tu contexto personal, no con una sola app. WireCat aporta las herramientas para chats, correo, reuniones, llamadas, documentos, tu CRM, tu sitio web y notas. Las notas Markdown pueden estar en Obsidian u otro editor.",
     "gcal · calls, participants and transcripts": "gcal · llamadas, participantes y transcripciones",
     "mail · meeting notes that Telemost sends by email": "mail · los resúmenes de reuniones que Telemost envía por correo",
     "notion · pages and databases, searched on your computer": "notion · páginas y bases de datos, búsqueda en tu ordenador",
     "b24 · deals, leads, contacts and companies": "b24 · negociaciones, prospectos, contactos y empresas",
     "pbx · your phone system’s calls, transcribed on your computer": "pbx · las llamadas de tu centralita, transcritas en tu ordenador",
     "linear · your issues and projects, readable offline": "linear · tus incidencias y proyectos, sin conexión",
+    "wordpress · your agent reads your site’s posts and pages and writes drafts": "wordpress · tu agente lee las entradas y páginas de tu sitio y escribe borradores",
     "hubspot · deals, contacts and companies": "hubspot · negociaciones, contactos y empresas"
   }
 }

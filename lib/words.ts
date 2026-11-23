@@ -20,6 +20,7 @@ export type Words = {
     meetingsCalls: string
     crm: string
     trackers: string
+    sites: string
     messenger: string
     language: string
     menu: string
@@ -139,6 +140,7 @@ export const words: Record<string, Words> = {
       meetingsCalls: "Meetings & Calls",
       crm: "CRM",
       trackers: "Issue trackers",
+      sites: "Sites and blogs",
       messenger: "Choose a messenger",
       language: "Choose a language",
       menu: "Open documentation menu",
@@ -194,6 +196,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       meetingsCalls: "Встречи и звонки",
       crm: "CRM",
       trackers: "Трекеры задач",
+      sites: "Сайты и блоги",
       messenger: "Выбрать мессенджер",
       language: "Выбрать язык",
       menu: "Открыть меню документации",
@@ -250,6 +253,7 @@ At the end, offer to install the ${tool} skill for my agent.`,
       meetingsCalls: "Reuniones y llamadas",
       crm: "CRM",
       trackers: "Gestores de incidencias",
+      sites: "Sitios y blogs",
       messenger: "Elegir servicio de mensajería",
       language: "Elegir idioma",
       menu: "Abrir el menú de documentación",
