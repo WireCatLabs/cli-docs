@@ -29,7 +29,7 @@ Desktop, y para ChatGPT a través de un túnel que ejecutas tú. Necesitas una c
 - **Incidencias sin conexión.** Lista incidencias por equipo, proyecto, estado, responsable o etiqueta, abre una con
   sus comentarios y encuentra incidencias, proyectos y comentarios por sus palabras.
 - **Una incidencia se convierte en tu tarea.** `issues assign ENG-12` te añade una tarea que apunta a la incidencia,
-  con fecha límite si la indicas. No copia nada del texto de la incidencia y no cambia nada en Linear.
+  con fecha límite si la indicas. No cambia nada en Linear.
 - **Todo lo demás que ofrece Linear.** Crea una incidencia, cambia su estado, añade un comentario o lee ciclos y
   documentos con el grupo `api`. `api list` nombra todas las operaciones.
 - **Tú decides qué puede cambiar el agente.** Cada perfil permite, pregunta o rechaza cada tipo de escritura. Un
@@ -69,7 +69,8 @@ claves de API para los miembros. Linear describe las opciones en su
 
 ## Conecta y copia tu espacio de trabajo
 
-1. [Instala `linear`](./installation.md) desde npm.
+1. [Instala `linear`](./installation.md) con WireCat Desktop o desde npm. En Desktop inicias sesión con la clave en
+   su ventana. Los comandos de aquí hacen lo mismo en un terminal.
 2. Inicia sesión. `work` es un perfil, un nombre que eliges para una cuenta de Linear. La herramienta pide la clave
    oculta y la comprueba con Linear antes de guardarla.
 

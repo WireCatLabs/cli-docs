@@ -29,7 +29,7 @@ You need a Linear personal API key, which you make once in Linear's settings.
 - **Issues without the internet.** List issues by team, project, state, assignee or label, open one with its
   comments, and find issues, projects and comments by their words.
 - **An issue becomes your task.** `issues assign ENG-12` adds a task for you that points at the issue, with a due date
-  if you give one. It copies none of the issue's text, and it changes nothing in Linear.
+  if you give one. It changes nothing in Linear.
 - **Everything else Linear offers.** Create an issue, change its state, add a comment, or read cycles and documents
   through the `api` group. `api list` names every operation.
 - **You decide what the agent may change.** Each profile allows, asks or refuses each kind of write. A delete or an
@@ -66,7 +66,8 @@ Linear describes the options on its [API and webhooks page](https://linear.app/d
 
 ## Connect and copy your workspace
 
-1. [Install `linear`](./installation.md) from npm.
+1. [Install `linear`](./installation.md) with WireCat Desktop or from npm. In Desktop you sign in with the key in its
+   window. The commands here do the same in a terminal.
 2. Sign in. `work` is a profile, a name you choose for one Linear account. The tool asks for the key hidden and checks
    it with Linear before it keeps it.
 

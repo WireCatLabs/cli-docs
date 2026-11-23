@@ -3,37 +3,26 @@ title: "Notion: start here"
 description: "Copy your Notion pages and databases to your computer, so your AI agent can search them offline and use them as context."
 ---
 
-Your plans, meeting notes and project databases live in Notion, and an AI agent on your computer cannot read them
-unless you paste them into the chat. The `notion` command-line tool copies the pages you choose to your computer, so
-your agent can search them and use them as context, even without the internet.
+Ask your AI agent about anything you wrote in Notion and get the answer with a link to the page. Plans, meeting
+notes and project databases stay in Notion, where an agent on your computer cannot read them unless you paste them
+into the chat. The `notion` command-line tool copies the pages you choose to your computer, so your agent searches
+them and uses them as context, even without the internet.
 
-You can ask your agent for the page where a decision was written down, the rows of a project database, or what a
-spec says about a feature. The agent finds the page in the local copy and gives you its Notion link.
+Your agent tells you on which page a decision was written down, which rows a project database holds, or what a spec
+says about a feature, and gives you the page's Notion link. When you allow it, the agent also writes pages and
+comments in Notion.
 
-This page explains what you get, how the copy works and how to connect your workspace.
+You install `notion` with [WireCat Desktop](/en/docs/desktop) or from npm. It needs one Notion token, a key that
+decides which pages the tool can see. [Get a Notion token](#get-a-notion-token) explains the two kinds.
 
 **On this page:**
 
-1. [How it works](#how-it-works)
-2. [What you get](#what-you-get)
+1. [What you get](#what-you-get)
+2. [How it works](#how-it-works)
 3. [Get a Notion token](#get-a-notion-token)
 4. [Connect and copy your pages](#connect-and-copy-your-pages)
 5. [What it does not do yet](#what-it-does-not-do-yet)
 6. [Find a guide for your task](#find-a-guide-for-your-task)
-
-## How it works
-
-- **A copy on your computer.** `notion` keeps the pages in the local store, one file on your computer that every
-  WireCat tool shares. Search reads this copy, not Notion. Your chats, mail and meetings are there too, so
-  [Memo](/en/docs/memo) can find a Notion page together with the conversation about it.
-- **A token instead of a password.** A Notion token is a key that lets the tool read your workspace. It decides what
-  the tool can see, so you can give it the whole workspace or only a few pages.
-- **A profile for each workspace.** A profile is a name you choose for one Notion account, such as `personal`. Every
-  command that uses an account names it first: `notion personal search "quarterly plan"`.
-- **A sync brings in changes.** The copy is as fresh as the last sync. Run it again to bring in what changed in
-  Notion.
-- **Your agent uses the same commands.** A terminal agent runs `notion` for you, and an app that connects to MCP
-  servers gets the same commands over MCP.
 
 ## What you get
 
@@ -54,6 +43,20 @@ This page explains what you get, how the copy works and how to connect your work
 The token stays in your system keyring, or in a private file where there is no keyring. `notion` connects only to
 Notion's own API. Read more in [access and security](./security.md).
 
+## How it works
+
+- **A copy on your computer.** `notion` keeps the pages in the local store, one file on your computer that every
+  WireCat tool shares. Search reads this copy, not Notion. Your chats, mail and meetings are there too, so
+  [Memo](/en/docs/memo) can find a Notion page together with the conversation about it.
+- **A token instead of a password.** A Notion token is a key that lets the tool read your workspace. It decides what
+  the tool can see, so you can give it the whole workspace or only a few pages.
+- **A profile for each workspace.** A profile is a name you choose for one Notion account, such as `personal`. Every
+  command that uses an account names it first: `notion personal search "quarterly plan"`.
+- **A sync brings in changes.** The copy is as fresh as the last sync. Run it again to bring in what changed in
+  Notion.
+- **Your agent uses the same commands.** A terminal agent runs `notion` for you, and an app that connects to MCP
+  servers gets the same commands over MCP.
+
 ## Get a Notion token
 
 A token decides what the tool can see. Notion offers two kinds:
@@ -63,9 +66,12 @@ A token decides what the tool can see. Notion offers two kinds:
 - An internal connection's token sees only the pages you share with that connection in Notion. Choose it when you
   want to give the tool a few pages and nothing else.
 
+[Make a Notion token](./installation.md#make-a-notion-token) has the steps in Notion for each kind.
+
 ## Connect and copy your pages
 
-1. [Install `notion`](./installation.md) from npm.
+1. [Install `notion`](./installation.md) with WireCat Desktop or from npm. In Desktop you sign in and choose the pages
+   in its window. The commands here do the same in a terminal.
 2. Sign in. `personal` is a profile: a name you choose for one Notion account. The tool asks for the token hidden.
 
 ```sh
