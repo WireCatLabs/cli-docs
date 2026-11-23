@@ -38,12 +38,11 @@ const port = match ? Number(match[1]) : 0
 const status = document.getElementById("status")
 
 const CALLBACK = "https://connect.wirecat.dev/webhooks/apps/amo-callback"
-const AMOCRM_ORIGIN = /^https:\/\/([a-z0-9-]+\.)*amocrm\.ru$/
 
 const consentUrl = () => {
   const query = new URLSearchParams({
     state,
-    mode: "popup",
+    mode: "post_message",
     origin: location.href,
     name: "WireCat",
     description: text.description,
@@ -67,15 +66,6 @@ const openConsent = () => {
   )
   if (!popup) location.assign(consentUrl())
 }
-
-// amoCRM's consent window may hand this page the address to go on to. Only our own callback is followed, so a
-// message cannot send this window anywhere else.
-window.addEventListener("message", (event) => {
-  if (!AMOCRM_ORIGIN.test(event.origin)) return
-  const url = typeof event.data?.url === "string" ? event.data.url : ""
-  if (url.startsWith(`${CALLBACK}?`)) location.assign(url)
-  else if (event.data?.error) status.textContent = String(event.data.error)
-})
 
 if (port >= 1024 && port <= 65535) {
   status.textContent = text.ready

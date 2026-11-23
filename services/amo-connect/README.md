@@ -71,7 +71,9 @@ its certificate from Let's Encrypt once the record resolves.
 - The connect page draws its own button and opens amoCRM's consent URL itself, the same URL amoCRM's button script
   (`www.amocrm.ru/auth/button.min.js`) builds. That script waited for `window.onload` and did not draw its button in
   every browser, and it moves the window to any `url` posted to it. No outside script runs on either page.
-- The page follows a `url` posted from an `amocrm.ru` window only when it is this service's callback.
+- The consent opens with `mode=post_message`: amoCRM sends the consent window itself to the callback, which hands the
+  code to `amo`. With `mode=popup` amoCRM closes that window and posts the callback address to this page instead,
+  which the page would have to trust; in a live run nothing arrived and `amo` kept waiting.
 - The connect page removes the `#state` fragment first: `location.href` goes to amoCRM as the origin.
 - Both pages load their script from a file, so the CSP is `script-src 'self'` with no `'unsafe-inline'`.
 - Every answer carries HSTS, `nosniff`, `Referrer-Policy: no-referrer`, `X-Frame-Options: DENY` and `noindex`.
