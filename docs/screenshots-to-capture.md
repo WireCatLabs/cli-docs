@@ -91,7 +91,7 @@ with the current menu. Capture at 1440x900 with `capture.mjs --lang en|ru|es [--
 | `sync-error` | `?showcase&sync-fail=tg` | Wait until the sync fails, about 25 s, then open Details |
 | `report` | `?showcase` | Click Report a problem |
 | `connect` | `?showcase&connect=called` | Scroll the MCP server heading to about 70 px below the top bar |
-| `tailscale-funnel` | `?showcase&tailscale=nofunnel` | Scroll the MCP server heading to the top, so the guide's steps show |
+| `tailscale-funnel` | `?showcase&tailscale=nofunnel` | Scroll the MCP server heading to the top, then down until Open the Access controls page is 60 px above the bottom |
 | `account-remove` | `?showcase&accounts=tg` | Open the account's menu, click Remove account |
 | `bitrix-app` | `?showcase&signin-plan=bitrix:app&b24-step=app` | |
 | `mail-rules` | `?showcase&accounts=email` | Click Rules |
@@ -111,7 +111,7 @@ capture until `{shot}-{light,dark}-{ru,es}.webp` exist. All were captured from t
 | `own-review-risky` | 1280x1300 | `?showcase&own=on&own-discover=risky&own-review=@example/acme-crm-cli` | |
 | `own-check` | 1280x900 | as `own-review` | Click Add |
 | `own-confirm` | 1280x800 | as `own-review` | Click Add, then Skip and install |
-| `own-tools-list` | 1280x900 | `?showcase&own=1` | Scroll Tools WireCat has not checked into view |
+| `own-tools-list` | 1280x900 | `?showcase&own=1&accounts=acmecrm` | Close its details (Manage), scroll Tools WireCat has not checked into view |
 | `own-settings` | 1280x400 | `?showcase&section=settings&community=1&own=on` | Scroll the heading Language to the top |
 
 `own-settings` has all six files: EN, RU and ES, light and dark.
