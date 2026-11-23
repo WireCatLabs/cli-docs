@@ -36,7 +36,7 @@ tipos.
 - **Tus propias notas en una página.** Añade etiquetas, notas y hechos a una página. Se quedan en tu ordenador y nunca
   llegan a Notion.
 - **Escritura en Notion.** Crea, cambia y restaura páginas, añade comentarios y sube archivos. Antes de
-  borrar una página, pregunta. `WCNOTION_READ_ONLY=1` o el [ajuste `permissions`](./configuration.md#permissions)
+  borrar una página, pregunta en una terminal, y por MCP la borra sin preguntar. `WCNOTION_READ_ONLY=1` o el [ajuste `permissions`](./configuration.md#permissions)
   desactivan la escritura.
 - **Lectura en directo cuando la necesitas.** Lee una página de Notion como Markdown, o lista las bases de datos que
   ve el token, sin copiar nada.

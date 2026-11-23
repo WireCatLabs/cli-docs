@@ -115,7 +115,7 @@ The ways in, by tool:
 | Linear | A personal API key from Linear's Settings → Account → Security & access. Read is enough to copy; your agent needs Write to change issues. See [make a personal API key](../linear/installation.md#make-a-personal-api-key) |
 | Asterisk | Where your calls are: the path of Master.csv, or the address of a MySQL or PostgreSQL call database and a read-only user's password. Then the countries of your phone lines, so a caller without a country code is linked to the right contact |
 | Notion | A Notion token that you paste in the window. Then choose the pages and databases to copy. Until you choose one, Notion copies everything the token sees |
-| Yandex Disk | A Yandex OAuth token, from an app you register once at oauth.yandex.com. Then choose the folders to copy |
+| Yandex Disk | A Yandex OAuth token, from an app you register once at oauth.yandex.ru. Then choose the folders to copy |
 | WordPress | Your site's address, your user name and an application password, a password made only for this program. You make it in WordPress under Users → Profile → Application Passwords. The site must use https. See [Connect WordPress](../wordpress/installation.md) |
 | beeline | An API token for Beeline Cloud PBX, from the Beeline cabinet |
 
@@ -234,7 +234,8 @@ such as Zoom, is left out of the check.
   bot** and **Existing bot**. Each bot shows whether its token works, with **Reconnect** and **Remove bot**, which
   asks first. On a wide window the bots stand in a column beside the accounts.
 - **Permissions:** what agents may do with each group of commands, set per profile: **Allow**, **Ask first**,
-  **Read only** or **Block**.
+  **Read only** or **Block**. **Ask first** asks only in a terminal. An agent connected over MCP is not asked: its
+  change runs. To stop it, choose **Read only** or **Block**.
 - **Background service** (Telegram, MAX and WhatsApp): the tool gets new messages only while its service runs.
   Each account shows whether it runs and whether it starts when you log in. **Start and keep running** starts it
   and sets it to start at login, **Stop** stops it, and **Stop starting at login**, shown when it starts at login,

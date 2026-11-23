@@ -2,7 +2,7 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "Current command reference and v0.21 breaking-change note require durations for --unanswered; bare hours are invalid.",
+    "reason": "Current command reference and v0.21 breaking-change note require durations for --unanswered; bare hours are invalid. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -27,7 +27,7 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "Shell ! inverts the exit status to zero inside then; capture the command status in else before dispatching on 14/4. Applied after preservation validation to the same literal example in every locale.",
+    "reason": "Shell ! inverts the exit status to zero inside then; capture the command status in else before dispatching on 14/4. Applied after preservation validation to the same literal example in every locale. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -89,7 +89,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "MAX v0.23 client.ts forwards scheduledFor to the send guard; send-guards.test.ts confirms future-send hour accounting. Restrictions are checked at queuing, capacity belongs to the scheduled hour.",
+    "reason": "MAX v0.23 client.ts forwards scheduledFor to the send guard; send-guards.test.ts confirms future-send hour accounting. Restrictions are checked at queuing, capacity belongs to the scheduled hour. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -114,7 +114,7 @@
   {
     "tool": "tg",
     "slug": "sessions",
-    "reason": "Explicit beginner login instructions: distinguish app credentials/account/session, copyable complete commands, QR and phone sequences, code-delivery limitations, named account profiles and inactivity vs overall session lifetime. Verified against TG session.ts, Telegram auth/API documentation and official Desktop inactivity selector.",
+    "reason": "Explicit beginner login instructions: distinguish app credentials/account/session, copyable complete commands, QR and phone sequences, code-delivery limitations, named account profiles and inactivity vs overall session lifetime. Verified against TG session.ts, Telegram auth/API documentation and official Desktop inactivity selector. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -139,7 +139,7 @@
   {
     "tool": "max",
     "slug": "sessions",
-    "reason": "Define session/token/device in everyday terms, establish signed-in phone prerequisites and provide an explicit QR scan/verification sequence, checked against official MAX help and session.ts.",
+    "reason": "Define session/token/device in everyday terms, establish signed-in phone prerequisites and provide an explicit QR scan/verification sequence, checked against official MAX help and session.ts. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -164,7 +164,7 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "Distinguish syntax templates from executable commands and link first-login terminology to explicit full commands and the step-by-step login guide.",
+    "reason": "Distinguish syntax templates from executable commands and link first-login terminology to explicit full commands and the step-by-step login guide. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -189,7 +189,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "Distinguish syntax templates from executable commands and link first-login terminology to explicit full commands and the step-by-step login guide.",
+    "reason": "Distinguish syntax templates from executable commands and link first-login terminology to explicit full commands and the step-by-step login guide. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -214,7 +214,7 @@
   {
     "tool": "max",
     "slug": "sessions",
-    "reason": "When saved authorization fails, give an explicit QR login command: bare session start imports a token and would confuse a first-time reader. No token lifetime is invented.",
+    "reason": "When saved authorization fails, give an explicit QR login command: bare session start imports a token and would confuse a first-time reader. No token lifetime is invented. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -239,7 +239,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "Shell ! inverts command status inside then; capture the original failure in else. Same proven correction as TG; raw translation code remains intact until post-validation application.",
+    "reason": "Shell ! inverts command status inside then; capture the original failure in else. Same proven correction as TG; raw translation code remains intact until post-validation application. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -264,7 +264,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -289,7 +289,7 @@
   {
     "tool": "max",
     "slug": "sessions",
-    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations.",
+    "reason": "Use harness-neutral first-run commands. setup asks for the agent in an interactive terminal; preserve explicit option documentation and machine-mode behavior. Requested by owner 2026-10-04; checked against setup option/selectAgent implementations. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -416,7 +416,7 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "Scope repeat safety to topic edits and ordering; released guide explicitly forbids blindly replaying topic creation after unknown outcome.",
+    "reason": "Scope repeat safety to topic edits and ordering; released guide explicitly forbids blindly replaying topic creation after unknown outcome. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -441,7 +441,7 @@
   {
     "tool": "tg",
     "slug": "groups",
-    "reason": "Separate mutually exclusive approval flags into concrete command examples; a pipe inside a flag is illustrative shorthand, not executable syntax. tg refuses --approval together with --max-uses, so the limit goes with --no-approval. Topic search moved to `tg search topics`; `tg topics search` no longer exists.",
+    "reason": "Separate mutually exclusive approval flags into concrete command examples; a pipe inside a flag is illustrative shorthand, not executable syntax. tg refuses --approval together with --max-uses, so the limit goes with --no-approval. Topic search moved to `tg search topics`; `tg topics search` no longer exists. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -491,7 +491,7 @@
   {
     "tool": "tg",
     "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits.",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -516,7 +516,7 @@
   {
     "tool": "max",
     "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits.",
+    "reason": "Owner approved replacing verdict-like account labels with signals/limits. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -541,7 +541,7 @@
   {
     "tool": "tg",
     "slug": "mcp",
-    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list.",
+    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -566,7 +566,7 @@
   {
     "tool": "max",
     "slug": "mcp",
-    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list.",
+    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -666,7 +666,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "Released v0.41.0 source review: Read src/adapter/max-adapter.ts:453–455; isImage branch precedes asFile check, videos check asFile !== true. Shared CLI forwards asFile from dist/cli/messenger/messages-send-command.js:68. Contract flag description broad; owning generator needs clarification but runtime contract not changed.",
+    "reason": "Released v0.41.0 source review: Read src/adapter/max-adapter.ts:453–455; isImage branch precedes asFile check, videos check asFile !== true. Shared CLI forwards asFile from dist/cli/messenger/messages-send-command.js:68. Contract flag description broad; owning generator needs clarification but runtime contract not changed. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -691,7 +691,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "Released v0.41.0 source review: Read src/commands/messages.ts:28–29 forced history:store; read src/commands/message-link.test.ts returns url:null/access:unavailable/reason:unsupported_provider and asserts never wire. No test executed.",
+    "reason": "Released v0.41.0 source review: Read src/commands/messages.ts:28–29 forced history:store; read src/commands/message-link.test.ts returns url:null/access:unavailable/reason:unsupported_provider and asserts never wire. No test executed. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -716,7 +716,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "Released v0.41.0 source review: Read src/scheduled.test.ts lost scheduled send emitted once, outcome_unknown references queue; reject silent; read src/spec/operations/messages.ts:129 measured scheduled protocol. Dedup assumption is irrelevant to supported nonretry contract; remove author research status without asserting platform dedup.",
+    "reason": "Released v0.41.0 source review: Read src/scheduled.test.ts lost scheduled send emitted once, outcome_unknown references queue; reject silent; read src/spec/operations/messages.ts:129 measured scheduled protocol. Dedup assumption is irrelevant to supported nonretry contract; remove author research status without asserting platform dedup. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -735,7 +735,7 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "The released registration estimator extends through August 2026; preserve older historical changelog text.",
+    "reason": "The released registration estimator extends through August 2026; preserve older historical changelog text. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -760,7 +760,7 @@
   {
     "tool": "tg",
     "slug": "archive",
-    "reason": "Auto-reply audience changed in the reviewed release; rules no longer apply only to test accounts.",
+    "reason": "Auto-reply audience changed in the reviewed release; rules no longer apply only to test accounts. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -785,7 +785,7 @@
   {
     "tool": "tg",
     "slug": "remote",
-    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record.",
+    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -810,7 +810,7 @@
   {
     "tool": "max",
     "slug": "remote",
-    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record.",
+    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -848,7 +848,7 @@
   {
     "tool": "max",
     "slug": "mcp",
-    "reason": "Since MAX 0.73.0 the MCP catalogue includes unavailable commands (cli-core 0.412.0 mcp/server.js passes includeUnavailable: true), and mcp/surface.js registers max_write whenever the catalogue holds a writing command. The tool is therefore always present; a blocked write reports its availability and is refused on call. The native table still says max_write is absent when no write is permitted.",
+    "reason": "Since MAX 0.73.0 the MCP catalogue includes unavailable commands (cli-core 0.412.0 mcp/server.js passes includeUnavailable: true), and mcp/surface.js registers max_write whenever the catalogue holds a writing command. The tool is therefore always present; a blocked write reports its availability and is refused on call. The native table still says max_write is absent when no write is permitted. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -905,7 +905,7 @@
   {
     "tool": "max",
     "slug": "attachments",
-    "reason": "Bare relative guide URL is not normalized by the site link mapper; make its guide-relative path explicit.",
+    "reason": "Bare relative guide URL is not normalized by the site link mapper; make its guide-relative path explicit. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -930,7 +930,7 @@
   {
     "tool": "tg",
     "slug": "sessions",
-    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps.",
+    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -956,7 +956,7 @@
     "tool": "max",
     "slug": "troubleshooting",
     "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/messages.ts#L427-L433",
-    "reason": "Reviewed portal correction: discovery is archive-only even for one named chat; the released native troubleshooting sentence still needs this qualification. Native usage already incorporates it.",
+    "reason": "Reviewed portal correction: discovery is archive-only even for one named chat; the released native troubleshooting sentence still needs this qualification. Native usage already incorporates it. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -1052,7 +1052,7 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "Core 0.285.0 removed TG mail search. Memo 0.41.0 syncs notes with --only notes; distinguish notes from mail owned by Memo.",
+    "reason": "Core 0.285.0 removed TG mail search. Memo 0.41.0 syncs notes with --only notes; distinguish notes from mail owned by Memo. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1077,7 +1077,7 @@
   {
     "tool": "tg",
     "slug": "query-language",
-    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items.",
+    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1102,7 +1102,7 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items.",
+    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1127,7 +1127,7 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources.",
+    "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1152,7 +1152,7 @@
   {
     "tool": "max",
     "slug": "search",
-    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes.",
+    "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -1177,7 +1177,7 @@
   {
     "tool": "tg",
     "slug": "groups",
-    "reason": "Public guides carry no release numbers (AUTHORING: current capabilities). tg v0.66.0 docs/groups.md names cli-core 0.298.0 and tg 0.63.0 for the shared category file; which released tools read it is not settled at the current pins (MAX v0.56.0 is on Core 0.296.0; memo v0.58.0 is on Core 0.311.0 without tasks categories), so the sentence names no tools or versions.",
+    "reason": "Public guides carry no release numbers (AUTHORING: current capabilities). tg v0.66.0 docs/groups.md names cli-core 0.298.0 and tg 0.63.0 for the shared category file; which released tools read it is not settled at the current pins (MAX v0.56.0 is on Core 0.296.0; memo v0.58.0 is on Core 0.311.0 without tasks categories), so the sentence names no tools or versions. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1228,7 +1228,7 @@
   {
     "tool": "wa",
     "slug": "roadmap",
-    "reason": "whatsapp-cli v0.8.0 dropped the old-files item from Next, but its attachments guide still documents the limitation (media.retry-failed, nothing saved), the 0.7.0/0.8.0 changelogs claim no fix, and the released dist/reasons.js still carries media.retry-failed. Keep it as planned work until a release ships it. Re-checked for v0.10.0: roadmap, attachments guide and dist/reasons.js unchanged on this point; the 0.9.0/0.10.0 changelogs claim no fix.",
+    "reason": "whatsapp-cli v0.8.0 dropped the old-files item from Next, but its attachments guide still documents the limitation (media.retry-failed, nothing saved), the 0.7.0/0.8.0 changelogs claim no fix, and the released dist/reasons.js still carries media.retry-failed. Keep it as planned work until a release ships it. Re-checked for v0.10.0: roadmap, attachments guide and dist/reasons.js unchanged on this point; the 0.9.0/0.10.0 changelogs claim no fix. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1254,7 +1254,7 @@
   {
     "tool": "wa",
     "slug": "mcp",
-    "reason": "Remove an unmeasured token-cost comparison; command availability is established by the release contract, token equivalence is not.",
+    "reason": "Remove an unmeasured token-cost comparison; command availability is established by the release contract, token equivalence is not. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1280,7 +1280,7 @@
   {
     "tool": "wa",
     "slug": "search",
-    "reason": "The pinned Memo command contract uses sync --only mail and sync --only notes; sync --mail and import are obsolete. Preserve the native WhatsApp release while correcting its cross-tool examples.",
+    "reason": "The pinned Memo command contract uses sync --only mail and sync --only notes; sync --mail and import are obsolete. Preserve the native WhatsApp release while correcting its cross-tool examples. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1318,7 +1318,7 @@
   {
     "tool": "wa",
     "slug": "usage",
-    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1416,7 +1416,7 @@
   {
     "tool": "wa",
     "slug": "mcp",
-    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1442,7 +1442,7 @@
   {
     "tool": "wa",
     "slug": "groups",
-    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1462,7 +1462,7 @@
   {
     "tool": "wa",
     "slug": "sessions",
-    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog.",
+    "reason": "Keep test provenance in the maintainer review, preserving command behavior, requested WhatsApp actions and actual prerequisites in reader guides. Source: whatsapp-cli v0.6.0 docs and changelog. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1482,7 +1482,7 @@
   {
     "tool": "wa",
     "slug": "diagnostics",
-    "reason": "Explain the actual Windows file-mode limitation, not test provenance. Source: whatsapp-cli v0.6.0 src/diagnose.ts deviceModes returns checked:false on win32; native docs/diagnostics.md. whatsapp-cli v0.10.0 adds the same sentence to the doctor files paragraph; cli-core 0.428 privateFiles returns checked:false on win32.",
+    "reason": "Explain the actual Windows file-mode limitation, not test provenance. Source: whatsapp-cli v0.6.0 src/diagnose.ts deviceModes returns checked:false on win32; native docs/diagnostics.md. whatsapp-cli v0.10.0 adds the same sentence to the doctor files paragraph; cli-core 0.428 privateFiles returns checked:false on win32. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1521,7 +1521,7 @@
     "tool": "wa",
     "slug": "usage",
     "source": "https://faq.whatsapp.com/6614640168569481/",
-    "reason": "WhatsApp documents a 15-minute edit window for sent text. The native v0.6.0 guide says 20 minutes; do not promise a broader provider window. This changes portal guidance, not CLI runtime behavior.",
+    "reason": "WhatsApp documents a 15-minute edit window for sent text. The native v0.6.0 guide says 20 minutes; do not promise a broader provider window. This changes portal guidance, not CLI runtime behavior. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1547,7 +1547,7 @@
     "tool": "wa",
     "slug": "remote",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/remote.md",
-    "reason": "Use an authenticated public HTTPS endpoint, preserve revocation semantics, and link current client prerequisites instead of an unchecked plan/region matrix. Keep setup-test provenance internal.",
+    "reason": "Use an authenticated public HTTPS endpoint, preserve revocation semantics, and link current client prerequisites instead of an unchecked plan/region matrix. Keep setup-test provenance internal. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1597,7 +1597,7 @@
     "tool": "wa",
     "slug": "attachments",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/attachments.md",
-    "reason": "Distinguish an expired-media retry request from success: the same released guide documents media.retry-failed.",
+    "reason": "Distinguish an expired-media retry request from success: the same released guide documents media.retry-failed. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1623,7 +1623,7 @@
     "tool": "wa",
     "slug": "sessions",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
-    "reason": "The portal resolves explicit relative Markdown links; preserve the native configuration reference destination.",
+    "reason": "The portal resolves explicit relative Markdown links; preserve the native configuration reference destination. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1649,7 +1649,7 @@
     "tool": "wa",
     "slug": "sessions",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/sessions.md",
-    "reason": "State the released CLI photo-format validation and keep unverified provider-side timing/dimension research out of the reader guide.",
+    "reason": "State the released CLI photo-format validation and keep unverified provider-side timing/dimension research out of the reader guide. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1675,7 +1675,7 @@
     "tool": "wa",
     "slug": "mcp",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.6.0/docs/mcp.md",
-    "reason": "Name the commands the released personal MCP server never offers. whatsapp-cli v0.8.0 marks session, setup, complete and mcp as mcp:false, and cli-core 0.411 toolsFromCommands drops any command with a lifetime (watch, serve) and excludes the bot group, which bot mcp serves. Every other command is listed with its availability (includeUnavailable); authority-changing commands need mcp.authority. Re-checked for v0.10.0 (cli-core 0.428.0): the same six commands are mcp:false or have a lifetime, and mcp/server.js still uses includeUnavailable: true with exclude [[\"bot\"]]. Re-checked for v0.30.0 from its commands --json contract: session, setup, complete and mcp are mcp:false, watch and serve are persistent; bot mcp still serves the bot group.",
+    "reason": "Name the commands the released personal MCP server never offers. whatsapp-cli v0.8.0 marks session, setup, complete and mcp as mcp:false, and cli-core 0.411 toolsFromCommands drops any command with a lifetime (watch, serve) and excludes the bot group, which bot mcp serves. Every other command is listed with its availability (includeUnavailable); authority-changing commands need mcp.authority. Re-checked for v0.10.0 (cli-core 0.428.0): the same six commands are mcp:false or have a lifetime, and mcp/server.js still uses includeUnavailable: true with exclude [[\"bot\"]]. Re-checked for v0.30.0 from its commands --json contract: session, setup, complete and mcp are mcp:false, watch and serve are persistent; bot mcp still serves the bot group. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1700,7 +1700,7 @@
   {
     "tool": "wa",
     "slug": "usage",
-    "reason": "whatsapp-cli v0.8.0 removed the old-file download from the not-built list, yet the same guide still links there for it and the released attachments guide and dist/reasons.js still document media.retry-failed. Restore the item. Re-checked for v0.10.0: usage guide still links the not-built list for it; media.retry-failed still in dist/reasons.js.",
+    "reason": "whatsapp-cli v0.8.0 removed the old-file download from the not-built list, yet the same guide still links there for it and the released attachments guide and dist/reasons.js still document media.retry-failed. Restore the item. Re-checked for v0.10.0: usage guide still links the not-built list for it; media.retry-failed still in dist/reasons.js. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1725,7 +1725,7 @@
   {
     "tool": "tg",
     "slug": "groups",
-    "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings.",
+    "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
     "replacements": {
       "en": [
@@ -1763,7 +1763,7 @@
   {
     "tool": "tg",
     "slug": "mcp",
-    "reason": "Remove an unmeasured token-cost comparison. CLI and MCP availability are explained separately by the released exclusions and permissions.",
+    "reason": "Remove an unmeasured token-cost comparison. CLI and MCP availability are explained separately by the released exclusions and permissions. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
     "replacements": {
       "en": [
@@ -1790,7 +1790,7 @@
     "tool": "tg",
     "slug": "mcp",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
-    "reason": "The server has three dispatcher tools and excludes some commands; describe catalogue coverage without claiming one MCP tool per command.",
+    "reason": "The server has three dispatcher tools and excludes some commands; describe catalogue coverage without claiming one MCP tool per command. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1815,7 +1815,7 @@
   {
     "tool": "tg",
     "slug": "bot",
-    "reason": "tg 0.90.0 contract: bot messages sync has --until-id <id> (start at this message, by its t.me link, inclusive) and no --from option; Core 0.412 botMessagesSyncCommand passes --until-id as the internal from value, and the missing-start error says 'give --until-id <message link>'.",
+    "reason": "tg 0.90.0 contract: bot messages sync has --until-id <id> (start at this message, by its t.me link, inclusive) and no --from option; Core 0.412 botMessagesSyncCommand passes --until-id as the internal from value, and the missing-start error says 'give --until-id <message link>'. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1853,7 +1853,7 @@
     "tool": "tg",
     "slug": "mcp",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/commands.md",
-    "reason": "The released attachments extract command has no MCP exclusion or lifetime; remove the stale terminal-only restriction without claiming that installed parsers or provider consent are unnecessary.",
+    "reason": "The released attachments extract command has no MCP exclusion or lifetime; remove the stale terminal-only restriction without claiming that installed parsers or provider consent are unnecessary. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1879,7 +1879,7 @@
     "tool": "tg",
     "slug": "usage",
     "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
-    "reason": "The released stream serializer emits item/end records, as the updated watch section states. Keep the general JSONL description and jq example consistent with that contract.",
+    "reason": "The released stream serializer emits item/end records, as the updated watch section states. Keep the general JSONL description and jq example consistent with that contract. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -1916,7 +1916,7 @@
   {
     "tool": "tg",
     "slug": "usage",
-    "reason": "Scope empty stdout to refusal before output; framed streams can retain earlier records after a later failure.",
+    "reason": "Scope empty stdout to refusal before output; framed streams can retain earlier records after a later failure. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
     "replacements": {
       "en": [
@@ -1942,7 +1942,7 @@
   {
     "tool": "tg",
     "slug": "permissions",
-    "reason": "Use the shared AI agent term for the actor; an agent with unrestricted file/terminal access can still edit the settings.",
+    "reason": "Use the shared AI agent term for the actor; an agent with unrestricted file/terminal access can still edit the settings. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/permissions.md",
     "replacements": {
       "en": [
@@ -1956,7 +1956,7 @@
   {
     "tool": "tg",
     "slug": "remote",
-    "reason": "Do not promise provider plan/region eligibility from a stale matrix; retain direct primary prerequisites for each app, as in the reviewed WhatsApp guide.",
+    "reason": "Do not promise provider plan/region eligibility from a stale matrix; retain direct primary prerequisites for each app, as in the reviewed WhatsApp guide. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
     "replacements": {
       "en": [
@@ -1982,7 +1982,7 @@
   {
     "tool": "tg",
     "slug": "remote",
-    "reason": "Lead with the remote-connection task and accurately describe a public HTTPS endpoint protected by sign-in. Use verified client examples and link current provider prerequisites.",
+    "reason": "Lead with the remote-connection task and accurately describe a public HTTPS endpoint protected by sign-in. Use verified client examples and link current provider prerequisites. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
     "replacements": {
       "en": [
@@ -2021,7 +2021,7 @@
     "tool": "max",
     "slug": "security",
     "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2047,7 +2047,7 @@
     "tool": "max",
     "slug": "usage",
     "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept.",
+    "reason": "MAX v0.72.0 command contract uses join-request confirm/reject. Native shorthand and comments retain decline/accept. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2072,7 +2072,7 @@
   {
     "tool": "max",
     "slug": "usage",
-    "reason": "MAX v0.74.0 (since 0.73.0) answers every join request with `chats requests confirm|reject <chat> --all` (cli-core admin-commands.js, services/admin.js answerAllRequests); only --link is refused, because MAX does not report a request's link (max-cli client/chat-writes.js). The command is `requests confirm`, not `requests accept`. The native usage guide still says --all is refused.",
+    "reason": "MAX v0.74.0 (since 0.73.0) answers every join request with `chats requests confirm|reject <chat> --all` (cli-core admin-commands.js, services/admin.js answerAllRequests); only --link is refused, because MAX does not report a request's link (max-cli client/chat-writes.js). The command is `requests confirm`, not `requests accept`. The native usage guide still says --all is refused. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -2136,7 +2136,7 @@
     "tool": "max",
     "slug": "roadmap",
     "source": "https://github.com/WireCatLabs/max-cli/blob/v0.72.0/CHANGELOG.md",
-    "reason": "Verified attachment archives shipped in v0.71.0 and service-event skipping in v0.72.0; keep actual future features separate.",
+    "reason": "Verified attachment archives shipped in v0.71.0 and service-event skipping in v0.72.0; keep actual future features separate. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2161,7 +2161,7 @@
   {
     "tool": "zm",
     "slug": "search",
-    "reason": "Commands have one name and no aliases: state where --since-time and --until-time apply without naming the list options they replaced.",
+    "reason": "Commands have one name and no aliases: state where --since-time and --until-time apply without naming the list options they replaced. Backported to the tool's own docs in WireCatLabs/zoom-cli#396 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2187,7 +2187,7 @@
     "tool": "zm",
     "slug": "configuration",
     "phase": "before-translation",
-    "reason": "One name per setting: the document-source provider is local or obsidian; drop the sentence that keeps the old provider value folder in a guide.",
+    "reason": "One name per setting: the document-source provider is local or obsidian; drop the sentence that keeps the old provider value folder in a guide. Backported to the tool's own docs in WireCatLabs/zoom-cli#396 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2201,7 +2201,7 @@
     "tool": "zm",
     "slug": "installation",
     "phase": "before-translation",
-    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the update step must.",
+    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the update step must. Backported to the tool's own docs in WireCatLabs/zoom-cli#396 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2215,7 +2215,7 @@
     "tool": "zm",
     "slug": "sessions",
     "phase": "before-translation",
-    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the login step must.",
+    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the login step must. Backported to the tool's own docs in WireCatLabs/zoom-cli#396 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2228,7 +2228,7 @@
   {
     "tool": "max",
     "slug": "cli-contract",
-    "reason": "Commands have one name and no aliases: drop the note that names the removed messages/chats/tasks stats paths. The stats commands above are the only paths.",
+    "reason": "Commands have one name and no aliases: drop the note that names the removed messages/chats/tasks stats paths. The stats commands above are the only paths. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -2253,7 +2253,7 @@
   {
     "tool": "tg",
     "slug": "search",
-    "reason": "The legacy query language was removed (strict Lucene is the only language); do not name it as a mode discovery excludes.",
+    "reason": "The legacy query language was removed (strict Lucene is the only language); do not name it as a mode discovery excludes. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2278,7 +2278,7 @@
   {
     "tool": "max",
     "slug": "audio-recognition",
-    "reason": "The models audio and models text groups were removed; max v0.74.0 has one models group (list, download, keys). Drop the sentence that tells readers to keep the removed groups apart.",
+    "reason": "The models audio and models text groups were removed; max v0.74.0 has one models group (list, download, keys). Drop the sentence that tells readers to keep the removed groups apart. Backported to the tool's own docs in WireCatLabs/max-cli#990 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "ru": [
         {
@@ -2337,7 +2337,7 @@
   {
     "tool": "memo",
     "slug": "mail",
-    "reason": "The removed memo mail commands are named as old commands, not as runnable examples, and a memo command written without memo is named in full.",
+    "reason": "The removed memo mail commands are named as old commands, not as runnable examples, and a memo command written without memo is named in full. Backported to the tool's own docs in WireCatLabs/cli-memo#890 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2434,7 +2434,7 @@
   {
     "tool": "gcal",
     "slug": "usage",
-    "reason": "gcal v0.17.0 docs/usage.md names the words before a scheduled command as `gcal personal`, which the checker reads as a command with an unknown subcommand; mark it as the start of a command line.",
+    "reason": "gcal v0.17.0 docs/usage.md names the words before a scheduled command as `gcal personal`, which the checker reads as a command with an unknown subcommand; mark it as the start of a command line. Backported to the tool's own docs in WireCatLabs/gcal-cli#195 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2459,7 +2459,7 @@
   {
     "tool": "mail",
     "slug": "usage",
-    "reason": "mail v0.10.0 docs/usage.md names memo's old `memo mail delete` in code, which the checker reads as an unknown subcommand; the prose names it without code.",
+    "reason": "mail v0.10.0 docs/usage.md names memo's old `memo mail delete` in code, which the checker reads as an unknown subcommand; the prose names it without code. Backported to the tool's own docs in WireCatLabs/mail-cli#199 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2484,7 +2484,7 @@
   {
     "tool": "mail",
     "slug": "oauth-google",
-    "reason": "mail v0.10.0 docs/oauth-google.md writes the example project name `mail for me` as code, which the checker reads as a command with an unknown subcommand; quote it as a name instead.",
+    "reason": "mail v0.10.0 docs/oauth-google.md writes the example project name `mail for me` as code, which the checker reads as a command with an unknown subcommand; quote it as a name instead. Backported to the tool's own docs in WireCatLabs/mail-cli#199 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2560,7 +2560,7 @@
     "tool": "gcal",
     "slug": "troubleshooting",
     "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.21.0/docs/troubleshooting.md",
-    "reason": "gcal v0.21.0 docs/troubleshooting.md says \"unset the secret to use WireCat's app\", which scripts/check-doc-versions.mjs reads as the editorial phrase \"Use WireCat\". Same meaning, worded so the check passes.",
+    "reason": "gcal v0.21.0 docs/troubleshooting.md says \"unset the secret to use WireCat's app\", which scripts/check-doc-versions.mjs reads as the editorial phrase \"Use WireCat\". Same meaning, worded so the check passes. Backported to the tool's own docs in WireCatLabs/gcal-cli#195 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2575,7 +2575,7 @@
     "slug": "search",
     "phase": "before-translation",
     "source": "https://github.com/WireCatLabs/zoom-cli/blob/v0.67.0/CHANGELOG.md",
-    "reason": "Released 0.61.0 makes search meetings a read over MCP (zm_read, not zm_write), as the CHANGELOG and docs/mcp.md say; docs/search.md still names zm_write.",
+    "reason": "Released 0.61.0 makes search meetings a read over MCP (zm_read, not zm_write), as the CHANGELOG and docs/mcp.md say; docs/search.md still names zm_write. Backported to the tool's own docs in WireCatLabs/zoom-cli#396 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2590,7 +2590,7 @@
     "slug": "permissions",
     "phase": "before-translation",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.117.0/docs/permissions.md",
-    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2605,7 +2605,7 @@
     "slug": "mcp",
     "phase": "before-translation",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.117.0/docs/mcp.md",
-    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it. Backported to the tool's own docs in WireCatLabs/tg-cli#922 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2620,7 +2620,7 @@
     "slug": "mcp",
     "phase": "before-translation",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.30.0/docs/mcp.md",
-    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2635,7 +2635,7 @@
     "slug": "permissions",
     "phase": "before-translation",
     "source": "https://github.com/WireCatLabs/whatsapp-cli/blob/v0.30.0/docs/permissions.md",
-    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it.",
+    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it. Backported to the tool's own docs in WireCatLabs/whatsapp-cli#421 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2648,7 +2648,7 @@
   {
     "tool": "memo",
     "slug": "business",
-    "reason": "memo review takes a query only through review list in the command contract; review list kind:contract gives the same answer on 0.131.64.",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:contract gives the same answer on 0.131.64. Backported to the tool's own docs in WireCatLabs/cli-memo#890 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2673,7 +2673,7 @@
   {
     "tool": "memo",
     "slug": "people",
-    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64.",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:relationship gives the same answer on 0.131.64. Backported to the tool's own docs in WireCatLabs/cli-memo#890 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2698,7 +2698,7 @@
   {
     "tool": "memo",
     "slug": "usage",
-    "reason": "memo review takes a query only through review list in the command contract; review list kind:invoice,payment gives the same answer on 0.131.64. In 0.131.72's account groups, `tg work` and `b24 work` name a profile, not a runnable command, so they are written as the start of one.",
+    "reason": "memo review takes a query only through review list in the command contract; review list kind:invoice,payment gives the same answer on 0.131.64. In 0.131.72's account groups, `tg work` and `b24 work` name a profile, not a runnable command, so they are written as the start of one. Backported to the tool's own docs in WireCatLabs/cli-memo#890 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2775,7 +2775,7 @@
   {
     "tool": "memo",
     "slug": "import",
-    "reason": "memo search takes a resource and a query; on 0.135.0 an imported document is found by `memo search notes <query> --source import:<name>` (checked in a throwaway home), and bare `memo search --source` is refused as an unknown option.",
+    "reason": "memo search takes a resource and a query; on 0.135.0 an imported document is found by `memo search notes <query> --source import:<name>` (checked in a throwaway home), and bare `memo search --source` is refused as an unknown option. Backported to the tool's own docs in WireCatLabs/cli-memo#890 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2892,7 +2892,7 @@
     "tool": "linear",
     "slug": "configuration",
     "source": "https://github.com/WireCatLabs/linear-cli/blob/v0.1.0/docs/configuration.md",
-    "reason": "The released Run records section keeps cli-template's developer note (\"a command you add\", `context.run`) and names a `comments` command that linear does not have (docs/commands.md at v0.1.0). The corrected text keeps only what holds for linear's own commands.",
+    "reason": "The released Run records section keeps cli-template's developer note (\"a command you add\", `context.run`) and names a `comments` command that linear does not have (docs/commands.md at v0.1.0). The corrected text keeps only what holds for linear's own commands. Backported to the tool's own docs in WireCatLabs/linear-cli#10 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2918,7 +2918,7 @@
     "tool": "attio",
     "slug": "installation",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain and drops \"this page walks you through it\" (AUTHORING, mandatory opening order). The Desktop steps name the buttons of wirecat-desktop src/features/tools/messages.tsx (Tools, Install, Manage, Sign in here, per language). Attio's Scopes screen shows labels, not ids, and its button reads \"+ New access token\" (wirecat-desktop src/features/signin/messages-plan.ts, the Attio steps).",
+    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain and drops \"this page walks you through it\" (AUTHORING, mandatory opening order). The Desktop steps name the buttons of wirecat-desktop src/features/tools/messages.tsx (Tools, Install, Manage, Sign in here, per language). Attio's Scopes screen shows labels, not ids, and its button reads \"+ New access token\" (wirecat-desktop src/features/signin/messages-plan.ts, the Attio steps). Backported to the tool's own docs in WireCatLabs/attio-cli#17 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -2980,7 +2980,7 @@
     "tool": "attio",
     "slug": "index",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The Desktop way in names the buttons of wirecat-desktop src/features/tools/messages.tsx (Tools, Install, Manage).",
+    "reason": "Docs audit 2026-11-23. The Desktop way in names the buttons of wirecat-desktop src/features/tools/messages.tsx (Tools, Install, Manage). Backported to the tool's own docs in WireCatLabs/attio-cli#17 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3006,7 +3006,7 @@
     "tool": "attio",
     "slug": "configuration",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The CRM list commands (deals, people, organizations, users, fields) give --limit a default of 50 (cli-core 0.708.0 dist/crm/cli/index.js:328, records.js), and a flag with a value wins over the config limit (dist/cli/settings.js:361), so `limit` does not change those lists.",
+    "reason": "Docs audit 2026-11-23. The CRM list commands (deals, people, organizations, users, fields) give --limit a default of 50 (cli-core 0.708.0 dist/crm/cli/index.js:328, records.js), and a flag with a value wins over the config limit (dist/cli/settings.js:361), so `limit` does not change those lists. Backported to the tool's own docs in WireCatLabs/attio-cli#17 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3032,7 +3032,7 @@
     "tool": "hubspot",
     "slug": "index",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. `leads` has only list and show (hubspot docs/commands.md at v0.4.0 and v0.5.0); deals are the group that creates, updates, moves and closes. Desktop 0.7.4 and later install and sign in HubSpot (wirecat-desktop catalog/tools.json at v0.7.4).",
+    "reason": "Docs audit 2026-11-23. `leads` has only list and show (hubspot docs/commands.md at v0.4.0 and v0.5.0); deals are the group that creates, updates, moves and closes. Desktop 0.7.4 and later install and sign in HubSpot (wirecat-desktop catalog/tools.json at v0.7.4). Backported to the tool's own docs in WireCatLabs/hubspot-cli#23 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3070,7 +3070,7 @@
     "tool": "hubspot",
     "slug": "roadmap",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. Desktop sign-in for HubSpot shipped in Desktop 0.7.4 (wirecat-desktop catalog/tools.json at v0.7.4 and v0.7.5: hubspot signIn with setupFrom 0.1.0), so it is no longer a plan.",
+    "reason": "Docs audit 2026-11-23. Desktop sign-in for HubSpot shipped in Desktop 0.7.4 (wirecat-desktop catalog/tools.json at v0.7.4 and v0.7.5: hubspot signIn with setupFrom 0.1.0), so it is no longer a plan. Backported to the tool's own docs in WireCatLabs/hubspot-cli#23 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3096,7 +3096,7 @@
     "tool": "wordpress",
     "slug": "index",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. Desktop 0.7.5 installs WordPress and signs it in with the site address, user name and application password (wirecat-desktop catalog/tools.json at v0.7.5).",
+    "reason": "Docs audit 2026-11-23. Desktop 0.7.5 installs WordPress and signs it in with the site address, user name and application password (wirecat-desktop catalog/tools.json at v0.7.5). Backported to the tool's own docs in WireCatLabs/wordpress-cli#13 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3122,7 +3122,7 @@
     "tool": "wordpress",
     "slug": "installation",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain and drops \"this page walks you through it\". Desktop 0.7.5 signs WordPress in with three fields (wirecat-desktop src/features/signin/messages-plan.ts: Site address, User name, Application password, per language). WordPress shows Users → Profile only to users who can list users; other roles get Profile (wp-admin/menu.php; Desktop's own steps say the same).",
+    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain and drops \"this page walks you through it\". Desktop 0.7.5 signs WordPress in with three fields (wirecat-desktop src/features/signin/messages-plan.ts: Site address, User name, Application password, per language). WordPress shows Users → Profile only to users who can list users; other roles get Profile (wp-admin/menu.php; Desktop's own steps say the same). Backported to the tool's own docs in WireCatLabs/wordpress-cli#13 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3184,7 +3184,7 @@
     "tool": "ydisk",
     "slug": "installation",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain. Desktop installs Yandex Disk and signs it in with a pasted Yandex OAuth token, then a folder choice (wirecat-desktop catalog/tools.json at v0.7.5, ydisk signIn and folderPicker); the buttons are those of src/features/tools/messages.tsx.",
+    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain. Desktop installs Yandex Disk and signs it in with a pasted Yandex OAuth token, then a folder choice (wirecat-desktop catalog/tools.json at v0.7.5, ydisk signIn and folderPicker); the buttons are those of src/features/tools/messages.tsx. Backported to the tool's own docs in WireCatLabs/ydisk-cli#32 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3234,7 +3234,7 @@
     "tool": "pbx",
     "slug": "installation",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain before how Asterisk keeps calls. Asterisk's files are owned by the asterisk user and group on stock Asterisk and FreePBX; asterisk-cli has no pbx group.",
+    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain before how Asterisk keeps calls. Asterisk's files are owned by the asterisk user and group on stock Asterisk and FreePBX; asterisk-cli has no pbx group. Backported to the tool's own docs in WireCatLabs/asterisk-cli#54 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3272,7 +3272,7 @@
     "tool": "pbx",
     "slug": "index",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. ffmpeg is needed only to turn WAV, GSM or M4A recordings into text (asterisk-cli src/commands/transcribe.ts:113 at v0.9.0); the install page says the same.",
+    "reason": "Docs audit 2026-11-23. ffmpeg is needed only to turn WAV, GSM or M4A recordings into text (asterisk-cli src/commands/transcribe.ts:113 at v0.9.0); the install page says the same. Backported to the tool's own docs in WireCatLabs/asterisk-cli#54 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3298,7 +3298,7 @@
     "tool": "amo",
     "slug": "index",
     "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. amo 0.3.0 adds a one-click sign-in for amoCRM administrators that needs no integration of your own (amo-cli CHANGELOG 0.3.0, docs/installation.md#sign-in-with-amocrm); the index still named one integration and two sign-ins.",
+    "reason": "Docs audit 2026-11-23. amo 0.3.0 adds a one-click sign-in for amoCRM administrators that needs no integration of your own (amo-cli CHANGELOG 0.3.0, docs/installation.md#sign-in-with-amocrm); the index still named one integration and two sign-ins. Backported to the tool's own docs in WireCatLabs/amo-cli#24 (2026-11-23): drop this entry at the next pin bump.",
     "replacements": {
       "en": [
         {
@@ -3328,6 +3328,554 @@
         {
           "before": "- **Inicio de sesión con un token o con la integración.** Los dos se guardan",
           "after": "- **Inicio de sesión con un clic, con un token o con la integración.** Todos se guardan"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "permissions",
+    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). Same text in tg-cli#922.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `ask` | A change asks in the terminal. |",
+          "after": "| `ask` | A change asks first in the terminal. Over MCP it runs without asking. |"
+        },
+        {
+          "before": "More specific keys win: `permissions.messages.send ask` still permits sending, with a question\nin the terminal and without a server form over MCP.",
+          "after": "More specific keys win: `permissions.messages.send ask` still permits sending. In the terminal it asks\nfirst. Over MCP it does not ask, and the agent's send goes ahead."
+        },
+        {
+          "before": "Over MCP, `ask` does not require a server form: the app controls\nits own approvals and may allow a call without asking again.",
+          "after": "Over MCP, a change set to `ask` runs without asking you: nobody is at a\nterminal to answer, and the server shows no form. Only the agent app may still ask, if you leave its write tool\nunapproved there."
+        },
+        {
+          "before": "`ask` requests confirmation in the CLI and follows the MCP client’s approval flow.",
+          "after": "`ask` asks first in the terminal, and over MCP it saves without asking."
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `ask` | Перед изменением запрашивается подтверждение в терминале. |",
+          "after": "| `ask` | Перед изменением запрашивается подтверждение в терминале. Через MCP изменение выполняется без вопроса. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` по-прежнему разрешает отправку с вопросом\nв терминале, а через MCP — без формы подтверждения на сервере.",
+          "after": "`permissions.messages.send ask` по-прежнему разрешает отправку. В терминале\nона сначала спрашивает. Через MCP вопроса нет, и агент отправляет сразу."
+        },
+        {
+          "before": "Через MCP значение `ask` не требует формы подтверждения на сервере: приложение управляет\nсвоими подтверждениями и может разрешить вызов без повторного вопроса.",
+          "after": "Через MCP изменение с уровнем `ask` выполняется без вопроса: у терминала никого нет, и сервер не показывает\nформу. Спросить вас может только само приложение агента, если вы не разрешили в нём инструмент записи заранее."
+        },
+        {
+          "before": "`ask` запрашивает подтверждение в CLI, а в MCP действует порядок одобрения приложения-клиента.",
+          "after": "`ask` сначала спрашивает в терминале, а через MCP сохраняет без вопроса."
+        }
+      ],
+      "es": [
+        {
+          "before": "| `ask` | Se pide confirmación en el terminal antes de un cambio. |",
+          "after": "| `ask` | Se pide confirmación en el terminal antes de un cambio. Por MCP se ejecuta sin preguntar. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` sigue permitiendo enviar, con una pregunta\nen el terminal y sin un formulario del servidor mediante MCP.",
+          "after": "`permissions.messages.send ask` sigue permitiendo enviar. En el terminal\npregunta antes. Por MCP no pregunta, y el envío del agente sigue adelante."
+        },
+        {
+          "before": "Mediante MCP, `ask` no exige un formulario del servidor: la aplicación controla\nsus propias aprobaciones y puede permitir una llamada sin volver a preguntar.",
+          "after": "Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no\nmuestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura."
+        },
+        {
+          "before": "`ask` solicita confirmación en la CLI y sigue el flujo de aprobación del cliente MCP.",
+          "after": "`ask` pregunta antes en el terminal, y por MCP guarda sin preguntar."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "tg",
+    "slug": "bot",
+    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). Same text in tg-cli#922.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "`ask` and `allow` permit a requested MCP write without a server form; `deny` and `readonly`\nblock it.",
+          "after": "Over MCP, `ask` and `allow` both let a write run without asking you; `deny` and `readonly`\nblock it."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Как и в других командах, `ask` и `allow` разрешают запрошенную запись MCP без формы подтверждения на сервере; `deny` и `readonly` блокируют его.",
+          "after": "Как и в других командах, через MCP `ask` и `allow` выполняют запись без вопроса; `deny` и `readonly` её блокируют."
+        }
+      ],
+      "es": [
+        {
+          "before": "`ask` y `allow` permiten una escritura MCP solicitada sin un formulario de servidor; `deny` y `readonly` lo bloquean.",
+          "after": "Por MCP, `ask` y `allow` dejan que una escritura se ejecute sin preguntarte; `deny` y `readonly` la bloquean."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "wa",
+    "slug": "permissions",
+    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). Same text in whatsapp-cli#421.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `ask` | A change asks in the terminal. |",
+          "after": "| `ask` | A change asks first in the terminal. Over MCP it runs without asking. |"
+        },
+        {
+          "before": "More specific keys win: `permissions.messages.send ask` still permits sending, with a question in the terminal and\nwithout a server form over MCP.",
+          "after": "More specific keys win: `permissions.messages.send ask` still permits sending. In the terminal it asks first. Over\nMCP it does not ask, and the agent's send goes ahead."
+        },
+        {
+          "before": "Over MCP, `ask` does not require a server form: the app controls its own\napprovals and may allow a call without asking again.",
+          "after": "Over MCP, a change set to `ask` runs without asking you: nobody is at a terminal\nto answer, and the server shows no form. Only the agent app may still ask, if you leave its write tool unapproved there."
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `ask` | Перед изменением в терминале запрашивается подтверждение. |",
+          "after": "| `ask` | Перед изменением в терминале запрашивается подтверждение. Через MCP изменение выполняется без вопроса. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` по-прежнему разрешает отправку с вопросом в терминале и без формы сервера через MCP.",
+          "after": "`permissions.messages.send ask` по-прежнему разрешает отправку. В терминале она сначала спрашивает. Через MCP вопроса нет, и агент отправляет сразу."
+        },
+        {
+          "before": "Через MCP `ask` не требует формы сервера: приложение контролирует подтверждения пользователя и может разрешить вызов без повторного запроса.",
+          "after": "Через MCP изменение с уровнем `ask` выполняется без вопроса: у терминала никого нет, и сервер не показывает форму. Спросить вас может только само приложение агента, если вы не разрешили в нём инструмент записи заранее."
+        }
+      ],
+      "es": [
+        {
+          "before": "| `ask` | Los cambios piden confirmación en el terminal. |",
+          "after": "| `ask` | Los cambios piden confirmación en el terminal. Por MCP se ejecutan sin preguntar. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` aún permite el envío, con una pregunta en el terminal y sin formulario de servidor sobre MCP.",
+          "after": "`permissions.messages.send ask` aún permite el envío. En el terminal pregunta antes. Por MCP no pregunta, y el envío del agente sigue adelante."
+        },
+        {
+          "before": "A través de MCP, `ask` no requiere un formulario de servidor: la aplicación controla sus propias aprobaciones y puede permitir una llamada sin volver a preguntar.",
+          "after": "Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no muestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "max",
+    "slug": "permissions",
+    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). Same Russian text in max-cli#990.",
+    "phase": "before-translation",
+    "replacements": {
+      "ru": [
+        {
+          "before": "| `ask` | Изменение спрашивает в терминале. |",
+          "after": "| `ask` | Изменение сначала спрашивает в терминале. Через MCP оно выполняется без вопроса. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` сохранит вопрос перед отправкой\nв терминале и разрешит её через MCP.",
+          "after": "`permissions.messages.send ask` сохранит вопрос перед отправкой\nв терминале. Через MCP вопроса не будет, и агент отправит сообщение сразу."
+        },
+        {
+          "before": "Через MCP уровень `ask` не требует формы сервера:\nприложение управляет своими подтверждениями и может разрешить вызов без нового вопроса.",
+          "after": "Через MCP изменение с уровнем `ask` выполняется без\nвопроса: у терминала никого нет, и сервер не показывает форму. Спросить вас может только само приложение агента,\nесли вы не разрешили в нём инструмент записи заранее."
+        }
+      ],
+      "en": [
+        {
+          "before": "| `ask` | Changes prompt for confirmation in the terminal. |",
+          "after": "| `ask` | Changes prompt for confirmation in the terminal. Over MCP they run without asking. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` keeps the confirmation prompt before sending in the terminal and allows sending through MCP.",
+          "after": "`permissions.messages.send ask` keeps the confirmation prompt before sending in the terminal. Over MCP there is no question, and the agent's send goes ahead."
+        },
+        {
+          "before": "Through MCP, `ask` does not require a server confirmation form: the application manages its own confirmations and may allow a call without another prompt.",
+          "after": "Over MCP, a change set to `ask` runs without asking you: nobody is at a terminal to answer, and the server shows no form. Only the agent app may still ask, if you leave its write tool unapproved there."
+        }
+      ],
+      "es": [
+        {
+          "before": "| `ask` | Los cambios piden confirmación en el terminal. |",
+          "after": "| `ask` | Los cambios piden confirmación en el terminal. Por MCP se ejecutan sin preguntar. |"
+        },
+        {
+          "before": "`permissions.messages.send ask` mantiene la confirmación antes de enviar en el terminal y permite enviar mediante MCP.",
+          "after": "`permissions.messages.send ask` mantiene la confirmación antes de enviar en el terminal. Por MCP no hay pregunta, y el envío del agente sigue adelante."
+        },
+        {
+          "before": "Mediante MCP, `ask` no exige un formulario de confirmación del servidor: la aplicación gestiona sus propias confirmaciones y puede permitir una llamada sin volver a preguntar.",
+          "after": "Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no muestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "drive",
+    "slug": "configuration",
+    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The drive settings page did not say it. Same text in drive-cli#389.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "These permissions restrict the live file/Doc command families. Local sync and local notes use\nseparate keys.",
+          "after": "These permissions restrict the live file/Doc command families. Local sync and local notes use\nseparate keys. A change set to `ask` asks first in a terminal. Over MCP nobody is there to answer, so it runs\nwithout asking: set a key to `readonly` or `deny` to stop an agent."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Эти разрешения ограничивают группы команд для файлов и Google Docs. Для локальной синхронизации\nи заметок используются отдельные ключи.",
+          "after": "Эти разрешения ограничивают группы команд для файлов и Google Docs. Для локальной синхронизации\nи заметок используются отдельные ключи. Изменение с уровнем `ask` в терминале сначала спрашивает. Через MCP ответить\nнекому, поэтому оно выполняется без вопроса: чтобы остановить агента, поставьте ключу `readonly` или `deny`."
+        }
+      ],
+      "es": [
+        {
+          "before": "Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización\nlocal y las notas tienen claves separadas.",
+          "after": "Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización\nlocal y las notas tienen claves separadas. Un cambio en `ask` pregunta antes en una terminal. Por MCP nadie puede\nresponder, así que se ejecuta sin preguntar: pon una clave en `readonly` o `deny` para detener a un agente."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "zm",
+    "slug": "configuration",
+    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The zm permissions table said only what ask does at a terminal. Same text in zoom-cli#396.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "| `ask` | a change to Zoom asks y/N at a terminal; without one it needs `--yes` (exit 7 otherwise) |",
+          "after": "| `ask` | a change to Zoom asks y/N at a terminal; without one it needs `--yes` (exit 7 otherwise). Over MCP it runs without asking |"
+        },
+        {
+          "before": "Settings, skill installation, upgrade and archive timer changes over MCP require `mcp.authority` at `allow` or `ask`.",
+          "after": "Over MCP nobody is at a terminal to answer, so a change set to `ask` runs without asking you, the built-in `ask` on\n`meetings.create`, `meetings.update` and `meetings.cancel` included. Set a key to `readonly` or `deny` to stop an agent.\n\nSettings, skill installation, upgrade and archive timer changes over MCP require `mcp.authority` at `allow` or `ask`."
+        }
+      ],
+      "ru": [
+        {
+          "before": "| `ask` | изменение в Zoom спрашивает y/N в терминале; без терминала нужен `--yes` (иначе код выхода 7) |",
+          "after": "| `ask` | изменение в Zoom спрашивает y/N в терминале; без терминала нужен `--yes` (иначе код выхода 7). Через MCP выполняется без вопроса |"
+        },
+        {
+          "before": "Настройки, установка навыка, обновление программы и изменение архивных таймеров через MCP требуют",
+          "after": "Через MCP у терминала никого нет, поэтому изменение с уровнем `ask` выполняется без вопроса, в том числе встроенный\n`ask` для `meetings.create`, `meetings.update` и `meetings.cancel`. Чтобы остановить агента, поставьте ключу `readonly`\nили `deny`.\n\nНастройки, установка навыка, обновление программы и изменение архивных таймеров через MCP требуют"
+        }
+      ],
+      "es": [
+        {
+          "before": "| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7) |",
+          "after": "| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7). Por MCP se ejecuta sin preguntar |"
+        },
+        {
+          "before": "Por MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo",
+          "after": "Por MCP nadie está en una terminal para responder, así que un cambio en `ask` se ejecuta sin preguntarte, también el\n`ask` de serie de `meetings.create`, `meetings.update` y `meetings.cancel`. Pon una clave en `readonly` o `deny` para\ndetener a un agente.\n\nPor MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "notion",
+    "slug": "troubleshooting",
+    "reason": "Docs follow-up 2026-11-23. Rows for notion.not-shared and notion.restricted, from notion-cli src/notion/errors.ts at v0.5.0 (404 object_not_found maps to notion.not-shared with the ••• → Connections hint, 403 restricted_resource to notion.restricted) and src/notion/notion.ts (a page part Notion would not give is reported as notion.not-shared). Docs follow-up 2026-11-23: the opening leads with the reader's gain instead of a narrator line (docs/AUTHORING.md, mandatory opening order). Same text in notion-cli#46: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "Start with the symptom, run the check, then retry the command. Keep the error code and the profile name for a\nsupport request.",
+          "after": "Get a command that failed working again, most often in one step. Find the symptom or the code from the error in the\ntable, do what its row says, then run the command again. Keep the error code and the profile name for a support\nrequest."
+        },
+        {
+          "before": "| A write is refused |",
+          "after": "| `notion.not-shared`, or Notion has no such page or database | The page or database is not shared with your connection, or the id is wrong. In Notion, open the page, choose ••• → Connections, and add your connection. Then run the command again. |\n| A page reads, but the answer lists `notion.not-shared` | A part of the page, such as a linked database, is not shared with your connection, so it was left out. Share that part as above. |\n| `notion.restricted` | Notion says the token may not do this. Check the connection's [capabilities](https://developers.notion.com/reference/capabilities) in Notion: reading needs Read content, a change needs Update content or Insert content. |\n| A write is refused |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Найдите симптом, выполните проверку и повторите команду. Для обращения в поддержку сохраните код ошибки и имя\nпрофиля.",
+          "after": "Верните к работе команду, которая не сработала, чаще всего за один шаг. Найдите в таблице симптом или код из ошибки,\nсделайте то, что сказано в его строке, и повторите команду. Для обращения в поддержку сохраните код ошибки и имя\nпрофиля."
+        },
+        {
+          "before": "| Запись отклонена |",
+          "after": "| `notion.not-shared`, или Notion не находит страницу или базу | Страница или база не открыта для вашего подключения, или в id ошибка. В Notion откройте страницу, выберите ••• → Connections и добавьте своё подключение. Затем повторите команду. |\n| Страница читается, но в ответе есть `notion.not-shared` | Часть страницы, например связанная база, не открыта для подключения, поэтому её нет в ответе. Откройте доступ к этой части так же. |\n| `notion.restricted` | Notion говорит, что токену это нельзя. Проверьте [возможности](https://developers.notion.com/reference/capabilities) подключения в Notion: для чтения нужен Read content, для изменения Update content или Insert content. |\n| Запись отклонена |"
+        }
+      ],
+      "es": [
+        {
+          "before": "Empieza por el síntoma, haz la comprobación y vuelve a ejecutar el comando. Guarda el código de error y el nombre del\nperfil para una consulta al soporte.",
+          "after": "Haz que vuelva a funcionar un comando que falló, casi siempre en un paso. Busca en la tabla el síntoma o el código del\nerror, haz lo que dice su fila y vuelve a ejecutar el comando. Guarda el código de error y el nombre del perfil para una\nconsulta al soporte."
+        },
+        {
+          "before": "| Se rechaza una escritura |",
+          "after": "| `notion.not-shared`, o Notion no tiene esa página o base de datos | La página o la base de datos no está compartida con tu conexión, o el id está mal. En Notion, abre la página, elige ••• → Connections y añade tu conexión. Después vuelve a ejecutar el comando. |\n| Una página se lee, pero la respuesta incluye `notion.not-shared` | Una parte de la página, como una base de datos enlazada, no está compartida con tu conexión, así que quedó fuera. Compártela igual. |\n| `notion.restricted` | Notion dice que el token no puede hacer esto. Revisa las [capacidades](https://developers.notion.com/reference/capabilities) de la conexión en Notion: leer necesita Read content, y un cambio Update content o Insert content. |\n| Se rechaza una escritura |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "linear",
+    "slug": "troubleshooting",
+    "reason": "Docs follow-up 2026-11-23: the opening leads with the reader's gain instead of a narrator line (docs/AUTHORING.md, mandatory opening order). Same text in linear-cli#10: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "Start with the symptom, run the check, then retry the command. Keep the error code and the profile name for a\nsupport request.",
+          "after": "Get a command that failed working again, most often in one step. Find the symptom or the code from the error in the\ntable, do what its row says, then run the command again. Keep the error code and the profile name for a support\nrequest."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Найдите симптом, выполните проверку и повторите команду. Для обращения в поддержку сохраните код ошибки и имя\nпрофиля.",
+          "after": "Верните к работе команду, которая не сработала, чаще всего за один шаг. Найдите в таблице симптом или код из ошибки,\nсделайте то, что сказано в его строке, и повторите команду. Для обращения в поддержку сохраните код ошибки и имя\nпрофиля."
+        }
+      ],
+      "es": [
+        {
+          "before": "Empieza por el síntoma, haz la comprobación y vuelve a ejecutar el comando. Guarda el código de error y el nombre del\nperfil para una petición de ayuda.",
+          "after": "Haz que vuelva a funcionar un comando que falló, casi siempre en un paso. Busca en la tabla el síntoma o el código del\nerror, haz lo que dice su fila y vuelve a ejecutar el comando. Guarda el código de error y el nombre del perfil para una\npetición de ayuda."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "notion",
+    "slug": "usage",
+    "reason": "Docs follow-up 2026-11-23: the opening leads with the reader's gain instead of a narrator line (docs/AUTHORING.md, mandatory opening order). Same idea in notion-cli#46: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "This page explains how a command is built, and how an agent uses the tool. Read it before your first command.",
+          "after": "Read and change your Notion pages from a terminal, or let your agent do it, always in the workspace you name. Every command starts\nwith a profile, so nothing goes to the wrong account. A script gets JSON, with an error code to branch on, and an\nagent gets the same commands as a skill or over MCP."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Здесь объясняется, как устроена команда и как агент работает с инструментом. Прочитайте это перед первой командой.",
+          "after": "Читайте и меняйте страницы Notion из терминала или поручите это агенту, всегда в том рабочем пространстве, которое вы назвали.\nКаждая команда начинается с профиля, поэтому ничего не попадёт в чужой аккаунт. Скрипт получает JSON с кодом ошибки,\nпо которому решает, что делать дальше, а агент получает те же команды как навык или через MCP."
+        }
+      ],
+      "es": [
+        {
+          "before": "Aquí se explica cómo se construye un comando y cómo usa un agente la herramienta. Léelo antes de tu primer comando.",
+          "after": "Lee y cambia tus páginas de Notion desde un terminal, o deja que lo haga tu agente, siempre en el espacio de trabajo que nombras.\nCada comando empieza por un perfil, así que nada va a la cuenta equivocada. Un script recibe JSON, con un código de\nerror para decidir qué hacer, y un agente recibe los mismos comandos como skill o por MCP."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "linear",
+    "slug": "usage",
+    "reason": "Docs follow-up 2026-11-23: the opening leads with the reader's gain instead of a narrator line (docs/AUTHORING.md, mandatory opening order). Same idea in linear-cli#10: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "This page explains how a command is built, and how an agent uses the tool. Read it before your first command.",
+          "after": "Ask about your team's issues, or change one, from a terminal, or let your agent do it, always in the workspace you name. Every command starts\nwith a profile, so nothing goes to the wrong account. A script gets JSON, with an error code to branch on, and an\nagent gets the same commands as a skill or over MCP."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Здесь объясняется, как устроена команда и как с инструментом работает агент. Прочитайте это до первой команды.",
+          "after": "Спрашивайте о задачах команды и меняйте их из терминала или поручите это агенту, всегда в том рабочем пространстве, которое вы назвали.\nКаждая команда начинается с профиля, поэтому ничего не попадёт в чужой аккаунт. Скрипт получает JSON с кодом ошибки,\nпо которому решает, что делать дальше, а агент получает те же команды как навык или через MCP."
+        }
+      ],
+      "es": [
+        {
+          "before": "Esta página explica cómo se forma un comando y cómo usa la herramienta un agente. Léela antes de tu primer comando.",
+          "after": "Pregunta por las incidencias de tu equipo o cambia una desde un terminal, o deja que lo haga tu agente, siempre en el espacio de trabajo que nombras.\nCada comando empieza por un perfil, así que nada va a la cuenta equivocada. Un script recibe JSON, con un código de\nerror para decidir qué hacer, y un agente recibe los mismos comandos como skill o por MCP."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "notion",
+    "slug": "configuration",
+    "reason": "Docs follow-up 2026-11-23: the opening leads with the reader's gain instead of a narrator line (docs/AUTHORING.md, mandatory opening order). Same text in notion-cli#46: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "Settings live in one file, `config.json`, in the folder `notion doctor` shows. Each profile has its own part,\nand `defaults` apply to every profile. This page lists how to see and change them.",
+          "after": "Decide once what your agent may change in Notion, and how much one command lists. Settings live in one file,\n`config.json`, in the folder `notion doctor` shows. Each profile has its own part, and `defaults` apply to every\nprofile."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Настройки хранятся в одном файле, `config.json`, в папке, которую показывает `notion doctor`. У каждого профиля своя\nчасть, а `defaults` действуют для всех профилей. На этой странице описано, как посмотреть и поменять настройки.",
+          "after": "Решите один раз, что агенту можно менять в Notion и сколько показывает одна команда. Настройки хранятся в одном\nфайле, `config.json`, в папке, которую показывает `notion doctor`. У каждого профиля своя часть, а `defaults`\nдействуют для всех профилей."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los ajustes viven en un archivo, `config.json`, en la carpeta que muestra `notion doctor`. Cada perfil tiene su\nparte, y `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.",
+          "after": "Decide una vez qué puede cambiar tu agente en Notion y cuánto muestra un comando. Los ajustes están en un archivo,\n`config.json`, en la carpeta que muestra `notion doctor`. Cada perfil tiene su parte, y `defaults` se aplica a todos\nlos perfiles."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "linear",
+    "slug": "configuration",
+    "reason": "Docs follow-up 2026-11-23: the opening leads with the reader's gain instead of a narrator line (docs/AUTHORING.md, mandatory opening order). Same text in linear-cli#10: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "Settings live in one file, `config.json`, in the folder `linear doctor` shows. Each profile has its own part,\nand `defaults` apply to every profile. This page lists how to see and change them.",
+          "after": "Decide once what your agent may change in Linear, and how much one command lists. Settings live in one file,\n`config.json`, in the folder `linear doctor` shows. Each profile has its own part, and `defaults` apply to every\nprofile."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Настройки лежат в одном файле, `config.json`, в папке, которую показывает `linear doctor`. У каждого профиля своя\nчасть, а `defaults` действуют для всех профилей. Здесь описано, как их посмотреть и поменять.",
+          "after": "Решите один раз, что агенту можно менять в Linear и сколько показывает одна команда. Настройки хранятся в одном\nфайле, `config.json`, в папке, которую показывает `linear doctor`. У каждого профиля своя часть, а `defaults`\nдействуют для всех профилей."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los ajustes están en un archivo, `config.json`, en la carpeta que muestra `linear doctor`. Cada perfil tiene su parte,\ny `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.",
+          "after": "Decide una vez qué puede cambiar tu agente en Linear y cuánto muestra un comando. Los ajustes están en un archivo,\n`config.json`, en la carpeta que muestra `linear doctor`. Cada perfil tiene su parte, y `defaults` se aplica a todos\nlos perfiles."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "configuration",
+    "reason": "Docs follow-up 2026-11-23. A contents list for the settings page, and YDISK_TOKEN: cli-core src/cli/profile-token.ts reads <PREFIX>_TOKEN before the keyring for every profile, and ydisk session status names it as the token's source (ydisk src/commands/session.ts). Same text in ydisk-cli#32: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "`ydisk doctor` shows. Each profile has its own part, and `defaults` apply to every profile.\n\n",
+          "after": "`ydisk doctor` shows. Each profile has its own part, and `defaults` apply to every profile.\n\n**On this page:**\n\n1. [Permissions](#permissions)\n2. [Run records](#run-records)\n3. [Other settings](#other-settings)\n4. [Environment variables](#environment-variables)\n\n"
+        },
+        {
+          "before": "| `YDISK_READ_ONLY` | `1` refuses every change. |",
+          "after": "| `YDISK_READ_ONLY` | `1` refuses every change. |\n| `YDISK_TOKEN` | A Yandex OAuth token that every profile uses instead of its saved one, for a CI job or a container with no keyring. `session status` then names it as the token's source. |"
+        }
+      ],
+      "ru": [
+        {
+          "before": "которую показывает `ydisk doctor`. У каждого профиля своя часть, а `defaults` действуют для всех профилей.\n\n",
+          "after": "которую показывает `ydisk doctor`. У каждого профиля своя часть, а `defaults` действуют для всех профилей.\n\n**На этой странице:**\n\n1. [Разрешения](#permissions)\n2. [Записи запусков](#run-records)\n3. [Другие настройки](#other-settings)\n4. [Переменные окружения](#environment-variables)\n\n"
+        },
+        {
+          "before": "| `YDISK_READ_ONLY` | `1` отклоняет любое изменение. |",
+          "after": "| `YDISK_READ_ONLY` | `1` отклоняет любое изменение. |\n| `YDISK_TOKEN` | OAuth-токен Яндекса, который каждый профиль берёт вместо сохранённого: для задачи CI или контейнера без связки ключей системы. `session status` тогда называет его источником токена. |"
+        }
+      ],
+      "es": [
+        {
+          "before": "`defaults` valen para\ntodos los perfiles.\n\n",
+          "after": "`defaults` valen para\ntodos los perfiles.\n\n**En esta página:**\n\n1. [Permisos](#permissions)\n2. [Registros de ejecución](#run-records)\n3. [Otros ajustes](#other-settings)\n4. [Variables de entorno](#environment-variables)\n\n"
+        },
+        {
+          "before": "| `YDISK_READ_ONLY` | `1` rechaza cualquier cambio. |",
+          "after": "| `YDISK_READ_ONLY` | `1` rechaza cualquier cambio. |\n| `YDISK_TOKEN` | Un token OAuth de Yandex que todos los perfiles usan en lugar del guardado, para un trabajo de CI o un contenedor sin llavero del sistema. `session status` lo nombra entonces como origen del token. |"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "installation",
+    "reason": "Docs follow-up 2026-11-23. account remove, from ydisk src/commands/account.ts at v0.5.0 and cli-core src/cli/account-remove.ts: it deletes the token and the settings, needs --keep-data or --delete-data, asks first or takes --yes, takes --dry-run, and revokes nothing (only Yandex revokes the OAuth token). Same text in ydisk-cli#32: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "`ydisk personal session end` forgets the profile's token on this computer. Then remove the tool:",
+          "after": "To forget one account on this computer, remove its profile:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nIt deletes the profile's token and its settings. Say what happens to the files it copied: `--keep-data` leaves them\nin the store, where search still finds them, and `--delete-data` deletes them, with the list of folders you chose to\ncopy. Nothing on your Disk changes. At a terminal it asks first, `--yes` answers for a script, and `--dry-run` lists\nwhat it would remove without removing it. The token stays valid at Yandex: only Yandex can revoke it, in your Yandex\nID settings.\n\n`ydisk personal session end` forgets only the token and keeps the profile. To remove the tool itself:"
+        }
+      ],
+      "ru": [
+        {
+          "before": "`ydisk personal session end` забывает токен профиля на этом компьютере. Затем удалите сам инструмент:",
+          "after": "Чтобы забыть один аккаунт на этом компьютере, удалите его профиль:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nКоманда удаляет токен профиля и его настройки. Скажите, что делать со скопированными файлами: `--keep-data`\nоставляет их в хранилище, где их по-прежнему находит поиск, а `--delete-data` удаляет их вместе со списком папок,\nкоторые вы выбрали для копирования. На Диске ничего не меняется. В терминале команда сначала спрашивает, `--yes`\nотвечает за скрипт, а `--dry-run` показывает, что будет удалено, ничего не удаляя. Токен у Яндекса остаётся\nдействительным: отозвать его может только Яндекс, в настройках Яндекс ID.\n\n`ydisk personal session end` забывает только токен и оставляет профиль. Чтобы удалить сам инструмент:"
+        }
+      ],
+      "es": [
+        {
+          "before": "`ydisk personal session end` olvida el token del perfil en este ordenador. Después quita la herramienta:",
+          "after": "Para olvidar una cuenta en este ordenador, quita su perfil:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nBorra el token del perfil y sus ajustes. Di qué pasa con los archivos que copió: `--keep-data` los deja en el\nalmacén, donde la búsqueda los sigue encontrando, y `--delete-data` los borra, con la lista de carpetas que elegiste\ncopiar. En tu Disk no cambia nada. En una terminal pregunta antes, `--yes` responde por un script y `--dry-run`\nmuestra lo que quitaría sin quitar nada. El token sigue siendo válido en Yandex: solo Yandex puede revocarlo, en los\najustes de Yandex ID.\n\n`ydisk personal session end` olvida solo el token y conserva el perfil. Para quitar la herramienta:"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "amo",
+    "slug": "installation",
+    "reason": "Docs follow-up 2026-11-23. The first paragraph said the CRM lets a program in only through a private integration; amo 0.3.0 adds a one-click sign-in for amoCRM administrators that needs no integration of their own (amo-cli CHANGELOG 0.3.0). Same text in amo-cli#24: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "The CRM keeps\nyour deals, contacts and companies in the cloud, and it lets a program in only through a private integration that an\naccount administrator makes.",
+          "after": "The CRM keeps\nyour deals, contacts and companies in the cloud. An amoCRM administrator lets `amo` in with one click in the browser,\nwith no integration of their own. Kommo, and users who are not administrators, paste a key from a private integration\nthat an administrator makes."
+        }
+      ],
+      "ru": [
+        {
+          "before": "CRM хранит\nваши сделки, контакты и компании в облаке и пускает программу только через приватную интеграцию, которую создает\nадминистратор аккаунта.",
+          "after": "CRM хранит\nваши сделки, контакты и компании в облаке. Администратор amoCRM пускает `amo` одним нажатием в браузере, без своей\nинтеграции. Для Kommo и для пользователей без прав администратора нужен ключ из приватной интеграции, которую создаёт\nадминистратор."
+        }
+      ],
+      "es": [
+        {
+          "before": "El CRM guarda tus negociaciones, contactos y empresas en la nube, y solo deja entrar a un programa a\ntravés de una integración privada que crea un administrador de la cuenta.",
+          "after": "El CRM guarda tus negociaciones, contactos y empresas en la nube. Un administrador de amoCRM deja entrar a `amo` con un\nclic en el navegador, sin una integración propia. Kommo, y los usuarios que no son administradores, pegan una clave de\nuna integración privada que crea un administrador."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "pbx",
+    "slug": "installation",
+    "reason": "Docs follow-up 2026-11-23. Steps for an SSH user that may only forward to the database: pbx opens only a direct-tcpip channel (cli-core src/sftp/ssh2.ts forwardOut), never a shell or a command. What a CDR database on another computer must accept (MySQL bind-address, PostgreSQL listen_addresses and pg_hba.conf, the firewall, db_tls). Same text in asterisk-cli#54: drop this entry at the next pin bump.",
+    "phase": "before-translation",
+    "replacements": {
+      "en": [
+        {
+          "before": "`cdr_source postgres` reads PostgreSQL.",
+          "after": "`10.0.0.%` stands for the address of the computer that runs `pbx`. When the database is on another computer, it must\nalso accept that address:\n\n1. On MySQL or MariaDB, set `bind-address` in the server's settings to an address your computer reaches, not\n   `127.0.0.1`, and restart the database. On PostgreSQL, add that address to `listen_addresses` in `postgresql.conf`,\n   and a line for the user to `pg_hba.conf`, such as `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.\n2. Let your computer's address through the firewall to the database port, and no other address.\n3. Turn on `db_tls true` when the connection crosses a network you do not control.\n\nNot ready to open the database to the network? Reach it\n[through the phone system's SSH](#a-database-behind-the-phone-systems-ssh) instead.\n\n`cdr_source postgres` reads PostgreSQL."
+        },
+        {
+          "before": "`db_ssh_port` changes the SSH port (22).",
+          "after": "The SSH user needs no shell. Make one before the first `session start`, on the phone system, as root:\n\n1. Create the user with no shell, and give it your public key:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Let it forward only to the database. Add this to the end of `/etc/ssh/sshd_config`, with the `db_host` and\n   `db_port` you set (`127.0.0.1:5432` for PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Check the file with `sshd -t`, then reload the SSH server with `systemctl reload sshd`.\n\n`pbx` asks the SSH server only to forward to the database, so this user can do nothing else on the phone system.\n\n`db_ssh_port` changes the SSH port (22)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "`cdr_source postgres` читает PostgreSQL.",
+          "after": "`10.0.0.%` здесь означает адрес компьютера, на котором работает `pbx`. Если база стоит на другом компьютере, она тоже\nдолжна принимать этот адрес:\n\n1. В MySQL или MariaDB задайте в настройках сервера `bind-address`: адрес, до которого доходит ваш компьютер, а не\n   `127.0.0.1`. Затем перезапустите базу. В PostgreSQL добавьте этот адрес в `listen_addresses` в `postgresql.conf`, а\n   для пользователя добавьте строку в `pg_hba.conf`, например `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.\n2. Откройте порт базы в сетевом экране только для адреса вашего компьютера.\n3. Включите `db_tls true`, если соединение идёт через сеть, которую вы не контролируете.\n\nНе хотите открывать базу в сеть? Подключайтесь к ней\n[через SSH самой АТС](#a-database-behind-the-phone-systems-ssh).\n\n`cdr_source postgres` читает PostgreSQL."
+        },
+        {
+          "before": "`db_ssh_port` меняет порт SSH (22).",
+          "after": "Пользователю SSH не нужна командная оболочка. Создайте его до первого `session start`, на АТС, от имени root:\n\n1. Создайте пользователя без оболочки и дайте ему ваш открытый ключ:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Разрешите ему пробрасывать соединение только до базы. Добавьте эти строки в конец `/etc/ssh/sshd_config`, с теми\n   `db_host` и `db_port`, что вы задали (`127.0.0.1:5432` для PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Проверьте файл командой `sshd -t`, затем перезагрузите SSH-сервер командой `systemctl reload sshd`.\n\n`pbx` просит SSH-сервер только пробросить соединение до базы, поэтому этот пользователь больше ничего не может\nсделать на АТС.\n\n`db_ssh_port` меняет порт SSH (22)."
+        }
+      ],
+      "es": [
+        {
+          "before": "`cdr_source postgres` lee PostgreSQL.",
+          "after": "`10.0.0.%` es la dirección del ordenador donde funciona `pbx`. Si la base de datos está en otro ordenador, también\ndebe aceptar esa dirección:\n\n1. En MySQL o MariaDB, pon en los ajustes del servidor `bind-address`: una dirección a la que llega tu ordenador, no\n   `127.0.0.1`. Después reinicia la base de datos. En PostgreSQL, añade esa dirección a `listen_addresses` en\n   `postgresql.conf`, y una línea para el usuario en `pg_hba.conf`, como `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.\n2. Deja pasar por el cortafuegos hasta el puerto de la base de datos la dirección de tu ordenador y ninguna otra.\n3. Activa `db_tls true` cuando la conexión cruce una red que no controlas.\n\n¿Prefieres no abrir la base de datos a la red? Llega a ella\n[por el SSH de la propia centralita](#a-database-behind-the-phone-systems-ssh).\n\n`cdr_source postgres` lee PostgreSQL."
+        },
+        {
+          "before": "`db_ssh_port` cambia el puerto SSH (22).",
+          "after": "El usuario SSH no necesita un intérprete de comandos. Créalo antes del primer `session start`, en la centralita,\ncomo root:\n\n1. Crea el usuario sin intérprete y dale tu clave pública:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Déjale reenviar solo hasta la base de datos. Añade esto al final de `/etc/ssh/sshd_config`, con el `db_host` y el\n   `db_port` que pusiste (`127.0.0.1:5432` para PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Comprueba el archivo con `sshd -t` y recarga el servidor SSH con `systemctl reload sshd`.\n\n`pbx` solo pide al servidor SSH que reenvíe hasta la base de datos, así que este usuario no puede hacer nada más en la\ncentralita.\n\n`db_ssh_port` cambia el puerto SSH (22)."
         }
       ]
     }

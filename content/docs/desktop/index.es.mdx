@@ -124,7 +124,7 @@ Cómo entra cada herramienta:
 | Linear | Una clave de API personal de Settings → Account → Security & access en Linear. Read basta para copiar; tu agente necesita Write para cambiar incidencias. Mira [crea una clave de API personal](../linear/installation.md#make-a-personal-api-key) |
 | Asterisk | Dónde están tus llamadas: la ruta de Master.csv, o la dirección de una base de llamadas MySQL o PostgreSQL y la contraseña de un usuario de solo lectura. Después, los países de tus líneas, para que quien llama sin prefijo de país se enlace con el contacto correcto |
 | Notion | Un token de Notion que pegas en la ventana. Después eliges las páginas y bases de datos que se copian. Mientras no eliges ninguna, Notion copia todo lo que ve el token |
-| Yandex Disk | Un token OAuth de Yandex, de una aplicación que registras una vez en oauth.yandex.com. Después eliges las carpetas que se copian |
+| Yandex Disk | Un token OAuth de Yandex, de una aplicación que registras una vez en oauth.yandex.ru. Después eliges las carpetas que se copian |
 | WordPress | La dirección del sitio, tu nombre de usuario y una contraseña de aplicación, una contraseña solo para este programa. Se crea en WordPress en Usuarios → Perfil → Contraseñas de aplicación. El sitio tiene que usar https. Mira [Conectar WordPress](../wordpress/installation.md) |
 | beeline | Un token de API de Beeline Cloud PBX, del panel de Beeline |
 
@@ -254,7 +254,8 @@ formato lee, como Zoom, queda fuera de la comprobación.
   tiene **Bot nuevo** y **Bot existente**. Cada bot muestra si su token funciona, con **Reconectar** y **Eliminar el
   bot**, que pregunta antes. En una ventana ancha, los bots están en una columna junto a las cuentas.
 - **Permisos:** lo que los agentes pueden hacer con cada grupo de comandos, por perfil: **Permitir**,
-  **Preguntar antes**, **Solo lectura** o **Bloquear**.
+  **Preguntar antes**, **Solo lectura** o **Bloquear**. **Preguntar antes** solo pregunta en una terminal. A un agente
+  conectado por MCP no se le pregunta: su cambio se ejecuta. Para detenerlo, elige **Solo lectura** o **Bloquear**.
 - **Servicio en segundo plano** (Telegram, MAX y WhatsApp): la herramienta recibe mensajes nuevos solo mientras su
   servicio funciona. Cada cuenta muestra si funciona y si se inicia al entrar en tu sesión. **Iniciar y mantener**
   lo inicia y hace que arranque al entrar, **Detener** lo detiene y **No iniciar al entrar**, que aparece cuando

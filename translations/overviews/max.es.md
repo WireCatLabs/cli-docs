@@ -67,7 +67,7 @@ Tú:     Sí.
   chats con una petición, las respuestas que debes, la búsqueda por significado y sin conexión, las notas de voz a
   texto en tu ordenador, un resumen matutino programado.
 - **Límites que tú pones al agente.** Solo lectura, envíos solo a los chats de tu lista y como mucho 30 envíos por hora
-  por defecto. Antes de enviar, `max` puede preguntarte. Ninguna otra herramienta de la comparativa documenta estos
+  por defecto. Antes de enviar, `max` puede preguntarte en el terminal. Ninguna otra herramienta de la comparativa documenta estos
   límites.
 - **Sin servidor de WireCat.** `max` solo habla con MAX, desde tu ordenador. Tu sesión se guarda en el llavero del
   sistema.
