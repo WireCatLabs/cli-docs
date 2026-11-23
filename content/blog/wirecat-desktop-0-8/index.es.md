@@ -1,7 +1,7 @@
 ---
 title: "WireCat Desktop 0.8: tu correo ordenado por tu modelo de IA"
 description: Ve qué correo necesita respuesta, ordenado por el modelo de IA que elegiste, con el precio de cada ordenación. Decide antes si dos contactos son la misma persona, deshaz lo que unió un agente, inicia sesión en tus propias herramientas en la ventana y recibe las actualizaciones de Linux por apt.
-date: 2026-11-24
+date: 2026-11-25
 tags: [release-notes]
 cover: ./cover.es.jpg
 coverAlt: "WireCat Desktop 0.8 junto a la pestaña Bandeja en modo oscuro, donde una ordenación terminada nombra su modelo y un coste de menos de un céntimo, y dos hilos esperan respuesta."

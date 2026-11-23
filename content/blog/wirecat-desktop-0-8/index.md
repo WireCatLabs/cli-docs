@@ -1,7 +1,7 @@
 ---
 title: "WireCat Desktop 0.8: your mail sorted by your AI model"
 description: See which mail needs an answer, sorted by the AI model you chose, with the price of each run. Decide faster who is one person, undo what an agent joined, sign in to your own tools in the window, and get Linux updates from apt.
-date: 2026-11-24
+date: 2026-11-25
 tags: [release-notes]
 cover: ./cover.jpg
 coverAlt: "WireCat Desktop 0.8 next to the Inbox tab in dark mode, where a finished run names its model and a cost under a cent, and two threads wait for an answer."
