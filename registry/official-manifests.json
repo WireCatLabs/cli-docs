@@ -69,8 +69,8 @@
     }
   },
   "attio": {
-    "version": "0.2.2",
-    "manifestSha256": "fec980c6cb98d9706f472484e9466c33c12f1c4e421f773b9184eb872c944972",
+    "version": "0.3.1",
+    "manifestSha256": "0f0fbef46edaebf24475916b0cb0ef43a25db917b96ad605c7b8a85f6d73c6b1",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
     "desktop": {
@@ -133,7 +133,13 @@
       "settings": null,
       "accountRemove": {
         "signOut": ["{profile}", "session", "end", "--record", "--json"],
-        "remove": null,
+        "remove": {
+          "minVersion": "0.0.0",
+          "keepData": ["{profile}", "account", "remove", "--keep-data", "--record", "--json"],
+          "deleteData": ["{profile}", "account", "remove", "--delete-data", "--record", "--json"],
+          "dryRun": "--dry-run",
+          "confirm": "--yes"
+        },
         "removes": ["signIn"],
         "keeps": ["settings", "data", "listed"]
       }
