@@ -56,7 +56,7 @@ que lo ejecutes tú mismo en una terminal.
 | Una lectura con `api`, como `api contacts-list` | `api.contacts-list` y la clave del comando que lee los mismos registros (`people.list`), así que `people: deny` también la detiene | `allow` |
 | Un borrado, archivado o fusión con `api` | su propia clave `api.` y la clave `.delete` de su grupo | `ask` |
 | Un propietario puesto en un registro, por cualquier camino | `crm.assign-others` | `deny` |
-| `api contacts-gdpr-delete`, que borra un contacto para siempre | además `people.erase`, para que puedas negarlo solo a él | `ask` |
+| `api contacts-gdpr-delete`, que borra un contacto para siempre | además `people.erase`, así que está desactivado hasta que lo permitas | `deny` |
 | Cualquier otro comando | la suya | `allow` |
 
 Una clave de HubSpot pertenece a la cuenta, no a una persona. `hubspot` no distingue tus registros de los de un

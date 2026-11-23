@@ -149,7 +149,7 @@
     "repo": "WireCatLabs/amo-cli",
     "package": "@wirecat/amo-cli",
     "lang": "en",
-    "docsRef": "v0.2.0",
+    "docsRef": "v0.3.0",
     "tier": "extra",
     "category": "crm",
     "summary": {
@@ -179,7 +179,7 @@
     "repo": "WireCatLabs/hubspot-cli",
     "package": "@wirecat/hubspot-cli",
     "lang": "en",
-    "docsRef": "v0.4.0",
+    "docsRef": "v0.5.0",
     "tier": "extra",
     "category": "crm",
     "summary": {
@@ -209,7 +209,7 @@
     "repo": "WireCatLabs/wordpress-cli",
     "package": "@wirecat/wordpress-cli",
     "lang": "en",
-    "docsRef": "v0.2.0",
+    "docsRef": "v0.3.0",
     "category": "content",
     "summary": {
       "en": "Read and write your self-hosted WordPress site from the terminal or your AI agent: posts, pages, tags and drafts, with a local copy to search offline.",

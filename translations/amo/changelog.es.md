@@ -4,6 +4,34 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nueva primero.
 
+## 0.3.0 — 23.11.2026
+
+### Añadido
+
+- **Inicio de sesión con un clic: `amo <profile> session start --host https://<subdomain>.amocrm.ru --one-click`.** El
+  navegador abre una página en connect.wirecat.dev, un servidor de WireCat en Rusia al que amoCRM puede llegar. La
+  persona elige la cuenta y pulsa «Разрешить», y amoCRM crea en ella una integración de WireCat. Nadie copia un ID de
+  integración, una clave secreta ni un token. amoCRM envía la clave secreta de la integración a connect.wirecat.dev, y
+  `amo` la recoge una vez. `amo` canjea el código solo con la cuenta que nombra `--host`, y rechaza uno permitido en
+  otra cuenta. Guarda y renueva el inicio de sesión igual que con `--client-id`. amoCRM solo deja permitirlo a un
+  administrador de la cuenta ([amoCRM: el botón](https://www.amocrm.ru/developers/content/oauth/button)). Por ahora
+  solo cuentas de amoCRM; Kommo inicia sesión con un token.
+- **`amo setup` ofrece primero «Войти через amoCRM» a un administrador,** y el token en segundo lugar. WireCat Desktop
+  muestra el enlace que hay que abrir y espera hasta que se permita el acceso.
+- **`amo setup` pregunta si eres administrador de la cuenta.** Un administrador crea la integración como antes. Un
+  usuario que no lo es recibe la petición que enviar a un administrador para un token de larga duración, un aviso de
+  que el token lleva los permisos del administrador y, una vez conectado, cómo sincronizar sus propias negociaciones en
+  lugar de las del administrador. WireCat Desktop muestra los mismos pasos. La página de instalación tiene el mismo
+  camino en "Si no eres administrador".
+
+### Corregido
+
+- **La ayuda compartida del CRM ya no menciona leads ni los campos de Bitrix24.** amoCRM no tiene leads aparte:
+  `changes list`, `search all` y los demás comandos compartidos describen ahora solo negociaciones.
+- La configuración y la página de instalación ya no dicen que cualquiera puede iniciar sesión con la integración en el
+  navegador: la guía de amoCRM dice que ofrece ese inicio de sesión solo en cuentas donde la persona es administradora
+  ([amoCRM: paso a paso](https://www.amocrm.ru/developers/content/oauth/step-by-step)).
+
 ## 0.2.0 — 19.11.2026
 
 ### Añadido
