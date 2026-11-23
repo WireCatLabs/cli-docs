@@ -161,7 +161,7 @@ describe("amo-connect service", () => {
     expect(script).toContain('CALLBACK = "https://connect.wirecat.dev/webhooks/apps/amo-callback"')
     expect(script).toContain('secrets_uri: "https://connect.wirecat.dev/api/amo/secrets"')
     expect(script).not.toContain('createElement("script")')
-    expect(script).toContain('logo: "https://connect.wirecat.dev/connect/wirecat-amo-logo.png"')
+    expect(script).toContain('logo: "https://i.postimg.cc/M6xrHsqs/wirecat-amo-logo.png"')
   })
 
   it.each(["/", "/connect/", "/connect/../server.mjs", "/static/connect/amo.html", "/webhooks/apps/b24-callback"])(
