@@ -95,8 +95,14 @@ same name, so the apex CNAME to `cli-docs.pages.dev` stays, and so do the MX and
 | Monitor `wirecat.dev /ru` | `5fdc3ee6bfc62cc2325cb5a4f1df9fc4` | HTTPS `GET /ru`, `Host: wirecat.dev`, expects 200, every 60 s |
 | Pool `wirecat-ru` | `11afb551b2a386077c41f1cd889f449c` | `139.100.204.107`, checked from Eastern Europe |
 | Pool `wirecat-world` | `fa4300c2df5fb87774731327006b5538` | `cli-docs.pages.dev` with `Host: cli-docs.pages.dev` ([Pages as an origin](https://developers.cloudflare.com/load-balancing/pools/cloudflare-pages-origin/)) |
-| Load balancer `wirecat.dev` | `339b010e22b3723d1ebcfebdf2d181db` | `steering_policy: geo`, `RU: [ru, world]`, default `[world, ru]`, fallback world, TTL 60 |
+| Load balancer `wirecat.dev` | `339b010e22b3723d1ebcfebdf2d181db` | `steering_policy: geo`, `RU: [ru, world]`, default `[world, ru]`, fallback world, TTL 60, `location_strategy: {prefer_ecs: always, mode: pop}` |
 | Load balancer `geo-test.wirecat.dev` | `7a3eed63df2990402cf9db8f2cc8194c` | The same, for trying a change first |
+
+`location_strategy` decides where a reader is. The default (`prefer_ecs: proximity`) ignores the client subnet
+that Google Public DNS passes on (ECS), and Google answers Russia from Frankfurt, so Russians on 8.8.8.8 got Pages.
+With `prefer_ecs: always` they get neirox; `mode: pop` places readers of 1.1.1.1, which sends no subnet, by the
+Cloudflare location that answered (Moscow for neirox). Checked from neirox through Selectel, 77.88.8.8, 8.8.8.8 and
+1.1.1.1.
 
 If neirox fails its monitor, Russia falls back to Pages. To undo geo DNS, delete the `wirecat.dev` load balancer:
 the CNAME answers again.
