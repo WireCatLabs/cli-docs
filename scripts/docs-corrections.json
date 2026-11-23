@@ -2824,31 +2824,6 @@
     }
   },
   {
-    "tool": "memo",
-    "slug": "people",
-    "reason": "memo 0.144.0 has no `config set` command (only show, migrate and unset), so agent_merges is set in the config file, as the configuration page shows.",
-    "replacements": {
-      "en": [
-        {
-          "before": "(`memo config set agent_merges propose`)",
-          "after": "([in the config file](./configuration.md#agent_merges))"
-        }
-      ],
-      "ru": [
-        {
-          "before": "(`memo config set agent_merges propose`)",
-          "after": "([в файле настроек](./configuration.md#agent_merges))"
-        }
-      ],
-      "es": [
-        {
-          "before": "(`memo config set agent_merges propose`)",
-          "after": "([en el archivo de configuración](./configuration.md#agent_merges))"
-        }
-      ]
-    }
-  },
-  {
     "tool": "linear",
     "slug": "security",
     "source": "https://github.com/WireCatLabs/linear-cli/blob/v0.1.0/docs/security.md",

@@ -142,7 +142,7 @@ ser un mensajero o una llamada. Un fijo, un número o una dirección que compart
 línea de una empresa, una dirección de rol, un nombre, lo que dice un CRM o una frase de un chat no es una prueba
 fuerte, y el vínculo te espera. Memo guarda qué agente unió, en qué ejecución, por qué y con qué prueba.
 `memo people review --kind merged` lista las uniones de agentes que siguen vigentes, y `memo people unmerge <merge>`
-deshace una. Pon `agent_merges` en `propose` (`memo config set agent_merges propose`) y cada vínculo de un agente te
+deshace una. Pon `agent_merges` en `propose` [en el archivo de configuración](./configuration.md#agent_merges) y cada vínculo de un agente te
 esperará.
 
 ```sh
@@ -257,6 +257,19 @@ unir a esas personas. Un `unlink` o `unmerge` de un agente necesita `--reason` y
 vuelve a proponer mientras esas identidades sigan en esa persona, y `people links check` deja de listarlas. Un
 `memo people link … --reason` de un agente espera igual, salvo que memo encuentre una prueba fuerte (ver arriba).
 
+### Eliminar a una persona
+
+`memo people delete person:42` muestra lo que se iría y no cambia nada. `--yes` elimina:
+
+- la persona y sus identidades;
+- las etiquetas, los vínculos, los alias y las menciones que la nombran.
+
+Un hecho, una nota, una tarea o un registro importado que la nombra se queda y pierde el nombre. Los mensajes, el correo
+y las reuniones pertenecen a su fuente: se quedan, y la próxima sincronización vuelve a hacer de su remitente una
+persona. Una factura, un pedido o una suscripción que nombra a la persona se cambia primero: hasta entonces la
+eliminación se rechaza y los nombra. A ti mismo (`person:me`) no te puedes eliminar. Solo tú lo haces, en un terminal o en WireCat
+Desktop.
+
 Para elegir la nota principal sobre la persona, consulta [la nota sobre una persona](./notes.md#the-note-about-a-person).
 
 ## Importar los contactos de un teléfono
@@ -294,7 +307,10 @@ memo projects context HRB
 
 `--scope` es `personal` o `work`. `name:` no distingue mayúsculas y toma `*` como cualquier texto, así que `name:*studio*` encuentra todos los nombres
 que contienen la palabra. `organizations add` y `organizations rename` de un agente se escriben al instante, como los tuyos.
-Los ajustes `permissions` de memo son los que los limitan. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
+Los ajustes `permissions` de memo son los que los limitan. `memo organizations delete organization:1` muestra lo que
+supone eliminarla y no cambia nada. `--yes` la elimina con las etiquetas, los vínculos y las menciones que la nombran.
+Sus oportunidades, leads, proyectos y notas se quedan sin ella. Solo tú eliminas una, y nunca una de tus propias
+empresas. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
 `projects context` muestra las personas enlazadas al proyecto, las notas que tratan sobre él o que enlazan a él, y sus
 etiquetas. `organizations context` muestra las personas de la organización por rol, sus clientes, proveedores y socios,
 sus proyectos, las oportunidades y los leads abiertos, las facturas, los pagos y los pedidos tal como están guardados

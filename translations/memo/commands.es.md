@@ -995,6 +995,29 @@ memo people links resolve <who> <answer> [options]
 
 **Example:** `memo people links resolve person:42 keep`, `memo people links resolve person:42 keep --from-app --json`, `memo people links resolve person:42 test`
 
+### `memo people delete`
+
+delete a person, their identities, and the tags, links, aliases and mentions that name them. A fact, note, task or imported entry that names them stays and loses the name. Messages, mail and meetings are their source's: they stay, and the next sync makes their sender a person again. An invoice, order or subscription that names the person must be changed first. Without --yes it shows what would go and changes nothing
+
+This command changes the local store or your files.
+
+```sh
+memo people delete <who> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `who` | required | person:<uid> as people list prints it, or an identity of the person. |
+
+| Option | What it does |
+|---|---|
+| `--yes` | delete; nothing of the person can be brought back. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Example:** `memo people delete person:17`, `memo people delete person:17 --yes`
+
 ### `memo people scan`
 
 match people across sources now: the same address or a phone two people share joins them, the rest waits in people review; memo sync runs it too
@@ -1709,6 +1732,29 @@ memo organizations rename <organization> <name> [options]
 | `--json` | print JSON; --json=id,title keeps only those fields. |
 
 **Example:** `memo organizations rename organization:1 'Harbour Studio Ltd'`, `memo organizations rename 1 'Harbour Studio Ltd' --json`
+
+### `memo organizations delete`
+
+delete an organization, the tags, links, aliases and mentions that name it, and which identities it held. A deal, lead, project, account, fact or note that names it stays and loses the name. One of your own companies is never deleted, and an invoice, order or subscription that names it must be changed first. Without --yes it shows what would go and changes nothing
+
+This command changes the local store or your files.
+
+```sh
+memo organizations delete <organization> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `organization` | required | its id or organization:<id>, as organizations list prints it. |
+
+| Option | What it does |
+|---|---|
+| `--yes` | delete; nothing of the organization can be brought back. |
+| `--as-owner` | act as you although an agent's terminal runs memo (AI_AGENT or CLAUDECODE set); asks y/N at the terminal. |
+| `--from-app` | you did this in WireCat Desktop: record it as yours, with no terminal question. |
+| `--json` | print JSON; --json=id,title keeps only those fields. |
+
+**Example:** `memo organizations delete organization:12`, `memo organizations delete organization:12 --yes`
 
 ### `memo organizations show`
 
@@ -5070,6 +5116,24 @@ memo records delete <record> [options]
 
 **Example:** `memo records delete payment:sheet-12 --account sheet:rentals`
 
+### `memo records clear`
+
+delete everything one source said: its records, the leads, deals and pipelines made from them, and the people only it made. Anyone you tagged or gave a task to, or another source knows, stays; people delete removes them. For a test or a wrong import; a WireCat tool's account, such as tg or a CRM, is removed by that tool. Without --yes nothing changes
+
+This command changes the local store or your files.
+
+```sh
+memo records clear [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--account <account>` | the source, <provider>:<account> as the envelope's source names it, such as sheet:rentals. |
+| `--yes` | confirm: nothing of the source can be brought back but by importing it again. |
+| `--json` | print JSON; --json=account,records keeps only those fields. |
+
+**Example:** `memo records clear --account n8n:test`, `memo records clear --account n8n:test --yes`
+
 ### `memo records match`
 
 link every waiting person, organization and project of a source to the one entry its e-mail, phone or other identifier names, or make one, as an import does; never by name. Two or more fits wait for records link
@@ -5584,7 +5648,7 @@ memo review reject <ids> [options]
 
 ### `memo review agenda`
 
-the morning digest, from the store alone with no model call: everything new in what you tagged watch (chats, mail threads, people, projects, a meeting's series), replies you owe to people in messengers and personal mail (not bots or service chats), new personal mail, meetings that ended, calendar events added, moved or cancelled and those starting within a day, Drive documents edited, CRM deals and leads the CRM changed (with a stage they moved to), tasks, projects that moved, memories and facts whose sources changed (source reviews raised since), proposals waiting. Tasks are the open ones created since the last morning-digest run (a day back when none ran) and those overdue, due today or due tomorrow, each with who asked and who does it. Replies owed reach back 7 days; owed mail lists only senders you know (linked to a person with other identities, or written to before), and mail from new senders is one count with the command that lists it. Each item has its reference, who, when, one line of text and why it is there; a section cut by --limit or --max-output-bytes says how many it left out and the command that reads them. `scope` says what was read (the window, sources, counts), `tasks` counts each task group and, as `undated`, every open task with no due date, and `health` names each account whose sync failed, that nothing syncs, or that is quiet for longer than usual, so an unsynced account does not read as a quiet day; an account stored or synced within a day is never named
+the morning digest, from the store alone with no model call: everything new in what you tagged watch (chats, mail threads, people, projects, a meeting's series), replies you owe to people in messengers and personal mail (not bots or service chats), new personal mail, meetings that ended, calendar events added, moved or cancelled and those starting within a day, Drive documents edited, CRM deals and leads the CRM changed (with a stage they moved to), tasks, projects that moved, memories and facts whose sources changed (source reviews raised since), proposals waiting. Tasks are the open ones created since the last morning-digest run (a day back when none ran) and those overdue, due today or due tomorrow, each with who asked and who does it. Replies owed reach back 7 days, and a dialog whose newest message the sync has not stored yet is listed there too, marked so; owed mail lists only senders you know (linked to a person with other identities, or written to before), and owed mail from new senders is listed under mail, marked so. Each item has its reference, who, when, one line of text and why it is there; a section cut by --limit or --max-output-bytes says how many it left out and the command that reads them. `scope` says what was read (the window, sources, counts), `tasks` counts each task group and, as `undated`, every open task with no due date, and `health` names each account whose sync failed, that nothing syncs, or that is quiet for longer than usual, or whose timer has not synced it for a day and a half (no reason, only how long), so an unsynced account does not read as a quiet day; an account stored or synced within a day is never named. A digest's scheduled run first runs again the syncs you put on a timer in tg, max, wa and mail that are more than an hour behind, as each schedule says, for up to 4 minutes
 
 ```sh
 memo review agenda [options]
@@ -6978,7 +7042,7 @@ run a memo command or an agent later or on a timer (systemd, launchd, Task Sched
 
 ### `memo schedule command`
 
-run memo <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+run memo <args…> on a timer — reads save what they read, so this is how the store stays current
 
 This command changes the local store or your files.
 
@@ -6989,7 +7053,7 @@ memo schedule command <name> <args> [options]
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
-| `args` | required | the memo command after its name, e.g. -- messages list <chat> --limit 50. |
+| `args` | required | the memo command after its name, e.g. -- doctor. |
 
 | Option | What it does |
 |---|---|
@@ -7016,7 +7080,7 @@ memo schedule agent <name> <harness> <prompt> [options]
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
 | `harness` | required | the agent to start. One of: `claude`, `codex`, `gemini`, `cursor`, `opencode`, `openclaw`, `hermes`, `grok`, `kimi`. |
-| `prompt` | required | what to do, e.g. "summarize what came in during the last day: memo personal search messages 'date>1d' --newest --limit 20". |
+| `prompt` | required | what to do, e.g. "say what needs attention in this installation: memo doctor". |
 
 | Option | What it does |
 |---|---|
@@ -7189,7 +7253,7 @@ memo schedule exec <file> [seal] [options]
 
 ## `memo digest`
 
-your digests: each a name, its times, what it reads, where it is sent and your brief; run one now, pause it, and build past days
+your digests: each a name, its times, what it reads, where it is sent and your brief; run one now, pause it, build past days, and read the last reports with what became of each item
 
 ### `memo digest brief`
 
@@ -7412,6 +7476,26 @@ memo digest remove <name> [options]
 
 **Example:** `memo digest remove weekly`
 
+### `memo digest history`
+
+the last reports a digest delivered, newest first, from its kept runs: each item with how many digests in a row had it (a reply owed two mornings running is in 2 digests in a row) and what became of it since, from the store as it is now: you answered, they wrote again, nothing new, or for a task done or still open. The digest's agent reads it to tell what is new, what is still open and what was done. A read: it runs under MEMO_READ_ONLY
+
+```sh
+memo digest history [digest] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `digest` | optional | the digest's name, as `memo digest list` shows it; morning-digest when left out. |
+
+| Option | What it does |
+|---|---|
+| `--last <n>` | how many reports. Default: `3`. |
+| `--before-time <time>` | only reports made before this ISO time or date, as a past day's digest reads them. |
+| `--json` | print JSON. |
+
+**Example:** `memo digest history --last 3 --compact`, `memo digest history weekly --json`
+
 ### `memo digest backfill`
 
 build each past run a digest would have had: its schedule's agent runs as its timer does (the same skill, flags and cost caps), reading the agenda as of that run's time and from the digest's previous time, and the result is kept as that run, marked backfill, for WireCat Desktop's digests screen. It is never sent to Telegram or mail. A run that already has a digest is skipped. Without --yes it only prints what it would build and the estimate: the runs times the last run's cost. Each run is a paid model call: it stops once today's runs cost the schedule's daily cap or a run fails, and only you run it, never an agent. The store keeps what holds now, so a chat answered since reads as answered
@@ -7486,7 +7570,7 @@ memo skill show [name] [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `name` | optional | a part of this skill, or a skill shipped for a task: vocabulary, search, proposals, projects, money, meetings, mcp, mail, mail-triage, morning-digest. |
+| `name` | optional | a part of this skill, or a skill shipped for a task: vocabulary, search, proposals, projects, money, meetings, mcp, mail, mail-triage, morning-digest, task-triage. |
 
 | Option | What it does |
 |---|---|

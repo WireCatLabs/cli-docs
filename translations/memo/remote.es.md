@@ -46,6 +46,50 @@ Pide a la app que descubra los comandos de Memo y busque una nota conocida que s
 
 El túnel y la app se instalan por separado. Esta guía describe el protocolo probado del servidor; no certifica todas las apps, suscripciones o configuraciones del sistema operativo.
 
+## Enviar registros desde n8n
+
+Un flujo de [n8n](https://n8n.io) en un servidor puede escribir leads, oportunidades, personas y otros registros en
+Memo a través del mismo servidor. n8n no tiene un archivo en tu ordenador que nombrar, así que entrega el propio sobre
+de registros.
+
+En n8n, añade un nodo MCP Client. Pon **Server Transport** en HTTP Streamable y **MCP Endpoint URL** en la dirección
+del conector. Elige OAuth2 con **Use Dynamic Client Registration** activado e introduce el código de acceso actual en
+la página que se abre ([la credencial MCP de n8n](https://docs.n8n.io/integrations/builtin/credentials/mcp/)). Después
+llama a la herramienta `memo_write` con el comando y sus argumentos; `input` contiene el sobre:
+
+```json
+{
+  "command": "records import",
+  "arguments": {
+    "account": "n8n:site",
+    "input": {
+      "schema_version": 1,
+      "source": { "provider": "n8n", "account": "site", "batch_id": "form-17" },
+      "records": [
+        {
+          "key": "pipe", "type": "pipeline", "external_id": "web", "operation": "upsert",
+          "fields": { "kind": "lead", "name": "Web",
+            "stages": [{ "external_id": "new", "name": "New", "position": 1, "outcome": "open" }] }
+        },
+        {
+          "key": "lead", "type": "lead", "external_id": "form-17", "operation": "upsert",
+          "fields": { "title": "Call back about the clinic site", "pipeline": "web", "stage": "new" }
+        }
+      ]
+    }
+  }
+}
+```
+
+`memo records templates list` lista todos los tipos y sus campos, y la [guía de datos de negocio](./business.md)
+describe el sobre. El mismo sobre enviado dos veces no cambia nada, así que activa **Retry On Fail** en el nodo: una
+entrega de la que n8n no está seguro se puede repetir sin riesgo. Todo lo que afecta a los totales de dinero espera tu
+revisión, como desde cualquier otra fuente.
+
+Mientras tu ordenador está apagado o el servidor detenido, la llamada falla y no se guarda nada. Deja que n8n
+lo intente de nuevo más tarde, o guarda los sobres en n8n hasta que el servidor responda. Después de reiniciar, vuelve a iniciar
+el túnel y el servidor. Una app que no hace ninguna llamada en 30 días inicia sesión de nuevo.
+
 ## Limitar lo que puede hacer una app
 
 HTTP usa los mismos [permisos guardados](./configuration.md#permissions) que stdio. Los comandos bloqueados siguen en el catálogo con un motivo y cada llamada vuelve a comprobar los permisos actuales. `ask` no muestra una pregunta en el terminal de Memo; las solicitudes de aprobación dependen de la app cliente.
