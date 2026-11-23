@@ -59,7 +59,8 @@ test("documentation search loads on demand and mobile navigation dismisses with 
   const dialog = page.getByRole("dialog")
   await expect(dialog).toBeVisible()
   await dialog.getByRole("combobox").fill("installation")
-  await expect(dialog.getByRole("option").first()).toBeVisible()
+  // The index downloads on the first query; on a busy CI runner it took over 5 s, and the results came after.
+  await expect(dialog.getByRole("option").first()).toBeVisible({ timeout: 15_000 })
   const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "best-practice"]).analyze()
   expect(result.violations).toEqual([])
   await page.keyboard.press("Escape")
