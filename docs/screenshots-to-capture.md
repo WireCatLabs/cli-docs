@@ -61,39 +61,69 @@ see its CLAUDE.md), with the sample data of `?showcase`. The language comes from
 `localStorage["wirecat.language"]` (`en`, `ru`, `es`). Use the size and framing of the existing shots
 (1040x650 webp). Each shot needs six files: `{shot}-{light,dark}-{en,ru,es}.webp`.
 
-| Shot (file stem) | Screen | Query for the browser build | Status |
+Every docs shot except `onboarding-install`, `amo-integration` and the three Digests shots was retaken from Desktop
+main at `8d8892fb` (0.7.5), after the sidebar changed: Agents became a tab of Tools, Storage a tab of Analytics, and
+Meetings and Documents joined the menu. `onboarding-install` looked the same in 0.7.5, so it stayed. The Digests shots
+(`digest-editor`, `digests`, `digest-settings`) are from main at `98c2b8f4` and `amo-integration` from PR #692, all
+with the current menu. Capture at 1440x900 with `capture.mjs --lang en|ru|es [--dark]`, then
+`node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`.
+
+| Shot | Query | Before the capture |
+| --- | --- | --- |
+| `onboarding-welcome` | `?state=fresh` | |
+| `onboarding-install` | `?state=fresh&onboarding=install&install=tg,wa&hold=wa` | |
+| `tools` | `?showcase` | |
+| `agents` | `?showcase&section=agents` | |
+| `search-hit` | `?showcase&search=tg` | Open the first result, then Show messages around it |
+| `tasks` | `?showcase&view=board` | |
+| `guides` | `?showcase&section=guides` | |
+| `memory` | `?showcase&section=memory` | |
+| `memory-add` | `?showcase&add=open` | |
+| `analytics` | `?showcase&section=analytics&analytics=real` | |
+| `storage` | `?showcase&section=storage` | |
+| `settings` | `?showcase&section=settings` | |
+| `settings-agents` | `?showcase&section=settings&agent=claude` | Scroll the heading Agent for background jobs to the top |
+| `clients` | `?showcase&section=clients&clients-view=board` | |
+| `contacts` | `?showcase&section=people` | |
+| `contacts-matches` | `?showcase&section=people` | Click Review matches, scroll the first match card to the top |
+| `logs` | `?showcase&section=logs` | |
+| `failed-run` | `?onboarding=off&section=logs&runs=fail` | Open the second run, the failed one |
+| `sync-error` | `?showcase&sync-fail=tg` | Wait until the sync fails, about 25 s, then open Details |
+| `report` | `?showcase` | Click Report a problem |
+| `connect` | `?showcase&connect=called` | Scroll the MCP server heading to about 70 px below the top bar |
+| `tailscale-funnel` | `?showcase&tailscale=nofunnel` | Scroll the MCP server heading to the top, so the guide's steps show |
+| `account-remove` | `?showcase&accounts=tg` | Open the account's menu, click Remove account |
+| `bitrix-app` | `?showcase&signin-plan=bitrix:app&b24-step=app` | |
+| `mail-rules` | `?showcase&accounts=email` | Click Rules |
+| `digest-editor` | `?showcase&section=digest-settings&agent=claude` | Click Set up on Daily digest, then scroll the Agent field to the middle |
+| `digests` | `?showcase&section=digests` | |
+| `digest-settings` | `?showcase&section=digest-settings` | |
+
+Own tools (`own-name`, `own-review`, `own-review-risky`, `own-check`, `own-confirm`, `own-tools-list`, `own-refused`):
+English only, 1280 wide and not 16:10, saved as WebP without resizing. Russian and Spanish pages show the English
+capture until `{shot}-{light,dark}-{ru,es}.webp` exist. All were captured from the same 0.7.5 build:
+
+| Shot | Size | Query | Before the capture |
 | --- | --- | --- | --- |
-| `onboarding-welcome` | Setup, Welcome step | `?state=fresh` | Missing |
-| `onboarding-install` | Setup, Install step with the progress bar | `?state=fresh&onboarding=install&install=tg,wa&hold=wa` | Missing |
-| `guides` | Guides page | `?showcase&section=guides` | Missing |
-| `analytics` | Analytics page, without the Preview parts | `?showcase&section=analytics&analytics=real` | Missing |
-| `storage` | Storage page with folders, backups and tables | `?showcase&section=storage` | Missing |
-| `settings` | Settings page: language, interface size, a tool's settings | `?showcase&section=settings` | Missing |
+| `own-name` | 1280x900 | `?showcase&own=on` | Click Add your own tool |
+| `own-refused` | 1280x900 | `?showcase&own=on&own-discover=not_found` | Add your own tool, type `@example/acme-crm-cli`, Check package |
+| `own-review` | 1280x1300 | `?showcase&own=on&own-review=@example/acme-crm-cli` | |
+| `own-review-risky` | 1280x1300 | `?showcase&own=on&own-discover=risky&own-review=@example/acme-crm-cli` | |
+| `own-check` | 1280x900 | as `own-review` | Click Add |
+| `own-confirm` | 1280x800 | as `own-review` | Click Add, then Skip and install |
+| `own-tools-list` | 1280x900 | `?showcase&own=1` | Scroll Tools WireCat has not checked into view |
+| `own-settings` | 1280x400 | `?showcase&section=settings&community=1&own=on` | Scroll the heading Language to the top |
 
-The guides beside the walkthrough use three more shots, captured from Desktop main at `ddc7fa3f` (0.6.1) at 1440x900
-with `capture.mjs --lang en|ru|es [--dark]`, then `node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`.
-The three Digests shots (`digest-editor`, `digests`, `digest-settings`) were retaken from Desktop main at `98c2b8f4`:
-
-| Shot | Page | Query | Before the capture |
-| --- | --- | --- | --- |
-| `settings-agents` | AI model | `?showcase&section=settings&agent=claude` | Scroll the heading Agent for background jobs to the top |
-| `digest-editor` | Digests | `?showcase&section=digest-settings&agent=claude` | Click Set up on Daily digest, then scroll the Agent field to the middle |
-| `digests` | Digests | `?showcase&section=digests` | |
-| `digest-settings` | Digests | `?showcase&section=digest-settings` | |
-| `logs` | Logs | `?showcase&section=logs` | |
-
-Own tools (`own-name`, `own-review`, `own-confirm`, `own-tools-list`, `own-refused`): English only, copied from
-wirecat-desktop `docs/images/own-*.webp` (1280 wide, not 16:10). Russian and Spanish pages show the English capture
-until `{shot}-{light,dark}-{ru,es}.webp` exist. `own-settings` has all six: `capture.mjs` at `--width 1280 --height 400`
-with `?showcase&section=settings&community=1&own=on`, saved as WebP without resizing.
+`own-settings` has all six files: EN, RU and ES, light and dark.
 
 ## Landing and download page shots
 
 The home page's Desktop section shows `tools`, `memory` and `digests`. The download page's gallery
 (`components/desktop-gallery.tsx`) shows all eight below. Their text is in
 `design/homepage-chat-treatments/release-{source,locales}.json` (after a change run `pnpm landing:export`, then `pnpm exec biome format --write lib/editorial/editorial.css`) and in
-`lib/download.ts`. All 48 files were captured from Desktop main at `2a6d79d9` (0.6.0) at 1440x900 with
-`--lang en|ru|es` and `--dark`, then cropped with `node scripts/crop-desktop-screenshots.mjs <folder>`.
+`lib/download.ts`. They are captured at 1440x900 with `--lang en|ru|es` and `--dark`, then cropped with
+`node scripts/crop-desktop-screenshots.mjs <folder> <shot>`. `memory` is from Desktop main at `2a6d79d9` (0.6.0): its
+crop shows no menu and the page looked the same in 0.7.5. The other seven were retaken from main at `8d8892fb` (0.7.5).
 
 | Shot | Query | Before the capture |
 | --- | --- | --- |
@@ -103,5 +133,5 @@ The home page's Desktop section shows `tools`, `memory` and `digests`. The downl
 | `tasks` | `?showcase&view=board` | |
 | `memory` | `?showcase&section=memory` | |
 | `connect` | `?showcase&connect=called` | Scroll the MCP server heading to about 70 px below the top bar |
-| `digests` | `?showcase&section=digests` | |
+| `digests` | `?showcase&section=digest-settings` | The Settings tab of Digests, with the schedules |
 | `analytics` | `?showcase&section=analytics&analytics=real` | |
