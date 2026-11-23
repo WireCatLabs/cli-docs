@@ -270,6 +270,11 @@
     "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
+    "tool": "attio",
+    "key": "accountRemove.remove",
+    "why": "attio-cli 0.3.0 added `account remove`, but Desktop's compiled catalog still has none, so Desktop offers only sign-out for Attio until wirecat-desktop's catalog/tools.json adds it."
+  },
+  {
     "tool": "hubspot",
     "key": "tagline",
     "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
