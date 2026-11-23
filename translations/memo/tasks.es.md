@@ -36,6 +36,26 @@ Una carpeta de notas también es una cuenta: la búsqueda da su número como `fo
 tienes una. `memo tasks list` y `memo reminders list` sin `--source` leen todas las cuentas y las nombran en
 `meta.accounts`.
 
+## Tareas propuestas a partir de chats, correo y reuniones
+
+Dos agentes programados leen tus fuentes y proponen tareas: lo que prometiste, lo que alguien te pidió o te prometió,
+con la fecha cuando se dijo una. Nada se convierte en tarea hasta que lo confirmas.
+
+- **Correo:** el agente `mail-triage`, consulta [Correo](./mail.md).
+- **Chats y reuniones:** el agente `task-triage`. Lee tus chats de Telegram, MAX y WhatsApp desde su última ejecución
+  (un diálogo entero, en un grupo solo tus mensajes y las respuestas a ti, salvo que etiquetes el grupo con
+  `watch-tasks`) y las reuniones que terminaron, y propone cada tarea en el proyecto del chat o en la bandeja de
+  entrada de la cuenta.
+
+```sh
+memo schedule agent task-triage claude 'Run memo skill show task-triage and follow it.' --at 08:00 --at 13:00 --at 18:00 --max-cost 1
+memo review list kind:mail_findings,meeting_findings,findings
+```
+
+Una tarea ya abierta, o que ya te espera con el mismo título desde cualquier fuente, no se vuelve a proponer.
+`memo review agenda` lista primero las propuestas que contienen tareas, y su sección `tasks` dice cuándo ningún agente
+propone tareas, o cuándo uno dejó de ejecutarse, con el comando que lo arregla.
+
 ## Qué revisar hoy
 
 La agenda, el plan y la ficha son los mismos comandos de tg y max. Cada uno lee una cuenta; indícala:

@@ -8,6 +8,93 @@ la API.
 
 Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las instrucciones de uso están traducidas en sus guías.
 
+## 0.149.0 — 23.11.2026
+
+### Added
+
+- **`memo organizations delete` deletes an organization and what memo knows of it alone.** Without `--yes` it shows
+  what would go and what stays without it (deals, leads, projects, notes) and changes nothing. Refused for one of your
+  own companies and while an invoice, order or subscription names it. Only you run it. See
+  [Organizations and projects](./people.md#organizations-and-projects).
+
+### Fixed
+
+- **`memo records clear` also deletes the organizations only that import made**, as it does for people.
+
+## 0.148.0 — 23.11.2026
+
+### Added
+
+- **`memo people delete` deletes a person and what memo knows of them alone.** Without `--yes` it shows what would
+  go (their identities, the tags, links and mentions that name them, what stays without them) and changes nothing.
+  Messages, mail and meetings stay with their source. Refused for your own person and while an invoice, order or
+  subscription names them. Only you run it. See [Delete a person](./people.md#delete-a-person).
+- **`memo records clear` clears a test import whole.** `memo records clear --account n8n:test --yes` removes
+  everything one source sent: its records, and the leads, deals and pipelines made from them. People and
+  organizations stay. Without `--yes` it changes nothing and says how many records would go. It refuses an account
+  that a WireCat tool syncs, such as `tg` or a CRM. Over MCP only the owner may run it. See
+  [Bring data in from another system](./business.md#bring-data-in-from-another-system).
+
+### Fixed
+
+- **`memo records clear` also deletes the people only that import made.** A person you tagged or gave a task to, or
+  one another source knows, stays.
+
+## 0.147.0 — 19.11.2026
+
+### Fixed
+
+- **The morning digest reaches Telegram whole.** memo is on cli-core 0.712.0: a digest longer than one Telegram
+  message goes as several messages in order, split between sections or items, never inside one, with
+  "(продолжение)" on the later parts. Sections show up to 25 items instead of 5 to 7. Mail and the `report.json`
+  that WireCat Desktop reads are unchanged.
+
+## 0.146.0 — 19.11.2026
+
+### Added
+
+- **A `task-triage` agent proposes tasks from chats and meetings.** Scheduled with `memo schedule agent task-triage
+  claude 'Run memo skill show task-triage and follow it.'`, it reads the Telegram, MAX and WhatsApp messages and the
+  meetings since its last run and stages what you promised, what you were asked and the dates said, as findings you
+  confirm. Before, only mail could propose a task. See [Tasks](./tasks.md#tasks-proposed-from-chats-mail-and-meetings).
+
+### Fixed
+
+- **`memo review agenda` shows the proposals that hold tasks first.** Hundreds of identity links no longer hide them;
+  each says how many tasks it holds, and a note counts all of them. Its `tasks` section says when no agent proposes
+  tasks, or when one was paused, fails or was refused, with the command that fixes it.
+- **A task already open or waiting is not proposed again.** `memo projects actions add` and `memo meetings actions
+  add` leave out a task whose title matches one, from any source, and answer `duplicates`. A read-only scheduled
+  agent may now run both, as it runs `memo mail findings add`.
+
+## 0.145.0 — 19.11.2026
+
+### Added
+
+- **`memo digest history`** lists the last reports a digest delivered, newest first, each item with how many digests
+  in a row had it and what became of it since: you answered, they wrote again, nothing new, or a task done or still
+  open. It is a read, so a digest's agent runs it under `MEMO_READ_ONLY` to say "second day without an answer" and to
+  leave out what was already done. See [commands](./commands.md).
+- **A digest's scheduled run catches up first.** Before its agent starts, memo runs again each sync you put on a timer
+  in tg, max, wa and mail that is more than an hour behind, as that schedule says (its profile, its flags), for up to
+  4 minutes in all. A morning digest no longer reads the night's 04:30 sync as the day. memo syncs no account you gave
+  no schedule, and picks no profile.
+- The digest's agent gets the agenda and the last three reports in its input, so it spends its calls on following
+  leads.
+
+### Changed — may break callers
+
+- **`review agenda` lists owed mail from new senders under `mail`**, each marked "owed reply, new sender", instead of
+  one count with a command. The `owed` section's `unknown` count stays.
+- `review agenda` lists under `owed` a dialog whose newest message the sync has not stored yet, marked "newest message
+  not synced: may be owed". Before, such a person was never shown.
+- `review agenda`'s `health` names an account whose timer has not synced it for 36 hours, with `reason: null` and the
+  hours since its last good sync, as `wirecat.report/1` allows.
+- The morning-digest skill writes a deeper report: a reply for every person waiting, an item for every project that
+  moved with what moved, today's and tomorrow's calendar, meetings with what was agreed, and mail worth a look. It
+  compares each item with the last digests and says how long one waits, what changed, and leaves out what was done.
+  It may make up to 20 memo calls, not 12.
+
 ## 0.144.0 — 17.11.2026
 
 ### Changed — may break callers
@@ -66,7 +153,7 @@ Las notas técnicas exactas de las nuevas versiones se conservan en inglés; las
   direction, length, the employee who took it and the start of what was said, in one list (`history` in JSON). `--limit`
   ends the page; `history.before_time` gives the time for `--before-time` to read the page before it, and `--since-time` bounds
   it (`30d`, a date). A recorded call or meeting under `meetings` has `snippet`, the start of its transcript. The texts
-  are other people's words: `untrusted` names them. See [the person-brief scenario](https://github.com/WireCatLabs/cli-memo/blob/v0.144.0/scenarios/person-brief.md).
+  are other people's words: `untrusted` names them. See [the person-brief scenario](https://github.com/WireCatLabs/cli-memo/blob/v0.149.0/scenarios/person-brief.md).
 
 ### Fixed
 

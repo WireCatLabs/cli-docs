@@ -120,6 +120,12 @@ memo deals show deal:1 --json
 memo records show custom:quote:Q-7 --account example-erp:demo
 ```
 
+Una importación de prueba, o una enviada a la cuenta equivocada, se va entera con
+`memo records clear --account n8n:test --yes`: sus registros, los leads, las oportunidades y los embudos hechos a partir
+de ellos, y las personas que solo ella creó. Una persona a la que pusiste una etiqueta o una tarea, o que conoce otra
+fuente, se queda. Sin `--yes` solo dice cuántos registros eliminaría. La cuenta de una herramienta de WireCat, como
+`tg` o un CRM, no es una importación y la elimina esa herramienta.
+
 ## Encontrarlo de nuevo
 
 `memo search all` encuentra facturas, pagos, pedidos, contratos, suscripciones, productos y carteras por las palabras de
