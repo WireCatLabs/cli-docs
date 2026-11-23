@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 concurrency:
   group: registry-drift-${{ github.ref }}
@@ -34,4 +35,40 @@ jobs:
         with:
           node-version: 24
           package-manager-cache: false
-      - run: node --experimental-strip-types scripts/official-tools.ts --check
+      - name: Compare the list with npm and Desktop's catalog
+        shell: bash
+        run: node --experimental-strip-types scripts/official-tools.ts --check 2>&1 | tee drift.txt
+      # A pull request opened with github.token starts no checks, so the job keeps one issue up to date instead.
+      - name: Keep one issue open while the list lags a release
+        if: failure() && github.event_name != 'pull_request'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          node --experimental-strip-types scripts/official-tools.ts || true
+          {
+            echo "The registry drift check failed: Desktop's signed list or its catalog says something else than a CLI's"
+            echo "latest manifest on npm. Run: $RUN_URL"
+            echo
+            echo '```'
+            cat drift.txt
+            echo '```'
+            echo
+            echo "Manifests that changed since the last refresh:"
+            echo
+            echo '```'
+            git diff --stat -- registry/
+            echo '```'
+            echo
+            echo "To fix: run \`pnpm registry:official && pnpm exec biome format --write registry/\`, commit registry/official-manifests.json in a pull request, and"
+            echo "add a known difference to registry/drift-allow.json only with its reason."
+          } > issue.md
+          title="Registry drift: Desktop's tool list lags a release"
+          number=$(gh issue list --state open --search "\"$title\" in:title" --json number -q '.[0].number // ""')
+          if [ -n "$number" ]; then
+            last=$(gh issue view "$number" --json body,comments -q '(.comments | last | .body) // .body')
+            [ "$last" = "$(cat issue.md)" ] || gh issue comment "$number" --body-file issue.md
+          else
+            gh issue create --title "$title" --body-file issue.md
+          fi

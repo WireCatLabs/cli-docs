@@ -581,8 +581,8 @@
     }
   },
   "memo": {
-    "version": "0.149.0",
-    "manifestSha256": "1d6f439d3d40c2f894069fcfa0e3fb1f3451c76b386bc13ffce035613e11d6fa",
+    "version": "0.150.0",
+    "manifestSha256": "ad0614cb1598f6275603b3d0fffd9f36a149764d9bc98b2833c99e749b180838",
     "bin": "wcat-memo",
     "bins": ["memo", "wcat-memo"],
     "desktop": {
