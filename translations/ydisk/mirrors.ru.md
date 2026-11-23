@@ -287,8 +287,8 @@ ydisk personal mirrors watch
 каждую замену или удаление, которые пропустила. `YDISK_READ_ONLY=1` запрещает синхронизацию, а `mirrors preview` и
 `mirrors status` продолжают работать.
 
-По MCP агент может запускать `mirrors list`, `mirrors status`, `mirrors preview`, `mirrors sync` и `mirrors conflicts
-list`, `show` и `resolve --keep`, но не `--allow-deletions`, `--allow-replacements`, `--replace`,
+По MCP агент может запускать `mirrors list`, `mirrors status`, `mirrors preview`, `mirrors sync` и
+`mirrors conflicts list`, `show` и `resolve --keep`, но не `--allow-deletions`, `--allow-replacements`, `--replace`,
 `--repin` или `resolve --file`: много изменений сразу разрешаете только вы, и только вы даете файл с этого
 компьютера. `mirrors conflicts resolve` проверяет те же ключи, что и синхронизация. По MCP никто не может ответить на вопрос, поэтому уровень `ask` пропускает запись:
 поставьте `files.delete` в `deny` агенту, который не должен заменять или удалять файлы. Добавить, изменить или убрать зеркало,

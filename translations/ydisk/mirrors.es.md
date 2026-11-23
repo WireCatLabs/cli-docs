@@ -293,8 +293,8 @@ Con `files.delete` en `deny`, una sincronización sigue enviando y bajando archi
 reemplazo o borrado que se saltó. `YDISK_READ_ONLY=1` rechaza una sincronización; `mirrors preview` y `mirrors status`
 siguen funcionando.
 
-Por MCP un agente puede ejecutar `mirrors list`, `mirrors status`, `mirrors preview`, `mirrors sync` y `mirrors conflicts
-list`, `show` y `resolve --keep`, pero no `--allow-deletions`, `--allow-replacements`, `--replace`, `--repin` ni `resolve --file`: solo tú apruebas muchos cambios a la vez, y solo tú das un archivo de este ordenador.
+Por MCP un agente puede ejecutar `mirrors list`, `mirrors status`, `mirrors preview`, `mirrors sync` y
+`mirrors conflicts list`, `show` y `resolve --keep`, pero no `--allow-deletions`, `--allow-replacements`, `--replace`, `--repin` ni `resolve --file`: solo tú apruebas muchos cambios a la vez, y solo tú das un archivo de este ordenador.
 `mirrors conflicts resolve` comprueba las mismas claves que una sincronización. Por MCP nadie puede responder una pregunta, así que un nivel en `ask` deja pasar la
 escritura: pon `files.delete` en `deny` para un agente que no deba reemplazar ni borrar archivos. Añadir, cambiar o quitar un
 espejo, `versions` y `watch` son solo para ti. Consulta [conecta tu agente](./mcp.md#decide-what-the-agent-may-change).

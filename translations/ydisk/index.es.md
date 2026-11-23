@@ -31,6 +31,12 @@ lleva unos cinco minutos, una sola vez.
   Yandex.
 - **Todo el Disk, en vivo.** Lista, lee, descarga, sube, copia, mueve, envía a la papelera, restaura y comparte
   archivos sin abrir un navegador.
+- **Edita un archivo donde está.** Tú o tu agente cambiáis una nota, celdas de Excel o párrafos de Word en el Disk sin
+  descargarlos a mano. El formato se mantiene, el archivo se comprueba justo antes de escribir, y lo que la edición
+  reemplazó se guarda en tu ordenador. Mira [edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk).
+- **Una carpeta al día con el Disk.** Un espejo mantiene igual una carpeta de tu ordenador y una del Disk en ambos
+  sentidos. Un archivo de texto editado en los dos lados se fusiona, y un conflicto real te espera con las diferencias.
+  Se detiene antes de muchos borrados o reemplazos. Mira [espejos](./mirrors.md).
 - **Seguro para dárselo a un agente.** En un terminal, la herramienta pregunta antes de borrar, sobrescribir o crear
   un enlace público. Para un agente puedes desactivar cada una de esas preguntas o permitir solo la lectura.
 - **Una búsqueda en todas tus fuentes.** La copia está en el mismo almacén local que tu Telegram, WhatsApp, correo,

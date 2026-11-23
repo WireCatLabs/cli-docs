@@ -17,7 +17,7 @@ Cambios notables en `@wirecat/yandex-disk-cli`. Una sección por versión, las m
   `files restore <path> <version>` devuelve una versión. Consulta
   [edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk) y
   [edita un archivo con tu agente](./recipes.md#edit-a-file-with-your-agent).
-- **Un espejo fusiona un archivo de texto cambiado en los dos lados.** Un archivo `.md`, `.txt`, `.csv` o `.tsv` de
+- **Un espejo fusiona un archivo de texto cambiado en los dos lados.** Un archivo `.md`, `.markdown`, `.txt`, `.csv` o `.tsv` de
   hasta 1 MB editado aquí y en el Disk en sitios distintos se fusiona línea a línea y se escribe en los dos lados; la
   respuesta lo incluye en `merged`. Los cambios en la misma línea o en líneas vecinas siguen siendo un conflicto.
   Consulta [un archivo cambiado en los dos lados](./mirrors.md#a-file-changed-on-both-sides).
