@@ -9,6 +9,7 @@ in Russia there. Everyone else keeps Cloudflare Pages.
 - [Deploys](#deploys)
 - [Certificates](#certificates)
 - [Set up or rebuild on neirox](#set-up-or-rebuild-on-neirox)
+- [Geo DNS](#geo-dns)
 - [Check it](#check-it)
 
 ## How it fits together
@@ -85,20 +86,20 @@ docker run -d --name wirecat-site --network kamal --restart unless-stopped --rea
 ## Geo DNS
 
 A Cloudflare load balancer in DNS-only mode answers `139.100.204.107` to resolvers in Russia and Pages to everyone
-else. It needs Load Balancing with Traffic Steering ($5 + $10 a month); without it Cloudflare refuses any monitor
-setting ("interval is not in range [1, 1]"). A load balancer takes precedence over a DNS record with the same name, so
-the apex CNAME to `cli-docs.pages.dev` stays as it is.
+else. It is in the account `ModelRow leemour` (`95adf467c9937e5fdca37a0cb07fa70a`), which holds the zone, and needs
+Load Balancing with Traffic Steering ($5 + $10 a month). A load balancer takes precedence over a DNS record with the
+same name, so the apex CNAME to `cli-docs.pages.dev` stays, and so do the MX and TXT records.
 
-1. A monitor: HTTPS `GET /ru` with `Host: wirecat.dev`, expects 200, every 60 s.
-2. Pool `wirecat-ru`: endpoint `139.100.204.107`. Pool `wirecat-world`: endpoint `cli-docs.pages.dev` with the host
-   header `cli-docs.pages.dev` ([Pages as an origin](https://developers.cloudflare.com/load-balancing/pools/cloudflare-pages-origin/)).
-3. First on `geo-test.wirecat.dev` (Caddy on neirox answers it with "wirecat neirox"): `proxied: false`,
-   `steering_policy: geo`, `country_pools: {"RU": [ru, world]}`, `default_pools: [world, ru]`,
-   `fallback_pool: world`, TTL 60. From neirox `dig +short geo-test.wirecat.dev` must give `139.100.204.107`; from
-   outside Russia, Pages.
-4. Then the same load balancer on `wirecat.dev`.
+| Part | Id | Setting |
+|---|---|---|
+| Monitor `wirecat.dev /ru` | `5fdc3ee6bfc62cc2325cb5a4f1df9fc4` | HTTPS `GET /ru`, `Host: wirecat.dev`, expects 200, every 60 s |
+| Pool `wirecat-ru` | `11afb551b2a386077c41f1cd889f449c` | `139.100.204.107`, checked from Eastern Europe |
+| Pool `wirecat-world` | `fa4300c2df5fb87774731327006b5538` | `cli-docs.pages.dev` with `Host: cli-docs.pages.dev` ([Pages as an origin](https://developers.cloudflare.com/load-balancing/pools/cloudflare-pages-origin/)) |
+| Load balancer `wirecat.dev` | `339b010e22b3723d1ebcfebdf2d181db` | `steering_policy: geo`, `RU: [ru, world]`, default `[world, ru]`, fallback world, TTL 60 |
+| Load balancer `geo-test.wirecat.dev` | `7a3eed63df2990402cf9db8f2cc8194c` | The same, for trying a change first |
 
-If neirox fails its monitor, Russia falls back to Pages.
+If neirox fails its monitor, Russia falls back to Pages. To undo geo DNS, delete the `wirecat.dev` load balancer:
+the CNAME answers again.
 
 ## Check it
 
