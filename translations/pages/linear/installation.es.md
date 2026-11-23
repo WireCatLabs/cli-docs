@@ -14,13 +14,29 @@ un terminal con npm. En los dos casos necesitas una clave de API personal.
 
 **En esta página:**
 
-1. [Qué necesitas](#what-you-need)
-2. [Crea una clave de API personal](#make-a-personal-api-key)
-3. [En WireCat Desktop](#in-wirecat-desktop)
-4. [En un terminal](#in-a-terminal)
-5. [Inicia sesión](#sign-in)
-6. [Comprueba que funciona](#check-that-it-works)
-7. [Cierra la sesión](#sign-out)
+1. [En resumen](#in-short)
+2. [Qué necesitas](#what-you-need)
+3. [Crea una clave de API personal](#make-a-personal-api-key)
+4. [En WireCat Desktop](#in-wirecat-desktop)
+5. [En un terminal](#in-a-terminal)
+6. [Inicia sesión](#sign-in)
+7. [Comprueba que funciona](#check-that-it-works)
+8. [Cierra la sesión](#sign-out)
+
+<a id="in-short" />
+
+## En resumen
+
+1. [Crea una clave](#make-a-personal-api-key) en Linear.
+2. En WireCat Desktop: en la página **Herramientas**, pulsa **Instalar** en la fila de Linear, luego **Gestionar** e
+   **Iniciar sesión aquí**, y pega la clave.
+3. O en un terminal, instala la herramienta, inicia sesión con la clave y copia tus datos:
+
+```sh
+npm install -g @wirecat/linear-cli
+linear work session start
+linear work sync
+```
 
 <a id="what-you-need" />
 

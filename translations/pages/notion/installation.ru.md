@@ -13,19 +13,36 @@ title: "Установка"
 
 **На этой странице:**
 
-1. [Что нужно](#what-you-need)
-2. [Создайте токен Notion](#make-a-notion-token)
-3. [В WireCat Desktop](#in-wirecat-desktop)
-4. [В терминале](#in-a-terminal)
-5. [Вход](#sign-in)
-6. [Проверьте, что все работает](#check-that-it-works)
-7. [Выход](#sign-out)
+1. [Коротко](#in-short)
+2. [Что нужно](#what-you-need)
+3. [Создайте токен Notion](#make-a-notion-token)
+4. [В WireCat Desktop](#in-wirecat-desktop)
+5. [В терминале](#in-a-terminal)
+6. [Вход](#sign-in)
+7. [Проверьте, что все работает](#check-that-it-works)
+8. [Выход](#sign-out)
+
+<a id="in-short" />
+
+## Коротко
+
+1. [Создайте токен](#make-a-notion-token) на стороне Notion.
+2. В WireCat Desktop: на странице **Инструменты** нажмите **Установить** в строке Notion, затем **Управление** и
+   **Войти здесь**, и вставьте токен.
+3. Или в терминале установите инструмент, войдите с токеном и скопируйте данные:
+
+```sh
+npm install -g @wirecat/notion-cli
+notion personal session start
+notion personal sync
+```
 
 <a id="what-you-need" />
 
 ## Что нужно
 
-- Рабочее пространство Notion, где вы полноправный участник. Гость токен создать не может.
+- Рабочее пространство Notion, где вы полноправный участник, для личного токена, или владелец, для внутреннего
+  подключения. Гость токен создать не может.
 - Для терминала: Node.js 22.16 или более новый 22.x, либо Node.js 24 и новее. Node 23 не поддерживается. WireCat
   Desktop ставит Node.js сам.
 
@@ -47,7 +64,7 @@ title: "Установка"
 можно, в **Settings → Connections**.
 
 **Токен внутреннего подключения** видит только страницы, которыми вы поделились с этим подключением. Выберите его,
-чтобы дать инструменту несколько страниц и больше ничего
+чтобы дать инструменту несколько страниц и больше ничего. Создать его может только владелец пространства
 ([инструкция Notion](https://developers.notion.com/guides/connections-and-tokens/internal-connections)):
 
 1. Откройте [портал разработчика](https://app.notion.com/developers/connections) и нажмите **New connection**.

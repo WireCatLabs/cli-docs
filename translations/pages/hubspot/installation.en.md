@@ -16,11 +16,25 @@ once.
 
 **On this page:**
 
-1. [Make a key](#make-a-key)
-2. [In WireCat Desktop](#in-wirecat-desktop)
-3. [In a terminal](#in-a-terminal)
-4. [Sign in](#sign-in)
-5. [Check that it works](#check-that-it-works)
+1. [In short](#in-short)
+2. [Make a key](#make-a-key)
+3. [In WireCat Desktop](#in-wirecat-desktop)
+4. [In a terminal](#in-a-terminal)
+5. [Sign in](#sign-in)
+6. [Check that it works](#check-that-it-works)
+
+## In short
+
+1. [Make the key](#make-a-key) on HubSpot's side.
+2. In WireCat Desktop: on the **Tools** page, click **Install** on the HubSpot row, then **Manage** and **Sign in here**,
+   and paste the key.
+3. Or in a terminal, install the tool, sign in with the key and copy your data:
+
+```sh
+npm install -g @wirecat/hubspot-cli
+hubspot work session start
+hubspot work sync
+```
 
 ## Make a key
 

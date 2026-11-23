@@ -15,19 +15,36 @@ un terminal con npm. En los dos casos necesitas un token de Notion.
 
 **En esta página:**
 
-1. [Qué necesitas](#what-you-need)
-2. [Crea un token de Notion](#make-a-notion-token)
-3. [En WireCat Desktop](#in-wirecat-desktop)
-4. [En un terminal](#in-a-terminal)
-5. [Inicia sesión](#sign-in)
-6. [Comprueba que funciona](#check-that-it-works)
-7. [Cierra la sesión](#sign-out)
+1. [En resumen](#in-short)
+2. [Qué necesitas](#what-you-need)
+3. [Crea un token de Notion](#make-a-notion-token)
+4. [En WireCat Desktop](#in-wirecat-desktop)
+5. [En un terminal](#in-a-terminal)
+6. [Inicia sesión](#sign-in)
+7. [Comprueba que funciona](#check-that-it-works)
+8. [Cierra la sesión](#sign-out)
+
+<a id="in-short" />
+
+## En resumen
+
+1. [Crea un token](#make-a-notion-token) en Notion.
+2. En WireCat Desktop: en la página **Herramientas**, pulsa **Instalar** en la fila de Notion, luego **Gestionar** e
+   **Iniciar sesión aquí**, y pega el token.
+3. O en un terminal, instala la herramienta, inicia sesión con el token y copia tus datos:
+
+```sh
+npm install -g @wirecat/notion-cli
+notion personal session start
+notion personal sync
+```
 
 <a id="what-you-need" />
 
 ## Qué necesitas
 
-- Un espacio de trabajo de Notion donde seas miembro completo. Un invitado no puede crear un token.
+- Un espacio de trabajo de Notion donde seas miembro completo, para un token personal, o propietario, para una
+  conexión interna. Un invitado no puede crear un token.
 - Para el terminal: Node.js 22.16 o un 22.x posterior, o Node.js 24 o posterior. Node 23 no es compatible. WireCat
   Desktop instala Node.js por su cuenta.
 
@@ -48,7 +65,7 @@ En el plan Free solo los propietarios del espacio pueden crearlo. En Business y 
 quién puede, en **Settings → Connections**.
 
 **El token de una conexión interna** solo ve las páginas que compartes con esa conexión. Elígelo para dar a la
-herramienta unas pocas páginas y nada más
+herramienta unas pocas páginas y nada más. Solo un propietario del espacio puede crearla
 ([guía de Notion](https://developers.notion.com/guides/connections-and-tokens/internal-connections)):
 
 1. Abre el [portal de desarrolladores](https://app.notion.com/developers/connections) y pulsa **New connection**.

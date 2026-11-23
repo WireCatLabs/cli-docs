@@ -16,11 +16,27 @@ HubSpot crea la clave una vez.
 
 **En esta página:**
 
-1. [Crea una clave](#make-a-key)
-2. [En WireCat Desktop](#in-wirecat-desktop)
-3. [En un terminal](#in-a-terminal)
-4. [Inicia sesión](#sign-in)
-5. [Comprueba que funciona](#check-that-it-works)
+1. [En resumen](#in-short)
+2. [Crea una clave](#make-a-key)
+3. [En WireCat Desktop](#in-wirecat-desktop)
+4. [En un terminal](#in-a-terminal)
+5. [Inicia sesión](#sign-in)
+6. [Comprueba que funciona](#check-that-it-works)
+
+<a id="in-short" />
+
+## En resumen
+
+1. [Crea una clave](#make-a-key) en HubSpot.
+2. En WireCat Desktop: en la página **Herramientas**, pulsa **Instalar** en la fila de HubSpot, luego **Gestionar** e
+   **Iniciar sesión aquí**, y pega la clave.
+3. O en un terminal, instala la herramienta, inicia sesión con la clave y copia tus datos:
+
+```sh
+npm install -g @wirecat/hubspot-cli
+hubspot work session start
+hubspot work sync
+```
 
 <a id="make-a-key" />
 

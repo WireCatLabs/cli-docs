@@ -14,13 +14,27 @@ with npm. Either way you need one personal API key.
 
 **On this page:**
 
-1. [What you need](#what-you-need)
-2. [Make a personal API key](#make-a-personal-api-key)
-3. [In WireCat Desktop](#in-wirecat-desktop)
-4. [In a terminal](#in-a-terminal)
-5. [Sign in](#sign-in)
-6. [Check that it works](#check-that-it-works)
-7. [Sign out](#sign-out)
+1. [In short](#in-short)
+2. [What you need](#what-you-need)
+3. [Make a personal API key](#make-a-personal-api-key)
+4. [In WireCat Desktop](#in-wirecat-desktop)
+5. [In a terminal](#in-a-terminal)
+6. [Sign in](#sign-in)
+7. [Check that it works](#check-that-it-works)
+8. [Sign out](#sign-out)
+
+## In short
+
+1. [Make the key](#make-a-personal-api-key) on Linear's side.
+2. In WireCat Desktop: on the **Tools** page, click **Install** on the Linear row, then **Manage** and **Sign in here**,
+   and paste the key.
+3. Or in a terminal, install the tool, sign in with the key and copy your data:
+
+```sh
+npm install -g @wirecat/linear-cli
+linear work session start
+linear work sync
+```
 
 ## What you need
 

@@ -14,17 +14,32 @@ with npm. Either way you need one Notion token.
 
 **On this page:**
 
-1. [What you need](#what-you-need)
-2. [Make a Notion token](#make-a-notion-token)
-3. [In WireCat Desktop](#in-wirecat-desktop)
-4. [In a terminal](#in-a-terminal)
-5. [Sign in](#sign-in)
-6. [Check that it works](#check-that-it-works)
-7. [Sign out](#sign-out)
+1. [In short](#in-short)
+2. [What you need](#what-you-need)
+3. [Make a Notion token](#make-a-notion-token)
+4. [In WireCat Desktop](#in-wirecat-desktop)
+5. [In a terminal](#in-a-terminal)
+6. [Sign in](#sign-in)
+7. [Check that it works](#check-that-it-works)
+8. [Sign out](#sign-out)
+
+## In short
+
+1. [Make the token](#make-a-notion-token) on Notion's side.
+2. In WireCat Desktop: on the **Tools** page, click **Install** on the Notion row, then **Manage** and **Sign in here**,
+   and paste the token.
+3. Or in a terminal, install the tool, sign in with the token and copy your data:
+
+```sh
+npm install -g @wirecat/notion-cli
+notion personal session start
+notion personal sync
+```
 
 ## What you need
 
-- A Notion workspace where you are a full member. Guests cannot make a token.
+- A Notion workspace where you are a full member, for a personal access token, or its owner, for an internal
+  connection. Guests cannot make a token.
 - For the terminal: Node.js 22.16 or a later 22.x, or Node.js 24 or later. Node 23 is not supported. WireCat Desktop
   sets up Node.js itself.
 
@@ -43,7 +58,7 @@ On the Free plan only workspace owners can make one. On Business and Enterprise 
 **Settings → Connections**.
 
 **An internal connection's token** sees only the pages you share with that connection. Choose it to give the tool a
-few pages and nothing else
+few pages and nothing else. Only a workspace owner can make one
 ([Notion's guide](https://developers.notion.com/guides/connections-and-tokens/internal-connections)):
 
 1. Open the [developer portal](https://app.notion.com/developers/connections) and click **New connection**.

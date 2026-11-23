@@ -16,11 +16,27 @@ HubSpot **Developer tools access**.
 
 **На этой странице:**
 
-1. [Создайте ключ](#make-a-key)
-2. [В WireCat Desktop](#in-wirecat-desktop)
-3. [В терминале](#in-a-terminal)
-4. [Войдите](#sign-in)
-5. [Проверьте, что все работает](#check-that-it-works)
+1. [Коротко](#in-short)
+2. [Создайте ключ](#make-a-key)
+3. [В WireCat Desktop](#in-wirecat-desktop)
+4. [В терминале](#in-a-terminal)
+5. [Войдите](#sign-in)
+6. [Проверьте, что все работает](#check-that-it-works)
+
+<a id="in-short" />
+
+## Коротко
+
+1. [Создайте ключ](#make-a-key) на стороне HubSpot.
+2. В WireCat Desktop: на странице **Инструменты** нажмите **Установить** в строке HubSpot, затем **Управление** и
+   **Войти здесь**, и вставьте ключ.
+3. Или в терминале установите инструмент, войдите с ключом и скопируйте данные:
+
+```sh
+npm install -g @wirecat/hubspot-cli
+hubspot work session start
+hubspot work sync
+```
 
 <a id="make-a-key" />
 
