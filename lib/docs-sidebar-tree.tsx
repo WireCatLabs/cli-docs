@@ -263,6 +263,7 @@ const toolGroups = {
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
   crm: { tools: ["b24", "amo", "attio", "hubspot"], open: false, icon: Handshake },
+  sites: { tools: ["wordpress"], open: true, icon: Newspaper },
   trackers: { tools: ["linear"], open: true, icon: SquareKanban },
 } as const
 

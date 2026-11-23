@@ -257,13 +257,28 @@ describe("tool folders in the sidebar", () => {
       children: [],
     })
     const tree = unifiedDocsTree({ name: "Docs", children: [folder("wordpress"), folder("linear")] }, "ru")
-    const [wordpress, group] = tree.children
-    expect(wordpress.name).toBe("wordpress")
+    const [, group] = tree.children
     expect(group.type === "folder" && !group.index && group.defaultOpen).toBe(true)
     expect(group.name).toBe("Трекеры задач")
     expect(
       group.type === "folder" && group.children.map((child) => child.type === "folder" && child.index?.url),
     ).toEqual(["/ru/docs/linear"])
+  })
+
+  it("puts WordPress in an open Sites and blogs group, keeping its URL", () => {
+    const folder = (tool: string): Node => ({
+      type: "folder",
+      name: tool,
+      index: { type: "page", name: tool, url: `/es/docs/${tool}` },
+      children: [],
+    })
+    const tree = unifiedDocsTree({ name: "Docs", children: [folder("pbx"), folder("wordpress")] }, "es")
+    const [, group] = tree.children
+    expect(group.type === "folder" && !group.index && group.defaultOpen).toBe(true)
+    expect(group.name).toBe("Sitios y blogs")
+    expect(
+      group.type === "folder" && group.children.map((child) => child.type === "folder" && child.index?.url),
+    ).toEqual(["/es/docs/wordpress"])
   })
 
   it("lists Google Calendar right after Google Drive in every language", () => {
