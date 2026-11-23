@@ -60,10 +60,10 @@
     "conclusion": "Reviewed pbx 0.8.0 from its changelog and the docs diff since v0.7.2. May break callers: `meetings transcribe` answers the report the other phone CLIs give (`audio_ms` instead of `audio_seconds`, a `ref` on each failed call, a call without a recording under `failed` with `recording.missing`, no `without_recording`). The overview (index) is rewritten as a sales page: the reader's gain, the ideas a newcomer would not guess, an example from the bundled sample call log, why pbx against the tools on its comparison page, a start and plain limits. RU/ES index retranslated, changelog and commands updated and accepted, and the changelog link correction moved to v0.8.0. The roadmap did not change."
   },
   "wordpress": {
-    "version": "v0.2.0",
+    "version": "v0.3.0",
     "roadmapSha256": "db37ad928f544284aafbd4243f54c61e37921d15919512911ebb6877079cfbfe",
-    "reviewedAt": "2026-11-21",
-    "conclusion": "Reviewed wordpress 0.2.0 from its changelog and the docs diff since v0.1.2: pages are written (posts create --type page and every write to a page), an Editor or Author gets the authors with published posts, an Author or Contributor sync reads only the changes and marks a post deleted for good only after a direct read answers 404, and the api group drops the application-password calls whose answers hold a secret. The roadmap did not change. RU and ES changelog, commands, index, installation, permissions, troubleshooting and usage updated and accepted. The release's installation guide now gives the index's wording, so the site correction for it is gone."
+    "reviewedAt": "2026-11-23",
+    "conclusion": "Reviewed wordpress 0.3.0 from its changelog and the docs diff since v0.2.0: WireCat Desktop signs in to WordPress in its own window (`--wcat-describe` lists the application-password sign-in with `--site` and `--login`), `posts publish` and `posts unpublish` ask one question, and `--help` names the application password and the `/wp-json` index. The roadmap did not change. RU and ES changelog, commands and permissions updated and accepted."
   },
   "attio": {
     "version": "v0.2.2",
@@ -72,9 +72,9 @@
     "conclusion": "First site release of attio, reviewed at 0.2.2 from its changelog and the pages it publishes. Sync copies every deal and the people and companies those deals name; everyone else in Attio is searched live. 0.2.2 fixed the pages that still said sync copies the whole workspace, and the RU and ES translations follow it. The roadmap's Next (changing deals, notes and tasks, one-click sign-in) and Later (custom objects and lists, webhooks) hold nothing that has shipped."
   },
   "hubspot": {
-    "version": "v0.4.0",
+    "version": "v0.5.0",
     "roadmapSha256": "920e391af6d3016eb424cdd39e156e18c94a81308ce95c9adfe324b33590308a",
-    "reviewedAt": "2026-11-19",
-    "conclusion": "First review of hubspot on the site, at 0.4.0. May break callers: `deals.write`, `people.write` and `organizations.write` are gone, and an `api` write on deals, contacts or companies checks the key of the command that does the same, as amo and b24 do. Fixed: a read denied on a CRM command is denied through `api` too, notes read as clean text, the daily limit is never retried. The overview is a sales page, and the comparison and roadmap come from the release (NEED-2734). RU/ES of every page translated and accepted. The roadmap names connecting HubSpot in WireCat Desktop (next Desktop release) and signing in as yourself in the browser."
+    "reviewedAt": "2026-11-23",
+    "conclusion": "Reviewed hubspot 0.5.0 from its changelog and the docs diff since v0.4.0. May break callers: `api contacts-gdpr-delete` (key `people.erase`) is `deny` by default, so a GDPR erase stays off until allowed. Fixed: a denied `api` call answers `permission_error` before its body is read. The roadmap did not change in the release; its item on connecting HubSpot in WireCat Desktop shipped in Desktop 0.7.4, so a site correction drops it. RU and ES changelog, commands and permissions updated and accepted."
   }
 }

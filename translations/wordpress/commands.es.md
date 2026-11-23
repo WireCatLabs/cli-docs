@@ -57,7 +57,7 @@ wordpress commands info [path]
 
 ## `wordpress session`
 
-keep this profile's WordPress token in the OS keyring
+keep this profile's WordPress application password in the OS keyring
 
 ### `wordpress session start`
 
@@ -115,7 +115,7 @@ wordpress session list
 
 ## `wordpress api`
 
-the raw WordPress API, one command per operation of its OpenAPI document
+the raw WordPress API, one command per operation of its index at /wp-json
 
 ### `wordpress api list`
 

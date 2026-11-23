@@ -3293,5 +3293,43 @@
         }
       ]
     }
+  },
+  {
+    "tool": "amo",
+    "slug": "index",
+    "phase": "before-translation",
+    "reason": "Docs audit 2026-11-23. amo 0.3.0 adds a one-click sign-in for amoCRM administrators that needs no integration of your own (amo-cli CHANGELOG 0.3.0, docs/installation.md#sign-in-with-amocrm); the index still named one integration and two sign-ins.",
+    "replacements": {
+      "en": [
+        {
+          "before": "You need one private integration in the account, which an administrator makes once.",
+          "after": "An administrator of an amoCRM account signs in with one click. Kommo, and users who are not administrators, sign in\nwith a token from a private integration that an administrator makes once."
+        },
+        {
+          "before": "- **Sign-in with a token or through the integration.** Either is kept",
+          "after": "- **Sign-in with one click, a token or through the integration.** Each is kept"
+        }
+      ],
+      "ru": [
+        {
+          "before": "Вам нужна одна приватная интеграция в аккаунте. Ее один раз создает администратор.",
+          "after": "Администратор аккаунта amoCRM входит одним кликом. Kommo и пользователи, которые не\nадминистраторы, входят по токену приватной интеграции, которую один раз создает администратор."
+        },
+        {
+          "before": "- **Вход по токену или через интеграцию.** И то, и другое хранится",
+          "after": "- **Вход одним кликом, по токену или через интеграцию.** Любой из них хранится"
+        }
+      ],
+      "es": [
+        {
+          "before": "Necesitas una integración privada en la cuenta, que un administrador crea una\nvez.",
+          "after": "Un administrador de una cuenta de amoCRM inicia sesión con un clic. Kommo, y los usuarios que no son\nadministradores, inician sesión con el token de una integración privada que un administrador crea una vez."
+        },
+        {
+          "before": "- **Inicio de sesión con un token o con la integración.** Los dos se guardan",
+          "after": "- **Inicio de sesión con un clic, con un token o con la integración.** Todos se guardan"
+        }
+      ]
+    }
   }
 ]

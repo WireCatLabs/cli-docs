@@ -4,6 +4,22 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/hubspot-cli`. Una sección por versión, la más nueva primero.
 
+## 0.5.0 — 21.11.2026
+
+### Cambiado: puede romper a quien lo usa
+
+- **El borrado GDPR de un contacto está desactivado hasta que lo permitas.** `api contacts-gdpr-delete` borra un
+  contacto y todo lo que tiene para siempre, y bloquea que su dirección vuelva. Su clave `people.erase` era `ask`, y por
+  MCP `ask` sigue adelante sin preguntar. Ahora es `deny` por defecto: la llamada responde `permission_error` y no
+  envía nada. Los borrados normales siguen preguntando. Atención: para borrar contactos, ejecuta
+  `hubspot <profile> config set permissions.people.erase allow`. Mira [permisos](./permissions.md).
+
+### Corregido
+
+- **Una llamada `api` denegada se rechaza antes de leer su cuerpo.** Una llamada cuya clave es `deny` respondía
+  `validation_error` cuando no tenía cuerpo o lo tenía mal, y ahora responde `permission_error`, en la línea de
+  comandos y por MCP (cli-core 0.715.0).
+
 ## 0.4.0 — 19.11.2026
 
 ### Cambiado: puede romper a quien lo usa

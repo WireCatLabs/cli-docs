@@ -4,6 +4,21 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/wordpress-cli`. Una sección por versión, la más nueva primero.
 
+## 0.3.0 — 21.11.2026
+
+### Añadido
+
+- **WireCat Desktop inicia sesión en WordPress en su propia ventana, también para una herramienta añadida desde su
+  descripción.** `--wcat-describe` ahora lista el inicio de sesión con contraseña de aplicación con sus opciones
+  `--site` y `--login`, así que Desktop pide el sitio, el nombre de usuario y la contraseña, y envía la contraseña por
+  stdin.
+
+### Corregido
+
+- **`posts publish` y `posts unpublish` hacen una sola pregunta**, no preguntan `posts.update` una segunda vez.
+- **`--help` nombra el inicio de sesión y la especificación propios de WordPress**: el grupo `session` dice contraseña
+  de aplicación, y `api` dice su índice en `/wp-json`.
+
 ## 0.2.0 — 21.11.2026
 
 ### Añadido

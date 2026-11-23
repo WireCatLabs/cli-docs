@@ -462,7 +462,7 @@ hubspot deals create [options]
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: hubspot commands info deals create
 
-**Example:** `hubspot work deals create --title "Example kitchen" --amount 15000 --currency EUR`, `hubspot work deals create --title "Example office" --pipeline Sales --stage "Quote sent" --field UF_CRM_SOURCE=web`
+**Example:** `hubspot work deals create --title "Example kitchen" --amount 15000 --currency EUR`, `hubspot work deals create --title "Example office" --pipeline Sales --stage "Quote sent" --field Source=web`
 
 ### `hubspot deals update`
 
@@ -491,7 +491,7 @@ hubspot deals update <deal> [options]
 
 **Returns:** crm write — operation_id, untrusted, deal, lead; every field: hubspot commands info deals update
 
-**Example:** `hubspot work deals update deal:12 --amount 18000`, `hubspot work deals update deal:12 --field UF_CRM_SOURCE=`
+**Example:** `hubspot work deals update deal:12 --amount 18000`, `hubspot work deals update deal:12 --field Source=`
 
 ### `hubspot deals move`
 
@@ -1018,9 +1018,9 @@ hubspot api show <operation>
 
 | Argument | | What it is |
 |---|---|---|
-| `operation` | required | the operation, as api list prints it. |
+| `operation` | required | the operation as api list prints it (quoted), its old name, or its operation id. |
 
-**Example:** `hubspot personal api show contacts-list --json`
+**Example:** `hubspot personal api show "contacts-list" --json`
 
 ### `hubspot api contacts-list`
 
