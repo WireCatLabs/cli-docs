@@ -3,38 +3,27 @@ title: "Notion: empieza aquí"
 description: "Copia tus páginas y bases de datos de Notion a tu ordenador para que tu agente de IA las busque sin conexión y las use como contexto."
 ---
 
-Tus planes, notas de reuniones y bases de datos de proyectos están en Notion, y un agente de IA en tu ordenador no
-puede leerlos si no pegas el texto en el chat. La herramienta de línea de comandos `notion` copia las páginas que
-elijas a tu ordenador. Así tu agente puede buscarlas y usarlas como contexto, incluso sin internet.
+Pregunta a tu agente de IA por cualquier cosa que escribiste en Notion y recibe la respuesta con el enlace a la
+página. Los planes, las notas de reuniones y las bases de datos de proyectos están en Notion, donde un agente en tu
+ordenador no puede leerlos si no pegas el texto en el chat. La herramienta de línea de comandos `notion` copia las
+páginas que elijas a tu ordenador, y tu agente busca en ellas y las usa como contexto, incluso sin internet.
 
-Pregunta a tu agente en qué página se anotó una decisión, qué filas tiene la base de datos de un proyecto o qué dice
-una especificación sobre una función. El agente encuentra la página en la copia local y te da su enlace de Notion.
+Tu agente te dice en qué página se anotó una decisión, qué filas tiene la base de datos de un proyecto o qué dice una
+especificación sobre una función, y te da el enlace de la página en Notion. Si lo permites, el agente también escribe
+páginas y comentarios en Notion.
 
-Esta página explica qué obtienes, cómo funciona la copia y cómo conectar tu espacio de trabajo.
+`notion` se instala con [WireCat Desktop](/es/docs/desktop) o desde npm. Necesita un token de Notion, una clave que
+decide qué páginas ve la herramienta. [Consigue un token de Notion](#consigue-un-token-de-notion) explica los dos
+tipos.
 
 **En esta página:**
 
-1. [Cómo funciona](#cómo-funciona)
-2. [Qué obtienes](#qué-obtienes)
+1. [Qué obtienes](#qué-obtienes)
+2. [Cómo funciona](#cómo-funciona)
 3. [Consigue un token de Notion](#consigue-un-token-de-notion)
 4. [Conecta y copia tus páginas](#conecta-y-copia-tus-páginas)
 5. [Qué no hace todavía](#qué-no-hace-todavía)
 6. [Encuentra una guía para tu tarea](#encuentra-una-guía-para-tu-tarea)
-
-## Cómo funciona
-
-- **Una copia en tu ordenador.** `notion` guarda las páginas en el almacén local, un archivo de tu ordenador que
-  comparten todas las herramientas de WireCat. La búsqueda lee esta copia, no Notion. Ahí están también tus chats, tu
-  correo y tus reuniones, así que [Memo](/es/docs/memo) encuentra una página de Notion junto con la conversación sobre
-  ella.
-- **Un token en lugar de una contraseña.** Un token de Notion es una clave con la que la herramienta lee tu espacio de
-  trabajo. Decide qué ve la herramienta: todo el espacio o solo unas pocas páginas.
-- **Un perfil por espacio.** Un perfil es el nombre que eliges para una cuenta de Notion, como `personal`. Cada
-  comando que usa una cuenta empieza por él: `notion personal search "quarterly plan"`.
-- **Cada sincronización trae los cambios.** La copia está al día según la última sincronización. Vuelve a ejecutarla
-  para traer lo que cambió en Notion.
-- **Tu agente usa los mismos comandos.** Un agente de terminal ejecuta `notion` por ti, y una aplicación que se conecta
-  a servidores MCP recibe los mismos comandos por MCP.
 
 ## Qué obtienes
 
@@ -57,6 +46,21 @@ Esta página explica qué obtienes, cómo funciona la copia y cómo conectar tu 
 El token se guarda en el llavero del sistema, o en un archivo privado donde no hay llavero. `notion` solo se conecta
 a la API de Notion. Más detalles en [acceso y seguridad](./security.md).
 
+## Cómo funciona
+
+- **Una copia en tu ordenador.** `notion` guarda las páginas en el almacén local, un archivo de tu ordenador que
+  comparten todas las herramientas de WireCat. La búsqueda lee esta copia, no Notion. Ahí están también tus chats, tu
+  correo y tus reuniones, así que [Memo](/es/docs/memo) encuentra una página de Notion junto con la conversación sobre
+  ella.
+- **Un token en lugar de una contraseña.** Un token de Notion es una clave con la que la herramienta lee tu espacio de
+  trabajo. Decide qué ve la herramienta: todo el espacio o solo unas pocas páginas.
+- **Un perfil por espacio.** Un perfil es el nombre que eliges para una cuenta de Notion, como `personal`. Cada
+  comando que usa una cuenta empieza por él: `notion personal search "quarterly plan"`.
+- **Cada sincronización trae los cambios.** La copia está al día según la última sincronización. Vuelve a ejecutarla
+  para traer lo que cambió en Notion.
+- **Tu agente usa los mismos comandos.** Un agente de terminal ejecuta `notion` por ti, y una aplicación que se conecta
+  a servidores MCP recibe los mismos comandos por MCP.
+
 ## Consigue un token de Notion
 
 El token decide lo que ve la herramienta. Notion ofrece dos tipos:
@@ -66,9 +70,12 @@ El token decide lo que ve la herramienta. Notion ofrece dos tipos:
 - El token de una conexión interna solo ve las páginas que compartes con esa conexión en Notion. Es la opción para
   dar a la herramienta unas pocas páginas y nada más.
 
+[Crea un token de Notion](./installation.md#make-a-notion-token) tiene los pasos en Notion para cada tipo.
+
 ## Conecta y copia tus páginas
 
-1. [Instala `notion`](./installation.md) desde npm.
+1. [Instala `notion`](./installation.md) con WireCat Desktop o desde npm. En Desktop inicias sesión y eliges las
+   páginas en su ventana. Los comandos de aquí hacen lo mismo en un terminal.
 2. Inicia sesión. `personal` es un perfil: un nombre que eliges para una cuenta de Notion. La herramienta pide el
    token sin mostrarlo.
 
