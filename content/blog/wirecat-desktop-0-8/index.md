@@ -17,7 +17,7 @@ The Digests page has a new **Inbox** tab. Press **Sort now**, and the AI model y
 
 ![The Inbox tab with a finished run, its model and a cost under a cent, and threads grouped into needs an answer and to read](./inbox-en.webp "A run names its model and what it cost.")
 
-A finished run names the model and its cost, so you know what sorting your mail takes. When the model runs outside your computer, WireCat first tells you how many emails and tokens it would send, and where, and sends nothing until you say yes. If you'd rather not press the button every time, the Settings tab of Digests sorts each account on a schedule. A scheduled run sends the mail without asking.
+A finished run names the model and its cost, so you know what sorting your mail takes. By default, when the model runs outside your computer, WireCat first tells you how many emails and tokens it would send, and where, and sends nothing until you say yes. If you'd rather not press the button every time, the Settings tab of Digests sorts each account on a schedule. A scheduled run sends the mail without asking.
 
 ## Decide who is who with more in front of you
 
@@ -48,7 +48,7 @@ If you set a group of commands to **Ask first**, an agent in a terminal asks you
 - **Updates on Ubuntu and Debian through Software Updater.** The .deb now adds WireCat's apt repository at apt.wirecat.dev, so new versions arrive with your other updates, and App Center shows WireCat as the developer.
 - **New WireCat tools without an app update.** The app reads WireCat's official tools from a signed list on wirecat.dev, so a new tool can show up with its icon and its texts in your language before the next Desktop version.
 
-The catalog grew too, and the Tools page now installs Attio, HubSpot, Linear, WordPress, amoCRM and Yandex Disk.
+The catalog grew too, and the Tools page now installs Attio, HubSpot, Linear and a few more.
 
 ## Get it
 

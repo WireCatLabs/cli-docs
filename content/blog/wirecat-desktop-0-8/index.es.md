@@ -17,7 +17,7 @@ La página Resúmenes tiene una pestaña nueva, **Bandeja**. Pulsa **Ordenar aho
 
 ![La pestaña Bandeja tras una ordenación, con su modelo y un coste de menos de un céntimo, y los hilos agrupados en necesita respuesta y para leer](./inbox-es.webp "Una ordenación nombra su modelo y lo que costó.")
 
-Una ordenación terminada nombra el modelo y su coste, así sabes lo que cuesta ordenar tu correo. Cuando el modelo funciona fuera de tu ordenador, WireCat te dice antes cuántos correos y tokens enviaría, y adónde, y no envía nada hasta que dices que sí. Si prefieres no pulsar el botón cada vez, la pestaña Ajustes de Resúmenes ordena cada cuenta según un horario. Una ordenación programada envía el correo sin preguntar.
+Una ordenación terminada nombra el modelo y su coste, así sabes lo que cuesta ordenar tu correo. Por defecto, cuando el modelo funciona fuera de tu ordenador, WireCat te dice antes cuántos correos y tokens enviaría, y adónde, y no envía nada hasta que dices que sí. Si prefieres no pulsar el botón cada vez, la pestaña Ajustes de Resúmenes ordena cada cuenta según un horario. Una ordenación programada envía el correo sin preguntar.
 
 ## Decide quién es quién con más datos delante
 
@@ -48,7 +48,7 @@ Si pones un grupo de comandos en **Preguntar antes**, un agente en una terminal 
 - **Actualizaciones en Ubuntu y Debian con el Actualizador de software.** El .deb ahora añade el repositorio apt de WireCat en apt.wirecat.dev, así que las versiones nuevas llegan con tus otras actualizaciones, y App Center muestra a WireCat como desarrollador.
 - **Herramientas nuevas de WireCat sin actualizar la app.** La app lee las herramientas oficiales de WireCat de una lista firmada en wirecat.dev, así que una herramienta nueva puede aparecer con su icono y sus textos en tu idioma antes de la próxima versión de Desktop.
 
-El catálogo también creció, y la página Herramientas ya instala Attio, HubSpot, Linear, WordPress, amoCRM y Yandex Disk.
+El catálogo también creció, y la página Herramientas ya instala Attio, HubSpot, Linear y algunas más.
 
 ## Cómo conseguirla
 
