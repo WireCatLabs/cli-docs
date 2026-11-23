@@ -13,8 +13,9 @@ ejecuta. Dan por hecho que ya has [iniciado sesión](./installation.md), elegido
 3. [Ordena las facturas del año pasado en un archivo](#tidy-last-years-invoices-into-an-archive)
 4. [Comparte un archivo y cierra el enlace después](#share-a-file-and-close-the-link-later)
 5. [Pon en el Disk un informe que escribió el agente](#put-a-report-the-agent-wrote-on-the-disk)
-6. [Deshaz un borrado](#undo-a-delete)
-7. [Mantén la copia al día cada mañana](#keep-the-copy-current-every-morning)
+6. [Edita un archivo con tu agente](#edit-a-file-with-your-agent)
+7. [Deshaz un borrado](#undo-a-delete)
+8. [Mantén la copia al día cada mañana](#keep-the-copy-current-every-morning)
 
 ## Encuentra un contrato y cita sus condiciones
 
@@ -41,7 +42,9 @@ Use ydisk CLI with profile personal. Open /Work/Q3/report.xlsx on my Disk and te
 ydisk personal files download /Work/Q3/report.xlsx --json
 ```
 
-`files download` sin `--output` responde con el texto del archivo, así que no se guarda nada en tu ordenador.
+`files download` sin `--output` responde con el texto del archivo, así que no se guarda nada en tu ordenador. Un texto
+de más de 200 000 caracteres se corta y dice `truncated: true`. Para las celdas mismas, con sus fórmulas,
+`ydisk personal files sheets show /Work/Q3/report.xlsx` las da por dirección.
 
 ## Ordena las facturas del año pasado en un archivo
 
@@ -86,6 +89,63 @@ ydisk personal files upload ./summary.md --folder /Reports
 
 Una subida rechaza los archivos de credenciales, los perfiles de navegador y las carpetas de WireCat, así que un
 agente no puede enviarlos al Disk por error.
+
+## Edita un archivo con tu agente
+
+El agente lee el archivo, lo edita y lo escribe de vuelta con el `sha256` que leyó. Si alguien cambió el archivo
+mientras tanto, la escritura se rechaza y no se sube nada: el agente lo lee otra vez y repite la edición. Lo que
+reemplazó cada edición se guarda en este ordenador.
+
+Una nota de Markdown:
+
+```text prompt
+Use ydisk CLI with profile personal. In /Notes/plan.md on my Disk, tick "send the invoice" and add
+"call the bank" under Friday. Keep everything else as it is.
+```
+
+```sh
+ydisk personal files download /Notes/plan.md --json
+ydisk personal files update /Notes/plan.md --expected-fingerprint <sha256 from the download> < plan.md
+```
+
+La descarga da el texto completo y su `sha256`. Un texto cortado a los 200 000 caracteres no tiene `sha256`, así que
+nunca se puede escribir de vuelta.
+
+Una hoja de cálculo:
+
+```text prompt
+Use ydisk CLI with profile personal. In /Work/budget.xlsx, set the March rent to 1300 and mark it paid.
+```
+
+```sh
+ydisk personal files sheets show /Work/budget.xlsx "Sheet1!A1:D20" --json
+ydisk personal files sheets update /Work/budget.xlsx "Sheet1!B3:C3" --values '[[1300, "paid"]]' --expected-fingerprint <sha256>
+```
+
+Solo cambian esas celdas; el formato, las otras hojas y las fórmulas se mantienen. Una celda con fórmula se rechaza salvo
+que el agente añada `--replace`.
+
+Un documento de Word:
+
+```text prompt
+Use ydisk CLI with profile personal. In /Work/letter.docx, replace the second paragraph with
+"The pond opens on Monday." and add "Kind regards, Anna" at the end.
+```
+
+```sh
+ydisk personal files documents show /Work/letter.docx --json
+ydisk personal files documents update /Work/letter.docx --payload '[{"index": 1, "text": "The pond opens on Monday."}, {"insert_after": 5, "text": "Kind regards, Anna"}]' --expected-fingerprint <sha256>
+```
+
+Los párrafos conservan su estilo. Un párrafo con un cambio controlado, una imagen, un comentario o un enlace se rechaza
+con el motivo, para que el agente te lo diga.
+
+Para deshacer una edición:
+
+```sh
+ydisk personal files history /Work/letter.docx
+ydisk personal files restore /Work/letter.docx <version> --expected-fingerprint <sha256 the file has now>
+```
 
 ## Deshaz un borrado
 

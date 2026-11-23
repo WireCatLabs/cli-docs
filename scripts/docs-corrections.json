@@ -2913,5 +2913,31 @@
         }
       ]
     }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/ydisk-cli/blob/v0.5.0/README.md",
+    "reason": "The ydisk overview lists no file editing and no mirrors, though 0.5.0 edits .md/.xlsx/.docx files in place and merges mirror edits (README 'What you get' has both). Retire when docs/index.md carries them.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **The whole Disk, live.** List, read, download, upload, copy, move, delete to the trash, restore and share files\n  without opening a browser.\n",
+          "after": "- **The whole Disk, live.** List, read, download, upload, copy, move, delete to the trash, restore and share files\n  without opening a browser.\n- **Edit a file where it is.** Your agent changes a Markdown note, cells of an Excel workbook or\n  paragraphs of a Word document on the Disk, and the rest of the file stays as it is. The file is checked again just before\n  the write, and what an edit replaced is kept on your computer. See\n  [edit a file on the Disk](./usage.md#edit-a-file-on-the-disk).\n- **A folder on your computer that stays in step with the Disk.** Work on files with your own tools, and a\n  [mirror](./mirrors.md) sends your changes up and brings the Disk's down. A note edited here and on your phone in\n  different places is merged, and a real conflict waits for you with both versions and the lines that clash.\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "- **Весь Диск вживую.** Смотрите, читайте, скачивайте, загружайте, копируйте, переносите, удаляйте в корзину,\n  восстанавливайте файлы и делитесь ими, не открывая браузер.\n",
+          "after": "- **Весь Диск вживую.** Смотрите, читайте, скачивайте, загружайте, копируйте, переносите, удаляйте в корзину,\n  восстанавливайте файлы и делитесь ими, не открывая браузер.\n- **Правка файла прямо на Диске.** Агент меняет заметку Markdown, ячейки таблицы Excel или абзацы\n  документа Word на Диске, а остальной файл остается как был. Прямо перед записью файл проверяется еще раз, а то, что\n  заменила правка, хранится на вашем компьютере. См.\n  [правку файла на Диске](./usage.md#edit-a-file-on-the-disk).\n- **Папка на компьютере, которая не отстает от Диска.** Работайте с файлами в своих программах, а\n  [зеркало](./mirrors.md) отправит ваши изменения на Диск и скачает изменения с Диска. Заметка, которую поправили здесь\n  и с телефона в разных местах, сливается в одну, а настоящий конфликт ждет вас с обеими версиями и строками, которые\n  расходятся.\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "- **Todo el Disk, en vivo.** Lista, lee, descarga, sube, copia, mueve, envía a la papelera, restaura y comparte\n  archivos sin abrir un navegador.\n",
+          "after": "- **Todo el Disk, en vivo.** Lista, lee, descarga, sube, copia, mueve, envía a la papelera, restaura y comparte\n  archivos sin abrir un navegador.\n- **Edita un archivo donde está.** Tu agente cambia una nota Markdown, celdas de un libro de Excel o\n  párrafos de un documento de Word en el Disk, y el resto del archivo queda como estaba. El archivo se comprueba otra vez\n  justo antes de escribir, y lo que una edición reemplazó se guarda en tu ordenador. Mira\n  [edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk).\n- **Una carpeta de tu ordenador al día con el Disk.** Trabaja con tus propias herramientas, y un\n  [espejo](./mirrors.md) sube tus cambios y baja los del Disk. Una nota editada aquí y en tu teléfono en sitios\n  distintos se fusiona, y un conflicto real te espera con las dos versiones y las líneas que chocan.\n"
+        }
+      ]
+    }
   }
 ]

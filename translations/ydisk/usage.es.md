@@ -104,22 +104,55 @@ ydisk personal files move /Documents/old.pdf --folder /Archive
 ydisk personal files create /Projects/2026
 ydisk personal files delete /Documents/old.pdf
 ydisk personal files restore trash:/old.pdf
+ydisk personal files update /Notes/plan.md --text "# Plan" --expected-fingerprint <sha256>
+ydisk personal files sheets show /Work/budget.xlsx "Sheet1!A1:C10"
+ydisk personal files documents show /Work/report.docx
+ydisk personal files history /Notes/plan.md
 ydisk personal files publish /Documents/plan.pdf
 ydisk personal files unpublish /Documents/plan.pdf
 ```
 
 - `files download` sin `--output` responde con el texto del archivo, hasta 200 000 caracteres, para que un agente lea
-  un archivo fuera de las carpetas elegidas sin guardarlo.
+  un archivo fuera de las carpetas elegidas sin guardarlo. Un texto más largo se corta ahí y la respuesta dice
+  `truncated: true`. Nunca escribas un texto cortado sobre el archivo: se perdería el resto.
+- `files show` y `files list` dan el `md5` y el `sha256` de cada archivo, para que un agente sepa si un archivo cambió
+  desde que lo leyó. `files download` da el `sha256` solo junto al texto completo del archivo: un texto cortado, o el
+  texto extraído de un PDF, un .docx o un .xlsx, tiene `sha256: null`, así que el agente no tiene huella con la que
+  escribirlo de vuelta.
 - `files delete` mueve un archivo a la papelera del Disk y `files restore` lo devuelve por su ruta en la papelera.
 - `files publish` crea un enlace público que puede abrir cualquiera que lo tenga. `files unpublish` lo cierra.
 - `--replace` en una subida, una copia o un movimiento sobrescribe un archivo que ya está en esa ruta.
 
-En un terminal, la herramienta pregunta antes de borrar, sobrescribir o crear un enlace público. Por MCP no hay nadie
+En un terminal, la herramienta pregunta antes de borrar, sobrescribir, editar o crear un enlace público. Por MCP no hay nadie
 a quien preguntar, así que define esos permisos para un agente. Consulta los [ajustes](./configuration.md#permissions).
 Añade `--dry-run` a cualquier cambio para ver qué haría sin hacerlo.
 
 Cada operación de la API de Disk de Yandex es también un comando: `ydisk personal api list` las lista y
 `ydisk personal api show resources-list` muestra los parámetros de una operación sin llamar a Yandex.
+
+## Edita un archivo en el Disk
+
+Una edición reemplaza un archivo solo si tiene el contenido con el que se leyó. Lee primero el `sha256` del archivo y
+pásalo como `--expected-fingerprint`. El archivo se comprueba justo antes de escribir, y lo que se reemplazó se guarda
+en este ordenador, en la carpeta de estado del perfil. Si el archivo cambió desde que se leyó, la respuesta es un
+`conflict` que indica el comando para leerlo otra vez, y no se sube nada. El Disk no tiene subida condicional, así que
+un cambio que llega en el instante entre esa última comprobación y la subida no se detecta; el contenido reemplazado
+se guarda igualmente.
+
+| Comando | Qué cambia |
+| --- | --- |
+| `files update <path> --text <text>` (o el texto por stdin) | todo el texto de un archivo de texto plano, como `.md`, `.txt` o `.csv`; un archivo nuevo no necesita huella |
+| `files sheets update <path> <range> --values <json>` | celdas de un `.xlsx`, a partir de `files sheets show`; el resto del libro queda como está |
+| `files documents update <path> --payload <json>` | párrafos de un `.docx`, por los índices que da `files documents show` |
+| `files restore <path> <version>` | devuelve una versión que lista `files history` |
+
+`files update` rechaza un `.pdf`, `.docx` o `.xlsx`: su texto es extraído, y escribirlo de vuelta reemplazaría el
+documento. `sheets update` escribe un texto como texto, aunque empiece por `=`, y no sobrescribe una fórmula salvo con
+`--replace`. `documents update` rechaza un párrafo con un cambio controlado, un campo, una imagen, un comentario, un
+enlace o una nota al pie, y dice por qué. Cada edición pregunta igual que `files.delete`. `files history` lista lo que
+reemplazaron las ediciones de este perfil, la más reciente al final; cada `version` es el sha256 del contenido
+reemplazado, y `available` dice si aún se guarda. Consulta
+[edita un archivo con tu agente](./recipes.md#edit-a-file-with-your-agent).
 
 ## Salida para scripts
 

@@ -3,11 +3,12 @@ title: "Comparación con otras herramientas"
 ---
 
 Elige una herramienta para tu Yandex Disk según el trabajo que quieres hacer: encontrar un documento por lo que dice,
-mantener una carpeta igual en tu ordenador y en el Disk, hacer copia de seguridad de carpetas enteras o dejar que un
-agente de IA trabaje con tus archivos. Esta página reúne esos trabajos y muestra qué herramienta hace cada uno. Las
-marcas de `ydisk` vienen de la versión 0.4.0, y las de las demás herramientas vienen de su propia documentación y su
-código. Las marcas de `ydisk` y las filas de todo el Disk, la carpeta montada y muchos cambios a la vez se comprobaron
-el 21 de noviembre de 2026, las demás filas de sincronización de carpetas el 19 de noviembre de 2026, y el resto el 17
+dejar que un agente de IA cambie una nota, una hoja de cálculo o un documento de Word sin tocar el resto, mantener una
+carpeta igual en tu ordenador y en el Disk, o hacer copia de seguridad de carpetas enteras. Esta página reúne esos
+trabajos y muestra qué herramienta hace cada uno. Las marcas de `ydisk` vienen de la versión 0.5.0, y las de las demás
+herramientas vienen de su propia documentación y su código. Las marcas de `ydisk` y las filas de edición de archivos y
+de archivos cambiados en los dos lados se comprobaron el 23 de noviembre de 2026, las filas de todo el Disk, la carpeta
+montada y muchos cambios a la vez el 21 de noviembre de 2026, las demás filas de sincronización de carpetas el 19 de noviembre de 2026, y el resto el 17
 de noviembre de 2026. Una herramienta puede hacer más de lo que dicen sus páginas, y esas celdas llevan ➖.
 
 **En esta página:**
@@ -24,7 +25,8 @@ Las herramientas:
 
 - **ydisk**: esta herramienta. Una línea de comandos y un servidor MCP que copian en tu ordenador el texto de las
   carpetas del Disk que tú eliges, para buscar en él, mantienen iguales en tu ordenador y en el Disk las carpetas que
-  elijas, y trabajan con los archivos del Disk en directo.
+  elijas, y trabajan con los archivos del Disk en directo, comprobando un archivo otra vez justo
+  antes de escribir una edición.
 - **[MCP de Yandex Disk](https://yandex.ru/dev/yandex-360/mcp/ru/disk)**: el servidor MCP propio de Yandex, que
   funciona en Yandex. Su aplicación de IA se conecta a él por internet. Es una versión preliminar para cuentas con
   una suscripción de pago a Yandex 360.
@@ -63,25 +65,31 @@ listaba ningún servidor de Yandex Disk el 17 de noviembre de 2026.
 | Borrar a la papelera y recuperar un archivo | ✅ | 🟡⁵ | 🟡⁵ | ➖ | 🟡⁵ |
 | Crear y cerrar un enlace público | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Poner tus propias etiquetas y notas a los documentos | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Editar un archivo en el Disk** | | | | | |
+| Un agente edita un archivo, y la edición se rechaza si alguien cambió el archivo desde que el agente lo leyó | 🟡⁶ | ❌ | ➖ | ➖ | ❌⁷ |
+| Cambiar celdas de un libro de Excel o párrafos de un documento de Word sin perder su formato | 🟡⁸ | ❌ | ❌ | ❌ | ❌ |
+| Devolver lo que reemplazó una edición, desde la propia herramienta | ✅⁹ | ❌ | 🟡¹⁰ | ➖ | ❌ |
 | **Tu Disk en tu ordenador** | | | | | |
-| Guardar en tu ordenador una copia de los propios archivos | ✅⁶ | ❌ | ✅ | ✅ | 🟡⁷ |
-| Abrir archivos del Disk en tu gestor de archivos sin descargarlos antes (un montaje) | 🟡⁸ | ❌ | ✅⁹ | ❌ | ❌ |
-| Sincronizar una carpeta en ambos sentidos: un cambio en cualquier lado llega al otro | ✅ | ❌ | 🟡¹⁰ | ✅ | ❌ |
-| Sincronizar todo el Disk, dejando fuera las carpetas que elijas | ✅¹¹ | ❌ | 🟡¹² | ✅ | ❌ |
-| Borrar un archivo en el otro lado solo cuando seguro que se borró, y si no, no borrar nada | ✅ | n/a | 🟡¹³ | ➖ | n/a |
-| Detenerse antes de muchos borrados o sobrescrituras a la vez, hasta que los permitas | ✅¹⁴ | n/a | 🟡¹⁵ | ➖ | n/a |
-| Guardar los archivos borrados y reemplazados, y recuperarlos | ✅ | n/a | 🟡¹⁶ | ➖ | n/a |
+| Guardar en tu ordenador una copia de los propios archivos | ✅¹¹ | ❌ | ✅ | ✅ | 🟡¹² |
+| Abrir archivos del Disk en tu gestor de archivos sin descargarlos antes (un montaje) | 🟡¹³ | ❌ | ✅¹⁴ | ❌ | ❌ |
+| Sincronizar una carpeta en ambos sentidos: un cambio en cualquier lado llega al otro | ✅ | ❌ | 🟡¹⁵ | ✅ | ❌ |
+| Sincronizar todo el Disk, dejando fuera las carpetas que elijas | ✅¹⁶ | ❌ | 🟡¹⁷ | ✅ | ❌ |
+| Borrar un archivo en el otro lado solo cuando seguro que se borró, y si no, no borrar nada | ✅ | n/a | 🟡¹⁸ | ➖ | n/a |
+| Detenerse antes de muchos borrados o sobrescrituras a la vez, hasta que los permitas | ✅¹⁹ | n/a | 🟡²⁰ | ➖ | n/a |
+| Guardar los archivos borrados y reemplazados, y recuperarlos | ✅ | n/a | 🟡²¹ | ➖ | n/a |
+| Fusionar las ediciones hechas en los dos lados de un archivo de texto, para que queden las dos | ✅²² | n/a | ❌²³ | ➖ | n/a |
+| Resolver un conflicto viendo las diferencias: las dos versiones y las líneas que chocan, y luego elegir una o escribir el texto final | ✅²⁴ | n/a | 🟡²³ | ➖ | n/a |
 | **Agentes y seguridad** | | | | | |
 | Una aplicación de IA trabaja con tu Disk por MCP | ✅ | ✅ | ❌ | ❌ | ✅ |
-| Un agente con terminal lo ejecuta, con salida JSON y una skill | ✅ | n/a | 🟡¹⁷ | ❌ | n/a |
-| Un agente solo lee hasta que tú permitas cambios | 🟡¹⁸ | ➖ | ➖ | n/a | ➖ |
-| Permitir o rechazar por separado los borrados y los enlaces públicos | ✅ | 🟡¹⁹ | ➖ | n/a | ➖ |
-| Un agente sincroniza una carpeta, pero no borra ni reemplaza archivos | ✅²⁰ | n/a | ➖ | n/a | n/a |
+| Un agente con terminal lo ejecuta, con salida JSON y una skill | ✅ | n/a | 🟡²⁵ | ❌ | n/a |
+| Un agente solo lee hasta que tú permitas cambios | 🟡²⁶ | ➖ | ➖ | n/a | ➖ |
+| Permitir o rechazar por separado los borrados y los enlaces públicos | ✅ | 🟡²⁷ | ➖ | n/a | ➖ |
+| Un agente sincroniza una carpeta, pero no borra ni reemplaza archivos | ✅²⁸ | n/a | ➖ | n/a | n/a |
 | Ver qué haría un cambio antes de hacerlo | ✅ | ➖ | ✅ | ➖ | ➖ |
 | Usarlo desde Claude o ChatGPT en el navegador | ✅ | ➖ | ❌ | ❌ | ❌ |
 | **Instalación** | | | | | |
 | Funciona con una cuenta gratuita de Yandex | ✅ | ❌ | ✅ | ✅ | ✅ |
-| Entrar sin registrar tu propia aplicación en Yandex | ❌ | ✅ | ✅²¹ | ✅ | ❌ |
+| Entrar sin registrar tu propia aplicación en Yandex | ❌ | ✅ | ✅²⁹ | ✅ | ❌ |
 
 ¹ Los dos guardan los propios archivos en una carpeta de tu ordenador, así que la búsqueda del sistema los encuentra.
 Ninguno tiene búsqueda propia.
@@ -94,55 +102,90 @@ Ninguno tiene búsqueda propia.
 
 ⁵ Un borrado va a la papelera, pero no hay ningún comando para recuperar el archivo.
 
-⁶ Para las carpetas que [sincronizas en ambos sentidos](./mirrors.md). Para las demás carpetas elegidas, `ydisk` guarda
+⁶ Una edición pasa el `sha256` que leyó el agente, y el archivo se comprueba otra vez justo antes de escribir. Un
+archivo que cambió desde la lectura se rechaza sin subir nada, y el agente lo lee otra vez. El Disk no tiene subida
+condicional, así que un cambio que llega en el instante entre esa comprobación y la subida no se detecta. Lo que
+reemplazó la edición se guarda igualmente en tu ordenador.
+
+⁷ `upload` con `overwrite` reemplaza un archivo y solo compara su tamaño. Nada comprueba que el archivo no cambió
+desde que se leyó.
+
+⁸ `files sheets update` escribe celdas y conserva el formato, las fórmulas y las otras hojas. Solo reemplaza una
+fórmula con `--replace`. `files documents update` reemplaza, inserta o borra párrafos y conserva su estilo. Rechaza un
+párrafo con un cambio controlado, un campo, una imagen, un comentario, un enlace o una nota al pie, y dice por qué. Un
+párrafo reemplazado toma el formato de su primer fragmento, así que una palabra en negrita o cursiva dentro de él
+queda sin formato.
+
+⁹ Lo que reemplazó una edición se guarda en tu ordenador: `files history` lo lista y `files restore` lo devuelve.
+El propio Disk también guarda el historial de un archivo en su versión web, 14 días, o 90 días con Yandex 360, sea
+cual sea la herramienta que escribió el archivo ([ayuda de Yandex](https://yandex.ru/support/disk/version-control.html)).
+
+¹⁰ `--backup-dir` guarda un archivo que `copy`, `sync` o `move` sobrescribiría o borraría, y no hay ningún comando
+para recuperarlo.
+
+¹¹ Para las carpetas que [sincronizas en ambos sentidos](./mirrors.md). Para las demás carpetas elegidas, `ydisk` guarda
 solo el texto de los archivos PDF, Word, Excel, CSV y de texto, para buscar.
 
-⁷ Descarga un archivo o una carpeta cuando se le pide, pero no mantiene esa copia al día.
+¹² Descarga un archivo o una carpeta cuando se le pide, pero no mantiene esa copia al día.
 
-⁸ `files serve` muestra una carpeta del Disk, o todo el Disk, con el cliente WebDAV propio del sistema: GNOME Files,
+¹³ `files serve` muestra una carpeta del Disk, o todo el Disk, con el cliente WebDAV propio del sistema: GNOME Files,
 Finder o `net use`. Es de solo lectura a propósito: una carpeta con escritura se saltaría la papelera, las versiones y
 la parada ante cambios masivos que tiene un [espejo](./mirrors.md). Los cambios van por los comandos `files` o por un
 espejo. Consulta [abre el Disk como una carpeta](./mount.md).
 
-⁹ `rclone mount` lee y escribe. Necesita FUSE: macFUSE o FUSE-T en macOS y WinFsp en Windows. Su página dice que
+¹⁴ `rclone mount` lee y escribe. Necesita FUSE: macFUSE o FUSE-T en macOS y WinFsp en Windows. Su página dice que
 muchos programas necesitan `--vfs-cache-mode writes` para guardar archivos ahí.
 
-¹⁰ `rclone sync` va en un solo sentido. `rclone bisync` sincroniza en ambos sentidos, y su página lo llama «an advanced
+¹⁵ `rclone sync` va en un solo sentido. `rclone bisync` sincroniza en ambos sentidos, y su página lo llama «an advanced
 command, so use with care» («un comando avanzado, úsalo con cuidado»). Cada ejecución la lanzas tú o un programador de
 tareas, y la primera necesita `--resync`.
 
-¹¹ Un espejo de `/` con `--ignore` para las rutas que dejas fuera, hasta 100 000 archivos.
+¹⁶ Un espejo de `/` con `--ignore` para las rutas que dejas fuera, hasta 100 000 archivos. Un Disk demasiado grande
+para listarlo en una ejecución se lista en varias, y cada ejecución sigue donde se detuvo la anterior.
 
-¹² rclone trabaja con todo el Disk (`yandex:`) y deja rutas fuera con opciones de filtro como `--exclude`. En ambos
+¹⁷ rclone trabaja con todo el Disk (`yandex:`) y deja rutas fuera con opciones de filtro como `--exclude`. En ambos
 sentidos solo con `rclone bisync`, que su página llama «an advanced command».
 
-¹³ `rclone bisync` rechaza una ejecución cuando una de las carpetas está vacía, y se detiene sin cambios cuando se
+¹⁸ `rclone bisync` rechaza una ejecución cuando una de las carpetas está vacía, y se detiene sin cambios cuando se
 borraría más del 50% de los archivos (`--max-delete`). Su documentación no describe una comprobación de que cada borrado
 fue intencionado.
 
-¹⁴ Una sincronización se detiene antes de borrar más de 10 archivos o reemplazar más de 50 archivos existentes, sea
-cual sea el tamaño del espejo. Solo tú puedes permitir más, con `--allow-deletions` y `--replace`, nunca un agente por
-MCP. Cada archivo reemplazado se guarda antes como versión.
+¹⁹ Una sincronización se detiene antes de borrar más de 10 archivos o reemplazar más de 50 archivos existentes, sea
+cual sea el tamaño del espejo. Solo tú puedes permitir más, con `--allow-deletions`, `--allow-replacements` o `--replace`,
+nunca un agente por MCP. Cada archivo reemplazado se guarda antes como versión.
 
-¹⁵ `rclone bisync` se detiene sin cambios cuando se borraría más del 50% de los archivos (`--max-delete`).
+²⁰ `rclone bisync` se detiene sin cambios cuando se borraría más del 50% de los archivos (`--max-delete`).
 `rclone sync` limita los borrados solo si indicas `--max-delete`, y entonces detiene la operación en curso. Sus páginas
 no describen ninguna parada antes de muchas sobrescrituras.
 
-¹⁶ Un archivo cambiado en los dos lados se guarda dos veces, con los nombres `.conflict1` y `.conflict2`. Un archivo
+²¹ Un archivo cambiado en los dos lados se guarda dos veces, con los nombres `.conflict1` y `.conflict2`. Un archivo
 borrado o reemplazado se guarda solo si indicas `--backup-dir1` y `--backup-dir2`, y no hay ningún comando para
 recuperarlo. En Yandex Disk, los borrados de rclone van a la papelera salvo con `--yandex-hard-delete`.
 
-¹⁷ `rclone lsjson` y otros comandos responden en JSON, pero no hay skill para agentes.
+²² Un archivo `.md`, `.txt`, `.csv` o `.tsv` de hasta 1 MB se fusiona línea a línea, como fusiona Git. Las
+ediciones en la misma línea o en líneas vecinas siguen siendo un conflicto. Las tres versiones de cada fusión y su
+resultado se guardan para siempre. Consulta [un archivo cambiado en los dos lados](./mirrors.md#a-file-changed-on-both-sides).
 
-¹⁸ El servidor MCP ofrece todos los comandos que cambian el Disk, y un permiso en `ask` se ejecuta sin preguntar por MCP. Para un agente que solo lee, pon `YDISK_READ_ONLY=1` o los permisos en `deny`. `mcp add` pide `--allow-writes` antes de conectar un agente.
+²³ `rclone bisync` conserva o elige un archivo entero: por defecto se quedan las dos copias, con los nombres
+`.conflict1` y `.conflict2`, y `--conflict-resolve` puede quedarse en su lugar con la más nueva, la más antigua, la más
+grande o la más pequeña. Su página no describe ninguna fusión del contenido ni ningún comando que muestre la
+diferencia, así que comparas tú las dos copias.
 
-¹⁹ Por defecto el agente te pregunta antes de cada cambio, también antes de un borrado o un enlace público.
+²⁴ `mirrors conflicts show` da las tres versiones y cada tramo de líneas en conflicto, con los marcadores de
+conflicto de Git. `mirrors conflicts resolve` escribe tu elección (`--keep local`, `disk` o `both`) o tu archivo final
+en los dos lados a la vez, y se niega sin escribir nada si algún lado cambió desde entonces.
 
-²⁰ Pon `files.delete` en `deny` para el agente. Sus sincronizaciones envían y traen entonces los archivos nuevos, y
+²⁵ `rclone lsjson` y otros comandos responden en JSON, pero no hay skill para agentes.
+
+²⁶ El servidor MCP ofrece todos los comandos que cambian el Disk, y un permiso en `ask` se ejecuta sin preguntar por MCP. Para un agente que solo lee, pon `YDISK_READ_ONLY=1` o los permisos en `deny`. `mcp add` pide `--allow-writes` antes de conectar un agente.
+
+²⁷ Por defecto el agente te pregunta antes de cada cambio, también antes de un borrado o un enlace público.
+
+²⁸ Pon `files.delete` en `deny` para el agente. Sus sincronizaciones envían y traen entonces los archivos nuevos, y
 enumeran cada reemplazo o borrado que se saltaron. Por MCP un permiso en `ask` deja pasar el cambio, y un agente no
-puede pasar `--allow-deletions`, `--replace` ni `--repin`.
+puede pasar `--allow-deletions`, `--allow-replacements`, `--replace` ni `--repin`.
 
-²¹ rclone entra con su propia aplicación de Yandex si no le das tu propio `client_id` ([página de rclone sobre Yandex](https://rclone.org/yandex/)). En octubre de 2026 hubo usuarios con errores que desaparecían con su
+²⁹ rclone entra con su propia aplicación de Yandex si no le das tu propio `client_id` ([página de rclone sobre Yandex](https://rclone.org/yandex/)). En octubre de 2026 hubo usuarios con errores que desaparecían con su
 propia aplicación ([issue 10067](https://github.com/rclone/rclone/issues/10067)).
 
 <a id="where-another-tool-fits-better"></a>
@@ -153,6 +196,9 @@ propia aplicación ([issue 10067](https://github.com/rclone/rclone/issues/10067)
   en solo lectura a propósito, para que un programa o un `rm -rf` equivocado no borren archivos del Disk a través de la
   carpeta.
 - **Una copia de seguridad en un solo sentido de carpetas enteras, con fotos y vídeos**: `rclone sync` o `copy`.
+- **Rehacer el diseño, las imágenes, los comentarios o los cambios controlados de un documento**: una aplicación de
+  oficina, sobre un archivo de la carpeta sincronizada de Yandex Disk para Linux, o el editor web del Disk. `ydisk`
+  cambia celdas y el texto de los párrafos, y rechaza un párrafo que no puede cambiar sin pérdida.
 - **Todo un Disk de más de 100 000 archivos en tu ordenador, sincronizado por un servicio en segundo plano**: Yandex
   Disk para Linux. Un espejo de `ydisk` admite hasta 100 000 archivos, sin contar los que dejas fuera, y sincroniza
   cuando lo ejecutas o mientras funciona `mirrors watch`. A cambio guarda las versiones que reemplaza y se detiene
@@ -187,8 +233,13 @@ Si `ydisk` te encaja, empieza por la [instalación](./installation.md).
 
 ## Cómo se comprobó cada marca
 
-Las marcas de `ydisk` se comprobaron con el paquete publicado 0.4.0, con una carpeta personal vacía y sin iniciar
-sesión: `ydisk commands`, el `--help` de cada comando y `--dry-run` en cada cambio para ver el permiso que comprueba.
+Las marcas de `ydisk` se comprobaron con la versión 0.5.0, con una carpeta personal vacía y sin iniciar sesión:
+`ydisk commands`, el `--help` de cada comando y `--dry-run` en cada cambio para ver el permiso que comprueba. Para las
+filas de edición, el `--help` de `files update`, `files sheets update`, `files documents update`, `files history` y
+`files restore` dice qué escribe, guarda y rechaza cada uno. Para las filas de archivos cambiados en los dos lados,
+`mirrors sync --help` dice que un archivo de texto cambiado en sitios distintos se fusiona, y
+`mirrors conflicts resolve --help` da `--keep` y `--file`. Las reglas de fusión vienen de
+[espejos](./mirrors.md#a-file-changed-on-both-sides).
 La búsqueda por significado necesita descargar una vez un modelo de texto, y el uso desde el navegador necesita tu
 propio túnel. Para las filas de sincronización de carpetas, `mirrors sync --dry-run` nombra los permisos que comprueba
 una sincronización: `files.upload` para cada archivo que envía y `files.delete` para cada archivo que reemplaza o mueve
@@ -198,7 +249,8 @@ ejecutar por MCP se leyó en el código de
 `versions` no se ofrecen, y `--allow-deletions`, `--replace` y `--repin` son solo del propietario. El mismo `--help`
 muestra `mirrors add --ignore` y `files serve`. `files serve` funciona hasta que se detiene, como `mirrors watch`, así
 que no se ofrece por MCP ([mount.ts](https://github.com/WireCatLabs/ydisk-cli/blob/v0.4.0/src/commands/mount.ts)). Los
-límites de 10 borrados, 50 reemplazos y 100 000 archivos vienen del registro de cambios de 0.4.0 y de la ayuda.
+límites de 10 borrados, 50 reemplazos y 100 000 archivos vienen del registro de cambios de 0.4.0 y de la ayuda, y el
+límite de 1 MB para fusionar, del registro de cambios de 0.5.0.
 
 Las marcas de las demás herramientas vienen de sus propias páginas. Si en esas páginas no aparece nada, la marca es ➖,
 nunca ❌, salvo cuando la lista de comandos o herramientas está completa.
@@ -209,7 +261,8 @@ nunca ❌, salvo cuando la lista de comandos o herramientas está completa.
   `disk.get_download_url` da un enlace, y ninguna herramienta lee el texto de un archivo. `disk.delete_item` mueve a la
   papelera y `disk.list_trash_items` la muestra, sin recuperación. Los enlaces se gestionan con
   `disk.create_public_link` y `disk.update_public_item_permissions`. Acceso: cuentas personales con una suscripción
-  de pago a Yandex 360 activa. El agente pregunta antes de un cambio «por defecto». La página describe la configuración
+  de pago a Yandex 360 activa. El agente pregunta antes de un cambio «por defecto». `disk.create_file` sube un archivo nuevo, y
+  ninguna herramienta cambia el contenido de un archivo que ya existe ni lista sus versiones. La página describe la configuración
   para Codex y Claude Code, no para aplicaciones de navegador, así que esa fila es ➖. Funciona en los servidores de
   Yandex, así que no busca sin internet.
 - **rclone** ([página de Yandex](https://rclone.org/yandex/), [comandos](https://rclone.org/commands/),
@@ -219,8 +272,10 @@ nunca ❌, salvo cuando la lista de comandos o herramientas está completa.
   `cleanup` la vacía, sin recuperación. Todo cambio admite `--dry-run`. No hay comando MCP. Entra con la aplicación
   propia de rclone salvo que indiques `client_id`. `bisync` es «an advanced command, so use with care». Rechaza una
   ejecución cuando una de las carpetas está vacía, se detiene por encima de `--max-delete` (50% por defecto) «without
-  making any changes», renombra las dos copias de un conflicto y guarda los archivos borrados solo con `--backup-dir1`
-  y `--backup-dir2`. Ninguna de las dos páginas menciona versiones de archivos. `mount` lista `--read-only` como
+  making any changes», renombra las dos copias de un conflicto o elige una con `--conflict-resolve` (`newer`, `older`,
+  `larger`, `smaller`, `path1`, `path2`), y guarda los archivos borrados solo con `--backup-dir1` y `--backup-dir2`.
+  Ningún comando edita el contenido de un archivo, y ninguna opción rechaza una sobrescritura cuando el archivo ya no
+  tiene el hash que tú indicas. `--backup-dir` guarda lo que `copy`, `sync` o `move` sobrescribe. Ninguna de las dos páginas menciona versiones de archivos. `mount` lista `--read-only` como
   opción, así que por defecto escribe. `--max-delete` para los demás comandos: «not to delete more than N files», y
   luego «stop the operation in progress».
 - **Yandex Disk para Linux** ([comandos de consola](https://yandex.ru/support/disk-desktop-linux/cli-commands.html)).
@@ -233,7 +288,8 @@ nunca ❌, salvo cuando la lista de comandos o herramientas está completa.
 - **yandex-disk-mcp** ([README](https://github.com/gorokhovdenis/yandex-disk-mcp/blob/main/README.md)). Su lista
   completa de herramientas: información, listado, metadatos, comparación, crear carpeta, subir, descargar, borrar,
   copiar, mover, últimos subidos. No hay búsqueda ni enlace público. `yandex_disk_delete` mueve a la papelera salvo
-  con `permanently`, sin recuperación. Funciona por stdio, con el token en su configuración.
+  con `permanently`, sin recuperación. `yandex_disk_upload` solo sobrescribe con `overwrite`, decidido solo por el
+  tamaño, y ninguna herramienta edita el contenido de un archivo ni lista versiones. Funciona por stdio, con el token en su configuración.
 
 Las listas completas de herramientas del MCP de Yandex Disk y de yandex-disk-mcp no tienen sincronización (comprobado
 el 19 de noviembre de 2026), así que las filas de sincronización que dependen de ella son n/a para ellos.

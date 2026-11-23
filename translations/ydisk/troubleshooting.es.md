@@ -41,7 +41,7 @@ ydisk personal doctor --online
 | Una subida falla porque el Disk está lleno | Libera espacio en el Disk o vacía su papelera. Reintentar no sirve hasta que haya sitio. |
 | Se rechaza una subida grande | Yandex limita el tamaño de un archivo según el plan: 1 GB sin un plan de Yandex 360, más con uno ([límites de Yandex](https://yandex.ru/support/yandex-360/customers/disk/web/ru/uploading)). |
 | Un cambio terminó con "outcome_unknown", código de salida 14 | Yandex falló durante el cambio, así que puede que se hiciera o puede que no. Comprueba con `files show` antes de volver a ejecutarlo. |
-| Un agente cambió un archivo que no querías que cambiara | Por MCP el nivel ask deja que un comando se ejecute. Deniega `files.delete` y `files.share`, o define `YDISK_READ_ONLY=1`. Mira [la conexión del agente](./mcp.md#decide-what-the-agent-may-change). Un archivo borrado está en la papelera del Disk: `files restore`. |
+| Un agente cambió un archivo que no querías que cambiara | Por MCP el nivel ask deja que un comando se ejecute. Deniega `files.delete` y `files.share`, o define `YDISK_READ_ONLY=1`. Mira [la conexión del agente](./mcp.md#decide-what-the-agent-may-change). Un archivo borrado está en la papelera del Disk: `files restore`. El contenido anterior de un archivo editado se guarda aquí: `files history` y después `files restore <path> <version>`. |
 | El archivo de ajustes no se lee | `doctor` lista cada problema del archivo en `config.issues`. Ejecuta el `config unset` que da cada uno, `config repair`, o corrige el archivo a mano. |
 | `doctor` lista `files.problems` | Otros usuarios del ordenador pueden leer `config.json` o entrar en su carpeta. Ejecuta cada `chmod` que `doctor` imprime después de "to make it private:". |
 

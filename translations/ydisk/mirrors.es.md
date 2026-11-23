@@ -6,7 +6,8 @@ Trabaja con tus archivos en tus propios programas, y Yandex Disk se pone al día
 carpeta de tu ordenador y una carpeta de Yandex Disk, en ambos sentidos. Editas un archivo en tu editor, y la siguiente
 sincronización lo sube al Disk. Lo cambias en el Disk, desde el móvil o el navegador, y la sincronización lo baja. Un
 archivo borrado va a una papelera, nunca desaparece, y se guarda la versión que una sincronización reemplaza, en
-cualquiera de los dos lados. Un archivo cambiado en los dos lados nunca se sobrescribe sin ti.
+cualquiera de los dos lados. Un archivo de texto cambiado en los dos lados en sitios distintos se fusiona; cualquier
+otro archivo cambiado en los dos lados nunca se sobrescribe sin ti.
 
 Usa un espejo cuando trabajas con archivos con herramientas locales, como un editor, un script o un agente, y los
 quieres también en el Disk, sin instalar la aplicación de Yandex Disk. Los archivos quedan como son: un PDF sigue siendo
@@ -69,11 +70,14 @@ grande pesan más dos cosas:
   carpetas grandes para que quepa. Las versiones anteriores se guardan 30 días.
 - **Tamaño.** Un espejo admite hasta 100 000 archivos, sin contar los que dejas fuera.
 - **Tiempo.** Una sincronización dura hasta 15 minutos en una terminal y 45 segundos cuando la ejecuta un agente. Se
-  detiene antes por su cuenta, conserva lo hecho y dice hasta dónde llegó: `listed` de cada espejo muestra cuántos
-  archivos del Disk listó y si la lista estaba completa. Ejecuta `mirrors sync` otra vez para seguir. La primera
-  sincronización de un Disk grande lleva varias ejecuciones. Cuando la lista sola llena la ejecución, no se sincroniza
-  nada y la respuesta sugiere un `--timeout` más largo, como `ydisk personal mirrors sync --timeout 1h`. Una lista
-  cortada no borra nada: los archivos del Disk a los que no llegó solo se cuentan, en `unlisted`.
+  detiene antes por su cuenta, conserva lo hecho y dice hasta dónde llegó. Ejecuta `mirrors sync` otra vez para
+  seguir: la siguiente ejecución lista el Disk desde donde se detuvo la anterior, no desde el principio, así que la
+  primera sincronización de un Disk grande termina en varias ejecuciones de cualquier duración. `listed` de cada
+  espejo muestra cuántos archivos del Disk listó esta ejecución (`files`), si la lista está completa, si siguió desde
+  una ejecución anterior (`resumed`) y cuántos archivos han listado todas las ejecuciones hasta ahora (`so_far`). Los
+  archivos listados hasta ahora se sincronizan enseguida; un borrado espera a que todo el Disk esté listado. Una lista
+  cortada no borra nada: los archivos del Disk a los que aún no llegó solo se cuentan, en `unlisted`. Un punto de
+  partida guardado más de 7 días hace que la lista empiece de nuevo.
 
 ## Deja carpetas fuera
 
@@ -130,9 +134,33 @@ Disk, así que funciona sin conexión.
 
 ## Un archivo cambiado en los dos lados
 
-Cuando un archivo cambió aquí y en el Disk desde la última sincronización, la sincronización no toca ninguna de las dos
-copias e informa del archivo en `conflicts`, con la hora y el tamaño de cada lado. Después la sincronización termina con
-un error, para que un script lo note. Resuelve los conflictos con otra ejecución:
+Un archivo de texto (`.md`, `.markdown`, `.txt`, `.csv` o `.tsv`, de hasta 1 MB) que cambió aquí y en el Disk se
+fusiona línea a línea, como fusiona Git: tu edición de una sección y una edición de otra sección desde el móvil
+quedan las dos, en los dos lados. La respuesta incluye el archivo en `merged`, y `mirrors preview` lo muestra como un
+paso `merge`. Dos cambios necesitan al menos una línea sin cambiar entre ellos. Los cambios en la misma línea o en
+líneas vecinas son un conflicto, porque dos ediciones que se leen bien por separado pueden leerse mal juntas. Marcar
+una casilla de una lista de Markdown y editar el texto del mismo elemento sí se fusionan. Los tres contenidos de cada
+fusión (el de la última sincronización, el tuyo y el del Disk) y el resultado se guardan en este ordenador para
+siempre; [`versions list`](#earlier-versions-of-a-file) indica el papel de cada uno.
+
+Cualquier otro archivo cambiado en los dos lados, y una fusión con conflicto, se deja intacto en los dos lados y
+aparece en `conflicts`, con la hora y el tamaño de cada lado. Después la sincronización termina con un error, para
+que un script lo note. Revisa y resuelve cada conflicto:
+
+```sh
+ydisk personal mirrors conflicts list
+ydisk personal mirrors conflicts show 1a2b3c4d notes/plan.md
+ydisk personal mirrors conflicts resolve 1a2b3c4d notes/plan.md --keep disk
+ydisk personal mirrors conflicts resolve 1a2b3c4d notes/plan.md --file ~/plan-final.md
+```
+
+`conflicts show` da las tres versiones y cada tramo de líneas en conflicto. Su `merged` es el archivo entero con los
+marcadores de conflicto de Git: edítalo hasta tener el texto final y pásalo a `resolve --file`. `resolve` escribe un
+único contenido final en los dos lados a la vez: `--keep local`, `--keep disk`, `--keep both` (la copia del Disk junto
+a la tuya) o `--file`. Se niega, sin escribir nada, si algún lado cambió desde que la sincronización encontró el
+conflicto; sincroniza otra vez y mira el conflicto nuevo. Cada versión reemplazada se guarda.
+
+También puedes resolver todos los conflictos de un espejo con la siguiente ejecución:
 
 | Comando | Qué ocurre |
 | --- | --- |
@@ -176,11 +204,12 @@ antes la lista:
 
 ```sh
 ydisk personal mirrors preview 1a2b3c4d
-ydisk personal mirrors sync 1a2b3c4d --allow-deletions 40 --replace
+ydisk personal mirrors sync 1a2b3c4d --allow-deletions 40 --allow-replacements 120
 ```
 
-`--allow-deletions` permite hasta ese número de borrados, y `--replace` cualquier número de reemplazos, para esa
-ejecución. Cada archivo reemplazado se guarda antes como versión. Con más de un espejo, los dos necesitan el id del
+`--allow-deletions` permite hasta ese número de borrados y `--allow-replacements` hasta ese número de reemplazos, para
+esa ejecución. `--replace` permite cualquier número de reemplazos. Una fusión cuenta como reemplazo. Cada archivo
+reemplazado se guarda antes como versión. Con más de un espejo, los dos necesitan el id del
 espejo, así que una aprobación nunca cubre otro espejo. Un espejo detenido no frena a los demás: se sincronizan como
 siempre. `mirrors watch` vuelve a informar de la parada en cada ciclo que sincroniza el espejo, hasta que permitas la
 ejecución o devuelvas los archivos.
@@ -210,13 +239,17 @@ ydisk personal mirrors versions restore 1a2b3c4d notes/plan.md <sha256>
 ```
 
 `versions list` muestra cada cambio, del más antiguo al más nuevo: cuándo, en qué sentido, el hash del contenido antes
-(`old`) y después (`new`), y de qué lado venía el contenido antiguo (`from`: `local`, o `remote` para el Disk).
-`available` dice si ese contenido sigue guardado. Cuando el contenido antiguo del Disk no se guardó porque el archivo
+(`old`) y después (`new`), y de qué lado venía el contenido antiguo (`from`: `local`, o `remote` para el Disk). Una
+fusión, un conflicto y una resolución (`event` `merged`, `conflict` o `resolved`, sentido `both`) listan sus contenidos
+en `versions`, cada uno con su papel: `base` (el de la última sincronización), `local`, `remote` (el del Disk) y
+`result`. `available` dice si ese contenido sigue guardado. Cuando el contenido antiguo del Disk no se guardó porque el archivo
 fue a la papelera del Disk, `old_in` es `remote-trash`: recupéralo de la papelera del Disk. `versions restore` devuelve
 una versión guardada a la carpeta local; el archivo que hay allí ahora se guarda primero. La siguiente sincronización
 envía el archivo recuperado al Disk.
 
-Una versión se guarda 30 días. La última versión de un archivo borrado se guarda para siempre. Una versión del Disk
+Una versión se guarda 30 días. La última versión de un archivo borrado, los contenidos de cada fusión y cada
+conflicto, y el último contenido sincronizado de cada archivo de texto (el punto de partida de la siguiente fusión) se
+guardan para siempre. Una versión del Disk
 también se recupera en la carpeta local, y la siguiente sincronización la devuelve.
 
 ## Una carpeta que se reemplazó
@@ -260,8 +293,9 @@ Con `files.delete` en `deny`, una sincronización sigue enviando y bajando archi
 reemplazo o borrado que se saltó. `YDISK_READ_ONLY=1` rechaza una sincronización; `mirrors preview` y `mirrors status`
 siguen funcionando.
 
-Por MCP un agente puede ejecutar `mirrors list`, `mirrors status`, `mirrors preview` y `mirrors sync`, pero no
-`--allow-deletions`, `--replace` ni `--repin`: solo tú apruebas muchos cambios a la vez. Por MCP nadie puede responder una pregunta, así que un nivel en `ask` deja pasar la
+Por MCP un agente puede ejecutar `mirrors list`, `mirrors status`, `mirrors preview`, `mirrors sync` y `mirrors conflicts
+list`, `show` y `resolve --keep`, pero no `--allow-deletions`, `--allow-replacements`, `--replace`, `--repin` ni `resolve --file`: solo tú apruebas muchos cambios a la vez, y solo tú das un archivo de este ordenador.
+`mirrors conflicts resolve` comprueba las mismas claves que una sincronización. Por MCP nadie puede responder una pregunta, así que un nivel en `ask` deja pasar la
 escritura: pon `files.delete` en `deny` para un agente que no deba reemplazar ni borrar archivos. Añadir, cambiar o quitar un
 espejo, `versions` y `watch` son solo para ti. Consulta [conecta tu agente](./mcp.md#decide-what-the-agent-may-change).
 
