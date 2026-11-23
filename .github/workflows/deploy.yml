@@ -229,3 +229,31 @@ jobs:
           # dashboard.
           $WRANGLER pages project create cli-docs --production-branch main || echo "cli-docs exists"
           $WRANGLER pages deploy out --project-name cli-docs --branch main
+      # Russia gets wirecat.dev from neirox (Selectel, Saint Petersburg) by geo DNS, because Russian providers
+      # throttle Cloudflare. The copy must follow every deploy: the signed tools list expires. The key may only
+      # rsync into the site folder (rrsync), and the host key is pinned. services/ru-mirror/README.md.
+      - name: Russian copy on neirox
+        env:
+          NEIROX_DEPLOY_KEY: ${{ secrets.NEIROX_DEPLOY_KEY }}
+          NEIROX_HOST_KEY: "[139.100.204.107]:25222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEiPgdBDEUwgplPVAABzbNDAVcDCvmqakmaqu+G9pjiY"
+        run: |
+          if [ -z "$NEIROX_DEPLOY_KEY" ]; then
+            echo "::error::NEIROX_DEPLOY_KEY is not set: the Russian copy is not updated"
+            exit 1
+          fi
+          umask 077
+          printf '%s\n' "$NEIROX_DEPLOY_KEY" > "$RUNNER_TEMP/neirox.key"
+          printf '%s\n' "$NEIROX_HOST_KEY" > "$RUNNER_TEMP/neirox.known_hosts"
+          ssh_cmd="ssh -p 25222 -i $RUNNER_TEMP/neirox.key -o IdentitiesOnly=yes -o ConnectTimeout=30"
+          ssh_cmd="$ssh_cmd -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/neirox.known_hosts"
+          # No --delay-updates: neirox has a few GB free, and a second copy of the changed files does not fit.
+          for attempt in 1 2 3; do
+            if rsync -rlt --delete --timeout=120 -e "$ssh_cmd" out/ kulibin@139.100.204.107:; then
+              rm -f "$RUNNER_TEMP/neirox.key"
+              exit 0
+            fi
+            sleep $((attempt * 20))
+          done
+          rm -f "$RUNNER_TEMP/neirox.key"
+          echo "::error::the Russian copy on neirox was not updated"
+          exit 1

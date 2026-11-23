@@ -1,0 +1,7 @@
+wirecat.dev {
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+	}
+	reverse_proxy wirecat-site:8080
+	header -Server
+}
