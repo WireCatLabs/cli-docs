@@ -323,8 +323,8 @@
     }
   },
   "hubspot": {
-    "version": "0.5.0",
-    "manifestSha256": "c506b9cc826acc976b9e85ec88fcc1d2f2b9a9265e5034446603e562611ca304",
+    "version": "0.6.0",
+    "manifestSha256": "14e60c4b08c0ce6e473dec603d59b1d613e6c1d5032d4180e87e047f26956060",
     "bin": "wcat-hubspot",
     "bins": ["hubspot", "wcat-hubspot"],
     "desktop": {
