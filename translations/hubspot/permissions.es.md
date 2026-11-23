@@ -35,7 +35,7 @@ las cubre todas. Cada clave tiene un nivel: `deny`, `readonly`, `ask` o `allow`.
 ```sh
 hubspot work config set permissions.people deny        # this profile reads no contacts
 hubspot work config set permissions.api readonly       # the API reads, never writes
-hubspot work config set permissions.notes.write allow  # let an agent add notes without a question
+hubspot work config set permissions.activities.create deny  # no notes or tasks, by command or api
 hubspot work config show                               # each key with its level and where it came from
 ```
 
@@ -52,7 +52,8 @@ que lo ejecutes tú mismo en una terminal.
 | `deals create`, `update`, `move` y `close`, `people` y `organizations` `create` y `update` | la suya, como `deals.update`. Un cambio de etapa comprueba también `deals.move`, y una etapa de ganada o perdida `deals.close` | `allow` |
 | `deals delete` | `deals.delete` | `ask` |
 | Una escritura con `api` en negociaciones, contactos o empresas, como `api deals-update` | `api.deals-update` y la clave del comando que hace lo mismo (`deals.update`), como en amoCRM y b24. Una escritura sin comando, como una fusión, comprueba `<group>.update`. Una etapa de negociación comprueba también `deals.move` y `deals.close` | `ask` |
-| Otra escritura con `api`, como `api notes-create` | `api.notes-create` y la clave `.write` de su grupo (`notes.write`) | `ask` |
+| `activities create` y `activities close` | `activities.create`, `activities.close`. El `--owner` de una tarea comprueba también `crm.assign-others` | `allow` |
+| Otra escritura con `api`, como `api notes-create` | `api.notes-create` y la clave `.write` de su grupo (`notes.write`). Crear una nota o una tarea comprueba también `activities.create` | `ask` |
 | Una lectura con `api`, como `api contacts-list` | `api.contacts-list` y la clave del comando que lee los mismos registros (`people.list`), así que `people: deny` también la detiene | `allow` |
 | Un borrado, archivado o fusión con `api` | su propia clave `api.` y la clave `.delete` de su grupo | `ask` |
 | Un propietario puesto en un registro, por cualquier camino | `crm.assign-others` | `deny` |

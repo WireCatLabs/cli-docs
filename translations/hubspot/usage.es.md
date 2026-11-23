@@ -99,8 +99,8 @@ agente ([permisos](./permissions.md)).
 
 Un contacto guarda un correo y dos números, teléfono y móvil. Una empresa guarda un número y ningún correo. `--phone`
 y `--email` sustituyen la lista entera, así que un solo `--phone` en un contacto borra su número móvil, y `--name`
-pone a la vez el nombre y el apellido. Las notas, las tareas, los leads y los contactos y la empresa de una
-negociación se escriben con [la API](#call-the-api).
+pone a la vez el nombre y el apellido. Los leads, los tickets y los contactos y la empresa de una negociación se
+escriben con [la API](#call-the-api).
 
 La clave pertenece a la cuenta, no a ti, así que poner un propietario con `--owner` comprueba `crm.assign-others`, que
 es `deny` hasta que lo permitas ([permisos](./permissions.md)). HubSpot no acepta una clave de idempotencia: un cambio
@@ -115,6 +115,16 @@ actividades con el id de tu cuenta en lugar del ejemplo `12345678`. `session sta
 hubspot work config set crm.hubspot:12345678.activities on
 hubspot work sync
 hubspot work activities list overdue:true
+```
+
+Una nota o una tarea se pone en una negociación por su referencia, y en un contacto o una empresa por el id de
+HubSpot, con un `--subject` para cada uno. Se escribe en HubSpot tanto si el ajuste de actividades está activado como
+si no, y se guarda en el almacén local solo cuando lo está. Para cerrar una tarea hace falta su id de `activities list`:
+
+```sh
+hubspot work activities create comment --subject deal:12 --text "Agreed on the price"
+hubspot work activities create task --subject deal:12 --subject person:4021 --title "Send the contract" --due 2026-12-01
+hubspot work activities close tasks:5501
 ```
 
 `changes list` muestra lo que las sincronizaciones vieron cambiar: negociaciones creadas, movidas, ganadas y perdidas,
@@ -144,7 +154,7 @@ antes en una terminal. Por MCP solo `readonly` o `deny` detienen a un agente.
 `--dry-run` muestra las claves sin enviar nada:
 
 ```sh
-hubspot work api notes-create --body-file note.json --dry-run
+hubspot work api tickets-create --body-file ticket.json --dry-run
 ```
 
 ```sh
