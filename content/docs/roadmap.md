@@ -29,7 +29,8 @@ what comes next.
   messages.
 - **[Yandex Disk](./ydisk/index.md)**: the text of the Disk folders you choose on your computer, searchable offline,
   the files on the Disk listed, uploaded, moved and shared when you allow it, chosen folders or the whole Disk kept the
-  same on your computer and on the Disk, both ways, and the Disk opened as a read-only folder.
+  same on your computer and on the Disk, both ways, with edits from both sides merged, notes, spreadsheets and Word
+  documents edited in place with their formatting kept, and the Disk opened as a read-only folder.
 - **[amoCRM and Kommo](./amo/index.md)**: your own deals and their clients on your computer, with what changed since
   yesterday, searchable next to your messages.
 - **[WordPress](./wordpress/index.md)**: the posts and pages of your WordPress site on your computer, searchable

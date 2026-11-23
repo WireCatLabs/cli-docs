@@ -13,12 +13,15 @@ your computer, so you and your agent search it by words, by meaning and by file 
 same tool lists, downloads, uploads, moves and shares files on the Disk within the permissions you set, over the
 command line or MCP. A folder you [mirror](./mirrors.md) stays the same on your computer and on the Disk, both ways,
 and a file a sync deletes or replaces is kept. A mirror can hold the whole Disk, with the folders you choose left
-out, and stops before many deletions or overwrites at once until you allow them. You can also
+out, and stops before many deletions or overwrites at once until you allow them. A text file edited on both sides in
+different places is merged, and a real conflict waits for you with both versions. Your agent can also
+[edit a file on the Disk](./usage.md#edit-a-file-on-the-disk) where it is: a text file, cells of an `.xlsx` or
+paragraphs of a `.docx`, with the formatting kept and the replaced content saved on your computer. You can also
 [open the Disk as a folder](./mount.md) in your file manager, read-only. See [start here](./index.md).
 
 ## Next
 
-- Editing and creating documents (`.md`, `.txt`, `.docx` and `.xlsx`). A file goes back to the Disk only if nobody
-  changed it there in the meantime.
+- Creating a new Word document or Excel workbook. Today an agent edits the ones already on the Disk and creates only
+  text files.
 
 What changed in each released version is in the [changelog](./changelog.md).

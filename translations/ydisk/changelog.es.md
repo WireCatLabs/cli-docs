@@ -4,6 +4,56 @@ title: "Historial de cambios"
 
 Cambios notables en `@wirecat/yandex-disk-cli`. Una sección por versión, las más nuevas arriba.
 
+## 0.5.0 — 23.11.2026
+
+### Añadido
+
+- **Versiones anteriores de cada archivo sincronizado y un registro de cambios** (cli-core 0.722.0, antes 0.711.0;
+  cli-base 0.128.0, antes 0.122.0). La sincronización guarda el texto, el título y el front matter de un documento
+  antes de cada cambio y antes de que salga de la copia. `documents history <document>` lista las versiones y
+  `--revision <n>` muestra una. `changes --since 1d` lista lo que se añadió, cambió, dejó de estar visible o volvió.
+  Ambos leen la copia, así que los agentes también los tienen por MCP ([el uso](./usage.md#earlier-versions-and-what-changed)).
+- **`keep_versions_for_days`, 365 por defecto**, para un perfil o `defaults`. Una sincronización que termina su pasada
+  borra las versiones y las filas del registro de cambios más antiguas ([ajustes](./configuration.md#other-settings)).
+- **Edita un archivo en el Disk, donde está.** `files update` reemplaza todo el texto de un archivo de texto,
+  `files sheets show` y `files sheets update` leen y escriben las celdas de un `.xlsx`, y `files documents show` y
+  `files documents update` leen y cambian los párrafos de un `.docx`, sin tocar el resto del archivo. Cada edición
+  toma el `sha256` del archivo como `--expected-fingerprint` y pregunta igual que `files.delete`. El archivo se
+  comprueba justo antes de escribir, y lo que se reemplazó se guarda en este ordenador; un archivo que cambió desde
+  que se leyó es un `conflict`, y no se sube nada. `files history` lista lo que reemplazaron las ediciones, y
+  `files restore <path> <version>` devuelve una versión. Consulta
+  [edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk) y
+  [edita un archivo con tu agente](./recipes.md#edit-a-file-with-your-agent).
+- **Un espejo fusiona un archivo de texto cambiado en los dos lados.** Un archivo `.md`, `.markdown`, `.txt`, `.csv` o `.tsv` de
+  hasta 1 MB editado aquí y en el Disk en sitios distintos se fusiona línea a línea y se escribe en los dos lados; la
+  respuesta lo incluye en `merged`. Los cambios en la misma línea o en líneas vecinas siguen siendo un conflicto.
+  Consulta [un archivo cambiado en los dos lados](./mirrors.md#a-file-changed-on-both-sides).
+- **`mirrors conflicts list|show|resolve`.** Muestra cada conflicto que dejó una sincronización, sus tres versiones y
+  las líneas en conflicto, y lo resuelve en los dos lados a la vez con `--keep local|disk|both` o con el archivo final
+  (`--file`, solo para ti). Si un lado cambió desde entonces, se rechaza sin escribir nada.
+- **`mirrors sync --allow-replacements <count>`** permite que una ejecución reemplace hasta ese número de archivos
+  existentes cuando la protección la detiene; `--replace` sigue permitiendo cualquier número.
+- **La sincronización de todo el Disk sigue la lista donde se detuvo la ejecución anterior.** Un Disk demasiado grande
+  para listarlo en una ejecución se lista en varias, así que cada ejecución dura lo habitual; la respuesta de una
+  ejecución detenida dice que la vuelvas a ejecutar en lugar de pedir más tiempo, y `listed` muestra `resumed` y
+  `so_far`. El espejo de una carpeta sigue listando desde el principio en cada ejecución.
+- **`files restore`** acepta una versión de `files history`, además de una ruta en la papelera.
+- Requiere `@wirecat/cli-core` 0.722.0 y `@wirecat/cli-base` 0.127.0.
+- **`files show` y `files list` dan el `md5` y el `sha256` de cada archivo**, para que un agente sepa si un archivo
+  cambió desde que lo leyó. `files download` da el `sha256` solo junto al texto completo del archivo: un texto que
+  cortó o que extrajo de un PDF, un docx o un xlsx tiene `sha256: null`, así que no se puede escribir de vuelta sobre
+  el archivo.
+- **Un texto cortado lo dice en la ayuda y en el terminal.** `files download` sin `--output` sigue respondiendo con
+  200 000 caracteres como mucho y `truncated: true`; su ayuda, [el uso](./usage.md) y un aviso en el terminal ahora
+  dicen que nunca escribas un texto cortado sobre el archivo.
+
+### Corregido
+
+- **Un archivo que la sincronización ya no encuentra conserva su texto.** Sale de las listas y de la búsqueda, se
+  marca como ya no visible y vuelve tal como estaba cuando el Disk lo muestra de nuevo. Antes, la sincronización
+  vaciaba su texto como si se hubiera borrado, aunque el Disk no puede decirle si fue un borrado, un traslado o un
+  recurso compartido perdido.
+
 ## 0.4.0 — 19.11.2026
 
 ### Añadido

@@ -256,7 +256,7 @@ ydisk documents list [query] [options]
 | `--limit <n>` | how many documents to return. Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Next usually:** `ydisk documents show <document>`, `ydisk documents context <document>`, `ydisk tags list <document> [query]`
+**Next usually:** `ydisk documents show <document>`, `ydisk documents history <document>`, `ydisk documents context <document>`
 
 **Example:** `ydisk personal documents list`, `ydisk personal documents list tag:budget`, `ydisk personal documents list person:PERSON_UID --limit 10`
 
@@ -294,6 +294,24 @@ ydisk documents export <document> [options]
 
 **Example:** `ydisk personal documents export DOC_ID --output notes.md`
 
+### `ydisk documents history`
+
+list the versions of a document kept in the local copy, or show one with --revision
+
+```sh
+ydisk documents history <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | file id (resource_id) or a search hit's document: ref. |
+
+| Option | What it does |
+|---|---|
+| `--revision <n>` | show the text of this version. |
+
+**Example:** `ydisk personal documents history DOC_ID`, `ydisk personal documents history DOC_ID --revision 3`
+
 ### `ydisk documents context`
 
 show a document with its tags, relationships, notes, memories and editors
@@ -307,6 +325,24 @@ ydisk documents context <document>
 | `document` | required | Yandex Disk file or folder id or URL in the local catalog, or a document:<n> ref. |
 
 **Example:** `ydisk personal documents context DOC_ID`
+
+## `ydisk changes`
+
+list the documents the sync added, changed, removed or brought back, newest first
+
+```sh
+ydisk changes [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since <when>` | from this time: an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago. Default: `1d`. |
+| `--until <when>` | up to this time, in the same forms. |
+| `--event <events>` | only these, comma separated: added, changed, restored, deleted, unavailable, unsynced. |
+| `--limit <n>` | how many changes to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Example:** `ydisk personal changes`, `ydisk personal changes --since 7d --event deleted,unavailable`
 
 ## `ydisk search`
 
@@ -356,7 +392,7 @@ ydisk catalog show <file>
 |---|---|---|
 | `file` | required | Yandex Disk file or folder id, or its URL. |
 
-**Next usually:** `ydisk documents show <document>`, `ydisk documents context <document>`, `ydisk tags list <document> [query]`
+**Next usually:** `ydisk documents show <document>`, `ydisk documents history <document>`, `ydisk documents context <document>`
 
 **Example:** `ydisk personal catalog show FILE_ID --offline`
 
@@ -377,7 +413,7 @@ ydisk catalog list [query] [options]
 | `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Next usually:** `ydisk documents show <document>`, `ydisk documents context <document>`, `ydisk tags list <document> [query]`
+**Next usually:** `ydisk documents show <document>`, `ydisk documents history <document>`, `ydisk documents context <document>`
 
 **Example:** `ydisk personal catalog list "parent:FOLDER_ID AND kind:file" --offline`
 
@@ -398,7 +434,7 @@ ydisk catalog search <query> [options]
 | `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Next usually:** `ydisk documents show <document>`, `ydisk documents context <document>`, `ydisk tags list <document> [query]`
+**Next usually:** `ydisk documents show <document>`, `ydisk documents history <document>`, `ydisk documents context <document>`
 
 **Example:** `ydisk personal catalog search "budget AND person:Rin*" --offline`
 
@@ -1018,7 +1054,7 @@ ydisk files show <path>
 
 ### `ydisk files download`
 
-read a Disk file's text (PDF, docx, xlsx, CSV, TSV, text, Markdown), or with --output save the file itself; the token never goes to the download host
+read a Disk file's text (PDF, docx, xlsx, CSV, TSV, text, Markdown), or with --output save the file itself; the token never goes to the download host. A text longer than 200,000 characters is cut there with truncated: true: never write a cut text back over the file, it would lose the rest
 
 **Changes something on this computer only.**
 
@@ -1136,22 +1172,6 @@ ydisk files delete <path>
 
 **Example:** `ydisk personal files delete /Documents/old.pdf`
 
-### `ydisk files restore`
-
-bring a file or folder back from the Disk's trash
-
-**Changes something in the service.**
-
-```sh
-ydisk files restore <path>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `path` | required | its path in the trash, like trash:/old.pdf. |
-
-**Example:** `ydisk personal files restore trash:/old.pdf`
-
 ### `ydisk files publish`
 
 open a file or folder to anyone with its public link; asks as files.share does
@@ -1201,6 +1221,143 @@ ydisk files serve [path] [options]
 | `--port <port>` | the local port to serve on; a free one without it. |
 
 **Example:** `ydisk personal files serve`, `ydisk personal files serve /Documents --port 8090`
+
+### `ydisk files sheets`
+
+the cells of an Excel workbook (.xlsx) on Yandex Disk, read and changed in place
+
+#### `ydisk files sheets show`
+
+show a workbook's stored cells, each with its value, type, formula and format, and the file's sha256 to pass as --expected-fingerprint to sheets update. Formulas show the value Excel saved last
+
+```sh
+ydisk files sheets show <path> [range]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .xlsx file on Yandex Disk. |
+| `range` | optional | the cells to show: Sheet1!A1:C10, a sheet's name, or A1:C10 on every sheet; all without it. |
+
+**Example:** `ydisk personal files sheets show /budget.xlsx "Sheet1!A1:C10"`, `ydisk personal files sheets show /budget.xlsx`
+
+#### `ydisk files sheets update`
+
+write values into a workbook's cells in place: the rest of the file, its formatting and its other sheets stay as they are. It needs --expected-fingerprint from sheets show and asks as files.delete does; what it replaced is kept on this computer (see history). A text is written as text, even one that starts with =. A formula cell is refused unless --replace
+
+**Changes something in the service.**
+
+```sh
+ydisk files sheets update <path> <range> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .xlsx file on Yandex Disk. |
+| `range` | required | where the values go: Sheet1!B2:C3, or its first cell Sheet1!B2; the sheet may be left out when there is one. |
+
+| Option | What it does |
+|---|---|
+| `--values <json>` | the cell values as JSON rows; null empties a cell. |
+| `--expected-fingerprint <hash>` | the sha256 sheets show gave for the file. |
+| `--replace` | replace a formula with the value instead of refusing it. |
+
+**Example:** `ydisk personal files sheets update /budget.xlsx "Sheet1!B2:C2" --values '[[120, "paid"]]' --expected-fingerprint 9f86d081…`
+
+### `ydisk files documents`
+
+the paragraphs of a Word document (.docx) on Yandex Disk, read and changed in place
+
+#### `ydisk files documents show`
+
+show a Word document's paragraphs by index, with their style, whether each can be edited and why not, and the file's sha256 to pass as --expected-fingerprint to documents update
+
+```sh
+ydisk files documents show <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .docx file on Yandex Disk. |
+
+**Example:** `ydisk personal files documents show /report.docx`
+
+#### `ydisk files documents update`
+
+replace, insert or delete a Word document's paragraphs in place; the rest of the file stays as it is. Indexes are the ones documents show gave. It needs --expected-fingerprint from documents show and asks as files.delete does; what it replaced is kept on this computer (see history). A paragraph that is not editable is refused with its reason, and a replaced one with mixed formatting takes its first run's
+
+**Changes something in the service.**
+
+```sh
+ydisk files documents update <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .docx file on Yandex Disk. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | the edits as JSON: {index, text}, {insert_after, text, style_from?} or {delete}. |
+| `--expected-fingerprint <hash>` | the sha256 documents show gave for the file. |
+
+**Example:** `ydisk personal files documents update /report.docx --payload '[{"index": 2, "text": "Revenue grew 12%."}]' --expected-fingerprint 9f86d081…`
+
+### `ydisk files history`
+
+list what the writes and syncs of this profile replaced in a file, newest last. Each entry's version is the sha256 of the content it replaced, kept on this computer while available is true; files restore puts it back
+
+```sh
+ydisk files history <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the file on Yandex Disk. |
+
+**Example:** `ydisk personal files history /budget.xlsx`
+
+### `ydisk files restore`
+
+with no version, bring a file or folder back from Yandex Disk's trash. With one, put back a version history lists: it is written as files update writes, so a file there needs --expected-fingerprint, asks as files.delete does, and is kept first
+
+**Changes something in the service.**
+
+```sh
+ydisk files restore <path> [version] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the file on Yandex Disk, or its path in the trash. |
+| `version` | optional | the version's sha256, from history. |
+
+| Option | What it does |
+|---|---|
+| `--expected-fingerprint <hash>` | the sha256 the file has now; required when it exists. |
+
+**Example:** `ydisk personal files restore /budget.xlsx 2c26b46b… --expected-fingerprint 9f86d081…`
+
+### `ydisk files update`
+
+replace a Yandex Disk file's text, or create a text file. A file already there is replaced only with --expected-fingerprint, the sha256 read from it; it asks as files.delete does. The file is checked just before the write, and what it replaced is kept on this computer. Write back only a whole plain-text file: a text cut with truncated: true would replace the whole file, and a .pdf, .docx or .xlsx is refused
+
+**Changes something in the service.**
+
+```sh
+ydisk files update <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the file on Yandex Disk. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the file's new text; without it, the text is read from stdin. |
+| `--expected-fingerprint <hash>` | the sha256 the file had when it was read; required when it exists. |
+
+**Example:** `ydisk personal files update /notes.md --text "# Notes"`, `ydisk personal files update /notes.md --text "# Notes" --expected-fingerprint 9f86d081…`
 
 ## `ydisk mirrors`
 
@@ -1253,7 +1410,7 @@ ydisk mirrors status [id]
 
 ### `ydisk mirrors preview`
 
-list the Disk and show what mirrors sync would do: each upload, download, rename, trash and conflict; nothing is changed on either side
+list the Disk and show what mirrors sync would do: each upload, download, merge, rename, trash and conflict; nothing is changed on either side
 
 ```sh
 ydisk mirrors preview [id] [options]
@@ -1271,7 +1428,7 @@ ydisk mirrors preview [id] [options]
 
 ### `ydisk mirrors sync`
 
-sync mirrors both ways once: a change on one side is copied to the other, a deletion goes to the other side's trash, and a file changed on both sides is reported and left for --keep; mirrors preview shows the plan first. A run stops before its deadline, keeps what it did, and the next sync goes on from there
+sync mirrors both ways once: a change on one side is copied to the other, a deletion goes to the other side's trash, a text file changed on both sides in different places is merged, and any other file changed on both sides is reported for mirrors conflicts or --keep; mirrors preview shows the plan first. A run stops before its deadline, keeps what it did, and the next sync goes on from there
 
 **Changes something in the service.**
 
@@ -1287,14 +1444,15 @@ ydisk mirrors sync [id] [options]
 |---|---|
 | `--keep <side>` | settle each conflict: keep the local file, the Disk's, or both. One of: `local`, `disk`, `both`. |
 | `--allow-deletions <count>` | let this run delete up to this many files when the guard stops it. |
-| `--replace` | let this run overwrite more than 50 existing files when the guard stops it; each is kept as a version first. |
+| `--allow-replacements <count>` | let this run overwrite up to this many existing files when the guard stops it; each is kept as a version first. |
+| `--replace` | let this run overwrite any number of existing files when the guard stops it; each is kept as a version first. |
 | `--repin` | the Disk or local folder was replaced and the new one is right: record it and sync. |
 
 **Example:** `ydisk personal mirrors sync`, `ydisk personal mirrors sync 1a2b3c4d --keep disk`
 
 ### `ydisk mirrors watch`
 
-keep syncing both ways until Ctrl-C or --timeout: on each local save, and when the Disk's revision moves; a file changed on both sides is reported and left for mirrors sync --keep
+keep syncing both ways until Ctrl-C or --timeout: on each local save, and when the Disk's revision moves; a file changed on both sides that cannot be merged is reported for mirrors conflicts
 
 **Changes something in the service.**
 
@@ -1385,6 +1543,61 @@ ydisk mirrors versions restore <id> <path> <sha256>
 | `sha256` | required | the version's hash, old or new in mirrors versions list. |
 
 **Example:** `ydisk personal mirrors versions restore 1a2b3c4d notes/plan.md 9f86d081…`
+
+### `ydisk mirrors conflicts`
+
+files changed on both sides that a sync could not merge: list them, show the three versions and the lines that conflict, and resolve each by keeping a side or giving the final file
+
+#### `ydisk mirrors conflicts list`
+
+list the conflicts each mirror's last sync left, with why and when it found them
+
+```sh
+ydisk mirrors conflicts list [id]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+**Example:** `ydisk personal mirrors conflicts list --json`
+
+#### `ydisk mirrors conflicts show`
+
+show a conflict's three versions (the last sync's, the local and the remote) and each changed stretch of the line merge; merged is the whole file with conflict markers, a start for resolve --file
+
+```sh
+ydisk mirrors conflicts show <id> <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+
+**Example:** `ydisk personal mirrors conflicts show 1a2b3c4d notes/plan.md --json`
+
+#### `ydisk mirrors conflicts resolve`
+
+settle a conflict on both sides at once: keep the local file, the disk's, or both (the disk's beside the local one), or give the final file. Refused with nothing written when either side changed since the conflict was found; every replaced version is kept
+
+**Changes something in the service.**
+
+```sh
+ydisk mirrors conflicts resolve <id> <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | keep the local file, the disk's, or both. One of: `local`, `disk`, `both`. |
+| `--file <file>` | the final content, written to both sides. |
+
+**Example:** `ydisk personal mirrors conflicts resolve 1a2b3c4d notes/plan.md --keep disk`, `ydisk personal mirrors conflicts resolve 1a2b3c4d notes/plan.md --file ~/plan-final.md`
 
 ## `ydisk store`
 
@@ -2097,7 +2310,7 @@ ydisk config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -2118,7 +2331,7 @@ ydisk config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 
 | Option | What it does |
 |---|---|

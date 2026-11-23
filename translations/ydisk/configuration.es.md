@@ -70,6 +70,7 @@ Mira [Seguridad](./security.md).
 | Ajuste | Por defecto | Qué hace |
 | --- | --- | --- |
 | `limit` | `20` | Cuántos elementos muestra una lista a la vez. |
+| `keep_versions_for_days` | `365` | Días que se guardan las versiones anteriores de los archivos sincronizados y el registro de cambios. Una sincronización que termina su pasada borra las más antiguas. Para un perfil o `defaults`. |
 | `search_reranker` | `mmarco` | El modelo que ordena los primeros resultados de la búsqueda, o `off`. |
 | `embedding_provider` | `local` | `local` u `openai`: lo que convierte el texto en vectores para la búsqueda por significado. `openai` envía el texto a OpenAI. |
 | `update_check` | `true` | Comprueba una vez al día si hay una versión nueva. |
