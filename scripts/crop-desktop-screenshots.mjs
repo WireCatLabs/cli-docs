@@ -1,7 +1,8 @@
 /**
  * Crop WireCat Desktop showcase captures (1440×900 PNG, from wirecat-desktop's `?showcase` build) into the
- * 16:10 WebP files under public/screenshots/desktop/. Tools keeps the sidebar, the other screens show the page
- * itself, and no crop shows the window controls.
+ * 16:10 WebP files under public/screenshots/desktop/. Tools is the whole window, so the menu shows. Since Desktop
+ * 0.7 its page has tabs and the "Add your own tool" button, which a tighter 16:10 box cuts in half. The other screens
+ * show the page itself, without the menu or the window controls.
  *
  *   node scripts/crop-desktop-screenshots.mjs <folder with wirecat-<screen>-<theme>-<lang>-1440x900.png> [screen…] [--docs]
  */
@@ -12,7 +13,7 @@ import { createRequire } from "node:module"
 const sharp = createRequire(createRequire(import.meta.url).resolve("next/package.json"))("sharp")
 
 const crops = {
-  tools: { box: { left: 0, top: 118, width: 1216, height: 760 } },
+  tools: { box: { left: 0, top: 0, width: 1440, height: 900 } },
   agents: { box: { left: 208, top: 60, width: 1232, height: 770 } },
   "search-hit": { box: { left: 208, top: 50, width: 1232, height: 770 } },
   tasks: { box: { left: 208, top: 60, width: 1232, height: 770 } },
