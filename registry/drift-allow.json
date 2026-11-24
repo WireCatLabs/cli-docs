@@ -182,12 +182,7 @@
   {
     "tool": "zm",
     "key": "doctor",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "zm",
-    "key": "setup",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "Desktop checks zm with `{profile} session status`; the manifest says `{profile} doctor`, as for gcal and email. Both answer: the built zoom-cli 0.81.0 code ran both with a profile and no sign-in on 2026-11-24. Which one Desktop should run is open."
   },
   {
     "tool": "zm",
@@ -196,13 +191,33 @@
   },
   {
     "tool": "zm",
-    "key": "sync.run",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "key": "tagline",
+    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
   },
   {
     "tool": "zm",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "key": "profiles.args",
+    "why": "Desktop's compiled catalog lists zm's profiles with `doctor`, which every zm answers. `session list` came in zoom-cli 0.81.0, so a catalog entry pointing there would fail on every zm installed before it; an installed zm's own answer replaces it once wirecat-desktop #476 lands."
+  },
+  {
+    "tool": "zm",
+    "key": "profiles.shape",
+    "why": "Desktop's compiled catalog lists zm's profiles with `doctor`, which every zm answers. `session list` came in zoom-cli 0.81.0, so a catalog entry pointing there would fail on every zm installed before it; an installed zm's own answer replaces it once wirecat-desktop #476 lands."
+  },
+  {
+    "tool": "zm",
+    "key": "accountRemove.signOut",
+    "why": "Deliberate: the catalog's signOut is the fallback for zm before accountRemove.remove.minVersion (0.70.0), and `session end` came in that same release, so an older zm has no sign-out to run (wirecat-desktop AccountRow.test.tsx, \"an old Zoom cannot sign out\")."
+  },
+  {
+    "tool": "zm",
+    "key": "accountRemove.removes",
+    "why": "Desktop names what a sign-out keeps in its own words, and has none for zm yet. cli-base writes a generic list. Open which list is right."
+  },
+  {
+    "tool": "zm",
+    "key": "accountRemove.keeps",
+    "why": "Desktop names what a sign-out keeps in its own words, and has none for zm yet. cli-base writes a generic list. Open which list is right."
   },
   {
     "tool": "memo",
@@ -223,11 +238,6 @@
     "tool": "memo",
     "key": "tagline",
     "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "bitrix",
-    "key": "setup",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "bitrix",
@@ -278,11 +288,6 @@
     "tool": "hubspot",
     "key": "tagline",
     "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "pbx",
-    "key": "setup",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
   },
   {
     "tool": "pbx",
