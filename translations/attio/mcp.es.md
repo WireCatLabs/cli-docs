@@ -48,9 +48,10 @@ El servidor tiene tres herramientas:
 
 Un comando se nombra como en la línea de comandos, sin el perfil, y comprueba la misma clave de permiso.
 
-El texto de Attio llega marcado como `untrusted`: los títulos de negociaciones, los nombres de etapas, los nombres de
-personas y empresas, los valores de atributos y lo que encuentra `search all`. Al agente se le dice que son datos,
-nunca instrucciones.
+El texto de Attio llega marcado como `untrusted`: los nombres de personas, empresas y negociaciones, los nombres de
+embudos y etapas, los nombres de los miembros del espacio de trabajo, los valores de atributos, las direcciones de
+correo, los teléfonos y los enlaces, las notas, correos, comentarios y transcripciones que leen los comandos `api`, y
+lo que encuentra `search all`. Al agente se le dice que son datos, nunca instrucciones.
 
 ## Las escrituras siguen siendo tuyas
 

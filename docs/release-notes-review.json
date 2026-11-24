@@ -66,10 +66,10 @@
     "conclusion": "Reviewed wordpress 0.3.0 from its changelog and the docs diff since v0.2.0: WireCat Desktop signs in to WordPress in its own window (`--wcat-describe` lists the application-password sign-in with `--site` and `--login`), `posts publish` and `posts unpublish` ask one question, and `--help` names the application password and the `/wp-json` index. The roadmap did not change. RU and ES changelog, commands and permissions updated and accepted."
   },
   "attio": {
-    "version": "v0.2.2",
-    "roadmapSha256": "e311c296c68e5e940fc86cb2e254b68d45fd935656ca9d973cc69478954207d2",
-    "reviewedAt": "2026-11-19",
-    "conclusion": "First site release of attio, reviewed at 0.2.2 from its changelog and the pages it publishes. Sync copies every deal and the people and companies those deals name; everyone else in Attio is searched live. 0.2.2 fixed the pages that still said sync copies the whole workspace, and the RU and ES translations follow it. The roadmap's Next (changing deals, notes and tasks, one-click sign-in) and Later (custom objects and lists, webhooks) hold nothing that has shipped."
+    "version": "v0.4.1",
+    "roadmapSha256": "7a7593307c351179fbfe9fc1c43e246cde41a1d530b21cefead9554689e08bbb",
+    "reviewedAt": "2026-11-24",
+    "conclusion": "Reviewed attio v0.2.2 to v0.4.1 from its changelog, the docs diff between the tags and the generated command reference. New: `deals create|update|move|close|delete` and `people create|update` write to Attio, each `ask` by default with `crm.assign-others` at `deny`, and a write also checks the `api` key of the operation it sends (0.3.0); `account remove`, `schedule`, and `session.missing` in place of `auth.missing` (0.3.0); company and person descriptions and `show` by a deal's `person:<id>`/`organization:<id>` (0.3.1); notes and tasks in the copy with the `activities` setting, which needs `note:read` and `task:read` (0.4.0, usage section \"Notes and tasks on a deal\", a scope row in installation); a closed deal's `closed_date` from the day it entered its stage (0.4.1). RU/ES of index, installation, usage, mcp, permissions, configuration, roadmap, commands and changelog follow the new source; the three 2026-11-23 audit corrections (installation, index, configuration) are in the translations now and upstream carries their en text. New portal corrections for index and mcp: upstream still says the CRM commands only read and that `api` writes are `allow`. The roadmap's Next dropped \"Change deals\" (shipped in 0.3.0) and narrowed notes and tasks to adding them (reading shipped in 0.4.0); one-click sign-in and the Later items (custom objects and lists, webhooks) have not shipped."
   },
   "hubspot": {
     "version": "v0.6.0",

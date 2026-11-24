@@ -48,9 +48,11 @@ trabajo de Attio y un administrador que pueda crear un token de acceso.
   espacio de trabajo y las personas y empresas que nombran, con las etapas del embudo de negociaciones. `deals`, `pipelines` y
   `changes` responden desde esa copia. `people`, `organizations` y `users` preguntan a Attio cada vez, así que siempre
   muestran los datos más nuevos y necesitan internet.
-- **Los comandos de negociaciones solo leen, el grupo `api` puede escribir.** `deals`, `people` y los demás comandos
-  del CRM nunca cambian Attio. `attio work api …` llega a cada operación de la API de Attio, escrituras y borrados
-  incluidos, hasta donde lo permiten los ámbitos del token y tus [permisos](./permissions.md).
+- **Cada cambio te pregunta antes en una terminal.** `deals create`, `update`, `move`, `close` y `delete`, y
+  `people create` y `update`, cambian Attio y guardan su respuesta. En una terminal cada uno pregunta sí o no antes, y
+  también cada escritura por `api`. Una negociación nueva sin `--owner` es tuya. Empresas, notas y tareas van por
+  `attio work api …`, que llega a cada operación de la API de Attio, hasta donde lo permiten los ámbitos del token y
+  tus [permisos](./permissions.md).
 - **Por MCP, "ask" sigue adelante.** MCP es la forma en que aplicaciones como Claude Desktop llaman a una herramienta,
   y ahí nadie está en una terminal para responder a una pregunta. Bloquea el grupo `api` antes de conectar una
   aplicación así: [MCP](./mcp.md).
@@ -112,7 +114,8 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 ## Empieza en unos minutos
 
-En WireCat Desktop, añade Attio desde la lista de herramientas y pega el token cuando te lo pida. O pega esto en tu
+En WireCat Desktop, instala Attio en la página **Herramientas** e inicia sesión en **Gestionar**, como
+muestra [la instalación](./installation.md#in-wirecat-desktop). O pega esto en tu
 agente:
 
 ```text prompt

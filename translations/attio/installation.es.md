@@ -2,9 +2,9 @@
 title: "Instala"
 ---
 
-Pon `attio` en marcha en tu ordenador y conéctalo a tu espacio de trabajo de Attio en unos cinco minutos. Attio deja
-entrar a un programa a través de un token de acceso que crea un administrador del espacio de trabajo, y esta página
-te guía paso a paso.
+Conecta tu espacio de trabajo de Attio una vez y, desde entonces, tu agente de IA te dice en qué punto está cada
+negociación sin que abras Attio. Attio solo deja entrar a un programa con un token de acceso que crea un
+administrador del espacio de trabajo. Crear el token, instalar `attio` e iniciar sesión lleva unos cinco minutos.
 
 Cuando termines, un agente de este ordenador lee tus negociaciones, personas y empresas cuando se lo pides.
 
@@ -29,8 +29,10 @@ Cuando termines, un agente de este ordenador lee tus negociaciones, personas y e
 
 ## En WireCat Desktop
 
-Añade Attio desde la lista de herramientas y pega el token de acceso cuando te lo pida.
-[Crea un token de acceso en Attio](#make-an-access-token-in-attio) muestra cómo conseguir uno.
+1. En la página **Herramientas**, pulsa **Instalar** en la fila de Attio.
+2. Pulsa **Gestionar**, escribe un nombre de cuenta, como `work`, y pulsa **Iniciar sesión aquí**.
+3. Pega el token de acceso cuando te lo pida. [Crea un token de acceso en Attio](#make-an-access-token-in-attio)
+   muestra cómo conseguir uno.
 
 ## Instala la herramienta
 
@@ -55,14 +57,15 @@ Attio describe estos pasos en su página de ayuda,
 
 1. En Attio, abre el menú junto al nombre de tu espacio de trabajo y elige **Workspace settings**.
 2. Abre la pestaña **Developers**.
-3. Pulsa **New access token** y dale un nombre, como `WireCat`.
-4. En los ámbitos, pon estos tres en lectura:
+3. Pulsa **+ New access token** y dale un nombre, como `WireCat`.
+4. En **Scopes**, dale lectura de registros, configuración de objetos y gestión de usuarios:
 
    | Alcance | Hace falta para |
    |---|---|
    | `record_permission:read` | Negociaciones, personas y empresas. |
    | `object_configuration:read` | Las etapas de las negociaciones y los atributos propios de tu espacio de trabajo. |
    | `user_management:read` | Los miembros del espacio de trabajo, responsables de las negociaciones. |
+   | `note:read` y `task:read` | Solo para copiar notas y tareas, ver [notas y tareas](./usage.md#notes-and-tasks-on-a-deal). |
 
 5. Guarda y copia el token que muestra Attio.
 

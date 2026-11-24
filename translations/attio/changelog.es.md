@@ -4,6 +4,73 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/attio-cli`. Una sección por versión, la más nueva primero.
 
+## 0.4.1 — 24.11.2026
+
+### Corregido
+
+- El `closed_date` de una negociación ganada o perdida es el día en que entró en esa etapa en Attio. Era el día de la
+  primera sincronización que la vio cerrada, así que un filtro como `closed:>=90d` contaba cada negociación ganada
+  antes de que instalaras `attio`.
+
+## 0.4.0 — 24.11.2026
+
+### Añadido
+
+- **Notas y tareas en la copia.** Con el ajuste `activities` activado, `sync` también copia las notas y tareas de las
+  negociaciones, personas y empresas que guarda. `deals show` las muestra, y `search all` encuentra una negociación
+  por las palabras de sus notas. Está desactivado hasta que lo activas, y el token necesita `note:read` y `task:read`.
+  Ejemplo: `attio work config set crm.attio:<workspace id>.activities on`. Ver
+  [notas y tareas](./usage.md#notes-and-tasks-on-a-deal).
+
+## 0.3.1 — 23.11.2026
+
+### Corregido
+
+- `organizations show` y `people show` dan la descripción del registro en Attio entre sus campos, así que un agente
+  al que le preguntan a qué se dedica un cliente la encuentra.
+- `people show` y `organizations show` aceptan el `person:<id>` y el `organization:<id>` que da una negociación,
+  desde cli-core 0.736.0. Antes respondían `not_found`.
+
+## 0.3.0 — 23.11.2026
+
+### Añadido
+
+- **Las negociaciones y las personas se escriben en Attio, y cada cambio te pregunta antes.** `deals create`,
+  `update`, `move`, `close` y `delete`, y `people create` y `update`, envían el cambio a Attio y guardan su respuesta,
+  como hacen los demás CLI de WireCat para CRM. Cada clave pregunta en una terminal, y también cada escritura de `api`.
+  Sin terminal, una escritura espera a `--yes`. Por MCP sigue adelante, así que es tu cliente MCP el que pregunta. Una
+  escritura también comprueba la clave `api` de la operación que envía, así que `permissions.api readonly` la detiene.
+  `--email` y `--phone` sustituyen toda la lista. La moneda de una negociación es la del espacio de trabajo, y otra se
+  rechaza. Una negociación nueva sin `--owner` es tuya, porque Attio necesita un responsable en cada negociación. Las
+  empresas no se escriben aquí: una empresa de Attio no tiene atributo de correo ni de teléfono. Ejemplo:
+  `attio work deals move deal:1 --stage "In Progress"`.
+- **`account remove`.** Cierra la sesión de un perfil y, con `--delete-data`, borra su copia local, cosa que rechaza
+  mientras otro perfil de aquí siga leyendo ese espacio de trabajo. El `session start` de un segundo perfil a un
+  espacio de trabajo que tiene otro perfil se rechaza (`session.duplicate`).
+- **`schedule`, como en las demás herramientas de WireCat para CRM.**
+  `attio work schedule command crm --every 1h -- sync` sincroniza cada hora, y `schedule command crm-digest --at 08:00 -- changes list --format report` envía el
+  resumen matutino del CRM.
+
+### Cambiado — puede romper a quien llama
+
+- **Un comando del CRM en un perfil sin sesión iniciada responde `session.missing`**, como todas las demás
+  herramientas de WireCat. Respondía `auth.missing`, que no usa ninguna otra herramienta. Un perfil que este
+  ordenador no conoce en absoluto responde ahora `profile.unknown` (`not_found`), en lo que cli-core convierte un
+  `session.missing` para un perfil desconocido, y nombra los perfiles que hay. El mensaje sigue diciendo cómo iniciar
+  sesión.
+
+### Corregido
+
+- `deals close <deal> won` encuentra la etapa ganada también por su nombre, en un espacio de trabajo donde la
+  celebración de la etapa está desactivada.
+- **El servidor MCP avisa al agente de cada tipo de texto externo que puede ver**: nombres de negociaciones, embudos y
+  etapas y de los miembros del espacio de trabajo, direcciones de correo, teléfonos y enlaces, las notas, correos,
+  comentarios y transcripciones que leen los comandos `api`, y lo que encuentra `search all`. Solo nombraba los
+  nombres de registros, los valores de atributos y los nombres de miembros.
+- **La skill dice cómo funciona el inicio de sesión**: solo el propietario inicia sesión, nunca con el token como
+  argumento, y qué ámbitos necesita el token.
+- **La descripción del paquete nombra las negociaciones** junto a personas y empresas.
+
 ## 0.2.2 — 19.11.2026
 
 ### Corregido

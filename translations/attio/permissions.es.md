@@ -49,10 +49,15 @@ lo ejecutes tú en una terminal.
 |---|---|---|
 | `api.<operation>` que borra, como `api.objects-records-delete` | `ask` | Un borrado no se puede deshacer. También comprueba `attio.delete`. |
 | `attio.delete` | `ask` | Una sola clave para todos los borrados. Ponla en `deny` para pararlos todos. |
-| Cualquier otro comando, escrituras de `api` incluidas | `allow` | |
+| `deals.create`, `deals.update`, `deals.move`, `deals.close`, `deals.delete` | `ask` | Cada uno cambia una negociación que ven tus compañeros. |
+| `people.create`, `people.update` | `ask` | Cada uno cambia una persona que ven tus compañeros. |
+| `api.<operation>` que escribe, como `api.objects-records-create` | `ask` | Cada una cambia lo que ven tus compañeros. |
+| `crm.assign-others` | `deny` | Dar una negociación o una persona a otro miembro del espacio de trabajo espera hasta que lo permitas. Una negociación nueva sin `--owner` es tuya. |
+| Cualquier otro comando | `allow` | |
 
-Los comandos de negociaciones, embudos, etapas, cambios, campos y búsqueda solo leen. Los comandos de personas,
-empresas y usuarios también solo leen. Solo el grupo `api` escribe en Attio.
+Una escritura de negociación o de persona también comprueba la clave `api` de la operación de Attio que envía, como
+`api.objects-records-replace`, así que un `readonly` en `api` también la detiene. Los comandos de embudos, etapas,
+cambios, campos y búsqueda solo leen, igual que los de empresas y usuarios.
 
 ## Aleja toda escritura de un agente
 
@@ -66,8 +71,8 @@ El id de registro de arriba es inventado. Cualquiera de estas opciones hace que 
 
 - **Ámbitos de lectura en el token.** Crea el token con solo los tres ámbitos de lectura de
   [instala](./installation.md). Entonces el propio Attio rechaza toda escritura.
-- **`api` en `readonly`.** `attio work config set permissions.api readonly`. Todas las lecturas de `api` siguen
-  funcionando.
+- **`api` en `readonly`.** `attio work config set permissions.api readonly`. Todas las lecturas siguen funcionando y
+  toda escritura se rechaza: los comandos de negociaciones y personas envían por las mismas operaciones.
 - **Sin borrados.** `attio work config set permissions.attio.delete deny` detiene todo borrado y deja las demás
   escrituras como están.
 
