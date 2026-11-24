@@ -5,8 +5,9 @@ title: "Compared with other tools"
 Pick a tool for your Yandex Disk by the job you want done: find a document by what it says, let an AI agent change a
 note, a spreadsheet or a Word document and leave the rest of it as it was, keep a folder the same on your computer and
 on the Disk, or back up whole folders. This page lists those jobs and shows which tool does each one. Marks for `ydisk`
-come from version 0.5.0, and marks for the other tools come from their own documentation and source. The `ydisk` marks
-and the rows for editing files and for files changed on both sides were checked on 23 November 2026, the rows for the
+come from version 0.7.0, and marks for the other tools come from their own documentation and source. The rows for an
+edit that is refused when the file changed, for getting back what an edit replaced and for reading the text of files
+were checked on 24 November 2026. The other `ydisk` marks and the rows for editing files and for files changed on both sides were checked on 23 November 2026, the rows for the
 whole Disk, a mounted folder and many changes at once on 21 November 2026, the other folder sync rows on 19 November
 2026, and the rest on 17 November 2026. A tool may do more than its pages say, and those cells are ➖.
 
@@ -24,7 +25,7 @@ The tools:
 
 - **ydisk**: this tool. A command line and an MCP server that copy the text of the Disk folders you choose to your
   computer for search, keep chosen folders the same on your computer and on the Disk, and work with the files on the
-  Disk live, checking a file again just before an edit is written.
+  Disk live. The Disk itself checks an edit to a file at the moment of the write.
 - **[Yandex Disk MCP](https://yandex.ru/dev/yandex-360/mcp/ru/disk)**: Yandex's own MCP server, run by Yandex. Your
   AI app connects to it over the internet. It is a preview, for accounts with a paid Yandex 360 subscription.
 - **[rclone](https://rclone.org/yandex/)**: a command line that copies, syncs and mounts files between your computer
@@ -63,7 +64,7 @@ listed no Yandex Disk server on 17 November 2026.
 | Make and close a public link | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Keep your own tags and notes on documents | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Edit a file on the Disk** | | | | | |
-| An agent edits a file, and the edit is refused when someone changed the file since the agent read it | 🟡⁶ | ❌ | ➖ | ➖ | ❌⁷ |
+| An agent edits a file, and the edit is refused when someone changed the file since the agent read it | ✅⁶ | ❌ | ➖ | ➖ | ❌⁷ |
 | Change cells of an Excel workbook or paragraphs of a Word document without losing its formatting | 🟡⁸ | ❌ | ❌ | ❌ | ❌ |
 | Put back what an edit replaced, from the tool itself | ✅⁹ | ❌ | 🟡¹⁰ | ➖ | ❌ |
 | **Your Disk on your computer** | | | | | |
@@ -99,10 +100,15 @@ search of its own.
 
 ⁵ A delete goes to the trash, but there is no command to bring a file back.
 
-⁶ An edit passes the `sha256` the agent read, and the file is checked again just before the write. A file changed
-since the read is refused with nothing uploaded, and the agent reads it again. The Disk has no conditional upload, so
-a change that lands in the moment between that check and the upload is not caught. What the edit replaced is still
-kept on your computer.
+⁶ An edit passes the `sha256` the agent read. A file changed since the read is refused with nothing changed, and the
+agent reads it again. For a file without a public link, the Disk itself checks this at the moment of the write. The new
+content goes to a hidden file next to it, the old file is moved to the trash only at the `md5` that was read
+(otherwise [the Disk answers 409](https://yandex.ru/dev/disk-api/doc/ru/reference/delete)), and the hidden file gets its name. The file then has a new id on the Disk,
+so the Disk's own version history of it starts over. The old copy is in the Disk's trash, where files, as
+[Yandex's help](https://yandex.ru/support/yandex-360/customers/disk/web/ru/actions-files/spec-folders/trash) says, still take up space on the Disk and are deleted after 30 days. Tags and notes follow the
+new file. A file with a public link is overwritten in place, so its link keeps working. It is checked just before the
+write, so a change in the moment between that check and the write is not caught. What the edit replaced is still kept
+on your computer.
 
 ⁷ `upload` with `overwrite` replaces a file and compares only its size. Nothing checks that the file is unchanged
 since it was read.
@@ -113,14 +119,18 @@ It refuses a paragraph with a tracked change, a field, an image, a comment, a li
 replaced paragraph takes the formatting of its first run, so a bold or italic word inside it becomes plain.
 
 ⁹ What an edit replaced is kept on your computer: `files history` lists it, and `files restore` puts it back. The
-Disk itself also keeps a file's history in its web version, for 14 days, or 90 days with Yandex 360, whatever tool
-wrote the file ([Yandex's help](https://yandex.ru/support/disk/version-control.html)).
+Disk itself also keeps a file's history in its web version, for 14 days, or 90 days with Yandex 360
+([Yandex's help](https://yandex.ru/support/disk/version-control.html)). After an edit to a file without a public link,
+that history starts over, and the earlier version stays in the Disk's trash for 30 days (see note 6).
 
 ¹⁰ `--backup-dir` keeps a file that `copy`, `sync` or `move` would overwrite or delete, and there is no command to
 bring it back.
 
 ¹¹ For the folders you [mirror](./mirrors.md), both ways. For the other chosen folders, `ydisk` keeps only the text of
-PDF, Word, Excel, CSV and text files, for search.
+files for search: PDF, Word, Excel, PowerPoint, OpenDocument, RTF, HTML, EPUB, CSV and text files. Scanned PDFs
+and JPEG, PNG or WebP pictures are read by OCR: by default with the `tesseract` program on your computer, in Russian
+and English, and nothing is sent anywhere. The `read_scans` setting can send the pages to Anthropic or OpenAI instead,
+which charge per page, or turn OCR off. One file is read up to 20 pages, and one sync reads at most 100.
 
 ¹² It downloads a file or a folder when asked, but it does not keep the copy in sync.
 
@@ -242,6 +252,14 @@ does, so it is not offered over MCP
 ([mount.ts](https://github.com/WireCatLabs/ydisk-cli/blob/v0.4.0/src/commands/mount.ts)). The limits of 10 deletions,
 50 replacements and 100,000 files come from the 0.4.0 changelog and the help, and the 1 MB merge limit from the 0.5.0
 changelog.
+
+The rows for an edit the Disk itself refuses and for getting back what it replaced were checked on version 0.7.0. The
+deletion of the old file passes the `md5` that was read to the Disk
+([writes.ts](https://github.com/WireCatLabs/ydisk-cli/blob/75cccfb/src/yandex/writes.ts#L31)), and the order of the replace, the new id and the exception for files with a
+public link are in
+[mirrors.md](https://github.com/WireCatLabs/ydisk-cli/blob/75cccfb/docs/mirrors.md#how-a-file-on-the-disk-is-replaced).
+The list of files that are read comes from
+[usage.md](https://github.com/WireCatLabs/ydisk-cli/blob/75cccfb/docs/usage.md#what-the-copy-holds).
 
 Other tools' marks come from their own pages. A search that finds nothing in those pages gives ➖, never ❌, except
 where a tool's list of commands or tools is complete.
