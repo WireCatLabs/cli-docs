@@ -3092,44 +3092,6 @@
     }
   },
   {
-    "tool": "amo",
-    "slug": "index",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. amo 0.3.0 adds a one-click sign-in for amoCRM administrators that needs no integration of your own (amo-cli CHANGELOG 0.3.0, docs/installation.md#sign-in-with-amocrm); the index still named one integration and two sign-ins. The en text is also in WireCatLabs/amo-cli#24 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/amo/index.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "You need one private integration in the account, which an administrator makes once.",
-          "after": "An administrator of an amoCRM account signs in with one click. Kommo, and users who are not administrators, sign in\nwith a token from a private integration that an administrator makes once."
-        },
-        {
-          "before": "- **Sign-in with a token or through the integration.** Either is kept",
-          "after": "- **Sign-in with one click, a token or through the integration.** Each is kept"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Вам нужна одна приватная интеграция в аккаунте. Ее один раз создает администратор.",
-          "after": "Администратор аккаунта amoCRM входит одним кликом. Kommo и пользователи, которые не\nадминистраторы, входят по токену приватной интеграции, которую один раз создает администратор."
-        },
-        {
-          "before": "- **Вход по токену или через интеграцию.** И то, и другое хранится",
-          "after": "- **Вход одним кликом, по токену или через интеграцию.** Любой из них хранится"
-        }
-      ],
-      "es": [
-        {
-          "before": "Necesitas una integración privada en la cuenta, que un administrador crea una\nvez.",
-          "after": "Un administrador de una cuenta de amoCRM inicia sesión con un clic. Kommo, y los usuarios que no son\nadministradores, inician sesión con el token de una integración privada que un administrador crea una vez."
-        },
-        {
-          "before": "- **Inicio de sesión con un token o con la integración.** Los dos se guardan",
-          "after": "- **Inicio de sesión con un clic, con un token o con la integración.** Todos se guardan"
-        }
-      ]
-    }
-  },
-  {
     "tool": "tg",
     "slug": "permissions",
     "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/permissions.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
@@ -3609,32 +3571,6 @@
         {
           "before": "`ydisk personal session end` olvida el token del perfil en este ordenador. Después quita la herramienta:",
           "after": "Para olvidar una cuenta en este ordenador, quita su perfil:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nBorra el token del perfil y sus ajustes. Di qué pasa con los archivos que copió: `--keep-data` los deja en el\nalmacén, donde la búsqueda los sigue encontrando, y `--delete-data` los borra, con la lista de carpetas que elegiste\ncopiar. En tu Disk no cambia nada. En una terminal pregunta antes, `--yes` responde por un script y `--dry-run`\nmuestra lo que quitaría sin quitar nada. El token sigue siendo válido en Yandex: solo Yandex puede revocarlo, en los\najustes de Yandex ID.\n\n`ydisk personal session end` olvida solo el token y conserva el perfil. Para quitar la herramienta:"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "amo",
-    "slug": "installation",
-    "reason": "Docs follow-up 2026-11-23. The first paragraph said the CRM lets a program in only through a private integration; amo 0.3.0 adds a one-click sign-in for amoCRM administrators that needs no integration of their own (amo-cli CHANGELOG 0.3.0). The en text is also in WireCatLabs/amo-cli#24 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/amo/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "The CRM keeps\nyour deals, contacts and companies in the cloud, and it lets a program in only through a private integration that an\naccount administrator makes.",
-          "after": "The CRM keeps\nyour deals, contacts and companies in the cloud. An amoCRM administrator lets `amo` in with one click in the browser,\nwith no integration of their own. Kommo, and users who are not administrators, paste a key from a private integration\nthat an administrator makes."
-        }
-      ],
-      "ru": [
-        {
-          "before": "CRM хранит\nваши сделки, контакты и компании в облаке и пускает программу только через приватную интеграцию, которую создает\nадминистратор аккаунта.",
-          "after": "CRM хранит\nваши сделки, контакты и компании в облаке. Администратор amoCRM пускает `amo` одним нажатием в браузере, без своей\nинтеграции. Для Kommo и для пользователей без прав администратора нужен ключ из приватной интеграции, которую создаёт\nадминистратор."
-        }
-      ],
-      "es": [
-        {
-          "before": "El CRM guarda tus negociaciones, contactos y empresas en la nube, y solo deja entrar a un programa a\ntravés de una integración privada que crea un administrador de la cuenta.",
-          "after": "El CRM guarda tus negociaciones, contactos y empresas en la nube. Un administrador de amoCRM deja entrar a `amo` con un\nclic en el navegador, sin una integración propia. Kommo, y los usuarios que no son administradores, pegan una clave de\nuna integración privada que crea un administrador."
         }
       ]
     }

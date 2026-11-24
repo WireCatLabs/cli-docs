@@ -8,8 +8,8 @@ copia, también sin conexión. También mueve y cierra negociaciones por ti, has
 
 Pregunta qué negociaciones están atascadas en "Quote sent", qué cambió en el CRM desde ayer o cómo fue el embudo Sales
 en los últimos 30 días. El agente responde con la negociación, su importe y su responsable. amoCRM y Kommo no tienen
-un servidor MCP propio para estos datos. Necesitas una integración privada en la cuenta, que un administrador crea una
-vez.
+un servidor MCP propio para estos datos. Un administrador de una cuenta de amoCRM inicia sesión con un clic. Kommo, y los usuarios que no son
+administradores, inician sesión con el token de una integración privada que un administrador crea una vez.
 
 **En esta página:**
 
@@ -112,7 +112,7 @@ con `api call`, que ejecutas tú después de permitirlo.
 - **Una copia en tu ordenador.** `sync` pone tus negociaciones y sus clientes en el almacén local de WireCat, el único
   archivo de tu ordenador que comparten todas las herramientas de WireCat. Las listas, el embudo y la búsqueda lo
   leen, también sin conexión.
-- **Inicio de sesión con un token o con la integración.** Los dos se guardan en el llavero del sistema, o en un archivo
+- **Inicio de sesión con un clic, con un token o con la integración.** Todos se guardan en el llavero del sistema, o en un archivo
   privado en un ordenador sin llavero. [Instala y conecta](./installation.md)
 - **Hecho para scripts y agentes.** `--json` da una respuesta en JSON, y un error llega con un código para decidir qué
   hacer. [MCP](./mcp.md)

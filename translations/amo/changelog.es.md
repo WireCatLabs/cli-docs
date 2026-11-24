@@ -4,6 +4,26 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nueva primero.
 
+## 0.4.0 — 24.11.2026
+
+### Cambios — pueden romper scripts
+
+- **`account remove` y la comprobación de un segundo inicio de sesión son ahora los comandos de CRM compartidos de
+  cli-core** (`@wirecat/cli-core` 0.722.0). Los motivos siguen siendo `account-remove.account-shared` y
+  `session.duplicate`, con los mismos detalles, y una prueba (`--dry-run`) sigue solo avisando. El rechazo ahora dice
+  `amoCRM account <host>`.
+- **`account remove --delete-data` se niega cuando amo no sabe qué cuenta tiene otro perfil**
+  (`account-remove.account-unknown`, detalle `profile`): un perfil cuyo inicio de sesión guardado no se puede leer y
+  que `session start` nunca recordó. `--keep-data` sigue eliminando.
+- **`session start` rechaza un perfil llamado `files` o `foreign-contacts`** (`profile.reserved`): todas las cuentas
+  comparten esas carpetas en la carpeta de estado.
+
+### Corregido
+
+- **La guía de instalación cita el rechazo de amoCRM para un usuario que no es administrador.** El inicio de sesión
+  con un clic también muestra su cuenta, pero amoCRM lo rechaza bajo «Разрешить»: «Первичная установка интеграции
+  доступна только администраторам аккаунта». La guía decía que solo mostraba las cuentas donde uno es administrador.
+
 ## 0.3.0 — 23.11.2026
 
 ### Añadido
