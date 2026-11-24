@@ -441,5 +441,20 @@
     "id": "tracker-linear-upkeep",
     "pages": ["linear/configuration.md", "linear/troubleshooting.md"],
     "families": { "linear": ["config", "doctor", "runs", "upgrade"] }
+  },
+  {
+    "id": "messenger-slack-connect",
+    "pages": ["slk/installation.md", "slk/usage.md", "slk/security.md"],
+    "families": { "slk": ["session", "setup", "skill", "mcp"] }
+  },
+  {
+    "id": "messenger-slack-read-write",
+    "pages": ["slk/index.md", "slk/commands.md"],
+    "families": { "slk": ["inbox", "chats", "messages", "contacts", "reactions", "search", "api", "commands"] }
+  },
+  {
+    "id": "messenger-slack-upkeep",
+    "pages": ["slk/configuration.md", "slk/troubleshooting.md"],
+    "families": { "slk": ["config", "doctor", "runs", "upgrade"] }
   }
 ]

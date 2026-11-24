@@ -37,6 +37,20 @@
     }
   },
   {
+    "name": "slk",
+    "displayName": "Slack",
+    "repo": "WireCatLabs/slack-cli",
+    "package": "@wirecat/slack-cli",
+    "lang": "en",
+    "docsRef": "a4f9753e6e5f2215af603dd31a3854b998573044",
+    "distribution": "source",
+    "summary": {
+      "en": "Your Slack channels, DMs and threads for your AI agent: it reads and searches them as you, with a Slack app of your own.",
+      "ru": "Каналы, личные сообщения и ветки Slack для вашего ИИ-агента: он читает и ищет их от вашего имени, через ваше собственное приложение Slack.",
+      "es": "Tus canales, mensajes directos e hilos de Slack para tu agente de IA: los lee y busca como tú, con una app de Slack propia."
+    }
+  },
+  {
     "name": "drive",
     "displayName": "Google Drive",
     "repo": "WireCatLabs/drive-cli",

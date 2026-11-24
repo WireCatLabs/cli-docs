@@ -15,6 +15,7 @@ import { readerGuide } from "./reader-guides"
 import seoCopy from "./seo-copy.json"
 import { appName, siteUrl, tools } from "./shared"
 import { homePath } from "./site-routes"
+import { slackDescriptions } from "./slack-descriptions"
 import { whatsappDescriptions } from "./whatsapp-descriptions"
 import { wordpressDescriptions } from "./wordpress-descriptions"
 import { ydiskDescriptions } from "./ydisk-descriptions"
@@ -152,6 +153,7 @@ export function documentationDescription(lang: string, slugs: string[], authored
     notion: notionDescriptions,
     linear: linearDescriptions,
     pbx: pbxDescriptions,
+    slk: slackDescriptions,
     wa: whatsappDescriptions,
     wordpress: wordpressDescriptions,
     ydisk: ydiskDescriptions,
