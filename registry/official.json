@@ -1,4 +1,5 @@
 {
   "b24": { "id": "bitrix" },
-  "mail": { "id": "email" }
+  "mail": { "id": "email" },
+  "slk": { "mcpPort": 8755 }
 }

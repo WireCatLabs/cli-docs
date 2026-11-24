@@ -41,6 +41,8 @@ what comes next.
   searchable next to your messages, with everyone else in Attio found live.
 - **[HubSpot](./hubspot/index.md)**: your HubSpot deals with their contacts and companies on your computer, with what
   changed since yesterday, searchable next to your messages.
+- **[Slack](./slk/index.md)**: your channels, DMs and threads read and searched by your agent as you, with what is
+  unread in one answer.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
 
@@ -87,7 +89,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 
 ### After that
 
-- **More messengers and meetings**: Microsoft Teams and Slack, for both messages and meetings.
+- **More messengers and meetings**: Microsoft Teams for messages and meetings, and Slack huddles.
 - **GitHub**: pull request descriptions, issues and projects.
 
 ## Later
@@ -115,5 +117,6 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - [Linear roadmap](./linear/roadmap.md)
 - [Memo roadmap](./memo/roadmap.md)
 - [WhatsApp roadmap](./wa/roadmap.md)
+- [Slack roadmap](./slk/roadmap.md)
 
 To suggest a source or feature, open an issue in the tool’s GitHub repository.

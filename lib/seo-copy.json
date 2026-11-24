@@ -56,6 +56,7 @@
       "ydisk": "Yandex Disk MCP server and CLI with offline search",
       "wordpress": "WordPress MCP server and CLI with offline posts",
       "linear": "Linear MCP server and CLI with offline issues",
+      "slk": "Slack MCP server and CLI for your own account",
       "attio": "Attio MCP server and CLI for your CRM",
       "hubspot": "HubSpot MCP server and CLI for your CRM"
     },
@@ -75,6 +76,7 @@
       "ydisk": "Yandex Disk",
       "wordpress": "WordPress",
       "linear": "Linear",
+      "slk": "Slack",
       "attio": "Attio",
       "hubspot": "HubSpot"
     },
@@ -202,6 +204,7 @@
       "ydisk": "Яндекс Диск: MCP-сервер и CLI с поиском без интернета",
       "wordpress": "WordPress: MCP-сервер и CLI с постами без интернета",
       "linear": "Linear: MCP-сервер и CLI с тикетами без интернета",
+      "slk": "Slack: MCP-сервер и CLI для вашего аккаунта",
       "attio": "Attio: MCP-сервер и CLI для CRM",
       "hubspot": "HubSpot: MCP-сервер и CLI для CRM"
     },
@@ -221,6 +224,7 @@
       "ydisk": "Яндекс Диска",
       "wordpress": "WordPress",
       "linear": "Linear",
+      "slk": "Slack",
       "attio": "Attio",
       "hubspot": "HubSpot"
     },
@@ -348,6 +352,7 @@
       "ydisk": "Servidor MCP y CLI de Yandex Disk con búsqueda sin conexión",
       "wordpress": "Servidor MCP y CLI de WordPress con entradas sin conexión",
       "linear": "Servidor MCP y CLI de Linear con incidencias sin conexión",
+      "slk": "Servidor MCP y CLI de Slack para tu propia cuenta",
       "attio": "Servidor MCP y CLI para el CRM de Attio",
       "hubspot": "Servidor MCP y CLI para el CRM de HubSpot"
     },
@@ -367,6 +372,7 @@
       "ydisk": "Yandex Disk",
       "wordpress": "WordPress",
       "linear": "Linear",
+      "slk": "Slack",
       "attio": "Attio",
       "hubspot": "HubSpot"
     },

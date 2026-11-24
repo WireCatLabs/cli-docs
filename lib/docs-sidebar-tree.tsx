@@ -101,6 +101,7 @@ export const sidebarIcons = {
   amo: Handshake,
   wordpress: Newspaper,
   linear: SquareKanban,
+  slk: MessageSquare,
   attio: Handshake,
   hubspot: Handshake,
   asterisk: Server,
@@ -259,7 +260,7 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // place of the group's first tool.
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
-  messengers: { tools: ["tg", "max", "wa"], open: true, icon: MessageSquare },
+  messengers: { tools: ["tg", "max", "wa", "slk"], open: true, icon: MessageSquare },
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
   crm: { tools: ["b24", "amo", "attio", "hubspot"], open: false, icon: Handshake },
@@ -355,7 +356,7 @@ export function unifiedDocsTree(tree: Root, lang = "en"): Root {
     }
     if (node.type !== "page") return node
     const slug =
-      /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|attio|hubspot|pbx|wordpress|linear)\/?$/.test(
+      /\/docs\/(tg|max|wa|drive|notion|gcal|mail|memo|zm|ydisk|b24|amo|attio|hubspot|pbx|wordpress|linear|slk)\/?$/.test(
         node.url,
       )
         ? "index"

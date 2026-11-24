@@ -39,6 +39,7 @@ export const siteOwnedPages: { tool?: string; slug: string; after?: string }[] =
   { tool: "amo", slug: "roadmap", after: "changelog" },
   { tool: "ydisk", slug: "roadmap", after: "changelog" },
   { tool: "linear", slug: "roadmap", after: "changelog" },
+  { tool: "slk", slug: "roadmap", after: "changelog" },
 ]
 export const siteOwnedFor = (tool: string) => siteOwnedPages.filter((page) => !page.tool || page.tool === tool)
 /** A tool may ship its own page of a site page's name in its release; the site's copy wins only while it exists. */

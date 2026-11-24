@@ -43,6 +43,8 @@ decidimos qué viene después.
   búsqueda junto a tus mensajes, y el resto de Attio se busca en directo.
 - **[HubSpot](./hubspot/index.md)**: tus negociaciones de HubSpot con sus contactos y empresas en tu ordenador, con
   lo que cambió desde ayer, en la búsqueda junto a tus mensajes.
+- **[Slack](./slk/index.md)**: tus canales, mensajes directos e hilos, que tu agente lee y busca como tú, con lo no
+  leído en una respuesta.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al
   evento del calendario y guardadas en tu ordenador después de que Google las borre.
 
@@ -95,7 +97,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 
 ### Después
 
-- **Más mensajería y reuniones**: Microsoft Teams y Slack, tanto mensajes como reuniones.
+- **Más mensajería y reuniones**: Microsoft Teams, tanto mensajes como reuniones, y las llamadas huddle de Slack.
 - **GitHub**: descripciones de pull requests, issues y proyectos.
 
 ## Más adelante
@@ -123,5 +125,6 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - [Hoja de ruta de Linear](./linear/roadmap.md)
 - [Hoja de ruta de Memo](./memo/roadmap.md)
 - [Hoja de ruta de WhatsApp](./wa/roadmap.md)
+- [Hoja de ruta de Slack](./slk/roadmap.md)
 
 Para proponer una fuente o función, abre un issue en el repositorio de GitHub de la herramienta.
