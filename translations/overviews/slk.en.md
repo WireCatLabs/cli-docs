@@ -51,9 +51,16 @@ or an admin who approves it.
   workspace for you, not even the only one.
 - **Channels are in the inbox only when you say so.** Slack gives a channel no unread count. So `inbox` reads every
   channel you name in `inbox_channels`, or all of them with `inbox_all_channels true`. Any other channel shows up
-  only when a message mentions you or uses @here, @channel or @everyone.
-- **Replies inside threads and muted channels are not counted.** The inbox does not read thread replies, and Slack
-  does not tell a program which channels you muted.
+  only when a message after your last read mentions you or uses @here, @channel or @everyone. The inbox asks your
+  chats for 15 seconds at most, and its `missing` field says which chats it did not reach and why.
+- **Replies inside threads, user-group mentions and muted channels are not counted.** The inbox does not read
+  thread replies or mentions of a group such as @design. Slack keeps your muted channels in your own settings, and
+  an app's token cannot read them, so a muted channel you list in `inbox_channels` still counts.
+- **Slack's search finds words, not mentions.** Slack's own search does not find a message by @Anna or by her user
+  id, only by the words in it. To see new mentions of you, ask `inbox`.
+- **Reads follow Slack's pace.** History and thread reads go at 50 a minute and other calls at 20 a minute, the limits
+  of Slack's [rate limit tiers](https://docs.slack.dev/apis/web-api/rate-limits/). A first sync of a busy channel
+  takes minutes.
 - **The local copy holds what you sync.** `messages sync` saves a chat on your computer, with the new replies of
   threads up to 14 days old. A message deleted in Slack later stays in the copy, since Slack does not say it was
   deleted.
@@ -103,7 +110,7 @@ slk personal inbox
 
 ## What it does not do yet
 
-- The inbox leaves out replies inside threads and mentions of a user group.
+- The inbox leaves out replies inside threads, mentions of a user group and the muted mark of a channel.
 - `chats list` shows no unread counts. Ask `inbox` for them.
 - It signs in only with the token of your own Slack app, not through the browser.
 

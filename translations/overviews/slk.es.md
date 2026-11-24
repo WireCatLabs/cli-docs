@@ -51,9 +51,18 @@ espacio de trabajo, o un administrador que la apruebe.
   comando elige un espacio de trabajo por ti, ni siquiera el único.
 - **Los canales entran en la bandeja solo si tú lo dices.** Slack no da a un canal un contador de no leídos. Por eso
   `inbox` lee cada canal que nombras en `inbox_channels`, o todos con `inbox_all_channels true`. Cualquier otro canal
-  aparece solo cuando un mensaje te menciona o usa @here, @channel o @everyone.
-- **No cuenta las respuestas dentro de hilos ni los canales silenciados.** La bandeja no lee respuestas en hilos, y
-  Slack no le dice a un programa qué canales silenciaste.
+  aparece solo cuando un mensaje posterior a tu última lectura te menciona o usa @here, @channel o @everyone. La
+  bandeja pregunta a tus chats durante 15 segundos como mucho, y su campo `missing` dice a qué chats no llegó y por
+  qué.
+- **No cuenta las respuestas dentro de hilos, las menciones a grupos ni los canales silenciados.** La bandeja no lee
+  respuestas en hilos ni menciones a un grupo como @design. Slack guarda tus canales silenciados en tu configuración
+  personal, y el token de una app no puede leerla, así que un canal silenciado que nombras en `inbox_channels` sigue
+  contando.
+- **La búsqueda de Slack encuentra palabras, no menciones.** La búsqueda propia de Slack no encuentra un mensaje por
+  @Ana ni por su id de usuario, solo por las palabras que contiene. Para ver las menciones nuevas, pregunta a `inbox`.
+- **Las lecturas siguen el ritmo de Slack.** El historial y los hilos se leen a 50 llamadas por minuto y el resto a
+  20 por minuto, los límites de los [niveles de Slack](https://docs.slack.dev/apis/web-api/rate-limits/). La primera
+  sincronización de un canal con mucho movimiento tarda minutos.
 - **La copia local guarda lo que sincronizas.** `messages sync` guarda un chat en tu ordenador, con las respuestas
   nuevas de hilos de hasta 14 días. Un mensaje que luego se borra en Slack sigue en la copia, porque Slack no avisa
   de que se borró.
@@ -103,7 +112,8 @@ slk personal inbox
 
 ## Lo que todavía no hace
 
-- La bandeja deja fuera las respuestas dentro de hilos y las menciones a un grupo de usuarios.
+- La bandeja deja fuera las respuestas dentro de hilos, las menciones a un grupo de usuarios y la marca de canal
+  silenciado.
 - `chats list` no muestra contadores de no leídos. Pídeselos a `inbox`.
 - Solo inicia sesión con el token de tu propia app de Slack, no desde el navegador.
 
