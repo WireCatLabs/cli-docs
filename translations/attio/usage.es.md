@@ -76,12 +76,32 @@ en su ayuda: `attio help deals list`.
 Attio tiene un solo embudo de negociaciones. Sus etapas son los estados del atributo **Stage** de la negociación, en
 el orden de Attio:
 
-- **Ganada** es la etapa que Attio celebra cuando una negociación llega a ella.
-- **Perdida** es una etapa cuyo título empieza por "Lost", como en un espacio de trabajo nuevo de Attio.
+- **Ganada** es la etapa que Attio celebra cuando una negociación llega a ella, o una con la palabra "won" en su
+  título.
+- **Perdida** es una etapa con la palabra "lost" en su título, como en un espacio de trabajo nuevo de Attio.
 - Cualquier otra etapa está abierta.
 
-Si cambiaste el nombre de tu etapa de perdidas por otro, sus negociaciones cuentan como abiertas. Deja "Lost" al
-principio de su título.
+Si cambiaste el nombre de tu etapa de perdidas por otro, sus negociaciones cuentan como abiertas. Deja la palabra
+"Lost" en su título.
+
+### Notas y tareas de una negociación
+
+Con `activities` activado, cada sincronización copia también las notas y tareas de tu espacio de trabajo que cuelgan
+de las negociaciones, personas y empresas que guarda. `deals show` las muestra, primero las tareas abiertas, y
+`search all` encuentra una negociación por las palabras de sus notas. La clave del ajuste nombra el espacio de trabajo
+por su id, el `id` que imprime `session status --check --json`:
+
+```sh
+attio work config set crm.attio:<workspace id>.activities on
+attio work sync
+attio work deals show deal:12
+```
+
+Está desactivado hasta que lo activas, y solo tú puedes hacerlo: a un agente se le niega. Las notas y tareas guardan
+lo que los clientes escribieron y dijeron. Attio no puede listar solo las notas cambiadas desde un momento, así que
+cada sincronización las vuelve a leer todas. Una nota o tarea borrada en Attio se queda en la copia. El token necesita
+dos ámbitos más, `note:read` y `task:read`. Sin uno de ellos, la sincronización copia el resto y dice qué lista no pudo
+leer.
 
 ## El embudo
 

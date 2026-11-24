@@ -2890,120 +2890,6 @@
     }
   },
   {
-    "tool": "attio",
-    "slug": "installation",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain and drops \"this page walks you through it\" (AUTHORING, mandatory opening order). The Desktop steps name the buttons of wirecat-desktop src/features/tools/messages.tsx (Tools, Install, Manage, Sign in here, per language). Attio's Scopes screen shows labels, not ids, and its button reads \"+ New access token\" (wirecat-desktop src/features/signin/messages-plan.ts, the Attio steps). The en text is also in WireCatLabs/attio-cli#17 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/attio/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Get `attio` running on your computer and connected to your Attio workspace in about five minutes. Attio lets a\nprogram in through an access token that a workspace admin makes, and this page walks you through it.",
-          "after": "Connect your Attio workspace once, and from then on your AI agent tells you where every deal stands without you\nopening Attio. Attio lets a program in only through an access token that a workspace admin makes. Making the token,\ninstalling `attio` and signing in take about five minutes."
-        },
-        {
-          "before": "Add Attio from the tool list, then paste the access token when it asks.\n[Make an access token in Attio](#make-an-access-token-in-attio) shows how to get one.",
-          "after": "1. On the **Tools** page, click **Install** on the Attio row.\n2. Click **Manage**, type an account name, such as `work`, and click **Sign in here**.\n3. Paste the access token when it asks. [Make an access token in Attio](#make-an-access-token-in-attio) shows how\n   to get one."
-        },
-        {
-          "before": "3. Click **New access token** and give it",
-          "after": "3. Click **+ New access token** and give it"
-        },
-        {
-          "before": "4. Under the scopes, set these three to read:",
-          "after": "4. Under **Scopes**, give it read access to records, object configuration and user management:"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Установите `attio` на свой компьютер и подключите его к своему пространству Attio примерно за пять минут. Attio\nпускает программу по токену доступа, который создает администратор пространства, и эта страница проведет вас по\nшагам.",
-          "after": "Подключите пространство Attio один раз, и дальше ИИ-агент говорит, где стоит каждая сделка, а вам не нужно\nоткрывать Attio. Attio пускает программу только по токену доступа, который создает администратор пространства.\nСоздать токен, установить `attio` и войти можно примерно за пять минут."
-        },
-        {
-          "before": "Добавьте Attio из списка инструментов и вставьте токен доступа, когда он попросит.\n[Создайте токен доступа в Attio](#make-an-access-token-in-attio) показывает, как его получить.",
-          "after": "1. На странице **Инструменты** нажмите **Установить** в строке Attio.\n2. Нажмите **Управление**, введите имя аккаунта, например `work`, и нажмите **Войти здесь**.\n3. Вставьте токен доступа, когда окно попросит. Как его получить, показано в разделе\n   [создайте токен доступа в Attio](#make-an-access-token-in-attio)."
-        },
-        {
-          "before": "3. Нажмите **New access token** и дайте",
-          "after": "3. Нажмите **+ New access token** и дайте"
-        },
-        {
-          "before": "4. Дайте токену чтение по этим правам:",
-          "after": "4. В разделе **Scopes** дайте право чтения записей, настроек объектов и пользователей:"
-        }
-      ],
-      "es": [
-        {
-          "before": "Pon `attio` en marcha en tu ordenador y conéctalo a tu espacio de trabajo de Attio en unos cinco minutos. Attio deja\nentrar a un programa a través de un token de acceso que crea un administrador del espacio de trabajo, y esta página\nte guía paso a paso.",
-          "after": "Conecta tu espacio de trabajo de Attio una vez y, desde entonces, tu agente de IA te dice en qué punto está cada\nnegociación sin que abras Attio. Attio solo deja entrar a un programa con un token de acceso que crea un\nadministrador del espacio de trabajo. Crear el token, instalar `attio` e iniciar sesión lleva unos cinco minutos."
-        },
-        {
-          "before": "Añade Attio desde la lista de herramientas y pega el token de acceso cuando te lo pida.\n[Crea un token de acceso en Attio](#make-an-access-token-in-attio) muestra cómo conseguir uno.",
-          "after": "1. En la página **Herramientas**, pulsa **Instalar** en la fila de Attio.\n2. Pulsa **Gestionar**, escribe un nombre de cuenta, como `work`, y pulsa **Iniciar sesión aquí**.\n3. Pega el token de acceso cuando te lo pida. [Crea un token de acceso en Attio](#make-an-access-token-in-attio)\n   muestra cómo conseguir uno."
-        },
-        {
-          "before": "3. Pulsa **New access token** y dale",
-          "after": "3. Pulsa **+ New access token** y dale"
-        },
-        {
-          "before": "4. En los ámbitos, pon estos tres en lectura:",
-          "after": "4. En **Scopes**, dale lectura de registros, configuración de objetos y gestión de usuarios:"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "attio",
-    "slug": "index",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The Desktop way in names the buttons of wirecat-desktop src/features/tools/messages.tsx (Tools, Install, Manage). The en text is also in WireCatLabs/attio-cli#17 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/attio/index.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "In WireCat Desktop, add Attio from the tool list and paste the token when it asks.",
-          "after": "In WireCat Desktop, install Attio on the **Tools** page and sign in under **Manage**, as\n[install](./installation.md#in-wirecat-desktop) shows."
-        }
-      ],
-      "ru": [
-        {
-          "before": "В WireCat Desktop добавьте Attio из списка инструментов и вставьте токен, когда он попросит.",
-          "after": "В WireCat Desktop установите Attio на странице **Инструменты** и войдите в разделе **Управление**, как\nпоказано в [установке](./installation.md#in-wirecat-desktop)."
-        }
-      ],
-      "es": [
-        {
-          "before": "En WireCat Desktop, añade Attio desde la lista de herramientas y pega el token cuando te lo pida.",
-          "after": "En WireCat Desktop, instala Attio en la página **Herramientas** e inicia sesión en **Gestionar**, como\nmuestra [la instalación](./installation.md#in-wirecat-desktop)."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "attio",
-    "slug": "configuration",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The CRM list commands (deals, people, organizations, users, fields) give --limit a default of 50 (cli-core 0.708.0 dist/crm/cli/index.js:328, records.js), and a flag with a value wins over the config limit (dist/cli/settings.js:361), so `limit` does not change those lists. The en text is also in WireCatLabs/attio-cli#17 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/attio/configuration.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "| `limit` | `20` | How many items a list shows at once. |",
-          "after": "| `limit` | `20` | How many items a command shows at once when it has no `--limit` of its own. The lists of deals, people and companies show 50; their `--limit` changes that. |"
-        }
-      ],
-      "ru": [
-        {
-          "before": "| `limit` | `20` | Сколько записей список показывает за раз. |",
-          "after": "| `limit` | `20` | Сколько записей команда показывает за раз, если у нее нет своего `--limit`. Списки сделок, людей и компаний показывают 50; это меняет их `--limit`. |"
-        }
-      ],
-      "es": [
-        {
-          "before": "| `limit` | `20` | Cuántos elementos muestra una lista de una vez. |",
-          "after": "| `limit` | `20` | Cuántos elementos muestra un comando de una vez cuando no tiene su propio `--limit`. Las listas de negociaciones, personas y empresas muestran 50; su `--limit` lo cambia. |"
-        }
-      ]
-    }
-  },
-  {
     "tool": "wordpress",
     "slug": "index",
     "phase": "before-translation",
@@ -3787,6 +3673,70 @@
         {
           "before": "`db_ssh_port` cambia el puerto SSH (22).",
           "after": "El usuario SSH no necesita un intérprete de comandos. Créalo antes del primer `session start`, en la centralita,\ncomo root:\n\n1. Crea el usuario sin intérprete y dale tu clave pública:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Déjale reenviar solo hasta la base de datos. Añade esto al final de `/etc/ssh/sshd_config`, con el `db_host` y el\n   `db_port` que pusiste (`127.0.0.1:5432` para PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Comprueba el archivo con `sshd -t` y recarga el servidor SSH con `systemctl reload sshd`.\n\n`pbx` solo pide al servidor SSH que reenvíe hasta la base de datos, así que este usuario no puede hacer nada más en la\ncentralita.\n\n`db_ssh_port` cambia el puerto SSH (22)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "attio",
+    "slug": "index",
+    "phase": "before-translation",
+    "reason": "Pin bump to v0.4.1, 2026-11-24. The deal and person commands write since attio 0.3.0 (attio-cli CHANGELOG 0.3.0), and docs/permissions.md at v0.4.1 gives deals.*, people.* and api writes `ask` by default; this page still says they only read. At the next pin bump, move this entry's es/ru replacements into translations/attio/index.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back. Companies are not written by the CRM commands: an Attio company has no e-mail or phone attribute (CHANGELOG 0.3.0).",
+    "replacements": {
+      "en": [
+        {
+          "before": "The CRM commands only read. Each command",
+          "after": "Every CRM write asks you first in a terminal. Each command"
+        },
+        {
+          "before": "- Deals are read and never changed by the deal commands. Moving or closing a deal is on the [roadmap](./roadmap.md).",
+          "after": "- The CRM commands do not write companies: an Attio company has no e-mail or phone attribute. `attio work api`\n  changes them."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Команды CRM только читают. У каждой",
+          "after": "Любая запись команд CRM сначала спрашивает вас в терминале. У каждой"
+        },
+        {
+          "before": "- Команды сделок только читают сделки и никогда их не меняют. Перемещение и закрытие сделки есть в\n  [планах развития](./roadmap.md).",
+          "after": "- Команды CRM не записывают компании: у компании в Attio нет атрибута почты или телефона. Их меняет\n  `attio work api`."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los comandos del CRM solo leen. Cada comando",
+          "after": "Cada escritura del CRM te pregunta antes en una terminal. Cada comando"
+        },
+        {
+          "before": "- Los comandos de negociaciones leen las negociaciones y nunca las cambian. Mover o cerrar una negociación está en las\n  [próximas mejoras](./roadmap.md).",
+          "after": "- Los comandos del CRM no escriben empresas: una empresa de Attio no tiene atributo de correo ni de teléfono.\n  `attio work api` las cambia."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "attio",
+    "slug": "mcp",
+    "phase": "before-translation",
+    "reason": "Pin bump to v0.4.1, 2026-11-24. The deal and person commands write since attio 0.3.0 (attio-cli CHANGELOG 0.3.0), and docs/permissions.md at v0.4.1 gives deals.*, people.* and api writes `ask` by default; this page still says they only read. At the next pin bump, move this entry's es/ru replacements into translations/attio/mcp.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back. docs/permissions.md: `ask` runs over MCP, so every write goes ahead there, not only deletes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The deal, people and company commands only read. The `api` group reaches every Attio operation, and its writes are\n`allow` by default, its deletes `ask`. Over MCP nobody is at a terminal to answer `ask`, so a delete goes ahead too.",
+          "after": "The deal and people commands write, and the `api` group reaches every Attio operation. Their writes and deletes are\n`ask` by default. Over MCP nobody is at a terminal to answer `ask`, so every write and delete goes ahead."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Команды сделок, людей и компаний только читают. Группа `api` достает до любой операции Attio, и ее записи по\nумолчанию стоят на `allow`, а удаления на `ask`. Через MCP в терминале никого нет, чтобы ответить на `ask`, поэтому\nудаление тоже выполняется.",
+          "after": "Команды сделок и людей пишут, а группа `api` достает до любой операции Attio. Их записи и удаления по умолчанию\nстоят на `ask`. Через MCP в терминале никого нет, чтобы ответить на `ask`, поэтому любая запись и любое удаление\nвыполняются."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los comandos de negociaciones, personas y empresas solo leen. El grupo `api` llega a cada operación de Attio, y sus\nescrituras están en `allow` por defecto, sus borrados en `ask`. Por MCP no hay nadie en una terminal para responder a\n`ask`, así que un borrado también sigue adelante.",
+          "after": "Los comandos de negociaciones y personas escriben, y el grupo `api` llega a cada operación de Attio. Sus escrituras\ny borrados están en `ask` por defecto. Por MCP no hay nadie en una terminal para responder a `ask`, así que toda\nescritura y todo borrado siguen adelante."
         }
       ]
     }

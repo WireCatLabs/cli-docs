@@ -32,7 +32,7 @@ Los más habituales:
 
 | Ajuste | Por defecto | Qué hace |
 |---|---|---|
-| `limit` | `20` | Cuántos elementos muestra una lista de una vez. |
+| `limit` | `20` | Cuántos elementos muestra un comando de una vez cuando no tiene su propio `--limit`. Las listas de negociaciones, personas y empresas muestran 50; su `--limit` lo cambia. |
 | `permissions` | ninguno | Qué puede hacer cada comando. Mira [Permisos](#permissions). |
 | `record` | `true` | Guarda cada ejecución. `false` guarda solo las ejecuciones fallidas. |
 | `record_input` | `true` | Guarda las palabras que escribiste en una ejecución. |

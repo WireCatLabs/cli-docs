@@ -71,7 +71,7 @@ attio commands info [path]
 
 ## `attio session`
 
-keep this profile's Attio token in the OS keyring
+keep this profile's Attio API token in the OS keyring
 
 ### `attio session start`
 
@@ -2288,6 +2288,120 @@ attio deals show <deal>
 
 **Example:** `attio work deals show deal:12`
 
+### `attio deals create`
+
+make a deal in the CRM, then store the CRM's copy of it
+
+**Changes something in the service.**
+
+```sh
+attio deals create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the deal's title. |
+| `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
+| `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
+| `--amount <decimal>` | the expected sum, such as 1500.50, with --currency. |
+| `--currency <code>` | an ISO 4217 code, such as EUR. |
+| `--close-date <date>` | the day it is expected to close, YYYY-MM-DD. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals create
+
+**Example:** `attio work deals create --title "Example kitchen" --amount 15000 --currency EUR`, `attio work deals create --title "Example office" --pipeline Sales --stage "Quote sent" --field Source=web`
+
+### `attio deals update`
+
+change a deal in the CRM; what is left out keeps its value; the CRM's copy is stored again
+
+**Changes something in the service.**
+
+```sh
+attio deals update <deal> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the deal's title. |
+| `--pipeline <pipeline>` | pipeline:<id>, or a name only one of the CRM's pipelines has. |
+| `--stage <stage>` | a stage of its pipeline, by the CRM's id or name; checks the move key too, and the close key for a won or lost stage. |
+| `--amount <decimal>` | the expected sum, such as 1500.50, with --currency. |
+| `--currency <code>` | an ISO 4217 code, such as EUR. |
+| `--close-date <date>` | the day it is expected to close, YYYY-MM-DD. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals update
+
+**Example:** `attio work deals update deal:12 --amount 18000`, `attio work deals update deal:12 --field Source=`
+
+### `attio deals move`
+
+move a deal to another stage of its pipeline; a won or lost stage checks the close key too
+
+**Changes something in the service.**
+
+```sh
+attio deals move <deal> <stage>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+| `stage` | required | the stage, by the CRM's id or a name only one stage of its pipeline has; or a stage:<id>, of its pipeline or of the owner's base set, which moves it to the one stage of its pipeline mapped there and refuses several (with the candidates) or none. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals move
+
+**Example:** `attio work deals move deal:12 "Quote sent"`, `attio work deals move deal:12 stage:5`
+
+### `attio deals close`
+
+mark a deal won or lost, the CRM's own way
+
+**Changes something in the service.**
+
+```sh
+attio deals close <deal> <outcome> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+| `outcome` | required | how it ended. One of: `won`, `lost`. |
+
+| Option | What it does |
+|---|---|
+| `--reason <text>` | why, in a few words; kept with it. |
+
+**Returns:** crm write — operation_id, untrusted, deal, lead; every field: attio commands info deals close
+
+**Example:** `attio work deals close deal:12 won`, `attio work deals close deal:12 lost --reason "Example: chose another supplier"`
+
+### `attio deals delete`
+
+delete a deal in the CRM; asks first unless allowed
+
+**Changes something in the service.**
+
+```sh
+attio deals delete <deal>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `deal` | required | deal:<id>, as a list shows it. |
+
+**Returns:** crm removal — operation_id, ref, removed; every field: attio commands info deals delete
+
+**Example:** `attio work deals delete deal:12`
+
 ## `attio pipelines`
 
 the CRM's pipelines and their stages, as last synced
@@ -2385,11 +2499,65 @@ attio people show <person>
 
 | Argument | | What it is |
 |---|---|---|
-| `person` | required | the CRM's id of the person, as list prints it, or its exact name. |
+| `person` | required | the CRM's id of the person, as list prints it, the person:<id> a deal gives, or its exact name. |
 
 **Returns:** crm person — id, name, first_name, last_name, position, organization_ids, assigned_to, created_at, and 6 more; every field: attio commands info people show
 
 **Example:** `attio work people show 42`, `attio work people show "Anna Example" --json`
+
+### `attio people create`
+
+make a person in the CRM, then store the CRM's copy of it
+
+**Changes something in the service.**
+
+```sh
+attio people create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--name <name>` | the whole name. |
+| `--first-name <name>` | the first name; empty clears it. |
+| `--last-name <name>` | the last name; empty clears it. |
+| `--position <title>` | the job title; empty clears it. |
+| `--email <address>` | an e-mail address to give it; repeat it for more; replaces its list, and an empty one clears it. |
+| `--phone <phone>` | a phone number to give it, in international form starting with +; repeat it for more; replaces its list, and an empty one clears it. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm record write — operation_id, stored, untrusted, removed, person, organization; every field: attio commands info people create
+
+**Example:** `attio work people create --first-name Anna --last-name Example --position Buyer`
+
+### `attio people update`
+
+change a person in the CRM; what is left out keeps its value; the CRM's copy is stored again
+
+**Changes something in the service.**
+
+```sh
+attio people update <person> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `person` | required | the CRM's id of the person, as list prints it. |
+
+| Option | What it does |
+|---|---|
+| `--name <name>` | the whole name. |
+| `--first-name <name>` | the first name; empty clears it. |
+| `--last-name <name>` | the last name; empty clears it. |
+| `--position <title>` | the job title; empty clears it. |
+| `--email <address>` | an e-mail address to give it; repeat it for more; replaces its list, and an empty one clears it. |
+| `--phone <phone>` | a phone number to give it, in international form starting with +; repeat it for more; replaces its list, and an empty one clears it. |
+| `--owner <user>` | the CRM user it is assigned to; anyone but the sign-in's own user checks crm.assign-others. |
+| `--field <key=value>` | one of the CRM's own fields, by its code or label as `fields list` prints them, and its value; a list field takes its option's label or id; repeat it for more fields, or for each value of a multiple field; an empty value clears it. Default: ``. |
+
+**Returns:** crm record write — operation_id, stored, untrusted, removed, person, organization; every field: attio commands info people update
+
+**Example:** `attio work people update 42 --position Buyer`
 
 ## `attio organizations`
 
@@ -2427,7 +2595,7 @@ attio organizations show <organization>
 
 | Argument | | What it is |
 |---|---|---|
-| `organization` | required | the CRM's id of the organization, as list prints it, or its exact name. |
+| `organization` | required | the CRM's id of the organization, as list prints it, the organization:<id> a deal gives, or its exact name. |
 
 **Returns:** crm organization — id, name, type, own, person_ids, assigned_to, created_at, updated_at, and 5 more; every field: attio commands info organizations show
 
@@ -2552,9 +2720,214 @@ attio search all <query> [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: attio commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 19 more; every field: attio commands info search all
 
 **Example:** `attio work search all Example LLC`, `attio work search all website --only crm --json`
+
+## `attio account`
+
+this profile on this computer
+
+### `attio account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something on this computer only.**
+
+```sh
+attio account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: attio commands info account remove
+
+**Example:** `attio personal account remove --keep-data --dry-run`, `attio personal account remove --delete-data --yes`
+
+## `attio schedule`
+
+run a attio command or an agent later or on a timer (systemd, launchd, Task Scheduler); an agent cannot send
+
+### `attio schedule command`
+
+run attio <args…> on a timer — reads save what they read, so this is how the store stays current
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule command <name> <args> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `args` | required | the attio command after its name, e.g. -- doctor. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+
+**Example:** `attio personal schedule command health --every 1h -- doctor`, `attio personal schedule command morning-check --at 08:00 -- doctor`
+
+### `attio schedule agent`
+
+start an agent (claude, codex, gemini, cursor, opencode, openclaw, hermes, grok, kimi) with a prompt on a timer; it runs with WCATTIO_READ_ONLY=1, so it reads and drafts and cannot send, and its own limits hold it to these CLIs' commands; an agent with no such limit is refused (`schedule agents list` says which) — its answer is kept and you are notified
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule agent <name> <harness> <prompt> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | lowercase letters, digits and dashes. |
+| `harness` | required | the agent to start. One of: `claude`, `codex`, `gemini`, `cursor`, `opencode`, `openclaw`, `hermes`, `grok`, `kimi`. |
+| `prompt` | required | what to do, e.g. "say what needs attention in this installation: attio doctor". |
+
+| Option | What it does |
+|---|---|
+| `--model <model>` | the model it runs on: an alias such as sonnet, or a model id; "" for the agent's own default (default sonnet for claude, the agent's own for the others, or the config file's). |
+| `--max-cost <usd>` | claude only: stop a run that costs more than this, in US dollars. |
+| `--allow-dangerous` | start an agent its own limits cannot hold to these CLIs' commands, where `schedule agents list` says allowed_with_ack: it may then run any program inside its sandbox. |
+| `--max-cost-per-day <usd>` | claude only, as the others report no cost: start no run for the rest of the day once its runs cost this much, in US dollars; 0 for no cap (default 5, or the config file's). |
+| `--every <duration>` | repeat: 30m, 2h, 1d. |
+| `--at <HH:MM>` | every day at this local time; 'mon 09:00' once a week, 'mon,fri 09:00' on several days (mon, tue, wed, thu, fri, sat, sun); repeat it for more times. |
+| `--at-time <time>` | one run: 30m, 2d from now, or an ISO time; the schedule removes itself after it. |
+| `--notify-on <when>` | desktop notice after a run (default failures for an agent that repeats with --every, else always). One of: `always`, `failures`, `never`. |
+| `--deliver-to <route>` | also send the result, when --notify-on says so, by the owner's own tg or mail: telegram-bot:<profile>/<chat id or user:id>, or email:<profile>/<address>; repeat it for more. |
+
+**Example:** `attio personal schedule agent review claude "review what came in overnight and draft replies" --at 08:30`, `attio personal schedule agent triage gemini "list what needs an answer today" --every 2h`, `attio personal schedule agent weekly claude "review the week's open threads" --at 09:00 --model opus`
+
+### `attio schedule list`
+
+the schedules, when they run and how their last run went
+
+```sh
+attio schedule list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** scheduled job — name, kind, when, last, paused, notify, deliver_to, harness, and 4 more; every field: attio commands info schedule list
+
+**Example:** `attio personal schedule list`, `attio personal schedule list kind:agent`
+
+### `attio schedule agents`
+
+the coding agents an agent schedule may start
+
+#### `attio schedule agents list`
+
+the agents a schedule may start, and which are on PATH here
+
+```sh
+attio schedule agents list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+**Returns:** schedule harness — id, name, programs, reports_cost, restricted, restricted_reason, allowed_with_ack, installed, and 1 more; every field: attio commands info schedule agents list
+
+**Example:** `attio personal schedule agents list`, `attio personal schedule agents list --json`
+
+### `attio schedule run`
+
+run a schedule now, as its timer would, and wait for it; a paused one runs too
+
+**Changes something in the service.**
+
+```sh
+attio schedule run <name> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+| Option | What it does |
+|---|---|
+| `--no-notify` | keep the result here: send it along none of its routes. |
+| `--deliver-to <route>` | send it along only this one of its own routes; repeat it for more. |
+
+**Example:** `attio personal schedule run health`
+
+### `attio schedule remove`
+
+stop a schedule and remove its timer; its past output stays
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule remove <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `attio personal schedule remove health`
+
+### `attio schedule pause`
+
+take a schedule off its timer and keep it; run runs it, resume puts it back
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule pause <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `attio personal schedule pause health`
+
+### `attio schedule resume`
+
+put a paused schedule back on its timer
+
+**Changes something on this computer only.**
+
+```sh
+attio schedule resume <name>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `name` | required | the schedule's name, as `schedule list` shows it. |
+
+**Example:** `attio personal schedule resume health`
+
+### `attio schedule exec`
+
+what a timer runs, given the schedule's file; to run one by hand, use run
+
+**Changes something in the service.**
+
+```sh
+attio schedule exec <file> [seal]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | the schedule's schedule.json in the state folder, as the timer passes it. |
+| `seal` | optional | the file's SHA-256 as it was saved, which the timer passes; a file that differs does not run. |
+
+**Example:** `attio personal schedule exec ~/.local/share/attio-cli/schedules/health/schedule.json`
 
 ## `attio doctor`
 
