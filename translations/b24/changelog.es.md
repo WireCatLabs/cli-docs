@@ -4,6 +4,78 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.27.0 — 24.11.2026
+
+### Añadido
+
+- **Archivos de clientes: `files list`, `files download` y `files sync`.** `files list --deal 12` (o `--lead`,
+  `--person`, `--organization`) lee del portal los archivos de un registro: los archivos de sus campos de archivo, los
+  documentos creados con plantillas (el PDF cuando el portal lo ha creado, si no el archivo de Word) y los archivos de
+  Drive adjuntos a sus actividades y a los comentarios de su línea de tiempo. `files download <id>` guarda uno en la
+  carpeta de estado y lee su texto, que luego encuentra `search all`. Un origen que el webhook no puede leer, como los
+  archivos de actividades sin el ámbito `disk`, se nombra en `issues` y los demás se siguen listando. Cada descarga
+  pide al portal un enlace nuevo y lo descarga solo del portal; ningún enlace llega al almacén ni a una respuesta.
+  `files: deny` también vale para `api call` de los métodos con los que leen estos comandos. Consulta
+  [Archivos de clientes](./usage.md#client-files).
+
+### Cambios — pueden romper scripts
+
+- **`api call` oculta más enlaces.** Ahora usa la regla de cli-core: además de las claves de descarga y las rutas del
+  portal con token, cualquier enlace que lleve `auth=`, `access_token=`, `api_token=` o `X-Amz-Signature=` se imprime
+  como `[link removed]`, sea cual sea su dirección. El `ERROR_NOT_FOUND` de Drive (como `api call disk.file.get` de un
+  archivo que no existe) ahora es `not_found`, código de salida 6, no `validation_error`.
+- **`search all` puede devolver un nuevo tipo de resultado, `crm_file`**, el texto de un archivo descargado. Un script
+  que se ramifica por `kind` lo recibe. Llega con `@wirecat/cli-core` 0.710.0, cuyo almacén pasa a la versión 69 (solo
+  hacia delante).
+- **`account remove --delete-data` se niega con `account-remove.account-shared`, detalle `account`.** Antes era
+  `account-remove.portal-shared` con el detalle `portal`. El comando ahora es el comando CRM compartido de cli-core
+  (`@wirecat/cli-core` 0.722.0). Sigue negándose mientras otro perfil de este ordenador lee el mismo portal, aunque su
+  sesión haya terminado. Con `--dry-run` ahora avisa y lista lo que se eliminaría, donde antes fallaba.
+- **`account remove --delete-data` se niega cuando b24 no puede saber qué portal tiene otro perfil**
+  (`account-remove.account-unknown`, detalle `profile`): un perfil cuyo webhook guardado no se puede leer y que
+  `session start` nunca recordó. `--keep-data` sigue eliminando.
+- **`session start` rechaza con el texto común de cli-core un segundo inicio de sesión en el mismo portal y con el mismo
+  usuario.** El motivo sigue siendo `session.duplicate`; su detalle `portal` ahora es `account`, y el mensaje dice que
+  termines el otro perfil con `b24 <profile> session end`. Un inicio de sesión con webhook en un perfil llamado
+  `files` o `foreign-contacts`, carpetas que comparten todos los portales, se rechaza con `profile.reserved`.
+- **Un servidor MCP ya no ofrece `schedule exec`, y este solo ejecuta un archivo de programación de la propia carpeta
+  de programaciones de b24** (`@wirecat/cli-core` 0.739.0). Un enlace simbólico o `..` que lleva a otro sitio se rechaza con
+  `schedule.outside-folder`. Los temporizadores instalados siguen funcionando. Un agente ejecuta una programación
+  guardada con `schedule run <name>`.
+
+### Corregido
+
+- **Una negociación que entra en una etapa en el mismo segundo en que se pusieron sus reglas `stage-tasks` ahora abre
+  su tarea** (`@wirecat/cli-core` 0.739.0). El historial de etapas del portal guarda segundos enteros, así que ese
+  movimiento se leía como hecho antes de las reglas y no abría ninguna.
+
+## 0.26.0 — 18.11.2026
+
+### Cambios — pueden romper scripts
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del ordenador sin que el dueño
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: una CLI nunca elige una cuenta por el dueño
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)). Atención: un cliente configurado con la entrada antigua conserva `--profiles all` hasta que se configure de nuevo;
+  un servidor añadido a mano o con `mcp config` no cambia.
+
+### Corregido
+
+- **Grabaciones que guarda tu proveedor de telefonía.** Un portal que trabaja con un proveedor de telefonía externo,
+  como una centralita en la nube de Beeline, enlaza cada grabación al servidor del proveedor. b24 rechazaba ese enlace,
+  así que `meetings transcribe` no convertía en texto ninguna de esas llamadas. Ahora sigue el enlace por https a una
+  dirección de internet pública, nunca a este ordenador ni a una red local, y no envía con él nada de tu inicio de
+  sesión en Bitrix24. Consulta [Llamadas](./calls.md#recordings).
+- **`meetings transcribe --max-meetings` cuenta las llamadas con grabación.** Una llamada sin grabación en el portal
+  sigue apareciendo en `failed`, pero ya no gasta el límite. Antes, cuando las llamadas más recientes no tenían
+  grabación, `--max-meetings 1` no convertía nada en texto.
+- **Una grabación enviada sin tipo de audio.** El servidor de un proveedor de telefonía, como una centralita en la nube
+  de Beeline, envía una grabación como `application/octet-stream` y nombra el archivo, `call.mp3`, en su
+  `Content-Disposition`. b24 la rechazaba como si no fuera audio (`recording.not-audio`), así que `meetings transcribe`
+  no convertía en texto ninguna de esas llamadas. Ahora toma el formato del nombre del archivo cuando el tipo no
+  nombra ninguno.
+
 ## 0.25.0 — 17.11.2026
 
 ### Cambios — pueden romper scripts
@@ -367,13 +439,13 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ### Corregido
 
-- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.25.0/README.md)
+- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.27.0/README.md)
   ahora elige de quién copiar negociaciones y prospectos antes del primer `sync`, que hasta entonces no copia nada.
   Ya no dice que un administrador copia todo el CRM, dice que por MCP un borrado con `ask` se ejecuta, y nombra
   `wcat-b24` para cuando se encuentra primero el comando `b24` de otro paquete.
   [Solución de problemas](./troubleshooting.md) incluye el error "no CRM user is chosen".
 - **Por MCP, `ask` no detiene una escritura.** El
-  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.25.0/README.md), [seguridad](./security.md) y la
+  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.27.0/README.md), [seguridad](./security.md) y la
   primera pantalla recomendaban poner `deals.move` en `ask` frente a los robots del portal, pero eso solo detiene un
   movimiento en una terminal. Por MCP nadie responde, así que la escritura sigue adelante. Ahora dicen que se ponga
   `readonly` o `deny`, o que se active la aprobación en el cliente del agente.

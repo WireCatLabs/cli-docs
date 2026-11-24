@@ -100,8 +100,11 @@ Cada grabación se guarda en la carpeta de estado de b24, en `recordings/<profil
 `meetings show` da su ruta como `local_path`, y WireCat Desktop la reproduce. Una grabación puede ocupar unos
 megabytes por llamada: comprueba el espacio antes de activarlo en una línea con mucho uso.
 
-El enlace que da el portal para una grabación lleva un token de acceso. b24 solo lo sigue en la dirección del propio
-portal, justo después de leerlo, y nunca lo guarda ni lo imprime.
+El enlace que da el portal para una grabación lleva un token de acceso. b24 lo sigue justo después de leerlo, sin
+redirecciones, y nunca lo guarda ni lo imprime. Cuando tu proveedor de telefonía guarda las grabaciones él mismo, como
+hace una centralita en la nube de Beeline, el enlace lleva al servidor del proveedor. b24 solo sigue un enlace así por
+https y solo a una dirección de internet pública, nunca a este ordenador ni a tu red local, y no envía con él nada de
+tu inicio de sesión en Bitrix24.
 
 ## Convertir las llamadas en texto
 
