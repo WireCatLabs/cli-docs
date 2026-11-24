@@ -50,18 +50,9 @@ connect.wirecat.dev {
 It has no `log` block on purpose: a Caddy access log keeps the query string, and the callback's query holds the
 sign-in code and state.
 
-To build and restart, from the repository root:
-
-```sh
-rsync -a --delete -e "ssh -p 25222" services/amo-connect/ kulibin@139.100.204.107:amo-connect/
-ssh -p 25222 kulibin@139.100.204.107 '
-  docker build -q -t amo-connect:latest ~/amo-connect &&
-  (docker rm -f amo-connect >/dev/null 2>&1; true) &&
-  docker run -d --name amo-connect --network kamal --restart unless-stopped \
-    --memory 64m --memory-swap 64m --pids-limit 64 --read-only --tmpfs /tmp:size=1m \
-    --cap-drop ALL --security-opt no-new-privileges --user node amo-connect:latest &&
-  docker exec caddy wget -qO- http://amo-connect:8080/connect/amo.html | head -3'
-```
+To build and restart, from the repository root: `services/amo-connect/deploy`. It copies this folder to neirox,
+rebuilds the image, replaces the container (read-only, no capabilities, 64 MB) and checks that the public page
+answers 200. A restart drops sign-ins in flight: their secrets live only in the server's memory.
 
 DNS: `connect.wirecat.dev` is an A record to `139.100.204.107`, DNS only (not proxied by Cloudflare). Caddy gets
 its certificate from Let's Encrypt once the record resolves.

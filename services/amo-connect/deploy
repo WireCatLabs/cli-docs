@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Builds and restarts amo-connect on neirox from this checkout, then checks it from outside:
+#
+#   services/amo-connect/deploy
+#
+# A restart drops sign-ins in flight: their secrets live only in the server's memory for ten minutes.
+require "net/http"
+
+SOURCE = File.expand_path(__dir__)
+HOST = "kulibin@139.100.204.107"
+PORT = "25222"
+REMOTE_DIR = "amo-connect"
+PUBLIC_PAGE = "https://connect.wirecat.dev/connect/amo.html"
+
+REMOTE_STEPS = <<~SH
+  set -e
+  docker build -q -t amo-connect:latest ~/#{REMOTE_DIR} >/dev/null
+  docker rm -f amo-connect >/dev/null 2>&1 || true
+  docker run -d --name amo-connect --network kamal --restart unless-stopped \\
+    --memory 64m --memory-swap 64m --pids-limit 64 --read-only --tmpfs /tmp:size=1m \\
+    --cap-drop ALL --security-opt no-new-privileges --user node amo-connect:latest >/dev/null
+  sleep 2
+  docker exec caddy wget -qO /dev/null http://amo-connect:8080/connect/amo.html
+SH
+
+def run!(*command)
+  puts "$ #{command.join(' ')}"
+  system(*command) || abort("failed: #{command.first}")
+end
+
+run!("rsync", "-a", "--delete", "--exclude", "node_modules", "-e", "ssh -p #{PORT}", "#{SOURCE}/",
+     "#{HOST}:#{REMOTE_DIR}/")
+run!("ssh", "-p", PORT, HOST, REMOTE_STEPS)
+
+response = Net::HTTP.get_response(URI(PUBLIC_PAGE))
+abort "#{PUBLIC_PAGE} answered #{response.code}" unless response.code == "200"
+puts "#{PUBLIC_PAGE} answers 200: deployed"
