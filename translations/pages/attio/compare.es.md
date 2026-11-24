@@ -4,6 +4,7 @@ title: "Comparado con otras herramientas"
 
 <a id="features" />
 <a id="when-another-tool-fits-better" />
+<a id="how-an-agent-answers-through-each" />
 
 `attio` es una línea de comandos y un servidor MCP para los datos de ventas de un espacio de trabajo de Attio:
 negociaciones, personas, empresas, el embudo de negociaciones y los miembros del espacio de trabajo. Esta página lo
@@ -12,8 +13,9 @@ trabajo. Las marcas de `attio` salen de su versión actual, sus comandos y su c�
 2026. Sus pruebas usan un Attio falso hecho a partir de la descripción de la API de Attio, y cada versión pasa además
 una revisión con un espacio de trabajo real. Las marcas se revisan de nuevo en cada versión. Las marcas de las demás
 herramientas salen de su propia documentación y su código, enlazados en la tabla, revisados el 19 de noviembre de
-2026. No se inició sesión en ninguna de ellas ni se probó en vivo, y una herramienta puede hacer más de lo que dicen
-sus páginas.
+2026. Attio MCP y attio-mcp también se probaron en vivo en una
+[prueba con un agente](#how-an-agent-answers-through-each). En las demás no se inició sesión, y una herramienta puede
+hacer más de lo que dicen sus páginas.
 
 Las herramientas:
 
@@ -124,10 +126,35 @@ Notas sobre la columna de `attio`:
   ningún navegador. No hay ninguna medición publicada frente a un agente de navegador, así que esta página no afirma
   nada.
 
+## Cómo responde un agente con cada una
+
+Le hicimos a un agente 30 preguntas de un vendedor sobre negociaciones y clientes, en un espacio de trabajo de Attio
+inventado con 123 negociaciones y unas 380 personas. Las preguntas suenan como se hacen de verdad: un nombre con una
+errata, sin nombrar al cliente, un detalle mal recordado. El agente fue siempre el mismo (Claude Code con Claude
+Sonnet) y solo cambió la herramienta. Otro agente puntuó las respuestas sin saber qué herramienta las dio. La
+preparación, las preguntas y los scripts están en los [resultados de la prueba](https://github.com/WireCatLabs/cli-testing/blob/main/performance/crm/attio-agents/README.md).
+
+| | attio | Attio MCP | attio-mcp |
+|---|---|---|---|
+| Respuestas correctas de 30 | 25 y 27 en dos pasadas | 28 | 22,5 |
+| Tiempo para 30 preguntas | unos 18 minutos | 8 minutos | 21 minutos |
+| Coste del modelo para 30 preguntas | de 3,07 a 3,18 $ | 2,74 $ | 5,38 $ |
+
+- **attio y Attio MCP respondieron igual de bien** con estos datos. La diferencia es menor que la variación entre las
+  dos pasadas de attio.
+- **Attio MCP respondió el doble de rápido.** Busca en las notas por significado. Con `attio` el agente lee las notas
+  con operaciones de `api` y necesita más pasos.
+- **Solo attio encontró a un cliente cuyo nombre tenía una letra equivocada.** Los dos servidores MCP no lo
+  encontraron.
+- **attio-mcp no ve la fecha límite de una tarea**, así que no pudo responder a las preguntas sobre tareas vencidas y tareas de la semana.
+
+Composio, Zapier MCP y FroeMic/attio-cli no participaron en esta prueba.
+
 ## Cuándo encaja mejor otra herramienta
 
 - **Attio MCP**: quieres Attio en Claude, ChatGPT o Cursor sin instalar nada, no eres administrador del espacio de
-  trabajo, o el agente debe leer notas, correos y grabaciones de llamadas y escribir con tu confirmación.
+  trabajo, el agente debe leer notas, correos y grabaciones de llamadas y escribir con tu confirmación, o una respuesta rápida
+  importa más que una copia local.
 - **Composio** o **Zapier MCP**: quieres Attio junto a muchas otras apps en un solo servidor alojado.
 - **attio-mcp**: el agente debe crear y cambiar negociaciones, notas y tareas con herramientas listas en tu ordenador.
 - **FroeMic/attio-cli**: un script debe gestionar objetos, atributos, listas y entradas en una terminal, sin una capa

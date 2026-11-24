@@ -7,8 +7,9 @@ deal pipeline and workspace members. This page puts it next to the other tools t
 Attio, so you can see which one fits your job. The marks for `attio` come from its current release, its commands and its
 source, checked on 19 November 2026. Its tests run against a fake Attio built from Attio's API description, and each
 release also passes a check against a live workspace. The marks are checked again at each release. The marks for the
-other tools come from their own documentation and source, linked in the table, checked on 19 November 2026. None of
-them was signed in to or tested live, and a tool may do more than its pages say.
+other tools come from their own documentation and source, linked in the table, checked on 19 November 2026. Attio MCP
+and attio-mcp were also tested live in an [agent test](#how-an-agent-answers-through-each). The others were not
+signed in to, and a tool may do more than its pages say.
 
 The tools:
 
@@ -115,10 +116,34 @@ Notes on the `attio` column:
 - **Speed and cost against a browser agent.** `attio` calls the Attio API, reads its own copy and opens no browser. No
   measurement of it against a browser agent is published, so this page makes no claim.
 
+## How an agent answers through each
+
+We asked an agent 30 questions a salesperson asks about deals and clients, in an invented Attio workspace of 123
+deals and about 380 people. The questions read the way people really ask: a name with a typo, no client named, a
+detail remembered wrong. The agent was the same each time (Claude Code with Claude Sonnet), only the tool changed. A
+separate agent scored the answers without knowing which tool gave them. The setup, questions and scripts are in the
+[test results](https://github.com/WireCatLabs/cli-testing/blob/main/performance/crm/attio-agents/README.md).
+
+| | attio | Attio MCP | attio-mcp |
+|---|---|---|---|
+| Right answers of 30 | 25 and 27 in two runs | 28 | 22.5 |
+| Time for 30 questions | about 18 minutes | 8 minutes | 21 minutes |
+| Model cost for 30 questions | $3.07 to $3.18 | $2.74 | $5.38 |
+
+- **attio and Attio MCP answered equally well** on this data. The gap is smaller than the spread between attio's two
+  runs.
+- **Attio MCP answered twice as fast.** It searches notes by meaning. Through `attio` the agent reads notes with `api`
+  operations and needs more steps.
+- **Only attio found a client whose name had one wrong letter.** Both MCP servers missed it.
+- **attio-mcp does not see a task's due date**, so it could not answer the questions about overdue tasks and the week's tasks.
+
+Composio, Zapier MCP and FroeMic/attio-cli were not part of this test.
+
 ## When another tool fits better
 
 - **Attio MCP**: you want Attio in Claude, ChatGPT or Cursor with nothing to install, you are not a workspace admin,
-  or the agent should read notes, e-mails and call recordings and write with your confirmation.
+  the agent should read notes, e-mails and call recordings and write with your confirmation, or a fast answer matters
+  more than a local copy.
 - **Composio** or **Zapier MCP**: you want Attio beside many other apps in one hosted server.
 - **attio-mcp**: the agent should create and update deals, notes and tasks through ready tools on your computer.
 - **FroeMic/attio-cli**: a script should manage objects, attributes, lists and entries in a terminal, with no
