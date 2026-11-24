@@ -128,30 +128,6 @@ amo session list
 
 **Example:** `amo session list`, `amo session list --json`
 
-## `amo account`
-
-this profile on this computer
-
-### `amo account remove`
-
-sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
-
-**Changes something on this computer only.**
-
-```sh
-amo account remove [options]
-```
-
-| Option | What it does |
-|---|---|
-| `--keep-data` | leave what the store holds of this account, still searchable. |
-| `--delete-data` | delete what the store and the tool's own files hold of this account. |
-| `--dry-run` | list what it would remove and keep, and change nothing. |
-
-**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: amo commands info account remove
-
-**Example:** `amo personal account remove --keep-data --dry-run`, `amo personal account remove --delete-data --yes`
-
 ## `amo sync`
 
 bring the CRM's copy in the local store up to date: pipelines, companies, contacts, deals that changed since the last sync, or everything with --rescan; a run stops before its deadline or --max-pages and the next one goes on from there
@@ -946,6 +922,30 @@ amo search all <query> [options]
 **Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: amo commands info search all
 
 **Example:** `amo work search all Example LLC`, `amo work search all website --only crm --json`
+
+## `amo account`
+
+this profile on this computer
+
+### `amo account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something on this computer only.**
+
+```sh
+amo account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: amo commands info account remove
+
+**Example:** `amo personal account remove --keep-data --dry-run`, `amo personal account remove --delete-data --yes`
 
 ## `amo api`
 

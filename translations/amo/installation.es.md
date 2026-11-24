@@ -3,8 +3,9 @@ title: "Instala y conecta"
 ---
 
 Conecta tu cuenta de amoCRM o Kommo una vez, y desde entonces tu agente de IA puede leer y actualizar tus
-negociaciones. El CRM guarda tus negociaciones, contactos y empresas en la nube, y solo deja entrar a un programa a
-través de una integración privada que crea un administrador de la cuenta.
+negociaciones. El CRM guarda tus negociaciones, contactos y empresas en la nube. Un administrador de amoCRM deja entrar a `amo` con un
+clic en el navegador, sin una integración propia. Kommo, y los usuarios que no son administradores, pegan una clave de
+una integración privada que crea un administrador.
 
 Después tu agente te dice qué negociaciones están abiertas, pasa una negociación a la siguiente etapa o encuentra a
 un cliente, desde una terminal o por MCP, hasta donde lo permiten los permisos que pongas. Tú ejecutas los mismos
@@ -63,7 +64,10 @@ amo work session start --host https://example.amocrm.ru --one-click
 Qué pasa detrás del clic:
 
 - amoCRM solo deja permitirlo a un administrador de la cuenta
-  ([amoCRM: el botón](https://www.amocrm.ru/developers/content/oauth/button)). Después la integración aparece en
+  ([amoCRM: el botón](https://www.amocrm.ru/developers/content/oauth/button)). A los demás les muestra bajo el botón
+  «Разрешить»: «Интеграция не может быть установлена в выбранный аккаунт. Первичная установка интеграции доступна
+  только администраторам аккаунта.» (la integración no se puede instalar en la cuenta elegida: la primera instalación
+  solo la hacen los administradores). Después la integración aparece en
   амоМаркет, donde un administrador puede desactivarla.
 - amoCRM envía la clave secreta de la nueva integración a connect.wirecat.dev, un servidor de WireCat en Rusia al que
   llegan los servidores de amoCRM. `amo` recoge la clave de allí una vez, y el servidor no guarda ninguna copia.
@@ -159,8 +163,9 @@ perfil.
 ## Si no eres administrador
 
 Lo ves en el menú de la izquierda de amoCRM: si no aparece **амоМаркет**, no eres administrador. Solo un administrador
-puede crear la integración y su clave, y el inicio de sesión en el navegador solo ofrece cuentas donde lo eres. Así que
-te conectas con una clave que un administrador crea para ti:
+puede crear la integración y su clave. El inicio de sesión con un clic también muestra tu cuenta, pero amoCRM lo
+rechaza: «Первичная установка интеграции доступна только администраторам аккаунта» (la primera instalación solo la
+hacen los administradores). Así que te conectas con una clave que un administrador crea para ti:
 
 1. Envía a un administrador de tu cuenta el enlace a esta página y pídele una integración privada y su token de larga
    duración.

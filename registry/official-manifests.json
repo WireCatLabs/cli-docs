@@ -1,7 +1,7 @@
 {
   "amo": {
-    "version": "0.3.0",
-    "manifestSha256": "a64870b45c312d75bd152c28c627e65993128b429f3c6855a290ef801f8bac03",
+    "version": "0.4.0",
+    "manifestSha256": "4dd97f7842bea89267f556350fe8851c8fdbe01f1a26f6598e2bbc38d0303022",
     "bin": "wcat-amo",
     "bins": ["amo", "wcat-amo"],
     "desktop": {
@@ -69,7 +69,7 @@
     }
   },
   "attio": {
-    "version": "0.3.1",
+    "version": "0.4.1",
     "manifestSha256": "0f0fbef46edaebf24475916b0cb0ef43a25db917b96ad605c7b8a85f6d73c6b1",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
@@ -203,8 +203,8 @@
     }
   },
   "drive": {
-    "version": "0.72.1",
-    "manifestSha256": "e387200fb2ff9fc6df37f39e8f3b930b9a1f6e44a8299b141c861fa5e209e2ac",
+    "version": "0.75.1",
+    "manifestSha256": "ec0158784056f862a32b69c4bc44c89d7636a4038b36b59713c0a0db589b59ab",
     "bin": "wcat-drive",
     "bins": ["drive", "wcat-drive"],
     "desktop": {
@@ -398,8 +398,8 @@
     }
   },
   "linear": {
-    "version": "0.2.0",
-    "manifestSha256": "8e3f9fb729e8daa7577dac92acc21612735067e80c8a0787eda1585022900005",
+    "version": "0.3.0",
+    "manifestSha256": "537f1f06084ddf3dfab5fd08694a1de7887fa10d45e174a9c79441ff915609c8",
     "bin": "wcat-linear",
     "bins": ["linear", "wcat-linear"],
     "desktop": {
@@ -632,8 +632,8 @@
     }
   },
   "notion": {
-    "version": "0.7.0",
-    "manifestSha256": "538f2b25c457364939d7f1b8b6bd079a320bb08a239d257206fa9006baa4a018",
+    "version": "0.8.0",
+    "manifestSha256": "d824afa20fa419aab79ee4578796ded328cb28e01dd8598a3ff5699a1b5d342b",
     "bin": "wcat-notion",
     "bins": ["notion", "wcat-notion"],
     "desktop": {
@@ -969,8 +969,8 @@
     }
   },
   "ydisk": {
-    "version": "0.5.0",
-    "manifestSha256": "062ba1ba11c90609a37f17da00f598e229916ae89d932c2d55adeb15788d0cac",
+    "version": "0.7.0",
+    "manifestSha256": "da93fb68c9c08fbdf2a29f9b70d851d5711db57f4f56e6d5a5acfd200b72f4ba",
     "bin": "wcat-ydisk",
     "bins": ["wcat-ydisk", "ydisk"],
     "desktop": {
