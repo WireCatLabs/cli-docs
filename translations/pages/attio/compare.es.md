@@ -53,7 +53,7 @@ sesión con un token así. attio-mcp también acepta un token de OAuth a través
 | **Buscar y leer** | | | | | | |
 | Listar las negociaciones abiertas de una etapa | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [🟡](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
 | Encontrar a una persona por nombre o correo | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L49-L50) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L924-L970) |
-| Leer las notas y tareas de una negociación | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | ➖ | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
+| Leer las notas y tareas de una negociación | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | ➖ | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
 | Buscar en los correos y grabaciones de llamadas que guarda Attio | ❌ | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
 | Leer negociaciones sin internet | ✅ | [❌](https://docs.attio.com/mcp/overview) | [❌](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/src/api/client-config.ts#L79) | ➖ | ➖ | [❌](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/src/utils/config.ts#L6) |
 | Una búsqueda sobre negociaciones y los mensajes y notas de tus otras herramientas | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
@@ -108,7 +108,8 @@ Notas sobre la columna de `attio`:
 - **Sin internet.** `sync` copia las negociaciones y las personas y empresas que nombran, con las etapas del embudo de
   negociaciones. `deals`, `pipelines`, `stages`, `changes`, `fields` y `search all` leen esta copia, también con
   `--offline`. `people`, `organizations` y `users` siempre preguntan a Attio. Attio no sabe listar solo lo que cambió,
-  así que cada sincronización lee todos los registros.
+  así que cada sincronización lee todos los registros. Con el ajuste `activities` la copia guarda también las notas y
+  las tareas de esos registros.
 - **Una búsqueda.** `search all` encuentra negociaciones junto a los mensajes, notas y reuniones que guardaron otras
   herramientas de WireCat en el mismo ordenador, sin internet.
 - **Etapas y parte ganada.** `pipelines show` da para cada etapa el número de negociaciones y su suma por moneda, sin
@@ -136,25 +137,26 @@ preparación, las preguntas y los scripts están en los [resultados de la prueba
 
 | | attio | Attio MCP | attio-mcp |
 |---|---|---|---|
-| Respuestas correctas de 30 | 25 y 27 en dos pasadas | 28 | 22,5 |
-| Tiempo para 30 preguntas | unos 18 minutos | 8 minutos | 21 minutos |
-| Coste del modelo para 30 preguntas | de 3,07 a 3,18 $ | 2,74 $ | 5,38 $ |
+| Respuestas correctas de 30 | 27,5 | 28 | 23,5 |
+| Tiempo para 30 preguntas | 10 minutos | 8 minutos | 21 minutos |
+| Coste del modelo para 30 preguntas | 2,74 $ | 2,74 $ | 5,38 $ |
 
-- **attio y Attio MCP respondieron igual de bien** con estos datos. La diferencia es menor que la variación entre las
-  dos pasadas de attio.
-- **Attio MCP respondió el doble de rápido.** Busca en las notas por significado. Con `attio` el agente lee las notas
-  con operaciones de `api` y necesita más pasos.
+- **attio y Attio MCP respondieron igual de bien** con estos datos, en un tiempo parecido y por el mismo coste. Medio
+  punto de diferencia está dentro de la variación de una pasada.
+- **Con `attio` el agente encuentra las notas por sus palabras.** Con el ajuste `activities`, `sync` copia las notas y
+  las tareas, y el agente respondió a todas las preguntas hechas solo con palabras clave. Attio MCP busca en las notas
+  por significado.
 - **Solo attio encontró a un cliente cuyo nombre tenía una letra equivocada.** Los dos servidores MCP no lo
   encontraron.
-- **attio-mcp no ve la fecha límite de una tarea**, así que no pudo responder a las preguntas sobre tareas vencidas y tareas de la semana.
+- **attio-mcp no ve la fecha límite de una tarea**, así que no pudo responder a las preguntas sobre tareas vencidas y
+  tareas de la semana.
 
 Composio, Zapier MCP y FroeMic/attio-cli no participaron en esta prueba.
 
 ## Cuándo encaja mejor otra herramienta
 
 - **Attio MCP**: quieres Attio en Claude, ChatGPT o Cursor sin instalar nada, no eres administrador del espacio de
-  trabajo, el agente debe leer notas, correos y grabaciones de llamadas y escribir con tu confirmación, o una respuesta rápida
-  importa más que una copia local.
+  trabajo, o el agente debe leer correos y grabaciones de llamadas y escribir con tu confirmación.
 - **Composio** o **Zapier MCP**: quieres Attio junto a muchas otras apps en un solo servidor alojado.
 - **attio-mcp**: el agente debe crear y cambiar negociaciones, notas y tareas con herramientas listas en tu ordenador.
 - **FroeMic/attio-cli**: un script debe gestionar objetos, atributos, listas y entradas en una terminal, sin una capa

@@ -46,7 +46,7 @@ also take an OAuth token through a Cloudflare Worker that you host.
 | **Find and read** | | | | | | |
 | List the open deals of a stage | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [🟡](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
 | Find a person by name or e-mail | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L49-L50) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L924-L970) |
-| Read the notes and tasks on a deal | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | ➖ | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
+| Read the notes and tasks on a deal | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | ➖ | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
 | Search the e-mails and call recordings that Attio holds | ❌ | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
 | Read deals without the internet | ✅ | [❌](https://docs.attio.com/mcp/overview) | [❌](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/src/api/client-config.ts#L79) | ➖ | ➖ | [❌](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/src/utils/config.ts#L6) |
 | One search over deals and the messages and notes of your other tools | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
@@ -100,7 +100,7 @@ Notes on the `attio` column:
 - **Without the internet.** `sync` copies the deals and the people and companies they name, with the stages of the
   deal pipeline. `deals`, `pipelines`, `stages`, `changes`, `fields` and `search all` read this copy, with `--offline`
   too. `people`, `organizations` and `users` always ask Attio. Attio cannot list only what changed, so each sync reads
-  every record.
+  every record. With the `activities` setting on, the copy also holds the notes and tasks of these records.
 - **One search.** `search all` finds deals beside the messages, notes and meetings that other WireCat tools on the same
   computer stored, without the internet.
 - **Stages and win rate.** `pipelines show` gives each stage's number of deals and their sum per currency, never
@@ -126,24 +126,24 @@ separate agent scored the answers without knowing which tool gave them. The setu
 
 | | attio | Attio MCP | attio-mcp |
 |---|---|---|---|
-| Right answers of 30 | 25 and 27 in two runs | 28 | 22.5 |
-| Time for 30 questions | about 18 minutes | 8 minutes | 21 minutes |
-| Model cost for 30 questions | $3.07 to $3.18 | $2.74 | $5.38 |
+| Right answers of 30 | 27.5 | 28 | 23.5 |
+| Time for 30 questions | 10 minutes | 8 minutes | 21 minutes |
+| Model cost for 30 questions | $2.74 | $2.74 | $5.38 |
 
-- **attio and Attio MCP answered equally well** on this data. The gap is smaller than the spread between attio's two
-  runs.
-- **Attio MCP answered twice as fast.** It searches notes by meaning. Through `attio` the agent reads notes with `api`
-  operations and needs more steps.
+- **attio and Attio MCP answered equally well** on this data, in about the same time and for the same cost. A
+  difference of half a point is within the noise of one run.
+- **Through `attio` the agent finds notes by their words.** `sync` copies the notes and tasks with the `activities`
+  setting on, and the agent answered every question asked in bare keywords. Attio MCP searches notes by meaning.
 - **Only attio found a client whose name had one wrong letter.** Both MCP servers missed it.
-- **attio-mcp does not see a task's due date**, so it could not answer the questions about overdue tasks and the week's tasks.
+- **attio-mcp does not see a task's due date**, so it could not answer the questions about overdue tasks and the
+  week's tasks.
 
 Composio, Zapier MCP and FroeMic/attio-cli were not part of this test.
 
 ## When another tool fits better
 
 - **Attio MCP**: you want Attio in Claude, ChatGPT or Cursor with nothing to install, you are not a workspace admin,
-  the agent should read notes, e-mails and call recordings and write with your confirmation, or a fast answer matters
-  more than a local copy.
+  or the agent should read e-mails and call recordings and write with your confirmation.
 - **Composio** or **Zapier MCP**: you want Attio beside many other apps in one hosted server.
 - **attio-mcp**: the agent should create and update deals, notes and tasks through ready tools on your computer.
 - **FroeMic/attio-cli**: a script should manage objects, attributes, lists and entries in a terminal, with no
