@@ -69,7 +69,7 @@
     }
   },
   "attio": {
-    "version": "0.4.1",
+    "version": "0.5.0",
     "manifestSha256": "0f0fbef46edaebf24475916b0cb0ef43a25db917b96ad605c7b8a85f6d73c6b1",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
@@ -398,7 +398,7 @@
     }
   },
   "linear": {
-    "version": "0.3.0",
+    "version": "0.3.1",
     "manifestSha256": "537f1f06084ddf3dfab5fd08694a1de7887fa10d45e174a9c79441ff915609c8",
     "bin": "wcat-linear",
     "bins": ["linear", "wcat-linear"],
@@ -1038,20 +1038,23 @@
     }
   },
   "zm": {
-    "version": "0.80.0",
-    "manifestSha256": "ddba70a220bf6fc047e216f6dd8c7d61525c78827c8fda92eb2f9da996c5509d",
+    "version": "0.81.0",
+    "manifestSha256": "917653b6e25d98605a350eeec7df7df701ebc6a6bf06fe92e5919596df11095a",
     "bin": "wcat-zm",
     "bins": ["wcat-zm", "zm"],
     "desktop": {
       "tagline": "Zoom transcripts and recordings, searchable",
-      "profiles": null,
-      "doctor": ["doctor", "--record", "--json"],
+      "profiles": {
+        "args": ["session", "list", "--no-record", "--json"],
+        "shape": "items"
+      },
+      "doctor": ["{profile}", "doctor", "--record", "--json"],
       "runs": {
         "list": ["runs", "list", "{query}", "--limit", "{limit}", "--page", "{page}", "--no-record", "--json"],
         "show": ["runs", "show", "{run}", "--no-record", "--json"]
       },
       "search": null,
-      "setup": ["session", "start"],
+      "setup": ["{profile}", "session", "start"],
       "signIn": {
         "gives": "Lets your agent find your Zoom meetings and read their transcripts and summaries.",
         "asks": "Your browser opens Zoom to approve access. Zoom first needs an app of your own, made once in the Zoom App Marketplace."
@@ -1070,8 +1073,8 @@
       },
       "tasks": null,
       "sync": {
-        "run": ["meetings", "sync", "--record", "--json"],
-        "last": null,
+        "run": ["{profile}", "meetings", "sync", "--record", "--json"],
+        "last": ["runs", "list", "command:\"meetings sync\" status:success", "--limit", "50", "--no-record", "--json"],
         "lastShape": "runs",
         "what": "meetings and transcripts",
         "note": null
@@ -1088,7 +1091,19 @@
         "app": "zoom-cli",
         "env": "ZM"
       },
-      "settings": null
+      "settings": null,
+      "accountRemove": {
+        "signOut": ["{profile}", "session", "end", "--record", "--json"],
+        "remove": {
+          "minVersion": "0.0.0",
+          "keepData": ["{profile}", "account", "remove", "--keep-data", "--record", "--json"],
+          "deleteData": ["{profile}", "account", "remove", "--delete-data", "--record", "--json"],
+          "dryRun": "--dry-run",
+          "confirm": "--yes"
+        },
+        "removes": ["signIn"],
+        "keeps": ["settings", "data", "listed"]
+      }
     }
   }
 }
