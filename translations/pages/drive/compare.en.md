@@ -3,7 +3,8 @@ title: "Compared with other tools"
 ---
 
 Pick a tool by the job you want done. This page lists the jobs people give a Google Drive tool and shows which
-tool does each one. Checked on 24 October 2026, against `drive` and each project's own documentation. A
+tool does each one. Checked on 24 October 2026, against `drive` and each project's own documentation. Rows 5 and 7, about reading files,
+were checked again on 24 November 2026 with `drive` 0.75.0. A
 tool may do more than its documentation says; those cells are ➖.
 
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation · n/a does not apply
@@ -63,7 +64,10 @@ functionality is implemented".
 ¹ Needs the optional activity grant at sign in. It shows what Google's activity log returns, not a complete edit
 history.
 
-² `drive` keeps text snapshots of Docs, Sheets, PDF and Word files. The original files stay in Google; rclone copies
+² `drive` keeps text snapshots of Docs, Sheets and uploaded files such as PDF, Word, Excel, PowerPoint, OpenDocument
+and EPUB. Scanned PDFs and JPEG, PNG or WebP pictures are read by OCR, with the `tesseract` program on your computer
+by default. The `read_scans` setting can send them to Anthropic or OpenAI instead, or turn OCR off. The original files
+stay in Google. rclone copies
 the files themselves.
 
 ³ `mirrors watch` keeps mirrored folders in sync while the command runs. It is not a background service.
@@ -112,6 +116,8 @@ profile) and by the [usage guide](./usage.md), [search guide](./search.md), [mir
 [configuration](./configuration.md) and [security](./security.md) pages. Where a mark is a limit (🟡 or ❌), the section
 above says what the limit is. Remote MCP uses the guarded HTTP server and access-code login in the
 [remote connection guide](./remote.md); it requires your own running server and tunnel.
+
+Rows 5 and 7 were checked again on version 0.75.0 against the [usage guide](https://github.com/WireCatLabs/drive-cli/blob/v0.75.0/docs/usage.md), which lists the formats it reads.
 
 Other tools' marks come from their own pages. A search that finds nothing in those pages gives ➖, never ❌, except
 where a command list is complete.

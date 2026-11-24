@@ -13,7 +13,8 @@ title: "Comparado con otras herramientas"
 
 Elige una herramienta según el trabajo que quieres hacer. Esta página reúne los trabajos que la gente le pide a una
 herramienta de Google Drive y muestra qué herramienta hace cada uno. Revisado el 24 de octubre de 2026, con `drive` y
-la propia documentación de cada proyecto. Una herramienta puede hacer más de lo que dice su documentación. Esas
+la propia documentación de cada proyecto. Las filas 5 y 7, sobre leer archivos, se revisaron otra vez el 24 de
+noviembre de 2026 con `drive` 0.75.0. Una herramienta puede hacer más de lo que dice su documentación. Esas
 celdas llevan ➖.
 
 ✅ sí · 🟡 en parte · ❌ no · ➖ no está en su documentación · n/a no aplica
@@ -75,7 +76,10 @@ functionality is implemented».
 ¹ Necesita el permiso opcional de actividad al iniciar sesión. Muestra lo que devuelve el registro de actividad de
 Google, no un historial completo de ediciones.
 
-² `drive` guarda instantáneas de texto de Documentos, Hojas de cálculo y archivos PDF y Word. Los archivos originales
+² `drive` guarda instantáneas de texto de Documentos, Hojas de cálculo y archivos subidos, por ejemplo PDF, Word,
+Excel, PowerPoint, OpenDocument y EPUB. Los PDF escaneados y las imágenes JPEG, PNG o WebP se leen por OCR, por
+defecto con el programa `tesseract` de tu ordenador. El ajuste `read_scans` puede enviarlos a Anthropic u OpenAI o
+apagar el OCR. Los archivos originales
 se quedan en Google. rclone copia los propios archivos.
 
 ³ `mirrors watch` mantiene sincronizadas las carpetas espejo mientras el comando está en marcha. No es un servicio en
@@ -132,6 +136,8 @@ iniciada) y con las páginas [guía de uso](./usage.md), [guía de búsqueda](./
 [configuración](./configuration.md) y [seguridad](./security.md). Donde una marca es un límite (🟡 o ❌), la sección
 anterior explica cuál es ese límite. El MCP remoto usa el servidor HTTP protegido y el inicio de sesión con código de
 acceso de la [guía de conexión remota](./remote.md). Necesita tu propio servidor en marcha y tu propio túnel.
+
+Las filas 5 y 7 se revisaron otra vez con la versión 0.75.0 en la [guía de uso](https://github.com/WireCatLabs/drive-cli/blob/v0.75.0/docs/usage.md), que enumera los formatos que lee.
 
 Las marcas de las demás herramientas salen de sus propias páginas. Una búsqueda que no encuentra nada en esas páginas
 da ➖, nunca ❌, salvo cuando una lista de comandos está completa.

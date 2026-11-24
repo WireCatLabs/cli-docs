@@ -5,8 +5,10 @@ title: "Comparación con otras herramientas"
 Elige una herramienta para tu Yandex Disk según el trabajo que quieres hacer: encontrar un documento por lo que dice,
 dejar que un agente de IA cambie una nota, una hoja de cálculo o un documento de Word sin tocar el resto, mantener una
 carpeta igual en tu ordenador y en el Disk, o hacer copia de seguridad de carpetas enteras. Esta página reúne esos
-trabajos y muestra qué herramienta hace cada uno. Las marcas de `ydisk` vienen de la versión 0.5.0, y las de las demás
-herramientas vienen de su propia documentación y su código. Las marcas de `ydisk` y las filas de edición de archivos y
+trabajos y muestra qué herramienta hace cada uno. Las marcas de `ydisk` vienen de la versión 0.7.0, y las de las demás
+herramientas vienen de su propia documentación y su código. Las filas de una edición que se rechaza si el archivo
+cambió, de recuperar lo que reemplazó una edición y de leer el texto de los archivos se comprobaron el 24 de noviembre
+de 2026. Las demás marcas de `ydisk` y las filas de edición de archivos y
 de archivos cambiados en los dos lados se comprobaron el 23 de noviembre de 2026, las filas de todo el Disk, la carpeta
 montada y muchos cambios a la vez el 21 de noviembre de 2026, las demás filas de sincronización de carpetas el 19 de noviembre de 2026, y el resto el 17
 de noviembre de 2026. Una herramienta puede hacer más de lo que dicen sus páginas, y esas celdas llevan ➖.
@@ -25,8 +27,8 @@ Las herramientas:
 
 - **ydisk**: esta herramienta. Una línea de comandos y un servidor MCP que copian en tu ordenador el texto de las
   carpetas del Disk que tú eliges, para buscar en él, mantienen iguales en tu ordenador y en el Disk las carpetas que
-  elijas, y trabajan con los archivos del Disk en directo, comprobando un archivo otra vez justo
-  antes de escribir una edición.
+  elijas, y trabajan con los archivos del Disk en directo. El propio Disk comprueba la edición de un archivo en el
+  momento de escribirla.
 - **[MCP de Yandex Disk](https://yandex.ru/dev/yandex-360/mcp/ru/disk)**: el servidor MCP propio de Yandex, que
   funciona en Yandex. Su aplicación de IA se conecta a él por internet. Es una versión preliminar para cuentas con
   una suscripción de pago a Yandex 360.
@@ -66,7 +68,7 @@ listaba ningún servidor de Yandex Disk el 17 de noviembre de 2026.
 | Crear y cerrar un enlace público | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Poner tus propias etiquetas y notas a los documentos | ✅ | ❌ | ❌ | ❌ | ❌ |
 | **Editar un archivo en el Disk** | | | | | |
-| Un agente edita un archivo, y la edición se rechaza si alguien cambió el archivo desde que el agente lo leyó | 🟡⁶ | ❌ | ➖ | ➖ | ❌⁷ |
+| Un agente edita un archivo, y la edición se rechaza si alguien cambió el archivo desde que el agente lo leyó | ✅⁶ | ❌ | ➖ | ➖ | ❌⁷ |
 | Cambiar celdas de un libro de Excel o párrafos de un documento de Word sin perder su formato | 🟡⁸ | ❌ | ❌ | ❌ | ❌ |
 | Devolver lo que reemplazó una edición, desde la propia herramienta | ✅⁹ | ❌ | 🟡¹⁰ | ➖ | ❌ |
 | **Tu Disk en tu ordenador** | | | | | |
@@ -102,10 +104,15 @@ Ninguno tiene búsqueda propia.
 
 ⁵ Un borrado va a la papelera, pero no hay ningún comando para recuperar el archivo.
 
-⁶ Una edición pasa el `sha256` que leyó el agente, y el archivo se comprueba otra vez justo antes de escribir. Un
-archivo que cambió desde la lectura se rechaza sin subir nada, y el agente lo lee otra vez. El Disk no tiene subida
-condicional, así que un cambio que llega en el instante entre esa comprobación y la subida no se detecta. Lo que
-reemplazó la edición se guarda igualmente en tu ordenador.
+⁶ Una edición pasa el `sha256` que leyó el agente. Un archivo que cambió desde la lectura se rechaza sin cambiar nada, y
+el agente lo lee otra vez. Para un archivo sin enlace público, lo comprueba el propio Disk en el momento de escribir. El
+contenido nuevo se sube a un archivo oculto a su lado, el archivo viejo pasa a la papelera solo con el `md5` que se leyó
+(si no, [el Disk responde 409](https://yandex.ru/dev/disk-api/doc/ru/reference/delete)), y el archivo oculto toma su nombre. Después el archivo tiene un id nuevo en el
+Disk, así que el historial de versiones del propio Disk empieza de cero. La copia vieja queda en la papelera del Disk,
+donde los archivos, según la [ayuda de Yandex](https://yandex.ru/support/yandex-360/customers/disk/web/ru/actions-files/spec-folders/trash), siguen ocupando espacio en el Disk y se borran a los 30 días. Las
+etiquetas y las notas pasan al archivo nuevo. Un archivo con enlace público se sobrescribe en su sitio, para que el
+enlace siga funcionando. Se comprueba justo antes de escribir, así que un cambio en el instante entre esa comprobación y
+la escritura no se detecta. Lo que reemplazó la edición se guarda igualmente en tu ordenador.
 
 ⁷ `upload` con `overwrite` reemplaza un archivo y solo compara su tamaño. Nada comprueba que el archivo no cambió
 desde que se leyó.
@@ -117,14 +124,19 @@ párrafo reemplazado toma el formato de su primer fragmento, así que una palabr
 queda sin formato.
 
 ⁹ Lo que reemplazó una edición se guarda en tu ordenador: `files history` lo lista y `files restore` lo devuelve.
-El propio Disk también guarda el historial de un archivo en su versión web, 14 días, o 90 días con Yandex 360, sea
-cual sea la herramienta que escribió el archivo ([ayuda de Yandex](https://yandex.ru/support/disk/version-control.html)).
+El propio Disk también guarda el historial de un archivo en su versión web, 14 días, o 90 días con Yandex 360
+([ayuda de Yandex](https://yandex.ru/support/disk/version-control.html)). Después de editar un archivo sin enlace
+público, ese historial empieza de cero, y la versión anterior queda 30 días en la papelera del Disk (ver la nota 6).
 
 ¹⁰ `--backup-dir` guarda un archivo que `copy`, `sync` o `move` sobrescribiría o borraría, y no hay ningún comando
 para recuperarlo.
 
 ¹¹ Para las carpetas que [sincronizas en ambos sentidos](./mirrors.md). Para las demás carpetas elegidas, `ydisk` guarda
-solo el texto de los archivos PDF, Word, Excel, CSV y de texto, para buscar.
+solo el texto de los archivos para buscar: PDF, Word, Excel, PowerPoint, OpenDocument, RTF, HTML, EPUB, CSV y archivos
+de texto. Los PDF escaneados y las imágenes JPEG, PNG o WebP se leen por OCR: por defecto con el programa `tesseract`
+de tu ordenador, en ruso e inglés, sin enviar nada a ningún sitio. El ajuste `read_scans` puede enviar las páginas a
+Anthropic u OpenAI, que cobran por página, o apagar el OCR. De un archivo se leen hasta 20 páginas, y en una
+sincronización como mucho 100.
 
 ¹² Descarga un archivo o una carpeta cuando se le pide, pero no mantiene esa copia al día.
 
@@ -251,6 +263,14 @@ muestra `mirrors add --ignore` y `files serve`. `files serve` funciona hasta que
 que no se ofrece por MCP ([mount.ts](https://github.com/WireCatLabs/ydisk-cli/blob/v0.4.0/src/commands/mount.ts)). Los
 límites de 10 borrados, 50 reemplazos y 100 000 archivos vienen del registro de cambios de 0.4.0 y de la ayuda, y el
 límite de 1 MB para fusionar, del registro de cambios de 0.5.0.
+
+Las filas sobre la edición que rechaza el propio Disk y sobre recuperar lo que reemplazó se comprobaron con la versión
+0.7.0. El borrado del archivo viejo pasa al Disk el `md5` que se leyó
+([writes.ts](https://github.com/WireCatLabs/ydisk-cli/blob/75cccfb/src/yandex/writes.ts#L31)), y el orden del reemplazo, el id nuevo y la excepción para los archivos con
+enlace público están en
+[mirrors.md](https://github.com/WireCatLabs/ydisk-cli/blob/75cccfb/docs/mirrors.md#how-a-file-on-the-disk-is-replaced).
+La lista de archivos que se leen viene de
+[usage.md](https://github.com/WireCatLabs/ydisk-cli/blob/75cccfb/docs/usage.md#what-the-copy-holds).
 
 Las marcas de las demás herramientas vienen de sus propias páginas. Si en esas páginas no aparece nada, la marca es ➖,
 nunca ❌, salvo cuando la lista de comandos o herramientas está completa.
