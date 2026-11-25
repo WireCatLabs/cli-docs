@@ -42,7 +42,7 @@
     "repo": "WireCatLabs/slack-cli",
     "package": "@wirecat/slack-cli",
     "lang": "en",
-    "docsRef": "v0.1.0",
+    "docsRef": "v0.2.0",
     "summary": {
       "en": "Your Slack channels, DMs and threads for your AI agent: it reads and searches them as you, with a Slack app of your own.",
       "ru": "Каналы, личные сообщения и ветки Slack для вашего ИИ-агента: он читает и ищет их от вашего имени, через ваше собственное приложение Slack.",

@@ -782,7 +782,7 @@
     }
   },
   "slk": {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "manifestSha256": "04e0955ca837633856f6fedc12e6c41462602c94c18ea079b02a426f3a0f4cb0",
     "bin": "wcat-slk",
     "bins": ["slk", "wcat-slk"],
