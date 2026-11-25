@@ -20,10 +20,11 @@ prepara uno.
 2. [Iniciar sesión](#sign-in)
 3. [Sincronizar](#sync)
 4. [Leer](#read)
-5. [Qué cambió](#what-changed)
-6. [Escribir](#write)
-7. [Salida para scripts](#output-for-scripts)
-8. [Agentes](#agents)
+5. [Archivos de clientes](#client-files)
+6. [Qué cambió](#what-changed)
+7. [Escribir](#write)
+8. [Salida para scripts](#output-for-scripts)
+9. [Agentes](#agents)
 
 ## El perfil va primero
 
@@ -48,8 +49,8 @@ Crea un webhook entrante en Bitrix24 (Developer resources → Common use cases �
 | `department` | Company Structure / Структура компании | Quién depende de quién. Más en [Quién es quién](#who-is-who). |
 | `task` | Tasks / Задачи | Las tareas de Bitrix24 de tus negociaciones ([Actividades y tareas](#activities-and-tasks-on-a-deal)). |
 | `telephony` | Telephony / Телефония | Las llamadas del portal ([Llamadas](./calls.md)). El empleado también necesita el permiso para ver las estadísticas de llamadas. |
-| `disk` | Drive / Диск | Los documentos de los clientes, los archivos de las negociaciones y sus adjuntos, para la función de archivos que llegará después. |
-| `documentgenerator` | Document Generator / Генератор документов | Documentos hechos a partir de plantillas. La documentación de Bitrix24 nombra `crm` en las páginas de los métodos y este permiso en la tabla de permisos, así que marca los dos. |
+| `disk` | Drive / Диск | Los archivos adjuntos a actividades y a comentarios de la línea de tiempo ([Archivos de clientes](#client-files)). |
+| `documentgenerator` | Document Generator / Генератор документов | Documentos hechos a partir de plantillas ([Archivos de clientes](#client-files)). La documentación de Bitrix24 nombra `crm` en las páginas de los métodos y este permiso en la tabla de permisos. Un webhook solo con `crm` también los lista. |
 
 `b24 work setup` muestra los mismos pasos en la terminal, y WireCat Desktop los muestra en su ventana. O inicia sesión
 directamente:
@@ -339,6 +340,36 @@ demás sin ellos. `people show` u `organizations show` de uno que no es tu clien
 contactos y empresas al día (UTC), contando juntos a ti y a tus agentes. Volver a mostrar el mismo ese día no cuenta, y
 tus propios clientes nunca cuentan. La cuenta se guarda en este ordenador, así que protege de un descuido y de un
 agente, no de alguien que quiere llevarse la base. Para eso están los permisos de acceso del propio Bitrix24.
+
+## Archivos de clientes
+
+`files list` muestra los archivos de una negociación, un prospecto, un contacto o una empresa, leídos del portal en ese
+momento. `files download` guarda uno en este ordenador y lee su texto, para que `search all` lo encuentre después.
+
+```sh
+b24 work files list --deal 12                      # the deal's files, each with an id
+b24 work files download deal:12:document:61        # saved in the state folder, its text in the answer
+b24 work files download deal:12:document:61 --dir ~/Documents/clients
+b24 work files sync                                # prefetches the files of your own deals and leads
+```
+
+Los archivos de un registro vienen de cuatro sitios del portal:
+
+| Origen | Qué es | Permiso |
+|---|---|---|
+| `field` | Un archivo en uno de los campos de archivo propios del registro | `crm` |
+| `document` | Un documento creado con una plantilla: un contrato, una factura, un presupuesto. El PDF cuando el portal lo ha creado, si no el archivo de Word | `crm` |
+| `activity` | Un archivo adjunto a un correo, una llamada u otra actividad | `crm` y `disk` |
+| `comment` | Un archivo adjunto a un comentario de la línea de tiempo | `crm` y `disk` |
+
+Un origen que el webhook no puede leer se omite, y la respuesta lo nombra en `issues` con el permiso que hay que
+añadir. Los archivos de los comentarios se listan sin `disk`, porque el comentario los nombra, pero descargar uno lo
+necesita. Un archivo en un campo no tiene nombre en el portal, así que se lista con el nombre del campo y el id del
+archivo. Los archivos de tus propios registros no cuentan para el límite. El registro de un compañero cuenta para el mismo límite de
+100 al día que los teléfonos y correos de sus clientes, salvo que seas administrador. `sync` nunca descarga un archivo.
+`files sync` descarga los archivos de la última semana de tus propias negociaciones y prospectos, dentro de los límites
+de los ajustes `crm.bitrix24:<portal>.files.*` (`max_files`, `max_file_mb`, `max_run_mb`, `run_minutes`, `days`,
+`max_total_mb`), que cambia `config set`.
 
 ## Qué cambió
 

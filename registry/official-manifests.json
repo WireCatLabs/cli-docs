@@ -69,7 +69,7 @@
     }
   },
   "attio": {
-    "version": "0.5.0",
+    "version": "0.5.1",
     "manifestSha256": "0f0fbef46edaebf24475916b0cb0ef43a25db917b96ad605c7b8a85f6d73c6b1",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
@@ -146,8 +146,8 @@
     }
   },
   "b24": {
-    "version": "0.26.0",
-    "manifestSha256": "2fb11a4a281bc3eef6b5e40680658d77396e900b72585bcf7205cf88569f50dc",
+    "version": "0.27.0",
+    "manifestSha256": "f54f89ca26e6b9fda5cdee5df76ec1a6809ac26d721d39026165ed5f8a5fc928",
     "bin": "wcat-b24",
     "bins": ["b24", "wcat-b24"],
     "desktop": {
@@ -199,12 +199,24 @@
         "app": "bitrix24-cli",
         "env": "B24"
       },
-      "settings": null
+      "settings": null,
+      "accountRemove": {
+        "signOut": ["{profile}", "session", "end", "--record", "--json"],
+        "remove": {
+          "minVersion": "0.0.0",
+          "keepData": ["{profile}", "account", "remove", "--keep-data", "--record", "--json"],
+          "deleteData": ["{profile}", "account", "remove", "--delete-data", "--record", "--json"],
+          "dryRun": "--dry-run",
+          "confirm": "--yes"
+        },
+        "removes": ["signIn"],
+        "keeps": ["settings", "data", "listed"]
+      }
     }
   },
   "drive": {
-    "version": "0.75.1",
-    "manifestSha256": "ec0158784056f862a32b69c4bc44c89d7636a4038b36b59713c0a0db589b59ab",
+    "version": "0.76.0",
+    "manifestSha256": "ed0bb76b580cb6f14b72a8394a1b218d673cf71fd1dbd151594a5d5791a1c385",
     "bin": "wcat-drive",
     "bins": ["drive", "wcat-drive"],
     "desktop": {
@@ -581,7 +593,7 @@
     }
   },
   "memo": {
-    "version": "0.150.0",
+    "version": "0.152.0",
     "manifestSha256": "ad0614cb1598f6275603b3d0fffd9f36a149764d9bc98b2833c99e749b180838",
     "bin": "wcat-memo",
     "bins": ["memo", "wcat-memo"],

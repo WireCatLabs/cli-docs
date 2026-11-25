@@ -31,7 +31,9 @@ cálculo con `--format csv`. `schedule` ejecuta `sync` con un temporizador. `cha
 report` lo convierte en un resumen matutino. Con `activities` activado, la sincronización también lee las llamadas, los correos,
 las tareas pendientes, las tareas y los comentarios de negociaciones y prospectos. `meetings sync` copia las llamadas
 del portal, `meetings transcribe` convierte sus grabaciones en texto en este ordenador, y `calls export` escribe en
-Bitrix24 las llamadas de otros sistemas telefónicos. `b24 api` llega a cualquier método del portal por su nombre.
+Bitrix24 las llamadas de otros sistemas telefónicos. `files list` y `files download` leen los archivos de un
+registro: sus campos de archivo, los documentos creados con plantillas y los archivos de sus actividades y
+comentarios; `search all` encuentra el texto de uno descargado. `b24 api` llega a cualquier método del portal por su nombre.
 Todos los comandos están en la [referencia de comandos](./commands.md).
 
 ## Siguiente
@@ -40,8 +42,6 @@ Todos los comandos están en la [referencia de comandos](./commands.md).
   negociaciones y los prospectos, así que leen del almacén local y funcionan sin conexión.
 - **Campos propios de los contactos guardados en local.** Los valores de los campos propios de tu portal en los
   contactos se guardan con el contacto, para que puedas leerlos sin conexión.
-- **Archivos y documentos de clientes.** Los archivos de las negociaciones y sus adjuntos, y los documentos creados con
-  las plantillas del portal. La configuración ya pide los permisos `disk` y `documentgenerator` que necesitan.
 
 ## Más adelante
 

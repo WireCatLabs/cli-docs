@@ -67,13 +67,22 @@ cada respuesta, nunca sus enlaces: el enlace de descarga de Bitrix24 lleva un to
 obtiene el archivo. Un archivo sin id y un enlace al portal con un token dentro (`/rest/…?auth=`, el
 `/rest/<user>/<code>/` de un webhook) se muestran como `[link removed]`. Un sitio web o un campo de enlace que
 escribiste tú se queda como está. `api call` imprime `[link removed]` en lugar de cada enlace de descarga, cada enlace
-público de un documento generado (`publicUrl`) y cada enlace al portal con un token. Una copia sincronizada antes de
+público de un documento generado (`publicUrl`), cada enlace al portal con un token y cualquier enlace que lleve
+`auth=`, `access_token=`, `api_token=` o `X-Amz-Signature=`, sea cual sea su dirección. Una copia sincronizada antes de
 esta regla aún puede contener esos enlaces. `b24 work sync --rescan` reescribe cada elemento que el portal todavía
 lista para el perfil. Una copia grande puede necesitar varias ejecuciones, y `b24 work store status` muestra cuánto
 lleva hecho. Un elemento borrado en el portal, o fuera del alcance de la sincronización, conserva lo que tenía.
 `b24 work account remove --delete-data` elimina toda la copia de la cuenta, y la siguiente sincronización después de
 volver a iniciar sesión la crea de nuevo. SQLite puede conservar bytes antiguos en el espacio libre del archivo del
 almacén hasta que lo reutilice.
+
+`files download` pide al portal un enlace nuevo en cada descarga, lo descarga solo desde la dirección del propio
+portal y no guarda el enlace en ningún sitio: ni en el almacén, ni en un registro, ni en una respuesta. Un archivo
+guardado solo lo puede leer tu usuario del sistema operativo (archivo 600, carpetas 700), y su texto se guarda en el
+almacén, así que `search all` lo encuentra. Un perfil que no es administrador solo encuentra el texto de los archivos de
+elementos asignados a él. Un agente por MCP recibe la ruta del archivo y su texto marcado como no confiable, nunca sus
+bytes. `disk` deja a `api call disk.*` leer cualquier archivo de Drive que pueda abrir el empleado del webhook, así que
+una llamada `disk.*` por `api call` pregunta primero, y una que crea un enlace público se rechaza.
 
 ## Teléfonos y correos de los clientes
 
@@ -128,8 +137,9 @@ un método. `api call` no se ofrece por MCP.
 cuenta, sin terminal. El temporizador ejecuta `b24 schedule exec <file>`, y el archivo de la programación, en la
 carpeta de estado, guarda las palabras, el perfil, tu `PATH` y las carpetas que usa `b24` (`B24_CONFIG_DIR`,
 `B24_STATE_DIR`, `MESSAGING_STORE`), nunca la dirección del webhook. Cada ejecución vuelve a comprobar los permisos.
-`B24_READ_ONLY` rechaza `schedule command`, `remove`, `run` y `exec`. Por MCP un agente puede ejecutar `schedule run` y
-`schedule exec`, cada uno con su propia clave de permiso (`schedule.run`, `schedule.exec`). Añadir, pausar, reanudar o
+`B24_READ_ONLY` rechaza `schedule command`, `remove`, `run` y `exec`. Por MCP un agente puede ejecutar una programación
+guardada con `schedule run`, con la clave de permiso `schedule.run`; `schedule exec` solo ejecuta un archivo de la
+propia carpeta de programaciones de la herramienta y no se ofrece por MCP. Añadir, pausar, reanudar o
 quitar un temporizador por MCP se rechaza salvo que el perfil ponga `permissions.mcp.authority` en `allow`.
 
 ## MCP en el navegador
