@@ -51,13 +51,14 @@ lo ejecutes tú en una terminal.
 | `attio.delete` | `ask` | Una sola clave para todos los borrados. Ponla en `deny` para pararlos todos. |
 | `deals.create`, `deals.update`, `deals.move`, `deals.close`, `deals.delete` | `ask` | Cada uno cambia una negociación que ven tus compañeros. |
 | `people.create`, `people.update` | `ask` | Cada uno cambia una persona que ven tus compañeros. |
+| `activities.create`, `activities.close` | `ask` | Tus compañeros ven una nota, una tarea y una tarea marcada como hecha. |
 | `api.<operation>` que escribe, como `api.objects-records-create` | `ask` | Cada una cambia lo que ven tus compañeros. |
-| `crm.assign-others` | `deny` | Dar una negociación o una persona a otro miembro del espacio de trabajo espera hasta que lo permitas. Una negociación nueva sin `--owner` es tuya. |
+| `crm.assign-others` | `deny` | Dar una negociación a otro miembro del espacio de trabajo espera hasta que lo permitas. Una negociación nueva sin `--owner` es tuya. Una persona no tiene responsable en Attio, así que `people create` y `update` no aceptan `--owner`. |
 | Cualquier otro comando | `allow` | |
 
-Una escritura de negociación o de persona también comprueba la clave `api` de la operación de Attio que envía, como
-`api.objects-records-replace`, así que un `readonly` en `api` también la detiene. Los comandos de embudos, etapas,
-cambios, campos y búsqueda solo leen, igual que los de empresas y usuarios.
+Una escritura de negociación, persona, nota o tarea también comprueba la clave `api` de la operación de Attio que
+envía, como `api.objects-records-replace` o `api.notes-create`, así que un `readonly` en `api` también la detiene. Los
+comandos de embudos, etapas, cambios, campos y búsqueda solo leen, igual que los de empresas y usuarios.
 
 ## Aleja toda escritura de un agente
 

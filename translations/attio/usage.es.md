@@ -99,9 +99,25 @@ attio work deals show deal:12
 
 Está desactivado hasta que lo activas, y solo tú puedes hacerlo: a un agente se le niega. Las notas y tareas guardan
 lo que los clientes escribieron y dijeron. Attio no puede listar solo las notas cambiadas desde un momento, así que
-cada sincronización las vuelve a leer todas. Una nota o tarea borrada en Attio se queda en la copia. El token necesita
-dos ámbitos más, `note:read` y `task:read`. Sin uno de ellos, la sincronización copia el resto y dice qué lista no pudo
-leer.
+cada sincronización las vuelve a leer todas, y una nota o tarea borrada en Attio sale de la copia. El token necesita
+dos ámbitos más, `note:read` y `task:read`. Sin uno de ellos, la sincronización copia el resto, no quita nada y dice
+qué lista no pudo leer.
+
+`activities list` las lista desde la copia, primero las tareas abiertas. `activities create` añade una nota o una
+tarea a una negociación, una persona o una empresa, y `activities close` marca una tarea como hecha. Cada uno pregunta
+antes, como todo cambio:
+
+```sh
+attio work activities list status:open
+attio work activities create comment --subject deal:12 --text "Called, they want the offer by Friday"
+attio work activities create task --subject deal:12 --title "Send the offer" --due 2026-12-04T10:00:00Z
+attio work activities close task:3f6c0c2e-0000-4000-8000-000000000000
+```
+
+`--subject` acepta la referencia que da `deals show` (`deal:12`, `person:3`), o `person:crm:<id>` por el id de
+Attio. Una nota de Attio está en un solo registro, así que una nota lleva un `--subject`, y una tarea puede llevar
+varios. Una tarea sin `--owner` no está asignada a nadie. Attio guarda una tarea como un solo texto, así que `--text`
+va debajo de su título. Para añadirlas, el token necesita dos ámbitos más, `note:read-write` y `task:read-write`.
 
 ## El embudo
 
@@ -166,11 +182,16 @@ attio work search all renewal --only crm
 mensajes, notas, eventos del calendario y reuniones que otras herramientas de WireCat guardaron en este ordenador. El
 mejor resultado sale primero.
 
+Después de `attio work sync --embed`, también encuentra una negociación por el significado de sus notas y tareas, con
+otras palabras o en otro idioma: «клиент жалуется на сроки» encuentra la negociación cuya nota dice que el
+lanzamiento se retrasó. Los vectores se crean en este ordenador con un modelo ya descargado. Hasta entonces,
+`search all` busca por palabras y lo dice. También encuentra un nombre latino escrito en cirílico: `феррара` encuentra
+Ferrara.
+
 ## La API de Attio
 
 `attio work api` ejecuta cualquier operación de la API de Attio, un comando por operación, con sus propias opciones y
-su ayuda. Llega a lo que todavía no tiene un comando propio: notas, tareas, listas, objetos personalizados, reuniones
-y más.
+su ayuda. Llega a lo que todavía no tiene un comando propio: listas, objetos personalizados, reuniones y más.
 
 ```sh
 attio work api list                               # every operation, without calling Attio

@@ -9,7 +9,7 @@ title: "Сравнение с другими инструментами"
 `attio` дает доступ к данным продаж пространства Attio из командной строки и через MCP-сервер: к сделкам, людям,
 компаниям, воронке сделок и участникам пространства. Здесь он стоит рядом с другими инструментами, через которые
 ИИ-агент читает и меняет Attio, чтобы вы могли выбрать тот, что подходит для вашей работы. Оценки для `attio` взяты из
-его текущего выпуска, его команд и исходного кода и проверены 19 ноября 2026 года. Его тесты работают с поддельным Attio,
+его текущего выпуска, его команд и исходного кода и проверены 25 ноября 2026 года. Его тесты работают с поддельным Attio,
 который собран по описанию API Attio, а каждый выпуск еще проходит проверку на живом пространстве. Оценки проверяют
 заново при каждом выпуске. Оценки для остальных инструментов взяты из их собственной документации и исходного кода по
 ссылкам в таблице и проверены 19 ноября 2026 года. Attio MCP и attio-mcp еще проверили вживую
@@ -57,8 +57,8 @@ Attio, 9 действий. Его здесь нет, чтобы в таблиц�
 | Один поиск по сделкам и по сообщениям и заметкам из других ваших инструментов | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Изменить CRM** | | | | | | |
 | Создать и изменить людей и компании | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L49-L50) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
-| Перевести сделку на другой этап | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [✅](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
-| Добавить примечание или задачу к сделке | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
+| Перевести сделку на другой этап | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [✅](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
+| Добавить примечание или задачу к сделке | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
 | **Сводки и изменения** | | | | | | |
 | Сколько сделок на каждом этапе и их сумма | ✅ | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
 | Доля выигранных сделок за период | ✅ | [🟡](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
@@ -94,14 +94,15 @@ Attio, 9 действий. Его здесь нет, чтобы в таблиц�
 - **Разрешить, спросить или запретить.** У каждой команды и каждой операции API свой ключ, например `deals.list` или
   `api.notes-create`, со значением `allow`, `ask`, `readonly` или `deny` в [разрешениях](./permissions.md).
   `mcp serve --permission` делает ключ строже только для одного сервера. Агент не может ослабить разрешение.
-- **Запись через MCP.** Инструмент `attio_write` выполняет записи группы `api`. С самого начала они в `allow`, а
-  удаления в `ask`. Через MCP отвечать в терминале некому, поэтому `ask` пропускает агента, и с токеном с правами на
+- **Запись через MCP.** Инструмент `attio_write` выполняет команды, которые пишут: сделки, люди, примечания и задачи,
+  а также группа `api`. С самого начала любая запись стоит в `ask`. Через MCP отвечать в терминале некому, поэтому `ask` пропускает агента, и с токеном с правами на
   запись он может писать и удалять. Поэтому строка про подтверждение отмечена как частично. Поставьте
   `permissions.api` в `readonly` или включите подтверждение для `attio_write` в приложении агента. См. [MCP](./mcp.md).
-- **Изменения в CRM.** Команды для сделок, людей и компаний только читают. Создать человека, перевести сделку, добавить
-  примечание или задачу можно через операцию `api`, например `api objects-records-update` или `api notes-create`,
-  поэтому эти строки отмечены как частично. Команды, чтобы переводить и закрывать сделки и работать с примечаниями и
-  задачами, есть в [планах](./roadmap.md).
+- **Изменения в CRM.** `deals` создают, меняют, переводят и закрывают сделки, `people` создают и меняют людей, а
+  `activities` добавляет примечание или задачу и отмечает задачу выполненной. Каждая такая команда сначала спрашивает
+  вас в терминале. Команды, которая записывает компании, нет: у компании в Attio нет атрибута почты или телефона, поэтому
+  компанию меняют через операцию `api`, например `api objects-records-update`. Из-за этого строка про людей и компании
+  отмечена как частично.
 - **Без интернета.** `sync` копирует сделки и людей и компании, которые в них названы, вместе с этапами воронки
   сделок. `deals`, `pipelines`, `stages`, `changes`, `fields` и `search all` читают эту копию, в том числе с
   `--offline`. `people`, `organizations` и `users` всегда обращаются к Attio. Attio не умеет отдавать только

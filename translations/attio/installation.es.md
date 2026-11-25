@@ -66,11 +66,13 @@ Attio describe estos pasos en su página de ayuda,
    | `object_configuration:read` | Las etapas de las negociaciones y los atributos propios de tu espacio de trabajo. |
    | `user_management:read` | Los miembros del espacio de trabajo, responsables de las negociaciones. |
    | `note:read` y `task:read` | Solo para copiar notas y tareas, ver [notas y tareas](./usage.md#notes-and-tasks-on-a-deal). |
+   | `record_permission:read-write` | Solo para cambiar negociaciones y personas. |
+   | `note:read-write` y `task:read-write` | Solo para añadir notas y tareas y marcar una tarea como hecha. |
 
 5. Guarda y copia el token que muestra Attio.
 
-Con solo estos ámbitos, el token puede leer y nunca cambia nada en Attio. Los tokens de Attio no caducan. Funcionan
-hasta que un administrador los borra en el mismo sitio.
+Con solo los ámbitos de lectura, el token puede leer y nunca cambia nada en Attio. Los tokens de Attio no caducan.
+Funcionan hasta que un administrador los borra en el mismo sitio.
 
 ## Inicia sesión
 

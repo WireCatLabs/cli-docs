@@ -4,6 +4,55 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/attio-cli`. Una sección por versión, la más nueva primero.
 
+## 0.6.0 — 25.11.2026
+
+### Añadido
+
+- **Añade una nota o una tarea a una negociación, una persona o una empresa.** `activities create comment` añade una
+  nota, `activities create task` una tarea con un título, un texto y una fecha límite, y `activities close` marca una
+  tarea como hecha. Cada uno pregunta antes, como todo cambio en Attio. `activities list` lista las notas y tareas que
+  guarda la copia, primero las tareas abiertas. Para añadirlas, el token necesita los ámbitos `note:read-write` y
+  `task:read-write` ([uso](./usage.md#notes-and-tasks-on-a-deal)).
+
+## 0.5.3 — 25.11.2026
+
+### Corregido
+
+- **La habilidad le dice a un agente que pregunte a `search all` por significado antes de leer cada nota.** Encuentra
+  negociaciones por lo que significan sus notas y tareas una vez que `sync --embed` ha creado sus vectores, y después
+  de los nombres exactos lista los nombres casi iguales y los nombres escritos en el otro alfabeto
+  (`match: corrected`). En la prueba de agentes con HubSpot, un agente leyó cada nota y tomó un nombre casi igual.
+
+## 0.5.2 — 25.11.2026
+
+### Corregido
+
+- **Una nota o tarea borrada en Attio sale de la copia local en la siguiente sincronización.** Se quedaba para siempre
+  en `deals show` y en `search all`. Cada sincronización lee todas las notas y tareas de Attio, así que la que ya no
+  aparece se marca como borrada. Cuando un token no puede leer una de las dos listas, no se quita nada. Si una
+  sincronización fuera a quitar la mayoría de una vez, las retiene y lo dice hasta `attio work sync --rescan`.
+
+## 0.5.1 — 24.11.2026
+
+### Corregido
+
+- **`search all` y `deals list` encuentran un nombre cirílico escrito con letras latinas**, marcado como corrección.
+  Un agente que buscó el nombre de una empresa rusa en letras latinas no encontró nada y respondió mal.
+
+## 0.5.0 — 24.11.2026
+
+### Añadido
+
+- **`search all` encuentra una negociación por el significado de sus notas y tareas**, con otras palabras o en otro
+  idioma, después de que `sync --embed` cree los vectores. Hasta entonces busca por palabras y lo dice.
+- **`search all` y `deals list` encuentran un nombre latino escrito en cirílico** (`феррара` encuentra Ferrara), y un
+  nombre que difiere en una letra de una palabra de la búsqueda.
+
+### Corregido
+
+- **`people create` y `people update` ya no ofrecen `--owner`.** Una persona en Attio no tiene responsable, y la
+  opción se rechazaba dos veces antes de la escritura. La ayuda lista solo las opciones que Attio acepta.
+
 ## 0.4.1 — 24.11.2026
 
 ### Corregido
