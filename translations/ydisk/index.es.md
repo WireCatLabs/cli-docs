@@ -24,16 +24,18 @@ lleva unos cinco minutos, una sola vez.
 
 ## Qué obtienes
 
-- **Busca dentro de tus archivos, no solo en sus nombres.** Se puede buscar en el texto de PDF, Word (`.docx`), Excel
-  (`.xlsx`), CSV, TSV, texto plano y Markdown. La búsqueda encuentra otras formas de una palabra en ruso y en inglés, y
+- **Busca dentro de tus archivos, no solo en sus nombres.** Se puede buscar en el texto de PDF, Word (`.docx`, `.doc`), Excel
+  (`.xlsx`), PowerPoint (`.pptx`), OpenDocument, RTF, HTML, EPUB, CSV, TSV, texto plano y Markdown. Los escaneos y las
+  imágenes JPEG, PNG y WebP se leen por [OCR](./usage.md#scans-and-pictures), en tu ordenador por defecto. La búsqueda encuentra otras formas de una palabra en ruso y en inglés, y
   encuentra un documento por su significado cuando su texto ya está indexado.
 - **Busca sin internet.** La búsqueda lee la copia de tu ordenador, así que es rápida y no hace ninguna petición a
   Yandex.
 - **Todo el Disk, en vivo.** Lista, lee, descarga, sube, copia, mueve, envía a la papelera, restaura y comparte
   archivos sin abrir un navegador.
 - **Edita un archivo donde está.** Tú o tu agente cambiáis una nota, celdas de Excel o párrafos de Word en el Disk sin
-  descargarlos a mano. El resto del archivo queda como estaba, el archivo se comprueba justo antes de escribir, y lo que la edición
-  reemplazó se guarda en tu ordenador. Mira [edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk).
+  descargarlos a mano. El resto del archivo queda como estaba, y lo que la edición reemplazó se guarda en tu
+  ordenador. Un archivo sin enlace público lo comprueba el propio Disk en el momento de escribir, y uno compartido se
+  comprueba justo antes. Mira [edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk).
 - **Una carpeta al día con el Disk.** Un espejo mantiene igual una carpeta de tu ordenador y una del Disk en ambos
   sentidos. Un archivo de texto editado en los dos lados se fusiona, y un conflicto real te espera con las diferencias.
   Se detiene antes de muchos borrados o reemplazos. Mira [espejos](./mirrors.md).

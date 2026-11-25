@@ -115,7 +115,7 @@ title: "Пошаговые сценарии"
    его теги, заметки, записи памяти и редакторы из локального хранилища
 
 4. ```sh
-   drive personal documents history DOC_ID --activity
+   drive personal activities list DOC_ID
    ```
 
    кто что с ним делал, по данным Drive Activity; нужен вход с --grant activity

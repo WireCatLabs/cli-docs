@@ -94,7 +94,7 @@ ydisk session status [options]
 
 ### `ydisk session end`
 
-forget this profile's token on this computer; the token itself stays valid in Yandex Disk
+forget this profile's token on this computer; the token itself stays valid in Yandex Disk until you remove the app in Yandex ID's Data access: https://id.yandex.ru/personal/data-access
 
 **Changes something on this computer only.**
 
@@ -336,8 +336,8 @@ ydisk changes [options]
 
 | Option | What it does |
 |---|---|
-| `--since <when>` | from this time: an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago. Default: `1d`. |
-| `--until <when>` | up to this time, in the same forms. |
+| `--since <time>` | from this time: an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago. Default: `1d`. |
+| `--until <time>` | up to this time, in the same forms. |
 | `--event <events>` | only these, comma separated: added, changed, restored, deleted, unavailable, unsynced. |
 | `--limit <n>` | how many changes to return. Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
@@ -1264,6 +1264,27 @@ ydisk files sheets update <path> <range> [options]
 
 **Example:** `ydisk personal files sheets update /budget.xlsx "Sheet1!B2:C2" --values '[[120, "paid"]]' --expected-fingerprint 9f86d081…`
 
+#### `ydisk files sheets create`
+
+create a new .xlsx on Yandex Disk from rows from A1: one sheet, or several given as [{name, rows, header?}]. Numbers and booleans are typed, a text stays text, even one that starts with =. A formula is only {"formula": "SUM(B2:B3)"}, computed when the file opens; {"value": "Total", "bold": true} is a bold cell and header: true makes a sheet's first row bold. A file already there is refused: change it with sheets update
+
+**Changes something in the service.**
+
+```sh
+ydisk files sheets create <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the new .xlsx file on Yandex Disk. |
+
+| Option | What it does |
+|---|---|
+| `--values <json>` | the rows as JSON, or [{"name", "rows", "header"?}] for several sheets; a cell is a text, number, boolean, null (empty), {"formula": "…", "bold"?} or {"value": …, "bold"?}. |
+| `--name <name>` | the sheet's name when --values is rows; Sheet1 without it. |
+
+**Example:** `ydisk personal files sheets create /budget.xlsx --values '[["Item", "Cost"], ["Rent", 950]]' --name Budget`, `ydisk personal files sheets create /budget.xlsx --values '[{"name": "Budget", "header": true, "rows": [["Item", "Cost"], ["Rent", 950], ["Food", 300], [{"value": "Total", "bold": true}, {"formula": "SUM(B2:B3)"}]]}]'`
+
 ### `ydisk files documents`
 
 the paragraphs of a Word document (.docx) on Yandex Disk, read and changed in place
@@ -1302,6 +1323,26 @@ ydisk files documents update <path> [options]
 | `--expected-fingerprint <hash>` | the sha256 documents show gave for the file. |
 
 **Example:** `ydisk personal files documents update /report.docx --payload '[{"index": 2, "text": "Revenue grew 12%."}]' --expected-fingerprint 9f86d081…`
+
+#### `ydisk files documents create`
+
+create a new .docx on Yandex Disk with these paragraphs, each in a style: Title, Heading1, Heading2, Heading3, Normal, ListBullet (Normal without one; ListBullet is a bullet list), and tables. A paragraph is bold or italic as a whole, or made of runs that each are; a table is rows of cell texts, its first row bold with header: true. A file already there is refused: change it with documents update
+
+**Changes something in the service.**
+
+```sh
+ydisk files documents create <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the new .docx file on Yandex Disk. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | the body as JSON, in order: [{text, style?, bold?, italic?}, {runs: [{text, bold?, italic?}], style?}, {table: [[cell, …], …], header?}]. |
+
+**Example:** `ydisk personal files documents create /report.docx --payload '[{"text": "Report", "style": "Title"}, {"text": "Revenue grew 12%."}]'`, `ydisk personal files documents create /report.docx --payload '[{"runs": [{"text": "Revenue "}, {"text": "grew 12%", "bold": true}]}, {"table": [["Item", "Cost"], ["Rent", "950"]], "header": true}]'`
 
 ### `ydisk files history`
 
@@ -2310,7 +2351,7 @@ ydisk config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, read_scans, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -2331,7 +2372,7 @@ ydisk config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, read_scans, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 
 | Option | What it does |
 |---|---|

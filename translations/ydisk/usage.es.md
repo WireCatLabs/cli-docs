@@ -76,12 +76,31 @@ de nuevo con su ruta nueva.
 
 | En el Disk | En la copia |
 | --- | --- |
-| PDF con capa de texto, Word `.docx`, Excel `.xlsx`, CSV, TSV, texto plano, Markdown | El texto, el nombre, la ruta, el tamaño y las fechas |
-| Un PDF escaneado o una imagen | El nombre, la ruta y las fechas. No hay texto que leer |
+| PDF con capa de texto, Word `.docx` y `.doc`, Excel `.xlsx`, PowerPoint `.pptx`, OpenDocument `.odt`, `.ods` y `.odp`, RTF, HTML, EPUB, CSV, TSV, texto plano, Markdown | El texto, el nombre, la ruta, el tamaño y las fechas |
+| Un PDF escaneado (sin capa de texto), una imagen JPEG, PNG o WebP | El texto leído por OCR, según diga `read_scans`: en tu ordenador por defecto. Un escaneo de más de 20 páginas, una imagen de más de 25 MB, o cualquiera de ellos con `read_scans` en `off`: el nombre, la ruta y las fechas. Consulta [escaneos e imágenes](#scans-and-pictures) |
 | Cualquier otro archivo, y cualquier archivo de más de 50 MB | El nombre, la ruta y las fechas |
 
 `status` lista cada archivo guardado solo por su nombre, con el motivo. Los archivos siguen en el Disk. La copia guarda
 su texto. Las horas se guardan y se muestran en UTC.
+
+### Escaneos e imágenes
+
+Una sincronización lee por OCR el texto de un PDF escaneado y de una imagen JPEG, PNG o WebP. El ajuste `read_scans`
+del perfil elige quién lo lee:
+
+| `read_scans` | Quién lee el texto | Qué necesita |
+| --- | --- | --- |
+| `local` (por defecto) | El programa `tesseract` en tu ordenador, en ruso e inglés. Nada sale del ordenador y no se descarga nada | `tesseract` instalado, por ejemplo `sudo apt install tesseract-ocr tesseract-ocr-rus` en Debian o Ubuntu, `brew install tesseract tesseract-lang` en macOS |
+| `anthropic` u `openai` | El modelo elegido con `memo models ai set`, en la dirección propia de ese proveedor. Cada página se envía al proveedor como imagen, y el proveedor cobra cada página | `memo models ai set` con ese proveedor, e imágenes permitidas (`--allow-remote`) |
+| `off` | Nadie | Los escaneos y las imágenes se guardan solo por su nombre |
+
+`ydisk personal config set read_scans '"anthropic"'` cambia un perfil. De un archivo se leen hasta 20 páginas, y una
+sincronización lee como mucho 100 páginas. Las páginas que pasan de eso esperan a la siguiente sincronización. Un
+escaneo que un ydisk anterior guardaba por su nombre se lee en la siguiente sincronización. Si falta `tesseract`, la
+sincronización termina igualmente, y el motivo de cada escaneo en `status` dice cómo instalarlo. `local` gira una
+página tumbada de lado antes de leerla, con los datos de orientación de `tesseract`
+(`sudo apt install tesseract-ocr-osd` donde no se instalan con `tesseract`). Sin esos datos esa página se lee como
+texto ilegible, y los `warnings` de la sincronización dicen `document.scan-unturned`.
 
 ## Lee un documento sincronizado
 
@@ -155,23 +174,42 @@ Cada operación de la API de Disk de Yandex es también un comando: `ydisk perso
 ## Edita un archivo en el Disk
 
 Una edición reemplaza un archivo solo si tiene el contenido con el que se leyó. Lee primero el `sha256` del archivo y
-pásalo como `--expected-fingerprint`. El archivo se comprueba justo antes de escribir, y lo que se reemplazó se guarda
-en este ordenador, en la carpeta de estado del perfil. Si el archivo cambió desde que se leyó, la respuesta es un
-`conflict` que indica el comando para leerlo otra vez, y no se sube nada. El Disk no tiene subida condicional, así que
-un cambio que llega en el instante entre esa última comprobación y la subida no se detecta; el contenido reemplazado
-se guarda igualmente.
+pásalo como `--expected-fingerprint`. Lo que la edición reemplazó se guarda en este ordenador, en la carpeta de estado
+del perfil. Si el archivo cambió desde que se leyó, la respuesta es un `conflict` que indica el comando para leerlo
+otra vez.
+
+Cómo se comprueba el archivo depende de si tiene un enlace público:
+
+- **Un archivo sin enlace público lo comprueba el propio Disk en el momento de escribir.** El contenido nuevo va a un
+  archivo oculto junto a él (`.name.ext.ydisk-…`). Después el archivo viejo va a la papelera del Disk, y el Disk lo
+  rechaza si el contenido del archivo no es el que se leyó. Después el archivo oculto toma el nombre del archivo. El
+  archivo recibe un id nuevo (el `resource_id` de Yandex), y el historial de versiones propio del Disk para él empieza
+  de nuevo. El archivo viejo queda en la papelera, y
+  [la ayuda de Yandex](https://yandex.ru/support/yandex-360/customers/disk/web/ru/actions-files/spec-folders/trash)
+  dice que los archivos allí siguen ocupando espacio en el Disk y se borran solos a los 30 días.
+  Si el archivo cambió, el archivo oculto se quita y no se reemplaza nada. Si en el instante entre los dos pasos
+  apareció un archivo nuevo en esa ruta, la respuesta es un `conflict` (`upload.replace-interrupted`) que nombra el
+  archivo oculto, que guarda tu contenido nuevo.
+- **Un archivo con enlace público se comprueba justo antes de escribir**, y lo que se reemplazó se guarda en tu
+  ordenador. Se sobrescribe en su sitio, así que su id y su enlace se mantienen. El Disk no tiene subida condicional,
+  así que un cambio que llega en el instante entre esa comprobación y la subida no se detecta. El contenido
+  reemplazado se guarda igualmente.
 
 | Comando | Qué cambia |
 | --- | --- |
 | `files update <path> --text <text>` (o el texto por stdin) | todo el texto de un archivo de texto plano, como `.md`, `.txt` o `.csv`; un archivo nuevo no necesita huella |
 | `files sheets update <path> <range> --values <json>` | celdas de un `.xlsx`, a partir de `files sheets show`; el resto del libro queda como está |
 | `files documents update <path> --payload <json>` | párrafos de un `.docx`, por los índices que da `files documents show` |
+| `files sheets create <path> --values <json>` | un `.xlsx` nuevo con una hoja de estas filas desde A1. `--name` da nombre a la hoja |
+| `files documents create <path> --payload <json>` | un `.docx` nuevo a partir de párrafos, cada uno con un estilo opcional como `Title` o `Heading1` |
 | `files restore <path> <version>` | devuelve una versión que lista `files history` |
 
 `files update` rechaza un `.pdf`, `.docx` o `.xlsx`: su texto es extraído, y escribirlo de vuelta reemplazaría el
 documento. `sheets update` escribe un texto como texto, aunque empiece por `=`, y no sobrescribe una fórmula salvo con
 `--replace`. `documents update` rechaza un párrafo con un cambio controlado, un campo, una imagen, un comentario, un
-enlace o una nota al pie, y dice por qué. Cada edición pregunta igual que `files.delete`. `files history` lista lo que
+enlace o una nota al pie, y dice por qué. `sheets create` y `documents create` escriben solo un archivo nuevo y
+rechazan una ruta que ya existe. Responden el `sha256` que `update` toma después. Cada edición de un archivo existente
+pregunta igual que `files.delete`. `files history` lista lo que
 reemplazaron las ediciones de este perfil, la más reciente al final; cada `version` es el sha256 del contenido
 reemplazado, y `available` dice si aún se guarda. Consulta
 [edita un archivo con tu agente](./recipes.md#edit-a-file-with-your-agent).

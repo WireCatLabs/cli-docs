@@ -115,7 +115,7 @@ Encuentra el documento que recoge una decisión, lee el pasaje y mira quién lo 
    sus etiquetas, notas, recuerdos y editores, guardados en el almacén local
 
 4. ```sh
-   drive personal documents history DOC_ID --activity
+   drive personal activities list DOC_ID
    ```
 
    quién hizo qué con él, según Drive Activity; necesita un inicio de sesión con --grant activity

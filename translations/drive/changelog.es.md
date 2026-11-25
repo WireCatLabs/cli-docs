@@ -4,6 +4,292 @@ title: "Historial de cambios"
 
 Los detalles técnicos de las versiones se conservan en el idioma del proyecto original. Las guías traducidas explican las tareas habituales.
 
+## 0.77.0 — 25.11.2026
+
+### Added
+
+- **`drive <profile> folders list` names each chosen folder**, as the shared folders row of the documents CLIs
+  allows. The name comes from `folders add` and is refreshed by each sync, so a rename shows after the next sync.
+  A folder chosen with an older drive shows only its id until then. No `path` is given: Google Drive keeps none,
+  and building one would cost a request per parent folder, often ending at a parent shared with you that you
+  cannot see ([usage](./usage.md)).
+
+## 0.76.1 — 25.11.2026
+
+### Fixed
+
+- **A scan of a page lying on its side is now read** (cli-core 0.750.0, was 0.742.0). Local OCR
+  (`read_scans: local`) turns the page first, so its text is found by search instead of coming out garbled. Scans
+  read before are read again once, at the next sync. Without tesseract's orientation data
+  (`apt install tesseract-ocr-osd`) a scan reads as before, and the sync warns with `document.scan-unturned`
+  ([scans and pictures](./usage.md#scans-and-pictures)).
+
+## 0.76.0 — 24.11.2026
+
+### Added
+
+- **`drive <profile> session status` says whether the profile is signed in to Google here**, as which account (the
+  Google account's permission id) and with which grants, without asking Google. drive now has all four session
+  commands ([WC-ACCT-12](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/accounts.md#wc-acct-12--sign-in-is-session-start-status-and-end-and-session-list-names-the-profiles)).
+
+## 0.75.1 — 24.11.2026
+
+### Fixed
+
+- **A picture OCR finds no text in keeps its picture search** (cli-core 0.742.0, was 0.740.0). With `picture_search`
+  on and `tesseract` installed, a photo without text was kept by name only: it lost its picture vector, so it was not
+  found by what it shows, and each sync downloaded it and ran OCR on it again. It now gets its vector, and the same
+  reader does not read it again until the file or the reader changes.
+
+## 0.75.0 — 24.11.2026
+
+### Added
+
+- **A sync reads the text of scans and pictures.** A PDF with no text layer and a JPEG, PNG or WebP picture are read
+  by OCR, chosen by the profile's `read_scans`: `local` by default (the `tesseract` program on this computer, Russian
+  and English, nothing downloaded), `anthropic` or `openai` (the `ai set` model at that provider's own address, with
+  pictures allowed, each page sent to it and paid per page), or `off`. At most 20 pages a file and 100 a sync. A scan
+  an older drive kept by name is read on the next sync, and a sync with no `tesseract` says how to install it
+  ([scans and pictures](./usage.md#scans-and-pictures)). Built on cli-core 0.740.0.
+
+### Fixed
+
+- **drive marks other people's text in its own Google reads for a scheduled agent.** In a run locked read-only
+  with a mark (`DRIVE_READ_ONLY=1`, `DRIVE_UNTRUSTED_MARK`), `files list|get`, `documents get`, `comments`,
+  `permissions` and `revisions list|get`, `activities list`, `shared-drives`, `sheets info|show`, `transcripts list`,
+  `folders browse`, `api call` and every `api <operation>` answer names, titles, descriptions, text, comments, cells and people's names between the run's markers, as
+  cli-core's shared `documents`, `search` and `catalog` reads already do. Outside such a run no answer changes.
+- **A `sync --rescan` removes a document Google put in the trash as deleted.** The walk of the chosen folders now
+  lists trashed files and folders too, so a full walk removes such a document and its text with the reason
+  `deleted`, where it used to keep it as `unavailable`. A file the walk does not find still stays `unavailable` with
+  its text kept, and so does a transcript kept by `transcripts: include`. A walk stopped midway remembers the files
+  it found in the trash, so the sync that resumes it removes them as deleted too.
+
+## 0.74.0 — 24.11.2026
+
+### Added
+
+- **Search reads more uploaded formats** (cli-core 0.739.0, was 0.735.0). A sync now reads the text of Word 97–2003
+  (`.doc`), PowerPoint (`.pptx`), OpenDocument (`.odt`, `.ods`, `.odp`), RTF, HTML and EPUB files, through
+  cli-core's readers in place of drive's own list. A file kept by name as an unsupported type is read on the next
+  sync ([usage](./usage.md)).
+
+### Fixed
+
+- **`files sheets create` and `files documents create` are not offered.** cli-core 0.739.0 adds them for CLIs that
+  name a file by its path; Google Drive names a file by an id it gives, so they could not work here
+  ([#393](https://github.com/WireCatLabs/drive-cli/issues/393)).
+
+## 0.73.0 — 24.11.2026
+
+### Added
+
+- **Edit Word, Excel and text files stored in Google Drive in place** (cli-core 0.735.0, was 0.724.0, and cli-base
+  0.132.0, was 0.130.0). `files sheets show|update` reads and writes cells of an uploaded `.xlsx`, `files documents
+  show|update` paragraphs of a `.docx`, and `files update FILE_ID --text` the whole text of a Markdown, text or CSV
+  file. Each write needs `--expected-fingerprint`, the `sha256` the file was read at, checks the `files.delete`
+  permission, and keeps the replaced content on this computer. `files history` lists those versions and `files restore FILE_ID
+  <version>` puts one back. Google Drive has no conditional upload, so the file is checked just before the write; a
+  change in that moment is not caught, but what the write replaced is kept. A Google Doc or Sheet is refused with
+  the command that changes it ([usage](./usage.md#edit-a-file-stored-in-google-drive),
+  [recipe](./recipes.md#edit-a-file-stored-in-drive-with-your-agent)).
+- **`files download FILE_ID` without `--output` answers the file's text and its `sha256`**, to edit it with
+  `files update`. A text cut at 200,000 characters, or one extracted from a PDF, `.docx` or `.xlsx`, has no `sha256`.
+
+### Changed — may break callers
+
+- **`files update` writes a file's text now; its metadata change moved to `api drive-files-update`.** `files update
+  FILE_ID --body '{"name":"Renamed"}'` is now `api drive-files-update --file-id FILE_ID --body '{"name":"Renamed"}'`,
+  with the same permission keys (`api.drive.files.update`, `files.update`). `files restore FILE_ID` with no version
+  still takes a file out of the trash.
+
+## 0.72.1 — 23.11.2026
+
+### Fixed
+
+- **`changes --since <time>` and `--until <time>` in help** (cli-core 0.724.0, was 0.722.0, and cli-base 0.130.0, was
+  0.128.0). `--until` said `<when>`. The flags take the same values as before. The vocabulary now knows `changes`,
+  `--since` and `--event`, so the command lint needs no exceptions for them.
+
+## 0.72.0 — 23.11.2026
+
+### Added
+
+- **Earlier versions of every synced document, and a change log** (cli-core 0.722.0, was 0.707.0, and cli-base
+  0.128.0, was 0.124.0). Sync keeps a document's text, title and front matter before each change and before it
+  leaves the copy. `documents history <document>` lists the versions and `--revision <n>` shows one.
+  `changes --since 1d` lists what was added, changed, deleted, no longer visible or came back. Both read the local
+  copy, so agents get them over MCP too ([recipes](./recipes.md#see-earlier-versions-and-what-changed)).
+- **`keep_versions_for_days`, 365 by default**, for a profile or `defaults`. A sync that finishes its pass drops older
+  versions and change log rows ([configuration](./configuration.md#saved-settings)).
+
+### Changed — may break callers
+
+- **`documents history` reads the local versions now, and Google's own history moved.** Google's revisions are
+  `revisions list <file>`, as before. Who did what is `activities list <file>`, which was `documents history --activity`.
+  The permission key of that Google read is `activities.list`, which was `documents.history`. A config that set
+  `permissions.documents.history` for the Google read sets `permissions.activities.list` instead.
+- **The MCP Registry entry asks which profiles to serve.** It started `mcp serve --profiles all`, so a client that
+  installed the server from the registry reached every account on the computer without the owner choosing. Now
+  `--profiles` is a required argument with the example `personal`: the client asks for one profile, a
+  comma-separated list or `all`. Why: a CLI never picks an account for the owner
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)). Watch for: a client set up from the old entry keeps `--profiles all` until it is set up again; a
+  server added by hand or with `mcp config` does not change.
+
+### Fixed
+
+- **The usage guide no longer says a catalog holds at most 10,000 entries** and asks for narrower folders. A scope of
+  any size reaches it over several syncs, and the guide and README now say a sync also stops after 15 minutes in a
+  terminal or 45 seconds over MCP and the next one goes on (cli-core 0.676.0, was 0.673.0; cli-base 0.104.0, was
+  0.102.1).
+- **A listing past 10,000 entries names the listing that is too large**: one folder (choose smaller folders) or the
+  transcript search (set more specific `transcript_words`). It said the chosen folders together held too many, the
+  ceiling a sync no longer has. The change-feed error says to run `sync --rescan` once and then plain `sync`, instead
+  of saying it works only while the folders hold at most 10,000 entries.
+- **A sync stops in time at its deadline and says to sync again** (15 minutes in a terminal, 45 seconds over MCP, or
+  `--timeout`). drive did not pass the run's budget and deadline to the sync, so a long sync was cut off with
+  `command.timed-out` instead.
+- **`sync --embed` no longer turns a sync's own stop into a timeout.** After a sync that stopped early, or with no
+  time left before the deadline, it skips embedding and says so in `embeddings` (`skipped`, `next`); the next
+  `sync --embed` goes on.
+- **A file Google stops showing keeps its text.** A removal in Google's change feed, a 404 or lost access marks the
+  document no longer visible: it leaves lists and search, keeps its text, and comes back as it was. Only a file in the
+  trash counts as deleted. Before, sync blanked the text in both cases.
+- **`drive mcp serve --profiles all` starts on a computer with no profile yet** (cli-core 0.707.0, was 0.687.0;
+  cli-base 0.124.0, was 0.109.0). It answers the handshake and lists its tools, and each tool call says how to set up
+  the first profile. Directories such as Glama start a server in an empty container only to read its tools, and
+  marked drive as one that cannot be deployed.
+- **An agent that runs drive itself writes its relationships as suggestions.** drive took only a call over its own MCP
+  server for an agent's, so an agent running `drive relationships add` in a terminal (Claude Code, Codex and others,
+  by `CLAUDECODE` or `AI_AGENT`) wrote a confirmed link as the owner. drive now asks cli-core's shared check, as
+  notion does: the link waits unconfirmed until the owner adds the same relationship or removes it. Memories and facts
+  an agent writes follow the same check.
+- **cli-core 0.687.0 and cli-base 0.109.0.** The profile's account is now recorded by cli-core's documents engine
+  instead of drive's own copy, and a Drive folder no longer shows up in search (a hit with
+  `not_read: "folder metadata only"` is gone). The start token and the root folder's read now count toward a sync's
+  request budget.
+
+## 0.71.0 — 16.11.2026
+
+### Changed — may break callers
+
+- **A sync no longer fails because the chosen folders hold more than 10,000 entries.** It reads 10,000, saves where it
+  stopped, answers `complete: false` and the next sync goes on from there (cli-core 0.673.0, was 0.666.0; cli-base 0.102.1, was 0.101.0). One folder
+  that alone holds more than 10,000 entries still stops the sync and says to choose smaller ones. The built-in
+  `transcript_words` now come from cli-core, the same list its meetings use; the words are unchanged.
+
+### Fixed
+
+- **A Meet transcript or Gemini notes shared with two Drive profiles link to their meeting** (cli-core 0.673.0).
+  `search all` showed the meeting and the document apart, and the meetings filter "only with transcript" missed it.
+
+## 0.70.0 — 15.11.2026
+
+### Changed — may break callers
+
+- **cli-core 0.666.0**, which carries the shared documents commands, and **cli-base 0.101.0**, which it is built on.
+  `runs list` help no longer prints the defaults of `--limit` and `--page`.
+- **The document commands come from cli-core and use the shared entity names.** `folders`, `sync`, `status`,
+  `documents list|show|export|context`, `search`, `catalog`, `tags`, `relationships`, `notes`, `memories`, `facts`,
+  `identities` and `mirrors` are cli-core's shared documents commands, the same in every documents CLI. Their
+  commands, options and arguments are unchanged. The entity names `commands --json` declares change: `drive_document`
+  → `document` (view `imported`), `document` view `drive_catalog` → `catalog`, `drive_document_tag` → `document_tag`,
+  `drive_document_relationship` → `document_relationship`, `drive_document_identity` → `document_identity`,
+  `drive_selected_folder` → `selected_folder`, `drive_mirror` → `mirror`. A caller that matched on the old names
+  matches on the new ones.
+- **`identities list` answers `remote_id` and `provider` instead of `google_id`.** The query term is `remote_id:<id>`,
+  and `provider` is `google-drive`. Every documents CLI answers the same fields.
+- **`catalog tree` reads only the folder it shows.** It still fails with `catalog.tree-limit` over 10 000 entries, and
+  the error now says to name a smaller folder or lower `--depth`. An entry in two folders is shown in full once and
+  marked `repeated: true` at its other place, where it used to be shown in full each time.
+- **The catalog, mirror, `export.exists` and `listing.too-large` reasons are cli-core's**, and their messages name no
+  provider.
+- **`commands info --json` loses the `notes` and `search` override entries**: those commands are cli-core's shared
+  ones now, not drive's customized messenger commands.
+
+## 0.69.0 — 14.11.2026
+
+### Changed — may break callers
+
+- **A `readonly` level no longer stops `drive sync`** (cli-core 0.662.0, was 0.656.0). A command that only fetches
+  from Google Drive into the local store runs at `readonly`: the profile's own key, a group key or setup's "read
+  only" answer. `deny` still refuses it. Commands that write the owner's files or change Google data stay blocked by
+  `readonly`. A profile that used `readonly` to stop syncing sets the key to `deny`. See the
+  [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **A shared config with a small slip is mended when it is read.** `~/.config/WireCat/config.json` with a
+  byte-order mark, a comment, a trailing comma or a missing comma between two lines is fixed in place, the old file
+  kept beside it as `config.json.bak-<time>`. Other damage names its line, column and the likely fix.
+
+## 0.68.0 — 13.11.2026
+
+### Changed — may break callers
+
+- **Built on cli-core 0.656.0** (was 0.652.0). See the
+  [cli-core changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **Sync runs on a fresh install.** A shared WireCat config (`~/.config/WireCat/config.json`) that could not be
+  read (a byte-order mark, broken JSON, a folder in its place, an older `setup` shape) made every WireCat tool
+  read-only and refused `sync`. Now only the owner's own "read only" answer limits a tool, and even then a sync runs:
+  it only reads Google into the local store. drive's own policy check lets it through too (cli-core 0.656.0).
+
+## 0.67.0 — 13.11.2026
+
+### Added
+
+- **Google Meet transcripts and Gemini notes, wherever they sit.** `drive <profile> transcripts list` lists the
+  Google Docs named like a Meet transcript or Gemini notes in your Drive and among the files shared with you (most
+  live in the organizer's Drive), and imports nothing. The profile setting `transcripts` decides what sync does:
+  `include` imports them like a chosen folder and keeps them up to date, `exclude` leaves them out even inside a
+  chosen folder, and `skip` or unset leaves them alone. `transcript_words` replaces the words that find them.
+
+### Changed — may break callers
+
+- **Built on cli-core 0.652.0** (was 0.650.0) and cli-base 0.99.0. No store change. A stale meeting project
+  fingerprint is now `conflict` (reason `meeting-project.stale`), not `configuration_error`. A mistyped profile in
+  `DRIVE_PROFILE` lists the profiles here, and `session start` keeps the provider's refusal for a new profile.
+  `doctor reports create` gives a pre-filled issue link. The first screen lists `pbx`, the Asterisk tool. Sync takes a
+  saved query beside the chosen folders, and a Meet transcript that Drive also imported is one search hit. What
+  changed is in [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Security
+
+- **`contracts/wirecat.json` lists the hosts the shared packages reach**: `registry.npmjs.org` (the update check),
+  Hugging Face (`huggingface.co`, `*.huggingface.co`, `*.hf.co`) and GitHub (`github.com`,
+  `*.githubusercontent.com`) for the local models. WireCat Desktop shows them before install.
+
+## 0.66.0 — 13.11.2026
+
+### Changed — may break callers
+
+- **Built on cli-core 0.650.0** (was 0.634.0). The store moves to version 66 on first open (a person's kind and
+  name order are worked out again; additive). Model calls follow memo's "local only" switch (`models local-only set
+  on`), send to a plain `http` model address only on this computer, and reach only their own host. A profile with no
+  saved sign-in fails with `session.missing` (was `oauth.missing`), and a profile name that is not on this computer
+  with `not_found` (exit 6, `profile.unknown`; was `validation_error`). `doctor reports` writes a problem report to
+  send; `store reset` is no longer offered to an agent over MCP. What changed is in
+  [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`meta.run_id` names the run that `drive runs show` finds** (`20261112T121302Z-documents-list-7dfb77`), as in
+  every other WireCat CLI. It was a random UUID that matched no saved run.
+- **`drive complete` is the shared WireCat completion command.** The same shells (zsh, bash, fish, PowerShell) and
+  the same Tab answers; its help text is the shared one, and it now reads the configured profile names.
+
+### Fixed
+
+- **`doctor --help` shows its Returns and Example again**, and `doctor reports` says what it returns.
+- **The docs say where tokens go when the keyring fails.** drive saves them in `credentials.json` (mode 600) in the
+  configuration folder and warns once; the configuration and security pages said there was no such fallback.
+
+### Security
+
+- **drive reaches only the Google hosts it declares.** Every request of the Google SDK, the sign-in and the token
+  refresh goes through cli-base's `hostFetch`, which refuses any other host before anything is sent and checks each
+  redirect. The package now ships `contracts/wirecat.json`, so WireCat Desktop shows these hosts before install.
+
 ## 0.65.0 — 10.11.2026
 
 ### Added

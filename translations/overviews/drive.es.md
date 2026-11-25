@@ -36,7 +36,8 @@ las carpetas.
 - **Lectura en directo cuando la necesitas.** Recorre una carpeta, o mira los permisos, comentarios y revisiones de un
   archivo en Google, sin copiar nada.
 - **Cambios solo cuando los permites.** El acceso por defecto es de lectura. Crear y editar Docs, rellenar Sheets,
-  copiar o mover archivos necesita un permiso de escritura aparte.
+  editar en su sitio un archivo subido de Word, Excel o texto, copiar o mover archivos necesita un permiso de escritura
+  aparte.
 - **Tu agente conectado.** Instala la skill de la herramienta para un agente de terminal como Claude Code, o sirve la
   herramienta por MCP a una aplicación que se conecta a servidores MCP.
 
@@ -106,17 +107,19 @@ No cambies archivos de Google.
 | Propietarios y último editor que muestra Google | Ver quién trabajó en un documento |
 | Carpetas y su árbol | Recorrer el árbol, listar una carpeta, etiquetarla y añadirle notas |
 | Tus etiquetas, notas, vínculos con personas o proyectos, y recuerdos | Conservar el contexto entre tareas |
+| Versiones anteriores de cada documento y un registro de cambios | Ver qué decía antes un documento, y qué se añadió, cambió o borró desde hace un día |
 
 Puedes [recorrer sin conexión las carpetas copiadas](./usage.md#browse-and-organize-the-local-catalog). Los archivos
 cuyo contenido no se puede leer quedan en la copia con su nombre y tipo. `catalog search` los encuentra por nombre,
-tipo y propietario. Los permisos, comentarios, el historial de revisiones y la actividad se leen en directo de Google
-y no se guardan.
+tipo y propietario. Los permisos, comentarios, el historial de revisiones propio de Google y la actividad se leen en
+directo de Google y no se guardan.
 
 ## Qué lee
 
-La herramienta indexa Google Docs y Sheets, y archivos subidos de Markdown y texto plano, PDF con capa de texto, Word
-`.docx`, Excel `.xlsx`, CSV y TSV. Los PDF escaneados, Slides, el audio y los accesos directos no tienen texto indexado.
-Las imágenes se encuentran por su nombre, o por lo que muestran si activas la
+La herramienta indexa Google Docs y Sheets, y archivos subidos de Markdown y texto plano, PDF, Word, Excel,
+PowerPoint, OpenDocument, RTF, HTML, EPUB, CSV y TSV. Lee el texto de los PDF escaneados y de las imágenes JPEG, PNG y
+WebP con [reconocimiento de texto (OCR)](./usage.md#scans-and-pictures), por defecto en tu ordenador. Slides, el audio y
+los accesos directos no tienen texto indexado. Las imágenes también se encuentran por lo que muestran si activas la
 [búsqueda de imágenes](./search.md#search-images-by-what-they-show). En Docs no se indexan imágenes, encabezados, pies
 de página, comentarios ni sugerencias.
 
@@ -129,6 +132,7 @@ de página, comentarios ni sugerencias.
 | Encontrar un pasaje, un archivo o una imagen | [Buscar](./search.md) |
 | Dar a tu agente una tarea completa | [Recetas](./recipes.md) |
 | Editar un Doc o una hoja | [Recetas](./recipes.md#create-a-native-doc-and-include-it-in-search) |
+| Editar un archivo subido de Word, Excel o texto | [Úsalo](./usage.md#edit-a-file-stored-in-google-drive) |
 | Mantener archivos Markdown locales al día con Google | [Espejos](./mirrors.md) |
 | Encontrar un comando o una opción | [Comandos](./commands.md) |
 | Cambiar un ajuste o un permiso | [Ajustes](./configuration.md) |

@@ -40,7 +40,7 @@ un `--client-file` que otros usuarios del ordenador puedan leer (aplícale antes
 
 | Datos | Ubicación y protección |
 | --- | --- |
-| Tokens de Google | Almacén de credenciales del sistema; archivo privado solo si lo eliges explícitamente |
+| Tokens de Google | Almacén de credenciales del sistema; `credentials.json` (modo 600) en el directorio de configuración si el almacén falla o se eligió `--credential-storage file` |
 | Perfiles y raíces elegidas | `config.json` en el directorio de configuración |
 | Texto, fragmentos, vectores y contexto local | La base WireCat compartida, seleccionada por `MESSAGING_STORE` |
 | Copias de fuentes y relaciones de carpetas | Documentos del perfil y estado de sincronización en el directorio de datos |

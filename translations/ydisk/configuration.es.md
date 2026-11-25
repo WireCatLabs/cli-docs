@@ -7,6 +7,13 @@ guardan los registros de ejecución y cómo ordena la búsqueda sus resultados. 
 `config.json`, en la carpeta que muestra `ydisk doctor`. Cada perfil tiene su propia parte, y `defaults` valen para
 todos los perfiles.
 
+**En esta página:**
+
+1. [Permisos](#permissions)
+2. [Registros de ejecución](#run-records)
+3. [Otros ajustes](#other-settings)
+4. [Variables de entorno](#environment-variables)
+
 ```sh
 ydisk personal config show
 ydisk personal config set limit 50
@@ -71,6 +78,7 @@ Mira [Seguridad](./security.md).
 | --- | --- | --- |
 | `limit` | `20` | Cuántos elementos muestra una lista a la vez. |
 | `keep_versions_for_days` | `365` | Días que se guardan las versiones anteriores de los archivos sincronizados y el registro de cambios. Una sincronización que termina su pasada borra las más antiguas. Para un perfil o `defaults`. |
+| `read_scans` | `local` | Quién lee los escaneos y las imágenes por OCR. `local` usa el programa `tesseract` en tu ordenador, que debe estar instalado, por ejemplo `sudo apt install tesseract-ocr tesseract-ocr-rus`. `anthropic` u `openai` envían cada página como imagen a ese proveedor, al modelo elegido con `ai set`, y se pagan por página. `off` los guarda solo por su nombre. Consulta [escaneos e imágenes](./usage.md#scans-and-pictures). Para un perfil o `defaults`. |
 | `search_reranker` | `mmarco` | El modelo que ordena los primeros resultados de la búsqueda, o `off`. |
 | `embedding_provider` | `local` | `local` u `openai`: lo que convierte el texto en vectores para la búsqueda por significado. `openai` envía el texto a OpenAI. |
 | `update_check` | `true` | Comprueba una vez al día si hay una versión nueva. |
@@ -82,3 +90,4 @@ Mira [Seguridad](./security.md).
 | --- | --- |
 | `YDISK_PROFILE` | El perfil para los comandos que no nombran ninguno. |
 | `YDISK_READ_ONLY` | `1` rechaza cualquier cambio. |
+| `YDISK_TOKEN` | Un token OAuth de Yandex que todos los perfiles usan en lugar del guardado, para un trabajo de CI o un contenedor sin llavero del sistema. `session status` lo nombra entonces como origen del token. |

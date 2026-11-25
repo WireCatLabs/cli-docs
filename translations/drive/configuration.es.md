@@ -21,7 +21,9 @@ una **opción** afecta a una ejecución. Son formas distintas de controlar la he
 
 Son los valores del sistema; las variables de abajo pueden moverlos. La configuración contiene
 ID de carpetas seleccionadas, identidad de la cuenta y ajustes, no tokens OAuth. Los tokens se
-guardan en el almacén de credenciales, salvo que elijas explícitamente un archivo al conectar.
+guardan en el llavero del sistema. Si el llavero falla (bloqueado, sin ejecutarse, sin D-Bus), drive los guarda sin
+preguntar en `credentials.json` (modo 600) en el directorio de configuración y avisa una vez.
+`--credential-storage file` al conectar elige ese archivo directamente.
 En Linux, la base predeterminada es `~/.local/share/WireCat/wirecat.db`; las copias y puntos de control
 están en `profiles/PROFILE_NAME/`. Lee sobre [almacenamiento local](./usage.md#disk-use-index-without-an-export-directory)
 antes de moverlos o borrarlos.
@@ -32,6 +34,8 @@ antes de moverlos o borrarlos.
 | --- | --- | --- |
 | `permissions` | Acceso por comando: `deny`, `readonly`, `ask` o `allow` | Perfil o `defaults` |
 | `max_text_chars` | Máximo de caracteres por archivo; valor predeterminado y máximo `2000000`, límite de los lectores | Perfil o `defaults` |
+| `keep_versions_for_days` | Cuántos días se conservan las versiones anteriores de los documentos sincronizados y el registro de cambios, `365` por defecto. Una sincronización que termina su pasada borra las más antiguas | Perfil o `defaults` |
+| `read_scans` | Quién lee escaneos e imágenes por OCR: `local` (predeterminado) usa el programa `tesseract` en este equipo, que debe estar instalado, por ejemplo `sudo apt install tesseract-ocr tesseract-ocr-rus`. `anthropic` u `openai` envían cada página como imagen a ese proveedor, con el modelo elegido con `ai set`, y cuestan por página. `off` los guarda solo por nombre. Consulta [escaneos e imágenes](./usage.md#scans-and-pictures) | Perfil o `defaults` |
 | `record` | `false` guarda en `drive runs list` solo las ejecuciones fallidas; predeterminado `true`, todas | Solo `defaults` |
 | `record_input` | Una ejecución guardada conserva el comando tal como se escribió, con los secretos o números de teléfono escritos como `[redacted]`. `"failed"` conserva las palabras escritas solo en una ejecución fallida; `false` escribe también como `[redacted]` cada valor que pueda ser contenido | Solo `defaults` |
 | `max_add_profiles` | Cuántos perfiles como máximo puede probar `documents add` para un documento, predeterminado `5`, como máximo `50` | Solo `defaults` |
@@ -40,6 +44,8 @@ antes de moverlos o borrarlos.
 | `runs_size_limit_mb` | El tamaño máximo del registro de ejecuciones; primero se borran las ejecuciones correctas más antiguas; predeterminado `200` | Solo `defaults` |
 | `google_client_id` | El client ID de tu propia aplicación Desktop de Google; `session start` lo usa en lugar de la de WireCat. Su secret viene de `DRIVE_GOOGLE_CLIENT_SECRET`, nunca de este archivo. Solo tú lo cambias en una terminal: a un agente por MCP se le rechaza | Perfil o `defaults` |
 | `picture_search` | `true` busca imágenes por su contenido: sync descarga imágenes de hasta 25 MB y la búsqueda devuelve `pictures`; predeterminado `false` | Solo perfil |
+| `transcripts` | Transcripciones de Google Meet y notas de Gemini: `include` las importa estén donde estén, `exclude` las deja fuera incluso dentro de una carpeta elegida, `skip` o sin valor no las toca. Consulta [uso](./usage.md#meet-transcripts-and-gemini-notes) | Solo perfil |
+| `transcript_words` | Las palabras del nombre de un documento que lo marcan como transcripción. Sustituyen la lista incluida (`Transcript`, `Notes by Gemini` y sus formas en ruso y español) | Solo perfil |
 | `models.memories.provider` | Proveedor de IA para la extracción solicitada explícitamente | Perfil o `defaults` |
 | `models.memories.model` | Identificador del modelo del proveedor | Perfil o `defaults` |
 | `models.memories.base_url` | Dirección opcional del proveedor configurado | Perfil o `defaults` |
@@ -66,7 +72,8 @@ drive config show --json
 ```
 
 Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización
-local y las notas tienen claves separadas. `--read-only` es más amplio: también bloquea cambios
+local y las notas tienen claves separadas. Un cambio en `ask` pregunta antes en una terminal. Por MCP nadie puede
+responder, así que se ejecuta sin preguntar: pon una clave en `readonly` o `deny` para detener a un agente. `--read-only` es más amplio: también bloquea cambios
 locales, así que no lo uses si quieres importar o etiquetar. Revisa la [referencia de comandos](./commands.md)
 y los [permisos de datos](./security.md) antes de elegir reglas más amplias.
 

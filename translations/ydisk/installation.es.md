@@ -2,20 +2,33 @@
 title: "Instala e inicia sesión"
 ---
 
-Configura `ydisk` una vez en cada ordenador donde lo uses tú o un agente. Tras estos pasos tu Disk queda conectado con
-el nombre de perfil que elijas y la primera búsqueda funciona. Iniciar sesión significa pegar un token OAuth de
-Yandex: una clave que Yandex te da para tu propia cuenta y con la que la herramienta usa tu Disk. Conseguirlo lleva
-unos cinco minutos, una sola vez.
+Conecta tu Yandex Disk una vez y, desde entonces, tu agente de IA encuentra cualquier documento por lo que dice.
+Yandex solo deja a un programa usar tu Disk con un token OAuth, una clave que Yandex te da para tu propia cuenta.
+Conseguir el token lleva unos cinco minutos, una sola vez.
+
+Tras estos pasos tu Disk queda conectado con el nombre de perfil que elijas y la primera búsqueda funciona. Puedes
+hacerlo todo en [WireCat Desktop](https://wirecat.dev/en/docs/desktop), una aplicación que instala las herramientas por ti, o en un
+terminal con npm.
 
 **En esta página:**
 
-1. [Instala la herramienta](#install-the-tool)
-2. [Consigue un token de Yandex](#get-a-yandex-token)
-3. [Inicia sesión](#sign-in)
-4. [Comprueba que funciona](#check-that-it-works)
-5. [Un ordenador sin llavero](#a-computer-with-no-keyring)
-6. [Actualiza](#update)
-7. [Desinstala](#remove)
+1. [En WireCat Desktop](#in-wirecat-desktop)
+2. [Instala la herramienta](#install-the-tool)
+3. [Consigue un token de Yandex](#get-a-yandex-token)
+4. [Inicia sesión](#sign-in)
+5. [Comprueba que funciona](#check-that-it-works)
+6. [Un ordenador sin llavero](#a-computer-with-no-keyring)
+7. [Actualiza](#update)
+8. [Desinstala](#remove)
+
+## En WireCat Desktop
+
+1. Consigue un token, como muestra [consigue un token de Yandex](#get-a-yandex-token).
+2. En la página **Herramientas**, pulsa **Instalar** en la fila de Yandex Disk.
+3. Pulsa **Gestionar**, escribe un nombre de cuenta, como `personal`, y pulsa **Iniciar sesión aquí**.
+4. Pega el token. Después elige las carpetas que se copian.
+
+Desktop también da a tus agentes de IA la skill de la herramienta, así que no necesitas los pasos del terminal.
 
 ## Instala la herramienta
 
@@ -95,7 +108,11 @@ Yandex mantiene válido un token durante meses y lo prolonga mientras se usa
 ([Yandex ID](https://yandex.ru/dev/id/doc/en/concepts/ya-oauth-intro)). Cuando Yandex deja de aceptarlo, los comandos
 fallan con el código de salida 4: consigue un token nuevo del mismo modo y ejecuta `session start` otra vez.
 
-`ydisk personal session end` borra el token de este ordenador.
+`ydisk personal session end` borra el token de este ordenador. El token en sí sigue siendo válido en Yandex. Para
+revocarlo, abre el acceso a datos ([«Доступ к данным»](https://id.yandex.ru/personal/data-access)) en Yandex ID y
+quita la aplicación para la que se emitió el token. Cambiar tu contraseña de Yandex o cerrar sesión en todos los
+dispositivos («Выйти на всех устройствах») también lo revoca, junto con todos los demás tokens de la cuenta
+([Yandex ID](https://yandex.ru/dev/id/doc/en/tokens/token-invalidate)).
 
 ## Un ordenador sin llavero
 
@@ -117,7 +134,19 @@ vez para que las instrucciones de tu agente coincidan con la versión nueva.
 
 ## Desinstala
 
-`ydisk personal session end` olvida el token del perfil en este ordenador. Después quita la herramienta:
+Para olvidar una cuenta en este ordenador, quita su perfil:
+
+```sh
+ydisk personal account remove --keep-data
+```
+
+Borra el token del perfil y sus ajustes. Di qué pasa con los archivos que copió: `--keep-data` los deja en el
+almacén, donde la búsqueda los sigue encontrando, y `--delete-data` los borra, con la lista de carpetas que elegiste
+copiar. En tu Disk no cambia nada. En un terminal pregunta antes, `--yes` responde por un script y `--dry-run`
+lista lo que quitaría sin quitar nada. El token sigue siendo válido en Yandex: revócalo en el acceso a datos
+([«Доступ к данным»](https://id.yandex.ru/personal/data-access)) de Yandex ID.
+
+`ydisk personal session end` olvida solo el token y conserva el perfil. Para quitar la herramienta:
 
 ```sh
 npm uninstall -g @wirecat/yandex-disk-cli

@@ -16,12 +16,14 @@ and a file a sync deletes or replaces is kept. A mirror can hold the whole Disk,
 out, and stops before many deletions or overwrites at once until you allow them. A text file edited on both sides in
 different places is merged, and a real conflict waits for you with both versions. Your agent can also
 [edit a file on the Disk](./usage.md#edit-a-file-on-the-disk) where it is: a text file, cells of an `.xlsx` or
-paragraphs of a `.docx`, with the formatting kept and the replaced content saved on your computer. You can also
+paragraphs of a `.docx`, with the formatting kept and the replaced content saved on your computer. It can also
+create a new Word document or Excel workbook there. A sync reads the text of scans and pictures by
+[OCR](./usage.md#scans-and-pictures), on your computer by default, and keeps
+[earlier versions](./usage.md#earlier-versions-and-what-changed) of each synced file for a year. You can also
 [open the Disk as a folder](./mount.md) in your file manager, read-only. See [start here](./index.md).
 
 ## Next
 
-- Creating a new Word document or Excel workbook. Today an agent edits the ones already on the Disk and creates only
-  text files.
+- Nothing new is planned right now.
 
 What changed in each released version is in the [changelog](./changelog.md).

@@ -214,6 +214,25 @@ espejo, así que una aprobación nunca cubre otro espejo. Un espejo detenido no 
 siempre. `mirrors watch` vuelve a informar de la parada en cada ciclo que sincroniza el espejo, hasta que permitas la
 ejecución o devuelvas los archivos.
 
+## Cómo se reemplaza un archivo en el Disk
+
+Un archivo sin enlace público lo comprueba el propio Disk en el momento de escribir. La sincronización envía el
+contenido nuevo a un archivo oculto junto a él, mueve el archivo viejo a la papelera del Disk con el contenido que
+listó (el Disk lo rechaza si el archivo cambió desde entonces) y da al archivo oculto su nombre. El archivo recibe un
+id nuevo (el `resource_id` de Yandex), y el historial de versiones propio del Disk para él empieza de nuevo. Su
+contenido viejo queda en la papelera del Disk y en las versiones del espejo. Un archivo cambiado en el Disk mientras
+tanto es un conflicto, y no se reemplaza nada. Un archivo nuevo puesto en esa ruta en el instante entre los dos pasos
+también es un conflicto: el archivo oculto junto a él (`.name.ext.ydisk-…`) guarda tu contenido, y el conflicto lo
+nombra.
+
+El archivo viejo queda en la papelera del Disk: [la ayuda de
+Yandex](https://yandex.ru/support/yandex-360/customers/disk/web/ru/actions-files/spec-folders/trash) dice que los
+archivos allí siguen ocupando espacio en el Disk y se borran solos a los 30 días. Así que cada envío de un archivo
+cambiado resta su tamaño viejo de tu espacio durante ese tiempo.
+
+Un archivo con enlace público conserva su enlace, así que se sobrescribe en su sitio: se comprueba justo antes de
+escribir, y lo que reemplazó se guarda en tu ordenador.
+
 ## Adónde van los archivos borrados
 
 | Borrado en | La sincronización mueve la copia del otro lado a | Cómo recuperarlo |
