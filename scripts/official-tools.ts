@@ -255,8 +255,11 @@ const FACTS = [
 ] as const
 /** What the person reads. */
 const WORDS = ["tagline", "signIn.gives", "signIn.asks"] as const
-/** cli-base always writes `0.0.0`, since a manifest ships inside the version it describes; Desktop keeps its own. */
-const IGNORED = ["accountRemove.remove.minVersion"]
+/**
+ * cli-base always writes `0.0.0` (its schema allows no other value), since a manifest ships inside the version it
+ * describes; Desktop keeps its own: the first version it offers the flow for.
+ */
+const IGNORED = ["accountRemove.remove.minVersion", "signIn.setupFrom"]
 
 const at = (v: unknown, path: string): unknown =>
   path.split(".").reduce<unknown>((o, k) => (record(o) ? (o as Record<string, unknown>)[k] : undefined), v)

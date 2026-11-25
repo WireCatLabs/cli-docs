@@ -128,6 +128,7 @@ describe("the drift check", () => {
     expect(
       differences({ remove: { minVersion: "0.0.0" } }, { remove: { minVersion: "0.9.0" } }, "accountRemove"),
     ).toEqual([])
+    expect(differences({ setupFrom: "0.0.0" }, { setupFrom: "0.1.0" }, "signIn")).toEqual([])
   })
 
   it("fails on a word, a program the package does not install, or a text", () => {
