@@ -712,7 +712,12 @@
     "beeline · Cloud PBX calls, transcribed on your computer": "beeline · звонки Облачной АТС, расшифровка на компьютере",
     "linear · your issues and projects, readable offline": "linear · тикеты и проекты, без интернета",
     "wordpress · your agent reads your site’s posts and pages and writes drafts": "wordpress · агент читает посты и страницы вашего сайта и пишет черновики",
-    "hubspot · deals, contacts and companies": "hubspot · сделки, контакты и компании"
+    "hubspot · deals, contacts and companies": "hubspot · сделки, контакты и компании",
+    "attio · deals, people and companies": "attio · сделки, люди и компании",
+    "amo · amoCRM or Kommo deals, contacts and companies": "amo · сделки, контакты и компании в amoCRM или Kommo",
+    "slk · your channels, DMs and threads": "slk · каналы, личные сообщения и ветки",
+    "ydisk · your Yandex Disk folders, searched on your computer": "ydisk · папки Яндекс Диска, поиск на компьютере",
+    "Yandex Disk": "Яндекс Диск"
   },
   "es": {
     "Personal chats": "Chats personales",
@@ -1422,6 +1427,10 @@
     "pbx · your phone system’s calls, transcribed on your computer": "pbx · las llamadas de tu centralita, transcritas en tu ordenador",
     "linear · your issues and projects, readable offline": "linear · tus incidencias y proyectos, sin conexión",
     "wordpress · your agent reads your site’s posts and pages and writes drafts": "wordpress · tu agente lee las entradas y páginas de tu sitio y escribe borradores",
-    "hubspot · deals, contacts and companies": "hubspot · negociaciones, contactos y empresas"
+    "hubspot · deals, contacts and companies": "hubspot · negociaciones, contactos y empresas",
+    "attio · deals, people and companies": "attio · negociaciones, personas y empresas",
+    "amo · amoCRM or Kommo deals, contacts and companies": "amo · negociaciones, contactos y empresas de amoCRM o Kommo",
+    "slk · your channels, DMs and threads": "slk · tus canales, mensajes directos e hilos",
+    "ydisk · your Yandex Disk folders, searched on your computer": "ydisk · tus carpetas de Yandex Disk, búsqueda en tu ordenador"
   }
 }

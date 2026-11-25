@@ -261,9 +261,9 @@ export function withCommunityGroup(children: Node[], lang: string, list: readonl
 // The folder has no page, so the tools keep their URLs. `open` is whether it starts expanded.
 const toolGroups = {
   messengers: { tools: ["tg", "max", "wa", "slk"], open: true, icon: MessageSquare },
+  crm: { tools: ["attio", "hubspot", "b24", "amo"], open: false, icon: Handshake },
   meetingsCalls: { tools: ["zm", "google-meet", "telemost", "pbx", "beeline"], open: true, icon: Phone },
   documentsFiles: { tools: ["drive", "notion", "ydisk", "markdown"], open: true, icon: Files },
-  crm: { tools: ["b24", "amo", "attio", "hubspot"], open: false, icon: Handshake },
   sites: { tools: ["wordpress"], open: true, icon: Newspaper },
   trackers: { tools: ["linear"], open: true, icon: SquareKanban },
 } as const
