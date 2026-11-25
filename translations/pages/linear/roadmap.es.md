@@ -2,22 +2,24 @@
 title: "Hoja de ruta"
 ---
 
-Esta página enumera lo que `linear` hace hoy y lo que todavía no hace. Léela antes de montar un apaño para una función
-que falta. No hay fechas. Para pedir algo, abre un [issue en GitHub](https://github.com/WireCatLabs/linear-cli/issues).
+Mira lo que `linear` ya hace por ti y lo que todavía no hace, antes de montar un apaño para una función que falta. No
+hay fechas. Para pedir algo, abre un [issue en GitHub](https://github.com/WireCatLabs/linear-cli/issues).
 
 ## Qué funciona hoy
 
-`linear` inicia sesión con tu clave de API personal de Linear y copia tus incidencias, proyectos y comentarios, con sus
-equipos, estados y etiquetas, en el almacén local de tu ordenador. Tú y tu agente listáis
-incidencias por equipo, estado, responsable o etiqueta, abrís una con sus comentarios y encontráis incidencias por sus
-palabras, sin red. `issues assign` convierte una incidencia en tu propia tarea. Cada consulta y mutación de la API de
-Linear es un comando del grupo `api`, dentro de los permisos que fijes, en la línea de comandos o por MCP. Mira
+`linear` inicia sesión con tu clave de API personal de Linear y copia tus incidencias, proyectos, sprints (lo que
+Linear llama ciclos) y comentarios, con sus equipos, estados y etiquetas, en el almacén local de tu ordenador. La
+misma sincronización copia los documentos de los proyectos que eliges. Tú y tu agente listáis incidencias por equipo,
+sprint, estado, responsable o etiqueta, abrís una con sus comentarios y encontráis incidencias por sus palabras, sin
+red. Las incidencias abiertas asignadas a ti se vuelven tus tareas. `issues create`, `issues update` e
+`issues comments create` cambian incidencias en Linear, y todas las demás consultas y mutaciones de la API de Linear
+son comandos del grupo `api`, dentro de los permisos que fijes, en la línea de comandos o por MCP. Mira
 [empieza aquí](./index.md).
 
 ## Qué falta todavía
 
-- La búsqueda común de WireCat no lee las incidencias de Linear. Hoy solo las encuentra `issues search`.
+- Búsqueda por significado en `issues search`. Hoy `search all` de memo encuentra las incidencias de Linear por
+  significado después de `sync --embed`.
 - Iniciar sesión en el navegador. Hoy se inicia sesión con una clave de API personal.
-- Comandos cortos para crear, cambiar o comentar una incidencia. Hoy pasan por el grupo `api`.
 
 Lo que cambió en cada versión publicada está en el [registro de cambios](./changelog.md).

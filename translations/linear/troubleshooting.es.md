@@ -2,8 +2,9 @@
 title: "Cuando algo falla"
 ---
 
-Empieza por el síntoma, haz la comprobación y vuelve a ejecutar el comando. Guarda el código de error y el nombre del
-perfil para una petición de ayuda.
+Haz que vuelva a funcionar un comando que falló, casi siempre en un paso. Busca en la tabla el síntoma o el código del
+error, haz lo que dice su fila y vuelve a ejecutar el comando. Guarda el código de error y el nombre del perfil para una
+petición de ayuda.
 
 | Síntoma | Qué hacer |
 | --- | --- |

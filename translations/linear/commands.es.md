@@ -57,7 +57,7 @@ linear commands info [path]
 
 ## `linear session`
 
-keep this profile's Linear token in the OS keyring
+keep this profile's Linear API token in the OS keyring
 
 ### `linear session start`
 
@@ -113,7 +113,7 @@ linear session list
 
 ## `linear api`
 
-the raw Linear API, one command per operation of its OpenAPI document
+the raw Linear API, one command per operation of its GraphQL schema
 
 ### `linear api list`
 
@@ -139,9 +139,9 @@ linear api show <operation>
 
 | Argument | | What it is |
 |---|---|---|
-| `operation` | required | the operation, as api list prints it. |
+| `operation` | required | the operation as api list prints it (quoted), its old name, or its operation id. |
 
-**Example:** `linear personal api show administrable-teams --json`
+**Example:** `linear personal api show "administrable-teams" --json`
 
 ### `linear api administrable-teams`
 
@@ -9301,9 +9301,851 @@ linear api workflow-state-update [options]
 
 **Example:** `linear personal api workflow-state-update`
 
+## `linear folders`
+
+choose the Linear projects whose documents sync copies
+
+### `linear folders add`
+
+import a folder and everything under it on the next sync
+
+**Changes something on this computer only.**
+
+```sh
+linear folders add <folder>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | project id, linear:all for every project, or linear:elsewhere for documents outside projects. |
+
+**Example:** `linear personal folders add linear:all`
+
+### `linear folders list`
+
+list the folder ids sync imports
+
+```sh
+linear folders list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** selected folder — id, name, path; every field: linear commands info folders list
+
+**Example:** `linear personal folders list`
+
+### `linear folders remove`
+
+stop importing a folder; the next sync drops its documents
+
+**Changes something on this computer only.**
+
+```sh
+linear folders remove <folder>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | project id, linear:all for every project, or linear:elsewhere for documents outside projects. |
+
+**Example:** `linear personal folders remove FOLDER_ID`
+
+## `linear status`
+
+show the last sync, imported documents and pending work
+
+```sh
+linear status
+```
+
+**Example:** `linear personal status`
+
+## `linear documents`
+
+read the Linear documents synced to this computer
+
+### `linear documents list`
+
+list the synced Linear documents with their projects
+
+```sh
+linear documents list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many documents to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Next usually:** `linear documents show <document>`, `linear documents history <document>`, `linear documents context <document>`
+
+**Example:** `linear personal documents list`, `linear personal documents list tag:budget`, `linear personal documents list person:PERSON_UID --limit 10`
+
+### `linear documents show`
+
+show an imported document's text, tabs and metadata
+
+```sh
+linear documents show <document>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | document id or a search hit's document: ref. |
+
+**Example:** `linear personal documents show DOC_ID`, `linear personal documents show document:42 --offline`
+
+### `linear documents export`
+
+write an imported document to a new Markdown file
+
+**Changes something on this computer only.**
+
+```sh
+linear documents export <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | document id or a search hit's document: ref. |
+
+| Option | What it does |
+|---|---|
+| `--output <file>` | path of the Markdown file to write; an existing file is refused. |
+
+**Example:** `linear personal documents export DOC_ID --output notes.md`
+
+### `linear documents history`
+
+list the versions of a document kept in the local copy, or show one with --revision
+
+```sh
+linear documents history <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | document id or a search hit's document: ref. |
+
+| Option | What it does |
+|---|---|
+| `--revision <n>` | show the text of this version. |
+
+**Example:** `linear personal documents history DOC_ID`, `linear personal documents history DOC_ID --revision 3`
+
+### `linear documents context`
+
+show a document with its tags, relationships, notes, memories and editors
+
+```sh
+linear documents context <document>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+
+**Example:** `linear personal documents context DOC_ID`
+
+## `linear changes`
+
+list the documents the sync added, changed, removed or brought back, newest first
+
+```sh
+linear changes [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since <time>` | from this time: an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago. Default: `1d`. |
+| `--until <time>` | up to this time, in the same forms. |
+| `--event <events>` | only these, comma separated: added, changed, restored, deleted, unavailable, unsynced. |
+| `--limit <n>` | how many changes to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Example:** `linear personal changes`, `linear personal changes --since 7d --event deleted,unavailable`
+
+## `linear search`
+
+search imported documents by words, and by meaning when indexed
+
+```sh
+linear search <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | words to look for, and fields such as tag: and date: that every hit must match. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many results to return. Default: `20`. |
+| `--page <n>` | which page to return. Default: `1`. |
+| `--exact` | match the words exactly: no word forms, no meaning. |
+
+**Example:** `linear personal search budget`, `linear personal search "quarterly plan" --exact --limit 5`
+
+## `linear catalog`
+
+browse stored Linear files and folders offline
+
+### `linear catalog import`
+
+put cached file and folder metadata into the shared database
+
+**Changes something on this computer only.**
+
+```sh
+linear catalog import
+```
+
+**Example:** `linear personal catalog import --offline`
+
+### `linear catalog show`
+
+show stored metadata and the stable file or folder reference
+
+```sh
+linear catalog show <file>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Linear file or folder id, or its URL. |
+
+**Next usually:** `linear documents show <document>`, `linear documents history <document>`, `linear documents context <document>`
+
+**Example:** `linear personal catalog show FILE_ID --offline`
+
+### `linear catalog list`
+
+list cached files and folders using metadata queries
+
+```sh
+linear catalog list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | metadata query: kind, mime, name, parent, person, tag; AND, OR, NOT. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Next usually:** `linear documents show <document>`, `linear documents history <document>`, `linear documents context <document>`
+
+**Example:** `linear personal catalog list "parent:FOLDER_ID AND kind:file" --offline`
+
+### `linear catalog search`
+
+search cached names, descriptions, types and observed people
+
+```sh
+linear catalog search <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | metadata query: kind, mime, name, parent, person, tag; AND, OR, NOT. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Next usually:** `linear documents show <document>`, `linear documents history <document>`, `linear documents context <document>`
+
+**Example:** `linear personal catalog search "budget AND person:Rin*" --offline`
+
+### `linear catalog tree`
+
+show the cached hierarchy below a folder or all selected roots
+
+```sh
+linear catalog tree [folder] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | optional | Linear folder id or URL; defaults to the explicitly selected profile's roots. |
+
+| Option | What it does |
+|---|---|
+| `--depth <n>` | maximum descendant depth, from 0 to 50. Default: `5`. |
+
+**Example:** `linear personal catalog tree --offline`, `linear personal catalog tree FOLDER_ID --depth 3 --offline`
+
+### `linear catalog tags`
+
+add owner tags to cached files or folders
+
+#### `linear catalog tags list`
+
+list local tags on a cached file or folder
+
+```sh
+linear catalog tags list <file> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Linear file or folder id, or its URL. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** document tag — tag; every field: linear commands info catalog tags list
+
+**Example:** `linear personal catalog tags list FOLDER_ID --offline`
+
+#### `linear catalog tags add`
+
+add local tags on a cached file or folder
+
+**Changes something on this computer only.**
+
+```sh
+linear catalog tags add <file> <tags>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Linear file or folder id, or its URL. |
+| `tags` | required | local tag names. |
+
+**Example:** `linear personal catalog tags add FOLDER_ID project --offline`
+
+#### `linear catalog tags remove`
+
+remove local tags on a cached file or folder
+
+**Changes something on this computer only.**
+
+```sh
+linear catalog tags remove <file> <tags>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | Linear file or folder id, or its URL. |
+| `tags` | required | local tag names. |
+
+**Example:** `linear personal catalog tags remove FOLDER_ID project --offline`
+
+## `linear tags`
+
+label imported documents; labels survive a sync
+
+### `linear tags list`
+
+list a document's tags
+
+```sh
+linear tags list <document> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** document tag — tag; every field: linear commands info tags list
+
+**Example:** `linear personal tags list DOC_ID`
+
+### `linear tags add`
+
+tag a document
+
+**Changes something on this computer only.**
+
+```sh
+linear tags add <document> <tags>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `tags` | required | one or more tags. |
+
+**Example:** `linear personal tags add DOC_ID budget q3`
+
+### `linear tags remove`
+
+untag a document
+
+**Changes something on this computer only.**
+
+```sh
+linear tags remove <document> <tags>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `tags` | required | one or more tags. |
+
+**Example:** `linear personal tags remove DOC_ID budget q3`
+
+## `linear relationships`
+
+connect a document to people, projects, notes and other references
+
+### `linear relationships list`
+
+list a document's relationships
+
+```sh
+linear relationships list <document> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** document relationship — id, from, to, kind, role, confirmed, origin; every field: linear commands info relationships list
+
+**Example:** `linear personal relationships list DOC_ID`
+
+### `linear relationships add`
+
+connect a document to another reference
+
+**Changes something on this computer only.**
+
+```sh
+linear relationships add <document> <reference> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `reference` | required | what it connects to, such as person:<uid>, project:<id> or note:<id>. |
+
+| Option | What it does |
+|---|---|
+| `--kind <kind>` | how the two relate. One of: `links-to`, `about`, `evidence`, `created-from`, `related-to`, `assigned-to`. Default: `related-to`. |
+| `--role <role>` | the part the reference plays, in a word or two. |
+| `--reason <text>` | why the two are connected. |
+
+**Example:** `linear personal relationships add DOC_ID project:PROJECT_ID --kind about`, `linear personal relationships add DOC_ID person:PERSON_UID --kind assigned-to --role reviewer`
+
+### `linear relationships remove`
+
+remove one of a document's relationships
+
+**Changes something on this computer only.**
+
+```sh
+linear relationships remove <document> <relationship-id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `relationship-id` | required | id, as relationships list prints it. |
+
+**Example:** `linear personal relationships remove DOC_ID LINK_ID`
+
+## `linear notes`
+
+write notes about an imported document
+
+### `linear notes add`
+
+write a note about a document
+
+**Changes something on this computer only.**
+
+```sh
+linear notes add <document> <text> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `text` | required | the note's text. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | a title for the note. |
+
+**Returns:** note — ref, id, source, folder_id, path, title, text, revision, and 15 more; every field: linear commands info notes add
+
+**Next usually:** `linear notes show <document> <note>`, `linear notes edit <document> <note> <text>`, `linear notes remove <document> <note>`
+
+**Example:** `linear personal notes add DOC_ID "Check the numbers" --title Review`
+
+### `linear notes list`
+
+list a document's notes
+
+```sh
+linear notes list <document> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many notes to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Returns:** note — ref, id, source, folder_id, path, title, text, revision, and 15 more; every field: linear commands info notes list
+
+**Next usually:** `linear notes show <document> <note>`, `linear notes edit <document> <note> <text>`, `linear notes remove <document> <note>`
+
+**Example:** `linear personal notes list DOC_ID`, `linear personal notes list DOC_ID text:review --limit 10`
+
+### `linear notes show`
+
+show one note
+
+```sh
+linear notes show <document> <note>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `note` | required | note:<id> reference, as notes list prints it. |
+
+**Returns:** note — ref, id, source, folder_id, path, title, text, revision, and 15 more; every field: linear commands info notes show
+
+**Next usually:** `linear notes edit <document> <note> <text>`, `linear notes remove <document> <note>`
+
+**Example:** `linear personal notes show DOC_ID note:NOTE_ID`
+
+### `linear notes edit`
+
+replace a note's text
+
+**Changes something on this computer only.**
+
+```sh
+linear notes edit <document> <note> <text> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `note` | required | note:<id> reference, as notes list prints it. |
+| `text` | required | the note's new text. |
+
+| Option | What it does |
+|---|---|
+| `--revision <n>` | revision from notes show; a newer note is not overwritten. |
+
+**Returns:** note — ref, id, source, folder_id, path, title, text, revision, and 15 more; every field: linear commands info notes edit
+
+**Next usually:** `linear notes show <document> <note>`, `linear notes remove <document> <note>`
+
+**Example:** `linear personal notes edit DOC_ID note:NOTE_ID "Numbers checked" --revision 2`
+
+### `linear notes remove`
+
+delete one note
+
+**Changes something on this computer only.**
+
+```sh
+linear notes remove <document> <note>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `note` | required | note:<id> reference, as notes list prints it. |
+
+**Example:** `linear personal notes remove DOC_ID note:NOTE_ID`
+
+## `linear memories`
+
+keep what was learned from a document, with evidence; an agent's stay proposed
+
+### `linear memories add`
+
+record a memory about a document
+
+**Changes something on this computer only.**
+
+```sh
+linear memories add <document> <text> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `text` | required | what to remember. |
+
+| Option | What it does |
+|---|---|
+| `--scope <scope>` | whose memory it is: personal or work. One of: `personal`, `work`. |
+| `--kind <kind>` | what kind of memory it is. One of: `summary`, `digest`, `preference`. Default: `summary`. |
+| `--supersedes <ref>` | a memory:<id> about the same document that this one replaces. |
+
+**Example:** `linear personal memories add DOC_ID "The team prefers async reviews" --scope work --kind preference`
+
+### `linear memories list`
+
+list a document's memories
+
+```sh
+linear memories list <document> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many memories to return. Default: `50`. |
+
+**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 13 more; every field: linear commands info memories list
+
+**Example:** `linear personal memories list DOC_ID scope:work`, `linear personal memories list DOC_ID kind:preference status:confirmed`
+
+### `linear memories show`
+
+show one memory
+
+```sh
+linear memories show <document> <memory>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `memory` | required | memory:<id> reference, as memories list prints it. |
+
+**Example:** `linear personal memories show DOC_ID memory:MEMORY_ID`
+
+### `linear memories confirm`
+
+confirm a proposed memory as true
+
+**Changes something on this computer only.**
+
+```sh
+linear memories confirm <document> <memory>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `memory` | required | memory:<id> reference, as memories list prints it. |
+
+**Example:** `linear personal memories confirm DOC_ID memory:MEMORY_ID`
+
+### `linear memories stale`
+
+mark a memory as out of date
+
+**Changes something on this computer only.**
+
+```sh
+linear memories stale <document> <memory>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `memory` | required | memory:<id> reference, as memories list prints it. |
+
+**Example:** `linear personal memories stale DOC_ID memory:MEMORY_ID`
+
+### `linear memories search`
+
+search a document's memories by words
+
+```sh
+linear memories search <document> <query>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | required | words to look for, and scope:personal or scope:work — the fields are below. |
+
+**Returns:** memory — ref, id, kind, text, subject, author, model, confidence, and 13 more; every field: linear commands info memories search
+
+**Example:** `linear personal memories search DOC_ID reviews scope:work`, `linear personal memories search DOC_ID "async reviews"`
+
+### `linear memories extract`
+
+send a document's text to the model and show the memories it proposes
+
+**Changes something in the service.**
+
+```sh
+linear memories extract <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+
+| Option | What it does |
+|---|---|
+| `--scope <scope>` | whose memories they become: personal or work. One of: `personal`, `work`. |
+| `--tab <id>` | send only this tab of the document. |
+| `--yes` | save the proposals, each with its quote and the document's version. |
+
+**Example:** `linear personal memories extract DOC_ID --scope work`, `linear personal memories extract DOC_ID --scope work --yes`
+
+## `linear facts`
+
+what happened, as a document shows it; an agent's stay proposed until confirmed
+
+### `linear facts add`
+
+record a fact a document shows
+
+**Changes something on this computer only.**
+
+```sh
+linear facts add <document> <statement> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `statement` | required | the fact, in one sentence. |
+
+| Option | What it does |
+|---|---|
+| `--type <type>` | what kind of fact it is. One of: `fact`, `statement`, `question`, `decision`, `promise`. Default: `fact`. |
+| `--scope <scope>` | whose fact it is: personal or work. One of: `personal`, `work`. |
+| `--supersedes <ref>` | a decision only: the decision this one replaces. |
+| `--occurred-time <time>` | when it happened, as the evidence shows, ISO 8601; a time without a zone is read in this computer's zone, a date alone as its midnight. |
+
+**Example:** `linear personal facts add DOC_ID "Budget approved" --type decision --scope work`
+
+### `linear facts list`
+
+list a document's facts
+
+```sh
+linear facts list <document> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many facts to return. Default: `50`. |
+
+**Returns:** fact — ref, id, kind, text, status, project, subject, occurred_at, and 14 more; every field: linear commands info facts list
+
+**Example:** `linear personal facts list DOC_ID status:proposed`, `linear personal facts list DOC_ID kind:decision`
+
+### `linear facts show`
+
+show one fact
+
+```sh
+linear facts show <document> <fact>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `fact` | required | fact:<id> reference, as facts list prints it. |
+
+**Example:** `linear personal facts show DOC_ID fact:FACT_ID`
+
+### `linear facts confirm`
+
+confirm a proposed fact; a decision it supersedes stops holding
+
+**Changes something on this computer only.**
+
+```sh
+linear facts confirm <document> <fact>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `fact` | required | fact:<id> reference, as facts list prints it. |
+
+**Example:** `linear personal facts confirm DOC_ID fact:FACT_ID`
+
+### `linear facts reverse`
+
+an accepted decision no longer holds, and nothing replaced it
+
+**Changes something on this computer only.**
+
+```sh
+linear facts reverse <document> <fact>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `fact` | required | fact:<id> reference, as facts list prints it. |
+
+**Example:** `linear personal facts reverse DOC_ID fact:FACT_ID`
+
+## `linear identities`
+
+the Linear accounts seen on a document, and the people they belong to
+
+### `linear identities list`
+
+list the people Linear shows for a document
+
+```sh
+linear identities list <document> [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** document identity — remote_id, provider, role, person; every field: linear commands info identities list
+
+**Example:** `linear personal identities list DOC_ID`
+
+### `linear identities link`
+
+record that a Linear account belongs to a known person
+
+**Changes something on this computer only.**
+
+```sh
+linear identities link <document> <linear-id> <person>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | Linear file or folder id or URL in the local catalog, or a document:<n> ref. |
+| `linear-id` | required | Linear account id, as identities list prints it. |
+| `person` | required | person:<uid> reference of someone already known. |
+
+**Example:** `linear personal identities link DOC_ID LINEAR_ID person:PERSON_UID`
+
 ## `linear sync`
 
-bring the tracker's copy in the local store up to date: teams, users, states, labels, projects, issues and comments that changed since the last sync, or everything with --rescan; once a day it also finds what the tracker deleted. A run stops before its deadline or --max-pages and the next one goes on from there
+bring the tracker's copy in the local store up to date: teams, users, states, labels, projects, sprints, issues and comments that changed since the last sync, or everything with --rescan; once a day it also finds what the tracker deleted, and says when it next will. Open issues assigned to you become your tasks, and close when the issue is done, canceled, a duplicate, deleted or goes to someone else. It also imports what changed in the chosen document folders, answered under documents; a part that fails leaves the other's answer. A run stops before its deadline or --max-pages and the next one goes on from there
 
 **Changes something on this computer only.**
 
@@ -9313,10 +10155,11 @@ linear sync [options]
 
 | Option | What it does |
 |---|---|
-| `--rescan` | list everything again, every id too, dropping a round in progress. |
-| `--max-pages <pages>` | at most this many requests to the tracker in this run. |
+| `--rescan` | list everything again, issues and documents, dropping a round in progress; a rescan of the documents starts their walk over each time, so run it once and continue with a plain sync. |
+| `--max-pages <pages>` | at most this many requests for the issues in this run, and as many for the documents. |
+| `--embed` | also index new issues, projects and comments and the documents' pending text for meaning search, with a model already downloaded. |
 
-**Returns:** tracker sync — provider, account, state, complete, synced, gaps, progress, stopped; every field: linear commands info sync
+**Returns:** tracker documents sync — provider, account, state, complete, synced, gaps, progress, deletions, and 5 more; every field: linear commands info sync
 
 **Example:** `linear work sync`, `linear work sync --rescan`
 
@@ -9371,7 +10214,7 @@ linear issues search <words> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `words` | required | every word must match; prefixes of three letters or more match too. |
+| `words` | required | every word must match, in any form; a word of four letters or more finds the words it begins. |
 
 | Option | What it does |
 |---|---|
@@ -9384,7 +10227,7 @@ linear issues search <words> [options]
 
 ### `linear issues assign`
 
-make an issue the owner's task: the task points at the issue and copies none of its text; the same issue again answers its existing task
+make an issue the owner's task, whoever it is assigned to: the task points at the issue and shows its key and title, which each sync keeps current; the same issue again answers its existing task
 
 **Changes something on this computer only.**
 
@@ -9403,6 +10246,88 @@ linear issues assign <issue> [options]
 **Returns:** tracker issue task — task_id, issue, created, key; every field: linear commands info issues assign
 
 **Example:** `linear work issues assign ENG-12 --due 2026-12-01`
+
+### `linear issues create`
+
+make an issue in the tracker, then store the tracker's copy of it
+
+**Changes something in the service.**
+
+```sh
+linear issues create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the issue's title. |
+| `--description <text>` | the issue's text; an empty value clears it. |
+| `--team <team>` | the team, by its id, key or name; left out, the copy's only team. |
+| `--assignee <user>` | the user, by id, name or e-mail; empty for none; anyone but you checks issues.assign-others. |
+| `--priority <n>` | critical or urgent (1), high (2), medium (3), low (4), none or empty (0), a 0.0–1.0 score or the old 0–4. |
+| `--status <state>` | the workflow state, by its id or a name only one of the team's states has. |
+| `--label <label>` | a label by its id or name; repeat it for each; replaces the issue's labels, and one empty value clears them. Default: ``. |
+| `--project <project>` | the project, by its id or name; empty for none. |
+| `--parent <id>` | the issue this one is part of, by its key or id; empty for none. |
+
+**Returns:** tracker write — operation_id, untrusted, issue, comment; every field: linear commands info issues create
+
+**Example:** `linear work issues create --title "Example: invoices fail for EUR" --team ENG --label Bug`, `linear work issues create --title "Example: write the guide" --assignee ada@example.com --priority high`
+
+### `linear issues update`
+
+change an issue in the tracker; what is left out keeps its value; the tracker's copy is stored again
+
+**Changes something in the service.**
+
+```sh
+linear issues update <issue> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `issue` | required | the issue's key (ENG-12) or id. |
+
+| Option | What it does |
+|---|---|
+| `--title <title>` | the issue's title. |
+| `--description <text>` | the issue's text; an empty value clears it. |
+| `--team <team>` | the team, by its id, key or name; left out, the copy's only team. |
+| `--assignee <user>` | the user, by id, name or e-mail; empty for none; anyone but you checks issues.assign-others. |
+| `--priority <n>` | critical or urgent (1), high (2), medium (3), low (4), none or empty (0), a 0.0–1.0 score or the old 0–4. |
+| `--status <state>` | the workflow state, by its id or a name only one of the team's states has. |
+| `--label <label>` | a label by its id or name; repeat it for each; replaces the issue's labels, and one empty value clears them. Default: ``. |
+| `--project <project>` | the project, by its id or name; empty for none. |
+| `--parent <id>` | the issue this one is part of, by its key or id; empty for none. |
+
+**Returns:** tracker write — operation_id, untrusted, issue, comment; every field: linear commands info issues update
+
+**Example:** `linear work issues update ENG-12 --status "In Progress"`, `linear work issues update ENG-12 --assignee ""`
+
+### `linear issues comments`
+
+comments on the tracker's issues; issues show lists an issue's
+
+#### `linear issues comments create`
+
+add a comment to an issue in the tracker, then store it
+
+**Changes something in the service.**
+
+```sh
+linear issues comments create <issue> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `issue` | required | the issue's key (ENG-12) or id. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the comment, as it is to read. |
+
+**Returns:** tracker write — operation_id, untrusted, issue, comment; every field: linear commands info issues comments create
+
+**Example:** `linear work issues comments create ENG-12 --text "Example: fixed in the next release"`
 
 ## `linear projects`
 
@@ -9428,6 +10353,31 @@ linear projects list [query] [options]
 **Returns:** tracker project — kind, external_id, deleted; every field: linear commands info projects list
 
 **Example:** `linear work projects list`, `linear work projects list archived:include`
+
+## `linear sprints`
+
+each team's sprints (Linear's cycles): number, start, end and when completed
+
+### `linear sprints list`
+
+sprints copied from the tracker, newest change first
+
+```sh
+linear sprints list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | rows per page, 1–500. Default: `50`. |
+| `--page <n>` | which page, starting at 1. Default: `1`. |
+
+**Returns:** tracker sprint — kind, external_id, deleted; every field: linear commands info sprints list
+
+**Example:** `linear work sprints list`, `linear work sprints list archived:include`
 
 ## `linear teams`
 

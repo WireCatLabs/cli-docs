@@ -4,8 +4,8 @@ title: "Compared with other tools"
 
 `linear` is a command line and an MCP server for Linear: issues, projects, teams, workflow states, labels and comments.
 This page puts it next to the other tools that let an AI agent read and change Linear, so you can see which one fits
-your job. The marks for `linear` come from its first release, its commands and its documentation, checked on
-19 November 2026 against linear-cli 0.1.0, not against a live workspace. They are checked again at each release. The
+your job. The marks for `linear` come from its release, its commands and its documentation, checked on
+25 November 2026 against linear-cli 0.4.1, not against a live workspace. They are checked again at each release. The
 marks for the other tools come from their own documentation and source, linked in the table, checked on 19 November
 2026. Nothing was signed in to or tested live, and a tool may do more than its pages say.
 
@@ -43,8 +43,8 @@ programmers who write their own code, so they are not in the table either.
 | List issues by state or assignee | ✅ | ➖ | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L153-L159) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/src/commands/issues.ts#L693-L703) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/src/tools/definitions/issue-tools.ts#L276-L300) |
 | List projects, teams, users, states and labels | ✅ | [🟡](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/crates/linear-cli/src/cli/mod.rs#L130-L168) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L162-L170) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L47-L76) |
 | **Change** | | | | | |
-| Create and update an issue | 🟡 | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L166-L173) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L84-L85) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L130-L131) |
-| Comment on an issue | 🟡 | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L177-L181) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L97-L108) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L132) |
+| Create and update an issue | ✅ | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L166-L173) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L84-L85) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L130-L131) |
+| Comment on an issue | ✅ | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L177-L181) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L97-L108) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L132) |
 | Every query and mutation of Linear's API | ✅ | [🟡](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/crates/linear-cli/src/cli/mod.rs#L180-L184) | [🟡](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L146-L152) | [🟡](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/README.md?plain=1#L16-L30) |
 | Make an issue your own task | ✅ | ➖ | ➖ | ➖ | ➖ |
 | **Agents and safety** | | | | | |
@@ -71,16 +71,19 @@ Notes on the `linear` column:
 - **Sign-in.** A personal API key acts with the rights of the Linear user who made it. `session start` reads it from
   stdin or a hidden prompt, never from an argument, and checks it with Linear before it keeps it. It is kept in the
   system keyring, or in a private file on a computer without one. See [installation](./installation.md).
-- **Without the internet.** `sync` copies teams, users, workflow states, labels, projects, issues and comments into the
-  WireCat local store. Archived ones are kept and marked. After the first run it reads only what changed, and once a
-  day it finds what Linear deleted. `issues list`, `issues show` and `issues search` read this copy, with `--offline`
-  too. The copy belongs to the user whose key signed in, since Linear shows each member other teams.
-- **Writes.** The `issues` commands only read the copy. An issue is created, updated or commented on through the `api`
-  group, such as `api issue-create` or `api comment-create`, with the input as JSON. So these rows are partly.
+- **Without the internet.** `sync` copies teams, users, workflow states, labels, projects, sprints (Linear's cycles),
+  issues and comments into the WireCat local store. Archived ones are kept and marked. After the first run it reads
+  only what changed, and once a day it finds what Linear deleted or moved to its trash. `issues list`, `issues show`
+  and `issues search` read this copy, with `--offline` too. The copy belongs to the user whose key signed in, since
+  Linear shows each member other teams.
+- **Writes.** `issues create`, `issues update` and `issues comments create` create, change and comment on an issue
+  with plain options, such as `--title`, `--status` and `--text`. Each write checks its own permission key, and
+  `--dry-run` shows what it would send.
 - **The api group.** `linear <profile> api` has one command for each query and mutation of Linear's GraphQL schema,
   each with its own flags and help. `api list` names them all.
-- **Your task.** `issues assign ENG-12` makes the issue your WireCat task: a local task that points at the issue and
-  copies none of its text. It changes nothing in Linear and does not assign the issue to anyone there.
+- **Your task.** After each `sync`, every open issue assigned to you is a WireCat task, titled with the issue's key
+  and title, and it closes when the issue is done, canceled or goes to someone else. `issues assign ENG-12` makes any
+  other issue your task. Neither changes anything in Linear or assigns the issue to anyone there.
 - **Read-only.** `WCLINEAR_READ_ONLY=1` refuses every write, whatever the settings say. The `readonly` level does the
   same for one key, such as `api`.
 - **Allow, ask or refuse.** Each command and each API operation has its key, set to `allow`, `ask`, `readonly` or

@@ -7,8 +7,8 @@ title: "Сравнение с другими инструментами"
 
 `linear` дает доступ к Linear из командной строки и через MCP-сервер: к тикетам, проектам, командам, статусам, меткам
 и комментариям. Здесь он стоит рядом с другими инструментами, через которые ИИ-агент читает и меняет Linear, чтобы вы
-могли выбрать тот, что подходит для вашей работы. Оценки для `linear` взяты из его первого выпуска, его команд и
-документации и проверены 19 ноября 2026 года на linear-cli 0.1.0, а не на живом рабочем пространстве. Их проверяют
+могли выбрать тот, что подходит для вашей работы. Оценки для `linear` взяты из его выпуска, его команд и
+документации и проверены 25 ноября 2026 года на linear-cli 0.4.1, а не на живом рабочем пространстве. Их проверяют
 заново при каждом выпуске. Оценки для других инструментов взяты из их собственной документации и исходного кода,
 ссылки на них есть в таблице, и проверены 19 ноября 2026 года. Ни в один инструмент не выполняли вход и ничего не
 проверяли вживую, а инструмент может уметь больше, чем говорят его страницы.
@@ -51,8 +51,8 @@ GraphQL API самого Linear: они для программистов, ко�
 | Список тикетов по статусу или исполнителю | ✅ | ➖ | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L153-L159) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/src/commands/issues.ts#L693-L703) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/src/tools/definitions/issue-tools.ts#L276-L300) |
 | Список проектов, команд, пользователей, статусов и меток | ✅ | [🟡](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/crates/linear-cli/src/cli/mod.rs#L130-L168) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L162-L170) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L47-L76) |
 | **Изменить** | | | | | |
-| Создать и изменить тикет | 🟡 | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L166-L173) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L84-L85) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L130-L131) |
-| Прокомментировать тикет | 🟡 | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L177-L181) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L97-L108) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L132) |
+| Создать и изменить тикет | ✅ | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L166-L173) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L84-L85) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L130-L131) |
+| Прокомментировать тикет | ✅ | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L177-L181) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L97-L108) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L132) |
 | Каждый запрос и каждая мутация API Linear | ✅ | [🟡](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/crates/linear-cli/src/cli/mod.rs#L180-L184) | [🟡](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L146-L152) | [🟡](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/README.md?plain=1#L16-L30) |
 | Сделать тикет своей задачей | ✅ | ➖ | ➖ | ➖ | ➖ |
 | **Агенты и безопасность** | | | | | |
@@ -79,17 +79,19 @@ GraphQL API самого Linear: они для программистов, ко�
 - **Вход.** Персональный API-ключ действует с правами пользователя Linear, который его создал. `session start` читает
   его из stdin или скрытого запроса, никогда из аргумента, и до сохранения проверяет его в Linear. Он хранится в
   системном хранилище ключей, а на компьютере без него в закрытом файле. Смотрите [установку](./installation.md).
-- **Без интернета.** `sync` копирует команды, пользователей, статусы, метки, проекты, тикеты и комментарии в локальное
-  хранилище WireCat. Архивные тоже попадают в копию, с пометкой. После первого запуска он читает только изменения, а
-  раз в день находит то, что удалили в Linear. `issues list`, `issues show` и `issues search` читают эту копию, в том
-  числе с `--offline`. Копия принадлежит пользователю, чей ключ выполнил вход, потому что Linear показывает разным
-  участникам разные команды.
-- **Изменения.** Команды `issues` только читают копию. Тикет создают, меняют и комментируют через группу `api`,
-  например `api issue-create` или `api comment-create`, с входными данными в JSON. Поэтому в этих строках частично.
+- **Без интернета.** `sync` копирует команды, пользователей, статусы, метки, проекты, спринты (циклы Linear), тикеты и
+  комментарии в локальное хранилище WireCat. Архивные тоже попадают в копию, с пометкой. После первого запуска он
+  читает только изменения, а раз в день находит то, что в Linear удалили или перенесли в корзину. `issues list`,
+  `issues show` и `issues search` читают эту копию, в том числе с `--offline`. Копия принадлежит пользователю, чей
+  ключ выполнил вход, потому что Linear показывает разным участникам разные команды.
+- **Изменения.** `issues create`, `issues update` и `issues comments create` создают, меняют и комментируют тикет
+  обычными параметрами, например `--title`, `--status` и `--text`. Каждая запись проверяет свой ключ разрешения, а
+  `--dry-run` показывает, что она отправила бы.
 - **Группа api.** В `linear <профиль> api` есть по команде на каждый запрос и каждую мутацию GraphQL-схемы Linear, у
   каждой свои флаги и справка. `api list` перечисляет их все.
-- **Ваша задача.** `issues assign ENG-12` делает тикет вашей задачей WireCat: локальной задачей, которая указывает на
-  тикет и не копирует его текст. В Linear она ничего не меняет и никому там тикет не назначает.
+- **Ваша задача.** После каждого `sync` каждый открытый тикет, назначенный на вас, становится задачей WireCat с ключом
+  и названием тикета и закрывается, когда тикет выполнен, отменен или перешел к другому. `issues assign ENG-12` делает
+  вашей задачей любой другой тикет. Ни то, ни другое ничего не меняет в Linear и никому там тикет не назначает.
 - **Только чтение.** `WCLINEAR_READ_ONLY=1` отклоняет любое изменение, что бы ни говорили настройки. Уровень
   `readonly` делает то же для одного ключа, например `api`.
 - **Разрешить, спросить или запретить.** У каждой команды и каждой операции API есть свой ключ со значением `allow`,

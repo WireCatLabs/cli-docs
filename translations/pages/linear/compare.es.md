@@ -7,8 +7,8 @@ title: "Comparado con otras herramientas"
 
 `linear` es una línea de comandos y un servidor MCP para Linear: incidencias, proyectos, equipos, estados, etiquetas y
 comentarios. Esta página lo pone junto a las otras herramientas con las que un agente de IA lee y cambia Linear, para
-que veas cuál encaja con tu trabajo. Las marcas de `linear` salen de su primera versión, sus comandos y su
-documentación, comprobados el 19 de noviembre de 2026 con linear-cli 0.1.0, no con un espacio de trabajo real. Se
+que veas cuál encaja con tu trabajo. Las marcas de `linear` salen de su versión publicada, sus comandos y su
+documentación, comprobados el 25 de noviembre de 2026 con linear-cli 0.4.1, no con un espacio de trabajo real. Se
 comprueban otra vez en cada versión. Las marcas de las otras herramientas salen de su propia documentación y su código,
 enlazados en la tabla, comprobados el 19 de noviembre de 2026. No se inició sesión en ninguna ni se probó nada en vivo,
 y una herramienta puede hacer más de lo que dicen sus páginas.
@@ -52,8 +52,8 @@ del propio Linear, que son para programadores que escriben su propio código.
 | Listar incidencias por estado o persona asignada | ✅ | ➖ | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L153-L159) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/src/commands/issues.ts#L693-L703) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/src/tools/definitions/issue-tools.ts#L276-L300) |
 | Listar proyectos, equipos, usuarios, estados y etiquetas | ✅ | [🟡](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/crates/linear-cli/src/cli/mod.rs#L130-L168) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L162-L170) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L47-L76) |
 | **Cambiar** | | | | | |
-| Crear y actualizar una incidencia | 🟡 | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L166-L173) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L84-L85) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L130-L131) |
-| Comentar una incidencia | 🟡 | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L177-L181) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L97-L108) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L132) |
+| Crear y actualizar una incidencia | ✅ | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L166-L173) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L84-L85) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L130-L131) |
+| Comentar una incidencia | ✅ | [✅](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/README.md?plain=1#L177-L181) | [✅](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L97-L108) | [✅](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/TOOLS.md?plain=1#L132) |
 | Cada consulta y mutación de la API de Linear | ✅ | [🟡](https://linear.app/docs/mcp) | [✅](https://github.com/schpet/linear-cli/blob/aa4cc2b60d5c0068028872ce25a4a34340cf053e/crates/linear-cli/src/cli/mod.rs#L180-L184) | [🟡](https://github.com/linearis-oss/linearis/blob/fdfa73c44cf5db46c872da5e93c952e324f8d576/README.md?plain=1#L146-L152) | [🟡](https://github.com/tacticlaunch/mcp-linear/blob/2f1d1803e3dfb1eb891278439b776ae62ad7d6a3/README.md?plain=1#L16-L30) |
 | Convertir una incidencia en tu tarea | ✅ | ➖ | ➖ | ➖ | ➖ |
 | **Agentes y seguridad** | | | | | |
@@ -81,17 +81,20 @@ Notas sobre la columna de `linear`:
   `session start` la lee de stdin o de una pregunta oculta, nunca de un argumento, y la comprueba con Linear antes de
   guardarla. Se guarda en el llavero del sistema, o en un archivo privado en un ordenador sin llavero. Mira la
   [instalación](./installation.md).
-- **Sin internet.** `sync` copia equipos, usuarios, estados, etiquetas, proyectos, incidencias y comentarios al
-  almacén local de WireCat. Los archivados se guardan también, marcados. Después de la primera vez lee solo lo que
-  cambió, y una vez al día encuentra lo que Linear borró. `issues list`, `issues show` e `issues search` leen esta
-  copia, también con `--offline`. La copia pertenece al usuario cuya clave inició sesión, porque Linear muestra a cada
-  miembro equipos distintos.
-- **Cambios.** Los comandos `issues` solo leen la copia. Una incidencia se crea, se actualiza o se comenta con el
-  grupo `api`, como `api issue-create` o `api comment-create`, con la entrada en JSON. Por eso estas filas son en parte.
+- **Sin internet.** `sync` copia equipos, usuarios, estados, etiquetas, proyectos, sprints (los ciclos de Linear),
+  incidencias y comentarios al almacén local de WireCat. Los archivados se guardan también, marcados. Después de la
+  primera vez lee solo lo que cambió, y una vez al día encuentra lo que Linear borró o movió a su papelera.
+  `issues list`, `issues show` e `issues search` leen esta copia, también con `--offline`. La copia pertenece al
+  usuario cuya clave inició sesión, porque Linear muestra a cada miembro equipos distintos.
+- **Cambios.** `issues create`, `issues update` e `issues comments create` crean, cambian y comentan una incidencia
+  con opciones sencillas, como `--title`, `--status` y `--text`. Cada escritura comprueba su propia clave de permiso, y
+  `--dry-run` muestra lo que enviaría.
 - **El grupo api.** `linear <perfil> api` tiene un comando para cada consulta y cada mutación del esquema GraphQL de
   Linear, cada uno con sus opciones y su ayuda. `api list` los nombra todos.
-- **Tu tarea.** `issues assign ENG-12` convierte la incidencia en tu tarea de WireCat: una tarea local que apunta a la
-  incidencia y no copia nada de su texto. No cambia nada en Linear y no asigna la incidencia a nadie allí.
+- **Tu tarea.** Después de cada `sync`, cada incidencia abierta asignada a ti es una tarea de WireCat, con la clave y
+  el título de la incidencia, y se cierra cuando la incidencia se completa, se cancela o pasa a otra persona.
+  `issues assign ENG-12` convierte cualquier otra incidencia en tu tarea. Ninguno de los dos cambia nada en Linear ni
+  asigna la incidencia a nadie allí.
 - **Solo lectura.** `WCLINEAR_READ_ONLY=1` rechaza cualquier cambio, digan lo que digan los ajustes. El nivel
   `readonly` hace lo mismo para una clave, como `api`.
 - **Permitir, preguntar o rechazar.** Cada comando y cada operación de la API tiene su clave, con el valor `allow`,
