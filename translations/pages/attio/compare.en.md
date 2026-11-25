@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `attio` is a command line and an MCP server for the sales data of an Attio workspace: deals, people, companies, the
 deal pipeline and workspace members. This page puts it next to the other tools that let an AI agent read and change
 Attio, so you can see which one fits your job. The marks for `attio` come from its current release, its commands and its
-source, checked on 19 November 2026. Its tests run against a fake Attio built from Attio's API description, and each
+source, checked on 25 November 2026. Its tests run against a fake Attio built from Attio's API description, and each
 release also passes a check against a live workspace. The marks are checked again at each release. The marks for the
 other tools come from their own documentation and source, linked in the table, checked on 19 November 2026. Attio MCP
 and attio-mcp were also tested live in an [agent test](#how-an-agent-answers-through-each). The others were not
@@ -52,8 +52,8 @@ also take an OAuth token through a Cloudflare Worker that you host.
 | One search over deals and the messages and notes of your other tools | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Change the CRM** | | | | | | |
 | Create and update people and companies | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L49-L50) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
-| Move a deal to another stage | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [✅](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
-| Add a note or a task on a deal | 🟡 | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
+| Move a deal to another stage | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [✅](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
+| Add a note or a task on a deal | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
 | **Summaries and changes** | | | | | | |
 | How many deals stand in each stage, and their total | ✅ | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
 | Share of deals won in a period | ✅ | [🟡](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
@@ -89,14 +89,14 @@ Notes on the `attio` column:
 - **Allow, ask or refuse.** Each command and each API operation has its key, such as `deals.list` or
   `api.notes-create`, set to `allow`, `ask`, `readonly` or `deny` in [the permissions](./permissions.md).
   `mcp serve --permission` makes a key stricter for one server only. An agent cannot loosen a permission.
-- **Writes over MCP.** The `attio_write` tool runs the writes of the `api` group. They are `allow` from the start, and
-  deletes are `ask`. Over MCP nobody is at a terminal to answer, so `ask` lets the agent go ahead, and a token with
+- **Writes over MCP.** The `attio_write` tool runs the commands that write: deals, people, notes and tasks, and the
+  `api` group. Each write is `ask` from the start. Over MCP nobody is at a terminal to answer, so `ask` lets the agent go ahead, and a token with
   write scopes lets it write and delete. This is why the confirmation row is partly. Set `permissions.api` to
   `readonly`, or turn on approval for `attio_write` in your agent's app. See [MCP](./mcp.md).
-- **Changes to the CRM.** The deal, people and company commands only read. Creating a person, moving a deal, or adding
-  a note or a task goes through an `api` operation, such as `api objects-records-update` or `api notes-create`, so
-  these rows are partly. Commands to move and close deals and to work with notes and tasks are on the
-  [roadmap](./roadmap.md).
+- **Changes to the CRM.** `deals` creates, updates, moves and closes deals, `people` creates and updates people, and
+  `activities` adds a note or a task and marks a task done. Each asks you first in a terminal. Companies have no
+  command that writes: an Attio company has no e-mail or phone attribute to write, so a change to one goes through an
+  `api` operation, such as `api objects-records-update`. This is why the people and companies row is partly.
 - **Without the internet.** `sync` copies the deals and the people and companies they name, with the stages of the
   deal pipeline. `deals`, `pipelines`, `stages`, `changes`, `fields` and `search all` read this copy, with `--offline`
   too. `people`, `organizations` and `users` always ask Attio. Attio cannot list only what changed, so each sync reads
