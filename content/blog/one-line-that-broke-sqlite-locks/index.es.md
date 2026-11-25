@@ -27,7 +27,7 @@ Lo encontró un agente que por la noche revisaba la búsqueda y vio `fts5: corru
 
 Paré los temporizadores y fui a ver quién tenía el archivo abierto. Los más sospechosos eran dos procesos `wa serve` de larga duración (el servidor del CLI de WhatsApp) que llevaban en marcha desde la madrugada. Esto es lo que tenían en `/proc/locks` (los números de proceso e inode aquí son inventados):
 
-```
+```text
 POSIX  ADVISORY  READ  4101 103:05:7777 128 128
 POSIX  ADVISORY  READ  4102 103:05:7777 128 128
 ```

@@ -27,7 +27,7 @@ An agent that was checking search in the evening ran into `fts5: corruption`. I 
 
 I stopped the timers and went to see who was holding the file. The most suspicious were two long-lived `wa serve` processes (the WhatsApp CLI server) that had been running since the night. Here's what `/proc/locks` had for them (the process and inode numbers here are made up):
 
-```
+```text
 POSIX  ADVISORY  READ  4101 103:05:7777 128 128
 POSIX  ADVISORY  READ  4102 103:05:7777 128 128
 ```
