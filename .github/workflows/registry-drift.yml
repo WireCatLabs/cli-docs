@@ -37,6 +37,8 @@ jobs:
           package-manager-cache: false
       - name: Compare the list with npm and Desktop's catalog
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: node --experimental-strip-types scripts/official-tools.ts --check 2>&1 | tee drift.txt
       # A pull request opened with github.token starts no checks, so the job keeps one issue up to date instead.
       - name: Keep one issue open while the list lags a release
@@ -62,7 +64,7 @@ jobs:
             echo '```'
             echo
             echo "To fix: run \`pnpm registry:official && pnpm exec biome format --write registry/\`, commit registry/official-manifests.json in a pull request, and"
-            echo "add a known difference to registry/drift-allow.json only with its reason."
+            echo "add a known difference to registry/drift-allow.json only with its reason and an \"until\" date or an \"issue\" link."
           } > issue.md
           title="Registry drift: Desktop's tool list lags a release"
           number=$(gh issue list --state open --search "\"$title\" in:title" --json number -q '.[0].number // ""')

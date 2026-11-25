@@ -179,9 +179,12 @@ release. The design is in wirecat-desktop
   site's summaries in `summaries`, and the texts above.
 - **The drift check,** `pnpm registry:drift` and the Registry drift workflow (daily and on pull requests that touch the
   registry), fails when `official-manifests.json` is behind npm, or when Desktop's compiled catalog says something
-  else than a manifest. Each known difference is a line in `registry/drift-allow.json` with why; a line that no
-  longer differs fails too. A CLI release that changes its manifest turns the check red until someone runs
-  `pnpm registry:official` and commits the result.
+  else than a manifest. A key the manifest leaves out or sets to `null` counts too, when the catalog runs something
+  there. The check also fails when a command line in Desktop's catalog, on main or in its latest release, names a
+  command the CLI's latest release no longer has. Each known difference is a line in `registry/drift-allow.json`
+  with why, and with an `until` date or an `issue` link. "Not checked" is not a reason, and a line past its date
+  fails. A line that no longer differs fails too. A CLI release that changes its manifest turns the check red until
+  someone runs `pnpm registry:official` and commits the result.
 
 To add a new official CLI: list it in `tools.json` like any of our tools, give it an entry in
 `registry/official.json` (at least `mcpPort` when it has an MCP server, and the Russian and Spanish texts), run

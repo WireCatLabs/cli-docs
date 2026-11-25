@@ -4,10 +4,12 @@ import { describe, expect, it } from "vitest"
 import { buildRegistry } from "./desktop-registry"
 import {
   type Allowed,
+  allowProblems,
   differences,
   driftProblems,
   type Manifest,
   type Manifests,
+  missingCommands,
   type Overlays,
   officialEntries,
   overlayProblems,
@@ -40,6 +42,7 @@ const manifest = (desktop: Record<string, unknown> = {}): Manifest => ({
     doctor: ["{profile}", "doctor", "--record", "--json"],
     search: null,
     storage: { app: "beeline-cli", env: "WCBEELINE" },
+    mcpServer: { start: ["mcp", "server", "start"] },
     ...desktop,
   },
 })
@@ -122,13 +125,27 @@ describe("the drift check", () => {
   const drift = (m: Manifest, allowed: Allowed[] = [], cat = catalog) =>
     driftProblems([beeline], {}, { beeline: m }, cat, allowed)
 
-  it("compares only what the manifest states, and Desktop's own keys not at all", () => {
-    expect(drift(manifest({ mcpServer: { start: ["mcp", "server", "start"] } }))).toEqual([])
-    expect(differences(null, { args: [] }, "search")).toEqual([])
+  it("compares the keys a manifest can state, and Desktop's own keys not at all", () => {
+    expect(drift(manifest())).toEqual([])
     expect(
       differences({ remove: { minVersion: "0.0.0" } }, { remove: { minVersion: "0.9.0" } }, "accountRemove"),
     ).toEqual([])
     expect(differences({ setupFrom: "0.0.0" }, { setupFrom: "0.1.0" }, "signIn")).toEqual([])
+    expect(differences({ gives: "x" }, { gives: "x", methods: [{ id: "token" }] }, "signIn")).toEqual([])
+  })
+
+  it("fails on a command the catalog runs where the manifest says the CLI has none", () => {
+    expect(differences(null, ["{profile}", "setup", "--json"], "setup")).toEqual(["setup"])
+    expect(differences({ start: ["mcp"] }, { start: ["mcp"], config: ["mcp", "config"] }, "mcpServer")).toEqual([
+      "mcpServer.config",
+    ])
+    expect(differences(undefined, { provider: "zoom" }, "meetings")).toEqual(["meetings"])
+  })
+
+  it("wants the catalog to name at least what the manifest says a sign-out removes", () => {
+    expect(differences(["signIn"], ["signIn", "serverSession"], "accountRemove.removes")).toEqual([])
+    expect(differences(["signIn"], [], "accountRemove.removes")).toEqual(["accountRemove.removes"])
+    expect(differences(["settings"], ["folders"], "accountRemove.keeps")).toEqual([])
   })
 
   it("fails on a word, a program the package does not install, or a text", () => {
@@ -138,6 +155,34 @@ describe("the drift check", () => {
     expect(drift(manifest({ sync: { last: ["runs", "list", "command:sync", "status:success"] } })).join()).toContain(
       "beeline sync.last",
     )
+  })
+
+  it("finds a command a Desktop catalog runs that the CLI's latest release no longer has", () => {
+    const m = { ...manifest(), commands: ["session list", "doctor", "doctor reports show"] }
+    const cat = (args: string[]) => ({
+      tools: [{ id: "beeline", profiles: { args }, doctor: ["{profile}", "doctor"] }],
+    })
+    expect(missingCommands([beeline], {}, { beeline: m }, cat(["session", "list", "--json"]), "v0.8.0")).toEqual([])
+    expect(missingCommands([beeline], {}, { beeline: m }, cat(["account", "list", "--json"]), "v0.8.0")).toEqual([
+      "beeline profiles.args: Desktop v0.8.0 runs `account list --json`, @wirecat/beeline-cli 0.5.0 has no such command",
+    ])
+    expect(missingCommands([beeline], {}, { beeline: manifest() }, cat(["account", "list", "--json"]), "main")).toEqual(
+      [],
+    )
+  })
+
+  it("takes an allow line only with a reason and an end date or an issue", () => {
+    const line = { tool: "beeline", key: "tagline", why: "Desktop words it its own way." }
+    expect(allowProblems([{ ...line, until: "2027-01-31" }], "2026-11-25")).toEqual([])
+    expect(
+      allowProblems([{ ...line, issue: "https://github.com/WireCatLabs/beeline-cli/issues/7" }], "2026-11-25"),
+    ).toEqual([])
+    expect(allowProblems([line], "2026-11-25").join()).toContain('"until" date or the "issue"')
+    expect(allowProblems([{ ...line, why: "Not checked yet", until: "2027-01-31" }], "2026-11-25").join()).toContain(
+      "not a reason",
+    )
+    expect(allowProblems([{ ...line, until: "2026-11-24" }], "2026-11-25").join()).toContain("has passed")
+    expect(allowProblems([{ ...line, issue: "https://example.com/1" }], "2026-11-25").join()).toContain("WireCatLabs")
   })
 
   it("lets a difference through only with a reason, and fails on a reason no longer needed", () => {

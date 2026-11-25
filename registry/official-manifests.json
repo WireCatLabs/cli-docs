@@ -69,7 +69,7 @@
     }
   },
   "attio": {
-    "version": "0.6.0",
+    "version": "0.7.0",
     "manifestSha256": "7596342a1761a2d5c6dd5ec26267edc0b7402e64ab3849cf1002af7ccea125cf",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
@@ -341,8 +341,8 @@
     }
   },
   "hubspot": {
-    "version": "0.7.0",
-    "manifestSha256": "14e60c4b08c0ce6e473dec603d59b1d613e6c1d5032d4180e87e047f26956060",
+    "version": "0.8.0",
+    "manifestSha256": "ced19f53297e5c7f2a2f30ec9158f8d72dd346d51dad5f32159c0da0009a1626",
     "bin": "wcat-hubspot",
     "bins": ["hubspot", "wcat-hubspot"],
     "desktop": {
@@ -360,7 +360,8 @@
       "setup": ["{profile}", "setup"],
       "signIn": {
         "gives": "Lets your agent read the account's CRM, and change it if you give the key the write scopes.",
-        "asks": "A service key or a legacy private app's access token from your HubSpot account, with read scopes, and write scopes if you want changes."
+        "asks": "A service key or a legacy private app's access token from your HubSpot account, with read scopes, and write scopes if you want changes.",
+        "setupFrom": "0.0.0"
       },
       "skill": {
         "status": ["skill", "status", "--no-record", "--json"],
@@ -410,8 +411,8 @@
     }
   },
   "linear": {
-    "version": "0.4.0",
-    "manifestSha256": "731b0c3eb2fbab35986ed3bb1945f7ea35c00bbd484d52aea28015c2a8dfce97",
+    "version": "0.5.0",
+    "manifestSha256": "6e0c75e1fe9a5cd38b2510f91477441e0363fa333a40f758d845a943c14c694f",
     "bin": "wcat-linear",
     "bins": ["linear", "wcat-linear"],
     "desktop": {
@@ -473,7 +474,7 @@
     }
   },
   "mail": {
-    "version": "0.36.0",
+    "version": "0.37.0",
     "manifestSha256": "9011aaf419624a2b53f121e25f20afe65a89b87577a0b1c34619ce578019b449",
     "bin": "wcat-mail",
     "bins": ["mail", "wcat-mail"],
@@ -542,8 +543,8 @@
     }
   },
   "max": {
-    "version": "0.118.0",
-    "manifestSha256": "95931a2497f457a89bb776ec0a733f3ce6dfe1f964e0d142ca10982b5e9f2fbb",
+    "version": "0.119.0",
+    "manifestSha256": "cbcf4e7bc7075f1ee99344f8dd617e3cf02f7968a1ff65c1c9c652815d98942e",
     "bin": "wcat-max",
     "bins": ["max", "wcat-max"],
     "desktop": {
@@ -589,12 +590,24 @@
         "app": "max-cli",
         "env": "MAX"
       },
-      "settings": null
+      "settings": null,
+      "accountRemove": {
+        "signOut": ["{profile}", "session", "end", "--record", "--json"],
+        "remove": {
+          "minVersion": "0.0.0",
+          "keepData": ["{profile}", "account", "remove", "--keep-data", "--record", "--json"],
+          "deleteData": ["{profile}", "account", "remove", "--delete-data", "--record", "--json"],
+          "dryRun": "--dry-run",
+          "confirm": "--yes"
+        },
+        "removes": ["signIn"],
+        "keeps": ["settings", "data", "listed"]
+      }
     }
   },
   "memo": {
-    "version": "0.152.0",
-    "manifestSha256": "ad0614cb1598f6275603b3d0fffd9f36a149764d9bc98b2833c99e749b180838",
+    "version": "0.153.0",
+    "manifestSha256": "1df1588ac9c96fc388e042b89c5295307ca6370540cc43d1ba7f55b25bfc1760",
     "bin": "wcat-memo",
     "bins": ["memo", "wcat-memo"],
     "desktop": {
@@ -644,8 +657,8 @@
     }
   },
   "notion": {
-    "version": "0.8.0",
-    "manifestSha256": "d824afa20fa419aab79ee4578796ded328cb28e01dd8598a3ff5699a1b5d342b",
+    "version": "0.9.0",
+    "manifestSha256": "4e59f7411f6ae6ca2d3632aa585846db7395ab89421b5eb8a63d390c30de12d9",
     "bin": "wcat-notion",
     "bins": ["notion", "wcat-notion"],
     "desktop": {
@@ -713,8 +726,8 @@
     }
   },
   "pbx": {
-    "version": "0.9.0",
-    "manifestSha256": "67fecf0f8d4ede1500390df5c0c0b84ea24ce594a061828bb015c9acdfc5490f",
+    "version": "0.10.0",
+    "manifestSha256": "ce5445e382e320d44494729f0665cb3209f6c70447d30a33694cfa2297c26dd8",
     "bin": "wcat-pbx",
     "bins": ["pbx", "wcat-pbx"],
     "desktop": {
@@ -732,7 +745,8 @@
       "setup": ["{profile}", "setup"],
       "signIn": {
         "gives": "Lets your agent find your company's phone calls and read what was said in them.",
-        "asks": "The path of Master.csv, or the CDR database's address and a read-only user's password."
+        "asks": "The path of Master.csv, or the CDR database's address and a read-only user's password.",
+        "setupFrom": "0.0.0"
       },
       "skill": {
         "status": ["skill", "status", "--no-record", "--json"],
@@ -782,7 +796,7 @@
     }
   },
   "slk": {
-    "version": "0.2.0",
+    "version": "0.3.0",
     "manifestSha256": "04e0955ca837633856f6fedc12e6c41462602c94c18ea079b02a426f3a0f4cb0",
     "bin": "wcat-slk",
     "bins": ["slk", "wcat-slk"],
@@ -846,7 +860,7 @@
     }
   },
   "tg": {
-    "version": "0.135.0",
+    "version": "0.136.0",
     "manifestSha256": "833a6bd2111100ebbbc3f512ac3598715916609ab10e0dfdea2a94c77f16d248",
     "bin": "wcat-tg",
     "bins": ["tg", "wcat-tg"],
@@ -909,7 +923,7 @@
     }
   },
   "wa": {
-    "version": "0.46.0",
+    "version": "0.47.0",
     "manifestSha256": "7441f2a52c51e0012caf89e41f5ddf39cf435736fcdc367e7a04d64e9c50e80d",
     "bin": "wcat-wa",
     "bins": ["wa", "wcat-wa"],
@@ -1114,7 +1128,7 @@
     }
   },
   "zm": {
-    "version": "0.81.0",
+    "version": "0.82.0",
     "manifestSha256": "917653b6e25d98605a350eeec7df7df701ebc6a6bf06fe92e5919596df11095a",
     "bin": "wcat-zm",
     "bins": ["wcat-zm", "zm"],
