@@ -1,312 +1,404 @@
 [
   {
-    "tool": "max",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "max",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "max",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "tool": "tg",
+    "key": "sync.run",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync.",
+    "until": "2027-01-15"
   },
   {
     "tool": "tg",
+    "key": "sync.last",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "tg",
+    "key": "sync.lastShape",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "max",
+    "key": "sync.run",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "max",
+    "key": "sync.last",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "max",
+    "key": "sync.lastShape",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "wa",
+    "key": "sync.last",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync. WhatsApp's last sync is read from `server status`.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "wa",
+    "key": "sync.lastShape",
+    "why": "cli-base writes sync only when a CLI has one sync command (cli-base src/wcat/manifest.ts:327). The messenger has several, `messages sync` among them, so its manifest states none. Desktop's catalog keeps the messenger's sync. WhatsApp's last sync is read from `server status`.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "wa",
     "key": "accountRemove.removes",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
-  },
-  {
-    "tool": "tg",
-    "key": "accountRemove.keeps",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
-  },
-  {
-    "tool": "tg",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "tg",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "tg",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "wa",
-    "key": "accountRemove.removes",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
-  },
-  {
-    "tool": "wa",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "wa",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "wa",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "WhatsApp signs in by linking this computer as a device. Desktop names that deviceKeys and linkedDevice, and the manifest's schema has only the word signIn (cli-base src/wcat/manifest.ts:157).",
+    "until": "2027-01-31"
   },
   {
     "tool": "drive",
     "key": "doctor",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "drive",
-    "key": "profiles.shape",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). drive answers both `status` and `doctor`.",
+    "until": "2027-01-31"
   },
   {
     "tool": "drive",
     "key": "mcpServer.config",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). Desktop 0.8.0 shows no MCP config button for drive.",
+    "until": "2027-01-31"
   },
   {
     "tool": "drive",
     "key": "sync.last",
-    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). Desktop 0.8.0 reads drive's last sync from `status`.",
+    "until": "2027-01-31"
   },
   {
     "tool": "drive",
-    "key": "accountRemove.keeps",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
+    "key": "sync.lastShape",
+    "why": "Goes with drive's sync.last: `status` answers in the driveStatus shape, runs list in the runs shape.",
+    "until": "2027-01-31"
   },
   {
     "tool": "drive",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "ydisk",
-    "key": "accountRemove.keeps",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
-  },
-  {
-    "tool": "ydisk",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "ydisk",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "ydisk",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "notion",
-    "key": "sync.last",
-    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
-  },
-  {
-    "tool": "notion",
-    "key": "accountRemove.keeps",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
-  },
-  {
-    "tool": "notion",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "gcal",
-    "key": "doctor",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "gcal",
-    "key": "mcpServer",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "gcal",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "gcal",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "gcal",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "email",
-    "key": "doctor",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "email",
-    "key": "mcpServer",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "email",
-    "key": "sync.last",
-    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
-  },
-  {
-    "tool": "email",
-    "key": "accountRemove.keeps",
-    "why": "Desktop names what a sign-out keeps in its own words (folders, appKeys, googleAccess). cli-base writes a generic list. Open which list is right."
-  },
-  {
-    "tool": "email",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "email",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "zm",
-    "key": "doctor",
-    "why": "Desktop checks zm with `{profile} session status`; the manifest says `{profile} doctor`, as for gcal and email. Both answer: the built zoom-cli 0.81.0 code ran both with a profile and no sign-in on 2026-11-24. Which one Desktop should run is open."
-  },
-  {
-    "tool": "zm",
-    "key": "mcpServer",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
-  },
-  {
-    "tool": "zm",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "zm",
-    "key": "profiles.args",
-    "why": "Desktop's compiled catalog lists zm's profiles with `doctor`, which every zm answers. `session list` came in zoom-cli 0.81.0, so a catalog entry pointing there would fail on every zm installed before it; an installed zm's own answer replaces it once wirecat-desktop #476 lands."
-  },
-  {
-    "tool": "zm",
     "key": "profiles.shape",
-    "why": "Desktop's compiled catalog lists zm's profiles with `doctor`, which every zm answers. `session list` came in zoom-cli 0.81.0, so a catalog entry pointing there would fail on every zm installed before it; an installed zm's own answer replaces it once wirecat-desktop #476 lands."
+    "why": "The catalog is right: drive-cli 0.77.0 answers session list as item.items (drive-cli src/commands/session.ts:135). The manifest says items because cli-base allows no other shape (cli-base src/wcat/manifest.ts:101). Fix drive-cli to answer a list, or let cli-base state the shape.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "gcal",
+    "key": "doctor",
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). Desktop 0.8.0 checks it with `session status`, which the CLI still has.",
+    "until": "2027-01-31"
+  },
+  {
+    "tool": "gcal",
+    "key": "mcpServer",
+    "why": "Desktop has no port for this MCP server yet, so it starts none (wirecat-desktop #476). Giving it a port is the owner's call.",
+    "until": "2027-01-31"
+  },
+  {
+    "tool": "email",
+    "key": "doctor",
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). Desktop 0.8.0 checks it with `session status`, which the CLI still has.",
+    "until": "2027-01-31"
+  },
+  {
+    "tool": "email",
+    "key": "mcpServer",
+    "why": "Desktop has no port for this MCP server yet, so it starts none (wirecat-desktop #476). Giving it a port is the owner's call.",
+    "until": "2027-01-31"
   },
   {
     "tool": "zm",
-    "key": "accountRemove.signOut",
-    "why": "Deliberate: the catalog's signOut is the fallback for zm before accountRemove.remove.minVersion (0.70.0), and `session end` came in that same release, so an older zm has no sign-out to run (wirecat-desktop AccountRow.test.tsx, \"an old Zoom cannot sign out\")."
+    "key": "doctor",
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). Desktop 0.8.0 checks it with `session status`, which the CLI still has.",
+    "until": "2027-01-31"
   },
   {
     "tool": "zm",
-    "key": "accountRemove.removes",
-    "why": "Desktop names what a sign-out keeps in its own words, and has none for zm yet. cli-base writes a generic list. Open which list is right."
+    "key": "mcpServer",
+    "why": "Desktop has no port for this MCP server yet, so it starts none (wirecat-desktop #476). Giving it a port is the owner's call.",
+    "until": "2027-01-31"
   },
   {
-    "tool": "zm",
-    "key": "accountRemove.keeps",
-    "why": "Desktop names what a sign-out keeps in its own words, and has none for zm yet. cli-base writes a generic list. Open which list is right."
+    "tool": "gcal",
+    "key": "accountRemove",
+    "why": "gcal-cli 0.35.0 is built with cli-base 0.109.0, whose manifest has no accountRemove yet. The cli-core 1.0 update brings it.",
+    "issue": "https://github.com/WireCatLabs/gcal-cli/pull/199"
+  },
+  {
+    "tool": "email",
+    "key": "sync.last",
+    "why": "The catalog passes the query as one argument, the manifest as two. Both forms ask the same thing: cli-core's runs list joins its query words before it reads them (cli-core src/cli/list-query.ts:134).",
+    "until": "2027-01-31"
+  },
+  {
+    "tool": "notion",
+    "key": "sync.last",
+    "why": "The catalog passes the query as one argument, the manifest as two. Both forms ask the same thing: cli-core's runs list joins its query words before it reads them (cli-core src/cli/list-query.ts:134).",
+    "until": "2027-01-31"
+  },
+  {
+    "tool": "memo",
+    "key": "sync.last",
+    "why": "The catalog passes the query as one argument, the manifest as two. Both forms ask the same thing: cli-core's runs list joins its query words before it reads them (cli-core src/cli/list-query.ts:134).",
+    "until": "2027-01-31"
   },
   {
     "tool": "memo",
     "key": "skill.install",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). The manifest adds --json, which memo has taken since 0.131.86 at least.",
+    "until": "2027-01-31"
   },
   {
     "tool": "memo",
     "key": "skill.show",
-    "why": "wirecat-desktop journal FIND-283: Desktop runs something else than the manifest says. Not checked which one the CLI answers; needs a run of the CLI."
+    "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). The manifest adds --json, which memo has taken since 0.131.86 at least.",
+    "until": "2027-01-31"
   },
   {
-    "tool": "memo",
-    "key": "sync.last",
-    "why": "wirecat-desktop journal FIND-283: the catalog passes the filter as one argument, the manifest as two. Not checked whether runs list reads them alike."
+    "tool": "zm",
+    "key": "profiles.args",
+    "why": "Desktop's compiled catalog lists zm's profiles with `doctor`, which every zm answers. `session list` came in zoom-cli 0.81.0, so the compiled entry would fail on an older zm. Desktop main takes profiles from an installed zm 0.81.0 or newer's own answer (wirecat-desktop src-tauri/src/described.rs:33), and Desktop 0.8.0 keeps `doctor`.",
+    "until": "2027-01-31"
   },
   {
-    "tool": "memo",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "tool": "zm",
+    "key": "profiles.shape",
+    "why": "Desktop's compiled catalog lists zm's profiles with `doctor`, which every zm answers. `session list` came in zoom-cli 0.81.0, so the compiled entry would fail on an older zm. Desktop main takes profiles from an installed zm 0.81.0 or newer's own answer (wirecat-desktop src-tauri/src/described.rs:33), and Desktop 0.8.0 keeps `doctor`.",
+    "until": "2027-01-31"
   },
   {
-    "tool": "bitrix",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "tool": "zm",
+    "key": "accountRemove.signOut",
+    "why": "Deliberate: the catalog's signOut is the fallback for zm before accountRemove.remove.minVersion (0.70.0), and `session end` came in that same release, so an older zm has no sign-out to run (wirecat-desktop AccountRow.test.tsx, \"an old Zoom cannot sign out\"). With no sign-out, the sign-out removes nothing.",
+    "until": "2027-01-31"
   },
   {
-    "tool": "bitrix",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "tool": "zm",
+    "key": "accountRemove.removes",
+    "why": "Deliberate: the catalog's signOut is the fallback for zm before accountRemove.remove.minVersion (0.70.0), and `session end` came in that same release, so an older zm has no sign-out to run (wirecat-desktop AccountRow.test.tsx, \"an old Zoom cannot sign out\"). With no sign-out, the sign-out removes nothing.",
+    "until": "2027-01-31"
   },
   {
-    "tool": "bitrix",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "tool": "zm",
+    "key": "meetings",
+    "why": "zoom-cli 0.82.0 names no meetingsProvider in its identity, so its manifest states no meetings, though it has `meetings show` and `meetings transcript`. Fix in zoom-cli.",
+    "until": "2027-01-15"
   },
   {
-    "tool": "amo",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "amo",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "amo",
-    "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "attio",
-    "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
-  },
-  {
-    "tool": "attio",
-    "key": "signIn.gives",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "tool": "pbx",
+    "key": "meetings",
+    "why": "asterisk-cli 0.10.0 names no meetingsProvider in its identity, so its manifest states no meetings, though it has `meetings show` and `meetings transcript`. Fix in asterisk-cli.",
+    "until": "2027-01-15"
   },
   {
     "tool": "attio",
     "key": "accountRemove.remove",
-    "why": "attio-cli 0.3.0 added `account remove`, but Desktop's compiled catalog still has none, so Desktop offers only sign-out for Attio until wirecat-desktop's catalog/tools.json adds it."
+    "why": "attio-cli has had `account remove` since 0.3.0. Desktop main takes it from attio's own answer (wirecat-desktop #476), and Desktop 0.8.0 offers only sign-out for Attio.",
+    "until": "2027-01-31"
+  },
+  {
+    "tool": "bitrix",
+    "key": "signIn.asks",
+    "why": "bitrix24-cli 0.27.0 also asks for the task, telephony, disk and documentgenerator scopes, under Common use cases, Other (bitrix24-cli src/identity.ts:35). Desktop's own Bitrix24 sign-in screens name three scopes, with screenshots in three languages, so a webhook made from them may lack telephony. The owner decides the new screens.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "amo",
+    "key": "signIn.asks",
+    "why": "amo-cli 0.4.0 also signs in through your own integration (--client-id) and with --one-click. Desktop offers only the long-lived token. More sign-in screens are the owner's call.",
+    "until": "2027-01-15"
+  },
+  {
+    "tool": "max",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "max",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "max",
+    "key": "signIn.asks",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "tg",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "tg",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "tg",
+    "key": "signIn.asks",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "wa",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "wa",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "wa",
+    "key": "signIn.asks",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "drive",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "ydisk",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "ydisk",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "ydisk",
+    "key": "signIn.asks",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "notion",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "gcal",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "gcal",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "gcal",
+    "key": "signIn.asks",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "email",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "email",
+    "key": "signIn.asks",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "zm",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "memo",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "bitrix",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "bitrix",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "amo",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "amo",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "attio",
+    "key": "tagline",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
+  },
+  {
+    "tool": "attio",
+    "key": "signIn.gives",
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
   },
   {
     "tool": "hubspot",
     "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
   },
   {
     "tool": "pbx",
     "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
   },
   {
     "tool": "wordpress",
     "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
   },
   {
     "tool": "linear",
     "key": "tagline",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
   },
   {
     "tool": "linear",
     "key": "signIn.asks",
-    "why": "wirecat-desktop journal FIND-282: the catalog and the CLI word this differently. Desktop shows the catalog text until one side is changed."
+    "why": "Desktop shows its own words and never takes texts from the CLI (wirecat-desktop #476). Which wording wins is the owner's open call (wirecat-desktop journal FIND-282).",
+    "until": "2027-02-28"
   }
 ]

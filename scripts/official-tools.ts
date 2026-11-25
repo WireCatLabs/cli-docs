@@ -24,8 +24,9 @@ import type { Tool } from "./sync.ts"
 export const MANIFESTS_FILE = "registry/official-manifests.json"
 export const OVERLAY_FILE = "registry/official.json"
 export const DRIFT_ALLOW_FILE = "registry/drift-allow.json"
-export const DESKTOP_CATALOG_URL =
-  "https://raw.githubusercontent.com/WireCatLabs/wirecat-desktop/main/catalog/tools.json"
+const DESKTOP_RAW = "https://raw.githubusercontent.com/WireCatLabs/wirecat-desktop"
+export const DESKTOP_CATALOG_URL = `${DESKTOP_RAW}/main/catalog/tools.json`
+const DESKTOP_RELEASE_URL = "https://api.github.com/repos/WireCatLabs/wirecat-desktop/releases/latest"
 const NPM = "https://registry.npmjs.org/"
 const LANGS = ["en", "ru", "es"] as const
 const TEXTS = ["name", "tagline", "summary", "gives", "asks", "syncNote"] as const
@@ -41,6 +42,8 @@ export type Manifest = {
   /** Every program the package installs: Desktop runs our tools by their short name, the manifest names `wcat-…`. */
   bins: string[]
   desktop: Record<string, unknown>
+  /** The manifest's command paths (`session list`), read for the check only and not kept in the committed file. */
+  commands?: string[]
 }
 /** By tools.json name; `null` when the latest release ships no manifest. */
 export type Manifests = Record<string, Manifest | null>
@@ -57,7 +60,8 @@ export type Overlay = {
 }
 export type Overlays = Record<string, Overlay>
 
-export type Allowed = { tool: string; key: string; why: string }
+/** A known difference: why it is so, and when it is looked at again (`until`, a date) or where it is fixed (`issue`). */
+export type Allowed = { tool: string; key: string; why: string; until?: string; issue?: string }
 
 const record = (v: unknown): Record<string, unknown> | undefined =>
   v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : undefined
@@ -179,9 +183,12 @@ async function retried<T>(run: () => Promise<T>, tries = 3): Promise<T> {
   }
 }
 
-const getJson = (url: string) =>
+const getJson = (url: string, headers: Record<string, string> = {}) =>
   retried(async () => {
-    const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(30_000) })
+    const res = await fetch(url, {
+      headers: { accept: "application/json", ...headers },
+      signal: AbortSignal.timeout(30_000),
+    })
     if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`)
     return (await res.json()) as Record<string, unknown>
   })
@@ -209,6 +216,10 @@ export async function fetchManifest(pkg: string): Promise<Manifest | null> {
     bin: String(m.bin),
     bins: Object.keys(record(latest.bin) ?? {}).sort(),
     desktop: m.desktop as Record<string, unknown>,
+    commands: (Array.isArray(m.commands) ? m.commands : []).flatMap((c) => {
+      const path = record(c)?.path
+      return Array.isArray(path) ? [path.join(" ")] : []
+    }),
   }
 }
 
@@ -252,6 +263,7 @@ const FACTS = [
   "signIn.setupFrom",
   "accountRemove",
   "meetings",
+  "sync.lastShape",
 ] as const
 /** What the person reads. */
 const WORDS = ["tagline", "signIn.gives", "signIn.asks"] as const
@@ -260,24 +272,109 @@ const WORDS = ["tagline", "signIn.gives", "signIn.asks"] as const
  * describes; Desktop keeps its own: the first version it offers the flow for.
  */
 const IGNORED = ["accountRemove.remove.minVersion", "signIn.setupFrom"]
+/**
+ * The manifest's schema has one word for what a sign-out removes (`signIn`) and three for what it keeps (cli-base
+ * src/wcat/manifest.ts), while Desktop names more (`serverSession`, `folders`). So the catalog must name every word
+ * the manifest names for `removes`, and `keeps` is not compared.
+ */
+const AT_LEAST = ["accountRemove.removes"]
+const DESKTOP_OWN = ["mcpServer.port", "accountRemove.keeps", "skill.doctorSkills"]
+/**
+ * Desktop's sign-in methods carry fields a manifest has no place for (`clientFile`, `address`, `portal`), so a CLI that
+ * states none says nothing; a list it does state is compared.
+ */
+const OWN_WHEN_UNSTATED = ["signIn.methods"]
 
 const at = (v: unknown, path: string): unknown =>
   path.split(".").reduce<unknown>((o, k) => (record(o) ? (o as Record<string, unknown>)[k] : undefined), v)
 
 /**
- * The paths under `path` where the catalog says something else than the manifest. Only what the manifest states is
- * compared: a key it leaves out or sets to `null` says nothing, and a key only the catalog has (`mcpServer.port`) is
- * Desktop's own. Word lists are compared as they are, since one argument is not two.
+ * The paths under `path` where the catalog says something else than the manifest. A key the manifest leaves out or
+ * sets to `null` says the CLI has no such thing, so a catalog that runs one there differs too; only Desktop's own keys
+ * (`mcpServer.port`) are not compared. Word lists are compared as they are, since one argument is not two.
  */
 export function differences(said: unknown, has: unknown, path: string): string[] {
-  if (said === null || said === undefined || IGNORED.includes(path)) return []
+  if (IGNORED.includes(path) || DESKTOP_OWN.includes(path)) return []
+  if (said === null || said === undefined)
+    return has === null || has === undefined || OWN_WHEN_UNSTATED.includes(path) ? [] : [path]
   const s = record(said)
   if (s) {
     const h = record(has)
     if (!h) return [path]
-    return Object.entries(s).flatMap(([k, v]) => differences(v, h[k], `${path}.${k}`))
+    return [...new Set([...Object.keys(s), ...Object.keys(h)])].flatMap((k) => differences(s[k], h[k], `${path}.${k}`))
   }
+  if (AT_LEAST.includes(path) && Array.isArray(said) && Array.isArray(has))
+    return said.every((w) => has.includes(w)) ? [] : [path]
   return JSON.stringify(said) === JSON.stringify(has) ? [] : [path]
+}
+
+const isWords = (v: unknown): v is string[] =>
+  Array.isArray(v) &&
+  v.length > 0 &&
+  v.every((w) => typeof w === "string") &&
+  (v[0] === "{profile}" || v.some((w) => w.startsWith("--")))
+
+/** Every command line a catalog entry runs, by the key it sits under. */
+export function commandLines(v: unknown, path = ""): [string, string[]][] {
+  if (isWords(v)) return [[path, v]]
+  const r = record(v)
+  return r ? Object.entries(r).flatMap(([k, x]) => commandLines(x, path ? `${path}.${k}` : k)) : []
+}
+
+/** The catalog runs `words`: one of the CLI's commands must be their first words, the rest its arguments. */
+export const runsACommand = (words: readonly string[], commands: readonly string[]) => {
+  const lead = words.filter((w) => !w.startsWith("{"))
+  const end = lead.findIndex((w) => w.startsWith("--"))
+  const path = end < 0 ? lead : lead.slice(0, end)
+  return commands.some((c) => {
+    const p = c.split(" ")
+    return p.every((w, i) => path[i] === w)
+  })
+}
+
+/**
+ * The command lines of a Desktop catalog (`where` says which: main, or the release people run) whose command the CLI's
+ * latest release no longer has. A released Desktop keeps running them until the next one ships.
+ */
+export function missingCommands(
+  tools: readonly Tool[],
+  overlays: Overlays,
+  manifests: Manifests,
+  catalog: { tools: Record<string, unknown>[] },
+  where: string,
+): string[] {
+  return ours(tools).flatMap((tool) => {
+    const m = manifests[tool.name]
+    const entry = catalog.tools.find((t) => t.id === (overlays[tool.name]?.id ?? tool.name))
+    if (!m?.commands?.length || !entry) return []
+    return commandLines(entry)
+      .filter(([, words]) => !runsACommand(words, m.commands ?? []))
+      .map(
+        ([key, words]) =>
+          `${String(entry.id)} ${key}: Desktop ${where} runs \`${words.join(" ")}\`, ${tool.package} ${m.version} has no such command`,
+      )
+  })
+}
+
+const DATE = /^\d{4}-\d{2}-\d{2}$/
+const VAGUE = /not checked|needs a run|open which/i
+
+/** A line in drift-allow.json says why the difference is right for now, and when or where it ends. */
+export function allowProblems(allowed: readonly Allowed[], today: string): string[] {
+  return allowed.flatMap((a) => {
+    const at = `${DRIFT_ALLOW_FILE}: ${a.tool} ${a.key}`
+    const problems: string[] = []
+    if (!a.why?.trim() || VAGUE.test(a.why))
+      problems.push(`${at}: say why the difference is right; "not checked" is a question, not a reason`)
+    if (a.until === undefined && a.issue === undefined)
+      problems.push(`${at}: give an "until" date or the "issue" that fixes it`)
+    if (a.until !== undefined && !DATE.test(a.until)) problems.push(`${at}: "until" is a date, YYYY-MM-DD`)
+    else if (a.until !== undefined && a.until < today)
+      problems.push(`${at}: its "until" (${a.until}) has passed; fix the difference or give a new date with the reason`)
+    if (a.issue !== undefined && !/^https:\/\/github\.com\/WireCatLabs\/[\w.-]+\/(issues|pull)\/\d+$/.test(a.issue))
+      problems.push(`${at}: "issue" is a WireCatLabs issue or pull request link`)
+    return problems
+  })
 }
 
 /**
@@ -345,27 +442,43 @@ export function portProblems(overlays: Overlays, catalog: { tools: Record<string
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
   const read = <T>(file: string) => JSON.parse(readFileSync(join(root, file), "utf8")) as T
-  const { values } = parseArgs({ options: { check: { type: "boolean", default: false } } })
+  const { values } = parseArgs({ options: { check: { type: "boolean", default: false }, catalog: { type: "string" } } })
   const tools = read<Tool[]>("tools.json")
   const overlays = read<Overlays>(OVERLAY_FILE)
   const live = await fetchManifests(tools)
   if (!values.check) {
-    writeFileSync(join(root, MANIFESTS_FILE), `${JSON.stringify(live, null, 2)}\n`)
+    const kept = Object.fromEntries(
+      Object.entries(live).map(([name, m]) => [name, m && (({ commands: _, ...rest }) => rest)(m)]),
+    )
+    writeFileSync(join(root, MANIFESTS_FILE), `${JSON.stringify(kept, null, 2)}\n`)
     const shipped = Object.values(live).filter(Boolean).length
     console.log(`${MANIFESTS_FILE}: ${shipped} of ${Object.keys(live).length} tools ship a manifest`)
   } else {
     const committed = read<Manifests>(MANIFESTS_FILE)
-    const catalog = (await getJson(DESKTOP_CATALOG_URL)) as { tools: Record<string, unknown>[] }
+    type Catalog = { tools: Record<string, unknown>[] }
+    // `--catalog <file>` reads a Desktop branch's catalog instead of main's, to check a change before it merges.
+    const catalog = (
+      values.catalog ? JSON.parse(readFileSync(values.catalog, "utf8")) : await getJson(DESKTOP_CATALOG_URL)
+    ) as Catalog
+    const token = process.env.GITHUB_TOKEN
+    const release = await getJson(DESKTOP_RELEASE_URL, token ? { authorization: `Bearer ${token}` } : {})
+    const tag = String(release.tag_name)
+    const released = (await getJson(`${DESKTOP_RAW}/${tag}/catalog/tools.json`)) as Catalog
+    const allowed = read<Allowed[]>(DRIFT_ALLOW_FILE)
     const stale = staleProblems(committed, live)
     const drift = [
       ...overlayProblems(tools, overlays),
       ...portProblems(overlays, catalog),
-      ...driftProblems(tools, overlays, live, catalog, read<Allowed[]>(DRIFT_ALLOW_FILE)),
+      ...allowProblems(allowed, new Date().toISOString().slice(0, 10)),
+      ...driftProblems(tools, overlays, live, catalog, allowed),
+      ...missingCommands(tools, overlays, live, catalog, "main"),
+      ...missingCommands(tools, overlays, live, released, tag),
     ]
     for (const name of Object.keys(live).filter((n) => !live[n])) console.log(`gap  ${name}: ships no manifest yet`)
     for (const p of stale) console.log(`stale  ${p}`)
     for (const p of drift) console.log(`drift  ${p}`)
     if (stale.length) console.log("Run `pnpm registry:official` and commit registry/official-manifests.json.")
+    console.log(`Compared with Desktop's catalog on ${values.catalog ?? "main"} and in its latest release, ${tag}.`)
     if (stale.length || drift.length) process.exit(1)
     console.log("The signed list, Desktop's catalog and the published CLIs agree.")
   }
