@@ -4,6 +4,24 @@ title: "Historial de cambios"
 
 Cambios notables de `@wirecat/slack-cli`. Una sección por versión, la más nueva primero.
 
+## 0.3.0 — 25.11.2026
+
+### Añadido
+
+- **`inbox` muestra las respuestas nuevas en los hilos que sigues.** Slack considera seguido un hilo que empezaste,
+  en el que respondiste o donde te mencionaron, y guarda hasta dónde lo leíste. Los mensajes sin leer de un canal
+  ahora incluyen las respuestas posteriores a ese punto, cada una con `threadRootId`. Esas respuestas cuentan como
+  dirigidas a ti, así que también aparece un canal que no sigues. Se revisan los hilos empezados en los últimos
+  `thread_window_days` (14 días por defecto) entre los 100 mensajes más nuevos del canal. Las respuestas en hilos de
+  mensajes directos todavía no se leen. Cuando se acaba el tiempo, `missing` indica cuántos hilos no se leyeron.
+
+### Cambios — pueden romper scripts
+
+- **Basado en cli-core 1.0.0 y cli-base 1.0.0.** Los archivos de API generados leen sus tipos de
+  `@wirecat/cli-base/codegen/runtime`. Con cli-core 1.0 llega la versión 73 del almacén. En cuanto una herramienta
+  1.0 abre el almacén, una herramienta 0.x lo rechaza, así que actualiza todos los CLI de WireCat a la vez.
+  `store migrate` no se ejecuta sin una copia para revertir. Con `--no-backup` migra de todos modos.
+
 ## 0.2.0 — 25.11.2026
 
 ### Añadido
@@ -78,7 +96,7 @@ Cambios notables de `@wirecat/slack-cli`. Una sección por versión, la más nue
 - **`setup` y el README enlazan a la creación de la app de Slack con el manifiesto ya rellenado.** Un clic abre
   **Create New App** con los permisos de slk. Pegar `docs/slack-app-manifest.json` a mano sigue funcionando.
 - **Inicia sesión con tu propia app de Slack: `slk <profile> session start`.** Crea una app en tu espacio de trabajo
-  a partir del [manifiesto](https://github.com/WireCatLabs/slack-cli/blob/v0.2.0/docs/slack-app-manifest.json), instálala y pega su User OAuth Token (`xoxp-`) en la
+  a partir del [manifiesto](https://github.com/WireCatLabs/slack-cli/blob/v0.3.0/docs/slack-app-manifest.json), instálala y pega su User OAuth Token (`xoxp-`) en la
   pregunta oculta o por stdin. slack lo comprueba con `auth.test` de Slack y lo guarda en el llavero del sistema, con
   el espacio de trabajo y la persona a la que pertenece. Un token de bot (`xoxb-`) y uno rotativo (`xoxe.`) se
   rechazan antes de enviar nada, porque slack lee como tú y no puede renovar un token que dura 12 horas.
@@ -95,7 +113,7 @@ Cambios notables de `@wirecat/slack-cli`. Una sección por versión, la más nue
   Cualquier otro borrado pide `slack.delete`. Once GET que envían, comparten o publican (`views publish`,
   `files remote-share` …) cuentan como escrituras: un perfil de solo lectura los rechaza, y nunca se envían dos veces.
   Los 15 métodos que solo aceptan un formulario y los cuatro que responden con un token o un enlace secreto quedan
-  fuera, cada uno con su motivo en `slk api show` y en [cobertura de la API](https://github.com/WireCatLabs/slack-cli/blob/v0.2.0/docs/dev/API_COVERAGE.md).
+  fuera, cada uno con su motivo en `slk api show` y en [cobertura de la API](https://github.com/WireCatLabs/slack-cli/blob/v0.3.0/docs/dev/API_COVERAGE.md).
 
 ### Cambios — pueden romper llamadas
 
