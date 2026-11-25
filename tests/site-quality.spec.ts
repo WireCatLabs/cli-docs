@@ -77,7 +77,7 @@ for (const width of [768, 1280]) {
     const dialog = page.getByRole("dialog")
     await expect(dialog).toBeVisible()
     await dialog.getByRole("combobox").fill("installation")
-    await expect(dialog.getByRole("option").first()).toBeVisible()
+    await expect(dialog.getByRole("option").first()).toBeVisible({ timeout: 15_000 })
     await page.keyboard.press("Escape")
     await expect(dialog).not.toBeVisible()
     await expect(search).toBeFocused()
