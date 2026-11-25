@@ -27,9 +27,9 @@ attio work mcp add claude-code --allow-writes   # or codex
 attio work mcp check                            # the handshake and the tool list, as the client sees them
 ```
 
-`--allow-writes` dice que sabes que el perfil ofrece herramientas que escriben: las escrituras del grupo `api`. Para
-Claude Desktop, Cursor o cualquier otro cliente, `attio work mcp config` imprime la entrada que hay que pegar en sus
-ajustes, con rutas completas. A mano, para Claude Code:
+`--allow-writes` dice que sabes que el perfil ofrece herramientas que escriben: las escrituras de negociaciones y
+personas y las del grupo `api`. Para Claude Desktop, Cursor o cualquier otro cliente, `attio work mcp config` imprime
+la entrada que hay que pegar en sus ajustes, con rutas completas. A mano, para Claude Code:
 
 ```sh
 claude mcp add attio -- attio work mcp serve
@@ -55,9 +55,9 @@ lo que encuentra `search all`. Al agente se le dice que son datos, nunca instruc
 
 ## Las escrituras siguen siendo tuyas
 
-Los comandos de negociaciones, personas y empresas solo leen. El grupo `api` llega a cada operación de Attio, y sus
-escrituras están en `allow` por defecto, sus borrados en `ask`. Por MCP no hay nadie en una terminal para responder a
-`ask`, así que un borrado también sigue adelante.
+Los comandos de negociaciones y personas escriben, y el grupo `api` llega a cada operación de Attio. Cada escritura
+está en `ask` por defecto. Por MCP no hay nadie en una terminal para responder a `ask`, así que toda escritura sigue
+adelante, y quien te pregunta es tu cliente MCP.
 
 Dos cosas detienen una escritura. Usa al menos una antes de añadir el servidor:
 

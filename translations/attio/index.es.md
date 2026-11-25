@@ -48,11 +48,11 @@ trabajo de Attio y un administrador que pueda crear un token de acceso.
   espacio de trabajo y las personas y empresas que nombran, con las etapas del embudo de negociaciones. `deals`, `pipelines` y
   `changes` responden desde esa copia. `people`, `organizations` y `users` preguntan a Attio cada vez, así que siempre
   muestran los datos más nuevos y necesitan internet.
-- **Cada cambio te pregunta antes en una terminal.** `deals create`, `update`, `move`, `close` y `delete`, y
-  `people create` y `update`, cambian Attio y guardan su respuesta. En una terminal cada uno pregunta sí o no antes, y
-  también cada escritura por `api`. Una negociación nueva sin `--owner` es tuya. Empresas, notas y tareas van por
-  `attio work api …`, que llega a cada operación de la API de Attio, hasta donde lo permiten los ámbitos del token y
-  tus [permisos](./permissions.md).
+- **Cada cambio te pregunta antes en una terminal.** `deals create`, `update`, `move`, `close` y `delete`,
+  `people create` y `update`, y `activities create` y `close` para notas y tareas, cambian Attio y guardan su
+  respuesta. En una terminal cada uno pregunta sí o no antes, y también cada escritura por `api`. Una negociación
+  nueva sin `--owner` es tuya. Las empresas van por `attio work api …`, que llega a cada operación de la API de Attio, hasta
+  donde lo permiten los ámbitos del token y tus [permisos](./permissions.md).
 - **Por MCP, "ask" sigue adelante.** MCP es la forma en que aplicaciones como Claude Desktop llaman a una herramienta,
   y ahí nadie está en una terminal para responder a una pregunta. Bloquea el grupo `api` antes de conectar una
   aplicación así: [MCP](./mcp.md).
@@ -75,8 +75,9 @@ Agent:  (runs attio work changes list change:won "at>=7d")
 
 - **Una copia de tus negociaciones en tu ordenador.** Las listas, el tablero del embudo y la búsqueda responden desde
   ella sin ninguna petición a Attio, también sin conexión.
-- **Seguro para dárselo a un agente.** Los comandos del CRM solo leen. Cada comando y cada operación de la API de Attio
-  tiene su propio permiso: permitir, preguntar, solo lectura o rechazar. Una línea aleja toda escritura de un agente.
+- **Seguro para dárselo a un agente.** Cada cambio en Attio te pregunta antes en una terminal. Cada comando y cada
+  operación de la API de Attio tiene su propio permiso: permitir, preguntar, solo lectura o rechazar. Una línea aleja
+  toda escritura de un agente.
 - **El token se queda en el llavero del sistema.** Nunca aparece en la salida, los errores ni los registros.
 - **Respetuoso con Attio.** La mayoría de las respuestas no necesitan ninguna petición, así que el límite de
   peticiones de tu espacio de trabajo queda para tus otras aplicaciones.
@@ -137,10 +138,10 @@ crear el token.
 
 ## Límites
 
-- Los comandos de negociaciones leen las negociaciones y nunca las cambian. Mover o cerrar una negociación está en las
-  [próximas mejoras](./roadmap.md).
-- Las notas, las tareas, las listas y los objetos personalizados todavía no tienen comandos propios. `attio work api`
-  llega a ellos.
+- Las empresas se leen, no se escriben: una empresa de Attio no tiene atributo de correo ni de teléfono que escribir.
+  Cambia una por `api`.
+- Las notas y las tareas se listan y se muestran en una negociación cuando activas el ajuste `activities`. Las listas
+  y los objetos personalizados todavía no tienen comandos propios. `attio work api` llega a ellos.
 - Las personas, las empresas y los miembros del espacio de trabajo se leen de Attio cada vez, así que necesitan
   internet.
 - Attio no puede listar solo lo que cambió desde un momento dado, así que cada sincronización vuelve a listar todas

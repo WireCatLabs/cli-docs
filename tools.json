@@ -177,7 +177,7 @@
     "repo": "WireCatLabs/attio-cli",
     "package": "@wirecat/attio-cli",
     "lang": "en",
-    "docsRef": "v0.4.1",
+    "docsRef": "v0.6.0",
     "tier": "extra",
     "category": "crm",
     "summary": {

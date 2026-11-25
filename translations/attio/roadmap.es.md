@@ -23,16 +23,15 @@ del embudo de negociaciones, así que `deals`, `pipelines`, `stages` y `changes`
 encuentra negociaciones junto a tus mensajes, notas y reuniones. `pipelines show` es el tablero del embudo: las
 negociaciones de cada etapa, su número, su suma por moneda y la proporción de ganadas. `changes list` muestra las
 negociaciones creadas, movidas, ganadas y perdidas, y `--format report` lo convierte en un resumen. `fields list`
-muestra los atributos propios del espacio de trabajo. Con el ajuste `activities` activado, la copia guarda también
-las notas y tareas de sus negociaciones, personas y empresas. `people`, `organizations` y `users` leen Attio en
-directo. `deals` crea, cambia, mueve y cierra negociaciones, y `people` crea y cambia personas, y cada cambio te
-pregunta antes. Las listas se exportan a CSV con `--format csv`. `attio work api` llega a cada operación de la API de Attio. Todos los
-comandos están en la [referencia de comandos](./commands.md).
+muestra los atributos propios del espacio de trabajo. Con el ajuste `activities` activado, la copia guarda también las
+notas y tareas de sus negociaciones, personas y empresas, y `activities list` las lista. `people`, `organizations` y
+`users` leen Attio en directo. `deals` crea, cambia, mueve y cierra negociaciones, `people` crea y cambia personas, y
+`activities` añade una nota o una tarea y marca una tarea como hecha, y cada cambio te pregunta antes. Las listas se
+exportan a CSV con `--format csv`. `attio work api` llega a cada operación de la API de Attio. Todos los comandos
+están en la [referencia de comandos](./commands.md).
 
 ## Siguiente
 
-- **Añadir notas y tareas.** Añadir una nota o una tarea a una negociación, una persona o una empresa con su propio
-  comando. Leerlas ya está en la copia.
 - **Iniciar sesión con un clic.** Iniciar sesión a través de Attio en el navegador, en lugar de crear un token a mano.
 
 ## Más adelante
