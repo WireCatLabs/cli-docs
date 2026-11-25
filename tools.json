@@ -236,7 +236,7 @@
     "repo": "WireCatLabs/linear-cli",
     "package": "@wirecat/linear-cli",
     "lang": "en",
-    "docsRef": "v0.1.0",
+    "docsRef": "v0.4.1",
     "category": "tracker",
     "summary": {
       "en": "Your Linear issues, projects and comments on your computer, so your AI agent reads them offline, turns an issue into your task and calls any operation of the Linear API.",

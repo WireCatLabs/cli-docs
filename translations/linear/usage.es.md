@@ -2,7 +2,10 @@
 title: "Úsalo"
 ---
 
-Esta página explica cómo se forma un comando y cómo usa la herramienta un agente. Léela antes de tu primer comando.
+Pregunta por las incidencias de tu equipo o cambia una desde un terminal, o deja que lo haga tu agente, siempre en
+el espacio de trabajo que nombras. Cada comando empieza por un perfil, así que nada va a la cuenta equivocada. Un
+script recibe JSON, con un código de error para decidir qué hacer, y un agente recibe los mismos comandos como skill o
+por MCP.
 
 ## Primero el perfil
 

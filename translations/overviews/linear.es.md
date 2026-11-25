@@ -9,8 +9,8 @@ esa copia, incluso sin conexión. Si lo permites, la misma herramienta crea y ca
 
 Puedes preguntar a tu agente qué incidencias de un equipo siguen en curso, qué se dijo en los comentarios de ENG-12 o
 qué incidencias no tienen responsable. El agente las encuentra en la copia local y nombra cada incidencia por su clave.
-Una incidencia que asumes se convierte en una [tarea](/es/docs/tasks) en el almacén local, junto a las tareas de tus
-chats.
+Una incidencia abierta asignada a ti se convierte en una [tarea](/es/docs/tasks) en el almacén local, junto a las
+tareas de tus chats.
 
 `linear` es a la vez una CLI de Linear para tu terminal y un servidor MCP de Linear para aplicaciones como Claude
 Desktop, y para ChatGPT a través de un túnel que ejecutas tú. Necesitas una clave de API personal de Linear, que creas una vez en los ajustes de Linear.
@@ -26,12 +26,19 @@ Desktop, y para ChatGPT a través de un túnel que ejecutas tú. Necesitas una c
 
 ## Qué obtienes
 
-- **Incidencias sin conexión.** Lista incidencias por equipo, proyecto, estado, responsable o etiqueta, abre una con
-  sus comentarios y encuentra incidencias, proyectos y comentarios por sus palabras.
-- **Una incidencia se convierte en tu tarea.** `issues assign ENG-12` te añade una tarea que apunta a la incidencia,
-  con fecha límite si la indicas. No cambia nada en Linear.
-- **Todo lo demás que ofrece Linear.** Crea una incidencia, cambia su estado, añade un comentario o lee ciclos y
-  documentos con el grupo `api`. `api list` nombra todas las operaciones.
+- **Incidencias sin conexión.** Lista incidencias por equipo, proyecto, sprint, estado, responsable o etiqueta, abre
+  una con sus comentarios y encuentra incidencias, proyectos y comentarios por sus palabras. Los sprints son lo que
+  Linear llama ciclos.
+- **Tus incidencias se vuelven tus tareas.** Después de cada sincronización, cada incidencia abierta asignada a ti es
+  una tarea, con su clave y su título. La tarea se cierra cuando la incidencia se completa, se cancela o pasa a otra
+  persona. `issues assign ENG-12` convierte también cualquier otra incidencia en tu tarea. No se escribe nada en
+  Linear.
+- **Incidencias desde el chat.** Crea una incidencia, pásala a otro estado, cambia su responsable o añade un
+  comentario, con `issues create`, `issues update` e `issues comments create`.
+- **Todo lo demás que ofrece Linear.** Archiva una incidencia, enlaza dos incidencias o añade un adjunto con el grupo
+  `api`. `api list` nombra todas las operaciones.
+- **También los documentos de Linear.** La misma sincronización copia los documentos de los proyectos que eliges, así
+  que tu agente los lee junto a las incidencias.
 - **Tú decides qué puede cambiar el agente.** Cada perfil permite, pregunta o rechaza cada tipo de escritura. Un
   borrado o un archivado necesita un permiso propio, `WCLINEAR_READ_ONLY=1` rechaza cualquier escritura y `--dry-run`
   muestra lo que enviaría una escritura sin enviarlo. Por MCP no hay nadie a quien preguntar, así que una escritura
@@ -46,13 +53,15 @@ oculta o por stdin, nunca como argumento, así que no acaba en el historial de l
 
 ## Cómo funciona
 
-- **Una copia en tu ordenador.** `linear` guarda tus incidencias, proyectos y comentarios, con sus equipos,
+- **Una copia en tu ordenador.** `linear` guarda tus incidencias, proyectos, sprints y comentarios, con sus equipos,
   estados y etiquetas, en el almacén local, un archivo de tu ordenador que comparten todas las
   herramientas de WireCat. Las listas y la búsqueda leen esta copia, no Linear.
 - **La copia es tuya.** Linear muestra a cada miembro equipos distintos, así que la copia guarda lo que ve tu propia
   clave y nada de los equipos privados de otra persona.
 - **Una sincronización trae los cambios.** La primera copia todo. Después solo lee lo que cambió, y una vez al día
-  detecta lo que se borró en Linear. Las incidencias archivadas siguen en la copia, marcadas.
+  detecta lo que se borró en Linear. Una incidencia que mueves a la papelera de Linear sale de la copia en esa
+  comprobación diaria, y vuelve si la restauras. Las incidencias archivadas siguen en la copia, marcadas. Una
+  sincronización sin nada nuevo lo dice.
 - **Un perfil para cada cuenta.** Un perfil es un nombre que eliges para una cuenta de Linear, como `work`. Cada
   comando que usa una cuenta lo nombra primero: `linear work issues show ENG-12`.
 - **Toda la API como comandos.** Cada una de las 493 consultas y mutaciones de la API de Linear es un comando propio
@@ -84,8 +93,11 @@ linear work session start
 linear work sync
 linear work issues list type:started
 linear work issues show ENG-12
+linear work issues search invoice currency
 ```
 
+`issues search` encuentra las incidencias que tienen todas las palabras, en cualquier orden. Las palabras entre
+comillas se buscan como una sola frase.
 Vuelve a ejecutar `sync` más tarde para traer lo que cambió.
 
 4. Conecta tu agente. Un agente de terminal recibe la skill:
@@ -98,10 +110,9 @@ Una aplicación que se conecta a servidores MCP recibe el servidor, como se expl
 
 ## Qué no hace todavía
 
-- La búsqueda común de WireCat todavía no lee las incidencias de Linear. Encuéntralas con `issues search`, no junto a
-  tus mensajes y notas.
+- `issues search` encuentra incidencias por sus palabras, no por significado. Para encontrarlas por significado,
+  ejecuta `sync --embed` y busca con `search all` de memo, junto a tus notas y otros documentos.
 - Solo inicia sesión con una clave de API personal, no a través del navegador.
-- Crear y cambiar incidencias pasa por el grupo `api`, una operación de Linear cada vez.
 
 ## Encuentra la guía para tu tarea
 
