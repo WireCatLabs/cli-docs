@@ -315,7 +315,7 @@ Código `2`. Solo se admite un `serve` por perfil. `tg personal server status` i
 
 ### El servidor en segundo plano no se inicia
 
-`tg personal server status --json` incluye `stopped` y `unit.exitCode` cuando la última salida normal fue una en la que la unidad no se reinicia. Para la salida 4, renueve la sesión con `tg personal session start`, luego `tg personal server start`. `tg personal server logs` dice por qué. En un servicio, el motivo habitual es el llavero: un servicio se inicia antes de que se abra el llavero, o sin `XDG_RUNTIME_DIR`. Después de mover Node o `tg`, ejecute `tg personal server install` nuevamente: la unidad ejecuta las rutas que lo instalaron ([ejecutándose como servicio](./archive.md#as-a-service)).
+`tg personal server status --json` incluye `stopped` y `unit.exitCode` cuando la última salida normal fue una en la que la unidad no se reinicia. Para la salida 4, renueve la sesión con `tg personal session start`, luego `tg personal server start`. Para la salida 6, la unidad nombra un perfil que este ordenador no tiene: vuelve a instalarla con el nombre correcto. `tg personal server logs` dice por qué. En un servicio, el motivo habitual es el llavero: un servicio se inicia antes de que se abra el llavero, o sin `XDG_RUNTIME_DIR`. Después de mover Node o `tg`, ejecute `tg personal server install` nuevamente: la unidad ejecuta las rutas que lo instalaron ([ejecutándose como servicio](./archive.md#as-a-service)).
 
 ## Informar de un problema
 

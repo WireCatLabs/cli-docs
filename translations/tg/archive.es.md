@@ -120,11 +120,15 @@ tg personal messages sync "Book club" --limit 5000  # up to 5000 messages in thi
 ```
 
 ```sh
-tg personal messages sync --all                 # every chat, most recently active first: the last 90 days
+tg personal messages sync --all                 # every chat but the muted ones, most recently active first: the last 90 days
 ```
 
 ```sh
-tg personal messages sync --all --since-time 365d  # every chat, back to a year ago
+tg personal messages sync --all --with-muted    # the muted chats too
+```
+
+```sh
+tg personal messages sync --all --since-time 365d  # the same chats, back to a year ago
 ```
 
 `messages sync` lee y guarda el historial por páginas, empezando por lo más reciente. **Puede reanudarse:** después de cada página registra lo que ya contiene, por lo que detenerlo no pierde datos. Ctrl-C, `--timeout`, el límite `--limit`, `--since-time`, `--last` y una espera larga exigida por Telegram detienen la descarga; la siguiente ejecución omite lo que ya está guardado. `--since-time` y `--last` indican hasta dónde retroceder: utiliza una de las dos, no ambas. Un fallo permanente antes de la primera página guardada termina con un error; si ya hay progreso, un fallo puede devolver lo guardado con un `issue`.
@@ -329,7 +333,7 @@ En macOS, el agente se guarda en `~/Library/LaunchAgents/`. `install` habilita l
 - En macOS, `server stop` descarga el agente hasta el próximo inicio de sesión, igual que en Linux; `server uninstall` evita que vuelva a iniciarse.
 - `tg upgrade` reinicia el servidor activo para que no siga usando la versión anterior.
 
-Las respuestas automáticas de `serve` a cuentas de prueba se describen en [respuestas automáticas](./replies.md).
+Las respuestas automáticas de `serve` siguen tus reglas y la audiencia elegida; consulta [las respuestas automáticas](./replies.md).
 
 ## Comprobación, copia de seguridad y restauración
 

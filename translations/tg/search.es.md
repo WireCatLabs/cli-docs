@@ -5,7 +5,7 @@ title: "Búsqueda"
 <a id="para-scripts-y-agentes" />
 <a id="archivos-preparación-y-lagunas-del-archivo" />
 
-Necesitas encontrar algo que esté escrito: un mensaje, un acuerdo, un archivo que alguien envió, un código de hace meses. Esta página muestra cómo buscar todo lo que tg ha guardado en esta computadora (mensajes de Telegram y el correo y las notas que [memo](https://github.com/WireCatLabs/cli-memo) importó) y cómo realizar la búsqueda propia de Telegram al mismo tiempo.
+Necesitas encontrar algo que esté escrito: un mensaje, un acuerdo, un archivo que alguien envió, un código de hace meses. Esta página muestra cómo buscar todo lo que tg ha guardado en esta computadora (mensajes de Telegram y las notas que [memo](https://github.com/WireCatLabs/cli-memo) importó) y cómo realizar la búsqueda propia de Telegram al mismo tiempo.
 
 Después de leerlo, puede encontrar mensajes por palabras, personas, chats, fechas, archivos y enlaces, guardar una búsqueda y ejecutarla nuevamente, contar coincidencias y distinguir un "no encontrado" real de un espacio en el historial guardado. La búsqueda no marca nada leído.
 
@@ -27,7 +27,7 @@ tg personal search messages 'What time does Helix export run? chat:990' --discov
 
 Busca solo en el archivo local. Conserva los filtros de chat, autor y fecha. En MCP, pasa `discover: true` a la herramienta de búsqueda de mensajes. El `discovery` de cada elemento indica qué parte de la consulta coincidió: `missing_terms` indica términos ausentes y `parent` enlaza una respuesta con su mensaje padre. Una puntuación alta no mide la confianza en la respuesta: puede aparecer primero una pregunta, propuesta o decisión antigua. Lee la evidencia y comprueba la [cobertura del archivo](./archive.md) antes de concluir que falta un hecho.
 
-Sin `--discover`, se mantiene la búsqueda estricta. La sintaxis booleana, frases entre comillas, comodines, peticiones AST, `--exact` y `--newest` conservan el comportamiento estricto. No combina con legacy, expresiones regulares ni `--backend server`. La búsqueda semántica de conversaciones sigue siendo una [búsqueda por temas](./topic-search.md) aparte.
+Sin `--discover`, se mantiene la búsqueda estricta. La sintaxis booleana, frases entre comillas, comodines, peticiones AST, `--exact` y `--newest` conservan el comportamiento estricto. No combina con expresiones regulares ni `--backend server`. La búsqueda semántica de conversaciones sigue siendo una [búsqueda por temas](./topic-search.md) aparte.
 
 ## Qué puedes hacer
 
@@ -79,7 +79,7 @@ tg personal search all 'lease agreement' --offline  # the store only; nothing is
 
 `search all` indica el tipo de resultado: mensaje (`msg:…`) o nota (`note:…`). tg no busca correo: `search all --only mail` se rechaza con una indicación hacia `memo search mail`. En `search messages`, `NOT has:attachment`, `has:voice` y `has:file` en la consulta dejan solo texto, voz o archivos; en `search notes`, `source:internal` y `source:file` dejan las notas escritas en memo o importadas de una carpeta. Si un campo no corresponde —`chat:`/`from:` para notas—, `search all` omite esa fuente y explica por qué.
 
-El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
+Las notas llegan al archivo local mediante `memo sync --only notes`. Sin notas importadas, `search all` busca solo mensajes. Busca el correo por separado con Memo.
 
 El resto de esta página trata sobre la búsqueda de mensajes, `tg personal search messages`. Sin `--discover`, lee el archivo local y también solicita la búsqueda propia de Telegram ([abajo](#asking-telegram-too---backend)).
 
@@ -111,10 +111,10 @@ Un resultado vacío no demuestra que el mensaje nunca existiera. Revisa las lagu
 
 ## Prepara primero tu archivo
 
-Una buena búsqueda necesita que se descarguen sus chats. La búsqueda de Telegram encuentra un mensaje por sus palabras incluso si tg nunca lo encontró, pero todo lo demás solo lee el archivo local: contando con `stats`, búsqueda de temas, `has:`, `filename:`, expresiones regulares, ajustes preestablecidos, etiquetas y clasificación de formas de palabras. Comience descargando todos los chats:
+Una buena búsqueda necesita que se descarguen sus chats. La búsqueda de Telegram encuentra un mensaje por sus palabras incluso si tg nunca lo encontró, pero todo lo demás solo lee el archivo local: contando con `stats`, búsqueda de temas, `has:`, `filename:`, expresiones regulares, ajustes preestablecidos, etiquetas y clasificación de formas de palabras. Comienza descargando tus chats:
 
 ```sh
-tg personal messages sync --all --background  # the last 90 days of every chat, as a background job
+tg personal messages sync --all --background  # the last 90 days of every chat but the muted ones, as a background job
 ```
 
 ```sh
@@ -155,7 +155,15 @@ tg personal search messages '(cafe OR library) NOT loud'
 tg personal search messages 'invoic*'            # every word that starts with "invoic"
 ```
 
-Todas las palabras una al lado de la otra deben estar en el mensaje. La búsqueda incluye formas de palabras, según la configuración de idioma del archivo local: `piso` puede encontrar `pisos`. Las citas mantienen unidas las palabras y también permiten formas de palabras. Utilice `exact:piso` o agregue `--exact` para palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabra. Se ignoran las mayúsculas y las tildes. El texto escrito de los mensajes no se corrige por errores tipográficos.
+Todas las palabras una al lado de la otra deben estar en el mensaje. La búsqueda incluye formas de palabras, según la configuración de idioma del archivo local: `piso` puede encontrar `pisos`. Las citas mantienen unidas las palabras y también permiten formas de palabras. Utilice `exact:piso` o agregue `--exact` para palabras sin un campo explícito. Un `text:` explícito sigue buscando formas de palabra. Se ignoran las mayúsculas y las tildes.
+
+Las erratas del texto escrito de los mensajes solo se corrigen en el [descubrimiento en el archivo](#when-you-remember-the-question-rather-than-its-wording)
+(`--discover`), y solo en palabras simples sin comillas, campos ni comodines. Una palabra que el archivo local no conoce
+se compara con las palabras conocidas más cercanas: una letra de diferencia para una palabra de hasta cuatro letras, dos
+para una más larga. Los números nunca se corrigen. La respuesta nombra cada corrección, `rolluot → rollout` en un terminal
+y `corrections` con `--json`, y un mensaje encontrado gracias a una corrección lleva `match: "corrected"`. Las palabras
+conocidas son las de los mensajes guardados, y `tg personal store rebuild` vuelve a crear la lista. La búsqueda sin
+`--discover` no corrige erratas.
 
 Las palabras sueltas y `transcript:` también buscan en las transcripciones guardadas de notas de voz, incluidas las
 formas de palabra y las grafías de una sola palabra que el reconocimiento de voz pueda haber distorsionado. `text:`
@@ -490,7 +498,7 @@ tg personal search messages 'invoice chat:"Book club"' --sync-first
 
 ## Resultados como JSON
 
-En una terminal, tg imprime una transcripción legible. `--json` devuelve un objeto con los mensajes y lo buscado; `--jsonl` transmite solo los mensajes, uno por línea. Los campos de la respuesta se encuentran en la [referencia del lenguaje de consulta](./query-language.md#the-answer).
+En una terminal, tg imprime una transcripción legible. `--json` devuelve un objeto con los mensajes y lo buscado; `--jsonl` emite un elemento por línea y termina con un registro de integridad del resultado y paginación. Los campos de la respuesta se encuentran en la [referencia del lenguaje de consulta](./query-language.md#the-answer).
 
 ## Si no se encuentra nada
 

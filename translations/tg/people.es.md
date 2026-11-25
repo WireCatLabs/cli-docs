@@ -140,7 +140,7 @@ tg personal contacts prepare @example_user --limit 5 --since-time 30d
 - Con `contacts.notes.list: deny` las notas se omiten, y la respuesta lo indica. Con `messages: deny` el comando se
   rechaza, igual que `contacts context`.
 
-## Bot, cuenta falsa o spammer: `contacts check`
+## Comprobar señales de la cuenta y sus límites: `contacts check`
 
 ```sh
 tg personal contacts check @example_user

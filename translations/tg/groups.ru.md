@@ -29,7 +29,7 @@ title: "Управление группами"
 | Держите список того, что вас ждет | `tg personal tasks list` |
 | Удалить спам по своим правилам | `tg personal chats rules set`, `tg personal chats moderate` |
 | Заменить утекшую ссылку-приглашение | `tg personal chats links reset` |
-| Одобряйте или отклоняйте запросы на вступление | `tg personal chats requests list\|accept\|decline` |
+| Одобряйте или отклоняйте запросы на вступление | `tg personal chats requests list\|confirm\|reject` |
 | Посмотрите активность за неделю и собственную статистику Telegram | `tg personal stats chats show`, `tg personal stats chats official` |
 | Сохраняйте список участников каждый день | `tg personal chats members fetch --track` |
 | Найдите участников, похожих на ботов или спамеров | `tg personal chats members check` |
@@ -210,9 +210,9 @@ cron не имеет терминала и часто не имеет `XDG_RUNTI
 | `tg personal chats members add\|remove <chat> <person...>` | добавлять людей (им сообщают; имена тех, кого не удалось добавить, называют) или удалять их (сообщения остаются) |
 | `tg personal chats admins add <chat> <person> --can <rights>` | сделать участника администратором со следующими правами: участники, администраторы, информация, закрепление, ссылка, публикация, редактирование, удаление |
 | `tg personal chats admins remove <chat> <person>` | снять права администратора; человек остаётся участником |
-| `tg personal chats links update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | изменить только предоставленное разрешение, срок действия или лимит использования вашей дополнительной ссылки-приглашения; предоставить хотя бы одно изменение |
+| `tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>` | изменить только предоставленное разрешение, срок действия или лимит использования вашей дополнительной ссылки-приглашения; предоставить хотя бы одно изменение |
 | `tg personal chats links show\|reset <chat>` | ссылка-приглашение; `reset` делает новый, а старый перестает работать |
-| `tg personal chats requests list\|accept\|decline <chat>` | запросы на вступление в группу, требующую одобрения администратора: кто просил, впустите, отвергните; `--all` отвечает на каждый запрос |
+| `tg personal chats requests list\|confirm\|reject <chat>` | запросы на вступление в группу, требующую одобрения администратора: кто просил, впустите, отвергните; `--all` отвечает на каждый запрос |
 | `tg personal chats rules show\|set\|unset <chat>` | правила группы |
 | `tg personal chats moderate <chat>` | проверить группу по ее правилам; делает то, что позволяют правила |
 | `tg personal messages delete --for-everyone`, `pin`, `unpin` | удалить для всех, закрепить |
@@ -281,7 +281,7 @@ tg personal tasks list chat:<chat id> "(kind:question OR kind:mention)"
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
-`tasks categories` показывает категории, которые может получить задача. Чтобы изменить список, измените раздел `task_categories` в `~/.config/WireCat/config.json`. Этот файл читает каждый инструмент WireCat на cli-core 0.298.0 или новее (tg — с 0.63.0), поэтому одна правка меняет список во всех них. В нём только ваши изменения списка по умолчанию: имя со смыслом и словами-признаками добавляет или заменяет категорию, а `null` убирает категорию из списка по умолчанию:
+`tasks categories` показывает категории, которые может получить задача. Чтобы изменить список, измените раздел `task_categories` в `~/.config/WireCat/config.json`. Это общий файл настроек инструментов WireCat, а не файл одного профиля. В нём только ваши изменения списка по умолчанию: имя со смыслом и словами-признаками добавляет или заменяет категорию, а `null` убирает категорию из списка по умолчанию:
 
 ```json
 {

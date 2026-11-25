@@ -140,7 +140,7 @@ tg personal contacts prepare @example_user --limit 5 --since-time 30d
 - При `contacts.notes.list: deny` заметки не включаются, и ответ сообщает об этом. При `messages: deny` команда
   отклоняется, как и `contacts context`.
 
-## Бот, поддельный аккаунт или спамер: `contacts check`
+## Проверить признаки аккаунта и их ограничения: `contacts check`
 
 ```sh
 tg personal contacts check @example_user

@@ -6,7 +6,7 @@ title: "ChatGPT, Codex o Claude en el navegador"
 <a id="transferir-un-archivo-grande" />
 <a id="capacidades-de-mcp-y-del-cliente" />
 
-Utilice esta página cuando desee una aplicación de IA que se ejecute en el navegador o en su teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de Telegram. Una aplicación de este tipo no puede iniciar `tg` en su computadora, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `tg` a través de una dirección HTTPS privada, solo puede hacer lo que su perfil permite y usted sabe cómo detenerla o recuperar su acceso.
+Conecta una aplicación MCP del navegador o teléfono, como ChatGPT o Claude, con tg en un equipo que controles. Iniciarás un endpoint HTTPS público con acceso autenticado, conectarás la aplicación con los permisos del perfil elegido y aprenderás a detener el servidor o revocar el acceso.
 
 Términos utilizados en esta página:
 
@@ -40,13 +40,15 @@ Si su conexión Tailscale ya funciona, consérvela; No necesitas un segundo tún
 - **La computadora que ejecuta `tg` debe permanecer encendida.** Para usarlo desde un teléfono o desde una computadora portátil sin nada instalado, ejecute todo esto en un servidor pequeño que esté siempre encendido e inicie sesión en `tg` allí (`tg personal setup --agent none`). Entonces sólo necesitas un navegador.
 - **Quién puede agregar un conector remoto:**
 
-| Aplicación | Planes | Documentación |
-|---|---|---|
-| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
-| Claudio | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
-| Géminis | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
+Comprueba los requisitos actuales de cuenta y región de la aplicación antes de iniciar el túnel.
 
-No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/tg-cli/issues).
+| Aplicación | Requisitos de conexión |
+|---|---|
+| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
+| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
+| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |
+
+Si falla un paso de configuración, [abre una incidencia](https://github.com/WireCatLabs/tg-cli/issues).
 
 ## Iniciar el túnel y el servidor
 

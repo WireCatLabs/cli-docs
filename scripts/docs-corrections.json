@@ -1,56 +1,6 @@
 [
   {
     "tool": "tg",
-    "slug": "usage",
-    "reason": "Current command reference and v0.21 breaking-change note require durations for --unanswered; bare hours are invalid. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`--unanswered [hours]` keeps only questions waiting for you or for a group's admins. A question is a\nmessage with `?` in it (a link's `?` does not count), or a reply to you or to an admin. It is\nanswered when you or an admin replied to it, or were the next to speak after the person who asked.\nQuestions younger than the hours given (24 by default) are left out: nobody has had time to answer.\nWhen a group's admins are not known, the command says so, and only your answers count.",
-          "after": "`--unanswered [duration]` keeps only questions waiting for you or for a group's admins. A question is a\nmessage with `?` in it (a link's `?` does not count), or a reply to you or to an admin. It is\nanswered when you or an admin replied to it, or were the next to speak after the person who asked.\nQuestions younger than the given duration (24 hours by default) are left out: nobody has had time to answer.\nWhen a group's admins are not known, the command says so, and only your answers count. Use a duration such as `4h` or `1d`; a bare number of hours is not accepted."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`--unanswered [hours]` оставляет вопросы, ожидающие вас или администраторов группы. Вопрос — сообщение с `?` (знак `?` в ссылках не учитывается) или ответ вам/администратору. Он закрыт, если вы или администратор ответили либо написали следом за автором. Вопросы моложе указанного срока (по умолчанию 24 часа) исключаются. Если администраторы неизвестны, учитываются только ваши ответы и выводится предупреждение.",
-          "after": "`--unanswered [duration]` оставляет вопросы, ожидающие вас или администраторов группы. Вопрос — сообщение с `?` (знак `?` в ссылках не учитывается) или ответ вам/администратору. Он закрыт, если вы или администратор ответили либо написали следом за автором. Вопросы моложе указанного срока (по умолчанию 24 часа) исключаются. Если администраторы неизвестны, учитываются только ваши ответы и выводится предупреждение. Указывайте длительность, например `4h` или `1d`; число часов без единицы не принимается."
-        }
-      ],
-      "es": [
-        {
-          "before": "`--unanswered [hours]` conserva solo las preguntas pendientes de ti o de los administradores de un grupo. Una pregunta es un mensaje con `?` (no cuenta el `?` de un enlace) o una respuesta a ti o a un administrador. Se considera respondida cuando tú o un administrador respondéis a ella o sois los siguientes en hablar tras quien preguntó. Se excluyen las preguntas de menos horas que las indicadas (24 por defecto): aún no ha habido tiempo para responder. Si no se conocen los administradores del grupo, el comando lo indica y solo cuentan tus respuestas.",
-          "after": "`--unanswered [duration]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas. Usa una duración como `4h` o `1d`; no se admite un número de horas sin unidad."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Shell ! inverts the exit status to zero inside then; capture the command status in else before dispatching on 14/4. Applied after preservation validation to the same literal example in every locale. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
-          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
-        }
-      ],
-      "ru": [
-        {
-          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
-          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
-        }
-      ],
-      "es": [
-        {
-          "before": "if ! tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  case $? in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi",
-          "after": "if tg personal messages send \"Book club\" \"See you at 7\" --json > /dev/null; then\n  :\nelse\n  send_status=$?\n  case \"$send_status\" in\n    14) echo \"it may have gone — repeat only with the same --operation-id\" ;;\n    4)  echo \"run tg personal session start\" ;;\n  esac\nfi"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "commands",
     "reason": "TG v0.22 bot guide explicitly states joins are not judged; current bot moderation uses locally observed messages only.",
     "replacements": {
@@ -58,30 +8,18 @@
         {
           "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
           "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
-        },
-        {
-          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
-          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ],
       "ru": [
         {
           "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
           "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
-        },
-        {
-          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
-          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ],
       "es": [
         {
           "before": "\njudge a group's new messages and joins by its rules, and act as they allow — as the bot\n",
           "after": "\njudge a group's new messages by its rules, and act as they allow — as the bot; joins are not judged\n"
-        },
-        {
-          "before": "**Returns:** act on a group's new messages and joins by its rules, as the bot",
-          "after": "**Returns:** act on a group's new messages by its rules, as the bot; joins are not judged"
         }
       ]
     }
@@ -112,31 +50,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "sessions",
-    "reason": "Explicit beginner login instructions: distinguish app credentials/account/session, copyable complete commands, QR and phone sequences, code-delivery limitations, named account profiles and inactivity vs overall session lifetime. Verified against TG session.ts, Telegram auth/API documentation and official Desktop inactivity selector. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/sessions.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "ru": [
-        {
-          "before": "\nПрофиль — отдельный вход со своей сессией, приложением, настройками, получателями и записями запусков. Имя указывается **первым словом**, а не параметром:\n\n",
-          "after": "\nПрофиль — именованное подключение аккаунта Telegram в CLI. Обычно отдельный профиль создают для каждого номера: например, `personal` для личного аккаунта и `work` для рабочего. У каждого подключения свои сессия входа, данные приложения, настройки, разрешённые получатели и записи запусков.\n\nИмя `work` — выбранная вами метка, а не номер телефона. Чтобы подключить рабочий аккаунт, выполните:\n\n```sh\ntg work session start --app browser\n```\n\nПри регистрации приложения укажите рабочий номер; при QR-входе переключите Telegram на телефоне на рабочий аккаунт. После входа проверьте, какой аккаунт связан с меткой:\n\n```sh\ntg work account show\n```\n\nОдин и тот же аккаунт тоже можно подключить в нескольких профилях; профиль сам по себе не создаёт новый аккаунт Telegram. Имя профиля указывается **первым словом после `tg`**, перед командой:\n\n"
-        }
-      ],
-      "en": [
-        {
-          "before": "\nA profile is a separate login: its own session, app, settings, recipients and runs. It is named by\n**the first word**, not by an option:\n\n",
-          "after": "\nA profile is a named connection to a Telegram account in the CLI. Usually you use one per phone number: for example `personal` for a personal account and `work` for a work account. Each connection has its own login session, application credentials, settings, allowed recipients and run records.\n\n`work` is a label you choose, not a phone number. Connect a work account with:\n\n```sh\ntg work session start --app browser\n```\n\nUse the work number to register credentials; for QR login, switch Telegram on your phone to the work account. Then check which account the label refers to:\n\n```sh\ntg work account show\n```\n\nYou can also connect the same account in multiple profiles; a profile does not create a Telegram account. The profile name is **the first word after `tg`**, before the command:\n\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\nUn perfil es una sesión independiente, con su propia aplicación, configuración, destinatarios y ejecuciones. Su nombre es **la primera palabra** del comando, no una opción:\n\n",
-          "after": "\nUn perfil es una conexión con nombre a una cuenta Telegram en el CLI. Normalmente usas uno por número: `personal` para la cuenta personal y `work` para la cuenta laboral. Cada conexión tiene su sesión, credenciales de aplicación, ajustes, destinatarios permitidos y ejecuciones.\n\n`work` es una etiqueta que eliges, no un número. Conecta la cuenta laboral con:\n\n```sh\ntg work session start --app browser\n```\n\nUsa el número laboral para registrar credenciales; para el QR, cambia Telegram del teléfono a la cuenta laboral. Comprueba después qué cuenta corresponde a la etiqueta:\n\n```sh\ntg work account show\n```\n\nPuedes conectar la misma cuenta en varios perfiles; un perfil no crea una cuenta Telegram. Su nombre es **la primera palabra después de `tg`**, antes del comando:\n\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "sessions",
     "reason": "Define session/token/device in everyday terms, establish signed-in phone prerequisites and provide an explicit QR scan/verification sequence, checked against official MAX help and session.ts. The ru text is also in WireCatLabs/max-cli#990 (2026-11-23). At the next pin bump, move this entry's en/es replacements into translations/max/sessions.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old en/es text back.",
@@ -157,31 +70,6 @@
         {
           "before": "```sh\nmax personal session start qr\n```",
           "after": "```sh\nmax personal session start qr\n```\n\n1. Mantén visible el QR en el ordenador, en la terminal o en la ventana del navegador abierta por el comando.\n2. Abre MAX en el teléfono y selecciona la cuenta que quieres conectar.\n3. Ve a **Ajustes → Dispositivos** y abre el escáner de acceso por QR. Los nombres pueden variar según la versión.\n4. Escanea el QR del ordenador desde MAX y confirma la conexión si se solicita.\n5. Si MAX pide una contraseña adicional de la cuenta, introdúcela en la terminal; los caracteres se ocultan.\n6. Espera a que termine el comando, comprueba la cuenta con `max personal account show` y lee algunos chats con `max personal chats list --limit 5`.\n\n[Instrucciones oficiales de MAX](https://help.max.ru/help/account/dostup_k_prophilyu/kak_voiti_v_prophil_max_esli_on_uzhe_est)."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Distinguish syntax templates from executable commands and link first-login terminology to explicit full commands and the step-by-step login guide. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "```sh\ntg [profile] [options] <resource> <action> [arguments]\n```",
-          "after": "The following is a syntax template, not a command to copy. Replace placeholders with the values shown in the examples below.\n\n```text\ntg [profile] [options] <resource> <action> [arguments]\n```"
-        }
-      ],
-      "ru": [
-        {
-          "before": "```sh\ntg [profile] [options] <resource> <action> [arguments]\n```",
-          "after": "Ниже схема команды, а не команда для копирования. Вместо обозначений в скобках подставляют значения, как в примерах ниже.\n\n```text\ntg [profile] [options] <resource> <action> [arguments]\n```"
-        }
-      ],
-      "es": [
-        {
-          "before": "```sh\ntg [profile] [options] <resource> <action> [arguments]\n```",
-          "after": "Esto es una plantilla de sintaxis, no un comando para copiar. Sustituye los marcadores por los valores de los ejemplos siguientes.\n\n```text\ntg [profile] [options] <resource> <action> [arguments]\n```"
         }
       ]
     }
@@ -414,56 +302,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Scope repeat safety to topic edits and ordering; released guide explicitly forbids blindly replaying topic creation after unknown outcome. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Repeating any of these is safe.",
-          "after": "Repeating topic edits and ordering is safe. After an unknown creation outcome, inspect the topic list before creating again."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Повторение любого из этих действий безопасно.",
-          "after": "Правку и порядок тем можно безопасно повторять. Если исход создания неизвестен, сначала проверьте список тем, прежде чем создавать снова."
-        }
-      ],
-      "es": [
-        {
-          "before": "Las demás escrituras (fijar, reaccionar, marcar como leído, borrar, votar, carpetas, contactos) terminan igual con el código de salida `14` cuando Telegram no responde; el mensaje indica si es seguro repetir.",
-          "after": "Es seguro repetir las ediciones y el orden de temas. Tras una creación de resultado desconocido, comprueba la lista de temas antes de crear de nuevo."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "groups",
-    "reason": "Separate mutually exclusive approval flags into concrete command examples; a pipe inside a flag is illustrative shorthand, not executable syntax. tg refuses --approval together with --max-uses, so the limit goes with --no-approval. Topic search moved to `tg search topics`; `tg topics search` no longer exists. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/groups.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg personal chats links update <chat> <link> --approval\\|--no-approval --expire-time <time> --max-uses <n>`",
-          "after": "`tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>`"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "security",
     "reason": "Reader review: name the reader's question in the title (the shared page is already titled Security) and state the page scope before native storage details; no behavior or command change.",
@@ -489,31 +327,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "people",
-    "reason": "Owner approved replacing verdict-like account labels with signals/limits. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/people.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Bot, fake or spammer: `contacts check`",
-          "after": "## Check account signals and their limits: `contacts check`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Бот, поддельный аккаунт или спамер: `contacts check`",
-          "after": "## Проверить признаки аккаунта и их ограничения: `contacts check`"
-        }
-      ],
-      "es": [
-        {
-          "before": "## Bot, cuenta falsa o spammer: `contacts check`",
-          "after": "## Comprobar señales de la cuenta y sus límites: `contacts check`"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "people",
     "reason": "Owner approved replacing verdict-like account labels with signals/limits. The ru text is also in WireCatLabs/max-cli#990 (2026-11-23). At the next pin bump, move this entry's en/es replacements into translations/max/people.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old en/es text back.",
@@ -534,31 +347,6 @@
         {
           "before": "## Bot, cuenta falsa o spam: `contacts check`",
           "after": "## Comprobar señales de la cuenta y sus límites: `contacts check`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "mcp",
-    "reason": "Explain catalogue coverage and link exact command syntax beside the full MCP tool list. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/mcp.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "## Tools\n",
-          "after": "## Tools\n\n\n**Command coverage.** These tools give the agent access to most everyday command-line operations: messages, chats, contacts, attachments, conversation analysis and statistics. The search tool returns available commands with their argument schemas and effects; availability follows provider support and profile permissions. Use the [complete command reference](./commands.md) for syntax and parameters. Execute the command path offered by the catalogue through the read or write tool; account login and interactive installation are performed in the terminal."
-        }
-      ],
-      "ru": [
-        {
-          "before": "## Инструменты\n",
-          "after": "## Инструменты\n\n\n**Покрытие команд.** Эти инструменты дают агенту доступ к большинству повседневных операций командной строки: сообщениям, чатам, контактам, вложениям, анализу обсуждений и статистике. Инструмент поиска возвращает доступные команды с параметрами и последствиями; набор определяется поддержкой мессенджера и правами профиля. Точный синтаксис и параметры — в [полном справочнике команд](./commands.md). Выполняйте команду, предложенную каталогом, через инструмент чтения или изменения; вход в аккаунт и интерактивная установка выполняются в терминале."
-        }
-      ],
-      "es": [
-        {
-          "before": "## Herramientas\n",
-          "after": "## Herramientas\n\n\n**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el servicio de mensajería y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal."
         }
       ]
     }
@@ -733,81 +521,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "The released registration estimator extends through August 2026; preserve older historical changelog text. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "table, and there is no estimate past December 2024.",
-          "after": "table ending in August 2026; newer IDs receive no estimate."
-        }
-      ],
-      "ru": [
-        {
-          "before": "и нет оценки после декабря 2024 года.",
-          "after": "которая заканчивается августом 2026 года; для более новых ID оценки нет."
-        }
-      ],
-      "es": [
-        {
-          "before": "y no hay una estimación posterior a diciembre de 2024.",
-          "after": "que termina en agosto de 2026; los ID más recientes no reciben estimación."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "archive",
-    "reason": "Auto-reply audience changed in the reviewed release; rules no longer apply only to test accounts. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/archive.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Automatic replies from `serve` to test accounts are described in [automatic replies](./replies.md).",
-          "after": "Automatic replies from `serve` follow your rules and chosen audience; see [automatic replies](./replies.md)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Автоматические ответы от `serve` на тестовые аккаунты описаны в [автоматические ответы](./replies.md).",
-          "after": "Автоответы из `serve` следуют вашим правилам и выбранной аудитории; см. [автоответы](./replies.md)."
-        }
-      ],
-      "es": [
-        {
-          "before": "Las respuestas automáticas de `serve` a cuentas de prueba se describen en [respuestas automáticas](./replies.md).",
-          "after": "Las respuestas automáticas de `serve` siguen tus reglas y la audiencia elegida; consulta [las respuestas automáticas](./replies.md)."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "remote",
-    "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/remote.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "The setup steps for each operating system have not all been tried on that system. If a step does\nnot work, [open an issue](https://github.com/WireCatLabs/tg-cli/issues).",
-          "after": "If a setup step fails, [open an issue](https://github.com/WireCatLabs/tg-cli/issues)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Не все этапы установки для каждой операционной системы были опробованы в этой системе. Если шаг не работает, [откройте проблему](https://github.com/WireCatLabs/tg-cli/issues).",
-          "after": "Если шаг настройки не работает, [откройте issue](https://github.com/WireCatLabs/tg-cli/issues)."
-        }
-      ],
-      "es": [
-        {
-          "before": "No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/tg-cli/issues).",
-          "after": "Si falla un paso de configuración, [abre una incidencia](https://github.com/WireCatLabs/tg-cli/issues)."
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "remote",
     "reason": "Public instructions explain supported setup and recovery; author OS-verification history belongs in the review record. The ru text is also in WireCatLabs/max-cli#990 (2026-11-23). At the next pin bump, move this entry's en/es replacements into translations/max/remote.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old en/es text back.",
@@ -928,31 +641,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "sessions",
-    "reason": "Show the real public my.telegram.org login screen and distinguish website registration from account QR authorization. Screenshot captured 2026-10-04 in a fresh unauthenticated browser; no phone, code, api_hash or QR tokens entered. Guidance verified against https://core.telegram.org/api/obtaining_api_id and https://my.telegram.org/apps. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/sessions.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "\n## The app from my.telegram.org\n",
-          "after": "\n## The app from my.telegram.org\n\n> **See the my.telegram.org login screen**\n>\n> ![Official my.telegram.org login screen with an empty phone-number field.](/telegram-app-login.png)\n>\n> This is the website login for managing your Telegram application credentials. The code arrives in Telegram, not by SMS. After login, choose **API development tools**. Authorizing the CLI with a QR code comes later. [my.telegram.org](https://my.telegram.org/apps)\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "\n## Приложение с my.telegram.org\n",
-          "after": "\n## Приложение с my.telegram.org\n\n> **Посмотреть экран входа my.telegram.org**\n>\n> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](/telegram-app-login.png)\n>\n> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа CLI через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "\n## La aplicación de my.telegram.org\n",
-          "after": "\n## La aplicación de my.telegram.org\n\n> **Ver la pantalla de acceso de my.telegram.org**\n>\n> ![Pantalla oficial de my.telegram.org con el campo del teléfono vacío.](/telegram-app-login.png)\n>\n> Este es el acceso al sitio para obtener las credenciales de aplicación de Telegram. El código llega por Telegram, no por SMS. Tras entrar, elige **API development tools**. La autorización del CLI por QR viene después. [my.telegram.org](https://my.telegram.org/apps)\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "troubleshooting",
     "source": "https://github.com/WireCatLabs/cli-messaging/blob/v0.217.1/src/services/messages.ts#L427-L433",
@@ -1050,106 +738,6 @@
     }
   },
   {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "Core 0.285.0 removed TG mail search. Memo 0.41.0 syncs notes with --only notes; distinguish notes from mail owned by Memo. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/search.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Mail and notes reach the store through memo: `memo sync --mail` and `memo import`. Without them,\n`search all` searches messages only.",
-          "after": "Notes reach the store through `memo sync --only notes`. Without imported notes, `search all` searches messages only. Search mail separately with Memo."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Почта и заметки попадают в архив через memo: `memo sync --mail` и `memo import`. Без них `search all` ищет только сообщения.",
-          "after": "Заметки попадают в архив через `memo sync --only notes`. Без импортированных заметок `search all` ищет только сообщения. Почту ищите отдельно через Memo."
-        }
-      ],
-      "es": [
-        {
-          "before": "El correo y las notas llegan al archivo local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.",
-          "after": "Las notas llegan al archivo local mediante `memo sync --only notes`. Sin notas importadas, `search all` busca solo mensajes. Busca el correo por separado con Memo."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "query-language",
-    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/query-language.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`--jsonl` streams the items only.",
-          "after": "`--jsonl` emits one item per line followed by a final record with completeness and pagination metadata."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`--jsonl` выдаёт потоком только элементы.",
-          "after": "`--jsonl` выводит по одному элементу на строку, затем итоговую запись с полнотой результата и данными о страницах."
-        }
-      ],
-      "es": [
-        {
-          "before": "`--jsonl` emite solo los elementos.",
-          "after": "`--jsonl` emite un elemento por línea y termina con un registro de integridad del resultado y paginación."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "Core 0.288.0 cli/envelope and Base 0.33.0 stream framing retain the final completeness/page record after JSONL items. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/search.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`--jsonl` streams the messages only, one per line.",
-          "after": "`--jsonl` emits one item per line followed by a final record with completeness and pagination metadata."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`--jsonl` передает только сообщения, по одному на строку.",
-          "after": "`--jsonl` выводит по одному элементу на строку, затем итоговую запись с полнотой результата и данными о страницах."
-        }
-      ],
-      "es": [
-        {
-          "before": "`--jsonl` transmite solo los mensajes, uno por línea.",
-          "after": "`--jsonl` emite un elemento por línea y termina con un registro de integridad del resultado y paginación."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "Core 0.285.0 removed mail search from TG; the released guide opening still promises mail alongside notes. Keep the opening consistent with the supported search sources. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/search.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "and the mail and notes that [memo]",
-          "after": "and the notes that [memo]"
-        }
-      ],
-      "ru": [
-        {
-          "before": "сообщения Telegram, почту и заметки, импортированные [memo]",
-          "after": "сообщения Telegram и заметки, импортированные [memo]"
-        }
-      ],
-      "es": [
-        {
-          "before": "mensajes de Telegram y el correo y las notas que [memo]",
-          "after": "mensajes de Telegram y las notas que [memo]"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "search",
     "reason": "Memo 0.41.0 has no top-level import; notes come in through memo sync --only notes. The ru text is also in WireCatLabs/max-cli#990 (2026-11-23). At the next pin bump, move this entry's en/es replacements into translations/max/search.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old en/es text back.",
@@ -1170,31 +758,6 @@
         {
           "before": "`memo import`",
           "after": "`memo sync --only notes`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "groups",
-    "reason": "Public guides carry no release numbers (AUTHORING: current capabilities). tg v0.66.0 docs/groups.md names cli-core 0.298.0 and tg 0.63.0 for the shared category file; which released tools read it is not settled at the current pins (MAX v0.56.0 is on Core 0.296.0; memo v0.58.0 is on Core 0.311.0 without tasks categories), so the sentence names no tools or versions. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/groups.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "section of `~/.config/WireCat/config.json`. Every WireCat tool built on cli-core 0.298.0 or newer reads this file\n(tg since 0.63.0), so one edit changes the list in all of them. It holds only your changes to the",
-          "after": "section of `~/.config/WireCat/config.json`, a settings file that WireCat tools\nshare, not one profile's. It holds only your changes to the"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Этот файл читает каждый инструмент WireCat на cli-core 0.298.0 или новее (tg — с 0.63.0), поэтому одна правка меняет список во всех них.",
-          "after": "Это общий файл настроек инструментов WireCat, а не файл одного профиля."
-        }
-      ],
-      "es": [
-        {
-          "before": "Todas las herramientas de WireCat con cli-core 0.298.0 o posterior leen este archivo (tg desde 0.63.0), así que un solo cambio modifica la lista en todas.",
-          "after": "Es un archivo de ajustes común a las herramientas de WireCat, no el de un perfil."
         }
       ]
     }
@@ -1724,263 +1287,6 @@
   },
   {
     "tool": "tg",
-    "slug": "groups",
-    "reason": "The released request actions are confirm/reject (tg 0.90.0 contract: chats requests list|confirm|reject); the group task table and command table retained the retired accept/decline spellings. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/groups.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/groups.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "`tg personal chats requests list\\|accept\\|decline`",
-          "after": "`tg personal chats requests list\\|confirm\\|reject`"
-        },
-        {
-          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
-          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`tg personal chats requests list\\|accept\\|decline`",
-          "after": "`tg personal chats requests list\\|confirm\\|reject`"
-        },
-        {
-          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
-          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
-        }
-      ],
-      "es": [
-        {
-          "before": "`tg personal chats requests list\\|accept\\|decline`",
-          "after": "`tg personal chats requests list\\|confirm\\|reject`"
-        },
-        {
-          "before": "`tg personal chats requests list\\|accept\\|decline <chat>`",
-          "after": "`tg personal chats requests list\\|confirm\\|reject <chat>`"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "mcp",
-    "reason": "Remove an unmeasured token-cost comparison. CLI and MCP availability are explained separately by the released exclusions and permissions. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/mcp.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "which costs the same tokens and can do the\nsame things",
-          "after": "which uses the command-line interface directly"
-        }
-      ],
-      "ru": [
-        {
-          "before": "с теми же затратами токенов и может делать те же самые действия",
-          "after": "через интерфейс командной строки"
-        }
-      ],
-      "es": [
-        {
-          "before": "que cuesta los mismos tokens y puede hacer las mismas cosas",
-          "after": "mediante la interfaz de línea de comandos"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "mcp",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/mcp.md",
-    "reason": "The server has three dispatcher tools and excludes some commands; describe catalogue coverage without claiming one MCP tool per command. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/mcp.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Every command is a tool, writes included; the profile's permissions limit what the agent may run. Read-only is\na choice you make in those permissions, not a default.",
-          "after": "The catalogue includes read and write commands, subject to the profile permissions and exclusions below. Read-only access is a choice you configure in those permissions."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Каждая команда — это инструмент, включая команды записи; что агенту можно запускать, ограничивают разрешения\nпрофиля. Только чтение — это ваш выбор в этих разрешениях, а не значение по умолчанию.",
-          "after": "Каталог включает команды чтения и записи с учётом разрешений профиля и исключений ниже. Доступ только для чтения настраивается в разрешениях."
-        }
-      ],
-      "es": [
-        {
-          "before": "Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede\nejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto.",
-          "after": "El catálogo incluye comandos de lectura y escritura, sujetos a los permisos del perfil y a las exclusiones siguientes. El acceso de solo lectura se configura mediante esos permisos."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "bot",
-    "reason": "tg 0.90.0 contract: bot messages sync has --until-id <id> (start at this message, by its t.me link, inclusive) and no --from option; Core 0.412 botMessagesSyncCommand passes --until-id as the internal from value, and the missing-start error says 'give --until-id <message link>'. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/bot.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "`--from` starts at that message, inclusive, and must name the same chat.",
-          "after": "`--until-id` starts at that message, given as its t.me link, inclusive, and must name the same chat."
-        },
-        {
-          "before": "it exits with code `2` and asks for `--from`.",
-          "after": "it exits with code `2` and asks for `--until-id`."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`--from` начинает с указанного сообщения включительно;",
-          "after": "`--until-id` начинает с указанного сообщения (ссылка t.me) включительно;"
-        },
-        {
-          "before": "и просит указать `--from`.",
-          "after": "и просит указать `--until-id`."
-        }
-      ],
-      "es": [
-        {
-          "before": "`--from` empieza en ese mensaje, incluido,",
-          "after": "`--until-id` empieza en ese mensaje (su enlace t.me), incluido,"
-        },
-        {
-          "before": "y solicita `--from`.",
-          "after": "y solicita `--until-id`."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "mcp",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/commands.md",
-    "reason": "The released attachments extract command has no MCP exclusion or lifetime; remove the stale terminal-only restriction without claiming that installed parsers or provider consent are unnecessary. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/mcp.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Extracting text is done in the terminal only.",
-          "after": "Text extraction is governed by the profile’s attachment permissions."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Извлечение текста выполняется только в терминале.",
-          "after": "Извлечением текста управляют разрешения профиля на вложения."
-        }
-      ],
-      "es": [
-        {
-          "before": "La extracción de texto se realiza únicamente en la terminal.",
-          "after": "La extracción de texto está sujeta a los permisos de adjuntos del perfil."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
-    "reason": "The released stream serializer emits item/end records, as the updated watch section states. Keep the general JSONL description and jq example consistent with that contract. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "- `--jsonl`: one object per line, no wrapper; whether there is more is said on stderr only.\n  A report (`stats …`) is one object, so `--jsonl` on it is refused; `stats * evidence` lists still stream.",
-          "after": "- `--jsonl`: item records carry the result in `data`; a final end record carries completeness and page metadata. Check that record rather than treating the stream as bare messages. A report (`stats …`) is one object, so `--jsonl` on it is refused; `stats * evidence` lists still stream."
-        },
-        {
-          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
-          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
-        }
-      ],
-      "ru": [
-        {
-          "before": "- `--jsonl`: по одному объекту в строке, без оболочки; есть ли что-то еще, говорится только в stderr.\n  Отчет (`stats …`) — это один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком.",
-          "after": "- `--jsonl`: записи элементов содержат результат в `data`; последняя запись завершения содержит полноту и данные страницы. Проверяйте её, а не считайте поток набором сообщений без оболочки. Отчёт (`stats …`) — один объект, поэтому `--jsonl` для него отклоняется; списки `stats * evidence` по-прежнему выдаются потоком."
-        },
-        {
-          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
-          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
-        }
-      ],
-      "es": [
-        {
-          "before": "- `--jsonl`: un objeto por línea, sin contenedor; si hay más se dice solo en stderr. Un informe (`stats …`) es un solo objeto, así que `--jsonl` se rechaza en él; las listas `stats * evidence` siguen emitiéndose por líneas.",
-          "after": "- `--jsonl`: los registros de elementos llevan el resultado en `data`; el registro final indica completitud y paginación. Compruébalo en vez de tratar el flujo como mensajes sin contenedor. Un informe (`stats …`) es un objeto, por lo que rechaza `--jsonl`; las listas `stats * evidence` siguen emitiéndose como flujo."
-        },
-        {
-          "before": "tg personal messages list me --jsonl | jq -r .text  # one message per line",
-          "after": "tg personal messages list me --jsonl | jq -r 'select(.type == \"item\") | .data.text'  # message text from item records"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "usage",
-    "reason": "Scope empty stdout to refusal before output; framed streams can retain earlier records after a later failure. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "source": "https://github.com/WireCatLabs/cli-base/blob/v0.50.3/src/standards/output.ts",
-    "replacements": {
-      "en": [
-        {
-          "before": "- An error that ends the command is `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` on stderr, and stdout is empty, so a\n  refusal can never be taken for an empty result.",
-          "after": "- An error uses `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` on stderr. A refusal before output writes no result, so it cannot be mistaken for an empty result. If a stream already printed records, keep them and inspect its final completeness record; a missing end record also means the stream did not finish."
-        }
-      ],
-      "ru": [
-        {
-          "before": "- Ошибка, завершающая команду, — `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` на stderr, а stdout пуст, поэтому отказ никогда не может быть воспринят как пустой результат.",
-          "after": "- Ошибка выдаёт `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` в stderr. Отказ до начала вывода не пишет результат, поэтому его нельзя принять за пустой ответ. Если поток уже выдал записи, сохраните их и проверьте запись завершения; отсутствие такой записи тоже означает незавершённый поток."
-        }
-      ],
-      "es": [
-        {
-          "before": "- Un error que termina el comando aparece como `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` en stderr y la salida estándar está vacía, por lo que nunca se puede considerar un rechazo como un resultado vacío.",
-          "after": "- Un error usa `{ \"error\": { \"code\": \"...\", \"message\": \"...\" } }` en stderr. Un rechazo anterior a la salida no escribe resultados y no se confunde con un resultado vacío. Si el flujo ya emitió registros, consérvalos y comprueba su registro final de completitud; si falta el final, el flujo tampoco terminó."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "permissions",
-    "reason": "Use the shared AI agent term for the actor; an agent with unrestricted file/terminal access can still edit the settings. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). Drop the entry at the next pin bump.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/permissions.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "An assistant that can edit configuration files",
-          "after": "An AI agent that can edit configuration files"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "remote",
-    "reason": "Do not promise provider plan/region eligibility from a stale matrix; retain direct primary prerequisites for each app, as in the reviewed WhatsApp guide. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/remote.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
-    "replacements": {
-      "en": [
-        {
-          "before": "| App | Plans | Documentation |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — in developer mode | [developer mode](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | any; one custom connector on the free plan | [custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | only adults in the US with a personal Google account | [connected apps](https://support.google.com/gemini/answer/17209137?hl=en) |",
-          "after": "Check the app’s current account and region requirements before starting the tunnel.\n\n| App | Connector prerequisites |\n|---|---|\n| ChatGPT | [Connection guide](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Connection guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Connection guide](https://support.google.com/gemini/answer/17209137?hl=en) |"
-        }
-      ],
-      "ru": [
-        {
-          "before": "| Приложение | Планы | Документация |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education — в режиме разработчика | [режим разработчика](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | любой; один своё подключение в бесплатном плане | [свои подключения](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | взрослые пользователи в США с личным аккаунтом Google | [связанные приложения](https://support.google.com/gemini/answer/17209137?hl=en) |",
-          "after": "Перед запуском туннеля проверьте текущие требования приложения к аккаунту и региону.\n\n| Приложение | Условия подключения |\n|---|---|\n| ChatGPT | [Руководство по подключению](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Руководство по подключению](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Руководство по подключению](https://support.google.com/gemini/answer/17209137?hl=en) |"
-        }
-      ],
-      "es": [
-        {
-          "before": "| Aplicación | Planes | Documentación |\n|---|---|---|\n| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claudio | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Géminis | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |",
-          "after": "Comprueba los requisitos actuales de cuenta y región de la aplicación antes de iniciar el túnel.\n\n| Aplicación | Requisitos de conexión |\n|---|---|\n| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |\n| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |\n| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
     "slug": "remote",
     "reason": "Lead with the remote-connection task and accurately describe a public HTTPS endpoint protected by sign-in. Use verified client examples and link current provider prerequisites. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). Except: its first en replacement was not found in tg-cli main and stays on the site only. At the next pin bump, move this entry's es/ru replacements into translations/tg/remote.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
     "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.86.0/docs/remote.md",
@@ -1989,30 +1295,18 @@
         {
           "before": "title: \"ChatGPT, Codex or Claude in the browser\"",
           "after": "title: \"Connect a browser or phone app\""
-        },
-        {
-          "before": "Use this page when you want an AI app that runs in the browser or on your phone, for example\nChatGPT, Codex web or Claude, to read and answer your Telegram messages. Such an app cannot start\n`tg` on your computer, so you give it an internet address instead. At the end, the app is connected\nto `tg` through a private HTTPS address, it can do only what your profile permits, and you know how\nto stop it or take its access back.",
-          "after": "Connect a browser or phone MCP app, such as ChatGPT or Claude, to tg running on a computer you control. You will start a public HTTPS endpoint with sign-in, connect the app under the chosen profile’s permissions and learn how to stop the server or revoke app access."
         }
       ],
       "ru": [
         {
           "before": "title: \"ChatGPT, Codex или Claude в браузере\"",
           "after": "title: \"Подключить приложение в браузере или на телефоне\""
-        },
-        {
-          "before": "Используйте эту страницу, если вы хотите, чтобы приложение агента, работающее в браузере или на вашем телефоне, например ChatGPT, Codex Web или Claude, читало ваши сообщения Telegram и отвечало на них. Такое приложение не может запустить `tg` на вашем компьютере, поэтому вместо этого вы указываете ему интернет-адрес. В результате приложение подключится к `tg` через частный адрес HTTPS, оно может делать только то, что разрешено вашим профилем, и вы знаете, как остановить его или отозвать доступ.",
-          "after": "Подключите приложение MCP в браузере или на телефоне, например ChatGPT или Claude, к tg на вашем компьютере. Вы запустите публичную точку HTTPS со входом, подключите приложение с разрешениями выбранного профиля и узнаете, как остановить сервер или отозвать доступ приложения."
         }
       ],
       "es": [
         {
           "before": "title: \"ChatGPT, Codex o Claude en el navegador\"",
           "after": "title: \"Conectar una aplicación del navegador o teléfono\""
-        },
-        {
-          "before": "Utilice esta página cuando desee una aplicación de IA que se ejecute en el navegador o en su teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de Telegram. Una aplicación de este tipo no puede iniciar `tg` en su computadora, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `tg` a través de una dirección HTTPS privada, solo puede hacer lo que su perfil permite y usted sabe cómo detenerla o recuperar su acceso.",
-          "after": "Conecta una aplicación MCP del navegador o teléfono, como ChatGPT o Claude, con tg en un equipo que controles. Iniciarás un endpoint HTTPS público con acceso autenticado, conectarás la aplicación con los permisos del perfil elegido y aprenderás a detener el servidor o revocar el acceso."
         }
       ]
     }
@@ -2246,31 +1540,6 @@
         {
           "before": "Las antiguas rutas `messages stats`, `chats stats` y `tasks stats` ya no existen y tampoco existen alias para ellas. Si la configuración tenía permisos para estas rutas, reescríbalos con las rutas nuevas. ",
           "after": ""
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "search",
-    "reason": "The legacy query language was removed (strict Lucene is the only language); do not name it as a mode discovery excludes. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/search.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Discovery does not combine with legacy,\nregular-expression search",
-          "after": "Discovery does not combine with\nregular-expression search"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Режим не совмещается с legacy, регулярными",
-          "after": "Режим не совмещается с регулярными"
-        }
-      ],
-      "es": [
-        {
-          "before": "No combina con legacy, expresiones",
-          "after": "No combina con expresiones"
         }
       ]
     }
@@ -2581,36 +1850,6 @@
         {
           "before": "Over MCP, run `search meetings` through `zm_write`: it updates the word index before searching.",
           "after": "Over MCP, `search meetings` is a read: run it through `zm_read`. It updates the word index before searching."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "permissions",
-    "phase": "before-translation",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.117.0/docs/permissions.md",
-    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "permissions, but since 0.113.0 it can never\nloosen one",
-          "after": "permissions, but it can never\nloosen one"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "mcp",
-    "phase": "before-translation",
-    "source": "https://github.com/WireCatLabs/tg-cli/blob/v0.117.0/docs/mcp.md",
-    "reason": "Current guides carry no release-number prose (docs:versions); the released sentence keeps its rule without the version that introduced it. The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "outside the agent: since 0.113.0 a `config set` run in an agent's shell",
-          "after": "outside the agent: a `config set` run in an agent's shell"
         }
       ]
     }
@@ -3087,94 +2326,6 @@
         {
           "before": "o Node.js 24 o posterior, y `ffmpeg`.",
           "after": "o Node.js 24 o posterior. Para convertir en texto grabaciones WAV, GSM o M4A, necesitas también `ffmpeg`."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "permissions",
-    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/permissions.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "| `ask` | A change asks in the terminal. |",
-          "after": "| `ask` | A change asks first in the terminal. Over MCP it runs without asking. |"
-        },
-        {
-          "before": "More specific keys win: `permissions.messages.send ask` still permits sending, with a question\nin the terminal and without a server form over MCP.",
-          "after": "More specific keys win: `permissions.messages.send ask` still permits sending. In the terminal it asks\nfirst. Over MCP it does not ask, and the agent's send goes ahead."
-        },
-        {
-          "before": "Over MCP, `ask` does not require a server form: the app controls\nits own approvals and may allow a call without asking again.",
-          "after": "Over MCP, a change set to `ask` runs without asking you: nobody is at a\nterminal to answer, and the server shows no form. Only the agent app may still ask, if you leave its write tool\nunapproved there."
-        },
-        {
-          "before": "`ask` requests confirmation in the CLI and follows the MCP client’s approval flow.",
-          "after": "`ask` asks first in the terminal, and over MCP it saves without asking."
-        }
-      ],
-      "ru": [
-        {
-          "before": "| `ask` | Перед изменением запрашивается подтверждение в терминале. |",
-          "after": "| `ask` | Перед изменением запрашивается подтверждение в терминале. Через MCP изменение выполняется без вопроса. |"
-        },
-        {
-          "before": "`permissions.messages.send ask` по-прежнему разрешает отправку с вопросом\nв терминале, а через MCP — без формы подтверждения на сервере.",
-          "after": "`permissions.messages.send ask` по-прежнему разрешает отправку. В терминале\nона сначала спрашивает. Через MCP вопроса нет, и агент отправляет сразу."
-        },
-        {
-          "before": "Через MCP значение `ask` не требует формы подтверждения на сервере: приложение управляет\nсвоими подтверждениями и может разрешить вызов без повторного вопроса.",
-          "after": "Через MCP изменение с уровнем `ask` выполняется без вопроса: у терминала никого нет, и сервер не показывает\nформу. Спросить вас может только само приложение агента, если вы не разрешили в нём инструмент записи заранее."
-        },
-        {
-          "before": "`ask` запрашивает подтверждение в CLI, а в MCP действует порядок одобрения приложения-клиента.",
-          "after": "`ask` сначала спрашивает в терминале, а через MCP сохраняет без вопроса."
-        }
-      ],
-      "es": [
-        {
-          "before": "| `ask` | Se pide confirmación en el terminal antes de un cambio. |",
-          "after": "| `ask` | Se pide confirmación en el terminal antes de un cambio. Por MCP se ejecuta sin preguntar. |"
-        },
-        {
-          "before": "`permissions.messages.send ask` sigue permitiendo enviar, con una pregunta\nen el terminal y sin un formulario del servidor mediante MCP.",
-          "after": "`permissions.messages.send ask` sigue permitiendo enviar. En el terminal\npregunta antes. Por MCP no pregunta, y el envío del agente sigue adelante."
-        },
-        {
-          "before": "Mediante MCP, `ask` no exige un formulario del servidor: la aplicación controla\nsus propias aprobaciones y puede permitir una llamada sin volver a preguntar.",
-          "after": "Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no\nmuestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura."
-        },
-        {
-          "before": "`ask` solicita confirmación en la CLI y sigue el flujo de aprobación del cliente MCP.",
-          "after": "`ask` pregunta antes en el terminal, y por MCP guarda sin preguntar."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "tg",
-    "slug": "bot",
-    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The en text is also in WireCatLabs/tg-cli#922 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/tg/bot.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "`ask` and `allow` permit a requested MCP write without a server form; `deny` and `readonly`\nblock it.",
-          "after": "Over MCP, `ask` and `allow` both let a write run without asking you; `deny` and `readonly`\nblock it."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Как и в других командах, `ask` и `allow` разрешают запрошенную запись MCP без формы подтверждения на сервере; `deny` и `readonly` блокируют его.",
-          "after": "Как и в других командах, через MCP `ask` и `allow` выполняют запись без вопроса; `deny` и `readonly` её блокируют."
-        }
-      ],
-      "es": [
-        {
-          "before": "`ask` y `allow` permiten una escritura MCP solicitada sin un formulario de servidor; `deny` y `readonly` lo bloquean.",
-          "after": "Por MCP, `ask` y `allow` dejan que una escritura se ejecute sin preguntarte; `deny` y `readonly` la bloquean."
         }
       ]
     }

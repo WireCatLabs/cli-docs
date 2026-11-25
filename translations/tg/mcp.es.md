@@ -2,7 +2,7 @@
 title: "Servidor MCP"
 ---
 
-Esta página le ayuda cuando desea que una aplicación de IA sin terminal funcione con su Telegram, por ejemplo Claude Desktop o el chat en Cursor. También ayuda cuando quieres que la propia aplicación te pregunte antes de cada acción. Después de leerlo, puede conectar la aplicación a su cuenta, elegir lo que puede hacer el agente y usar indicaciones listas y menciones de chat.
+Esta página le ayuda cuando desea que una aplicación de IA sin terminal funcione con su Telegram, por ejemplo Claude Desktop o el chat en Cursor. También ayuda cuando quieres que sea la propia aplicación, no `tg`, la que te pregunte antes de cada acción. Después de leerlo, puede conectar la aplicación a su cuenta, elegir lo que puede hacer el agente y usar indicaciones listas y menciones de chat.
 
 Algunos términos primero:
 
@@ -16,10 +16,11 @@ El servidor viene con `tg`; no hay nada más que instalar. De forma predetermina
 
 ## ¿Lo necesitas?
 
-Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude Code, Codex, Cursor Agent o Gemini CLI) no necesita MCP. Llama directamente a `tg`, que cuesta los mismos tokens y puede hacer las mismas cosas; aprende cómo hacerlo gracias a la skill que imprime `tg skill show`. MCP es para:
+Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude Code, Codex, Cursor Agent o Gemini CLI) no necesita MCP. Llama directamente a `tg`, mediante la interfaz de línea de comandos; aprende cómo hacerlo gracias a la skill que imprime `tg skill show`. MCP es para:
 
 - aplicaciones sin terminal, como Claude Desktop o Cursor Chat;
-- cualquiera que quiera que la aplicación pregunte antes de cada envío.
+- cualquiera que quiera que la aplicación pregunte antes de cada envío. Pregunta la aplicación, no `tg`: por MCP, una
+  escritura con `ask` se ejecuta sin preguntar.
 
 Para ChatGPT o Claude **en el navegador**, use `tg personal mcp serve --http`; consulte [conectar un navegador o una aplicación de teléfono](./remote.md).
 
@@ -121,6 +122,8 @@ Aquí `agent` es el nombre de un perfil. Las escrituras mantienen los límites d
 
 ## Herramientas
 
+**Cobertura de comandos.** Estas herramientas cubren la mayoría de operaciones habituales: mensajes, chats, contactos, adjuntos, conversaciones y estadísticas. La búsqueda devuelve comandos disponibles con parámetros y efectos según el servicio de mensajería y los permisos. Consulta sintaxis y parámetros en la [referencia completa](./commands.md). Ejecuta la ruta ofrecida por el catálogo mediante lectura o escritura; acceso a la cuenta e instalación interactiva se realizan en el terminal.
+
 | Herramienta | Qué hace |
 |---|---|
 | `tg_tools_search` | Encuentra un comando, sus argumentos y sus efectos |
@@ -149,8 +152,7 @@ perfil no depende de la configuración de la cuenta.
 
 ### Comandos que el servidor no ofrece
 
-Cada comando es una herramienta, incluidos los de escritura; los permisos del perfil limitan lo que el agente puede
-ejecutar. Solo lectura es una decisión que tomas en esos permisos, no un valor por defecto. Unos pocos comandos no se
+El catálogo incluye comandos de lectura y escritura, sujetos a los permisos del perfil y a las exclusiones siguientes. El acceso de solo lectura se configura mediante esos permisos. Unos pocos comandos no se
 ofrecen nunca, y los ejecutas en una terminal:
 
 - **Inicio de sesión y configuración**: `setup`, `session start|end`, `complete`, `mcp config|add|check|revoke`,
@@ -161,9 +163,16 @@ ofrecen nunca, y los ejecutas en una terminal:
 - **Comandos de larga duración**: `watch`, `serve` y `bot watch` siguen hasta que los detienes, y una llamada del
   agente debe terminar. El propio servidor MCP (`mcp serve`, `bot mcp serve`) queda fuera por la misma razón, igual que
   `mcp server` y `mcp server start|stop|status`, que lo ejecutan en segundo plano.
+- **Vaciar el almacén**: `store reset` necesita que lo confirmes ante el teclado.
+- **Enviar texto de chats a modelos externos**: `models chats set` decide si el texto de los chats puede ir a un
+  modelo fuera de este ordenador, y solo tú lo haces menos estricto.
+- **Leer una imagen con tu agente de código**: `images read` inicia Claude Code o Codex en este ordenador, así que un
+  agente nunca inicia otro a través de él.
+- **Ejecutar un archivo de programación**: `schedule exec` es lo que ejecuta un temporizador instalado. Un agente
+  ejecuta una programación guardada por su nombre.
 
 Los comandos `store backup|restore`, `server start|stop|restart`, las descargas de modelos,
-`schedule run|exec`, `doctor reports create` y `account sessions end` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
+`schedule run`, `doctor reports create` y `account sessions end` tienen claves de permisos propias, con `ask` por defecto. Se ofrecen al agente;
 la aplicación MCP controla la aprobación. En `tg commands --json`, un comando que MCP no ofrece lleva
 `mcp: false`, y uno de larga duración lleva un `lifetime` en su lugar. Las operaciones directas de `bot api` necesitan un [permiso](./permissions.md#raw-bot-api-calls) explícito.
 
@@ -217,7 +226,7 @@ La petición preparada `link-conversations` permite al agente vincular las respu
 
 ## Archivos y mensajes guardados
 
-`tg_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y si se extrajo su texto. `tg_write` (`command: "attachments update"`) guarda el texto que el agente leyó de un archivo. La extracción de texto se realiza únicamente en la terminal. `tg_read` con `command: "messages context"` y `arguments: { offline: true }` lee solo la copia local.
+`tg_read` (`command: "attachments list"`) muestra las rutas de los archivos guardados y si se extrajo su texto. `tg_write` (`command: "attachments update"`) guarda el texto que el agente leyó de un archivo. La extracción de texto está sujeta a los permisos de adjuntos del perfil. `tg_read` con `command: "messages context"` y `arguments: { offline: true }` lee solo la copia local.
 
 ## Cómo se mantiene la conexión
 

@@ -18,7 +18,7 @@ Comience leyendo y permita cambios solo cuando los necesite.
 |---|---|
 | `deny` | Se rechaza la acción, incluida la lectura. |
 | `readonly` | Se permite la lectura; se rechazan los cambios. |
-| `ask` | Se pide confirmación en el terminal antes de un cambio. |
+| `ask` | Se pide confirmación en el terminal antes de un cambio. Por MCP se ejecuta sin preguntar. |
 | `allow` | La acción puede ejecutarse sin otra pregunta. |
 
 Una negativa indica que debes revisar la acción solicitada y los ajustes. No significa que la conexión de tu cuenta
@@ -36,8 +36,8 @@ Sustituye `work` por tu perfil. Para permitir la lectura de mensajes y rechazar 
 tg work config set permissions.messages readonly
 ```
 
-Las claves más específicas tienen prioridad: `permissions.messages.send ask` sigue permitiendo enviar, con una pregunta
-en el terminal y sin un formulario del servidor mediante MCP. Establece esa clave en `readonly` para rechazar los envíos.
+Las claves más específicas tienen prioridad: `permissions.messages.send ask` sigue permitiendo enviar. En el terminal
+pregunta antes. Por MCP no pregunta, y el envío del agente sigue adelante. Establece esa clave en `readonly` para rechazar los envíos.
 Revisa otras excepciones con `config show`.
 
 Esto controla los mensajes. Otras acciones, como reacciones o administración del chat, tienen sus propias claves de permiso. Un perfil completo de solo lectura y todas las claves se encuentran en [lo que puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
@@ -58,8 +58,8 @@ Una lista de destinatarios limita a qué chats puede enviar el perfil. Un límit
 ## Un cambio temporal para un servidor MCP
 
 Añade `--permission messages.send=deny` al comando de inicio del servidor para rechazar los envíos de ese
-proceso. Los ajustes guardados no cambian. La opción solo endurece: una anulación que aflojaría el nivel del perfil se rechaza al iniciar. Mediante MCP, `ask` no exige un formulario del servidor: la aplicación controla
-sus propias aprobaciones y puede permitir una llamada sin volver a preguntar. Usa `deny` o `readonly` para rechazar los cambios. [Configuración en el navegador](./remote.md) explica la conexión completa.
+proceso. Los ajustes guardados no cambian. La opción solo endurece: una anulación que aflojaría el nivel del perfil se rechaza al iniciar. Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no
+muestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura. Usa `deny` o `readonly` para rechazar los cambios. [Configuración en el navegador](./remote.md) explica la conexión completa.
 
 ## Permitir que un agente cambie sus propios límites
 
@@ -93,11 +93,11 @@ Vuelve a `deny` para impedir su ejecución; las herramientas seguirán visibles.
 
 ## Límites y reglas detalladas
 
-Un agente que pueda editar archivos de configuración o ejecutar comandos de terminal sin restricciones puede cambiar estas configuraciones. Lea [seguridad](./security.md) antes de otorgar ese acceso. Para permisos anidados y claves de comando exactas, consulte [qué puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
+Un agente de IA que pueda editar archivos de configuración o ejecutar comandos de terminal sin restricciones puede cambiar estas configuraciones. Lea [seguridad](./security.md) antes de otorgar ese acceso. Para permisos anidados y claves de comando exactas, consulte [qué puede hacer un perfil](./configuration-reference.md#what-a-profile-may-do).
 
 ## Guardar un borrador
 
-`messages send --draft` usa el permiso independiente `drafts`. Guardar cambia el borrador de Telegram de ese chat o tema, no envía ningún mensaje y no registra el texto del borrador en el diario. `deny` o `readonly` impide guardar; `ask` solicita confirmación en la CLI y sigue el flujo de aprobación del cliente MCP.
+`messages send --draft` usa el permiso independiente `drafts`. Guardar cambia el borrador de Telegram de ese chat o tema, no envía ningún mensaje y no registra el texto del borrador en el diario. `deny` o `readonly` impide guardar; `ask` pregunta antes en el terminal, y por MCP guarda sin preguntar.
 
 En MCP, el permiso del comando también debe permitir `messages send`. Configurar `drafts: allow` no anula `messages.send: deny` ni `readonly`.
 

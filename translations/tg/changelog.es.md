@@ -4,6 +4,337 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.136.0 — 25.11.2026
+
+### Changed — may break callers
+
+- **El almacén pasa a la versión 72** al abrirlo por primera vez (cli-core 0.722.0). Como toda migración del almacén, solo
+  avanza.
+- **El servidor MCP ya no ofrece `schedule exec`, y el comando solo ejecuta un archivo de la carpeta de programaciones de tg**
+  (cli-core 0.736.0). Un agente ejecuta una programación guardada con `schedule run <name>`. Los temporizadores instalados
+  siguen funcionando.
+- **tg se basa en cli-core 1.0.0 y cli-base 1.0.0.** El almacén pasa a la versión 73 al abrirlo por primera vez: un id nunca
+  se entrega dos veces, y a partir de entonces solo las herramientas con cli-core 1.0 abren el almacén. Actualiza cada WireCat
+  CLI instalado antes de ejecutar esta versión. La migración escribe primero una copia para revertir y no se ejecuta sin ella.
+- **Una llamada MCP que nombra un lugar prohibido responde `permission_error`**, no `validation_error`. Antes de ejecutar
+  cualquier llamada MCP, cada opción y argumento que recibe un archivo o una carpeta local se comprueba por su ruta real: una
+  llamada no puede nombrar una carpeta de credenciales, una carpeta de una herramienta de WireCat ni el almacén de mensajes. Una
+  ejecución desde la terminal no cambia.
+- **`schedule exec` ya no está disponible por MCP.** Solo ejecuta un archivo de programación de la carpeta de programaciones de
+  la propia herramienta. Un agente ejecuta una programación guardada con `schedule run <name>`.
+
+### Fixed
+
+- **`search conversations --like` muestra la parte de una conversación enorme que responde a la pregunta** (cli-core
+  0.734.0; tg ahora se basa en ella, antes 0.718.0). Una conversación de más de 50 fragmentos tiene texto cercano a cualquier
+  pregunta, así que su fragmento más cercano solía tratar de otra cosa. Con una respuesta inventada, ese resultado muestra
+  ahora el fragmento que mejor puntúa por significado y por las palabras raras dentro de esa conversación. Sin `--like` no
+  cambia nada.
+- **Un error de uso dice cómo corregir la llamada** (cli-core 0.734.0). Una opción desconocida que acepta un comando hermano
+  lo nombra (`unknown option '--like' — --like is an option of search conversations`), `--filter` en `search messages` dice
+  que el filtro va en la consulta, y una consulta que falla después de `--` dice que se pongan las opciones antes de `--`.
+- **`messages sync <chat> --full-history --background` lee el chat completo** (cli-core 0.752.0; tg ahora se basa en
+  0.753.0, antes 0.734.0). El trabajo en segundo plano se iniciaba sin `--full-history`, así que un grupo grande terminaba en
+  el acto con `fetched: 0` y `limited: "group_too_large"`. Ahora el trabajo recibe la opción, y `store jobs retry` la conserva
+  ([#916](https://github.com/WireCatLabs/tg-cli/issues/916)).
+- **Una sincronización larga sigue siendo rápida a medida que crece el chat** (cli-core 0.753.0). Cada mensaje guardado
+  recorría todo el chat buscando respuestas que esperaban la raíz de su hilo, así que una página de 100 tardaba 78 ms con
+  10 000 mensajes guardados y 919 ms con 90 000. Ahora esa búsqueda se hace una vez por página: de 32 a 42 ms hasta 60 000
+  ([#917](https://github.com/WireCatLabs/tg-cli/issues/917),
+  [benchmark](https://github.com/WireCatLabs/cli-testing/tree/main/performance/store/sync-growth)).
+- **`messages download --output-dir` rechaza las carpetas de credenciales, las carpetas propias de tg y el almacén de
+  mensajes** (cli-core 0.736.0), para un mensaje, con `--all` y con `--offline`.
+- **El skill del agente dice dónde van el remitente y el chat en cada búsqueda.** `search conversations` acepta
+  `--filter 'from:me'`; `search messages` no acepta `--like`, `--chat` ni `--filter`, y `from:me` y `chat:<chat>` van en su
+  consulta. La descripción corta del skill ahora también nombra `--like` y `messages context <hit ref>`, para un agente que
+  empieza por la descripción sin abrir el skill.
+
+## 0.135.0 — 23.11.2026
+
+### Added
+
+- **`tg personal search conversations` muestra lo que dice cada resultado y acepta `--like`.** Cada resultado trae `lines`:
+  hasta tres de sus mensajes que comparten más palabras con la pregunta, el mensaje justo después del que pregunta, y una
+  respuesta posterior a él desde otra parte del chat. `--like "<a reply that would answer it>"` busca, en la misma llamada,
+  también por el significado de una respuesta inventada de una frase. En un almacén de unos 954 000 mensajes, las respuestas
+  visibles en las líneas mostradas pasaron de 19 a 24 de las preguntas de prueba, tanto con la pregunta tal como se hizo como
+  con una respuesta inventada. Con cli-core 0.718.0.
+
+### Fixed
+
+- **La búsqueda de conversaciones ordena mejor y arranca más rápido.** Las palabras raras pesan más que las comunes, un grupo
+  grande ya no esconde sus respuestas detrás de su propio tamaño, y una palabra con mayúscula que no es un nombre ya no reduce
+  la búsqueda a un solo chat. La búsqueda mediana bajó de 5,1 a 2,8 segundos con la pregunta tal como se hizo, y de 6,8 a
+  4,4 segundos con una respuesta inventada.
+- **El skill del agente busca una sola vez, con `--like`, y lee las `lines` de cada resultado**, también las conversaciones
+  del propio propietario. Antes buscaba dos veces: con la pregunta y luego con la respuesta inventada.
+
+## 0.134.0 — 19.11.2026
+
+### Added
+
+- **Cancelar, editar y enviar ya un mensaje programado.** `tg personal messages scheduled cancel "Book club" 12` lo cancela,
+  `tg personal messages scheduled edit "Book club" 12 "new text"` cambia el texto (añade `--at-time 2h` para moverlo también,
+  o pasa solo `--at-time` para moverlo), y `tg personal messages scheduled send "Book club" 12` lo envía en el acto. Antes,
+  `tg` podía programar y listar, y el propietario cancelaba una publicación en la app de Telegram. Telegram numera los
+  mensajes programados aparte de los enviados: `messages edit` con un id programado fallaba con `MESSAGE_ID_INVALID`, y
+  `messages delete` con el mismo número habría borrado un mensaje antiguo del grupo. Los nuevos comandos aceptan solo los ids
+  que lista `messages scheduled <chat>` y comprueban primero cada uno con esa lista. Cancelar pregunta como lo hace borrar en
+  un nivel `ask` (`--allow-dangerous`). Con cli-core 0.714.0.
+
+### Changed — may break callers
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Iniciaba `mcp serve --profiles all`, así que un cliente que
+  instalaba el servidor desde el registro llegaba a todas las cuentas del ordenador sin que el propietario eligiera. Ahora
+  `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una lista separada por comas
+  o `all`. Por qué: un CLI nunca elige una cuenta por el propietario
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)).
+  A tener en cuenta: un cliente configurado con la entrada antigua conserva `--profiles all` hasta que se configure de nuevo;
+  un servidor añadido a mano o con `mcp config` no cambia.
+
+### Fixed
+
+- **El skill del agente busca por significado dos veces: con la pregunta y luego con un ejemplo de una frase de la respuesta
+  que la contestaría.** Una respuesta se parece más a la respuesta buscada que una pregunta. En 10 preguntas de prueba, la
+  pregunta encontró la respuesta entre los 20 primeros en 8, el ejemplo de respuesta en 9, y ambos juntos en 10.
+- **El skill del agente dice que en `search messages` deben coincidir todas las palabras, y que las variantes se unen con un
+  OR en mayúsculas** (`invoice OR счёт`) cuando no está claro qué palabra usa un mensaje. Varias grafías en una búsqueda solo
+  encontraban los mensajes que las contenían todas.
+
+## 0.133.0 — 16.11.2026
+
+### Changed — may break callers
+
+- **El skill del agente es un núcleo corto más archivos de referencia, así que un agente que lo abre carga unos 2200 tokens,
+  no 12 000.** `skills/tg-cli/SKILL.md` pasó de 50 048 a menos de 9000 bytes. Ahora contiene la regla del perfil, el camino
+  para responder una pregunta desde los chats, leer y enviar, los límites, la salida y los códigos de salida, y una línea por
+  referencia que dice cuándo leerla. Todo lo demás, sin perder ninguna regla, pasó a `skills/tg-cli/references/` (`search`,
+  `messages`, `history`, `tasks`, `people`, `stats`, `files`, `setup`, `mcp-and-bots`). El skill completo viajaba en cada
+  turno posterior de la sesión de un agente: en una prueba de agentes con tiempo limitado, la entrada mediana por turno subió
+  de unos 31 000 a 47 000 tokens, y a la mitad de las sesiones se les acabó el tiempo. `tg skill install` ahora copia toda la
+  carpeta, `tg skill show <name>` imprime una referencia (`tg skill show search`), y el servidor MCP sirve cada una en
+  `tg://skill/references/<name>.md` (cli-base 0.106.0, cli-core 0.681.0). Un script que leía solo SKILL.md para una regla
+  debe leer la referencia que nombra su índice.
+
+## 0.132.0 — 16.11.2026
+
+### Changed — may break callers
+
+- **`projects evidence` y `projects status` aceptan `--purposes`** para la lista de propósitos que leer (cli-core 0.674.0;
+  tg ahora se basa en 0.675.0, antes 0.672.0). `--purpose` sigue funcionando, pero está oculto y desaparecerá en una versión
+  posterior.
+- **El almacén pasa a la versión 67** al abrirlo por primera vez (cli-core 0.674.0): un registro de hechos eliminados que no
+  guarda el texto de ningún hecho, y los campos de una llamada telefónica en una reunión. Como toda migración del almacén,
+  solo avanza.
+
+### Fixed
+
+- **`search conversations` responde en segundos en un almacén grande** (cli-core 0.675.0). Para saber qué chats cambiaron
+  desde su última construcción, leía cada fragmento del almacén una vez por chat. En un almacén de unos 950 000 mensajes, una
+  búsqueda en caliente pasó de unos 12 s a unos 3 s. `conversations status` y `conversations embed` también son más rápidos.
+- **`--from` en una búsqueda nombra al remitente, no una fecha** (cli-core 0.675.0). `search messages`, `search all` y
+  `search conversations` responden a `--from`, `--sender` y `--author` con `from:<sender>` en la consulta (en `--filter` para
+  conversaciones); `from:me` encuentra lo que escribiste tú.
+
+## 0.131.0 — 16.11.2026
+
+### Fixed
+
+- **Un agente al que se le pregunta por el historial de Telegram del propietario ahora encuentra la búsqueda por
+  significado.** La descripción del skill instalado dice que responde a cualquier pregunta que los chats del propietario
+  puedan responder (quién dijo, aconsejó o envió qué; un mensaje, enlace, precio o decisión pasados), aunque la pregunta no
+  diga Telegram, y nombra `search conversations` como primer paso; la trampa 5 ahora empieza por él. La primera pantalla
+  (`tg --help`, `tg <profile> --help`) lista `search conversations "<question>"` junto a `search all`; la línea
+  `TG_READ_ONLY=1` salió de ella, ya que `schedule agent` y `mcp serve --permission` dicen lo mismo. En una prueba en la que
+  un agente tenía diez llamadas, abrió el skill en 1 de 32 sesiones y ejecutó `search conversations` en 1
+  ([#896](https://github.com/WireCatLabs/tg-cli/issues/896)).
+- **Una opción que un agente adivina falla con la forma que funciona** (cli-core 0.672.0). `--chat`, `--around`, `--since`,
+  `--after`, `--until`, `--before` y `--only` en `search all`, `search messages`, `search notes`, `search conversations` y
+  `messages list`, `show` y `context` ahora dicen en una línea qué escribir en su lugar (`chat:<chat>` en la consulta,
+  `messages context <hit ref>`, `date>=…` o `--since-time`, `--after-n`). Antes, el error era un simple "unknown option", o
+  nombraba una opción sin relación (`--since` → `--source`).
+
+## 0.130.0 — 15.11.2026
+
+### Fixed
+
+- **El skill lleva una pregunta con las palabras del propio propietario primero a la búsqueda por significado** (#884):
+  `search conversations`, luego `search messages --discover`, luego palabras clave; la pregunta tal como está escrita, sin
+  filtrar los resultados a mano, `from:me` para "yo aconsejé", y `--timeout` después de `query.time-limit`. En el
+  Experimento B, un agente con el skill antiguo hizo 71 búsquedas por palabras y una por significado.
+- **`search conversations` toma el límite más largo de un `--timeout` explícito**, y **`search messages --discover`
+  encuentra un nombre escrito como una sola palabra cuando la pregunta lo escribe con guion** (`Альфа-банк` encuentra
+  `АльфаБанк`) (cli-core 0.664.0 y 0.665.0, ya en esta versión).
+
+## 0.129.0 — 15.11.2026
+
+### Changed — may break callers
+
+- **Un agente ya no puede borrar un chat ni vaciar su historial por MCP** (cli-core 0.664.0). `chats delete` y `chats clear`
+  no se ofrecen como herramientas MCP: por MCP, un nivel `ask` seguía adelante sin preguntar. En la línea de comandos ambos
+  siguen preguntando primero.
+- **`store clear --allow-dangerous` es solo tuyo** (cli-core 0.663.0; tg ahora se basa en 0.665.0, antes 0.662.0). Su
+  herramienta MCP ya no acepta `allow_dangerous`: un agente previsualiza con `dry_run`, y tú ejecutas el comando en una
+  terminal.
+- **Las listas sin `--limit` muestran el `defaults.limit` configurado** (20 si no se cambió), así que `metadata sync` y
+  `tags rebuild` bajan de 50 a 20 (cli-core 0.663.0).
+- **`models chats show|set allowed|ask|denied`** decide si el texto de los chats puede ir a un modelo fuera de este ordenador
+  (cli-core 0.664.0). Con `denied`, `conversations embed` y `conversations links rebuild --analyze` con un modelo así se
+  niegan incluso con `--yes`. Solo tú puedes hacerlo menos estricto.
+
+### Fixed
+
+- **Todas las opciones de tiempo leen una misma gramática** (cli-core 0.663.0): ISO con o sin segundos y zona, solo una
+  fecha, `today`, `yesterday`, `30m`, `2h`, `7d`.
+- **`tasks scan`, `conversations embed` y `conversations links rebuild` aceptan `yes` por MCP** (cli-core 0.663.0 y
+  0.664.0), así que un agente ya no se queda atascado en una vista previa.
+- **`search conversations` responde a una pregunta larga en un almacén grande**: cuando a la mitad por palabras se le acaba
+  el tiempo, la mitad por significado sigue respondiendo (cli-core 0.664.0).
+
+## 0.128.0 — 14.11.2026
+
+### Changed — may break callers
+
+- **Un nivel `readonly` ya no detiene una sincronización** (cli-core 0.662.0, antes 0.659.0). Los comandos que solo traen
+  datos de Telegram al almacén local (`sync`, `messages sync`, `contacts sync`, `metadata sync`, `store gaps repair`,
+  `--sync-first`) se ejecutan en `readonly`; `deny` sigue rechazándolos. Los comandos que escriben archivos del propietario o
+  llaman a otro servicio siguen bloqueados por `readonly`. Un perfil que usaba `readonly` para detener la sincronización pone
+  la clave en `deny`.
+- **Las fechas en las consultas de listas usan la zona horaria del ordenador** (cli-core 0.661.0). `today` y una fecha sola
+  en `tasks list`, `chats list` y las demás consultas de listas empezaban en UTC y ahora empiezan a la medianoche local, como
+  en la búsqueda.
+- **La herramienta MCP `messages_photo` acepta `attachment`, desde 1** (cli-core 0.661.0), como `attachments_show`. Antes
+  aceptaba `index`, desde 0.
+- **Una búsqueda en el servidor ya no envía a Telegram una persona de `to:` o `cc:` como remitente** (cli-core 0.660.0); el
+  almacén sigue filtrando por ellas.
+
+## 0.127.0 — 14.11.2026
+
+### Changed — may break callers
+
+- **Borrar mensajes ya no pregunta, y las reglas de respuesta automática activadas envían** (cli-core 0.659.0, antes
+  0.656.0). `messages delete` y `bot messages delete` siguen adelante sin preguntar ni pedir `--allow-dangerous`; un perfil
+  que quiera la pregunta pone `messages.delete: ask`. `replies.send` ahora es `allow`, así que `serve` envía las respuestas
+  de las reglas que activaste; una regla nueva sigue empezando desactivada, y `replies.send: deny` detiene toda respuesta
+  automática. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **Una configuración compartida con un pequeño desliz se repara al leerla.** `~/.config/WireCat/config.json` con una marca
+  de orden de bytes, un comentario, una coma final o una coma que falta entre dos líneas se corrige en el sitio, y el archivo
+  antiguo se guarda al lado como `config.json.bak-<time>`. Otros daños indican su línea, su columna y la corrección probable.
+
+## 0.126.0 — 13.11.2026
+
+### Added
+
+- **La primera pantalla y el primer arranque listan `pbx`** (cli-core 0.651.0), la herramienta de WireCat para Asterisk, en
+  "Works with" y entre las herramientas que el primer arranque ofrece instalar.
+- **`doctor reports create` da un enlace a una incidencia ya rellenada** (cli-core 0.651.0) en `issue_url` y en su nota. El
+  título y el cuerpo solo llevan la versión, la plataforma y el código de error de la ejecución fallida; el archivo del
+  informe se queda en el ordenador hasta que lo adjuntes.
+
+### Changed — may break callers
+
+- **Basado en cli-core 0.656.0** (antes 0.651.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **Un perfil mal escrito en `TG_PROFILE` lista los perfiles de este ordenador** (cli-core 0.651.0), como lo hace una primera
+  palabra mal escrita.
+- **`session start` y `setup` conservan el rechazo de Telegram** (cli-core 0.651.0). Un inicio de sesión fallido para un
+  perfil nuevo se informaba como "no profile named …", lo que ocultaba el motivo.
+- **`schedule command` guarda el PATH sin sus carpetas relativas** (cli-core 0.651.0). Con pnpm, `schedule exec` rechazaba
+  una programación así; guárdala de nuevo y se ejecuta.
+- **Un modelo en una dirección IPv6 como `https://[fd00::1]` vuelve a estar accesible** (cli-core 0.651.0).
+- **Una configuración compartida que no se puede leer ya no deja esta herramienta en solo lectura.** Una configuración de
+  WireCat (`~/.config/WireCat/config.json`) con una marca de orden de bytes, JSON roto, una carpeta en su lugar o una forma
+  antigua de `setup` limitaba cada perfil a solo lectura, y un servidor MCP ocultaba `messages sync`. Ahora solo la propia
+  respuesta "solo lectura" del propietario limita una herramienta, e incluso entonces `messages sync` se ofrece por MCP: solo
+  lee el servicio de mensajería al almacén local (cli-core 0.656.0).
+
+### Security
+
+- **`account remove` con solo la carpeta de configuración movida ya no cierra la sesión del propietario** (cli-core 0.651.0).
+  La carpeta de estado en ese caso es del propietario, así que el inicio de sesión ahora aparece en `kept`.
+
+## 0.125.0 — 13.11.2026
+
+### Changed — may break callers
+
+- **`contacts context` y `contacts prepare` responden `meetings[]`** (cli-core 0.650.0): las llamadas grabadas de esa
+  persona, desde un CLI de reuniones que comparte el almacén. Quien compruebe la respuesta con un esquema fijado debe
+  actualizarlo.
+
+### Fixed
+
+- **`TG_READ_ONLY` deja pasar la búsqueda de Telegram** (cli-core 0.650.0). El bloqueo promete "puede leer y sincronizar,
+  pero nunca enviar", y sin embargo `search messages --backend server` fallaba con `permission_error` y el `--backend both`
+  por defecto descartaba el servidor sin avisar. Las lecturas que solo traen datos de Telegram o trabajan en local ahora pasan
+  el bloqueo ([#874](https://github.com/WireCatLabs/tg-cli/issues/874)); la puesta al día para la búsqueda local también
+  ([#872](https://github.com/WireCatLabs/tg-cli/issues/872)).
+- **Una búsqueda solo en el archivo sobre un chat sincronizado en parte sugiere la búsqueda de Telegram** (cli-core 0.650.0):
+  `next` empieza con la misma consulta y `--backend server` ([#873](https://github.com/WireCatLabs/tg-cli/issues/873)).
+- **El skill ya no mantiene a los agentes en la copia local.** Para un acuerdo o un documento decía "busca en el archivo
+  local", y los agentes añadían `--backend archive`, así que un mensaje más antiguo que el historial sincronizado volvía como
+  "no encontrado" aunque la propia búsqueda de Telegram lo tenía. Ahora el skill busca en el archivo y en Telegram a la vez,
+  reserva `--backend archive` para un propietario que pidió que nada salga del ordenador y, cuando una búsqueda no encuentra
+  nada en un chat sincronizado en parte, prueba el servidor antes de sincronizar
+  ([#873](https://github.com/WireCatLabs/tg-cli/issues/873)).
+
+### Security
+
+- **La comprobación de actualizaciones y las llamadas a modelos solo llegan a su propio host** (cli-core 0.650.0). Una
+  redirección a otro host se rechaza, y cada intercambio tiene un plazo.
+- **Una ejecución con carpetas movidas no borra nada en las carpetas del propietario** (cli-core 0.650.0). Con solo
+  `TG_CONFIG_DIR` movido, `account remove` borraba archivos en la carpeta de estado real del propietario, y `--delete-data`
+  eliminaba la cuenta del almacén del propietario. Ahora ambos se conservan, con su motivo en `kept`.
+
+## 0.124.0 — 13.11.2026
+
+### Added
+
+- **De `@wirecat/cli-core` 0.648.0** (antes 0.633.0): `images read <ref>` hace que tu agente de programación lea el texto de
+  una imagen y lo guarda para la búsqueda; `schedule agent` inicia gemini, cursor, opencode, openclaw, hermes, grok y kimi
+  además de claude y codex, y `schedule agents list` dice cuáles están en el PATH; `contacts unlink --from <person>`.
+
+### Changed — may break callers
+
+- **Solo local mantiene cada llamada a un modelo en este ordenador** (cli-core 0.648.0). Con el interruptor activado
+  (`memo models local-only set on`), las llamadas a modelos de tg, los embeddings remotos y la transcripción de OpenAI
+  rechazan cualquier dirección que no sea este ordenador antes de enviar nada (`local-only.refused`).
+- **El http sin cifrar solo va a este ordenador, para toda llamada a un modelo.** El enriquecimiento, la búsqueda a fondo, la
+  vinculación, los borradores de respuesta, el OCR de adjuntos y los embeddings remotos rechazan una dirección `http://` en
+  otra máquina (`model.address-refused`); usa https o ejecuta el modelo en este ordenador.
+- **Los mensajes de voz los transcribe primero el modelo descargado.** `auto` usa el modelo de voz local cuando está
+  descargado, pregunta a Telegram solo cuando no lo está, y nunca con solo local activado.
+- **Hay que guardar de nuevo cada programación de agente** (cli-core 0.648.0). Una programación guardada antes se rechaza con
+  `agent.refused` y una pista para guardarla de nuevo; una programación de codex necesita `--allow-dangerous`.
+- **`stats tasks show` ya no tiene `--chat`** (cli-core 0.648.0): nombra el chat en la consulta,
+  `tg personal stats tasks show 'chat:"Project room"'`.
+- **Un perfil mal escrito es `not_found`** con el motivo `profile.unknown` y los perfiles de este ordenador, donde antes era
+  "not signed in" (cli-core 0.648.0). `tg serve` bajo una unidad de servicio no se reinicia tras esa salida (6), como tras un
+  inicio de sesión que falta (4); una unidad instalada antes conserva su ajuste antiguo hasta que se vuelva a ejecutar
+  `server install`.
+- **`store reset` ya no se ofrece por MCP**, y `store restore` y `store recover run` necesitan `mcp.authority`
+  (cli-core 0.648.0). `doctor reports create --output` se niega a sobrescribir un archivo.
+
+### Fixed
+
+- **Las páginas del archivo y de la búsqueda dicen que `messages sync --all` deja fuera los chats silenciados**, y muestran
+  `--with-muted`.
+
+### Security
+
+- **`tg session end` en una ejecución con carpetas movidas conserva el inicio de sesión del propietario.** Con solo
+  `TG_CONFIG_DIR` o `TG_CACHE_DIR` movidos, la carpeta de estado sigue siendo del propietario, y `session end` cerraba esa
+  sesión en Telegram y borraba su archivo. Ahora responde `ended: false` con `kept: "owners-sign-in"` y no cambia nada.
+  `account remove` en una ejecución así también conserva el archivo de sesión del propietario y la carpeta de bots. Una
+  ejecución movida cuya carpeta de estado es propia olvida su archivo de sesión, pero nunca cierra la sesión en Telegram
+  (`logged_out: false`): un archivo copiado allí seguiría siendo el inicio de sesión del propietario.
+
 ## 0.123.0 — 10.11.2026
 
 ### Added

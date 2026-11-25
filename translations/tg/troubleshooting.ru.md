@@ -343,7 +343,7 @@ tg personal messages send <chat> "<the same text>" --operation-id <id from the e
 
 ### Фоновый сервер не запускается
 
-`tg personal server status --json` включает `stopped` и `unit.exitCode`, когда последний нормальный выход был таким, при котором служба не перезапускается. Для выхода 4 возобновите сессию с помощью `tg personal session start`, затем `tg personal server start`. `tg personal server logs` говорит, почему. В службе обычной причиной является связка ключей: служба запускается до открытия связки ключей или без `XDG_RUNTIME_DIR`. После перемещения Node или `tg` запустите `tg personal server install` еще раз: служба использует пути, с которыми её установили ([запускается как служба](./archive.md#as-a-service)).
+`tg personal server status --json` включает `stopped` и `unit.exitCode`, когда последний нормальный выход был таким, при котором служба не перезапускается. Для выхода 4 возобновите сессию с помощью `tg personal session start`, затем `tg personal server start`. Для выхода 6 служба называет профиль, которого на этом компьютере нет: установите её заново под правильным именем. `tg personal server logs` говорит, почему. В службе обычной причиной является связка ключей: служба запускается до открытия связки ключей или без `XDG_RUNTIME_DIR`. После перемещения Node или `tg` запустите `tg personal server install` еще раз: служба использует пути, с которыми её установили ([запускается как служба](./archive.md#as-a-service)).
 
 ## Сообщить о проблеме
 

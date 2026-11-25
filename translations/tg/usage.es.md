@@ -20,7 +20,9 @@ Términos utilizados en esta página:
 
 Cada comando realiza una tarea, imprime la respuesta y termina. Solo `tg personal watch`, `tg personal serve` y `tg personal mcp serve` permanecen activos, y cada uno lo indica.
 
-```sh
+Esto es una plantilla de sintaxis, no un comando para copiar. Sustituye los marcadores por los valores de los ejemplos siguientes.
+
+```text
 tg [profile] [options] <resource> <action> [arguments]
 ```
 
@@ -281,7 +283,7 @@ tg personal review --unanswered            # questions nobody answered in 24 hou
 tg personal review 'chat:Neighbours' --unanswered 4h
 ```
 
-`--unanswered [hours]` conserva solo las preguntas pendientes de ti o de los administradores de un grupo. Una pregunta es un mensaje con `?` (no cuenta el `?` de un enlace) o una respuesta a ti o a un administrador. Se considera respondida cuando tú o un administrador respondéis a ella o sois los siguientes en hablar tras quien preguntó. Se excluyen las preguntas de menos horas que las indicadas (24 por defecto): aún no ha habido tiempo para responder. Si no se conocen los administradores del grupo, el comando lo indica y solo cuentan tus respuestas.
+`--unanswered [duration]` conserva solo preguntas pendientes para ti o los administradores. Una pregunta contiene `?` (no cuenta dentro de enlaces) o responde a ti o a un administrador. Se considera contestada si tú o un administrador respondéis o sois los siguientes en hablar tras quien preguntó. Omite preguntas más recientes que el intervalo indicado (24 horas por defecto) para dar tiempo a responder. Si no se conocen los administradores, lo avisa y solo cuenta tus respuestas. Usa una duración como `4h` o `1d`; no se admite un número de horas sin unidad.
 
 Las transcripciones de voz guardadas también cuentan en este filtro. Agregue `--transcribe` para transcribir mensajes de voz que no tengan una transcripción guardada antes de seleccionar las preguntas. Un mensaje de voz que no se pudo transcribir mantiene la revisión incompleta: un resultado vacío no prueba que no haya preguntas sin respuesta. Mantenga el límite anterior mientras la respuesta tenga una entrada en `missing`.
 
@@ -877,7 +879,7 @@ Todos estos sólo leen. `events` lee los mensajes de servicio del chat: quién h
 
 Estos cambian algo y las personas en el chat lo ven.
 
-Para un foro, utilice `tg personal topics enable <chat>` y `tg personal topics create <chat> <title>`. Un grupo básico requiere `--upgrade --yes`; mantenga la nueva identificación de chat devuelta por la actualización. Lea `topics list` después de un resultado de creación desconocido en lugar de repetir la creación. Enviar a su id con `tg personal messages send <chat> <text> --topic <id>` o `tg personal polls create <chat> <question> <answers> --topic <id>`. `tg personal topics edit <chat> <id> --title <new>` cambia el nombre de un tema, `--closed on`/`--closed off` lo cierra a nuevos mensajes o lo vuelve a abrir, `--pinned on`/`--pinned off` lo fija en la parte superior o lo desancla, y en el tema General (id 1) `--hidden on`/`--hidden off` lo oculta de la lista de temas o lo muestra nuevamente. `--emoji <emoji>` da al tema un icono, en `topics edit` y en `topics create`. El emoji debe estar en el conjunto predeterminado de iconos de temas de Telegram, que cualquier cuenta puede usar; `tg personal topics icons list` lo muestra, y otro emoji se rechaza junto con la lista. `topics edit --emoji none` quita el icono. `tg personal topics order <chat> <id...>` coloca los temas fijados en ese orden; no fija ni desancla nada. Repetir cualquiera de estos es seguro. `tg personal topics delete <chat> <id>` elimina un tema y todos los mensajes que contiene, para todos; no se puede deshacer, por lo que pregunta primero de forma predeterminada; un `topics.delete: allow` o `--allow-dangerous` explícito omite la pregunta. El tema general no se puede eliminar.
+Para un foro, utilice `tg personal topics enable <chat>` y `tg personal topics create <chat> <title>`. Un grupo básico requiere `--upgrade --yes`; mantenga la nueva identificación de chat devuelta por la actualización. Lea `topics list` después de un resultado de creación desconocido en lugar de repetir la creación. Enviar a su id con `tg personal messages send <chat> <text> --topic <id>` o `tg personal polls create <chat> <question> <answers> --topic <id>`. `tg personal topics edit <chat> <id> --title <new>` cambia el nombre de un tema, `--closed on`/`--closed off` lo cierra a nuevos mensajes o lo vuelve a abrir, `--pinned on`/`--pinned off` lo fija en la parte superior o lo desancla, y en el tema General (id 1) `--hidden on`/`--hidden off` lo oculta de la lista de temas o lo muestra nuevamente. `--emoji <emoji>` da al tema un icono, en `topics edit` y en `topics create`. El emoji debe estar en el conjunto predeterminado de iconos de temas de Telegram, que cualquier cuenta puede usar; `tg personal topics icons list` lo muestra, y otro emoji se rechaza junto con la lista. `topics edit --emoji none` quita el icono. `tg personal topics order <chat> <id...>` coloca los temas fijados en ese orden; no fija ni desancla nada. Es seguro repetir las ediciones y el orden de temas. Tras una creación de resultado desconocido, comprueba la lista de temas antes de crear de nuevo. `tg personal topics delete <chat> <id>` elimina un tema y todos los mensajes que contiene, para todos; no se puede deshacer, por lo que pregunta primero de forma predeterminada; un `topics.delete: allow` o `--allow-dangerous` explícito omite la pregunta. El tema general no se puede eliminar.
 
 ```sh
 tg personal chats create "Hiking 2027" @olga 12345  # a supergroup; the people added are told
@@ -986,13 +988,13 @@ tg personal chats list --json | jq -r '.items[].id'
 ```
 
 ```sh
-tg personal messages list me --jsonl | jq -r .text  # one message per line
+tg personal messages list me --jsonl | jq -r 'select(.type == "item") | .data.text'  # message text from item records
 ```
 
 - `--json`: un valor JSON. **Cada lista es un objeto**, siempre la misma forma: `{ "items": [...], "page": { "limit": 20, "has_more": true }, "meta": { ... } }`; una lista con más filas indica el paso siguiente en `page.next`. `--all` y `--offline` responden con el mismo objeto. Un solo elemento, no una lista, es `{ "item": {...}, "meta": {...} }`.
 - Los mensajes de un chat se paginan con `--cursor`, no con un número de página; `page.next` lo lleva.
-- `--jsonl`: un objeto por línea, sin contenedor; si hay más se dice solo en stderr. Un informe (`stats …`) es un solo objeto, así que `--jsonl` se rechaza en él; las listas `stats * evidence` siguen emitiéndose por líneas.
-- Un error que termina el comando aparece como `{ "error": { "code": "...", "message": "..." } }` en stderr y la salida estándar está vacía, por lo que nunca se puede considerar un rechazo como un resultado vacío.
+- `--jsonl`: los registros de elementos llevan el resultado en `data`; el registro final indica completitud y paginación. Compruébalo en vez de tratar el flujo como mensajes sin contenedor. Un informe (`stats …`) es un objeto, por lo que rechaza `--jsonl`; las listas `stats * evidence` siguen emitiéndose como flujo.
+- Un error usa `{ "error": { "code": "...", "message": "..." } }` en stderr. Un rechazo anterior a la salida no escribe resultados y no se confunde con un resultado vacío. Si el flujo ya emitió registros, consérvalos y comprueba su registro final de completitud; si falta el final, el flujo tampoco terminó.
 - Las lecturas y descargas parciales pueden salir con código `0`: comprueba `complete` y `batch` o `issue`; el JSONL de descarga parcial añade `batch_summary`.
 - **Bifurcación en el código de salida, no en el texto.** El texto cambia; el código no. `0` funcionó, `2` entrada incorrecta, `4` no inició sesión, `5` el perfil puede no hacer esto, `6` no encontrado, `7` no está en la lista de destinatarios permitidos, `8` un límite (el límite por hora o el propio Telegram), `9` Telegram no respondió a tiempo, `14` se desconoce si llegó algún mensaje. La tabla completa está en [códigos de salida](./commands.md#exit-codes).
 - **Los identificadores son cadenas.** Nunca conviertas uno en un número.
@@ -1001,8 +1003,11 @@ tg personal messages list me --jsonl | jq -r .text  # one message per line
 - `tg commands --json` es el árbol de comandos completo, con `effects: { remote, local }` en cada comando: `remote: "write"` cambia algo en Telegram.
 
 ```sh
-if ! tg personal messages send "Book club" "See you at 7" --json > /dev/null; then
-  case $? in
+if tg personal messages send "Book club" "See you at 7" --json > /dev/null; then
+  :
+else
+  send_status=$?
+  case "$send_status" in
     14) echo "it may have gone — repeat only with the same --operation-id" ;;
     4)  echo "run tg personal session start" ;;
   esac
@@ -1149,7 +1154,7 @@ tg personal config set sends_per_hour 10
 
 `tg personal contacts show <person>` muestra lo que dice Telegram sobre una persona y qué tan activa es en los chats que compartes. `tg personal contacts check <person>` los califica como posible bot, falso o spammer, con todos los motivos. `tg personal contacts context <person>` lee lo que el archivo local tiene sobre ellos: sin `--chat`, en todas las cuentas vinculadas a ellos con `contacts link`; con `--chat`, sus mensajes más nuevos en cada chat que nombre. Lo que cada uno pide a Telegram o a una lista pública de spam, y lo que envía a dónde: [personas](./people.md).
 
-Algunos límites que debe conocer: una fecha de registro estimada se adivina a partir de la identificación de la cuenta con una tabla comunitaria, y no hay una estimación posterior a diciembre de 2024. La verificación del bot lee hasta 1000 mensajes almacenados. `contacts context` devuelve cuerpos de mensajes, por lo que sigue los permisos `messages`; vincular y desvincular identidades está controlado por `contacts` y nunca cambia la libreta de direcciones de Telegram.
+Algunos límites que debe conocer: una fecha de registro estimada se adivina a partir de la identificación de la cuenta con una tabla comunitaria, que termina en agosto de 2026; los ID más recientes no reciben estimación. La verificación del bot lee hasta 1000 mensajes almacenados. `contacts context` devuelve cuerpos de mensajes, por lo que sigue los permisos `messages`; vincular y desvincular identidades está controlado por `contacts` y nunca cambia la libreta de direcciones de Telegram.
 
 ## Siguiente paso
 
