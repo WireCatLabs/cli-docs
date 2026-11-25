@@ -14,7 +14,7 @@ Lea esta página si necesita una segunda cuenta, si el agente de IA necesita men
 | Dar menos permisos al agente | Perfil con sus [permisos](./permissions.md) |
 | Mantener al agente en ese perfil | `MAX_PROFILE_LOCK` ([perfiles y sesiones](./sessions.md#профили)) |
 | Usar un bot junto a la cuenta personal | Perfil de bot: `max support bot api get-my-info` |
-| Ver todos los perfiles locales | `max account list` |
+| Ver todos los perfiles locales | `max session list` |
 
 ## Elegir un perfil
 
@@ -24,7 +24,7 @@ Coloque el nombre del perfil delante del comando:
 max work config show
 ```
 
-`max account list` muestra los perfiles locales y sus cuentas; `max work session end` cierra la sesión MAX del perfil `work`.
+`max session list` muestra los perfiles locales y sus cuentas; `max work session end` cierra la sesión MAX del perfil `work`.
 
 La entrada en `profiles.work` en el archivo de configuración es válida para este perfil; `defaults` se utiliza cuando no hay ningún valor. Las reglas para los nombres de los perfiles y el orden en el que `max` selecciona un perfil se encuentran en la sección [perfiles en el inicio de sesión y las sesiones de](./sessions.md#профили).
 

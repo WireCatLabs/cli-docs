@@ -60,7 +60,7 @@ Output contains no secrets: the configuration file has no fields in which to sto
 
 ## Configuration file
 
-`~/.config/max-cli/config.json` on Linux; Paths on other systems are in the [Settings Guide](./configuration.md#где-лежит-файл). The first command that reads the settings, such as `config show`, `account list` or `chats list`, creates it with `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` and `skill_hint` in `defaults`. The file is created and written by `max personal config set` with mode `0600`, and its folder with `0700`. `max personal doctor` names a file or folder that other users can read in `files.problems` and prints the `chmod` that fixes it. `max personal doctor` only reads the file: if it is missing, it answers `config.found: false` and does not create it.
+`~/.config/max-cli/config.json` on Linux; Paths on other systems are in the [Settings Guide](./configuration.md#где-лежит-файл). The first command that reads the settings, such as `config show`, `session list` or `chats list`, creates it with `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` and `skill_hint` in `defaults`. The file is created and written by `max personal config set` with mode `0600`, and its folder with `0700`. `max personal doctor` names a file or folder that other users can read in `files.problems` and prints the `chmod` that fixes it. `max personal doctor` only reads the file: if it is missing, it answers `config.found: false` and does not create it.
 
 Setting names are written in snake_case: `sends_per_hour`, `keep_runs_for_days`, `models.<назначение>.base_url`.
 
