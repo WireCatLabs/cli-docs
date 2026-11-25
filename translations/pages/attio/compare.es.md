@@ -9,7 +9,7 @@ title: "Comparado con otras herramientas"
 `attio` es una línea de comandos y un servidor MCP para los datos de ventas de un espacio de trabajo de Attio:
 negociaciones, personas, empresas, el embudo de negociaciones y los miembros del espacio de trabajo. Esta página lo
 pone junto a las otras herramientas con las que un agente de IA lee y cambia Attio, para que veas cuál encaja con tu
-trabajo. Las marcas de `attio` salen de su versión actual, sus comandos y su código, revisados el 25 de noviembre de
+trabajo. Las marcas de `attio` salen de su versión actual, sus comandos y su código, revisados el 26 de noviembre de
 2026. Sus pruebas usan un Attio falso hecho a partir de la descripción de la API de Attio, y cada versión pasa además
 una revisión con un espacio de trabajo real. Las marcas se revisan de nuevo en cada versión. Las marcas de las demás
 herramientas salen de su propia documentación y su código, enlazados en la tabla, revisados el 19 de noviembre de
@@ -54,7 +54,7 @@ sesión con un token así. attio-mcp también acepta un token de OAuth a través
 | Listar las negociaciones abiertas de una etapa | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [🟡](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
 | Encontrar a una persona por nombre o correo | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L49-L50) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L924-L970) |
 | Leer las notas y tareas de una negociación | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | ➖ | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
-| Buscar en los correos y grabaciones de llamadas que guarda Attio | ❌ | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
+| Buscar en los correos y grabaciones de llamadas que guarda Attio | 🟡 | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
 | Leer negociaciones sin internet | ✅ | [❌](https://docs.attio.com/mcp/overview) | [❌](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/src/api/client-config.ts#L79) | ➖ | ➖ | [❌](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/src/utils/config.ts#L6) |
 | Una búsqueda sobre negociaciones y los mensajes y notas de tus otras herramientas | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Cambiar el CRM** | | | | | | |
@@ -109,8 +109,11 @@ Notas sobre la columna de `attio`:
 - **Sin internet.** `sync` copia las negociaciones y las personas y empresas que nombran, con las etapas del embudo de
   negociaciones. `deals`, `pipelines`, `stages`, `changes`, `fields` y `search all` leen esta copia, también con
   `--offline`. `people`, `organizations` y `users` siempre preguntan a Attio. Attio no sabe listar solo lo que cambió,
-  así que cada sincronización lee todos los registros. Con el ajuste `activities` la copia guarda también las notas y
-  las tareas de esos registros.
+  así que cada sincronización lee todos los registros. Con el ajuste `activities` la copia guarda también las notas,
+  las tareas y las reuniones de esos registros.
+- **Llamadas y correos.** Con el ajuste `activities`, `sync` copia también las reuniones de Attio con las
+  transcripciones de sus llamadas grabadas, y `search all` encuentra una negociación por una palabra dicha en una
+  llamada. Los correos que guarda Attio no se copian. Por eso la fila de correos y grabaciones de llamadas es en parte.
 - **Una búsqueda.** `search all` encuentra negociaciones junto a los mensajes, notas y reuniones que guardaron otras
   herramientas de WireCat en el mismo ordenador, sin internet.
 - **Etapas y parte ganada.** `pipelines show` da para cada etapa el número de negociaciones y su suma por moneda, sin
@@ -157,7 +160,7 @@ Composio, Zapier MCP y FroeMic/attio-cli no participaron en esta prueba.
 ## Cuándo encaja mejor otra herramienta
 
 - **Attio MCP**: quieres Attio en Claude, ChatGPT o Cursor sin instalar nada, no eres administrador del espacio de
-  trabajo, o el agente debe leer correos y grabaciones de llamadas y escribir con tu confirmación.
+  trabajo, o el agente debe leer los correos que guarda Attio y escribir con tu confirmación.
 - **Composio** o **Zapier MCP**: quieres Attio junto a muchas otras apps en un solo servidor alojado.
 - **attio-mcp**: el agente debe crear y cambiar negociaciones, notas y tareas con herramientas listas en tu ordenador.
 - **FroeMic/attio-cli**: un script debe gestionar objetos, atributos, listas y entradas en una terminal, sin una capa

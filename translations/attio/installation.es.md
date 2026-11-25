@@ -66,6 +66,7 @@ Attio describe estos pasos en su página de ayuda,
    | `object_configuration:read` | Las etapas de las negociaciones y los atributos propios de tu espacio de trabajo. |
    | `user_management:read` | Los miembros del espacio de trabajo, responsables de las negociaciones. |
    | `note:read` y `task:read` | Solo para copiar notas y tareas, ver [notas y tareas](./usage.md#notes-and-tasks-on-a-deal). |
+   | `meeting:read` y `call_recording:read` | Solo para copiar reuniones y lo que se dijo en sus llamadas. |
    | `record_permission:read-write` | Solo para cambiar negociaciones y personas. |
    | `note:read-write` y `task:read-write` | Solo para añadir notas y tareas y marcar una tarea como hecha. |
 

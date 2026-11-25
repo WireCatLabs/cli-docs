@@ -23,9 +23,10 @@ title: "Команды attio"
 3. [Воронки](#attio-pipelines)
 4. [Люди](#attio-people)
 5. [Компании](#attio-organizations)
-6. [Что изменилось](#attio-changes)
-7. [API](#attio-api)
-8. [Коды выхода](#exit-codes)
+6. [Заметки и задачи](#attio-activities)
+7. [Что изменилось](#attio-changes)
+8. [API](#attio-api)
+9. [Коды выхода](#exit-codes)
 
 ## Параметры всех команд
 
@@ -1997,6 +1998,7 @@ attio sync [options]
 | Option | What it does |
 |---|---|
 | `--rescan` | list everything again, every id too, dropping a round in progress. |
+| `--allow-deletions <count>` | let this run mark deleted up to this many of what its full list no longer has, when the guard holds it. |
 | `--max-pages <pages>` | at most this many requests to the CRM in this run. |
 | `--embed` | also index new activities and tasks for search all by meaning, with a model already downloaded. |
 
@@ -2069,8 +2071,12 @@ bring the store up to this build's schema, then normalize, index and stem the me
 **Changes something on this computer only.**
 
 ```sh
-attio store migrate
+attio store migrate [options]
 ```
+
+| Option | What it does |
+|---|---|
+| `--no-backup` | migrate even when no rollback copy can be written; older tools then cannot open the store again. |
 
 **Returns:** store migration — path, exists, from, to, normalized, indexed, terms, stemmed, and 1 more; every field: attio commands info store migrate
 

@@ -24,7 +24,8 @@ encuentra negociaciones junto a tus mensajes, notas y reuniones. `pipelines show
 negociaciones de cada etapa, su número, su suma por moneda y la proporción de ganadas. `changes list` muestra las
 negociaciones creadas, movidas, ganadas y perdidas, y `--format report` lo convierte en un resumen. `fields list`
 muestra los atributos propios del espacio de trabajo. Con el ajuste `activities` activado, la copia guarda también las
-notas y tareas de sus negociaciones, personas y empresas, y `activities list` las lista. `people`, `organizations` y
+notas, tareas y reuniones de sus negociaciones, personas y empresas, con lo que se dijo en las llamadas grabadas, y
+`activities list` las lista. `people`, `organizations` y
 `users` leen Attio en directo. `deals` crea, cambia, mueve y cierra negociaciones, `people` crea y cambia personas, y
 `activities` añade una nota o una tarea y marca una tarea como hecha, y cada cambio te pregunta antes. Las listas se
 exportan a CSV con `--format csv`. `attio work api` llega a cada operación de la API de Attio. Todos los comandos

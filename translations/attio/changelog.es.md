@@ -4,6 +4,39 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/attio-cli`. Una sección por versión, la más nueva primero.
 
+## 0.8.0 (25.11.2026)
+
+### Añadido
+
+- **Reuniones y lo que se dijo en sus llamadas.** Con el ajuste `activities` activado, `sync` copia también tus
+  reuniones de Attio, con las transcripciones de las grabaciones terminadas de sus llamadas, así que `search all`
+  encuentra una negociación por una palabra dicha en una llamada y `deals show` lista sus reuniones. Una reunión que
+  Attio vinculó a personas y empresas va también a sus negociaciones. El token necesita `meeting:read` y
+  `call_recording:read`. Sin `meeting:read` no se copia ninguna reunión, y las notas y tareas borradas en Attio siguen
+  saliendo de la copia. Una llamada se guarda hasta sus primeros 20.000 caracteres
+  ([uso](./usage.md#notes-and-tasks-on-a-deal), [instalación](./installation.md)).
+
+## 0.7.0 (25.11.2026)
+
+### Cambios que pueden romper scripts
+
+- **attio se basa en cli-core 1.0.0 y cli-base 1.0.0.** Tras su primera ejecución el almacén está en la versión 73, y
+  solo lo abren las herramientas con cli-core 1.0, así que actualiza todos los CLI de WireCat de este ordenador a la
+  vez. La migración guarda una copia para revertir y no se ejecuta si no puede escribirla (`store migrate --no-backup`
+  migra de todos modos).
+- **`sync --rescan` ya no deja que una sincronización marque como borrada la mayor parte de un tipo.** Solo vuelve a
+  listarlo todo. Cuando la protección retiene una pasada, `sync --allow-deletions <count>` deja marcar como borrados
+  como mucho ese número de registros. La opción es para el propietario en una terminal, y el servidor MCP no la
+  ofrece.
+- **Una sincronización ya no marca registros como borrados cuando Attio no pudo listar un tipo entero.** La pasada de
+  ids espera hasta que llega una lista completa.
+- **Una llamada MCP que nombra una carpeta denegada responde `permission_error`**, no `validation_error`.
+
+### Corregido
+
+- **El índice de la referencia de comandos nombra las notas y tareas.** Los comandos `activities` estaban en la
+  página, pero faltaban en la lista de arriba ([comandos](./commands.md#attio-activities)).
+
 ## 0.6.0 — 25.11.2026
 
 ### Añadido
