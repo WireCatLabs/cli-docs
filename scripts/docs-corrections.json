@@ -2731,5 +2731,30 @@
         }
       ]
     }
+  },
+  {
+    "tool": "tg",
+    "slug": "sessions",
+    "reason": "tg 0.136.0 links its my.telegram.org login screenshot by its full wirecat.dev URL. The site serves it from its own public folder, and the browser check looks for /telegram-app-login.png, so keep the image on the same origin as the page (preview deploys included).",
+    "replacements": {
+      "en": [
+        {
+          "before": "](https://wirecat.dev/telegram-app-login.png)",
+          "after": "](/telegram-app-login.png)"
+        }
+      ],
+      "ru": [
+        {
+          "before": "](https://wirecat.dev/telegram-app-login.png)",
+          "after": "](/telegram-app-login.png)"
+        }
+      ],
+      "es": [
+        {
+          "before": "](https://wirecat.dev/telegram-app-login.png)",
+          "after": "](/telegram-app-login.png)"
+        }
+      ]
+    }
   }
 ]
