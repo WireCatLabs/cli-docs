@@ -93,6 +93,10 @@ export function remarkDocUsability(indexes = loadCommandIndexes()) {
     }
 
     const visit = (node: Node) => {
+      // Tool docs name the site's own images by their full address so they show on GitHub too; here they load from
+      // this build, not from the deployed site.
+      if (node.type === "image" && node.url?.startsWith("https://wirecat.dev/"))
+        node.url = node.url.slice("https://wirecat.dev".length)
       if (node.type === "table") {
         tableNumber++
         node.data = {

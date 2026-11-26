@@ -84,7 +84,7 @@ describe("documentation command references", () => {
   })
   it("keeps browser-login screenshots in an accessible closed disclosure", () => {
     const tree = fromMarkdown(
-      "> **See the my.telegram.org login screen**\n>\n> ![Empty login form](/telegram-app-login.png)\n>\n> Website login comes before account authorization.\n",
+      "> **See the my.telegram.org login screen**\n>\n> ![Empty login form](https://wirecat.dev/telegram-app-login.png)\n>\n> Website login comes before account authorization.\n",
     )
     remarkDocUsability(new Map())(tree, { path: "/project/content/docs/tg/sessions.md" })
     expect(tree.children[0]).toMatchObject({
