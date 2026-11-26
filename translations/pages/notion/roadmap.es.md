@@ -13,7 +13,8 @@ bases de datos que elijas, con las páginas que contienen y las filas de las bas
 Tú y tu agente buscáis en esa copia por palabras y por significado sin conexión, leéis y exportáis sus páginas y
 añadís vuestras etiquetas y notas, desde la línea de comandos o por MCP. También escribís páginas con
 `documents create`, `documents update`, `documents delete` y `documents restore`, leéis y respondéis comentarios con
-`comments list`, `comments create` y `comments reply`, y añadís un archivo a una página con `files upload`. Consulta
+`comments list`, `comments create` y `comments reply`, y añadís un archivo a una página con `files upload`. `mirrors` mantiene iguales una carpeta de archivos Markdown y las
+páginas bajo una página de Notion, en los dos sentidos. Consulta
 [empieza aquí](./index.md).
 
 ## A continuación
@@ -23,8 +24,6 @@ añadís vuestras etiquetas y notas, desde la línea de comandos o por MCP. Tamb
 
 ## Más adelante
 
-- Mantener una carpeta de archivos Markdown en tu ordenador al día con un árbol de páginas de Notion, en los dos
-  sentidos.
 - Iniciar sesión en el navegador, con tu propia conexión de Notion, en lugar de pegar un token.
 
 Lo que cambió en cada versión está en el [registro de cambios](./changelog.md).

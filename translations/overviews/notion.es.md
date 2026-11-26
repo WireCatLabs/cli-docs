@@ -38,6 +38,9 @@ tipos.
 - **Escritura en Notion.** Crea, cambia y restaura páginas, añade comentarios y sube archivos. Antes de
   borrar una página, pregunta en una terminal, y por MCP la borra sin preguntar. `WCNOTION_READ_ONLY=1` o el [ajuste `permissions`](./configuration.md#permissions)
   desactivan la escritura.
+- **Una carpeta de archivos Markdown, en los dos sentidos.** Mantén iguales una carpeta de tu ordenador y las páginas
+  bajo una página de Notion: cambia un archivo o la página, y una sincronización copia el cambio al otro lado.
+  [Uso](./usage.md#keep-a-folder-of-markdown-files-and-notion-pages-the-same)
 - **Lectura en directo cuando la necesitas.** Lee una página de Notion como Markdown, o lista las bases de datos que
   ve el token, sin copiar nada.
 - **Tu agente conectado.** Instala la skill de la herramienta para un agente de terminal como Claude Code, o sirve la
@@ -113,7 +116,6 @@ Una aplicación con MCP se conecta al servidor, como se explica en [úsalo](./us
 
 - No busca filas de una base de datos por sus propiedades, como el estado o el responsable. La búsqueda encuentra las
   filas por su texto.
-- No mantiene una carpeta de archivos Markdown al día con un árbol de páginas de Notion.
 
 ## Encuentra una guía para tu tarea
 

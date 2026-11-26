@@ -2,8 +2,9 @@
 title: "Ajustes"
 ---
 
-Los ajustes viven en un archivo, `config.json`, en la carpeta que muestra `notion doctor`. Cada perfil tiene su
-parte, y `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.
+Decide una vez qué puede cambiar tu agente en Notion y cuánto muestra un comando. Los ajustes están en un archivo,
+`config.json`, en la carpeta que muestra `notion doctor`. Cada perfil tiene su parte, y `defaults` se aplica a todos
+los perfiles.
 
 ```sh
 notion personal config show

@@ -61,7 +61,7 @@ keep this profile's Notion token in the OS keyring
 
 ### `notion session start`
 
-sign this profile in: a Notion personal access token, which acts with your own rights, or an internal connection's token, which sees only the pages shared with that connection. It is asked hidden or read from stdin, never taken as an argument, checked with Notion, and only then kept in the keyring, or in a private file
+sign this profile in: the Notion token is asked hidden or read from stdin, never taken as an argument, checked with Notion, and only then kept in the keyring, or in a private file. The token is a Notion personal access token, which acts with your own rights, or an internal connection's token, which sees only the pages shared with that connection
 
 **Changes something on this computer only.**
 
@@ -111,6 +111,30 @@ notion session list
 
 **Example:** `notion session list`, `notion session list --json`
 
+## `notion account`
+
+this profile on this computer
+
+### `notion account remove`
+
+sign the profile out, then forget it on this computer: its settings, its saved sign-in and its files; --keep-data leaves its messages in the store, where search still finds them, --delete-data deletes them; asks first, or --yes
+
+**Changes something on this computer only.**
+
+```sh
+notion account remove [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--keep-data` | leave what the store holds of this account, still searchable. |
+| `--delete-data` | delete what the store and the tool's own files hold of this account. |
+| `--dry-run` | list what it would remove and keep, and change nothing. |
+
+**Returns:** account removal — profile, data, dry_run, account, revoked, config_file, removed, kept; every field: notion commands info account remove
+
+**Example:** `notion personal account remove --keep-data --dry-run`, `notion personal account remove --delete-data --yes`
+
 ## `notion folders`
 
 choose the Notion pages and databases sync copies; none chosen copies everything the token sees
@@ -143,7 +167,7 @@ notion folders list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** selected folder — id; every field: notion commands info folders list
+**Returns:** selected folder — id, name, path; every field: notion commands info folders list
 
 **Example:** `notion personal folders list`
 
@@ -230,7 +254,7 @@ notion documents list [query] [options]
 | `--limit <n>` | how many documents to return. Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Next usually:** `notion documents show <document>`, `notion documents context <document>`, `notion tags list <document> [query]`
+**Next usually:** `notion documents show <document>`, `notion documents history <document>`, `notion documents context <document>`
 
 **Example:** `notion personal documents list`, `notion personal documents list tag:budget`, `notion personal documents list person:PERSON_UID --limit 10`
 
@@ -268,6 +292,24 @@ notion documents export <document> [options]
 
 **Example:** `notion personal documents export DOC_ID --output notes.md`
 
+### `notion documents history`
+
+list the versions of a document kept in the local copy, or show one with --revision
+
+```sh
+notion documents history <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | page id, Notion link, or a search hit's document: ref. |
+
+| Option | What it does |
+|---|---|
+| `--revision <n>` | show the text of this version. |
+
+**Example:** `notion personal documents history DOC_ID`, `notion personal documents history DOC_ID --revision 3`
+
 ### `notion documents context`
 
 show a document with its tags, relationships, notes, memories and editors
@@ -294,13 +336,31 @@ notion documents get <page>
 |---|---|---|
 | `page` | required | the page's id or its Notion link. |
 
-**Returns:** document markdown — id, markdown, truncated, missing_block_ids, signed_links_removed; every field: notion commands info documents get
+**Returns:** document markdown — id, markdown, truncated, missing_block_ids, signed_links_removed, sha256; every field: notion commands info documents get
 
 **Example:** `notion personal documents get https://www.notion.so/Roadmap-0123456789abcdef0123456789abcdef`, `notion personal documents get 0123456789abcdef0123456789abcdef --json`
 
+### `notion documents check`
+
+read one page live and say whether its text still has the sha256 documents get answered, without the text. changed is true when it differs. A page too long for Notion to give whole has no fingerprint: changed is null and the answer is incomplete
+
+```sh
+notion documents check <page> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+
+| Option | What it does |
+|---|---|
+| `--expected-fingerprint <hash>` | the sha256 documents get answered. |
+
+**Example:** `notion personal documents check PAGE_ID --expected-fingerprint SHA256`, `notion personal documents check https://www.notion.so/Roadmap-0123456789abcdef0123456789abcdef --expected-fingerprint SHA256 --json`
+
 ### `notion documents create`
 
-create a Notion page under another page, from Notion-flavoured Markdown. With no --title, Notion takes the text's first # heading as the title
+create a Notion page under another page (--parent), from Notion-flavoured Markdown, or a row in a database (--into). With no --title, Notion takes the text's first # heading as the title. A row's --field values are checked against the database's properties and sent as each type takes it. A database with several data sources takes one of their ids in place of the database. With --from-template, Notion fills the row from that template after it answers, so the text is not there yet when this returns: template_pending says so. databases show lists the properties, their options and the templates
 
 **Changes something in the service.**
 
@@ -311,15 +371,18 @@ notion documents create [options]
 | Option | What it does |
 |---|---|
 | `--parent <id>` | the parent page's id or its Notion link. |
+| `--into <id>` | the database to add it to: its id or Notion link, or one of its data source ids. |
 | `--title <title>` | the page's title. |
+| `--field <key=value>` | a row's value, as Name=Value. Repeat it for more. Lists (multi-select, people, relations) take values split by commas, a person is an email address, a user id or me, a date is 2026-12-01 or a range start/end, and an empty value clears it. Default: ``. |
+| `--from-template <template>` | for a row: default, none, or a template's id or name from databases show. |
 | `--text <text>` | the text, as Notion-flavoured Markdown. |
 | `--file <file>` | read the text from this file; - reads stdin. |
 
-**Example:** `notion personal documents create --parent PAGE_ID --title "Meeting notes" --text "Discussed the roadmap"`, `notion personal documents create --parent https://www.notion.so/Projects-0123456789abcdef0123456789abcdef --file notes.md`, `notion personal documents create --parent PAGE_ID --file notes.md --dry-run`
+**Example:** `notion personal documents create --parent PAGE_ID --title "Meeting notes" --text "Discussed the roadmap"`, `notion personal documents create --into DATABASE_ID --title "Write the plan" --field Status=Open --field Owner=me`, `notion personal documents create --into DATABASE_ID --title "Weekly review" --from-template default --dry-run`
 
 ### `notion documents update`
 
-replace a Notion page's whole text with Notion-flavoured Markdown. A child page or database whose tag the new text leaves out is refused unless --allow-deleting-content is given, which asks as documents delete does
+change parts of a Notion page's text where they are (--payload), replace its whole text with Notion-flavoured Markdown, change a database row's values with --field, or set the page's icon (--emoji) and cover. With --expected-fingerprint, the sha256 documents get answered, the page is read again just before the write and the write is refused when it changed: Notion has no conditional write, so an edit landing after that read is not caught. --payload needs it. Every text write keeps the text it replaces in the profile's local versions, and answers the new sha256. A value not named keeps what it had, and a list given replaces the whole list. A child page or database whose tag the new text leaves out is refused unless --allow-deleting-content is given, which asks as documents delete does. Values, icon and cover are set first in one request, then the text
 
 **Changes something in the service.**
 
@@ -335,9 +398,14 @@ notion documents update <page> [options]
 |---|---|
 | `--text <text>` | the text, as Notion-flavoured Markdown. |
 | `--file <file>` | read the text from this file; - reads stdin. |
+| `--payload <json>` | parts of the text to change where they are, as JSON: [{"old": "text on the page now", "new": "its new text"}], up to 100. Each old text must be on the page once, or add "all": true to change every place it is. |
+| `--expected-fingerprint <hash>` | the page's sha256 from documents get or documents check; the write is refused when the page changed since. |
+| `--field <key=value>` | a row's value, as Name=Value. Repeat it for more. Lists (multi-select, people, relations) take values split by commas, a person is an email address, a user id or me, a date is 2026-12-01 or a range start/end, and an empty value clears it. Default: ``. |
+| `--emoji <emoji>` | the page's icon, one emoji, or none to take it away. |
+| `--cover <link>` | the page's cover, an https link to an image, or none to take it away. |
 | `--allow-deleting-content` | let Notion delete the child pages and databases the new text leaves out. |
 
-**Example:** `notion personal documents update PAGE_ID --file notes.md`, `notion personal documents update PAGE_ID --text "# Plan" --dry-run`, `notion personal documents update PAGE_ID --file page.md --allow-deleting-content`
+**Example:** `notion personal documents update PAGE_ID --file notes.md`, `notion personal documents update PAGE_ID --payload '[{"old":"Due Friday","new":"Due Monday"}]' --expected-fingerprint SHA256`, `notion personal documents update ROW_ID --field Status=Done --field "Tags=Urgent, Backend" --emoji 📌`
 
 ### `notion documents delete`
 
@@ -371,6 +439,44 @@ notion documents restore <page>
 
 **Example:** `notion personal documents restore PAGE_ID`, `notion personal documents restore PAGE_ID --dry-run`
 
+### `notion documents move`
+
+move a Notion page, with the pages under it, under another page (--parent) or into a database (--into). A database with several data sources takes one of their ids in place of the database, as databases show lists them. Notion moves no database, and no page to the top of the workspace. The next sync files the page at its new place
+
+**Changes something in the service.**
+
+```sh
+notion documents move <page> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+
+| Option | What it does |
+|---|---|
+| `--parent <id>` | the page to move it under: its id or its Notion link. |
+| `--into <id>` | the database to move it into: its id or Notion link, or one of its data source ids. |
+
+**Example:** `notion personal documents move PAGE_ID --parent OTHER_PAGE_ID`, `notion personal documents move PAGE_ID --into DATABASE_ID`, `notion personal documents move PAGE_ID --into DATA_SOURCE_ID --dry-run`
+
+### `notion documents rename`
+
+give a Notion page or database row a new title. Its text, icon and place stay as they are
+
+**Changes something in the service.**
+
+```sh
+notion documents rename <page> <title>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `page` | required | the page's id or its Notion link. |
+| `title` | required | the new title. |
+
+**Example:** `notion personal documents rename PAGE_ID "Roadmap 2027"`, `notion personal documents rename PAGE_ID "Roadmap 2027" --dry-run`
+
 ### `notion documents add`
 
 read one page live and keep its text among the sources added by hand, where memo and search all find it; adding it again keeps its new text as the next revision
@@ -391,6 +497,24 @@ notion documents add <page> [options]
 | `--subject <ref>` | a person, organization, project, task or meeting it is about; repeat to add more. |
 
 **Example:** `notion personal documents add https://www.notion.so/Roadmap-0123456789abcdef0123456789abcdef`, `notion personal documents add PAGE_ID --subject person:PERSON_UID`
+
+## `notion changes`
+
+list the documents the sync added, changed, removed or brought back, newest first
+
+```sh
+notion changes [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since <time>` | from this time: an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago. Default: `1d`. |
+| `--until <time>` | up to this time, in the same forms. |
+| `--event <events>` | only these, comma separated: added, changed, restored, deleted, unavailable, unsynced. |
+| `--limit <n>` | how many changes to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
+
+**Example:** `notion personal changes`, `notion personal changes --since 7d --event deleted,unavailable`
 
 ## `notion search`
 
@@ -440,7 +564,7 @@ notion catalog show <file>
 |---|---|---|
 | `file` | required | page or database id, or its Notion link. |
 
-**Next usually:** `notion documents show <document>`, `notion documents context <document>`, `notion tags list <document> [query]`
+**Next usually:** `notion documents show <document>`, `notion documents history <document>`, `notion documents context <document>`
 
 **Example:** `notion personal catalog show FILE_ID --offline`
 
@@ -461,7 +585,7 @@ notion catalog list [query] [options]
 | `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Next usually:** `notion documents show <document>`, `notion documents context <document>`, `notion tags list <document> [query]`
+**Next usually:** `notion documents show <document>`, `notion documents history <document>`, `notion documents context <document>`
 
 **Example:** `notion personal catalog list "parent:FOLDER_ID AND kind:file" --offline`
 
@@ -482,7 +606,7 @@ notion catalog search <query> [options]
 | `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Next usually:** `notion documents show <document>`, `notion documents context <document>`, `notion tags list <document> [query]`
+**Next usually:** `notion documents show <document>`, `notion documents history <document>`, `notion documents context <document>`
 
 **Example:** `notion personal catalog search "budget AND person:Rin*" --offline`
 
@@ -1063,6 +1187,199 @@ notion identities link <document> <notion-id> <person>
 
 **Example:** `notion personal identities link DOC_ID NOTION_ID person:PERSON_UID`
 
+## `notion meetings`
+
+stored meetings and their records
+
+### `notion meetings list`
+
+meetings, newest first: the service's and the stored ones, kept in the store
+
+```sh
+notion meetings list [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+| Option | What it does |
+|---|---|
+| `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
+| `--limit <n>` | meetings per page; the profile's defaults.limit when absent. |
+| `--page <n>` | which page, starting at 1. |
+
+**Returns:** meeting — ref, id, provider_id, provider, account, title, url, started_at, and 12 more; every field: notion commands info meetings list
+
+**Next usually:** `notion meetings show <meeting>`, `notion meetings transcript <meeting>`, `notion meetings summary <meeting>`
+
+**Example:** `notion personal meetings list --limit 50 --json`
+
+### `notion meetings show`
+
+show a meeting, read again from the service with its people, transcript and documents
+
+```sh
+notion meetings show <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | the stored meeting's number, its meeting: ref, or the service's id (provider_id). |
+
+| Option | What it does |
+|---|---|
+| `--backend <archive\|server\|both>` | where to read: the store (archive), the service (server), or both, kept in the store (default: both). |
+
+**Returns:** meeting details — ref, id, provider_id, provider, account, title, url, started_at, and 21 more; every field: notion commands info meetings show
+
+**Next usually:** `notion meetings transcript <meeting>`, `notion meetings summary <meeting>`, `notion meetings export <meeting>`
+
+**Example:** `notion personal meetings show 1 --json`
+
+### `notion meetings transcript`
+
+show current meeting transcripts
+
+```sh
+notion meetings transcript <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | stored meeting id. |
+
+| Option | What it does |
+|---|---|
+| `--history` | include superseded transcript versions. |
+
+**Returns:** meeting transcript — ref, meeting, source, language, superseded_at, created_at, lines, untrusted; every field: notion commands info meetings transcript
+
+**Example:** `notion personal meetings transcript 1 --json`
+
+### `notion meetings summary`
+
+show stored meeting summaries
+
+```sh
+notion meetings summary <meeting>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | stored meeting id. |
+
+**Returns:** meeting summary — id, meeting, source, title, overview, sections, next_steps, content, and 4 more; every field: notion commands info meetings summary
+
+**Next usually:** `notion meetings show <meeting>`, `notion meetings transcript <meeting>`, `notion meetings export <meeting>`
+
+**Example:** `notion personal meetings summary 1 --json`
+
+### `notion meetings export`
+
+export a meeting as Markdown or one transcript as WebVTT
+
+**Changes something on this computer only.**
+
+```sh
+notion meetings export <meeting> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `meeting` | required | stored meeting id. |
+
+| Option | What it does |
+|---|---|
+| `--format <format>` | export format. One of: `markdown`, `vtt`. Default: `markdown`. |
+| `--transcript-id <id>` | export a specific transcript version. |
+| `--output <file>` | write content to a new file through the host's writer. |
+
+**Returns:** meeting export — meeting_id, format, filename, content, untrusted, output; every field: notion commands info meetings export
+
+**Example:** `notion personal meetings export 1 --format markdown --json`
+
+### `notion meetings people`
+
+find meeting participants by name or email
+
+```sh
+notion meetings people <query> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | required | a name or an email address. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | most matching observations per page, 1–1000 (default 50). |
+| `--scan-limit <n>` | most participant observations to inspect, 1–10000 (default 1000). |
+| `--max-read-bytes <bytes>` | most stored name and email bytes to read (default 1048576). |
+| `--cursor <cursor>` | continue with the same name query and selected account. |
+
+**Returns:** meeting participants — schema_version, kind, account_id, query, items, ambiguity, coverage, page; every field: notion commands info meetings people
+
+**Example:** `notion personal meetings people "Test Person" --json`
+
+### `notion meetings sync`
+
+bring the stored meetings up to date from the connected account, oldest first; a run that stops before its deadline keeps what it saved and the next one goes on from there
+
+**Changes something on this computer only.**
+
+```sh
+notion meetings sync [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--since-time <time>` | fetch meetings starting at or after this ISO 8601 date or time, or 30m, 2h, 7d ago. |
+| `--lookback-days <days>` | revisit recent occurrences for late transcripts (0–31). |
+| `--rescan` | read the last 30 days again, not only what came after the last sync. |
+
+**Returns:** meeting ingestion — meetings, participants, transcript_rows, summaries, warnings, timezone; every field: notion commands info meetings sync
+
+**Example:** `notion personal meetings sync --since-time 2026-11-01T00:00:00Z --json`
+
+### `notion meetings repair`
+
+preview filling in what older builds left out of stored transcripts (their language); --yes stores it
+
+**Changes something on this computer only.**
+
+```sh
+notion meetings repair [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--yes` | store the detected languages; otherwise only preview. |
+
+**Returns:** meeting repair — account_id, applied, transcripts, languages; every field: notion commands info meetings repair
+
+**Example:** `notion personal meetings repair --json`
+
+## `notion events`
+
+the owner's stored events
+
+### `notion events list`
+
+list stored events
+
+```sh
+notion events list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | event id, origin or time fields that narrow the list. |
+
+**Returns:** event — id, event_series_id, title, description, location, starts_at, ends_at, timezone, and 13 more; every field: notion commands info events list
+
+**Example:** `notion personal events list --json`
+
 ## `notion databases`
 
 read Notion databases and their data sources
@@ -1090,7 +1407,7 @@ notion databases list [query] [options]
 
 ### `notion databases show`
 
-show one database live from Notion: its title, where it sits, and each of its data sources with its id and its properties, with the options of each select and status; a query of the database names a data source id
+show one database live from Notion: its title, where it sits, and each of its data sources with its id, its properties with the options of each select and status, and its templates, which documents create --template takes. A query of the database names a data source id
 
 ```sh
 notion databases show <database>
@@ -1103,6 +1420,32 @@ notion databases show <database>
 **Returns:** database — id, title, description, url, parent, is_inline, in_trash, created_time, and 2 more; every field: notion commands info databases show
 
 **Example:** `notion personal databases show 0123456789abcdef0123456789abcdef`, `notion personal databases show https://www.notion.so/0123456789abcdef0123456789abcdef --json`
+
+## `notion rows`
+
+list a Notion database's rows live, with their values
+
+### `notion rows list`
+
+list a Notion database's rows live, with their values as the local copy keeps them. Each --filter is Name, an operator and a value, and a row must match every one. = and != compare, and with an empty value ask whether it is empty. > >= < <= compare numbers and dates. \~ and !\~ ask whether text or a list holds the value. A people value takes me, an email address or a user id
+
+```sh
+notion rows list <database> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `database` | required | the database's id or Notion link, or one of its data source ids. |
+
+| Option | What it does |
+|---|---|
+| `--filter <query>` | a condition such as Status=Open or Due<2026-12-01. Repeat it for more. Default: ``. |
+| `--limit <n>` | at most this many, up to 100 (50 if not given). |
+| `--cursor <cursor>` | go on from where the last page stopped, as page.next gives it. |
+
+**Returns:** notion row — id, title, url, created_time, last_edited_time, properties; every field: notion commands info rows list
+
+**Example:** `notion personal rows list DATABASE_ID --filter Status=Open`, `notion personal rows list DATABASE_ID --filter "Due<2026-12-01" --filter Owner=me --json`, `notion personal rows list DATABASE_ID --filter "Tags~Backend" --limit 20`
 
 ## `notion comments`
 
@@ -1171,6 +1514,43 @@ notion comments reply <discussion> [options]
 
 **Example:** `notion personal comments reply DISCUSSION_ID --text "Done"`
 
+### `notion comments edit`
+
+change the text of a comment this connection posted, by its id from comments list. Notion lets a connection change only its own comments. The answer keeps the text it had in previous_text
+
+**Changes something in the service.**
+
+```sh
+notion comments edit <comment> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `comment` | required | the comment's id from comments list. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the comment, as Markdown: bold, italic, code, links. |
+| `--file <file>` | read the comment from this file; - reads stdin. |
+
+**Example:** `notion personal comments edit COMMENT_ID --text "Fixed the link"`
+
+### `notion comments delete`
+
+delete a comment this connection posted, by its id from comments list. Notion keeps no deleted comment, so this asks first, as the profile's documents.delete permission says, and the answer keeps its text in previous_text
+
+**Changes something in the service.**
+
+```sh
+notion comments delete <comment>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `comment` | required | the comment's id from comments list. |
+
+**Example:** `notion personal comments delete COMMENT_ID`, `notion personal comments delete COMMENT_ID --dry-run`
+
 ## `notion files`
 
 upload files to Notion pages
@@ -1194,6 +1574,246 @@ notion files upload <file> [options]
 | `--parent <id>` | the page to add the file to: its id or its Notion link. |
 
 **Example:** `notion personal files upload report.pdf --parent PAGE_ID`, `notion personal files upload photo.png --parent PAGE_ID --dry-run`
+
+## `notion mirrors`
+
+keep local folders and Notion pages the same, both ways, file by file
+
+### `notion mirrors add`
+
+mirror a local folder and a Notion page both ways: checks the Notion page and saves the pair; nothing is copied until mirrors sync. Each page under it is a Markdown file named after its title, and the pages under that one are in a folder of the same name
+
+**Changes something on this computer only.**
+
+```sh
+notion mirrors add <folder> <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `folder` | required | the Notion page whose pages become the folder's files, by its id or its Notion link. |
+| `path` | required | the local folder. |
+
+| Option | What it does |
+|---|---|
+| `--ignore <path>` | leave this path out on both sides, a path or a glob; repeat it for more: a name at any depth (node_modules, *.iso) or a path from the mirror's root (/Photos). |
+
+**Example:** `notion personal mirrors add 0123456789abcdef0123456789abcdef ./notes`, `notion personal mirrors add 0123456789abcdef0123456789abcdef ~/Roadmap --ignore drafts`
+
+### `notion mirrors list`
+
+list this profile's mirrors
+
+```sh
+notion mirrors list
+```
+
+**Example:** `notion personal mirrors list --json`
+
+### `notion mirrors status`
+
+show which local files the next sync would send or delete on Notion; Notion is not asked
+
+```sh
+notion mirrors status [id]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+**Example:** `notion personal mirrors status --json`
+
+### `notion mirrors preview`
+
+list Notion and show what mirrors sync would do: each upload, download, merge, rename, trash and conflict; nothing is changed on either side
+
+```sh
+notion mirrors preview [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | settle each conflict: keep the local file, the Notion one, or both. One of: `local`, `notion`, `both`. |
+
+**Example:** `notion personal mirrors preview --json`, `notion personal mirrors preview 1a2b3c4d --keep notion`
+
+### `notion mirrors sync`
+
+sync mirrors both ways once: a change on one side is copied to the other, a deletion goes to the other side's trash, a text file changed on both sides in different places is merged, and any other file changed on both sides is reported for mirrors conflicts or --keep; mirrors preview shows the plan first. A run stops before its deadline, keeps what it did, and the next sync goes on from there
+
+**Changes something in the service.**
+
+```sh
+notion mirrors sync [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | settle each conflict: keep the local file, the Notion one, or both. One of: `local`, `notion`, `both`. |
+| `--allow-deletions <count>` | let this run delete up to this many files when the guard stops it. |
+| `--allow-replacements <count>` | let this run overwrite up to this many existing files when the guard stops it; each is kept as a version first. |
+| `--replace` | let this run overwrite any number of existing files when the guard stops it; each is kept as a version first. |
+| `--repin` | the Notion or local folder was replaced and the new one is right: record it and sync. |
+
+**Example:** `notion personal mirrors sync`, `notion personal mirrors sync 1a2b3c4d --keep notion`
+
+### `notion mirrors watch`
+
+keep syncing both ways until Ctrl-C or --timeout: on each local save, and when Notion changes; a file changed on both sides that cannot be merged is reported for mirrors conflicts
+
+**Changes something in the service.**
+
+```sh
+notion mirrors watch [id] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+| Option | What it does |
+|---|---|
+| `--every <duration>` | how often to ask Notion whether anything changed. Default: `5m`. |
+
+**Example:** `notion personal mirrors watch`, `notion personal mirrors watch 1a2b3c4d --every 2m --jsonl`
+
+### `notion mirrors update`
+
+add paths to what a mirror ignores, as mirrors list shows it. --clear empties the list first, so --clear with --ignore keeps only the paths given: that is how one path stops being ignored. An ignored path is left alone on both sides and never deleted, now or later; one no longer ignored is synced as a new folder, copying one-sided files and reporting different ones as conflicts, deleting nothing
+
+**Changes something on this computer only.**
+
+```sh
+notion mirrors update <id> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+
+| Option | What it does |
+|---|---|
+| `--ignore <path>` | leave this path out on both sides, a path or a glob; repeat it for more: a name at any depth (node_modules, *.iso) or a path from the mirror's root (/Photos). |
+| `--clear` | empty the list before adding any --ignore paths; alone, sync every path again. |
+
+**Example:** `notion personal mirrors update 1a2b3c4d --ignore Photos --ignore "*.iso"`, `notion personal mirrors update 1a2b3c4d --clear --ignore Photos`
+
+### `notion mirrors remove`
+
+stop mirroring a folder: nothing on Notion or in the local folder is changed; its kept versions stay
+
+**Changes something on this computer only.**
+
+```sh
+notion mirrors remove <id>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+
+**Example:** `notion personal mirrors remove 1a2b3c4d`
+
+### `notion mirrors versions`
+
+the versions of a mirrored file that syncs replaced or deleted, kept on this computer
+
+#### `notion mirrors versions list`
+
+list what syncs did to a mirrored file, oldest first, and which versions are still kept
+
+```sh
+notion mirrors versions list <id> <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+
+**Example:** `notion personal mirrors versions list 1a2b3c4d notes/plan.md --json`
+
+#### `notion mirrors versions restore`
+
+put a kept version back into the local folder; the file there now is kept first, and the next mirrors sync sends the restored one to Notion
+
+**Changes something on this computer only.**
+
+```sh
+notion mirrors versions restore <id> <path> <sha256>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+| `sha256` | required | the version's hash, old or new in mirrors versions list. |
+
+**Example:** `notion personal mirrors versions restore 1a2b3c4d notes/plan.md 9f86d081…`
+
+### `notion mirrors conflicts`
+
+files changed on both sides that a sync could not merge: list them, show the three versions and the lines that conflict, and resolve each by keeping a side or giving the final file
+
+#### `notion mirrors conflicts list`
+
+list the conflicts each mirror's last sync left, with why and when it found them
+
+```sh
+notion mirrors conflicts list [id]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | optional | mirror id from mirrors list; every mirror of the profile when omitted. |
+
+**Example:** `notion personal mirrors conflicts list --json`
+
+#### `notion mirrors conflicts show`
+
+show a conflict's three versions (the last sync's, the local and the remote) and each changed stretch of the line merge; merged is the whole file with conflict markers, a start for resolve --file
+
+```sh
+notion mirrors conflicts show <id> <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+
+**Example:** `notion personal mirrors conflicts show 1a2b3c4d notes/plan.md --json`
+
+#### `notion mirrors conflicts resolve`
+
+settle a conflict on both sides at once: keep the local file, the notion's, or both (the notion's beside the local one), or give the final file. Refused with nothing written when either side changed since the conflict was found; every replaced version is kept
+
+**Changes something in the service.**
+
+```sh
+notion mirrors conflicts resolve <id> <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `id` | required | mirror id from mirrors list. |
+| `path` | required | the file's path inside the mirror, like notes/plan.md. |
+
+| Option | What it does |
+|---|---|
+| `--keep <side>` | keep the local file, the notion's, or both. One of: `local`, `notion`, `both`. |
+| `--file <file>` | the final content, written to both sides. |
+
+**Example:** `notion personal mirrors conflicts resolve 1a2b3c4d notes/plan.md --keep notion`, `notion personal mirrors conflicts resolve 1a2b3c4d notes/plan.md --file ~/plan-final.md`
 
 ## `notion api`
 
@@ -1223,9 +1843,9 @@ notion api show <operation>
 
 | Argument | | What it is |
 |---|---|---|
-| `operation` | required | the operation, as api list prints it. |
+| `operation` | required | the operation as api list prints it (quoted), its old name, or its operation id. |
 
-**Example:** `notion personal api show retrieve-a-page --json`
+**Example:** `notion personal api show "get-self" --json`
 
 ### `notion api get-self`
 
@@ -2485,7 +3105,7 @@ notion config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -2506,7 +3126,7 @@ notion config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, keep_versions_for_days, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 
 | Option | What it does |
 |---|---|
