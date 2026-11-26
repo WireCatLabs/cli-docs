@@ -13,7 +13,8 @@ you choose, with the pages under them and the database rows, into the local stor
 search that copy by words and by meaning with no network, read and export its pages, and add your own tags and notes,
 over the command line or MCP. You also write pages with `documents create`, `documents update`, `documents delete`
 and `documents restore`, read and answer comments with `comments list`, `comments create` and `comments reply`, and add
-a file to a page with `files upload`. See [start here](./index.md).
+a file to a page with `files upload`. `mirrors` keeps a folder of Markdown files and the pages under one Notion
+page the same, both ways. See [start here](./index.md).
 
 ## Next
 
@@ -21,7 +22,6 @@ a file to a page with `files upload`. See [start here](./index.md).
 
 ## Later
 
-- Keep a folder of Markdown files on your computer in step with a Notion page tree, both ways.
 - Sign in through the browser, with your own Notion connection, instead of pasting a token.
 
 What changed in each released version is in the [changelog](./changelog.md).

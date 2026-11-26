@@ -51,7 +51,7 @@ tool may do more than its pages say.
 | Find database rows by a property value, such as Status is Done | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-databases-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L59) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Keep a copy and export** | | | | | |
 | Keep a copy of chosen pages and databases on your computer, updated by each sync | ✅ | ➖ | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [🟡](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
-| Export a page and the pages under it as Markdown files | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
+| Export a page and the pages under it as Markdown files | ✅ | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Write** | | | | | |
 | Create a page or change its text from Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Read a page's comments and reply to them | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1512-L1565) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -102,8 +102,8 @@ tool may do more than its pages say.
   and each next sync takes only what changed. notion-exporter downloads a page tree once (`-r <folder>`) and keeps no
   record of what changed.
 - **Export.** `notion documents export` writes one page from the copy to a Markdown file. `ntn pages get` prints one
-  page as Markdown. notion-exporter writes the whole page tree, and a database as a CSV file. No tool here keeps a
-  folder of Markdown files in step with Notion both ways. `notion` plans one.
+  page as Markdown. notion-exporter writes the whole page tree, and a database as a CSV file. `notion mirrors` also keeps a
+  folder of Markdown files and a Notion page tree the same, both ways; no other tool here does.
 - **Write.** `notion documents create` makes a page under another page from Markdown, and `notion documents update`
   replaces a page's text. Each write has its own permission and `--dry-run`. An update that would delete a child page
   or database is refused unless you allow it. notion-mcp-server writes through tools made from Notion's API, and an
@@ -125,7 +125,8 @@ tool may do more than its pages say.
 - **Preview.** `--dry-run` shows what a command would do and sends nothing. Notion MCP can propose a page edit that
   someone reviews before it applies, on the Business and Enterprise plans.
 - **Text as data.** The `notion` MCP server tells the agent that page text, titles and property names come from
-  other people and are data, never instructions. The text itself is not marked inside each answer.
+  other people and are data, never instructions. In a scheduled agent's
+  read-only run, the text is also marked inside each answer.
 - **No browser.** Notion MCP takes a token without a browser only when a workspace owner on the Business or
   Enterprise plan creates one. notion-exporter needs two cookies copied by hand from a browser where you are signed in.
 - **What Notion supports.** notion-exporter uses the export of Notion's web app, an internal API that its README

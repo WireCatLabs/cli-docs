@@ -55,7 +55,7 @@ comentarios, archivos y personas. Una herramienta puede hacer más de lo que dic
 | Encontrar filas de una base de datos por el valor de una propiedad, como Status es Done | 🟡 | [✅](https://developers.notion.com/guides/mcp/tools-databases-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [✅](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L59) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | **Copia y exportación** | | | | | |
 | Tener en tu ordenador una copia de las páginas y bases de datos elegidas, que cada sincronización actualiza | ✅ | ➖ | [❌](https://developers.notion.com/cli/reference/commands) | ➖ | [🟡](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
-| Exportar una página y las páginas que tiene dentro como archivos Markdown | 🟡 | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
+| Exportar una página y las páginas que tiene dentro como archivos Markdown | ✅ | ➖ | [🟡](https://developers.notion.com/cli/reference/commands) | ➖ | [✅](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L76) |
 | **Escribir** | | | | | |
 | Crear una página o cambiar su texto desde Markdown | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-pages-reference) | [✅](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/README.md?plain=1#L24) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
 | Leer los comentarios de una página y responderlos | ✅ | [✅](https://developers.notion.com/guides/mcp/tools-comments-reference) | [🟡](https://developers.notion.com/cli/reference/commands) | [🟡](https://github.com/makenotion/notion-mcp-server/blob/cf16e5c/scripts/notion-openapi.json?plain=1#L1512-L1565) | [❌](https://github.com/yannbolliger/notion-exporter/blob/ee112e9/src/cli.ts#L60-L89) |
@@ -112,8 +112,8 @@ comentarios, archivos y personas. Una herramienta puede hacer más de lo que dic
   páginas una vez (`-r <folder>`) y no recuerda qué cambió.
 - **Exportar.** `notion documents export` escribe una página de la copia en un archivo Markdown. `ntn pages get`
   muestra una página en Markdown. notion-exporter escribe todo el árbol de páginas, y una base de datos como archivo
-  CSV. Ninguna herramienta de esta página mantiene una carpeta de archivos Markdown al día con Notion en los dos
-  sentidos. `notion` lo tiene previsto.
+  CSV. Además, `notion mirrors` mantiene iguales una carpeta de archivos Markdown y un árbol de páginas de
+  Notion, en los dos sentidos; ninguna otra herramienta de esta página lo hace.
 - **Escribir.** `notion documents create` crea una página desde Markdown dentro de otra página, y
   `notion documents update` reemplaza el texto de una página. Cada escritura tiene su propio permiso y `--dry-run`. Un
   cambio que borraría una página o una base de datos interior se rechaza hasta que lo permitas. notion-mcp-server
@@ -136,8 +136,8 @@ comentarios, archivos y personas. Una herramienta puede hacer más de lo que dic
 - **Ver un cambio.** `--dry-run` muestra lo que haría un comando y no envía nada. Notion MCP puede proponer una
   edición de página que alguien revisa antes de aplicarla, en los planes Business y Enterprise.
 - **Texto como datos.** El servidor MCP de `notion` le dice al agente que el texto de las páginas, los títulos y los
-  nombres de las propiedades los escriben otras personas y son datos, nunca instrucciones. El texto en sí no va
-  marcado dentro de cada respuesta.
+  nombres de las propiedades los escriben otras personas y son datos, nunca instrucciones. En la ejecución de un
+  agente programado en modo de solo lectura, el texto también va marcado dentro de cada respuesta.
 - **Sin navegador.** Notion MCP acepta un token sin navegador solo si lo crea el propietario de un espacio de trabajo
   en el plan Business o Enterprise. notion-exporter necesita dos cookies que copias a mano de un navegador donde has
   entrado en Notion.
