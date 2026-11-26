@@ -135,11 +135,13 @@ b24 sync [options]
 | Option | What it does |
 |---|---|
 | `--rescan` | list everything again, every id too, dropping a round in progress. |
+| `--allow-deletions <count>` | let this run mark deleted up to this many of what its full list no longer has, when the guard holds it. |
 | `--max-pages <pages>` | at most this many requests to the CRM in this run. |
+| `--embed` | also index new activities and tasks for search all by meaning, with a model already downloaded. |
 
-**Returns:** crm sync — provider, account, scope, pipelines, skipped_owner_rejected, stage_tasks, synced, issues, and 9 more; every field: b24 commands info sync
+**Returns:** crm sync — provider, account, scope, pipelines, skipped_owner_rejected, stage_tasks, synced, issues, and 10 more; every field: b24 commands info sync
 
-**Example:** `b24 work sync`, `b24 work sync --rescan`, `b24 work sync --max-pages 20`
+**Example:** `b24 work sync`, `b24 work sync --rescan`, `b24 work sync --embed`
 
 ## `b24 store`
 
@@ -206,8 +208,12 @@ bring the store up to this build's schema, then normalize, index and stem the me
 **Changes something on this computer only.**
 
 ```sh
-b24 store migrate
+b24 store migrate [options]
 ```
+
+| Option | What it does |
+|---|---|
+| `--no-backup` | migrate even when no rollback copy can be written; older tools then cannot open the store again. |
 
 **Returns:** store migration — path, exists, from, to, normalized, indexed, terms, stemmed, and 1 more; every field: b24 commands info store migrate
 
