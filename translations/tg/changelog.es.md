@@ -2240,7 +2240,7 @@ Después de actualizar, vuelve a leer los mensajes antiguos una vez: `tg <profil
 
 ### Cambios que pueden afectar a scripts
 
-- **El almacén de mensajes elimina las copias guardadas para versiones anteriores** (versión del archivo local 28, cli-messaging 0.212.0).   Las notas, notas de contacto, relaciones y entidades escritas antes de la refactorización de notas se copian en sus nuevas tablas una vez, durante la actualización. Después, un tg, max o memo más antiguo rechazal archivo local con "actualizar esta herramienta": actualiza los tres juntos.
+- **El almacén de mensajes elimina las copias guardadas para versiones anteriores** (versión del archivo local 28, cli-messaging 0.212.0).   Las notas, notas de contacto, relaciones y entidades escritas antes de la refactorización de notas se copian en sus nuevas tablas una vez, durante la actualización. Después, un tg, max o memo más antiguo rechaza el archivo local con "actualizar esta herramienta": actualiza los tres juntos.
 
 ## 0.40.1 — 09.10.2026
 
@@ -2415,7 +2415,7 @@ Después de actualizar, vuelve a leer los mensajes antiguos una vez: `tg <profil
 - **`tg messages send --html` y `tg messages edit --html` leen el HTML de Telegram** — `<b>`, `<i>`, `<u>`, `<s>`,
   `<a href>`, `<code>`, `<pre>`, `<blockquote>`, `<tg-spoiler>` — conservando los saltos de línea tal como los escribiste
   ([uso](./usage.md#sending)).
-- **`tg messages send --file … --filename <name>`** envíal archivo con el nombre que ven los demás.
+- **`tg messages send --file … --filename <name>`** envía el archivo con el nombre que ven los demás.
 - **`tg messages list <chat> --topic <id>` lee un tema del foro**, hacia atrás desde su mensaje más reciente o `--before-id`.
 - **`tg chats folders order` coloca las carpetas en el orden que indiques**, y **`tg chats folders join <link>`** añade una
   carpeta compartida mediante un enlace `t.me/addlist/` y entra en todos sus chats.
@@ -2581,7 +2581,7 @@ Después de actualizar, vuelve a leer los mensajes antiguos una vez: `tg <profil
 
 - **`tg serve` y `tg watch` terminan correctamente al detenerlos con SIGTERM o Ctrl-C.** Antes salían con 1 y
   `database is not open`, y se perdían las actualizaciones y contactos que seguían llegando: la biblioteca de Telegram
-  cerrabal archivo de inicio de sesión al recibir la señal, antes de que el comando terminara de usarlo. Ahora el comando
+  cerraba el archivo de inicio de sesión al recibir la señal, antes de que el comando terminara de usarlo. Ahora el comando
   lo cierra una sola vez después de guardar lo recibido.
 
 - `chats show` da el recuento real de miembros de un supergrupo, que la lista de chats de Telegram mostraba como ausente o
@@ -2874,7 +2874,7 @@ Después de actualizar, vuelve a leer los mensajes antiguos una vez: `tg <profil
 - **`tg account show` muestra las cuatro últimas cifras del teléfono** y el número completo con `--show-phone`. `tg_account_show` siempre muestra solo las cuatro últimas.
 - **`tg messages forward --send-id`.** Reintenta un reenvío sin respuesta con el identificador del error; Telegram conserva una copia, igual que en envíos. `--json` incluye `sendId`; `tg_messages_forward` acepta `send_id`.
 - **`tg messages edit --md`** formatea como `messages send --md`; `tg_messages_edit` acepta `markdown`.
-- **Mantenimiento del archivo local: `tg store info`, `check`, `migrate`, `backup`, `restore`.** `info` indica ubicación de `messages.db`, tamaño, esquema y filas. `check` comprueba integridad, claves externas, índices y espacio libre; identifica chats cuyo historial termina antes del último mensaje y no repara nada. `migrate` actualiza y normaliza mensajes anteriores. `backup <file>` copial archivo en uso con acceso solo para ti, sin sobrescribir. `restore <file>` restaura una copia y conserva al lado el archivo sustituido; rechaza si `tg serve` está activo o algún proceso tiene la base abierta. La base se comparte con max-cli: reinicia después los `serve` y `mcp` activos de ambos CLI.
+- **Mantenimiento del archivo local: `tg store info`, `check`, `migrate`, `backup`, `restore`.** `info` indica ubicación de `messages.db`, tamaño, esquema y filas. `check` comprueba integridad, claves externas, índices y espacio libre; identifica chats cuyo historial termina antes del último mensaje y no repara nada. `migrate` actualiza y normaliza mensajes anteriores. `backup <file>` copia el archivo en uso con acceso solo para ti, sin sobrescribir. `restore <file>` restaura una copia y conserva al lado el archivo sustituido; rechaza si `tg serve` está activo o algún proceso tiene la base abierta. La base se comparte con max-cli: reinicia después los `serve` y `mcp` activos de ambos CLI.
 - **Cada escritura tiene identificador propio, `operationId`.** Envios, ediciones, reenvíos, eliminaciones, mensajes fijados, reacciones, marcado como leído y votos lo incluyen en `--json` y MCP, registro de envíos y `--trace`, para seguir una operación desde respuesta a registro. En envíos, `operationId` equivale a `sendId`.
 - **Unos 16 MB menos al instalar:** cli-messaging 0.60.0 incluye su capa de base de datos en lugar de depender de ella.
 

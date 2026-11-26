@@ -22,7 +22,7 @@ Términos utilizados en esta página:
 | Vea cuánto se guarda de cada chat | `tg personal store status` |
 | Descargue el historial de un chat o el de cada chat | `tg personal messages sync <chat>`, `tg personal messages sync --all` |
 | Ejecute una descarga larga en segundo plano | `tg personal messages sync <chat> --background`, `tg personal store jobs list` |
-| Mantengal archivo local actualizado todo el tiempo | `tg personal server start`, `tg personal server install` |
+| Mantenga el archivo local actualizado todo el tiempo | `tg personal server start`, `tg personal server install` |
 | Leer chats sin conectarse | `tg personal --offline messages list <chat>` |
 | Exportar un chat a líneas JSON o Markdown | `tg personal store export <chat> --output <file>` |
 | Preparar mensajes para el informe de un agente | `tg personal messages evidence <chat>` |
