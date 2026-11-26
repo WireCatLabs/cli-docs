@@ -117,9 +117,10 @@ Consulta [la página de Google sobre aplicaciones no verificadas](https://suppor
 drive session list --json
 ```
 
-Busca `personal` entre los perfiles. Esta lista muestra la configuración local sin imprimir
-tokens; no contacta con Google ni comprueba si un acceso anterior sigue vigente. `drive personal session status --json`
-indica si ese perfil tiene un acceso guardado aquí, con qué cuenta y con qué permisos. La importación
+Busca `personal` entre los perfiles, con `state: "saved"`. Esta lista solo lee este ordenador y no imprime
+ningún token. No contacta con Google ni comprueba si un acceso anterior sigue funcionando. `drive personal session status --json`
+indica si ese perfil tiene un acceso guardado aquí y con qué permisos. Añade `--check` para preguntar a Google qué
+cuenta es. La importación
 del paso 3 comprobará el acceso a la carpeta elegida. Sigue con el [paso 3](#check-your-first-result).
 
 Si el navegador no se abre, repite el acceso con `--no-browser` y abre el enlace mostrado en el

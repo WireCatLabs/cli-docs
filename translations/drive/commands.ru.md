@@ -268,11 +268,11 @@ drive <profile> mcp check [options]
 
 ## `drive session`
 
-sign in to Google and manage local profiles
+sign in to Google in the browser and manage this profile's sign-in
 
 ### `drive session start`
 
-sign in to Google in the browser; read-only unless you pass --grant write
+sign this profile in to Google in the browser; the account is checked before anything is kept, in the keyring or, with --credential-storage file, a private file
 
 This command can change Google data or send data to the configured model.
 
@@ -282,43 +282,32 @@ drive <profile> session start [options]
 
 | Option | What it does |
 |---|---|
+| `--no-browser` | print the sign-in URL instead of opening a browser. |
+| `--credential-storage <storage>` | where the sign-in is kept: keyring, which falls back to a private file by itself, or file. Default: `keyring`. |
+| `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
 | `--client-file <file>` | path to your own Desktop OAuth client JSON, used instead of WireCat's. |
 | `--client-id <id>` | your own Desktop OAuth client ID, used instead of WireCat's; its secret comes from DRIVE_GOOGLE_CLIENT_SECRET. |
-| `--credential-storage <storage>` | where the sign-in is kept: keyring (the default, which falls back to a private file by itself when no keyring works), or file, not recommended. Default: `keyring`. |
-| `--no-browser` | print the sign-in URL instead of opening a browser. |
 | `--grant <scopes>` | also ask for these permissions, comma-separated: write (change Drive files and Docs), activity (read Drive Activity history), apps (see installed Drive apps). |
 
-**Example:** `drive personal session start`, `drive work session start --grant write,activity`, `drive work session start --client-id 1234-abc.apps.googleusercontent.com`
+**Example:** `drive personal session start`, `drive personal session start --no-browser`, `drive personal session start --json --answer-stdin`
 
 ### `drive session status`
 
-show whether this profile is signed in here, and as which Google account
+show this profile's sign-in and its scopes, never a token; --check asks Google whose it is
 
 ```sh
-drive <profile> session status
+drive <profile> session status [options]
 ```
 
-**Example:** `drive personal session status`
+| Option | What it does |
+|---|---|
+| `--check` | ask Google whether the sign-in still works, and whose it is. |
 
-### `drive session list`
-
-list the configured profiles; credentials are never printed
-
-```sh
-drive session list [query]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-**Returns:** drive session — profile, selected_folders, storage; every field: drive commands info session list
-
-**Example:** `drive session list`
+**Example:** `drive personal session status`, `drive personal session status --check --json`
 
 ### `drive session end`
 
-sign this profile out; imported documents stay
+forget this profile's sign-in on this computer; the grant stays in Google, and a run with moved folders never removes the owner's sign-in
 
 This command changes local state.
 
@@ -327,6 +316,16 @@ drive <profile> session end
 ```
 
 **Example:** `drive personal session end`
+
+### `drive session list`
+
+list the profiles on this computer and whether each is signed in; picks none
+
+```sh
+drive session list
+```
+
+**Example:** `drive session list`, `drive session list --json`
 
 ## `drive account`
 

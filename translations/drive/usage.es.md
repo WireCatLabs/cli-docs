@@ -298,7 +298,7 @@ Google Vids necesita el flujo API de larga duración y no admite estos comandos 
 
 Un archivo existente, incluido un enlace simbólico, se rechaza antes de descargar. Usa `--overwrite`
 para sustituirlo. El resultado contiene el ID y el número de bytes, sin nombre del documento ni ruta
-local. Ambos escriben un archivo local, así que `--read-only` los rechaza; `--dry-run` muestra el plan
+local. Ambos escriben un archivo local, así que `--read-only` y `DRIVE_READ_ONLY=1` los rechazan; `--dry-run` muestra el plan
 sin descargar. El comando existente `documents export --output PATH` escribe una copia Markdown
 importada sin conectarse a Google.
 
@@ -306,6 +306,9 @@ Sin `--output`, `files download FILE_ID --json` no guarda nada y responde con el
 bytes, para una edición (abajo). Un texto de más de 200 000 caracteres se corta ahí con `truncated: true` y sin
 `sha256`. Un PDF, `.docx` o `.xlsx` responde con su texto extraído, también sin `sha256`: escrito de vuelta, ese texto
 sustituiría el documento.
+Como no escribe nada aquí, una ejecución de solo lectura (`--read-only`, `DRIVE_READ_ONLY=1`) también lee el texto,
+y un agente por MCP la ejecuta con `drive_read`. `--output` es solo del propietario: ninguna herramienta MCP lo
+ofrece.
 
 ## Editar un archivo guardado en Google Drive
 
