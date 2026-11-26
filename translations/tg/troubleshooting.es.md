@@ -315,7 +315,7 @@ Código `2`. Solo se admite un `serve` por perfil. `tg personal server status` i
 
 ### El servidor en segundo plano no se inicia
 
-`tg personal server status --json` incluye `stopped` y `unit.exitCode` cuando la última salida normal fue una en la que la unidad no se reinicia. Para la salida 4, renueve la sesión con `tg personal session start`, luego `tg personal server start`. `tg personal server logs` dice por qué. En un servicio, el motivo habitual es el llavero: un servicio se inicia antes de que se abra el llavero, o sin `XDG_RUNTIME_DIR`. Después de mover Node o `tg`, ejecute `tg personal server install` nuevamente: la unidad ejecuta las rutas que lo instalaron ([ejecutándose como servicio](./archive.md#as-a-service)).
+`tg personal server status --json` incluye `stopped` y `unit.exitCode` cuando la última salida normal fue una en la que la unidad no se reinicia. Para la salida 4, renueve la sesión con `tg personal session start`, luego `tg personal server start`. Para la salida 6, la unidad nombra un perfil que este ordenador no tiene: vuelve a instalarla con el nombre correcto. `tg personal server logs` dice por qué. En un servicio, el motivo habitual es el llavero: un servicio se inicia antes de que se abra el llavero, o sin `XDG_RUNTIME_DIR`. Después de mover Node o `tg`, ejecute `tg personal server install` nuevamente: la unidad ejecuta las rutas que lo instalaron ([ejecutándose como servicio](./archive.md#as-a-service)).
 
 ## Informar de un problema
 
@@ -327,7 +327,7 @@ tg personal doctor reports create --run <id>  # about another run; ids from tg p
 
 `create` escribe `tg-report-<time>.json` en la carpeta actual (o `--output`), que solo usted puede leer. Contiene la versión, el tiempo de ejecución y el sistema, lo que responde `tg personal doctor`, la ejecución fallida más reciente (la operación, duración y código de error de cada solicitud) y los últimos 20 intentos de envío, solo el resultado y la duración. Cada ID de chat, mensaje y cuenta se reemplaza por una etiqueta que no significa nada fuera del archivo. No contiene texto de mensaje, títulos de chat, nombres, números de teléfono, credenciales de sesión o aplicación. Una ejecución fallida se mantiene sola, incluso con `record` configurado en `false` ([ejecuciones fallidas](./diagnostics.md#a-failed-run-is-always-kept)).
 
-Envíalo como nueva incidencia en [GitHub](https://github.com/WireCatLabs/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjuntal archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
+Envíalo como nueva incidencia en [GitHub](https://github.com/WireCatLabs/tg-cli/issues/new): explica qué hiciste y qué ocurrió y adjunta el archivo. Tanto la incidencia como el archivo son públicos: revísalo antes.
 
 ⚠ Nunca adjuntes el directorio de estado, la sesión ni `~/.local/share/WireCat/`: contienen tu acceso y tus mensajes.
 

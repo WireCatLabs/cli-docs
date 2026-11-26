@@ -120,11 +120,15 @@ tg personal messages sync "Book club" --limit 5000  # up to 5000 messages in thi
 ```
 
 ```sh
-tg personal messages sync --all                 # every chat, most recently active first: the last 90 days
+tg personal messages sync --all                 # every chat but the muted ones, most recently active first: the last 90 days
 ```
 
 ```sh
-tg personal messages sync --all --since-time 365d  # every chat, back to a year ago
+tg personal messages sync --all --with-muted    # the muted chats too
+```
+
+```sh
+tg personal messages sync --all --since-time 365d  # the same chats, back to a year ago
 ```
 
 `messages sync` читает и сохраняет историю постранично, от новых сообщений к старым. **Загрузку можно продолжить:** после каждой страницы записывается прогресс. Ctrl-C, `--timeout`, лимит `--limit`, `--since-time`, `--last` и длительное ожидание Telegram останавливают загрузку без потери данных. Следующий запуск пропускает сохранённое. `--since-time` и `--last` определяют глубину истории: используйте один из них. Неустранимый сбой до первой сохранённой страницы завершает команду ошибкой; после того как часть сохранена, сбой может вернуть сохранённое вместе с `issue`.
@@ -329,7 +333,7 @@ tg personal server status  # starts_at_login says whether it starts at the next 
 - В macOS `server stop` выгружает агент до следующего входа в систему, как и в Linux; `server uninstall` не даёт ему запуститься снова.
 - `tg upgrade` перезапускает работающий сервер для перехода на новую версию.
 
-Автоматические ответы от `serve` на тестовые аккаунты описаны в [автоматические ответы](./replies.md).
+Автоответы из `serve` следуют вашим правилам и выбранной аудитории; см. [автоответы](./replies.md).
 
 ## Проверка, резервная копия и восстановление
 

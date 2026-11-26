@@ -144,7 +144,7 @@ En un archivo grande, un prefijo corto como `a*` puede ampliarse a más de 10.00
 ## La respuesta
 
 `--json` devuelve `{ items, page: { limit, has_more }, next?, missing?, meta }`, aunque no haya coincidencias.
-`--jsonl` emite solo los elementos.
+`--jsonl` emite un elemento por línea y termina con un registro de integridad del resultado y paginación.
 
 - `items`: los resultados, los mejores primero (o los más nuevos primero con `--newest`), cada uno con su `ref` (`msg:…`), `timestamp`,
   `sender_name`, `excerpt` y `matched_in`.

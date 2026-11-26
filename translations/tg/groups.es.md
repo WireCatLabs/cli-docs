@@ -25,7 +25,7 @@ Aquí todo funciona desde tu cuenta personal, en grupos donde eres administrador
 | Mantenga una lista de lo que le espera | `tg personal tasks list` |
 | Elimina el spam según tus propias reglas | `tg personal chats rules set`, `tg personal chats moderate` |
 | Reemplazar un enlace de invitación filtrado | `tg personal chats links reset` |
-| Dejar entrar a la gente o rechazarla | `tg personal chats requests list\|accept\|decline` |
+| Dejar entrar a la gente o rechazarla | `tg personal chats requests list\|confirm\|reject` |
 | Ver la actividad de la semana y las estadísticas propias de Telegram | `tg personal stats chats show`, `tg personal stats chats official` |
 | Guarde la lista de miembros todos los días | `tg personal chats members fetch --track` |
 | Encuentra miembros que parezcan bots o spammers | `tg personal chats members check` |
@@ -206,9 +206,9 @@ cron no tiene terminal y, a menudo, no tiene `XDG_RUNTIME_DIR`, sin el cual `tg`
 | `tg personal chats members add\|remove <chat> <person...>` | agregar personas (se les dice; se nombra a quienes no se pudieron agregar) o eliminarlas (sus mensajes permanecen) |
 | `tg personal chats admins add <chat> <person> --can <rights>` | convertir a un miembro en administrador con estos derechos: miembros, administradores, información, fijar, vincular, publicar, editar, eliminar |
 | `tg personal chats admins remove <chat> <person>` | retirar los permisos de administrador; sigue siendo miembro |
-| `tg personal chats links update <chat> <link> --approval\|--no-approval --expire-time <time> --max-uses <n>` | cambiar solo la aprobación, el vencimiento o el límite de uso proporcionados de su enlace de invitación adicional; suministrar al menos un cambio |
+| `tg personal chats links update <chat> <link> --approval --expire-time <time>`, `tg personal chats links update <chat> <link> --no-approval --max-uses <n>` | cambiar solo la aprobación, el vencimiento o el límite de uso proporcionados de su enlace de invitación adicional; suministrar al menos un cambio |
 | `tg personal chats links show\|reset <chat>` | el enlace de invitación; `reset` hace uno nuevo y el viejo deja de funcionar |
-| `tg personal chats requests list\|accept\|decline <chat>` | solicitudes para unirse a un grupo que necesita la aprobación de un administrador: quién preguntó, déjelo entrar, rechace; `--all` responde a todas las solicitudes |
+| `tg personal chats requests list\|confirm\|reject <chat>` | solicitudes para unirse a un grupo que necesita la aprobación de un administrador: quién preguntó, déjelo entrar, rechace; `--all` responde a todas las solicitudes |
 | `tg personal chats rules show\|set\|unset <chat>` | las reglas del grupo |
 | `tg personal chats moderate <chat>` | comprobar el grupo según sus reglas; hace lo que permiten las reglas |
 | `tg personal messages delete --for-everyone`, `pin`, `unpin` | eliminar para todos, pin |
@@ -277,7 +277,7 @@ Agregue lo que las reglas no pueden ver, como una promesa que hizo, o cierre una
 tg personal tasks add msg:telegram/<you>/<chat>/<message> --type promise --category other
 ```
 
-`tasks categories` muestra las categorías que puede tener una tarea. Para cambiar la lista, edita la sección `task_categories` de `~/.config/WireCat/config.json`. Todas las herramientas de WireCat con cli-core 0.298.0 o posterior leen este archivo (tg desde 0.63.0), así que un solo cambio modifica la lista en todas. Solo guarda tus cambios a la lista por defecto: un nombre con su significado y sus palabras clave añade o sustituye una categoría, y `null` quita una de la lista por defecto:
+`tasks categories` muestra las categorías que puede tener una tarea. Para cambiar la lista, edita la sección `task_categories` de `~/.config/WireCat/config.json`. Es un archivo de ajustes común a las herramientas de WireCat, no el de un perfil. Solo guarda tus cambios a la lista por defecto: un nombre con su significado y sus palabras clave añade o sustituye una categoría, y `null` quita una de la lista por defecto:
 
 ```json
 {

@@ -21,6 +21,12 @@ title: "Вход, сессии и профили"
 
 ## Приложение с my.telegram.org
 
+> **Посмотреть экран входа my.telegram.org**
+>
+> ![Официальный экран входа my.telegram.org: поле номера телефона не заполнено.](https://wirecat.dev/telegram-app-login.png)
+>
+> Это вход на сайт для получения данных приложения Telegram. Код приходит сообщением в Telegram, не по SMS. После входа выберите **API development tools**. Подтверждение доступа CLI через QR-код будет следующим этапом. [my.telegram.org](https://my.telegram.org/apps)
+
 Каждый пользователь регистрирует своё приложение. Telegram выдаёт одно приложение на номер телефона, поэтому общий идентификатор не включён в `tg`. Данные нужны один раз для каждого профиля; `tg personal session start` запрашивает их только при отсутствии.
 
 Есть два способа получить данные:
@@ -37,23 +43,23 @@ title: "Вход, сессии и профили"
 
 1. **Войдите на [my.telegram.org](https://my.telegram.org/apps).** Выберите страну, введите номер телефона и нажмите **Next**.
 
-   ![Страница входа my.telegram.org с полями страны и номера телефона](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-1-sign-in.png)
+   ![Страница входа my.telegram.org с полями страны и номера телефона](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-1-sign-in.png)
 
    Telegram присылает код подтверждения сообщением в приложение Telegram, а не по SMS. Введите его на странице и нажмите **Sign in**. Никому не сообщайте этот код и никогда не вводите его в чат с агентом.
 
-   ![Страница кода подтверждения my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-2-code.png)
+   ![Страница кода подтверждения my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-2-code.png)
 
 2. **Откройте Development Tools** и выберите **Create new application**.
 
-   ![Главная страница my.telegram.org с карточкой Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-3-development-tools.png)
+   ![Главная страница my.telegram.org с карточкой Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-3-development-tools.png)
 
    Заполните форму. Название (title) — не меньше 5 символов. Краткое имя (short name) — только буквы и цифры, от 5 до 32 символов. Не используйте в них слово «Telegram». Выберите платформу, например **Desktop**. URL и описание необязательны. Затем нажмите **Create application**.
 
-   ![Форма Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-4-create-application.png)
+   ![Форма Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-4-create-application.png)
 
 3. **Скопируйте `api_id` и `api_hash`** из раздела Credentials. Храните хеш в тайне: любой, у кого он есть, может расходовать квоту вашего приложения.
 
-   ![Раздел Credentials с App api_id и App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-app-5-credentials.png)
+   ![Раздел Credentials с App api_id и App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-5-credentials.png)
 
 4. **Передайте оба значения `tg`**, когда он запросит `App api_id` и `App api_hash`. Хеш не отображается при вводе.
 
@@ -106,7 +112,7 @@ tg personal session start qr
 2. Нажмите **Подключить устройство** (Add Device) и разрешите доступ к камере, если Telegram спросит.
 3. Наведите камеру на QR-код в терминале.
 
-![Telegram для Android, «Настройки» и «Устройства», с кнопкой подключения устройства](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-android-add-device.png)
+![Telegram для Android, «Настройки» и «Устройства», с кнопкой подключения устройства](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-android-add-device.png)
 
 #### iPhone и iPad
 
@@ -118,7 +124,7 @@ tg personal session start qr
 
 **Незавершённые попытки входа.** Если вы отсканировали код, но не ввели пароль 2FA, попытка появится в **Устройствах** в разделе незавершённых попыток входа (Incomplete login attempts). У неё нет доступа к вашим сообщениям. Завершите вход в `tg` или завершите эту попытку в том же списке.
 
-![Список незавершённых попыток входа на экране «Устройства» в Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.123.0/docs/images/telegram-android-incomplete-login.png)
+![Список незавершённых попыток входа на экране «Устройства» в Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-android-incomplete-login.png)
 
 ## Проверка и выход
 
@@ -131,6 +137,8 @@ tg personal session end      # log out on Telegram's side, and delete the sessio
 
 `tg personal session end` завершает сессию **и на стороне Telegram**: устройство исчезает из списка в приложении. Идентификатор и хеш приложения остаются в хранилище ключей, локальная база не меняется.
 
+Запуск, в котором перенесены только `TG_CONFIG_DIR` или `TG_CACHE_DIR`, по-прежнему использует ваш собственный файл сессии. В таком запуске `session end` и `account remove` сохраняют этот вход и его файл, а `session end` отвечает `ended: false` и `kept: "owners-sign-in"`. Запуск, в котором перенесена и папка состояния, забывает свой файл сессии, но не завершает сессию на стороне Telegram и отвечает `logged_out: false`: завершите сессию этого устройства в списке сессий приложения Telegram. Сессию в Telegram завершает только запуск с вашими собственными папками.
+
 Чтобы полностью забыть профиль, используйте `tg personal account remove --keep-data` или `--delete-data`. Команда так же завершает сессию, а затем удаляет идентификатор и хеш приложения профиля, пароль его прокси, сессии его ботов для чтения истории и то, что cli-core хранит для профиля. С `--keep-data` его сообщения остаются в хранилище и находятся поиском. С `--delete-data` они удаляются. Токен бота с профилем того же имени остаётся, потому что бот является отдельным аккаунтом.
 
 ## Срок действия сессии
@@ -139,7 +147,21 @@ tg personal session end      # log out on Telegram's side, and delete the sessio
 
 ## Профили
 
-Профиль — отдельный вход со своей сессией, приложением, настройками, получателями и записями запусков. Имя указывается **первым словом**, а не параметром:
+Профиль — именованное подключение аккаунта Telegram в CLI. Обычно отдельный профиль создают для каждого номера: например, `personal` для личного аккаунта и `work` для рабочего. У каждого подключения свои сессия входа, данные приложения, настройки, разрешённые получатели и записи запусков.
+
+Имя `work` — выбранная вами метка, а не номер телефона. Чтобы подключить рабочий аккаунт, выполните:
+
+```sh
+tg work session start --app browser
+```
+
+При регистрации приложения укажите рабочий номер; при QR-входе переключите Telegram на телефоне на рабочий аккаунт. После входа проверьте, какой аккаунт связан с меткой:
+
+```sh
+tg work account show
+```
+
+Один и тот же аккаунт тоже можно подключить в нескольких профилях; профиль сам по себе не создаёт новый аккаунт Telegram. Имя профиля указывается **первым словом после `tg`**, перед командой:
 
 ```sh
 tg personal chats list     # profile "personal"
