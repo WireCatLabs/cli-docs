@@ -64,9 +64,9 @@ see its CLAUDE.md), with the sample data of `?showcase`. The language comes from
 Every docs shot except `onboarding-install`, `amo-integration` and the three Digests shots was retaken from Desktop
 main at `8d8892fb` (0.7.5), after the sidebar changed: Agents became a tab of Tools, Storage a tab of Analytics, and
 Meetings and Documents joined the menu. `onboarding-install` looked the same in 0.7.5, so it stayed. The Digests shots
-(`digest-editor`, `digests`, `digest-settings`) are from main at `98c2b8f4` and `amo-integration` from PR #692, all
-with the current menu. Capture at 1440x900 with `capture.mjs --lang en|ru|es [--dark]`, then
-`node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`.
+(`digest-editor`, `digests`, `digest-settings`) are from main at `98c2b8f4`, `amo-integration` from PR #692 and
+`bitrix-app` from wirecat-desktop PR #483 (the seven permissions), all with the current menu. Capture at 1440x900 with
+`capture.mjs --lang en|ru|es [--dark]`, then `node scripts/crop-desktop-screenshots.mjs <folder> <shot> --docs`.
 
 | Shot | Query | Before the capture |
 | --- | --- | --- |
