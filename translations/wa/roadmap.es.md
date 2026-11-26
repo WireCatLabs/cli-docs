@@ -13,6 +13,7 @@ La Cloud API oficial está disponible para [bots](./bot.md), y los [archivos de 
 ## Siguiente
 
 - **Archivos en canales**: guardar uno de una publicación y enviar un álbum a un canal que administras.
+- **Archivos antiguos**: descargar desde tu teléfono un archivo que WhatsApp ya no guarda en sus servidores.
 - **Cuentas comerciales**: etiquetas de WhatsApp Business y el perfil de otro negocio.
 - **Un comando guía** que te lleva paso a paso por las tareas comunes.
 

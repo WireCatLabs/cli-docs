@@ -17,7 +17,7 @@ Términos utilizados en esta página:
 
 WhatsApp no tiene solicitud de "chats". Tres cosas llenan el almacén local y nada más:
 
-- **El envío del historial** después de vincular. `wa <profile> session start` y `setup` mantienen la conexión abierta y la guardan hasta que el teléfono haya estado en silencio durante 45 segundos. El teléfono puede enviar más partes después; `serve` las guarda, y una parte que otro comando oyó primero espera en el archivo del dispositivo hasta que `serve` se conecte. El teléfono decide cuánto envía: normalmente cada chat con sus últimos mensajes, y los últimos meses completos.
+- **El envío del historial** después de vincular. `wa <profile> session start` y `setup` mantienen la conexión abierta y la guardan hasta que el teléfono diga que el historial está completo, o tras 5 minutos sin nada nuevo. El teléfono puede enviar más partes después; `serve` las guarda, y una parte que otro comando oyó primero espera en el archivo del dispositivo hasta que `serve` se conecte. El teléfono decide cuánto envía: normalmente cada chat con sus últimos mensajes, y los últimos meses completos.
 - **`serve`**, mientras se ejecuta: mensajes nuevos, ediciones, eliminaciones y reacciones, y los mensajes que envías. Una edición mantiene el tiempo, la respuesta y las reacciones del mensaje; solo la edición de un mensaje que falta en el almacén local se guarda con el tiempo de edición. Un chat que lees por teléfono obtiene un recuento de no leídos de 0 y cada mensaje nuevo de otra persona agrega uno. Se guardan archivar, silenciar (con su fin) y marcar un chat como no leído en el teléfono; fijar, eliminar o borrar un chat no lo es.
 - **`messages sync <chat>`**: mensajes antiguos de un chat, solicitados en tu teléfono ([abajo](#older-history-from-your-phone)).
 
@@ -92,7 +92,7 @@ wa personal server start  # start serve in the background; answers once it liste
 ```
 
 ```sh
-wa personal server status  # whether it runs, since when, who started it
+wa personal server status  # whether it runs, since when, who started it, and when the store was last current
 ```
 
 ```sh

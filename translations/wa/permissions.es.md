@@ -18,7 +18,7 @@ Empieza leyendo y permite cambios solo cuando los necesites.
 |---|---|
 | `deny` | Se rechaza la acción, incluida la lectura. |
 | `readonly` | Se permite leer; los cambios se rechazan. |
-| `ask` | Los cambios piden confirmación en el terminal. |
+| `ask` | Los cambios piden confirmación en el terminal. Por MCP se ejecutan sin preguntar. |
 | `allow` | La acción puede ejecutarse sin otra pregunta. |
 
 Sin ningún `permissions` configurado, todo está permitido, excepto eliminar y algunos otros cambios, que se solicitan. Un rechazo sale con el código `5` y nombra la clave de permiso. No significa que el enlace a WhatsApp esté roto. No pidas a un agente que elimine una restricción sólo para finalizar una tarea.
@@ -35,7 +35,7 @@ Sustituye `work` con tu perfil. Para un valor predeterminado que permite leer me
 wa work config set permissions.messages readonly
 ```
 
-Las claves más específicas tienen prioridad: `permissions.messages.send ask` aún permite el envío, con una pregunta en el terminal y sin formulario de servidor sobre MCP. Establece esa clave en `readonly` para rechazar envíos. Consulta otras excepciones con `wa work config show`.
+Las claves más específicas tienen prioridad: `permissions.messages.send ask` aún permite el envío. En el terminal pregunta antes. Por MCP no pregunta, y el envío del agente sigue adelante. Establece esa clave en `readonly` para rechazar envíos. Consulta otras excepciones con `wa work config show`.
 
 Esto controla los mensajes. Otras acciones tienen sus propias claves: `reactions` para reacciones, `polls` para encuestas y votos, `chats.mark-read` para recibos de lectura. El otro lado ve los tres, así que dales el mismo cuidado que al enviar. `chats.mute` y `chats.unmute` cubren `chats mute` y `chats unmute`, que nadie más ve; cada clave es independiente. `messages.star` y `messages.unstar` controlan la estrella de un mensaje, que tampoco ven los demás. `chats.archive`, `chats.unarchive`, `chats.pin`, `chats.unpin` y `chats.mark-unread` cubren los comandos de esos nombres, que nadie más ve; cada clave es independiente, por lo que `chats.archive readonly` aún deja pasar a `chats unarchive`. `account.update` cubre `account update`: otras personas pueden ver el nuevo nombre, información y foto. `chats.delete` y `chats.clear` cubren la eliminación de un chat o sus mensajes desde tus propios dispositivos; preguntan de forma predeterminada, ya que nada devuelve los mensajes.
 
@@ -61,7 +61,7 @@ Un límite de envío por hora, `sends_per_hour` (30 de forma predeterminada), ay
 
 ## Un cambio temporal para un servidor MCP
 
-Añade `--permission messages.send=readonly` al comando de inicio del servidor para detener el envío de ese proceso. La configuración guardada permanece igual. `--permission` solo se estrecha: uno que aflojaría el perfil (de `readonly` a `allow`, un `deny` a cualquier cosa) detiene el servidor al inicio y `validation_error` nombra la clave. Para permitir que un agente haga más, establezca el nivel en el propio perfil. A través de MCP, `ask` no requiere un formulario de servidor: la aplicación controla sus propias aprobaciones y puede permitir una llamada sin volver a preguntar. Usa `deny` o `readonly` para rechazar cambios. [El servidor MCP](./mcp.md) y [la configuración del navegador](./remote.md) explican la conexión completa.
+Añade `--permission messages.send=readonly` al comando de inicio del servidor para detener el envío de ese proceso. La configuración guardada permanece igual. `--permission` solo se estrecha: uno que aflojaría el perfil (de `readonly` a `allow`, un `deny` a cualquier cosa) detiene el servidor al inicio y `validation_error` nombra la clave. Para permitir que un agente haga más, establezca el nivel en el propio perfil. Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no muestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura. Usa `deny` o `readonly` para rechazar cambios. [El servidor MCP](./mcp.md) y [la configuración del navegador](./remote.md) explican la conexión completa.
 
 ## Límites y reglas detalladas
 

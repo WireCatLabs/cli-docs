@@ -2,19 +2,231 @@
 title: "Historial de cambios"
 ---
 
-Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest first; versions follow
-[semantic versioning](https://semver.org), so before `1.0.0` the command interface may still change.
+Cambios destacados de `@wirecat/whatsapp-cli`. Una sección por versión, la más reciente primero. Las versiones siguen
+el [versionado semántico](https://semver.org), así que antes de `1.0.0` la interfaz de comandos aún puede cambiar.
+
+## 0.48.0 — 26.11.2026
+
+### Novedades
+
+- **`wa <profile> session status` dice si el perfil tiene la sesión iniciada, y con qué cuenta**, solo desde este
+  equipo. `--check` pregunta al servicio de mensajería si la sesión sigue funcionando, y no muestra el número de
+  teléfono (lo tiene `account show`). De cli-core 1.3.0 (antes 1.0.0).
+
+### Cambios — pueden romper scripts
+
+- **`wa session list` enumera los perfiles de este equipo, y `wa account list` ya no existe** (WC-ACCT-12,
+  WC-CMD-8). Responde con las mismas filas, acepta la misma consulta (`profile:`, `current:`) y no necesita perfil.
+  No hay alias: un script que ejecuta `wa account list` debe usar `wa session list`. `account show`,
+  `account update`, `account sessions` y el resto de `account` se quedan.
+- **El almacén pasa a la versión 77** al abrirse por primera vez (cli-core 1.1.0 y 1.2.0). Como toda migración del
+  almacén, solo va hacia delante.
+
+## 0.47.0 — 25.11.2026
+
+### Cambios — pueden romper scripts
+
+- **wa se construye sobre cli-core 1.0.0 y cli-base 1.0.0.** El almacén pasa a la versión 73 al abrirse por primera
+  vez: un id nunca se entrega dos veces, y a partir de ahí solo las herramientas con cli-core 1.0 abren el almacén.
+  Actualiza cada WireCat CLI instalado antes de ejecutar esta versión. La migración escribe primero una copia para
+  revertir y no se ejecuta sin ella.
+- **Una llamada por MCP que indica un lugar no permitido responde `permission_error`**, no `validation_error`. Antes
+  de ejecutar cualquier llamada por MCP, cada opción y argumento que recibe un archivo o una carpeta local se
+  comprueba por su ruta real: una llamada no puede indicar una carpeta de credenciales, la carpeta de una herramienta
+  de WireCat ni el almacén de mensajes. Una ejecución en la shell no cambia.
+- **`schedule exec` ya no se ofrece por MCP.** Solo ejecuta un archivo de programación de la carpeta de
+  programaciones de la propia herramienta. Un agente ejecuta una programación guardada con `schedule run <name>`.
+
+## 0.46.0 — 21.11.2026
+
+### Novedades
+
+- **`wa server status` dice cuándo estuvo el almacén al día por última vez (`current_at` en `--json`).** WhatsApp no
+  tiene sincronización completa: los mensajes nuevos llegan al almacén solo mientras se ejecuta `wa <profile> serve`.
+  Ahora `serve` escribe la hora al conectarse, cada minuto mientras se ejecuta y al detenerse, y la conserva después
+  de detenerse. Así WireCat Desktop puede mostrar lo recientes que son los mensajes de una cuenta de WhatsApp cuando
+  `serve` está apagado, y la respuesta en texto dice "The store was current at …".
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.715.0** (antes 0.681.0) y cli-base 0.125.1 (antes 0.106.0). El almacén compartido
+  pasa a la versión 71, así que actualiza también los demás WireCat CLI que lo comparten. WhatsApp no tiene mensajes
+  programados, así que wa sigue sin comandos `messages scheduled`. Los archivos de clientes de un CRM tienen sus
+  propios límites (`crm.<provider>:<account>.files.*` en `wa config set`), y `wa --wcat-describe` ahora le dice a
+  WireCat Desktop cómo quitar una cuenta. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Antes iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del equipo sin que el propietario
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: un CLI nunca elige una cuenta por el propietario
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)).
+  Ten en cuenta: un cliente configurado con la entrada antigua conserva `--profiles all` hasta que se configure de
+  nuevo; un servidor añadido a mano o con `mcp config` no cambia.
+
+### Corregido
+
+- **Node 24.22 (SQLite 3.54) ya no rompe el almacén.** Los perfiles y grupos de cuentas guardados con él vuelven a
+  leerse enteros, y una búsqueda de unas 53 palabras o más responde `query.too-large` en lugar de un error de SQLite
+  sin procesar.
+
+## 0.45.0 — 16.11.2026
+
+### Cambios — pueden romper scripts
+
+- **La skill para agentes es más corta.** `SKILL.md` conserva lo que un agente necesita en cada turno (la regla del
+  perfil, responder a partir de los chats, los límites de envío, la salida y los códigos de salida) en unos 8 KB en
+  lugar de 29 KB, y enlaza el resto en `skills/whatsapp-cli/references/`: búsqueda, historial, envío, la conexión,
+  grupos, el almacén local, comandos y configuración. No se ha quitado ninguna regla. Un agente que lee la skill gasta
+  unos 5.000 tokens menos en cada turno.
+
+### Corregido
+
+- **`wa skill install` instala las `references/` de la skill junto a `SKILL.md`,** en `~/.claude/skills/whatsapp-cli/`
+  y `~/.agents/skills/whatsapp-cli/`, y `wa skill show <name>` imprime una de ellas (`wa skill show sending`). Antes
+  solo se instalaba `SKILL.md`, y sus enlaces a las referencias no llevaban a ninguna parte. wa se construye sobre
+  cli-core 0.681.0 y cli-base 0.106.0.
+
+## 0.44.0 — 16.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.674.0** (antes 0.665.0) y cli-base 0.103.0 (antes 0.101.0). El almacén compartido
+  pasa a la versión 67, así que actualiza también los demás WireCat CLI que lo comparten. Un comando que se ejecuta
+  sin un perfil que necesita lleva ahora el motivo `profile.missing`. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **El motor se construye con golang.org/x/sys 0.50.0 y modernc.org/sqlite 1.62.0** (antes 0.49.0 y 1.61.1), y sus
+  avisos de terceros los nombran.
+
+## 0.43.0 — 15.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Un agente ya no puede borrar un chat ni vaciar su historial por MCP** (cli-core 0.664.0; construido sobre
+  0.665.0, antes 0.662.0). Por MCP, un nivel `ask` seguía adelante sin preguntar, así que un agente podía quitar un
+  chat entero de tu cuenta de WhatsApp sin preguntar. `chats delete` y `chats clear` se quedan ahora en la línea de
+  comandos, donde `ask` sigue preguntando primero.
+- **`store clear --allow-dangerous` es solo tuyo** (cli-core 0.663.0). Su herramienta MCP ya no acepta
+  `allow_dangerous`: un agente previsualiza con `dry_run`, y tú ejecutas el comando en una terminal.
+- **Las listas sin `--limit` muestran el `defaults.limit` configurado** (20 si no se define), así que `metadata sync`
+  y `tags rebuild` bajan de 50 a 20 (cli-core 0.663.0).
+- **`models chats show|set allowed|ask|denied`** decide si el texto de los chats puede ir a un modelo fuera de este
+  equipo (cli-core 0.664.0). Con `denied`, `conversations embed` y `conversations links rebuild --analyze` con un
+  modelo así se niegan incluso con `--yes`. Solo tú puedes hacerlo menos estricto.
+
+### Corregido
+
+- **Cada opción de tiempo entiende un mismo formato** (cli-core 0.663.0): ISO con o sin segundos y zona horaria, una
+  fecha sola, `today`, `yesterday`, `30m`, `2h`, `7d`.
+- **`tasks scan`, `conversations embed` y `conversations links rebuild` aceptan `yes` por MCP** (cli-core 0.663.0
+  y 0.664.0), así que un agente ya no se queda atascado en una previsualización.
+- **`search conversations` responde a una pregunta larga en un almacén grande**: cuando la parte de búsqueda por
+  palabras se queda sin tiempo, la parte por significado sigue respondiendo (cli-core 0.664.0).
+
+## 0.42.0 — 14.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Un nivel `readonly` ya no detiene una sincronización** (cli-core 0.662.0, antes 0.659.0). Los comandos que solo
+  descargan de WhatsApp al almacén local (`sync`, `messages sync`, `contacts sync`, `metadata sync`,
+  `store gaps repair`, `--sync-first`) se ejecutan con `readonly`; `deny` sigue rechazándolos. Los comandos que
+  escriben en los archivos del propietario o llaman a otro servicio siguen bloqueados por `readonly`. Un perfil que
+  usaba `readonly` para detener la sincronización pone la clave en `deny`.
+- **Las fechas de las consultas de listas se leen en la zona horaria del equipo** (cli-core 0.661.0). `today` y una
+  fecha sola en `tasks list`, `chats list` y las demás consultas de listas empezaban en UTC y ahora empiezan a
+  medianoche local, como hace la búsqueda.
+- **La herramienta MCP `messages_photo` acepta `attachment`, desde 1** (cli-core 0.661.0), como `attachments_show`.
+  Antes aceptaba `index` desde 0.
+
+## 0.41.0 — 14.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Borrar mensajes ya no pregunta, y las reglas de respuesta activadas envían** (cli-core 0.659.0, antes 0.656.0).
+  `messages delete` sigue adelante sin preguntar ni pedir `--allow-dangerous`; un perfil que quiera la pregunta
+  define `messages.delete: ask`. `replies.send` es ahora `allow`, así que `serve` envía las respuestas de las reglas
+  que activaste; una regla nueva sigue empezando desactivada, y `replies.send: deny` detiene todas las respuestas
+  automáticas. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Una configuración compartida con un pequeño fallo se repara al leerla.** `~/.config/WireCat/config.json` con una
+  marca de orden de bytes, un comentario, una coma final o una coma que falta entre dos líneas se corrige en el sitio,
+  y el archivo anterior se guarda al lado como `config.json.bak-<time>`. Para otros daños se indican la línea, la
+  columna y la corrección probable.
+
+## 0.40.0 — 13.11.2026
+
+### Novedades
+
+- **La primera pantalla muestra `pbx`**, la herramienta para Asterisk, en "Works with" (cli-core 0.651.0).
+- **`contracts/wirecat.json` enumera los hosts a los que llega cli-core en cualquier herramienta**: npm para
+  `upgrade`, las descargas de modelos y los hosts a los que redirigen (cli-base 0.99.0). WireCat Desktop los muestra
+  junto a los de wa.
+- **`wa guide`**: escenarios cortos (ponerse al día, encontrar lo que se dijo, un agente que no puede enviar) y un
+  bloque "What you can do" en la primera pantalla de ayuda, como en tg y max. Las secciones repetidas
+  "Getting started" y "For agents" ya no están.
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.656.0** (antes 0.651.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Las páginas decían que la vinculación se detiene tras 45 segundos sin actividad.** Se detiene cuando el teléfono
+  dice que su historial está completo, o tras 5 minutos sin nada nuevo ([sesiones](./sessions.md)).
+- **Una configuración compartida que no se puede leer ya no deja esta herramienta en solo lectura.** Una
+  configuración de WireCat (`~/.config/WireCat/config.json`) con una marca de orden de bytes, JSON roto, una carpeta
+  en su lugar o una forma antigua de `setup` limitaba cada perfil a solo lectura, y un servidor MCP ocultaba
+  `messages sync`. Ahora solo la propia respuesta «solo lectura» del propietario limita una herramienta, e incluso
+  entonces `messages sync` se ofrece por MCP: solo lee el servicio de mensajería hacia el almacén local
+  (cli-core 0.656.0).
+
+### Seguridad
+
+- **Una ejecución con carpetas movidas nunca desvincula un dispositivo en WhatsApp.** Allí, `session end` borra solo
+  las claves de dispositivo propias de esa ejecución y te dice que quites el dispositivo en el teléfono. Con solo
+  `WA_CONFIG_DIR` o `WA_CACHE_DIR` definidos (u otro `HOME` junto a tu propia carpeta de estado), la ejecución lee tu
+  dispositivo vinculado real: `session end` responde entonces `ended: false` y explica por qué, y `account remove` se
+  niega (`device.owners`) y no borra nada ([sesiones](./sessions.md)).
+- **Una descarga de medios de la Cloud API solo llega al host que Meta indicó para ella**, redirecciones incluidas.
+  0.39.0 la limitaba a `graph.facebook.com`, así que se rechazaba una dirección de medios en cualquier otro host. Una
+  función de descarga pasada desde fuera también pasa la comprobación del host. `contracts/wirecat.json` enumera los
+  hosts de wa para WireCat Desktop, y el paquete lo incluye.
+
+## 0.39.0 — 13.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Construido sobre cli-core 0.648.0 y cli-base 0.98.0** (antes 0.641.0 y 0.93.0). El almacén sigue en la versión
+  66. Detalles en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **El modo solo local mantiene cada llamada a modelos en este equipo.** Con el modo activado
+  (`memo models local-only set on`), las llamadas a modelos de wa, los embeddings remotos y la transcripción con
+  OpenAI rechazan cualquier dirección que no sea de este equipo antes de enviar nada (`local-only.refused`).
+- **El http sin cifrar solo va a este equipo, en cada llamada a un modelo.** El enriquecimiento, la búsqueda a fondo,
+  la vinculación, los borradores de respuesta, el OCR de adjuntos y los embeddings remotos rechazan una dirección
+  `http://` en otra máquina (`model.address-refused`); usa https o ejecuta el modelo en este equipo.
+- **Los mensajes de voz los transcribe primero el modelo descargado.** `auto` usa el modelo de voz local cuando está
+  descargado y pregunta al servicio de mensajería solo cuando no lo está, y nunca en modo solo local.
+- **Un perfil mal escrito es `not_found` (motivo `profile.unknown`) con los perfiles de este equipo**, no una
+  petición de vincular un dispositivo; aquí cuenta como perfil uno con un dispositivo vinculado. La pista para
+  vincular se queda en el mensaje para un perfil que es nuevo a propósito.
+- **`stats tasks show` no tiene `--chat`: nombra el chat en la consulta**, `stats tasks show -- chat:"Project room"`.
+- **`store reset` ya no se ofrece por MCP**: necesita `--yes`, que una llamada por MCP no puede pasar.
+- **El bot de la Cloud API solo llega a `graph.facebook.com`.** Sus peticiones pasan por la misma comprobación del
+  host que todas las demás.
 
 ## 0.38.0 — 11.11.2026
 
-### Added
+### Novedades
 
 - **Parte de un nombre en `from:` y `chat:`, desde `@wirecat/cli-core` 0.640.0.** Un valor sin comillas con `*` o `?` es un patrón sobre nombres: `from:Ana*` encuentra «Ana» y «Ana Lopez», y `chat:*club*` cada chat que lo tiene en el nombre. Un patrón que no encaja con nadie falla con los nombres más cercanos. Uno que encaja con más de 50 se rechaza como `query.too-large`.
 - **Una parte dentro de una palabra en el texto del mensaje, desde `@wirecat/cli-core` 0.641.0.** `*contract*` encuentra «Contract», «contracts» y «subcontractor», también en un almacén grande y dentro de `AND`, `OR` y `NOT`. La parte necesita tres letras seguidas.
 - **`participants_count` en las consultas, desde `@wirecat/cli-core` 0.638.0.** `participants_count<10` encuentra mensajes en chats de menos de diez personas, según el tamaño que WhatsApp informó por última vez.
 - **El registro de una ejecución guarda el progreso de `messages sync`** como eventos `sync.progress`, así que `runs show` dice hasta dónde llegó y cuándo.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **`wa` pide a WhatsApp como mucho 20 veces por minuto por perfil, 10 a la vez** (antes 60 por minuto, 20 a la vez). Cuenta cada solicitud, en todos los procesos del perfil y en `serve`: envíos, ediciones, reacciones, sincronizaciones de contactos y solicitudes de historial antiguo. Un script que envía más de 10 mensajes seguidos ahora espera unos 3 segundos antes de cada uno de los demás. `requests_per_minute` o `WA_REQUESTS_PER_MINUTE` lo cambian ([el ritmo](./limits.md#the-pace)).
 - **Basado en cli-core 0.641.0** (antes 0.633.0). El almacén pasa a la versión 66 al abrirse por primera vez. Lo que cambió entre medias está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
@@ -22,7 +234,7 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 - **La `--pause` de `messages download --all`, `attachments download` y `store gaps repair` es de 5 segundos por defecto** (antes 2), la misma pausa que `messages sync`, así que estos comandos tardan aproximadamente el doble.
 - **`*part*` en el texto del mensaje coincide tal como se escribe, salvo mayúsculas y ё/е.** Ya no encuentra «café» para `*cafe*`. Escribe la letra como la tiene el texto, o busca la palabra entera, que sigue ignorando los acentos.
 
-### Fixed
+### Corregido
 
 - **El historial antiguo llega del teléfono más despacio.** `messages sync <chat>` pide una página cada 5 a 10 segundos en lugar de cada 2 a 4, porque WhatsApp puede bloquear un número que lee rápido ([límites](./limits.md#no-bulk-reads)).
 - **Un reloj atrasado ya no detiene `wa` durante horas.** Un ordenador que arrancó con el reloj adelantado rechazaba cada solicitud a WhatsApp hasta que el reloj corregido lo alcanzaba. Ahora la espera se corrige según el tamaño del salto.
@@ -30,12 +242,12 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 
 ## 0.37.0 — 10.11.2026
 
-### Added
+### Novedades
 
 - **`muted:` en la búsqueda y las estadísticas, desde `@wirecat/cli-core` 0.633.0.** `muted:false` deja fuera los chats que silenciaste, así que `stats messages show -- 'date>=30d muted:false'` cuenta solo lo que la sincronización sigue leyendo. `stats messages responses` y `stats messages waiting` también lo aceptan.
 - **`store import`, desde `@wirecat/cli-core` 0.633.0.** Carga chats, personas y mensajes inventados desde un archivo marcado como sintético en un almacén de prueba, como el sandbox de Desktop. Rechaza el almacén real del propietario.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Basado en cli-core 0.624.0** (antes 0.618.0). El almacén pasa a la versión 61 al abrirse por primera vez (vínculos de personas, solo añade). Lo que cambió entre medias está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
 - **`search messages --timeout 30s` puede buscar hasta unos 29 segundos.** Se detenía a los 2 segundos fuera cual fuera el tiempo dado a la ejecución, así que una consulta válida sobre un almacén grande fallaba en WireCat Desktop. Sin `--timeout` siguen siendo 2 segundos, también para agentes y MCP.
@@ -43,94 +255,94 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 
 ## 0.36.0 — 09.11.2026
 
-### Added
+### Novedades
 
 - **Un pull request añade sus entradas del historial de cambios como fragmento, `changes/<branch>.md`.** Los pull requests abiertos ya no entran en conflicto bajo `## Unreleased`. `pnpm docs:check` revisa cada fragmento, y `bin/release` los reúne en la sección de la versión. Una entrada bajo `## Unreleased` sigue funcionando durante el cambio.
 
-### Fixed
+### Corregido
 
 - **`wa serve` termina cuando la compilación que ejecuta está desactualizada, para que su servicio arranque la nueva.** Cada minuto comprueba si el almacén compartido pasó a un formato que esta compilación ya no puede escribir, o si hay instalada una versión más nueva de wa. Si es así, registra `serve.outdated` y termina con el código 3, y la unidad de systemd (`Restart=on-failure`) arranca la versión instalada. Antes, un serve siguió en 0.30.0 durante un día después de instalar 0.33.0 y no guardó nada.
 - **Después de `wa store recover run`, el almacén marca como no obtenido lo que tenía desde un día antes de la última comprobación profunda superada.** A WhatsApp no se le pueden pedir sus chats, así que solo vuelve lo que el teléfono envía mientras `wa serve` está en marcha. Desde cli-core 0.618.0 (antes 0.616.0).
 
 ## 0.35.0 — 09.11.2026
 
-### Added
+### Novedades
 
 - **`wa account remove --keep-data|--delete-data` desvincula un perfil y lo olvida en este ordenador.** Quita el dispositivo del lado de WhatsApp y luego borra las claves del dispositivo del perfil, su carpeta y lo que cli-core guarda para él. `--keep-data` deja los mensajes en el almacén, donde la búsqueda los sigue encontrando. `--delete-data` los borra. Los demás perfiles se quedan. Un perfil cuyo dispositivo WhatsApp ya quitó se olvida igualmente. El token de Business API de un perfil de bot se queda: es una cuenta aparte. Mientras `wa serve` tiene el perfil, el comando se niega, como `session end`. Una ejecución con carpetas movidas solo borra sus propias claves y no desvincula nada.
 
 ## 0.34.0 — 08.11.2026
 
-### Added
+### Novedades
 
 - **`contacts add` y `contacts rename` guardan a una persona en tus contactos de WhatsApp.** `add` usa el nombre que WhatsApp muestra para ella, y `rename` el nombre que tú le das. Es un nombre de contacto de WhatsApp: se ve en cada dispositivo de la cuenta, y a la persona no se le envía nada. Para alguien guardado en la app Contactos del teléfono, el teléfono sigue mostrando el nombre de esa app. wa rechaza el número propio de la cuenta. `contacts remove` e `import` siguen rechazados.
 
 ## 0.33.0 — 08.11.2026
 
-### Fixed
+### Corregido
 
 - **`session start` espera hasta que el teléfono dice que la sincronización del historial terminó.** Antes se detenía tras 45 segundos sin recibir nada, así que una cuenta grande que hacía una pausa más larga se cortaba mientras el teléfono aún se vinculaba, y el teléfono acababa mostrando «couldn't link device» aunque wa había informado de éxito. Ahora wa termina la espera con la propia señal de fin del teléfono. Solo cuando el teléfono nunca la envía, wa se rinde tras cinco minutos sin noticias, lo dice en una línea de progreso `waiting` y pide mantener WhatsApp abierto en el teléfono hasta que termine de vincularse.
 - **La guía dice que una foto y un vídeo se agrupan en un solo álbum solo con texto.** Sin pie de foto, un teléfono puede mostrarlos como dos mensajes. Con uno, se vieron como un solo álbum en un teléfono.
 
 ## 0.32.0 — 08.11.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **`--offline` en un comando que necesita la red se rechaza con `offline.refused`, código de salida 5**, antes de que el comando se ejecute. `upgrade`, `topics`, `chats inspect` y `chats send-as` respondían antes `validation_error`, código de salida 2.
 - **`contacts context` lee solo cuentas del mismo ámbito que la cuenta consultada.** Una cuenta personal ya no muestra los mensajes de una persona vinculada desde cuentas de trabajo, y una cuenta de trabajo no muestra ninguno de las personales.
 
-### Fixed
+### Corregido
 
 - **wa vuelve a abrir el almacén después de que otra CLI de WireCat lo actualizara.** Una CLI con un cli-core más nuevo pasa el almacén compartido a la versión 56 o posterior, que un wa anterior a esta versión rechaza. cli-core actualizado a 0.608.0.
 
 ## 0.31.0 — 08.11.2026
 
-### Added
+### Novedades
 
 - **`wa session start phone --json --answer-stdin` pide el número de teléfono por stdin.** Imprime la pregunta como una línea `{"event":"needs","field":"phone",…}` en stderr y lee la respuesta, una línea, de stdin, así que una aplicación como WireCat Desktop puede vincular con un código de emparejamiento en su propia ventana. Sin el flag, vincular por número sigue necesitando una terminal.
 - **La línea `{"event":"qr"}` de cada código QR dice cuándo caduca** (`expires_at`, una hora ISO), así que una ventana puede hacer la cuenta atrás y esperar el siguiente código. Antes era `null`.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Con `--json`, `session start` y `setup` informan del código de emparejamiento y de la espera del historial como líneas JSON.** El código de emparejamiento es `{"event":"pairing_code",…}` en lugar de la nota `pairing code: …`, y la espera del historial del teléfono es `{"event":"progress","step":"history"}`, luego `"step":"waiting"` cuando tarda, en lugar de las dos notas. Quien leía esas notas lee ahora los eventos. La salida de la terminal sin `--json` no cambia.
 
-### Fixed
+### Corregido
 
 - cli-core actualizado a 0.604.0.
 
 ## 0.30.0 — 07.11.2026
 
-### Fixed
+### Corregido
 
 - **Abrir el almacén ya no suelta los bloqueos de archivo de SQLite.** Antes abría el archivo con truncado, lo que liberaba los bloqueos POSIX que tenían otros procesos, así que dos escritores podían solaparse (cli-core 0.599.0).
 
 ## 0.29.0 — 05.11.2026
 
-### Added
+### Novedades
 
 - **`wa config migrate` escribe en `defaults` cada ajuste que le falta al archivo, con su valor predeterminado, y cada escritura de wa en el archivo también los añade.** Así encuentras y editas `limit`, `sends_per_hour`, `record` y los demás en `config.json` sin la documentación. Tus valores, su orden y las claves que wa no conoce se mantienen; `config unset` no vuelve a poner lo que quitó, y una simple lectura nunca reescribe el archivo. `wa config show` da el valor predeterminado de cada ajuste y lo que hace (cli-core 0.563.0).
 - **Desde cli-core 0.563.0:** `config repair` repara la sintaxis JSON del archivo de ajustes; `stats messages responses` y `stats messages waiting`; `tasks status`, `tasks review` y `tasks acknowledge`; `tasks add --open-new`.
 - **Desde cli-core 0.564.0–0.567.0:** `store chats status` cuenta los chats que el archivo guarda hasta el primer mensaje, en parte o nada; `stats tasks show` acepta una consulta y cuenta las tareas abiertas y cerradas en un periodo (`-- created>=30d`); `has:transcript` encuentra mensajes de voz que tienen transcripción.
 - **`wa bot list` no necesita la palabra del perfil** (`wa <profile> bot list` sigue funcionando; cli-core 0.567.0).
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Un nuevo código de error, `conflict` (salida 15), está en `wa commands --json` y en el esquema de errores de las herramientas MCP** (cli-base 0.77.1). Significa que se rechazó una escritura porque lo que cambia ha cambiado desde que se leyó. Un cambio en una tarea que otra persona cambió después de que la leyeras ahora falla con él, no con `configuration_error` (salida 3); el motivo sigue siendo `task.stale` (cli-core 0.567.0).
 - **`search all` ordena todas las fuentes en una sola lista, busca también el correo por significado y encuentra registros para una pregunta escrita como una frase** (cli-core 0.564.0). Antes, los resultados de cada fuente se turnaban, y una pregunta solo encontraba registros que tenían todas sus palabras.
 
-### Fixed
+### Corregido
 
 - **`wa account list` ya no muestra un bot como una cuenta personal sin sesión iniciada.** Un nombre que solo usa la parte del bot (`config set --bot …`, `bot auth set`) se omite; un nombre que es tu cuenta y también un bot indica `bot: true`. `wa mcp serve --profiles all` omite los bots de la misma manera (cli-core 0.567.0).
 - **`wa <profile> config set --bot phone_number_id 100000000000001` funciona como muestra `docs/bot.md`.** El identificador se leía como un número y se rechazaba; ahora se guarda con los dígitos tal como se escribieron (cli-core 0.567.0).
 
 ## 0.28.0 — 03.11.2026
 
-### Added
+### Novedades
 
 - **`wcat wa` ejecuta la herramienta, y `wcat --help` la muestra en la lista.** El paquete instala `wcat-wa` junto a `wa`, y `wcat-wa --wcat-describe` imprime para `wcat` el nombre, la versión y la descripción de la herramienta.
 
 ## 0.27.0 — 02.11.2026
 
-### Added
+### Novedades
 
 - **`messages sync` también respeta los límites del historial** (cli-core 0.551.0): a un chat individual se le piden como mucho `history_dialog_days`, a un grupo `history_group_days`, y a un grupo de más de `history_group_members_max` personas no se le pide nada; `--full-history` quita el límite para un chat, y la respuesta dice lo que dejó fuera (`limited`).
 - **`--compact`: una línea por elemento** para un agente, a partir de la misma respuesta que imprime `--json`: `#<id> · time · sender ·
@@ -138,7 +350,7 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 - **`server install` habilita el servicio**, así que `serve` se inicia en cada inicio de sesión y después de reiniciar. Un servicio que instaló un `wa` más antiguo no queda habilitado hasta que vuelvas a ejecutar `wa <profile> server install`; `server status` indica `starts_at_login` (cli-core 0.552.0).
 - **`messages list` lee una ventana con un inicio y un final**: `'date>=2026-10-01 date<2026-10-20'`. Un inicio lee hacia adelante, del más antiguo al más reciente, y se detiene en el final; un final solo lee hacia atrás desde él, como antes (cli-core 0.547.0).
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **whatsapp-cli requiere cli-base 0.75.0** (cli-core 0.551.0).
 - **Una búsqueda que se queda sin tiempo se detiene en su límite de tiempo y dice que fue el tiempo, no la consulta.** Falla con `timeout` y motivo `query.time-limit` en unos 2 s. En un almacén grande antes seguía más de 90 s, más allá de `--timeout`, o fallaba con `validation_error` / `query.too-large`, como si la consulta estuviera mal. La consulta era válida: añade `chat:` o `date:` para buscar en menos parte del almacén. Un script que cambiaba la consulta ante `query.too-large` debe tratar `query.time-limit` como «acótala», no como «corrígela» (cli-core 0.552.0).
@@ -146,7 +358,7 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 - **Desde la 0.26.0, un chat indicado como `<kind>:<text>` se lee como una referencia** (cli-core 0.546.0, anotado aquí después de la publicación): `chat:whatsapp/…` y `msg:whatsapp/…`, tal como los imprimen otras herramientas de WireCat, funcionan dondequiera que se nombre un chat o un mensaje. Un chat cuyo título parece `note:plan` ya no se encuentra por ese título; indica su identificador o una parte del título. Una referencia a otra cuenta u otro servicio de mensajería se rechaza y nombra el perfil o la herramienta que la abre.
 - **Desde la 0.26.0, una opción después de `--` se lee como la opción** (cli-core 0.546.0, anotado aquí después de la publicación): `messages sync -- <chat> --json` responde en JSON. Los comandos que aceptan texto libre, como `messages send` y `messages edit`, conservan como texto cada palabra después de `--`.
 
-### Fixed
+### Corregido
 
 - **`messages delete` sin identificador de mensaje se rechaza con `validation_error`** antes de conectarse. Un identificador vacío llegaba antes a WhatsApp como un borrado de nada y respondía con éxito (cli-core 0.551.0).
 - **Una sincronización cuyo lector desaparece termina su trabajo.** Cuando el programa que leía su salida (la aplicación de escritorio, una tubería) se cerraba antes, un `messages sync` largo terminaba con `write EPIPE`; ahora termina y su registro de ejecución dice cómo (cli-core 0.552.0).
@@ -154,45 +366,45 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 - **`messages list`**: un inicio como `date>=2026-10-01` incluye un mensaje enviado exactamente en ese momento, y el comando `page.next` de una respuesta funciona tal como está escrito (cli-core 0.547.0).
 - **Una llamada MCP cuya respuesta nombra un paso que solo tú puedes dar** ya no falla como un error del programa; el paso se conserva (cli-core 0.551.0).
 
-### Security
+### Seguridad
 
 - **Desde la 0.25.0, un agente ya no puede aflojar los permisos** (cli-core 0.544.0, anotado aquí después de la publicación). `wa <profile> config set|unset permissions…` ejecutado por un agente, por MCP o en su propio shell (Hermes, OpenClaw, Claude Code y otros que lo marcan con `AI_AGENT`, `CLAUDECODE` u `OPENCLAW_SHELL=exec`), solo puede bajar un nivel, nunca subirlo. Así, el modo de solo lectura que configura la aplicación de escritorio se mantiene, incluso cuando un mensaje de un chat convence al agente de ejecutar `config set`. Afloja los permisos en tu propio terminal. Desde la misma versión, la primera ejecución de una versión nueva también actualiza un `SKILL.md` desactualizado que instaló una anterior (`WA_NO_SKILL_REFRESH=1` lo desactiva).
 
 ## 0.26.0 — 02.11.2026
 
-### Fixed
+### Corregido
 
 - **El «History: … kept» de una vinculación cuenta solo lo que llegó al almacén** (cli-core 0.546.0). La 0.25.0 ya contaba así; ahora está incluido el cli-core que le dice qué partes se guardaron.
 - **`wa upgrade` ya no reinicia `serve` en una versión sin su motor.** Justo después de una publicación, el gestor de paquetes puede instalar la CLI y omitir el paquete del motor sin avisar; el `serve` reiniciado se detenía entonces con «the WhatsApp engine is not installed». Ahora comprueba primero el motor, no reinicia nada cuando falta y dice que ejecutes `wa upgrade` de nuevo.
 
 ## 0.25.0 — 02.11.2026
 
-### Added
+### Novedades
 
 - **Límites del historial según el tipo de chat** (cli-core 0.545.0). El historial que envía el teléfono se guarda 3 años en los chats individuales (`history_dialog_days`), 1 año en los grupos de más de 2 personas (`history_group_days`) y nada en un grupo de más de 50 personas (`history_group_members_max`). Lo que quedó fuera se registra por chat: `store status` lo muestra, y `search messages`, `search all` y `messages list --offline` responden `meta.complete: false` con una entrada `history_limits` y el paso que lo descarga. `messages sync <chat> --full-history` conserva un chat completo. Los mensajes nuevos y lo que ya está guardado nunca se descartan.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Al vincular se pide al teléfono el ajuste de historial más largo, 3 años de forma predeterminada**, en lugar de 10.
 
-### Fixed
+### Corregido
 
 - **Una vinculación cuenta solo lo que llegó al almacén**: «History: N chats, M messages kept» ya no cuenta mensajes que un almacén que no podía escribir nunca guardó.
 
 ## 0.24.0 — 02.11.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **whatsapp-cli requiere cli-base 0.73.0** (cli-core 0.543.0).
 
-### Fixed
+### Corregido
 
 - **La sincronización del correo ya no carga en cada ronda todos los correos guardados de una cuenta**, lo que ralentizaba cada comando que comparte el almacén (cli-core 0.541.0).
 - **El historial que el teléfono envía después de vincular se conserva hasta que el almacén local lo tiene.** Una vinculación mientras no se podía escribir en el almacén (un archivo dañado) marcaba cada parte del historial como hecha, la borraba del servidor de WhatsApp e informaba de que los mensajes se habían guardado. Ahora una parte cuenta como hecha solo cuando cli-core la ha guardado; hasta entonces se queda en el archivo del dispositivo y en el servidor de WhatsApp, y el siguiente `serve` la vuelve a entregar.
 
 ## 0.23.0 — 01.11.2026
 
-### Added
+### Novedades
 
 - **Un resultado de mensaje nombra sus archivos**: los resultados de `search messages` y `search all` llevan `attachments` (posición, tipo, nombre, tamaño) (cli-core 0.532.0).
 - **`messages download --offline`** copia los archivos que este ordenador ya tiene y nunca se conecta; `--attachment
@@ -200,11 +412,11 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 - **`messages link` muestra los archivos de un mensaje** (`files`); WhatsApp no da a ningún archivo su propio enlace, así que cada `url` es null con el motivo `unsupported_provider` (cli-core 0.532.0).
 - **`doctor` dice cuándo estuvo el teléfono en línea por última vez, y avisa a partir de 12 días.** WhatsApp desvincula un dispositivo cuyo teléfono está ausente unas dos semanas. El motor anota los propios recibos de lectura y respuestas de archivos del teléfono en una marca junto a las claves; `doctor` responde `whatsapp.phone: { last_seen, days_away, warning? }`.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **whatsapp-cli requiere cli-base 0.71.0** (cli-core 0.529.0).
 
-### Fixed
+### Corregido
 
 - **Una unidad de `serve` sobrevive al siguiente `wa upgrade` con pnpm** (cli-core 0.534.0). `server install` escribía una carpeta con versión del almacén de pnpm que la actualización elimina; ahora escribe el enlace al que pnpm vuelve a apuntar. Ejecuta `wa <profile> server
   install` una vez después de esta actualización.
@@ -215,11 +427,11 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 
 ## 0.22.0 — 01.11.2026
 
-### Added
+### Novedades
 
 - **`doctor` cuenta las advertencias del motor del último día en `provider_log`** (cli-core 0.528.0). Ahora siempre se guardan, con los números de teléfono enmascarados, en un archivo privado por perfil de 1 MB como máximo con un archivo anterior; `decrypt` cuenta los mensajes que no se pudieron leer. `WA_ENGINE_LOG` ahora solo mueve el archivo.
 
-### Fixed
+### Corregido
 
 - **El historial que el teléfono envía después de vincular ya no se pierde por un comando que no lo guarda.** El teléfono envía su historial por partes, durante minutos. Un envío, una descarga o un `messages sync` conectados en ese tiempo descargaban una parte, la descartaban y le decían a WhatsApp que había llegado. Ahora cada parte anunciada se escribe en el archivo del dispositivo antes de confirmarla, y solo `serve` o una vinculación la descargan; una parte que oyó otro comando espera hasta que `serve` se conecte. Una parte que no se puede escribir queda sin confirmar, así que WhatsApp la vuelve a enviar.
 - **Una vinculación nueva ya no pierde los avisos de historial del teléfono por un archivo del dispositivo ocupado.** Dos mensajes descifrados a la vez fallaban con `database is locked`, y el teléfono no los volvía a enviar. Ahora se esperan el uno al otro.
@@ -230,14 +442,14 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 
 ## 0.21.0 — 31.10.2026
 
-### Added
+### Novedades
 
 - **Una ejecución registrada lista cada solicitud bajo su operación (cli-core 0.467.0).** Cada solicitud al motor de WhatsApp, y cada llamada a la Graph API y cada descarga de medios de `wa <profile> bot`, es una línea `wire` en el `events.jsonl` de la ejecución con su duración, resultado y código de error. Las líneas del motor guardan el identificador de un mensaje, nunca el identificador de un chat, un número de teléfono ni texto; las líneas de Graph guardan la ruta con los identificadores como `:id`, nunca la dirección tal como se envió ni su consulta.
 - **`search messages` dice cuántos mensajes coinciden en total: `page.total`** (cli-core 0.501.0). `--json` añade `page.total: { value, relation }`, con la forma de `hits.total` de Elasticsearch: `eq` es el recuento exacto, `gte` un límite inferior (el recuento se detiene en 10.000). El terminal añade `showing 1–20 of 144` debajo de los resultados.
 - **`search messages --discover` muestra seguimientos**, mensajes posteriores que pueden cancelar o cambiar un resultado, y ya no falla con una pregunta que lleva una hora o una proporción («until 22:00?») (cli-core 0.492.0, 0.496.0).
 - **`messages list --offline`, `search messages` y `search all` indican cuándo el almacén guarda un chat solo en parte**, con el paso `messages sync` que lo completaría (cli-core 0.493.0).
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **`search messages --discover` busca por significado cuando la consulta usa `-`, `NOT`, `OR`, grupos, frases o `exact:`** (cli-core 0.506.0). Una consulta así ejecutaba solo la búsqueda estricta. Ahora sus palabras siguen coincidiendo con toda la consulta (`discovery.method: "lexical-strict"`), y se les suman los mensajes cercanos en significado a sus palabras buscadas. Cada resultado encontrado por significado, y cada respuesta y seguimiento añadidos, coincide con cada campo de la consulta y con cada palabra excluida.
 
@@ -245,81 +457,81 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 - **`search messages`, `search all` y `messages list --offline` responden `meta.complete: false`** cuando un chat que leen se guarda solo en parte, con `missing` y `next` que lo nombran (cli-core 0.493.0). Un script que leía `meta.complete` como «todas las fuentes respondieron» ahora también ve los huecos del archivo.
 - **Un `transcribeWith` desconocido en un perfil se niega a transcribir** con `validation_error`, nombrando los cuatro valores; cualquier valor distinto de `local` significaba antes preguntar primero al mensajero (cli-core 0.499.0).
 
-### Fixed
+### Corregido
 
 - **`search messages --discover` con un filtro estrecho (`chat:`, `date:`) ordena por significado los propios mensajes de ese filtro** cuando contiene como máximo 100.000 mensajes, en lugar de los 100 más cercanos en general, de modo que llena su página (cli-core 0.506.0).
 - **`search messages --discover` funciona con un almacén de solo lectura** (cli-core 0.506.0).
 - **Una reconstrucción larga en un proceso ya no hace que la escritura de otro proceso falle con "database is locked"** (cli-core 0.506.0).
 
-### Security
+### Seguridad
 
 - **Una ejecución con carpetas movidas ya no copia el inicio de sesión del propietario en el llavero al renovar un token** (cli-core 0.494.0).
 
 ## 0.20.0 — 31.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Las notas, los documentos y las notas de contactos se encuentran por cualquier parte de una palabra, en cualquier caso de letra.** `search notes 'bud'` encuentra «Budget», y una palabra en cirílico coincide sea cual sea su caso; también se busca el título, no solo el texto, y los resultados llegan en milisegundos. Una búsqueda de uno o dos caracteres se rechaza con "search needs at least three characters", como ya hace la búsqueda de mensajes; una vacía sigue sin filtrar nada. La primera ejecución tras la actualización pasa su almacén local a un formato nuevo (versión 40); las notas guardadas antes se indexan por lotes con `search notes` o `store migrate`, y hasta entonces coinciden como antes. No se descarga nada de WhatsApp. Actualice todas las herramientas de línea de comandos de WireCat a esta versión el mismo día: una más antigua no indexa notas nuevas en un almacén que ya está en la versión 40. cli-core 0.490.0.
 
-### Fixed
+### Corregido
 
 - **Una sincronización de correo con presupuesto termina de localizar una carpeta grande** en el almacén compartido (`memo`, `mail`). cli-core 0.491.0.
 
 ## 0.19.0 — 30.10.2026
 
-### Fixed
+### Corregido
 
 - **`tags list name:` ignora el caso de letra en cualquier alfabeto, no solo en el latino.** `tags list 'name:*ТАРТ*'` ahora encuentra un chat o contacto llamado «Тартус»; antes solo se igualaban A–Z, así que un nombre cirílico, griego o con acentos no se encontraba si el caso no coincidía. La primera ejecución tras la actualización pasa su almacén local a un formato nuevo (versión 38) y rellena las copias normalizadas de los títulos de chat y los nombres de contacto; no se descarga nada de WhatsApp. cli-core 0.484.0.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **La primera pantalla (`--help`) lista `gcal` en "Works with"**, junto a `drive`. cli-core 0.482.0.
 
 ## 0.18.0 — 30.10.2026
 
-### Added
+### Novedades
 
 - **`messages transcribe` transcribe un archivo de audio que alguien envió, no solo una nota de voz.** Una grabación de iPhone llega a WhatsApp como un archivo `audio/mp4`; ahora la transcribe el modelo local. MP3, FLAC y Ogg Vorbis no necesitan nada más; AAC/M4A necesita `ffmpeg` en la máquina, y sin él el comando lo indica. Se rechaza el audio de más de una hora. cli-core 0.481.0.
 
 ## 0.17.0 — 29.10.2026
 
-### Added
+### Novedades
 
 - **Una tarjeta de contacto compartida muestra su nombre y teléfono**, en línea y desde el almacén: en JSON el adjunto tiene `contact` (`name`, `first_name`, `last_name`, `phone`). La vCard en sí sigue sin imprimirse nunca. Requiere cli-core 0.477.0.
 - **`reactions list <chat> <message>`** muestra quién reaccionó a un mensaje, de la más reciente a la más antigua, y acepta `reaction:🔥` y `--limit`/`--cursor`. WhatsApp no tiene una petición para esto, así que la lista es lo que recibió el almacén local (el envío del historial, `serve` y `watch`), no una respuesta en vivo: falta una reacción enviada con `reactions add` o una que llegó mientras nada escuchaba. Cada persona aparece una vez, con su reacción más reciente; una retirada se omite. Un canal la rechaza (`reactions.broadcast`). Requiere cli-core 0.480.0.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **`contacts info` pasa a ser `contacts show`**, que acepta `--offline` para responder solo desde el almacén. `--show-phone` desaparece, así que un script que lo pase falla como opción desconocida; quítalo. `--hide-phone` es la opción para dejar fuera un número (WhatsApp no da ninguno para la cuenta ni para una persona, así que aquí no cambia nada). La herramienta MCP `contacts info` desaparece y un permiso guardado `contacts.info` se rechaza con el `config unset` que lo elimina; `contacts.show` lo cubre.
 
 ## 0.16.0 — 29.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **La skill del agente figura en ClawHub como `wirecat-whatsapp`.** Instálala con `openclaw skills install @wirecat/wirecat-whatsapp`. La ficha `whatsapp-cli` ya no se actualiza. `wa skill install` sigue escribiendo `skills/whatsapp-cli/`.
 
 ## 0.15.0 — 29.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **`wa mcp serve` sin perfil se rechaza; indica qué sirve.** Ejecuta `wa <profile> mcp serve` para un perfil, `wa mcp serve --profiles work,personal` para una lista, o `wa mcp serve --profiles all` para todos los perfiles. Sin ninguno sale con `2` y `validation_error` y lista los perfiles. Lo mismo vale para `--http`, `mcp revoke`, `mcp server start|stop|status` y `mcp config`. Una entrada de app que ejecuta `wa mcp serve` sin perfil deja de funcionar: imprímela de nuevo con `wa mcp config --profiles all`, o `wa <profile> mcp config`. La entrada del MCP Registry ahora ejecuta `wa mcp serve --profiles all` (cli-core 0.470.0).
 - **cli-core 0.473.0.** Cada mensaje que imprime `wa` dice si lo enviaste tú (`sender_is_me`). El registro de una ejecución fallida conserva el código de error de la red (`runs show`, `error.cause_code`). `--offline --transcribe` lista bajo `missing` los mensajes de voz que no pudo transcribir, con el comando que lo hace.
 
 ## 0.14.0 — 29.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **cli-core 0.469.0 y cli-base 0.65.0.** cli-core 0.469 acepta solo cli-base 0.65, así que ambas versiones fijadas se mueven juntas. cli-base 0.65 conoce los verbos `serve` y `revoke`, por lo que sus excepciones de lint desaparecen, y su `cli-dev bundle` encuentra un servidor iniciado con una opción antes de `mcp serve`. Desde cli-core 0.467 cada ejecución se registra por defecto, también las correctas, y dice quién la pidió (`via`); `record: false` ahora conserva los fallos. Desde cli-core 0.468, un servidor MCP ofrece mediante su herramienta de lectura un comando que solo descarga al almacén.
 - **El servidor MCP es `wa <profile> mcp serve`; `wa <profile> mcp` a secas imprime la ayuda.** Los inicios de sesión del navegador se olvidan con `wa <profile> mcp revoke` en lugar de `mcp --revoke`, y `wa mcp serve` sin perfil sirve todos los perfiles. El servidor de un bot es `wa <name> bot mcp serve`. Una entrada de app que ejecuta `wa personal mcp` debe cambiar a `wa personal mcp serve`: ejecuta de nuevo `wa personal mcp add <app>` o `wa personal mcp config`. `mcp server start`, las entradas que imprime `mcp config` y la entrada del MCP Registry ya ejecutan el comando nuevo (cli-core 0.463.0).
 - **`wa skill show|status|install --json` imprimen `{ item, meta }`.** Los campos de la skill pasaron a `item`; el instalador de Windows los lee de ahí (cli-core 0.462.0).
 - **`wa account list` dice si cada perfil tiene la sesión iniciada en este equipo** (`signed_in`), y los resultados de búsqueda de todo tipo nombran los campos que un agente debe leer como datos (`untrusted`). Un llamador que los compare con una copia antigua y estricta del esquema rechazará el campo nuevo (cli-core 0.464.0 y 0.466.0).
 
-### Added
+### Novedades
 
 - **`wa <profile> mcp server status` dice qué hizo por última vez cada app de navegador con la sesión iniciada** (cli-core 0.454.0).
 - **`wa upgrade` reinicia el servidor MCP de navegador que lanzó `wa mcp server start`** con el mismo puerto, dirección y límites (`mcp_servers`, versión antigua → nueva); uno iniciado a mano se deja en marcha y se nombra. Las sesiones de agente por stdio que siguen en la versión antigua se listan (`stale_sessions`): reinícialas desde tu app de agente. Esto funciona a partir de la próxima actualización (cli-core 0.464.0).
 
-### Fixed
+### Corregido
 
 - **`wa` arranca en aproximadamente la mitad de tiempo: el paquete se ejecuta desde un bundle.** Un comando cargaba unos mil archivos de módulos antes de hacer nada; ahora carga unas pocas decenas que contienen el mismo código, generadas por `cli-dev bundle` de cli-base. `wa messages list --help` en caliente pasó de 416 a 200 ms, `wa --version` de 39 a 18 ms. La salida no cambia; el motor de WhatsApp se sigue encontrando en su paquete de plataforma. Un `wa serve` o `wa mcp serve` en marcha carga todo su código poco después de arrancar, así que actualizar `wa` en el sitio no lo rompe. El paquete es más grande: 2,7 MB de descarga en lugar de 0,3 MB.
 - **`wa mcp serve` sin perfil marca los perfiles que no tienen la sesión iniciada.** Listaba todos los perfiles, así que una app podía elegir uno sin dispositivo vinculado y fallar. Ahora cada perfil lleva una etiqueta (`default — not signed in`) en el menú de la app y en la descripción, y una llamada a uno sin sesión responde cómo iniciarla: `wa <profile> setup`, o desde WireCat Desktop.
@@ -327,7 +539,7 @@ Notable changes to `@wirecat/whatsapp-cli`. One section per version, newest firs
 
 ## 0.13.0 — 27.10.2026
 
-### Added
+### Novedades
 
 - **`wa mcp` sin perfil sirve todos los perfiles, por stdio y con `--http` (cli-core 0.450.0).** Una app de IA necesita un solo conector para WhatsApp, no uno por perfil. Cada herramienta recibe un `profile` obligatorio (todos los perfiles de aquí, sin valor por defecto) y se le dice al agente que pregunte cuando no nombraste la cuenta; la llamada se ejecuta en el propio `wa <profile> mcp` de ese perfil, así que sus permisos se aplican como antes. WhatsApp permite una conexión por cuenta: ejecuta `wa <profile> serve` mientras otro proceso `wa` pueda tenerla. `--public-url` acepta una ruta, `https://<name>.ts.net/wa`.
 - **El error de un perfil sin vincular también ofrece WireCat Desktop.** `is not linked to WhatsApp` ahora dice: ejecuta `wa <profile>
@@ -338,12 +550,12 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **La skill `whatsapp-cli` le dice a OpenClaw y ClawHub que necesita `wa`, y cómo instalarlo** (`metadata.openclaw`: `requires.bins` y el paquete npm `@wirecat/whatsapp-cli`). Con `wa` ausente del PATH, OpenClaw marca la skill como no lista y ofrece instalar el paquete. Claude Code y Codex ignoran el bloque.
 - **`wa <profile> mcp server start|stop|status` ejecuta el servidor MCP HTTP en segundo plano (cli-core 0.445.0).** `start` acepta `--public-url`, `--port` y `--permission` como `mcp --http` y vuelve cuando el servidor escucha; `status` da el puerto, la dirección, el código de inicio de sesión de un solo uso y las apps que iniciaron sesión; `stop` termina solo el servidor que inició.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **wa necesita cli-base 0.63.0 (cli-core 0.452.0).** Nada de lo que usa wa cambió en él.
 - **El registro de una ejecución conserva la línea de comandos tal como se escribió (cli-core 0.439.0 a 0.447.0).** `runs show` y `run.json` llevan `argv`, las palabras después de `wa`, con los secretos como `[redacted]` (una opción con nombre de secreto, una contraseña en una URL, un formato de token conocido, una cadena de aspecto aleatorio) y un número de teléfono nunca se conserva. `wa <profile> config set record_input false` deja `[redacted]` en lugar de cada valor escrito que pueda ser texto. Los eventos registrados siguen guardando ids, nunca el título de un chat ni el texto de un mensaje.
 
-### Fixed
+### Corregido
 
 - **La búsqueda por significado y `--discover` se ejecutan también en el ONNX Runtime nativo en Windows (cli-core 0.451.0).** Tras `wa <profile> models download`, los modelos de texto y el reranker usan la biblioteca nativa en Windows x64 y arm64, como ya hacían en Linux y macOS: de 2 a 3 veces más rápido que WebAssembly. La descarga toma `onnxruntime.dll` del paquete npm `onnxruntime-node` (113,5 MB, una sola vez, comprobado con sha256). Los modelos de imagen (CLIP, SigLIP2) también usan la biblioteca nativa, donde esté instalada. Los resultados son los mismos.
 - **Cada comando tarda menos en prepararse (cli-base 0.62.0, cli-core 0.449.0).** La comprobación de los comandos compartidos ahora describe cada comando una vez, no de nuevo por cada grupo que tiene encima. Era cerca del 60 % de la preparación de cada comando; en tg un `run(["--version"])` en caliente pasó de 49 a 29 ms. Detecta los mismos cambios que antes.
@@ -351,40 +563,40 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.12.0 — 26.10.2026
 
-### Added
+### Novedades
 
 - **`search messages --discover` reordena sus primeros 50 resultados una vez descargado un reranker (cli-core 0.435.0).** Un modelo local lee la pregunta junto con cada resultado, y su puntuación se mezcla con la propia de discovery; los resultados posteriores a los 50 primeros conservan su orden. Por defecto es mMARCO (136 MB, `wa models download mmarco`); el ajuste de perfil `search_reranker` elige `bge-reranker-v2-m3` (588 MB) u `off`. Cada resultado reordenado tiene `discovery.reranker_score`; `score` sigue siendo el de discovery. Sin el modelo, discovery conserva su orden y dice `not reranked: …` (en `--json` y MCP: `missing` y `next`). Una búsqueda nunca descarga un modelo ni envía texto a ningún sitio; `--exact`, `--newest` y las consultas estrictas no se tocan.
 - **`search all` también encuentra mensajes por significado, una vez descargado e5-small y con los mensajes ya vectorizados (cli-core 0.435.0).** Los resultados por significado se mezclan con los de palabras en una sola lista de mensajes; el `foundBy` de cada elemento dice qué búsqueda lo encontró. Una consulta con NOT, o con un filtro bajo OR o en un grupo, sigue usando solo palabras. Sin el modelo o los vectores, `search all` lee palabras como antes y dice por qué. `--exact` y `--backend server` siguen usando solo palabras.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **El almacén compartido pasa a la versión 34 (cli-core 0.434.0).** La búsqueda por significado ordena mediante un índice vectorial guardado en el almacén, construido en la primera apertura con esta versión. Una vez que esta versión abre el almacén, una CLI con cli-core 0.433.0 o anterior lo rechaza y pide actualizarse, así que actualiza juntas todas las CLI de WireCat que comparten el almacén. Cuando falta la extensión de SQLite del índice o no se carga, abrir el almacén falla con `store.vector-extension-missing` o `store.vector-extension-failed`: reinstala wa. `store check` informa de `vector_indexes` y falla cuando un índice no está sincronizado.
 - **`wa upgrade --help` muestra solo `wa upgrade --check` como ejemplo (cli-core 0.433.0).** El ejemplo de `wa upgrade` a secas desaparece: copiado y ejecutado, actualizaba.
 - **El análisis a través de Anthropic envía la clave como `Authorization: Bearer` (cli-core 0.433.0).** Antes enviaba `X-Api-Key`. Una pasarela en un `models.<purpose>.base_url` personalizado que lea `X-Api-Key` debe leer `Authorization`.
 
-### Fixed
+### Corregido
 
 - **Un vector almacenado desaparece cuando ningún texto del almacén lo usa (cli-core 0.435.0).** Una imagen cuya foto cambió y un chat purgado (`store clear --left`, un chat fusionado con otro) dejaban vectores atrás, y ya no. `store rebuild` elimina los que dejaron versiones anteriores (`unused_vectors_dropped`), y `store check` los cuenta (`vectors.unused`).
 - **`conversations embeddings clear --chat` también elimina los vectores de mensajes del chat (cli-core 0.435.0)**, no solo los de sus conversaciones.
 
 ## 0.11.0 — 25.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **La ejecución de un comando `bot` fallido nombra la llamada a la Cloud API que falló.** `runs show` y `runs list` dan a su `error.http` el `method` y el `endpoint_template` junto al estado — `{ "method": "POST", "endpoint_template": "/v23.0/:id/messages", "status": 400 }` — donde antes solo tenían el estado. Cada id de la ruta se escribe `:id`, así que el id del número de teléfono, el id de la cuenta de negocio y el id de un medio nunca llegan a una ejecución ni a una traza. Las peticiones del bot en `--trace` y en una ejecución registrada llevan los mismos dos campos, y una línea de traza legible los muestra tras el nombre de la operación. Un script que analice el texto de `--trace` verá esa columna extra.
 
-### Added
+### Novedades
 
 - **`store reset --dry-run` lista lo que vaciaría un reset y no borra nada** (cli-core 0.429.0): los archivos del almacén y sus bytes, cada tabla de datos con sus filas, si antes se hace una copia de seguridad, y si un serve u otro proceso tiene el archivo abierto.
 - **`search messages --discover` también encuentra mensajes cercanos en significado** una vez descargado e5-small y tras dar `conversations rebuild` a los mensajes sus propios vectores (cli-core 0.432.0). El `discovery.found_by` de cada resultado dice qué búsqueda lo encontró. Hasta entonces discovery busca por palabras como antes y dice por qué. No se descarga nada y ningún texto sale del equipo.
 
-### Fixed
+### Corregido
 
 - **Un `--version` a secas responde antes de que se cargue el programa**: el bin arranca a través de `@wirecat/cli-core/cli/start` (cli-core 0.429.0).
 
 ## 0.10.0 — 25.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Each command is checked under its own permission key (cli-core 0.421.0).** `chats unmute` is checked only as `chats.unmute`, so a level saved on `chats.mute` no longer applies to it. `messages sync` is checked as `messages.sync`; a level on `messages` still applies. A saved permission key that no command checks now stops every command, bot ones included, with the `config unset` that removes it.
 - **`doctor --json` reports the config file's problems as `config.issues` (cli-core 0.423.0).** `config.error` is gone. Each issue has a `kind` (`invalid_json`, `unknown_setting`, `unknown_permission`, `missing_setting` or `invalid_value`), the `file`, the `profile` and `key` where they apply, `line` and `column` for invalid JSON, a sentence that says what the value has to be (never the value), and `fix`, the `config unset` command that removes it. `doctor` lists every problem in the file, still exits 0, and still answers when the JSON is broken. A profile lock, a flag or an environment variable the settings refuse is reported in `settings.error`.
@@ -394,32 +606,32 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **A run record names how it was started and why it failed (cli-core 0.425.0).** `run.json`, `runs list`, `runs show` and `search runs` gain `cli_command` (the whole command, `wa messages list`), `argv` with every value that may be content written `[redacted]`, `agent` (the coding agent and its session, where it gives one) and, for a failed run, `error`. A run with no profile named leaves `profile` out instead of recording `default` (cli-core 0.424.0).
 - **The first screen says zm and drive are "searchable with your other WireCat data"** (cli-core 0.426.0).
 
-### Added
+### Novedades
 
 - **`wa skill status` and `wa skill show --for claude|agents`** (cli-base 0.56.0, through cli-core 0.427.0). `skill status` says, for Claude Code and for `~/.agents`, whether the installed SKILL.md matches this version; `skill show --for` prints the copy installed there.
 - **`wa store tables list` lists every table of the local archive** with its kind and rows; `--full` adds each table's size (cli-core 0.427.0). `store info` also says which tools opened the store, its journal mode, pages, migrations and last backup, and counts by provider, chat kind, account, year and attachment kind.
 
-### Fixed
+### Corregido
 
 - **A crash in the middle of a command is reported like any other failure.** It used to print Node's stack trace; now it prints the `internal_error` failure (`command.crashed`) — one line at a terminal, the JSON error object otherwise — and still exits 1. A stack trace tells a script nothing it can act on, and can carry text that should not reach the screen. A script that read the stack trace on stderr reads the error object instead.
 
-### Security
+### Seguridad
 
 - **`doctor` reports a `config.json` or config folder that other users can read, with the `chmod` that fixes it (cli-core 0.428.0).** `files.problems` lists the config file (wants `0600`) and its folder (wants `0700`), also when `WA_CONFIG_DIR` names the folder, and stderr prints `to make it private: chmod 600 '<path>'`. `files` is in the answer also with no profile named and when the settings are refused. Nothing is changed on disk; Windows is not checked.
 
 ## 0.9.0 — 25.10.2026
 
-### Added
+### Novedades
 
 - `wa --help` names `wa account list`, which lists your profiles and their logged-in accounts.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **The shared store moves to version 33 (cli-core 0.420.0).** Once this version opens the store, a CLI on an older cli-core refuses it and asks to be upgraded, so upgrade every WireCat CLI that shares the store together.
 
 ## 0.8.0 — 24.10.2026
 
-### Added
+### Novedades
 
 - The owner-run `bin/live-oneshot-drop` can send its two test messages automatically with
   `--sender-profile`, using two explicitly confirmed accounts owned by the same person.
@@ -432,7 +644,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - Incoming community announcement comments are decrypted into their post's stored thread; `messages comments`
   reads the comments this device has received. Channels have no comments, and comment sending stays unavailable.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - The one-shot regression checks the receiver's store before restarting `serve`; delivery only after restart
   is inconclusive. Lost messages and inconclusive checks now return nonzero.
@@ -443,7 +655,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 - **Shared CLI contracts require explicit provider overrides.** Discovery includes the inherited definitions, schemas, reasons and exact deliberate differences. Contact activity filters with `scope:` and `at:`, and diagnostic run searches with `started_at:`. Unknown roster and webhook type lists are omitted instead of `null`.
 
-### Fixed
+### Corregido
 
 - Permission-denied commands stay discoverable in CLI and MCP with current availability and reasons. Calls still enforce permissions; a listed command grants no execution access.
 - The owner-run one-shot regression can pause and restore a persistent systemd user service, including one
@@ -454,7 +666,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.7.0 — 24.10.2026
 
-### Added
+### Novedades
 
 - The first command at a terminal asks once for your languages, other WireCat tools to install, and whether
   commands and agents may only read. Pipes, agents and noninteractive runs skip the questions.
@@ -464,7 +676,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - Incoming community announcement comments are decrypted into their post's stored thread; `messages comments`
   reads the comments this device has received. Channels have no comments, and comment sending stays unavailable.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Live JSON output uses item and end records.** `watch --jsonl` wraps each message or event in
   `{ "type": "item", "data": … }`, uses snake_case fields and finishes with a `type: "end"` record.
@@ -479,7 +691,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
   `chats links`, `metadata show|sync`, `tasks update`, `commands info`, `mcp add|check` and
   `doctor reports show|create`. Models use `models list`, `models download` and `models keys`.
 
-### Fixed
+### Corregido
 
 - Commands to end other sessions or remove contacts are hidden from help, discovery and MCP because a linked
   WhatsApp device cannot perform them.
@@ -491,7 +703,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.6.0 — 24.10.2026
 
-### Added
+### Novedades
 
 - **`wa <profile> bot`: a WhatsApp Business number on Meta's Cloud API.** A bot profile keeps an access token in the
   system keychain (`bot auth set`) and the number's ids as settings (`config set --bot phone_number_id …`). `bot me`
@@ -524,7 +736,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **Pull requests cannot grow the command-lint baseline.** New violations must be fixed or carry a dated,
   reasoned override, so adding a feature cannot silently weaken the existing checks.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **Shared flags use one meaning.** Analysis uses `--analysis-provider`, vectors `--embedding-provider`, consent removal `--consent-provider`, tag ownership `--claim` and stored-answer removal `--answer-model`. Contact notes read `--text-file`; group message lifetime is `--disappear-after`. Catch-up views use query terms such as `inbox kind:group`. Old CLI flags remain hidden aliases for one compatibility release and cannot be combined with their replacements; saved MCP requests must use canonical arguments.
 - MCP message deletion takes `message`, chat export takes `chat`, and duplicate-task operations take `task`
@@ -538,7 +750,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **Setup returns suggested commands in `item.commands` and login details in `item.session`.** Update scripts
   that read `item.next` or `item.device`; `next` is reserved for structured continuation steps.
 
-### Fixed
+### Corregido
 
 - cli-core 0.399.0 supplies the shared flag migration, additional help examples, offline review and the updated MCP server dependency. The command-lint baseline drops from 52 entries to 38; guides, skill and the generated reference use the released flags.
 - Message-search commands no longer list or delete saved meeting searches.
@@ -551,7 +763,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **Agents are no longer offered channel comments, which WhatsApp cannot read** (cli-core 0.393.0). A direct call
   fails before connecting. Commands also show more concrete examples in their help.
 
-### Security
+### Seguridad
 
 - **The engine uses the patched Go certificate verification library.** Release and monthly checks now
   audit reachable Go vulnerabilities, and dependency updates cover the engine's Go module.
@@ -560,14 +772,14 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.4.0 — 22.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **A call with no `outcome` may have ended.** Before, a call message with no `outcome` in `provider_metadata` was
   always still ringing. Now a call that ends for a reason `wa` does not know is kept as "Voice call" with no
   `outcome`, so it does not pass as missed or answered. A script that reads a missing `outcome` as "ringing" should
   read the text as well: a ringing call's text starts with "Incoming".
 
-### Fixed
+### Corregido
 
 - **A call answered or declined on your phone is stored as answered or declined, not missed.** While `serve` or
   `watch` runs, WhatsApp tells a linked device only that the call was taken or turned down on another device, and
@@ -579,7 +791,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.3.0 — 22.10.2026
 
-### Added
+### Novedades
 
 - **Date filters say how they read the date** (cli-core 0.384.0). The JSON answer of a command with a date filter,
   such as `contacts context`, `contacts timeline`, `messages sync`, `chats moderate` and `store export`, gives
@@ -605,7 +817,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
   so chat stats do not count it as something said. A group call is kept as it rings. `wa` never answers or declines a
   call. The engine speaks protocol 42.
 
-### Fixed
+### Corregido
 
 - **A store the pre-rename `cli-messaging` wrote is refused again, and left untouched** (cli-core 0.385.0). Since
   cli-core 0.382.0 such a file was opened and failed with `internal_error`; it now fails with `configuration_error`.
@@ -637,7 +849,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **The ban error says its end time is in UTC.** "the ban ends 2026-10-21T14:03:00.000Z" now ends in "UTC", so it is
   not read as local time. `standing.until` is unchanged.
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **A typed date or time is read in your zone, and a date alone covers your whole local day** (cli-core 0.379.0).
   `--since-time 2026-10-01` used to start at UTC midnight; it now starts at local midnight, and `--until-time` with a
@@ -649,7 +861,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.2.0 — 21.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **`--qr-file` is gone: without a terminal, `session start` and `setup` print the QR code as text** for an agent to
   paste into the chat, instead of a PNG the person opens in an image viewer. The text is plain half blocks, no
@@ -822,7 +1034,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **A live edit or deletion of a channel post is no longer passed on**: `watch` and `serve` used to hand it on under
   an id the store does not file the post by. A channel's posts are now read with `messages sync <channel>`.
 
-### Security
+### Seguridad
 
 - **The engine log (`WA_ENGINE_LOG`) no longer keeps media download links.** When a download failed on the network,
   whatsmeow wrote the whole link into the log: the file's path on WhatsApp's servers, its hash and the signed
@@ -848,7 +1060,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
   now they exit 5 at once, and a broken login no longer turns the refusal into a network failure. A permission level
   of `readonly` or `deny` on the command does the same (cli-core 0.343.0).
 
-### Fixed
+### Corregido
 
 - **An album wa sends shows on the phone as one album.** It showed as two messages, a photo and a video. Messages
   wa sends now carry a message secret and a reporting token (all but reactions and poll votes), as WhatsApp Web,
@@ -1014,7 +1226,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **A query with a `/` that opens a regular expression and never closes it says to quote the value** (cli-base
   0.44.0): `text/plain` now hints `"text/plain"`. The error code and reason are unchanged.
 
-### Added
+### Novedades
 
 - **`messages list <old id> --offline` finds the chat that id moved to**, and so does every other command that
   names a chat by the phone-number id it had before WhatsApp gave the person a LID. The store now keeps each chat's
@@ -1168,7 +1380,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 
 ## 0.1.0 — 17.10.2026
 
-### Changed — may break callers
+### Cambios — pueden romper scripts
 
 - **The engine dying during a write answers `outcome_unknown`** (WC-LIFE-9): exit 14, `retry.safe: false`, the
   `operation_id` kept, reason `engine.stopped-mid-write`. It answered `provider_unavailable` (exit 12), which
@@ -1231,7 +1443,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **`chats admins add` takes no `--can`**: a WhatsApp admin has every right, so it gives them all. A script that
   passed `--can` drops it.
 
-### Security
+### Seguridad
 
 - **`WA_ENGINE_LOG` no longer writes phone numbers** (WC-SECR-1): every user id (phone, device and hidden-id forms)
   and any other long run of digits is masked before a line reaches the file.
@@ -1250,7 +1462,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **The Go engine builds with Go 1.26.9 and `golang.org/x/net` 0.60.0**, clearing the affected runtime and
   networking advisory paths while retaining the current Go release branch.
 
-### Fixed
+### Corregido
 
 - **`session end` no longer runs through a running `serve`**: it logged out `serve`'s own connection and then
   deleted the device keys under it. It now refuses with `provider_unavailable`, reason `device.in-use` (exit 12),
@@ -1277,7 +1489,7 @@ delete|clear` quedan fuera de MCP: en el nivel `ask`, MCP los ejecuta.
 - **Release and monthly source checks include the Go engine**, using its module toolchain. Local tests resolve the
   shared TypeScript config directly so they run in isolated worktrees.
 
-### Added
+### Novedades
 
 - **`wa <profile> flood clear`** (cli-core's, as in tg and max): forgets the waits WhatsApp asked for and lifts the
   hold on writes. The refusal during a hold already named it; `wa` did not have it.

@@ -2,7 +2,7 @@
 title: "WhatsApp desde el navegador"
 ---
 
-Usa esta página cuando desee una aplicación de IA que se ejecute en el navegador o en tu teléfono, por ejemplo ChatGPT, Codex web o Claude, para leer y responder sus mensajes de WhatsApp. Una aplicación de este tipo no puede iniciar `wa` en tu ordenador, por lo que le proporciona una dirección de Internet. Al final, la aplicación está conectada a `wa` a través de una dirección HTTPS privada, solo puede hacer lo que tu perfil permite y ti sabe cómo detenerla o recuperar su acceso.
+Conecta una aplicación MCP del navegador o del teléfono, como ChatGPT o Claude, a `wa` en un ordenador que controlas. Configurarás un túnel HTTPS con inicio de sesión, comprobarás qué acciones permite el perfil de `wa` y aprenderás a detener la conexión o revocar el acceso.
 
 Términos utilizados en esta página:
 
@@ -36,13 +36,15 @@ ChatGPT / Claude ──internet──▶ Tailscale Funnel ──▶ wa personal 
 - **La computadora que ejecuta `wa` debe permanecer encendida.** Para usarlo desde un teléfono, o desde una computadora portátil sin nada instalado, ejecute todo esto en un servidor pequeño que esté siempre encendido y vincule allí `wa` (`wa personal setup --agent none`). Ese es un dispositivo vinculado más en tu teléfono.
 - **Quién puede agregar un conector remoto:**
 
-| Aplicación | Planes | Documentación |
-|---|---|---|
-| ChatGPT | Plus, Pro, Business, Enterprise, Education: en modo desarrollador | [modo desarrollador](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
-| Claude | cualquier; un conector personalizado en el plan gratuito | [conectores personalizados](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
-| Gemini | sólo adultos en EE.UU. con una cuenta personal de Google | [aplicaciones conectadas](https://support.google.com/gemini/answer/17209137?hl=en) |
+Tu cuenta debe permitir añadir un conector MCP remoto. Comprueba los requisitos actuales de cuenta y región antes de iniciar el túnel.
 
-No se han probado todos los pasos de configuración para cada sistema operativo en ese sistema. Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/whatsapp-cli/issues).
+| Aplicación | Requisitos de conexión |
+|---|---|
+| ChatGPT | [Guía de conexión](https://developers.openai.com/api/docs/guides/custom-mcp-server) |
+| Claude | [Guía de conexión](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp) |
+| Gemini | [Guía de conexión](https://support.google.com/gemini/answer/17209137?hl=en) |
+
+Si un paso no funciona, [abra un problema](https://github.com/WireCatLabs/whatsapp-cli/issues).
 
 ## Inicie el túnel y el servidor.
 

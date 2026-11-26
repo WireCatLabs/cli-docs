@@ -26,7 +26,7 @@ wa personal session start phone    # your number, typed in the terminal, then a 
 
 **QR:** escanea el código en WhatsApp en el teléfono: Ajustes → Dispositivos vinculados → Vincular un dispositivo. El código se renueva mientras esperas.**Teléfono:** escribe tu número en formato internacional cuando `wa` te lo solicite. `wa` muestra un código de emparejamiento de ocho caracteres; en el teléfono, abra Configuración → Dispositivos vinculados → Vincular un dispositivo → Vincular con número de teléfono y escríbalo. El número va al motor en su entrada, nunca como argumento, por lo que otros programas en esta computadora no pueden verlo en la lista de procesos.
 
-Inmediatamente después, el teléfono envía su historial. `session start` mantiene abierta la misma conexión, guarda lo que llega a el almacén local y se detiene cuando el teléfono ha estado en silencio durante 45 segundos o con Ctrl+C. Ctrl+C allí, o `--timeout`, finaliza solo esta espera: el dispositivo permanece vinculado, lo que llegó se guarda y cuenta, y el comando finaliza con el código de salida `0`. `wa personal setup` espera de la misma manera, luego continúa con los pasos restantes dentro del límite de tiempo habitual del comando y comienza de nuevo. Luego siga recibiendo con `wa personal server install` ([el almacén local](./archive.md)).
+Inmediatamente después, el teléfono envía su historial. `session start` mantiene abierta la misma conexión, guarda lo que llega al almacén local y se detiene cuando el teléfono dice que el historial está completo. Si el teléfono nunca lo dice, se detiene tras 5 minutos sin nada nuevo y avisa de que el teléfono no lo confirmó. Si en 20 segundos aún no llegó nada, avisa de que sigue esperando. Ctrl+C allí, o `--timeout`, finaliza solo esta espera: el dispositivo permanece vinculado, lo que llegó se guarda y cuenta, y el comando finaliza con el código de salida `0`. `wa personal setup` espera de la misma manera, luego continúa con los pasos restantes dentro del límite de tiempo habitual del comando y comienza de nuevo. Luego siga recibiendo con `wa personal server install` ([el almacén local](./archive.md)).
 
 Mantén WhatsApp abierto en el teléfono hasta que `serve` esté en marcha: el teléfono puede enviar más partes después de que `session start` se detenga. Una parte que llega mientras otro comando está conectado, un envío por ejemplo, se guarda en el archivo del dispositivo y no en el almacén. `serve` la guarda la próxima vez que se conecte.
 
@@ -49,7 +49,7 @@ Una aplicación que muestra el enlace en su propia ventana, como WireCat Desktop
 
 ```sh
 wa personal account show     # who this profile is linked as; the phone number shows only its last four digits
-wa account list              # every profile on this computer, and the account each is linked as
+wa session list              # every profile on this computer, and the account each is linked as
 wa personal session end      # unlink the device on WhatsApp's side, and delete its keys here
 ```
 
@@ -61,9 +61,11 @@ wa personal account update --description "Back on Monday"       # the "about" li
 wa personal account update --photo ~/me.jpg                     # the profile photo, a square JPEG
 ```
 
-El nombre va al teléfono y a sus otros dispositivos a la vez. Otras personas probablemente lo vean solo la próxima vez que el teléfono se conecte: un dispositivo le dice a WhatsApp su nombre cuando dice que está en línea, y `wa` nunca lo hace (aún no verificado). Es posible que un dispositivo vinculado hace unos minutos aún no tenga las claves de configuración de WhatsApp; Mantén `serve` ejecutándose por un tiempo e inténtelo nuevamente.`wa` toma la foto como un JPEG cuadrado de 190 a 720 píxeles por lado, los lados que toma para un grupo; No se comprueba si WhatsApp toma otros lados de su propia foto. `wa` no convierte ni recorta uno, y su contenido rechaza un PNG o WebP, antes de que algo cambie. En conjunto, primero va el nombre, luego acerca de y luego la foto; si falla uno posterior, el error dice cuál cambió. La eliminación de la foto se realiza en el teléfono.
+`wa` envía el cambio de nombre como un ajuste de la cuenta. Un dispositivo recién vinculado puede carecer de las claves de ajustes de WhatsApp: mantén `serve` en marcha y vuelve a intentarlo más tarde.
 
-`wa personal session end` elimina el dispositivo **también del lado de WhatsApp**: desaparece de la lista de dispositivos vinculados del teléfono. Deja el almacén local como está. Mientras `serve` se ejecuta para el perfil, se niega (código de salida `12`): detenga primero `serve` con `wa personal server stop`, o Ctrl+C donde se ejecuta.
+Para la foto de perfil, `wa` exige un JPEG cuadrado de 190 a 720 píxeles por lado, con la misma validación que para una foto de grupo. `wa` no convierte ni recorta imágenes y rechaza contenido PNG o WebP antes de cambiar nada. Si indicas nombre, descripción y foto juntos, se cambian en ese orden; un error posterior identifica los cambios ya realizados. Quita la foto desde el teléfono.
+
+`wa personal session end` elimina el dispositivo **también del lado de WhatsApp**: desaparece de la lista de dispositivos vinculados del teléfono. Deja el almacén local como está. Mientras `serve` se ejecuta para el perfil, se niega (código de salida `12`): detenga primero `serve` con `wa personal server stop`, o Ctrl+C donde se ejecuta. Una ejecución con carpetas movidas (un `WA_*_DIR` definido, u otro `HOME`) nunca desvincula en WhatsApp: borra solo sus propias claves de dispositivo, y tú quitas el dispositivo en el teléfono. Si su carpeta de estado sigue siendo la tuya, el dispositivo es tuyo: entonces no borra nada, y `account remove` se niega.
 
 Para olvidar un perfil por completo, usa `wa personal account remove --keep-data` o `--delete-data`. Desvincula el dispositivo de la misma manera y luego borra las claves del dispositivo del perfil y lo que cli-core guarda para él. `--keep-data` deja sus mensajes en el almacén, donde se pueden seguir buscando. `--delete-data` los borra.
 
@@ -99,7 +101,7 @@ export WA_PROFILE=work     # the same for the whole shell session
 
 **La primera palabra es el perfil cuando no es un comando.** Por lo tanto, un perfil no puede llamarse `chats`, `messages` ni ninguna otra palabra de comando. Los nombres son letras, dígitos, punto, guión y guión bajo, y comienzan con una letra o un dígito.
 
-Se utiliza la primera coincidencia en este orden: la primera palabra, luego `WA_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles en esta computadora. `wa` nunca elige uno, ni siquiera el único. Los comandos que no utilizan ninguna cuenta se ejecutan sin un perfil: `--help`, `--version`, `commands`, `skill show`, `account list` y `config show`.
+Se utiliza la primera coincidencia en este orden: la primera palabra, luego `WA_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles en esta computadora. `wa` nunca elige uno, ni siquiera el único. Los comandos que no utilizan ninguna cuenta se ejecutan sin un perfil: `--help`, `--version`, `commands`, `skill show`, `session list` y `config show`.
 
 **`WA_PROFILE_LOCK` fija un proceso a un perfil.** Configúrelo donde se ejecuta un agente y se rechaza una primera palabra o `WA_PROFILE` que nombre cualquier otro perfil (código de salida `5`). Sin él, un agente podría elegir un perfil con menos límites.
 
@@ -114,7 +116,7 @@ Para qué sirve cada perfil: [perfiles](./profiles.md).
 | chats y mensajes | el almacén local de WireCat que comparte cada CLI de WireCat, `~/.local/share/WireCat/wirecat.db` |
 | configuración | `~/.config/whatsapp-cli/config.json`; nunca es un secreto |
 
-`WA_CONFIG_DIR`, `WA_STATE_DIR` y `WA_CACHE_DIR` mueven las tres carpetas ([referencia de configuración](configuration-reference.md)).
+`WA_CONFIG_DIR`, `WA_STATE_DIR` y `WA_CACHE_DIR` mueven las tres carpetas ([referencia de configuración](./configuration-reference.md)).
 
 ## Siguiente
 

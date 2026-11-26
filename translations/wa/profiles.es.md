@@ -13,7 +13,7 @@ Lee esta página si quieres una segunda cuenta o que tu agente de IA tenga menos
 | Usa dos cuentas de WhatsApp en una computadora | Vincula una vez por perfil: `wa work session start` |
 | Dale a tu agente menos derechos de los que tienes | Un perfil con sus propios [permisos](./permissions.md) |
 | Mantén un agente en ese perfil | `WA_PROFILE_LOCK` ([perfiles en vinculación](./sessions.md#profiles)) |
-| Ver todos los perfiles en esta computadora | `wa account list` |
+| Ver todos los perfiles en esta computadora | `wa session list` |
 
 ## Elige un perfil
 
@@ -23,7 +23,7 @@ Pon el nombre del perfil antes del comando:
 wa work config show
 ```
 
-`wa account list` muestra todos los perfiles en esta computadora y la cuenta a la que está vinculado cada uno; `wa work session end` desvincula el perfil `work`.
+`wa session list` muestra todos los perfiles en esta computadora y la cuenta a la que está vinculado cada uno; `wa work session end` desvincula el perfil `work`.
 
 Una configuración en `profiles.work` en el archivo de configuración se aplica a ese perfil; los valores bajo `defaults` se aplican cuando no tiene valor propio. Las reglas para los nombres de los perfiles y el orden en el que `wa` elige un perfil se encuentran en [perfiles en la vinculación](./sessions.md#profiles).
 

@@ -52,7 +52,7 @@ Dos tipos de mensajes no tienen claves, por lo que `wa` no puede guardar ni reen
 - **Una foto o un vídeo que se puede ver una vez.** Las propias aplicaciones de WhatsApp no guardan ni reenvían uno, por lo que `wa` deja caer sus claves cuando llega.
 - **Un mensaje almacenado antes de que `wa` manejara los archivos.** Nombra su archivo, pero no puede recuperarlo.
 
-WhatsApp mantiene un archivo en sus servidores sólo por un tiempo limitado. Cuando una descarga descubre que ya no existe, `wa` le pide a tu teléfono que la cargue nuevamente, como lo hacen las propias aplicaciones de WhatsApp, y recupera la nueva copia. Su teléfono debe estar en línea y aún contener el archivo: uno eliminado del teléfono desaparecerá para siempre.
+WhatsApp mantiene un archivo en sus servidores sólo por un tiempo limitado. Cuando una descarga descubre que ya no existe, `wa` le pide a tu teléfono que la cargue nuevamente, como lo hacen las propias aplicaciones de WhatsApp, e intenta descargar la nueva copia. Su teléfono debe estar en línea y aún contener el archivo: uno eliminado del teléfono desaparecerá para siempre.
 
 **Limitación conocida: un archivo antiguo aún no se descarga.** En los teléfonos probados, el teléfono carga el archivo nuevamente pero cifra la nueva copia con una nueva clave que no envía a los dispositivos vinculados, por lo que `wa` no puede leerlo. La descarga finaliza con `media.retry-failed` ("el teléfono cargó este archivo nuevamente, pero la nueva copia no se descargó") y no guarda nada, en lugar de un archivo roto. Abra el archivo en el teléfono o pídale al remitente que lo envíe nuevamente.
 
