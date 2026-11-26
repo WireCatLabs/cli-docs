@@ -32,7 +32,8 @@ ajuste que quitó. El ID de cliente, la carpeta de archivos y la zona horaria no
 | `runs_size_limit_mb` | lo máximo que puede ocupar el registro de ejecuciones; las ejecuciones correctas más antiguas se borran primero; 200 por defecto |
 
 Comprueba `zm config show` tras editar. El perfil no es un ajuste: es la primera palabra de cada comando
-([perfiles](./sessions.md#select-a-local-profile)). Otro ID selecciona otra entrada del almacén; autoriza esa app antes de usar API.
+([perfiles](./sessions.md#select-a-local-profile)). Un inicio de sesión solo sirve con la app con la que
+se hizo, así que tras cambiar el ID de cliente ejecuta de nuevo `zm <profile> session start`.
 
 ### Qué app de Zoom usa zm
 
@@ -46,8 +47,9 @@ que indique una:
 4. la app de WireCat, vacía por ahora.
 
 `zm doctor --json` muestra la elección en `oauth_client`: `{ "client": "own", "source": "env" }` o `"config"`, y sin
-ninguna `{ "client": null, "source": null, "reason": "WireCat has no Zoom app yet; …" }`. La entrada del almacén es
-`<client id>:<profile>`, así que un ID en `ZM_ZOOM_CLIENT_ID` usa la sesión creada con ese ID. Un archivo programado
+ninguna `{ "client": null, "source": null, "reason": "WireCat has no Zoom app yet; …" }`. La sesión se guarda en el
+llavero del sistema como `oauth:zoom:<profile>` en el servicio `zoom-cli`, una por perfil, sea cual sea la app con la
+que se inició. Un archivo programado
 conserva el ID con el que se guardó y se niega a ejecutarse con otro.
 
 El archivo guarda estos ajustes como `client_id`, `files_folder`, `files_timezone`, `source`, `context_sources`,
@@ -61,7 +63,7 @@ detienen en el primer problema, indican cómo quitarlo y cuántos más hay. `zm 
 `config.issues`:
 
 ```json
-{ "kind": "unknown_setting", "file": "/home/you/.config/zm/config.json", "key": "example_setting",
+{ "kind": "unknown_setting", "file": "/home/you/.config/zoom-cli/config.json", "key": "example_setting",
   "what": "setting example_setting is not a setting of zm", "fix": "zm config unset example_setting" }
 ```
 
@@ -81,11 +83,15 @@ comprobar la sesión OAuth guardada.
 
 | Plataforma | Configuración pública predeterminada |
 |---|---|
-| Linux y macOS | `~/.config/zm/config.json`, o el directorio `zm` dentro de `XDG_CONFIG_HOME` |
-| Windows | `%APPDATA%\zm\Config\config.json` |
+| Linux y macOS | `~/.config/zoom-cli/config.json`, o el directorio `zoom-cli` dentro de `XDG_CONFIG_HOME` |
+| Windows | `%APPDATA%\zoom-cli\Config\config.json` |
 | Ruta explícita | `config.json` dentro de `ZM_CONFIG_DIR` |
 
-Los directorios antiguos de macOS ya no se trasladan automáticamente; doctor muestra la ruta utilizada.
+zm guarda sus carpetas bajo `zoom-cli`, el nombre que usan `zm doctor` y el registro de ejecuciones; las versiones
+anteriores usaban `zm`. La primera ejecución de una versión nueva mueve lo que tienen las carpetas antiguas; lo que ya
+está en la carpeta nueva se queda, y también su copia antigua. Una carpeta antigua que queda vacía pasa a ser un enlace a
+la nueva, así que un zm anterior sigue encontrando sus ajustes. Los directorios antiguos de macOS no se mueven; doctor
+muestra la ruta utilizada.
 Ajustes públicos, tokens del almacén y base de reuniones son datos separados.
 
 `zm config set` guarda el archivo para que solo tú puedas leerlo (`0600`). `zm doctor --json` enumera el archivo y
@@ -97,21 +103,26 @@ su carpeta en `files.problems` cuando otros usuarios pueden leerlos, cada uno co
 Cada perfil indica qué puede hacer en `permissions`: una ruta de comando, con puntos, y un nivel.
 
 ```sh
-zm personal config set permissions '{"remote-meetings": "allow", "recordings": "readonly"}'
+zm personal config set permissions '{"meetings.create": "allow", "recordings": "readonly"}'
 ```
 
 | Nivel | Efecto |
 |---|---|
 | `deny` | el comando se rechaza |
 | `readonly` | solo se ejecuta si no cambia nada, como con `ZM_READ_ONLY` |
-| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7) |
+| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7). Por MCP se ejecuta sin preguntar |
 | `allow` | se ejecuta; un cambio en Zoom se aplica sin `--yes` |
 
-Gana la clave más específica (`remote-meetings.cancel` sobre `remote-meetings`). De fábrica, `remote-meetings` es `ask`;
+Gana la clave más específica (`recordings.download` sobre `recordings`). De fábrica, `meetings.create`,
+`meetings.update` y `meetings.cancel` son `ask`;
 una clave más amplia que fija el propietario nunca lo relaja, una clave igual de profunda sí. `--yes` solo responde a `ask`: nunca
 levanta `deny` ni `readonly`. En una terminal, los ajustes, el acceso, la ayuda y el servidor MCP nunca se limitan. Una clave que no nombra ningún
 comando, o un nivel que no es uno de los cuatro, se rechaza al fijarlo; una ya guardada detiene todos los comandos hasta que
 `zm <profile> config unset permissions.<key>` la quita. `ZM_READ_ONLY` se aplica además de cualquier nivel.
+
+Por MCP nadie está en una terminal para responder, así que un cambio en `ask` se ejecuta sin preguntarte, también el
+`ask` de serie de `meetings.create`, `meetings.update` y `meetings.cancel`. Pon una clave en `readonly` o `deny` para
+detener a un agente.
 
 Por MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo
 necesitan `mcp.authority` en `allow` o `ask`. Se deniega por defecto. Configúralo desde una terminal en
@@ -132,7 +143,7 @@ el id que acepta `runs show`.
 
 | Variable | Efecto |
 |---|---|
-| `ZM_CONFIG_DIR` | cambia el directorio de configuración y el servicio del llavero para el acceso |
+| `ZM_CONFIG_DIR` | cambia el directorio de configuración; esa ejecución lee tu sesión, pero guarda aparte sus propios cambios ([seguridad](./security.md)) |
 | `ZM_STATE_DIR` | cambia el directorio de las ejecuciones registradas (`runs/`) |
 | `ZM_CACHE_DIR` | cambia el directorio de caché |
 | `ZM_READ_ONLY` | `1` rechaza los cambios en Zoom, el acceso, los ajustes y lo que hayas añadido, con código 5; la lectura y la sincronización desde Zoom siguen funcionando ([seguridad](./security.md#what-agents-can-do)) |

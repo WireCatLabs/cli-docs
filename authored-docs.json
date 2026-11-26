@@ -8,7 +8,7 @@
   {
     "name": "zoom",
     "package": "@wirecat/zoom-cli",
-    "docsRef": "v0.71.0",
+    "docsRef": "v0.82.0",
     "pages": ["translations/pages/zm/meetings"]
   }
 ]

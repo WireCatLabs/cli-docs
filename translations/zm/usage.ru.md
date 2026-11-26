@@ -71,7 +71,7 @@ zm personal meetings scheduled --limit 20 --json
 покажи варианты. Укажи, что не найдено или не подтверждено. Ничего не изменяй.
 ```
 
-Нужен ID серии у самого Zoom из [расписания](./remote-meetings.md), цифрами без пробелов,
+Нужен ID серии у самого Zoom из [расписания](#find-a-scheduled-meeting-series), цифрами без пробелов,
 а не внутренний ID из `meetings list`. В терминале:
 
 ```sh
@@ -282,7 +282,7 @@ zm personal mentions list started_at>=30d --json
 | Импортировать файлы расшифровок | `meetings import`, папка `watch` | Из файлов в базу |
 | Сохранить облачные записи | `recordings` | Из Zoom в указанную папку |
 | Подготовка выбранной серии | `meetings prepare` | Расписание Zoom и локальная база |
-| Прочитать расписание или изменить встречу | `remote-meetings` | Аккаунт Zoom |
+| Изменить встречу Zoom или прочитать приглашение | `meetings create\|update\|cancel\|invitation` | Аккаунт Zoom |
 
 Успешное локальное чтение не доказывает, что в Zoom осталось то же содержимое. Загрузка облачного
 файла не импортирует его расшифровку в базу, пока вы не запросите импорт архива.
@@ -309,7 +309,7 @@ zm personal mentions list started_at>=30d --json
 | `meetings prepare <series-id>` | получить время предстоящего созвона и сохранённый контекст с источниками для выбранной серии |
 | `meetings projects scan <ref>` | предложить существующие проекты по ограниченной странице доказательств встречи; связи не сохраняются |
 | `meetings projects evidence <project> [query...]` | прочитать ограниченные источники по названию, ключу и псевдонимам существующего проекта |
-| `meetings update <reference>`, `meetings link <reference>` | просмотреть или применить выбранные связи |
+| `meetings link <reference>` | просмотреть или применить выбранные вами связи с событиями и людьми |
 | `meetings transcribe <meeting> <file> --model <model>` | просмотреть или локально распознать запись (MP4, M4A, WAV) в отдельную расшифровку |
 | `models list\|download` | речевые компоненты для расшифровки; скачать или починить один |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | прочитать ограниченные источники или контекст связанного человека |
@@ -328,15 +328,15 @@ zm personal mentions list started_at>=30d --json
 | `recordings archive transcript <directory>` | прочитать проверенные WebVTT-фрагменты без базы |
 | `search recordings <directory> <query>` | искать проверенный текст без базы |
 | `recordings archive import <directory>` | проверить VTT и добавить к сохранённым встречам |
-| `remote-meetings list\|show\|invitation` | прочитать будущие встречи и приглашения |
-| `remote-meetings create\|update\|cancel` | простое изменение встречи Zoom с предварительным вопросом; `--dry-run` показывает план |
+| `meetings invitation <meeting>` | прочитать приглашение на встречу Zoom |
+| `meetings create\|update\|cancel` | простое изменение встречи Zoom с предварительным вопросом; `--dry-run` показывает план |
 | `mcp serve [--profiles a,b\|all]` | предоставить команды zm агенту MCP через stdio в рамках разрешений профиля |
 | `stats meetings show\|top` | время речи, строки и слова по говорящим и по неделям |
 | `stats meetings history` | встречи, минуты и расшифровки по дням, неделям или сериям |
 | `skill show`, `skill install --for agents` | показать или явно установить инструкции агенту |
 
-`meetings` использует локальные ID, `remote-meetings` — числовые ID Zoom.
-[Управление встречами](./remote-meetings.md) описывает изменения.
+Чтение сохраненных встреч принимает ссылки или локальные ID, а `meetings create|update|cancel|invitation` принимают
+номер встречи в Zoom. [Управление встречами](./meeting-management.md) описывает изменения.
 
 ## Вывод для скриптов и агентов
 

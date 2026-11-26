@@ -30,13 +30,13 @@
       "prompting.mdx",
       "zm/meetings.md",
       "zm/search.md",
-      "zm/remote-meetings.md",
+      "zm/meeting-management.md",
       "zm/usage.md"
     ],
     "families": {
       "tg": ["contacts", "chats", "messages"],
       "max": ["contacts", "chats", "messages"],
-      "zm": ["meetings", "remote-meetings", "events", "batch"]
+      "zm": ["meetings", "events", "batch"]
     }
   },
   {

@@ -117,8 +117,7 @@ Los IDs distintos son candidatos para revisar, nunca vínculos automáticos con 
 `zm personal meetings list 'started_at:[2026-09-12 TO 2026-10-12]' --json`.
 JSON devuelve `items`, `page` y pasos `next` opcionales. JSONL emite cada reunión en un registro item,
 seguido de un registro end con la página y si el resultado está completo. Continúa con `--page`.
-La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;
-esos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.
+La búsqueda de transcripciones y la importación de reuniones aceptan `--since-time` y `--until-time`.
 `search all` usa el servicio común y busca solo reuniones por defecto, las de la propia cuenta de Zoom del perfil. Las lee
 a través del índice de búsqueda de reuniones y las ordena junto con las demás fuentes. Devuelve una lista de coincidencias,
 como en tg: una coincidencia de reunión tiene `scope` (transcripción, chat o resumen), el `id` de la línea
@@ -271,8 +270,8 @@ La referencia principal es `meeting:<accountId>/<meetingId>`; se añaden revisi�
 pasaje para más detalle. Los vínculos de evento y persona usan la principal:
 
 ```sh
-zm personal meetings update meeting:1/1 --event-id 1 --expected-event-id none --json
-zm personal meetings update meeting:1/1 --event-id 1 --expected-event-id none --yes --json
+zm personal meetings link meeting:1/1 --event-id 1 --expected-event-id none --json
+zm personal meetings link meeting:1/1 --event-id 1 --expected-event-id none --yes --json
 zm personal meetings link meeting:1/1 --participant-id 1 --person 1 --expected-person none --yes --json
 ```
 
@@ -406,7 +405,7 @@ muestra los pasajes que respaldan cada sugerencia y señala posibles sinónimos 
 No crees ni fusiones etiquetas al preparar la propuesta.
 ```
 
-Memo ya ofrece las comprobaciones; Zoom no mantiene un segundo catálogo de etiquetas:
+Memo ya ofrece las comprobaciones, así que zm no tiene una lista de etiquetas propia:
 
 ```sh
 memo vocabulary list 'kind:tag' --max-entries 128 --max-read-bytes 65536 --json
@@ -444,7 +443,7 @@ etiquetas actuales, y después sus propuestas de vínculos. Revisa posibles sin�
 etiqueta para el mismo tema. Memo se instala por separado y debe usar la misma ruta de base de datos.
 
 La búsqueda por significado se explica en [su guía](./topic-search.md).
-Para una próxima llamada, selecciona la serie del proveedor en [el calendario de Zoom](./remote-meetings.md)
+Para una próxima llamada, selecciona la serie del proveedor en [el calendario de Zoom](./usage.md#find-a-scheduled-meeting-series)
 y [prepara su contexto](./usage.md#prepare-for-an-upcoming-meeting). Añade `--project RES` para un proyecto
 existente e incluye candidatos citados por nombre/alias separados de los vínculos confirmados;
 revisa la continuación y la cobertura antes de considerar completo el resultado.

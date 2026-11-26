@@ -198,10 +198,9 @@ Use zm CLI: найди встречу, которую я только что и�
 
 | Что | Linux и macOS | Windows |
 |---|---|---|
-| настройки (`config.json`) | `~/.config/zm/` | `%APPDATA%\zm\Config\` |
-| состояние | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
-| записанные запуски (`runs/`) | `~/.local/share/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Data\` |
-| кеш | `~/.cache/zm/` | `%LOCALAPPDATA%\zm\Cache\` |
+| настройки (`config.json`) | `~/.config/zoom-cli/` | `%APPDATA%\zoom-cli\Config\` |
+| состояние и записанные запуски (`runs/`) | `~/.local/share/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Data\` |
+| кеш | `~/.cache/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Cache\` |
 | локальное хранилище | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 
 `config.json` хранит публичные настройки; это не скачанный файл учётных данных. `zm doctor --json`
@@ -218,7 +217,7 @@ npm install -g @wirecat/zoom-cli
 zm --version
 ```
 
-Если вы последний раз входили через zm 0.34 или старше, снова выполните `zm <profile> session start`: тот старый вход больше не используется.
+Если вы последний раз входили через zm 0.34 или более раннюю версию, снова выполните `zm <profile> session start`: тот старый вход больше не используется.
 
 Для удаления команды:
 
@@ -228,9 +227,9 @@ npm uninstall -g @wirecat/zoom-cli
 
 Удаление убирает только пакет. Чтобы убрать всё остальное, удалите:
 
-- каталоги настроек, состояния, записанных запусков и кеша: `~/.config/zm`, `~/.local/share/zm`,
-  `~/.local/share/zoom-cli` и `~/.cache/zm` в Linux и macOS; `%APPDATA%\zm`, `%LOCALAPPDATA%\zm` и
-  `%LOCALAPPDATA%\zoom-cli` в Windows;
+- каталоги настроек, состояния, записанных запусков и кеша: `~/.config/zoom-cli`, `~/.local/share/zoom-cli` и
+  `~/.cache/zoom-cli` в Linux и macOS; `%APPDATA%\zoom-cli` и `%LOCALAPPDATA%\zoom-cli` в Windows (старые версии
+  использовали `zm` вместо `zoom-cli`);
 - папки skill агента, если вы его устанавливали: `~/.claude/skills/zoom-cli` и
   `~/.agents/skills/zoom-cli` (`%USERPROFILE%\.claude\skills\zoom-cli` и
   `%USERPROFILE%\.agents\skills\zoom-cli` в Windows);

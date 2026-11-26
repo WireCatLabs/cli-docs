@@ -128,6 +128,7 @@ emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido co
 | `user:read:user` | Verificar sesión remota con `zm personal session status --check` |
 | `meeting:read:meeting` | Ver detalles remotos y preparar una serie elegida con contexto guardado |
 | `meeting:read:invitation` | Leer invitación |
+| `meeting:read:past_meeting` | Volver a leer desde Zoom una reunión ya celebrada con `meetings show` |
 | `meeting:write:meeting` | Crear reunión |
 | `meeting:update:meeting` | Actualizar reunión |
 | `meeting:delete:meeting` | Cancelar reunión |
@@ -137,7 +138,7 @@ emitidos no ganan permisos automáticamente. Comprueba lo realmente concedido co
 
 Archivar no requiere permisos de escritura de reuniones. Los cambios muestran un plan;
 `--yes` aplica una solicitud. Tras concederlos, sigue con [archivo de grabaciones](./archive.md#archive-cloud-recordings)
-o [gestión de reuniones](./remote-meetings.md).
+o [gestión de reuniones](./meeting-management.md).
 
 <a id="before-your-first-zm-pull" />
 

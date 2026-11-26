@@ -63,8 +63,8 @@ The agent first [discovers a bounded page of candidate series](./usage.md#find-a
 in Zoom, then verifies the selected series and searches stored context. Old or missing inventory
 dates are hints, not proof of a future call. This list does not include every calendar invitation. Check that the brief
 names the intended meeting and separates confirmed decisions from suggestions. Ask it to show
-missing periods, transcripts or documents. [Upcoming Zoom meetings](./remote-meetings.md) covers
-schedule and invitation reads; your agent assembles the brief from the sources you choose.
+missing periods, transcripts or documents. [Managing Zoom meetings](./meeting-management.md) covers
+invitation reads and changes; your agent assembles the brief from the sources you choose.
 For a recurring series, confirm the actual next occurrence; its original start date alone does not
 verify the next call. If permissions prevent that check, mark the date as unverified.
 

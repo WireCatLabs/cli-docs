@@ -118,8 +118,7 @@ zm personal search meetings "launch" --tag planning --limit 20 --json
 `zm personal meetings list 'started_at:[2026-09-12 TO 2026-10-12]' --json`.
 JSON возвращает `items`, `page` и необязательные шаги `next`. JSONL выдаёт встречу в записи item,
 затем запись end со страницей и полнотой. Для продолжения используйте `--page`.
-Запрос по дате заменяет прежние параметры списка `--since-time` и `--until-time`;
-эти параметры сохраняются в поиске расшифровок и загрузке встреч. `search all` использует общий сервис
+Поиск расшифровок и загрузка встреч принимают `--since-time` и `--until-time`. `search all` использует общий сервис
 и по умолчанию ищет только встречи, причём только встречи собственного аккаунта Zoom профиля. Он читает их через
 поисковый индекс встреч и ранжирует вместе с другими источниками:
 
@@ -273,8 +272,8 @@ cat requests.json | zm personal batch - --jsonl
 фрагмента. Связи с событием и человеком принимают основную ссылку:
 
 ```sh
-zm personal meetings update meeting:1/1 --event-id 1 --expected-event-id none --json
-zm personal meetings update meeting:1/1 --event-id 1 --expected-event-id none --yes --json
+zm personal meetings link meeting:1/1 --event-id 1 --expected-event-id none --json
+zm personal meetings link meeting:1/1 --event-id 1 --expected-event-id none --yes --json
 zm personal meetings link meeting:1/1 --participant-id 1 --person 1 --expected-person none --yes --json
 ```
 
@@ -410,7 +409,7 @@ memo facts list 'subject:"meeting:1/1"' --json
 и не объединяй метки при подготовке предложения.
 ```
 
-Нужные проверки уже есть в Memo; Zoom не ведёт второй каталог меток:
+Нужные проверки уже есть в Memo, поэтому своего списка меток у zm нет:
 
 ```sh
 memo vocabulary list 'kind:tag' --max-entries 128 --max-read-bytes 65536 --json
@@ -447,7 +446,7 @@ memo vocabulary check --kind tag --max-entries 128 --max-read-bytes 65536 --max-
 для той же темы. Memo устанавливается отдельно и должен использовать тот же путь к базе.
 
 Поиск по смыслу описан в [отдельном руководстве](./topic-search.md).
-Для предстоящего созвона выберите серию провайдера в [расписании Zoom](./remote-meetings.md), затем
+Для предстоящего созвона выберите серию провайдера в [расписании Zoom](./usage.md#find-a-scheduled-meeting-series), затем
 [подготовьте контекст](./usage.md#prepare-for-an-upcoming-meeting). Добавьте `--project RES` для одного
 существующего проекта, чтобы включить кандидатов по названиям/псевдонимам со ссылками отдельно от
 подтверждённых связей; проверьте продолжение и покрытие, прежде чем считать результат полным.

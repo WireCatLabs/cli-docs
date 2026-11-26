@@ -32,7 +32,7 @@ title: "MCP и инструкции для агента"
 |---|---|
 | `zm_tools_search` | находит команду для задачи — «meetings list», «search», «prepare» — с её аргументами |
 | `zm_read` | выполняет команду, которая ничего не меняет: `{ "command": "meetings list", "arguments": {} }` |
-| `zm_write` | выполняет команду, которая что-то меняет, например `remote-meetings create` |
+| `zm_write` | выполняет команду, которая что-то меняет, например `meetings create` |
 
 Вызов выполняет саму командную строку, поэтому отвечает и завершается ошибкой так же, как `zm personal <command> --json`.
 Сервер работает от профиля, названного в его `args`; вызывающий не может его сменить.
@@ -49,8 +49,9 @@ title: "MCP и инструкции для агента"
 ключом разрешения. `readonly` отмечает запись как недоступную. Справка CLI и каталог с указанным
 профилем тоже показывают текущую доступность. Каждый вызов проверяет разрешения заново.
 При уровне `ask` MCP выполняет запрошенную запись без вопроса в терминале: встроенный `ask` для
-`remote-meetings` позволяет агенту создавать, менять и отменять встречи Zoom. Чтобы запретить это,
-задайте профилю `{"remote-meetings": "readonly"}`.
+`meetings create`, `meetings update` и `meetings cancel` дает агенту менять встречи Zoom. Чтобы запретить это,
+задайте профилю `{"meetings.create": "readonly", "meetings.update": "readonly",
+"meetings.cancel": "readonly"}`.
 
 В формате `mcpServers`
 [конфигурации Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers):

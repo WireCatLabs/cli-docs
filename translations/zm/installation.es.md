@@ -198,10 +198,9 @@ Cuando funcione, [busca un tema y lee el contexto de sus fuentes](./search.md).
 
 | Qué | Linux y macOS | Windows |
 |---|---|---|
-| ajustes (`config.json`) | `~/.config/zm/` | `%APPDATA%\zm\Config\` |
-| estado | `~/.local/share/zm/` | `%LOCALAPPDATA%\zm\Data\` |
-| ejecuciones registradas (`runs/`) | `~/.local/share/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Data\` |
-| caché | `~/.cache/zm/` | `%LOCALAPPDATA%\zm\Cache\` |
+| ajustes (`config.json`) | `~/.config/zoom-cli/` | `%APPDATA%\zoom-cli\Config\` |
+| estado y ejecuciones registradas (`runs/`) | `~/.local/share/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Data\` |
+| caché | `~/.cache/zoom-cli/` | `%LOCALAPPDATA%\zoom-cli\Cache\` |
 | el almacén local | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
 
 `config.json` guarda ajustes públicos; no es un archivo de credenciales descargado. `zm doctor --json`
@@ -228,9 +227,9 @@ npm uninstall -g @wirecat/zoom-cli
 
 La desinstalación quita solo el paquete. Para quitar todo lo demás, borra:
 
-- los directorios de ajustes, estado, ejecuciones registradas y caché: `~/.config/zm`, `~/.local/share/zm`,
-  `~/.local/share/zoom-cli` y `~/.cache/zm` en Linux y macOS; `%APPDATA%\zm`, `%LOCALAPPDATA%\zm` y
-  `%LOCALAPPDATA%\zoom-cli` en Windows;
+- los directorios de ajustes, estado, ejecuciones registradas y caché: `~/.config/zoom-cli`, `~/.local/share/zoom-cli`
+  y `~/.cache/zoom-cli` en Linux y macOS; `%APPDATA%\zoom-cli` y `%LOCALAPPDATA%\zoom-cli` en Windows (las versiones
+  anteriores usaban `zm` en lugar de `zoom-cli`);
 - las carpetas del skill del agente, si lo instalaste: `~/.claude/skills/zoom-cli` y
   `~/.agents/skills/zoom-cli` (`%USERPROFILE%\.claude\skills\zoom-cli` y
   `%USERPROFILE%\.agents\skills\zoom-cli` en Windows);
