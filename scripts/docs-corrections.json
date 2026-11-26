@@ -1453,20 +1453,6 @@
     }
   },
   {
-    "tool": "zm",
-    "slug": "sessions",
-    "phase": "before-translation",
-    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the login step must. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "The next `session start` that reaches the keyring moves the tokens back.\n",
-          "after": "The next `session start` that reaches the keyring moves the tokens back.\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "cli-contract",
     "reason": "Commands have one name and no aliases: drop the note that names the removed messages/chats/tasks stats paths. The stats commands above are the only paths. The ru text is also in WireCatLabs/max-cli#990 (2026-11-23). At the next pin bump, move this entry's en/es replacements into translations/max/cli-contract.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old en/es text back.",
