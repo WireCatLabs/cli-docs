@@ -6,7 +6,15 @@ description: Descubre por qué falló una herramienta, con qué frecuencia pasa 
 
 Una herramienta falló, o un agente dice que un comando no funcionó, y quieres saber por qué. La página **Registros** de WireCat Desktop muestra lo que cada herramienta de línea de comandos registró sobre sus propias ejecuciones. Una **ejecución** es un arranque de una herramienta, como `tg personal messages send`, desde el inicio hasta la salida. Aquí ves con qué frecuencia pasa un fallo y qué comando, perfil, agente o error interviene. Después puedes abrir una ejecución y copiar su registro para un informe de error o para tu agente.
 
-**En esta página:** [Por qué casi todo son fallos](#por-qué-casi-todo-son-fallos) · [Buscar ejecuciones](#buscar-ejecuciones) · [Facetas](#filtrar-con-facetas) · [Agrupar ejecuciones](#agrupar-ejecuciones) · [Abrir una ejecución](#abrir-una-ejecución) · [Logs en el terminal](#logs-en-el-terminal) · [Privacidad](#privacidad)
+**En esta página:**
+
+1. [Por qué casi todo son fallos](#por-qué-casi-todo-son-fallos)
+2. [Buscar ejecuciones](#buscar-ejecuciones)
+3. [Facetas](#filtrar-con-facetas)
+4. [Agrupar ejecuciones](#agrupar-ejecuciones)
+5. [Abrir una ejecución](#abrir-una-ejecución)
+6. [Logs en el terminal](#logs-en-el-terminal)
+7. [Privacidad](#privacidad)
 
 <DesktopShot
   shot="logs"
@@ -153,7 +161,7 @@ perfil: `zm runs list`, `memo runs list`. Qué hacer con el error que encuentres
 
 ## Privacidad
 
-Los registros de ejecución nunca contienen el texto de los mensajes, nombres de personas, títulos de chats ni secretos de acceso, como contraseñas y claves de sesión. La [guía de diagnóstico de Telegram](../tg/diagnostics.md) enumera lo que una herramienta registra y lo que nunca registra.
+Los registros de ejecución no guardan los mensajes que leyó un comando ni secretos de acceso, como contraseñas y claves de sesión. Sí guardan el comando tal como lo escribiste, que puede incluir el título de un chat o un mensaje que enviaste, salvo que el ajuste `record_input` de la herramienta esté desactivado. La [guía de diagnóstico de Telegram](../tg/diagnostics.md) enumera lo que una herramienta registra y lo que nunca registra.
 
 Antes de mostrar una ejecución, la aplicación también oculta los datos personales: los valores de campos como tokens, contraseñas, números de teléfono, direcciones de correo, nombres de cuenta e ID de usuario pasan a ser `•••`. En el texto, la aplicación sustituye las direcciones de correo por `[email]`, los números de teléfono por `[number]` y los tokens de bot por `[bot token]`. Lo que copias también queda oculto.
 

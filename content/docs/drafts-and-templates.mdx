@@ -5,30 +5,32 @@ description: "Review replies in your messaging app and use templates for auto-re
 
 You can use drafts in two ways: review and send them yourself in your messaging app, or ask your agent to send text you have approved. Use a template when an auto-reply rule should answer for you. A draft lets you decide about one message; a template gives a rule reusable reply text.
 
-- **A draft** is an unsent reply you can review and edit. The main workflow below puts the text in the messaging app's message box so you can check the chat and send it yourself.
+- **A draft** is an unsent reply you can review and edit. In Telegram and in mail your agent saves it as a draft in the app, so you check it there and send it yourself.
 - **A template** is reusable text for an auto-reply rule. The background server fills it in when the rule matches. Its audience, sending permissions and limits control whether a reply is sent. Liquid provides placeholders such as a sender's name.
 
 | | Draft | Template |
 |---|---|---|
 | Who writes the text | your agent prepares a reply; you can edit it | you write reusable text, with an optional AI-generated part |
 | Who decides to send | you, for this message and chat | the rule, within its audience, permissions and limits |
-| Where you review it | the message box in your messaging app, or your agent chat | the rule's template and its test results |
+| Where you review it | the draft in Telegram or your mail app, or your agent chat | the rule's template and its test results |
 
 <a id="drafts-the-agent-writes-you-approve" />
 
 ## Review drafts in your messaging app
 
-1. Ask your agent to prepare a reply and return the chat name and message text.
-2. Open that chat in your messaging app and paste the text into its message box.
-3. Check the recipient and wording, edit the text if needed, and press Send yourself when it is ready.
+Your agent can save a reply as a draft right where you will send it. In Telegram the text appears in the chat's message box, and in mail a letter appears in your Drafts folder. Saving a draft sends nothing.
 
-The current personal-account tools can prepare reply text through your agent, but they do not save it directly into the messaging app's draft field. You copy and paste it yourself. Ask for text to review, rather than asking the agent to send it or claiming a draft has already appeared in the app.
+1. Ask your agent to prepare a reply and save it as a draft in that chat.
+2. Open the chat in Telegram, or the Drafts folder in your mail app, and check the recipient and wording.
+3. Edit the text if needed and send it yourself.
 
 ```text prompt
-Use tg CLI. Read the recent messages in my chat with Anna and prepare a short reply to her last question. Use only facts from our chat. Return the chat name and reply text so I can paste it into the messaging app and review it there. Send nothing and mark nothing as read.
+Use tg CLI. Read the recent messages in my chat with Anna and prepare a short reply to her last question. Use only facts from our chat. Save the reply as a draft in that chat, so I can check it in Telegram and send it myself. Send nothing and mark nothing as read.
 ```
 
-Use the name of your messenger tool in the request; for example, use "Use max CLI" for MAX.
+The agent saves it with `tg messages send --draft`, which needs the separate [drafts permission](./tg/permissions.md#saving-a-draft). For mail, ask it to save the letter in Drafts: it uses `mail drafts create`.
+
+MAX, WhatsApp and Slack have no drafts the agent can write to. There, ask the agent to return the chat name and the reply text, and paste the text into the chat yourself. Start the request with the name of your tool, for example "Use max CLI".
 
 ### Have your agent send an approved draft
 

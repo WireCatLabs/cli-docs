@@ -202,8 +202,8 @@ el agente debe convertir la hora para el CLI y confirmártela en la zona horaria
 
 Telegram entrega los mensajes programados aunque tu ordenador esté apagado. Si el resultado de la
 programación es incierto, el agente debe consultar la lista de mensajes programados en lugar de
-crear un segundo recordatorio. Los mensajes programados de Telegram se cancelan o cambian en la
-aplicación de Telegram. [Envíos programados](./tg/usage.md#sending-later).
+crear un segundo recordatorio. Tu agente también puede cambiar un mensaje
+programado, cancelarlo o enviarlo ya con `tg messages scheduled`. [Envíos programados](./tg/usage.md#sending-later).
 
 <a id="limitar-el-alcance-cuando-haga-falta" />
 
@@ -268,7 +268,8 @@ pregunta necesita una cobertura completa. El agente debe elegir según los datos
 alcance y tus límites. [Ejemplo resuelto](./first-tasks.mdx#find-a-decision-in-older-history).
 
 Si un comando falla, pide su error y el siguiente paso seguro en lugar de repetir el intento a
-ciegas. [Diagnóstico](./tg/diagnostics.md) puede registrar nombres de operaciones, IDs, recuentos
-y tiempos, pero los registros del CLI excluyen a propósito el texto de los mensajes y los argumentos
-sensibles. Sirven para informar de un error, no como transcripción completa de lo que el agente
-leyó o decidió. Revisa cualquier informe antes de compartirlo.
+ciegas. [Diagnóstico](./tg/diagnostics.md) registra cada ejecución: el comando tal como se escribió, los
+chats que leyó, recuentos y tiempos. El comando puede incluir lo que escribiste, como un mensaje que
+enviaste, salvo que desactives `record_input`. Los secretos siempre se ocultan, y los mensajes que el
+comando leyó no se guardan. Un registro sirve para informar de un error, pero no es una transcripción
+de lo que el agente leyó o decidió. Revisa cualquier informe antes de compartirlo.

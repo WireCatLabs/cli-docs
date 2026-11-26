@@ -47,6 +47,10 @@ decidimos qué viene después.
   leído en una respuesta.
 - **[Google Meet](./google-meet.mdx)**: tus llamadas de Meet con quién se unió y la transcripción, enlazadas al
   evento del calendario y guardadas en tu ordenador después de que Google las borre.
+- **[Clientes en WireCat Desktop](./desktop/clients.mdx)**: las personas y empresas con las que trabajas y tus acuerdos con
+  ellas, junto a los chats, el correo y las reuniones de cada una.
+- **Copias de seguridad en WireCat Desktop**: una copia de todo lo que WireCat guarda en tu ordenador con un clic, y
+  restaurarla desde la aplicación.
 
 Todo lo que funciona hoy está en [funciones](./features.mdx).
 
@@ -54,11 +58,7 @@ Todo lo que funciona hoy está en [funciones](./features.mdx).
 
 ### En WireCat Desktop
 
-- **Clientes**: una página con las personas y empresas con las que trabajas y tus acuerdos con ellas, junto a los
-  chats, el correo y las reuniones de cada una.
 - **Notas**: leer y escribir tus notas en la aplicación y enlazarlas con personas y mensajes.
-- **Copia de seguridad en un clic**: guardar una copia de todo lo que WireCat guarda en tu ordenador y restaurarla
-  desde la aplicación.
 - **Herramientas de la comunidad**: la primera herramienta hecha por alguien fuera de WireCat, en la aplicación junto
   a las nuestras.
 
@@ -85,10 +85,6 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 - **Recuerdos al día**: los recuerdos que propone tu agente ya esperan tu revisión. Ahora un recuerdo se marcará
   cuando cambie la fuente en la que se basa, con un cambio que tú confirmas.
 
-### Nuevas fuentes
-
-- **Notion**: tus páginas y bases de datos junto a tus notas y documentos.
-
 ### Confianza
 
 - **Aplicaciones verificadas**: las aplicaciones de inicio de sesión de WireCat para Google, Microsoft y Zoom pasan
@@ -104,7 +100,7 @@ la búsqueda por palabras. Consulta [cómo funciona la búsqueda](./search-archi
 
 - **Código en GitHub**: búsqueda por significado en el propio código y, por separado, en el propósito de cada cambio.
 - **Confluence.**
-- **Gestores de tareas**: Jira, Linear, Todoist y TickTick.
+- **Gestores de tareas**: Jira, Todoist y TickTick.
 
 ## Planes de cada herramienta
 

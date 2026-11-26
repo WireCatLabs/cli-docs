@@ -5,30 +5,32 @@ description: "Revisa respuestas en tu aplicación de mensajería y usa plantilla
 
 Puedes usar los borradores de dos formas: revisarlos y enviarlos tú mismo desde tu aplicación de mensajería, o pedir a tu agente que envíe el texto que has aprobado. Usa una plantilla cuando una regla de respuesta automática deba responder por ti. Un borrador te permite decidir sobre un mensaje; una plantilla proporciona a una regla texto reutilizable.
 
-- **Un borrador** es una respuesta sin enviar que puedes revisar y editar. El flujo principal de abajo coloca el texto en el cuadro de mensaje de tu aplicación de mensajería para que compruebes el chat y lo envíes tú mismo.
+- **Un borrador** es una respuesta sin enviar que puedes revisar y editar. En Telegram y en el correo tu agente lo guarda como borrador en la aplicación, y tú lo revisas allí y lo envías.
 - **Una plantilla** es texto reutilizable de una regla de respuesta automática. El servidor en segundo plano lo completa cuando se cumple la regla. Su audiencia, permisos de envío y límites determinan si se envía una respuesta. Liquid proporciona campos como el nombre de quien escribe.
 
 | | Borrador | Plantilla |
 |---|---|---|
 | Quién escribe el texto | tu agente prepara una respuesta; tú puedes editarla | escribes texto reutilizable, con una parte opcional generada por IA |
 | Quién decide enviar | tú, para ese mensaje y chat | la regla, dentro de su audiencia, permisos y límites |
-| Dónde lo revisas | el cuadro de mensaje de tu aplicación de mensajería o el chat con tu agente | la plantilla de la regla y sus resultados de prueba |
+| Dónde lo revisas | el borrador en Telegram o en tu correo, o el chat con tu agente | la plantilla de la regla y sus resultados de prueba |
 
 <a id="borradores-el-agente-escribe-tú-apruebas" />
 
 ## Revisa borradores en tu aplicación de mensajería
 
-1. Pide a tu agente que prepare una respuesta y devuelva el nombre del chat y el texto del mensaje.
-2. Abre ese chat en tu aplicación de mensajería y pega el texto en el cuadro de mensaje.
-3. Comprueba el destinatario y la redacción, edita lo necesario y pulsa Enviar cuando esté listo.
+Tu agente puede guardar una respuesta como borrador justo donde la vas a enviar. En Telegram el texto aparece en el cuadro de mensaje del chat, y en el correo aparece una carta en tu carpeta Borradores. Guardar un borrador no envía nada.
 
-Las herramientas actuales de la cuenta personal permiten a tu agente preparar texto, pero no lo guardan directamente en el campo de borrador de la aplicación de mensajería. Lo copias y pegas tú mismo. Pide texto para revisar, no su envío; el agente no debe afirmar que el borrador ya apareció en la aplicación.
+1. Pide a tu agente que prepare una respuesta y la guarde como borrador en ese chat.
+2. Abre el chat en Telegram, o la carpeta Borradores de tu correo, y comprueba el destinatario y el texto.
+3. Edita lo necesario y envíalo tú.
 
 ```text prompt
-Usa tg CLI. Lee los mensajes recientes de mi chat con Anna y prepara una respuesta breve a su última pregunta. Usa solo hechos de nuestro chat. Devuelve el nombre del chat y el texto de la respuesta para que pueda pegarlo en la aplicación de mensajería y revisarlo allí. No envíes nada ni marques nada como leído.
+Usa tg CLI. Lee los mensajes recientes de mi chat con Anna y prepara una respuesta breve a su última pregunta. Usa solo hechos de nuestro chat. Guarda la respuesta como borrador en ese chat para que la revise en Telegram y la envíe yo. No envíes nada ni marques nada como leído.
 ```
 
-Indica el nombre de tu herramienta de mensajería en la petición; por ejemplo, empieza con «Usa max CLI» para MAX.
+El agente la guarda con `tg messages send --draft`, que necesita el [permiso de borradores](./tg/permissions.md#saving-a-draft) aparte. Para el correo, pídele que guarde la carta en Borradores: usa `mail drafts create`.
+
+MAX, WhatsApp y Slack no tienen borradores en los que el agente pueda escribir. Ahí pide al agente el nombre del chat y el texto de la respuesta, y pégalo tú en el chat. Empieza la petición con el nombre de tu herramienta, por ejemplo «Usa max CLI».
 
 ### Pide a tu agente que envíe un borrador aprobado
 
