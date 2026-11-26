@@ -128,7 +128,7 @@ tg personal account show --hide-phone  # the same without the phone number
 ```
 
 ```sh
-tg session list                # every profile on this computer and the account each is logged in as
+tg account list                # every profile on this computer and the account each is logged in as
 ```
 
 ```sh

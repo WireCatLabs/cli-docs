@@ -49,7 +49,7 @@ Una aplicación que muestra el enlace en su propia ventana, como WireCat Desktop
 
 ```sh
 wa personal account show     # who this profile is linked as; the phone number shows only its last four digits
-wa session list              # every profile on this computer, and the account each is linked as
+wa account list              # every profile on this computer, and the account each is linked as
 wa personal session end      # unlink the device on WhatsApp's side, and delete its keys here
 ```
 
@@ -99,7 +99,7 @@ export WA_PROFILE=work     # the same for the whole shell session
 
 **La primera palabra es el perfil cuando no es un comando.** Por lo tanto, un perfil no puede llamarse `chats`, `messages` ni ninguna otra palabra de comando. Los nombres son letras, dígitos, punto, guión y guión bajo, y comienzan con una letra o un dígito.
 
-Se utiliza la primera coincidencia en este orden: la primera palabra, luego `WA_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles en esta computadora. `wa` nunca elige uno, ni siquiera el único. Los comandos que no utilizan ninguna cuenta se ejecutan sin un perfil: `--help`, `--version`, `commands`, `skill show`, `session list` y `config show`.
+Se utiliza la primera coincidencia en este orden: la primera palabra, luego `WA_PROFILE`. Sin ninguno de los dos, un comando que usa una cuenta se detiene con el código de salida `2` y enumera los perfiles en esta computadora. `wa` nunca elige uno, ni siquiera el único. Los comandos que no utilizan ninguna cuenta se ejecutan sin un perfil: `--help`, `--version`, `commands`, `skill show`, `account list` y `config show`.
 
 **`WA_PROFILE_LOCK` fija un proceso a un perfil.** Configúrelo donde se ejecuta un agente y se rechaza una primera palabra o `WA_PROFILE` que nombre cualquier otro perfil (código de salida `5`). Sin él, un agente podría elegir un perfil con menos límites.
 

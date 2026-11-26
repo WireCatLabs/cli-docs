@@ -22,7 +22,7 @@ title: "Un número de WhatsApp Business como bot"
 | `bot mcp serve` | Los comandos del bot como herramientas MCP para un agente. |
 | `bot list` | Cada perfil de bot de este ordenador que tiene un token; `--check` pregunta a Meta qué número es cada uno. No necesita la palabra del perfil. |
 
-Un perfil de bot no es una de tus cuentas: `wa session list` omite un nombre que solo usa un bot, y marca con `bot: true` un nombre que es tu cuenta y también un bot.
+Un perfil de bot no es una de tus cuentas: `wa account list` omite un nombre que solo usa un bot, y marca con `bot: true` un nombre que es tu cuenta y también un bot.
 
 Un chat es el número de teléfono de la persona en dígitos, como `70000000001`. Meta nombra a algunas personas solo mediante una identificación de usuario de ámbito empresarial; `bot watch` muestra ese chat como `user:<id>` y lo envías de la misma manera.
 

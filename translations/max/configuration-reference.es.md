@@ -63,7 +63,7 @@ No aparecen secretos: el archivo no dispone de campos para guardarlos.
 
 ## Archivo
 
-`~/.config/max-cli/config.json` en Linux; rutas en otros sistemas - en [guía de configuración](./configuration.md#где-лежит-файл). El primer comando que lee la configuración, por ejemplo `config show`, `session list` o `chats list`, lo crea con `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` y `skill_hint` en `defaults`. El archivo se crea y `max personal config set` lo escribe con permisos `0600`; su carpeta, con `0700`. `max personal doctor` nombra en `files.problems` el archivo o la carpeta que otros usuarios pueden leer e imprime el `chmod` que lo corrige. `max personal doctor` solo lee el archivo: si no existe, responde `config.found: false` y no lo crea.
+`~/.config/max-cli/config.json` en Linux; rutas en otros sistemas - en [guía de configuración](./configuration.md#где-лежит-файл). El primer comando que lee la configuración, por ejemplo `config show`, `account list` o `chats list`, lo crea con `limit`, `keep_runs_for_days`, `sends_per_hour`, `update_check` y `skill_hint` en `defaults`. El archivo se crea y `max personal config set` lo escribe con permisos `0600`; su carpeta, con `0700`. `max personal doctor` nombra en `files.problems` el archivo o la carpeta que otros usuarios pueden leer e imprime el `chmod` que lo corrige. `max personal doctor` solo lee el archivo: si no existe, responde `config.found: false` y no lo crea.
 
 Los nombres de los ajustes se escriben en snake_case: `sends_per_hour`, `keep_runs_for_days`, `models.<назначение>.base_url`.
 

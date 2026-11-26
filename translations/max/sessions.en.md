@@ -86,7 +86,7 @@ MAX_TOKEN="$(cat /path/to/token)" max personal chats list --json
 
 ```sh
 max personal account show             # под кем выполнен вход: id, имя, последние четыре цифры телефона
-max session list             # все профили на этом компьютере и аккаунт каждого
+max account list             # все профили на этом компьютере и аккаунт каждого
 max personal account sessions list    # все устройства и приложения, вошедшие в аккаунт; ничего не завершает
 max personal session end              # выйти из MAX и забыть токен на этой машине
 ```
@@ -129,7 +129,7 @@ Order, first match wins: first word, `MAX_PROFILE`. If none of these is set, a c
 ✗ name a profile: `max <profile> …` — profiles here: personal (or set MAX_PROFILE)
 ```
 
-On a computer with no profiles, the message says how to create the first one: `max personal setup`. Without a profile, only commands that do not need an account work: `--help`, `--version`, `commands`, `skill show`, `session list`, `config show`.
+On a computer with no profiles, the message says how to create the first one: `max personal setup`. Without a profile, only commands that do not need an account work: `--help`, `--version`, `commands`, `skill show`, `account list`, `config show`.
 
 If the first word is not a command and no command follows it, the program explains what happened instead of silently displaying help:
 
