@@ -200,7 +200,7 @@
   {
     "tool": "bitrix",
     "key": "signIn.asks",
-    "why": "bitrix24-cli 0.27.0 also asks for the task, telephony, disk and documentgenerator scopes, under Common use cases, Other (bitrix24-cli src/identity.ts:35). Desktop's own Bitrix24 sign-in screens name three scopes, with screenshots in three languages, so a webhook made from them may lack telephony. The owner decides the new screens.",
+    "why": "Desktop now names the same seven scopes as bitrix24-cli 0.27.0 (wirecat-desktop #483, NEED-2938 A). The text still differs in Desktop's own words: Incoming webhook and Developer resources, Other, where b24 says Inbound webhook under Common use cases, Other (bitrix24-cli src/identity.ts:35), and b24's text has a semicolon. Which wording wins is the owner's open call, like the tagline lines (wirecat-desktop journal FIND-282).",
     "until": "2027-01-15"
   },
   {
