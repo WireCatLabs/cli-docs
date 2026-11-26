@@ -44,7 +44,7 @@ const byTool: Record<string, Record<string, Names>> = {
   },
   zm: {
     mcp: { en: "MCP and skills", ru: "MCP и инструкции", es: "MCP y skills" },
-    "remote-meetings": { en: "Manage meetings", ru: "Управление встречами", es: "Gestionar reuniones" },
+    "meeting-management": { en: "Manage meetings", ru: "Управление встречами", es: "Gestionar reuniones" },
   },
   memo: {
     sources: { en: "Your sources", ru: "Свои источники", es: "Tus fuentes" },

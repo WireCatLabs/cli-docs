@@ -122,7 +122,7 @@ export const sidebarIcons = {
   telemost: Video,
   gcal: CalendarDays,
   "zoom-app": KeyRound,
-  "remote-meetings": Video,
+  "meeting-management": Video,
   attachments: Paperclip,
   "audio-recognition": Mic,
   "external-models": BrainCircuit,

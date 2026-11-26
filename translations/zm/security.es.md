@@ -13,7 +13,14 @@ IA. Esta guía los explica antes de conectar o archivar.
 - El login usa PKCE y comprueba el estado. La página estática
   [wirecat.dev/zoom-callback](https://wirecat.dev/zoom-callback) pasa el retorno a `zm`; no sirve
   sin la clave de verificación que queda en el equipo.
-- Los tokens solo van al almacén del sistema, no a la configuración. Si no está disponible, hay error.
+- Los tokens se guardan en el llavero del sistema, una entrada por perfil: servicio `zoom-cli`, cuenta
+  `oauth:zoom:<profile>`. Si el llavero no está disponible, o con `session start --credential-storage file`, van a
+  `credentials.json` en la carpeta de configuración de zm, que solo tú puedes leer, y zm lo avisa una vez en stderr.
+  Nunca se escriben en `config.json`.
+- Una ejecución con carpetas movidas (`ZM_CONFIG_DIR`, un `HOME` temporal) lee tu sesión, pero nunca la sustituye ni
+  la borra. Su propia sesión va a una entrada temporal que su `session end` elimina.
+- Solo se renueva una sesión a la vez en todos los procesos de zm, así que el temporizador del archivo y un agente
+  nunca usan dos veces el mismo token de renovación.
 - El receptor se cierra al completar, fallar o caducar el login.
 
 ## Qué se envía por la red

@@ -80,11 +80,11 @@ Notes on the `zm` column:
 - **Find a meeting by what it was about.** It needs an embedding model that you choose. Without one, search matches
   words.
 - **Summaries.** `zm` reads the AI summary that Zoom made. It makes no summary of its own.
-- **Every command also an MCP tool.** `zm` offers its commands through three MCP tools. A few stay in the terminal:
-  `watch`, `session start`, `meetings scheduled`, `meetings projects scan` and `upgrade`.
+- **Every command also an MCP tool.** `zm` offers its commands through three MCP tools. Two stay in the terminal:
+  `watch` and `session start`.
 - **Limits and questions.** A profile can deny a command or allow only commands that change nothing. Changes to Zoom
   meetings ask first at a terminal. Over MCP no one is there to answer, so a profile that must not change Zoom sets
-  `{"remote-meetings": "readonly"}`. See [MCP and skills](./mcp.md).
+  `{"meetings.create": "readonly", "meetings.update": "readonly", "meetings.cancel": "readonly"}`. See [MCP and skills](./mcp.md).
 - **Daily archive.** The timer installs on Linux only. Other systems can preview it.
 - **Speed and cost against a browser agent.** `zm` calls Zoom's API and opens no browser. No measurement of it against
   a browser agent is published, so this page makes no claim.

@@ -33,7 +33,7 @@ ofrecen todas las CLI de WireCat:
 |---|---|
 | `zm_tools_search` | encuentra el comando para una tarea ("meetings list", "search", "prepare") con sus argumentos |
 | `zm_read` | ejecuta un comando que no cambia nada: `{ "command": "meetings list", "arguments": {} }` |
-| `zm_write` | ejecuta un comando que cambia algo, como `remote-meetings create` |
+| `zm_write` | ejecuta un comando que cambia algo, como `meetings create` |
 
 Una llamada ejecuta la propia línea de comandos, así que responde y falla exactamente como
 `zm personal <command> --json`. El servidor habla por el perfil nombrado en sus `args`; el cliente no
@@ -51,8 +51,10 @@ Los comandos denegados permanecen en el listado completo y las búsquedas, con
 `availability.available: false`, un motivo y la clave de permiso. `readonly` marca las escrituras como
 no disponibles. La ayuda CLI y el catálogo con un perfil explícito muestran la misma información actual.
 Cada llamada vuelve a comprobar los permisos antes de ejecutarse. En MCP, `ask` permite la escritura
-sin una pregunta en la terminal: el `ask` de fábrica de `remote-meetings` deja que el agente cree,
-modifique y cancele reuniones. Para impedirlo, asigna `{"remote-meetings": "readonly"}` al perfil.
+sin una pregunta en la terminal: el `ask` de fábrica de `meetings create`, `meetings update` y
+`meetings cancel` deja que el agente cambie reuniones de Zoom. Para impedirlo, asigna al perfil
+`{"meetings.create": "readonly", "meetings.update": "readonly",
+"meetings.cancel": "readonly"}`.
 
 En el formato `mcpServers` de
 [Claude Desktop](https://modelcontextprotocol.io/docs/develop/connect-local-servers):

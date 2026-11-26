@@ -63,8 +63,8 @@ El agente primero [descubre una página acotada de posibles series](./usage.md#f
 en Zoom, verifica la serie elegida y busca contexto guardado. Fechas antiguas o ausentes son pistas,
 no pruebas de una llamada futura. La lista no incluye todas las invitaciones del calendario. Comprueba que el resumen se refiere
 a la reunión correcta y separa decisiones confirmadas de sugerencias. Pide que indique períodos,
-transcripciones o documentos ausentes. [Próximas reuniones de Zoom](./remote-meetings.md) describe
-la agenda y las invitaciones; el agente prepara el resumen con las fuentes que eliges.
+transcripciones o documentos ausentes. [Gestionar reuniones de Zoom](./meeting-management.md) describe
+las invitaciones y los cambios; el agente prepara el resumen con las fuentes que eliges.
 En una serie recurrente, confirma la siguiente ocurrencia concreta: la fecha inicial de la serie
 no verifica la próxima llamada. Si faltan permisos para comprobarla, marca la fecha como no verificada.
 

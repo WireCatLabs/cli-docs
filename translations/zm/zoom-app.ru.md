@@ -132,6 +132,7 @@ Zoom Marketplace. Оно находится в Development и работает �
 | `user:read:user` | Проверить серверный сеанс через `zm personal session status --check` |
 | `meeting:read:meeting` | Просмотр удалённых сведений и подготовка выбранной серии с сохранённым контекстом |
 | `meeting:read:invitation` | Прочитать приглашение |
+| `meeting:read:past_meeting` | Снова прочитать из Zoom прошедшую встречу через `meetings show` |
 | `meeting:write:meeting` | Создать встречу |
 | `meeting:update:meeting` | Изменить встречу |
 | `meeting:delete:meeting` | Отменить встречу |
@@ -141,7 +142,7 @@ Zoom Marketplace. Оно находится в Development и работает �
 
 Для архива не нужны права изменения встреч. Изменения сначала показывают план; `--yes` выполняет
 один запрос. После выдачи прав переходите к [архиву записей](./archive.md#archive-cloud-recordings)
-или [управлению встречами](./remote-meetings.md).
+или [управлению встречами](./meeting-management.md).
 
 <a id="before-your-first-zm-pull" />
 

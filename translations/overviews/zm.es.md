@@ -57,7 +57,7 @@ Agente: (ejecuta zm personal meetings people "Bruno Muestra" y luego zm personal
         nuevo antes del viernes (meeting:1/42/57/118). Preguntó si el plan anual incluye la puesta en marcha
         (meeting:1/42/57/131).
 Tú:     Pasa la llamada de hoy a las cuatro.
-Agente: (ejecuta zm personal remote-meetings update 85012345678 --start-time 2026-10-09T16:00:00+02:00 --dry-run)
+Agente: (ejecuta zm personal meetings update 85012345678 --start-time 2026-10-09T16:00:00+02:00 --dry-run)
         "Revisión de precios" pasa de las 15:00 a las 16:00 de hoy. ¿Lo cambio en Zoom?
 Tú:     Sí.
 ```
@@ -85,7 +85,8 @@ Docs sin instalar nada (el servidor MCP del propio Zoom), o si administras usuar
 - **Dar seguimiento:** cita un pasaje y mira antes la tarea de seguimiento. [Uso](./usage.md)
 - **Guardar grabaciones:** descarga, comprueba y reanuda, cada día con un temporizador en Linux. [Archivo](./archive.md)
 - **Transcribir una grabación** en tu ordenador con un modelo de voz que descargas. [Uso](./usage.md)
-- **Próximas reuniones:** consúltalas y mira un cambio antes de hacerlo. [Próximas reuniones](./remote-meetings.md)
+- **Cambiar una reunión en Zoom:** créala, muévela o cancélala, y mira el cambio antes de hacerlo.
+  [Gestionar reuniones](./meeting-management.md)
 
 ## Cómo funciona
 
@@ -134,7 +135,7 @@ Necesitas Node.js 22.16 o posterior en 22.x, o 24 o posterior. [Instalar y conec
 | Instalar y conectar | [Instalar y conectar](./installation.md), [Tu aplicación de Zoom](./zoom-app.md) |
 | Buscar y leer reuniones | [Búsqueda](./search.md) |
 | Guardar grabaciones y transcripciones | [Archivo](./archive.md) |
-| Próximas reuniones | [Próximas reuniones](./remote-meetings.md) |
+| Cambiar una reunión en Zoom | [Gestionar reuniones](./meeting-management.md) |
 | Conectar un agente por MCP | [MCP](./mcp.md) |
 | Reuniones con proyectos y personas | [Reuniones](./meetings.md) |
 | Un comando exacto | [Comandos](./commands.md) |

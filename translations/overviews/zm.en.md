@@ -54,7 +54,7 @@ Agent:  (runs zm personal meetings people "Bob Sample", then zm personal search 
         You last spoke on 2 October in "Pricing review". You promised Bob a revised quote by Friday
         (meeting:1/42/57/118). He asked whether the annual plan includes onboarding (meeting:1/42/57/131).
 You:    Move today's call to four.
-Agent:  (runs zm personal remote-meetings update 85012345678 --start-time 2026-10-09T16:00:00+02:00 --dry-run)
+Agent:  (runs zm personal meetings update 85012345678 --start-time 2026-10-09T16:00:00+02:00 --dry-run)
         "Pricing review" moves from 15:00 to 16:00 today. Change it in Zoom?
 You:    Yes.
 ```
@@ -81,7 +81,8 @@ install (Zoom's own MCP server), or you administer users and webinars
 - **Follow up:** cite a passage and preview a follow-up task. [Usage](./usage.md)
 - **Keep recordings:** download, verify and resume, on a daily schedule on Linux. [Archive](./archive.md)
 - **Transcribe a recording** on your computer with a speech model you download. [Usage](./usage.md)
-- **Upcoming meetings:** read them, and preview a change before you make it. [Upcoming meetings](./remote-meetings.md)
+- **Change a meeting in Zoom:** create, move or cancel it, and preview the change before you make it.
+  [Manage meetings](./meeting-management.md)
 
 ## How it works
 
@@ -127,7 +128,7 @@ You need Node.js 22.16 or later on 22.x, or 24 and later. [Install and connect](
 | Install and connect | [Install and connect](./installation.md), [Your Zoom app](./zoom-app.md) |
 | Search and read meetings | [Search](./search.md) |
 | Keep recordings and transcripts | [Archive](./archive.md) |
-| Upcoming meetings | [Upcoming meetings](./remote-meetings.md) |
+| Change a meeting in Zoom | [Manage meetings](./meeting-management.md) |
 | Connect an agent over MCP | [MCP](./mcp.md) |
 | Meetings with projects and people | [Meetings](./meetings.md) |
 | An exact command | [Commands](./commands.md) |

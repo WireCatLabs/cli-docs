@@ -71,7 +71,7 @@ decisiones guardadas, notas sobre llamadas anteriores y personas/proyectos vincu
 muestra candidatas. Indica qué falta o no está confirmado. No cambies nada.
 ```
 
-Usa el ID de serie del propio Zoom que aparece en [la agenda](./remote-meetings.md), con dígitos
+Usa el ID de serie del propio Zoom que aparece en [la agenda](#find-a-scheduled-meeting-series), con dígitos
 sin espacios, en lugar del ID interno de `meetings list`. En el terminal:
 
 ```sh
@@ -286,7 +286,7 @@ vez. Sin grabación en la nube no hay un chat de reunión que recuperar.
 | Importar transcripciones | `meetings import`, carpeta `watch` | De archivos a la base |
 | Guardar grabaciones disponibles | `recordings` | De Zoom al destino indicado |
 | Preparar una serie elegida | `meetings prepare` | Calendario Zoom y base local |
-| Leer agenda o modificar una reunión | `remote-meetings` | Cuenta de Zoom |
+| Cambiar una reunión de Zoom o leer su invitación | `meetings create\|update\|cancel\|invitation` | Cuenta de Zoom |
 
 Una lectura local correcta no demuestra que Zoom conserve el mismo contenido. Descargar un archivo
 no importa su transcripción en la base hasta que solicites la importación del archivo.
@@ -313,7 +313,7 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `meetings prepare <series-id>` | reunir la próxima cita y el contexto guardado con fuentes de una serie elegida |
 | `meetings projects scan <ref>` | sugerir proyectos existentes a partir de una página acotada de evidencia local; no guarda vínculos |
 | `meetings projects evidence <project> [query...]` | leer evidencia acotada del nombre, clave y alias de un proyecto existente |
-| `meetings update <reference>`, `meetings link <reference>` | revisar o aplicar vínculos elegidos |
+| `meetings link <reference>` | revisar o aplicar los vínculos con eventos y personas que elegiste |
 | `meetings transcribe <meeting> <file> --model <model>` | revisar o reconocer una grabación (MP4, M4A, WAV) como transcripción independiente |
 | `models list\|download` | los modelos de voz para transcribir; descargar o reparar uno |
 | `meetings passage <reference>`, `meetings evidence <reference>`, `meetings context <person>` | leer fuentes limitadas o contexto personal vinculado |
@@ -332,15 +332,15 @@ no importa su transcripción en la base hasta que solicites la importación del 
 | `recordings archive transcript <directory>` | leer WebVTT verificado sin base de datos |
 | `search recordings <directory> <query>` | buscar texto verificado sin base |
 | `recordings archive import <directory>` | verificar VTT y añadirlo a reuniones guardadas |
-| `remote-meetings list\|show\|invitation` | leer próximas reuniones e invitaciones |
-| `remote-meetings create\|update\|cancel` | un cambio simple en Zoom, con confirmación previa; `--dry-run` lo revisa |
+| `meetings invitation <meeting>` | leer la invitación de una reunión de Zoom |
+| `meetings create\|update\|cancel` | un cambio simple en Zoom, con confirmación previa; `--dry-run` lo revisa |
 | `mcp serve [--profiles a,b\|all]` | servir los comandos de zm a un agente MCP por stdio, según los permisos del perfil |
 | `stats meetings show\|top` | tiempo de palabra, líneas y palabras por orador y por semana |
 | `stats meetings history` | reuniones, minutos y transcripciones por día, semana o serie |
 | `skill show`, `skill install --for agents` | mostrar o instalar instrucciones del agente |
 
-`meetings` usa IDs locales; `remote-meetings`, IDs numéricos de Zoom.
-[Gestionar reuniones](./remote-meetings.md) explica las escrituras.
+La lectura de reuniones guardadas recibe referencias o IDs locales; `meetings create|update|cancel|invitation` reciben
+el número de reunión de Zoom. [Gestionar reuniones](./meeting-management.md) explica las escrituras.
 
 ## Salida para scripts y agentes
 

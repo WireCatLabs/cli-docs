@@ -91,7 +91,13 @@ sesión; `zm <name> config set permissions '{}'` también crea un perfil, para u
 comandos de lectura solo buscan el perfil: descarga o importa primero para que `meetings list` pueda encontrarlo.
 
 Para otro usuario de Zoom, crea un segundo perfil con `zm work session start` y elige a ese usuario en el
-navegador. El acceso de cada perfil es su propia entrada del llavero, `<client id>:<profile>`.
+navegador. El acceso de cada perfil es su propia entrada del llavero del sistema: `oauth:zoom:<profile>` en el servicio
+`zoom-cli`. Las versiones anteriores guardaban los accesos en `zoom-cli:<configuration directory>` como
+`<client id>:<profile>`; la primera ejecución copia uno a la entrada nueva y deja el antiguo hasta `session end`.
+
+`zm session list --json` lista los perfiles de este equipo y el estado del acceso guardado de cada uno (`saved`,
+`expired`, `missing`, o `not_configured` mientras no haya una app de Zoom configurada). No recibe perfil y no contacta
+con Zoom.
 
 `ZM_PROFILE_LOCK=personal` fija un proceso a un solo perfil: una primera palabra o un `ZM_PROFILE` que nombre
 otro se rechaza con `permission_error`. Fíjalo donde se ejecuta un agente.
@@ -102,11 +108,9 @@ hacer falta un `--since-time` anterior explícito.
 
 ## Retirar el acceso
 
-`zm <profile> session end` elimina el inicio de sesión de Zoom guardado del perfil del llavero y del archivo privado. Las reuniones guardadas se quedan. Ni este comando ni `zm <profile> account remove` revocan el inicio de sesión en Zoom. Retira la autorización desde la gestión de apps de Zoom App Marketplace.
-Para borrar el token local, abre el almacén de contraseñas del sistema y elimina la entrada cuyo servicio es
-`zoom-cli:<configuration directory>` (por ejemplo `zoom-cli:/home/you/.config/zm`; `zm doctor --json` muestra
-el directorio) y cuya cuenta es `<Public Client ID>:<profile>`.
-Desinstalar `zm` no revoca permisos ni borra reuniones. Consulta [seguridad](./security.md) antes de
+`zm <profile> session end` elimina de este equipo el acceso de ese perfil, también la entrada que hizo una versión
+anterior, y conserva sus reuniones. No retira el acceso de la app en Zoom: para eso, elimina o revoca la app en la
+gestión de apps de Zoom App Marketplace. Desinstalar `zm` no revoca permisos ni borra reuniones. Consulta [seguridad](./security.md) antes de
 compartir datos con un agente.
 
 Varios usuarios de Zoom en un mismo equipo son varios perfiles: cada uno tiene su propia entrada del llavero y sus propias reuniones.

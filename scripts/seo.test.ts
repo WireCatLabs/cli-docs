@@ -325,7 +325,7 @@ describe("Zoom descriptions", () => {
         "search",
         "topic-search",
         "mcp",
-        "remote-meetings",
+        "meeting-management",
         "roadmap",
         "commands",
         "configuration",

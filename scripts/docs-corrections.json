@@ -1454,59 +1454,6 @@
   },
   {
     "tool": "zm",
-    "slug": "search",
-    "reason": "Commands have one name and no aliases: state where --since-time and --until-time apply without naming the list options they replaced. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/zm/search.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "The date query replaces the former list-only `--since-time` and `--until-time` flags;\nthose flags remain available on transcript search and ingestion commands. ",
-          "after": "Transcript search and ingestion commands take `--since-time` and `--until-time`. "
-        }
-      ],
-      "ru": [
-        {
-          "before": "Запрос по дате заменяет прежние параметры списка `--since-time` и `--until-time`;\nэти параметры сохраняются в поиске расшифровок и загрузке встреч. ",
-          "after": "Поиск расшифровок и загрузка встреч принимают `--since-time` и `--until-time`. "
-        }
-      ],
-      "es": [
-        {
-          "before": "La consulta por fecha sustituye los antiguos parámetros del listado `--since-time` y `--until-time`;\nesos parámetros siguen disponibles en la búsqueda de transcripciones y la importación de reuniones.\n",
-          "after": "La búsqueda de transcripciones y la importación de reuniones aceptan `--since-time` y `--until-time`.\n"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "configuration",
-    "phase": "before-translation",
-    "reason": "One name per setting: the document-source provider is local or obsidian; drop the sentence that keeps the old provider value folder in a guide. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "for a vault. A source\nsaved earlier with provider `folder` still resolves. `notes:5` resolves",
-          "after": "for a vault.\n`notes:5` resolves"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "installation",
-    "phase": "before-translation",
-    "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the update step must. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "zm --version\n```\n\nRemove the command with:",
-          "after": "zm --version\n```\n\nIf you last signed in with zm 0.34 or earlier, run `zm <profile> session start` again: that older login is no longer used.\n\nRemove the command with:"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
     "slug": "sessions",
     "phase": "before-translation",
     "reason": "Released 0.46.0 stops moving a login saved by zm 0.34 or earlier to a profile (CHANGELOG, Changed). The released guides no longer say so; the login step must. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). Drop the entry at the next pin bump.",
@@ -1743,21 +1690,6 @@
     }
   },
   {
-    "tool": "zm",
-    "slug": "search",
-    "phase": "before-translation",
-    "source": "https://github.com/WireCatLabs/zoom-cli/blob/v0.67.0/CHANGELOG.md",
-    "reason": "Released 0.61.0 makes search meetings a read over MCP (zm_read, not zm_write), as the CHANGELOG and docs/mcp.md say; docs/search.md still names zm_write. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Over MCP, run `search meetings` through `zm_write`: it updates the word index before searching.",
-          "after": "Over MCP, `search meetings` is a read: run it through `zm_read`. It updates the word index before searching."
-        }
-      ]
-    }
-  },
-  {
     "tool": "wa",
     "slug": "mcp",
     "phase": "before-translation",
@@ -1808,21 +1740,6 @@
         {
           "before": "and whether the owner confirmed that or it is the store's suggestion",
           "after": "and whether the owner has confirmed that or it is the store's suggestion"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "sessions",
-    "phase": "before-translation",
-    "source": "https://github.com/WireCatLabs/zoom-cli/blob/v0.71.0/CHANGELOG.md",
-    "reason": "Released 0.70.0 adds session end (deletes the saved Zoom login, keeps the meetings) and account remove (CHANGELOG, Added). docs/sessions.md at v0.71.0 still says there is no logout command.",
-    "replacements": {
-      "en": [
-        {
-          "before": "There is no logout command. To withdraw the app's account access,",
-          "after": "`zm <profile> session end` deletes the profile's saved Zoom login from the keyring and the private file. The stored meetings stay. Neither it nor `zm <profile> account remove` revokes the login at Zoom. To withdraw the app's account access,"
         }
       ]
     }
@@ -2101,44 +2018,6 @@
         {
           "before": "Mediante MCP, `ask` no exige un formulario de confirmación del servidor: la aplicación gestiona sus propias confirmaciones y puede permitir una llamada sin volver a preguntar.",
           "after": "Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no muestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "zm",
-    "slug": "configuration",
-    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The zm permissions table said only what ask does at a terminal. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/zm/configuration.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "| `ask` | a change to Zoom asks y/N at a terminal; without one it needs `--yes` (exit 7 otherwise) |",
-          "after": "| `ask` | a change to Zoom asks y/N at a terminal; without one it needs `--yes` (exit 7 otherwise). Over MCP it runs without asking |"
-        },
-        {
-          "before": "Settings, skill installation, upgrade and archive timer changes over MCP require `mcp.authority` at `allow` or `ask`.",
-          "after": "Over MCP nobody is at a terminal to answer, so a change set to `ask` runs without asking you, the built-in `ask` on\n`meetings.create`, `meetings.update` and `meetings.cancel` included. Set a key to `readonly` or `deny` to stop an agent.\n\nSettings, skill installation, upgrade and archive timer changes over MCP require `mcp.authority` at `allow` or `ask`."
-        }
-      ],
-      "ru": [
-        {
-          "before": "| `ask` | изменение в Zoom спрашивает y/N в терминале; без терминала нужен `--yes` (иначе код выхода 7) |",
-          "after": "| `ask` | изменение в Zoom спрашивает y/N в терминале; без терминала нужен `--yes` (иначе код выхода 7). Через MCP выполняется без вопроса |"
-        },
-        {
-          "before": "Настройки, установка навыка, обновление программы и изменение архивных таймеров через MCP требуют",
-          "after": "Через MCP у терминала никого нет, поэтому изменение с уровнем `ask` выполняется без вопроса, в том числе встроенный\n`ask` для `meetings.create`, `meetings.update` и `meetings.cancel`. Чтобы остановить агента, поставьте ключу `readonly`\nили `deny`.\n\nНастройки, установка навыка, обновление программы и изменение архивных таймеров через MCP требуют"
-        }
-      ],
-      "es": [
-        {
-          "before": "| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7) |",
-          "after": "| `ask` | un cambio en Zoom pregunta y/N en una terminal; sin terminal necesita `--yes` (si no, código 7). Por MCP se ejecuta sin preguntar |"
-        },
-        {
-          "before": "Por MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo",
-          "after": "Por MCP nadie está en una terminal para responder, así que un cambio en `ask` se ejecuta sin preguntarte, también el\n`ask` de serie de `meetings.create`, `meetings.update` y `meetings.cancel`. Pon una clave en `readonly` o `deny` para\ndetener a un agente.\n\nPor MCP, los cambios de ajustes, instalación de skills, actualización y temporizadores del archivo"
         }
       ]
     }

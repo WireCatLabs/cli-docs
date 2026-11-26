@@ -4,6 +4,250 @@ title: "Historial de cambios"
 
 Las entradas nuevas están traducidas; el historial anterior conserva su inglés original. Los comandos y límites corresponden a las versiones indicadas.
 
+## 0.82.0 — 25.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **zm funciona con cli-core 1.0 y cli-base 1.0** (cli-core 1.0.0, antes 0.707.0; cli-base 1.0.0, antes 0.124.0).
+  cli-core 1.0 pasa el almacén de mensajes a la versión 74 la primera vez que lo abre: un id nunca se entrega dos
+  veces y una columna JSON contiene JSON válido. A partir de ahí, solo las herramientas con cli-core 1.0 abren el
+  almacén. Ten en cuenta: actualiza antes cada WireCat CLI instalado a su versión 1.0 y detén `serve`, `mcp` y toda
+  sincronización mientras el almacén migra; la migración escribe primero una copia para revertir y no se ejecuta sin
+  ella. Consulta el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Seguridad
+
+- **Una llamada por MCP no puede indicar una carpeta de credenciales, la carpeta de una herramienta de WireCat ni el
+  almacén de mensajes.** Cada opción y argumento que recibe un archivo o una carpeta local
+  (`zm recordings download --output-dir`, `zm meetings import <folder>`, la carpeta del archivo de
+  `zm recordings archive` y los demás) se comprueba por su ruta real antes de ejecutar la llamada, así que ni un enlace
+  ni `..` pasan. Una llamada rechazada responde `permission_error` (`access.denied`) con la opción en `param`. Una
+  ejecución en una terminal no cambia.
+
+## 0.81.0 — 24.11.2026
+
+### Añadido
+
+- **`zm session list` enumera los perfiles de este equipo** y el estado del inicio de sesión de Zoom guardado de cada
+  uno, sin nombrar un perfil y sin contactar con Zoom. Cada elemento indica `signed_in`, como hace `session list` en
+  otros CLI. zm ya tiene los cuatro comandos de sesión ([WC-ACCT-12](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/accounts.md#wc-acct-12--sign-in-is-session-start-status-and-end-and-session-list-names-the-profiles)).
+
+### Cambiado — puede romper la compatibilidad
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Antes iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del equipo sin que el propietario
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: un CLI nunca elige una cuenta por el propietario
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)).
+  Ten en cuenta: un cliente configurado con la entrada antigua conserva `--profiles all` hasta que se configure de
+  nuevo; un servidor añadido a mano o con `mcp config` no cambia.
+
+### Corregido
+
+- **WireCat Desktop ejecuta la sincronización, la comprobación y el inicio de sesión de zm para el perfil que
+  corresponde.** El manifiesto de zm no enumeraba perfiles, así que Desktop omitía la palabra del perfil en `doctor`,
+  `session start` y `meetings sync`. Ahora los obtiene con `session list` y pone `{profile}` primero en cada uno, y
+  también describe `account remove` para Desktop.
+- **`zm mcp serve --profiles all` arranca en un equipo que aún no tiene ningún perfil** (cli-core 0.707.0, antes
+  0.691.0; cli-base 0.124.0, antes 0.109.0). Responde al saludo inicial y enumera sus herramientas, y cada llamada a una
+  herramienta explica cómo configurar el primer perfil. Directorios como Glama arrancan un servidor en un contenedor
+  vacío solo para leer sus herramientas, y marcaban zm como uno que no se puede desplegar.
+
+## 0.80.0 — 17.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **`meetings people` pone su siguiente paso al principio de la respuesta.** `next` (el paso `page.next` con el
+  cursor), `missing` y `meta` estaban dentro de `item`, donde no los encontraba un agente que lee el `next` propio de
+  la respuesta. Los comandos de reuniones compartidos ahora responden con `meetingAnswerBody` de cli-core.
+- **Construido sobre cli-core 0.691.0** (antes 0.687.0); cli-base sigue en 0.109.0. El almacén pasa al esquema 69: los
+  demás WireCat CLI que lo usan necesitan una versión que lo entienda. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.79.0 — 17.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Un llavero que no responde se nombra como tal, en lugar de tomarse por «sesión no iniciada».** Cuando el llavero
+  del sistema falla (en Linux, una causa conocida es un bus de sesión reiniciado) y el archivo de inicio de sesión no
+  tiene ninguna entrada, `session status`, `session end` y `account remove` responden `keyring.unreachable` con la
+  solución: cierra la sesión y vuelve a entrar, o define `DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus`.
+  Antes, `session end` decía que no había nada que cerrar mientras el inicio de sesión seguía en el llavero.
+- **Construido sobre cli-core 0.687.0 y cli-base 0.109.0** (antes 0.681.0 y 0.106.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md) y el
+  [historial de cambios de cli-base](https://github.com/WireCatLabs/cli-base/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **`meetings passage` marca el texto de la transcripción en la ejecución de un agente programado.** Con el bloqueo
+  de solo lectura y una marca de texto no fiable definida, la salida en texto y en Markdown envuelve el hablante y las
+  palabras de cada fragmento en marcas de texto no fiable, como ya hacía JSON.
+
+## 0.78.0 — 16.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **La skill para agentes es más corta.** `SKILL.md` conserva lo que un agente necesita en cada turno (la regla del
+  perfil, responder a partir de las reuniones guardadas, los límites de los cambios, la salida) en unos 8 KB en lugar
+  de 20 KB, y enlaza el resto en `skills/zoom-cli/references/`: búsqueda, personas y proyectos, preparación, el
+  archivo, reuniones en Zoom y configuración. No se ha quitado ninguna regla. Se corrigen los nombres que
+  desaparecieron en 0.77.0: `meetings link --event-id`, y `meetings create|update|cancel|invitation` en lugar de
+  `remote-meetings`, y lo que muestra `--dry-run`. La skill ahora indica a los agentes que `meetings show` y
+  `meetings list` consultan a Zoom por defecto y que `--offline` lee solo el almacén. Un agente que lee la skill gasta
+  unos 3.000 tokens menos en cada turno.
+
+### Corregido
+
+- **`zm skill install` instala las `references/` de la skill junto a `SKILL.md`,** en `~/.claude/skills/zoom-cli/` y
+  `~/.agents/skills/zoom-cli/`, y `zm skill show <name>` imprime una de ellas (`zm skill show search`). Antes solo se
+  instalaba `SKILL.md`, y sus enlaces a las referencias no llevaban a ninguna parte. zm se construye sobre cli-core
+  0.681.0 y cli-base 0.106.0.
+
+## 0.77.0 — 15.11.2026
+
+### Añadido
+
+- **`meetings show` lee desde Zoom una reunión ya celebrada,** con sus personas y su transcripción, por el uuid de la
+  instancia que guarda `meetings sync` o por su número de reunión (entonces, su última instancia). Necesita el permiso
+  opcional `meeting:read:past_meeting`: añádelo a la app de Zoom y vuelve a ejecutar `zm <profile> session start`. Sin
+  él, `meetings show` indica que falta el permiso.
+- **`meetings list` encuentra reuniones que se celebraron en Zoom y aún no están guardadas.** Pide a Zoom un mes de la
+  ventana `started_at` cada vez, de la más reciente a la más antigua, y lee las sesiones de como máximo 20 reuniones
+  por petición, así que una lista envía como máximo 126 peticiones. Sin `started_at` empieza hoy y retrocede hasta
+  donde Zoom enumera reuniones pasadas, 6 meses. Cuando se detiene antes del final, la respuesta indica que no está
+  completa (`meetings.server-capped`) y pide un `started_at` más estrecho. Las reuniones que aún no se han celebrado no
+  aparecen: las enumera `meetings scheduled`.
+- **`meetings create|update|cancel|invitation`** cambian una reunión de Zoom o leen su invitación, mediante la gestión
+  de reuniones compartida de cli-core. Crear una necesita `--start-time`; zm no inicia una reunión instantánea. Un
+  cambio que zm no puede enviar se rechaza antes de la pregunta.
+
+### Cambiado — puede romper la compatibilidad
+
+- **`remote-meetings` ya no existe.** Usa `meetings create`, `meetings update`, `meetings cancel` y
+  `meetings invitation`. `remote-meetings list` y `remote-meetings show` para una reunión próxima no tienen
+  sustituto: `meetings scheduled` enumera las series programadas, y `meetings show` responde sobre reuniones ya
+  celebradas.
+- **`--dry-run` en `meetings create|update|cancel` muestra el comando y su permiso,** no la petición que zm enviaría a
+  Zoom, y no comprueba el cambio. Un cambio que Zoom no puede aceptar se rechaza al ejecutarse, antes de la pregunta.
+- **Una clave de permiso `remote-meetings` guardada detiene todos los comandos** hasta que se quite con
+  `zm <profile> config unset permissions.remote-meetings`. En su lugar, define `meetings.create`, `meetings.update` o
+  `meetings.cancel`. Por defecto, estos preguntan primero.
+- **`meetings update <reference> --event-id` ahora es `meetings link <reference> --event-id`.** `meetings update`
+  cambia una reunión en Zoom.
+- **Construido sobre cli-core 0.667.0 y cli-base 0.102.1** (antes 0.663.0 y 0.100.0). `--json <fields>` conserva las
+  marcas de texto no fiable en el texto de otras personas. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.76.0 — 14.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **`search meetings` sin `--limit` muestra 20 coincidencias, no 100,** y una búsqueda por significado conserva las
+  mismas 20 (el tamaño de página compartido de cli-core). zm aún no tiene un tamaño de página configurable, así que
+  `--limit` es la única forma de cambiarlo.
+- **Los comandos `meetings` aceptan `--json [fields]` y `--jsonl` del programa** en lugar de sus propios indicadores
+  de activar y desactivar, así que `meetings list --json id,title` conserva solo esos campos.
+- **Necesita `@wirecat/cli-core` 0.663.0 y `@wirecat/cli-base` 0.100.0.**
+
+## 0.75.0 — 14.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Un nivel `readonly` ya no detiene una sincronización** (cli-core 0.662.0, antes 0.659.0). Un comando que solo
+  descarga de Zoom al almacén local, como `meetings sync`, se ejecuta con `readonly`; `deny` sigue rechazándolo. Los
+  comandos que escriben en los archivos del propietario o llaman a otro servicio siguen bloqueados por `readonly`. Un
+  perfil que usaba `readonly` para detener la sincronización pone la clave en `deny`.
+- **`meetings list` y `meetings show` aceptan `--backend archive|server|both`** (cli-core 0.660.0, por defecto
+  `both`). zm aún no busca en Zoom desde estos comandos, así que `both` responde desde el almacén con una línea
+  `missing` y `meta.complete: false`, `--backend server` se niega, y `--backend archive` da la respuesta anterior solo
+  desde el almacén. Los elementos llevan `provider_id`, y `meetings show` acepta el id de Zoom además del número del
+  almacén. `--since-time` acepta `7d` y otros intervalos hacia atrás desde ahora.
+- **`meetings list` lee las fechas en la zona horaria del equipo** (cli-core 0.660.0), no en UTC.
+
+### Corregido
+
+- **`readonly` sigue deteniendo `recordings schedule run`.** La ejecución descarga grabaciones en la carpeta guardada
+  de la tarea, que no recibe como opción, así que está marcada como una que escribe en los archivos del propietario.
+
+## 0.74.0 — 14.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Construido sobre cli-core 0.659.0** (antes 0.656.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Una configuración compartida con un pequeño fallo se repara al leerla.** `~/.config/WireCat/config.json` con una
+  marca de orden de bytes, un comentario, una coma final o una coma que falta entre dos líneas se corrige en el sitio,
+  y el archivo anterior se guarda al lado como `config.json.bak-<time>`. Para otros daños se indican la línea, la
+  columna y la corrección probable.
+
+## 0.73.0 — 13.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Construido sobre cli-core 0.651.0 y cli-base 0.99.0** (antes 0.648.0 y 0.98.0). Una huella de proyecto de reunión
+  desactualizada responde `conflict` (motivo `meeting-project.stale`), no `configuration_error`. Los motivos de
+  cli-core `oauth.missing` y `ai.address-refused` ahora son `session.missing` y `model.address-refused`.
+  `contracts/wirecat.json` enumera los hosts a los que llegan los paquetes compartidos (el registro de npm y las
+  descargas de Hugging Face y GitHub), para que WireCat Desktop los muestre. El resto de cambios está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **zm guarda sus carpetas bajo `zoom-cli`, el nombre que ya usaban `zm doctor` y el registro de ejecuciones.** Los
+  ajustes pasan de `~/.config/zm` a `~/.config/zoom-cli`, y el estado de `~/.local/share/zm` a
+  `~/.local/share/zoom-cli`. La primera ejecución los mueve y deja un enlace en cada carpeta antigua que vació, así que
+  un zm anterior sigue funcionando; una programación del archivo guardada sigue ejecutándose
+  ([configuración](./configuration.md)).
+- **Construido sobre cli-core 0.648.0.** Un perfil mal escrito ahora responde `not_found` con el motivo
+  `profile.unknown` y los perfiles de este equipo, no «sesión no iniciada». Los comandos y opciones desconocidos
+  llevan un motivo `usage.*`, y `doctor reports create --output` se niega a sobrescribir un archivo. El resto de
+  cambios está en el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Un inicio de sesión ya no depende del client ID en su nombre del llavero.** Después de cambiar `zoom.client_id`,
+  vuelve a ejecutar `zm <profile> session start`.
+- **Construido sobre cli-core 0.656.0** (antes 0.651.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Las peticiones a Zoom se reintentan con el mecanismo de reintentos compartido de cli-base**, con los mismos dos
+  reintentos y el `Retry-After` de Zoom.
+- **La documentación dice dónde está de verdad el inicio de sesión:** en el llavero, o en un archivo privado cuando el
+  llavero no está disponible, y `session end` lo elimina.
+- **La sincronización funciona en una instalación nueva.** Una configuración compartida de WireCat
+  (`~/.config/WireCat/config.json`) que no se podía leer (una marca de orden de bytes, JSON roto, una carpeta en su
+  lugar, una forma antigua de `setup`) dejaba todas las herramientas de WireCat en solo lectura y rechazaba `sync`.
+  Ahora solo la propia respuesta «solo lectura» del propietario limita una herramienta, e incluso entonces una
+  sincronización se ejecuta: solo copia los datos del servicio al almacén local (cli-core 0.656.0).
+
+### Seguridad
+
+- **Una entrada del llavero por perfil, compartida por todas las ejecuciones.** Un inicio de sesión se guarda bajo el
+  servicio `zoom-cli`, cuenta `oauth:zoom:<profile>`, no bajo un servicio por cada carpeta de configuración. La primera
+  ejecución copia ahí una entrada anterior y deja la antigua hasta `session end`, que ahora elimina ambas. Una
+  ejecución con carpetas movidas (`ZM_CONFIG_DIR`, un `HOME` temporal) lee el inicio de sesión del propietario, pero
+  nunca lo sustituye ni lo elimina ([sesiones](./sessions.md#remove-access)).
+- **Una sola renovación de token a la vez entre procesos.** El temporizador del archivo, un servidor MCP y un comando
+  en una terminal ya no renuevan el mismo inicio de sesión a la vez. Zoom sustituye el token de renovación en cada
+  renovación, así que el perdedor de esa carrera podía cerrar la sesión del propietario.
+- **zm solo llega a los hosts de Zoom.** Cada petición pasa por `hostFetch` de cli-base, limitado a `zoom.us`,
+  `zoom.com` y sus subdominios. `contracts/wirecat.json` los enumera para WireCat Desktop.
+
+## 0.72.0 — 13.11.2026
+
+### Cambiado — puede romper la compatibilidad
+
+- **Construido sobre cli-core 0.647.0** (antes 0.620.0). El almacén pasa a la versión 66 al abrirse por primera vez
+  (vínculos entre personas, tipos de persona y orden de los nombres; solo añade). `doctor reports show` y
+  `doctor reports create` escriben un informe de problema para enviar, y `doctor --help` muestra sus secciones Returns
+  y Example. Lo que cambió entre medias está en el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **Las llamadas a modelos se quedan en este equipo cuando lo pides.** Con el modo solo local activado
+  (`memo models local-only set on`), cada llamada a un modelo que cli-core hace para zm rechaza una dirección que no
+  sea de este equipo antes de enviar nada. `http://` sin cifrar ahora solo se acepta hacia este equipo, así que el
+  texto de las reuniones nunca cruza la red sin cifrar; usa https o ejecuta el modelo en local.
+- **`schedule pause <name>` y `schedule resume <name>`** quitan una programación de su temporizador y la conservan;
+  `schedule run` sigue ejecutándola. `--at` se puede repetir: `--at 08:30 --at 18:00` se ejecuta dos veces al día.
+
 ## 0.71.0 — 09.11.2026
 
 ### Añadido
