@@ -17,12 +17,14 @@ guardar todo el Disk, sin las carpetas que dejes fuera, y se detiene antes de mu
 hasta que los permitas. Un archivo de texto editado en ambos lados en sitios distintos se fusiona, y un conflicto real
 te espera con las dos versiones. Tu agente también puede [editar un archivo en el Disk](./usage.md#edit-a-file-on-the-disk)
 donde está: un archivo de texto, celdas de un `.xlsx` o párrafos de un `.docx`, con el formato intacto y el contenido
-reemplazado guardado en tu ordenador. También puedes [abrir el Disk como una carpeta](./mount.md) en tu gestor de
+reemplazado guardado en tu ordenador. También puede crear allí un documento de Word o un libro de Excel nuevo. Una
+sincronización lee el texto de escaneos e imágenes con [reconocimiento de texto (OCR)](./usage.md#scans-and-pictures),
+por defecto en tu ordenador, y guarda durante un año las
+[versiones anteriores](./usage.md#earlier-versions-and-what-changed) de cada archivo sincronizado. También puedes [abrir el Disk como una carpeta](./mount.md) en tu gestor de
 archivos, en solo lectura. Mira la [introducción](./index.md).
 
 ## Siguiente
 
-- Crear un documento de Word o un libro de Excel nuevo. Hoy un agente edita los que ya están en el Disk y solo crea
-  archivos de texto.
+- Por ahora no hay nada nuevo previsto.
 
 Lo que cambió en cada versión está en el [registro de cambios](./changelog.md).

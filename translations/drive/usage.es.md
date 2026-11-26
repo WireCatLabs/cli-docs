@@ -46,10 +46,10 @@ incluye en la búsqueda local. La búsqueda necesita importar; exportar es opcio
 | Markdown o TXT subido | Descarga texto a la caché | Texto buscable y exportable |
 | Carpeta Google | Guarda metadatos y padres en la base; recorre descendientes | `catalog tree`, búsqueda de metadatos, etiquetas y notas locales |
 | Google Sheet | Exporta el libro como `.xlsx` y lee cada hoja | Cada hoja es un encabezado; filas como `Row 2: Column: value`, usando la primera fila textual como nombres de columnas |
-| PDF, Word (`.docx`), Excel (`.xlsx`), CSV o TSV subidos | Descarga y lee texto | Texto PDF/Word, cada hoja Excel y filas CSV |
-| PDF escaneado sin texto | Guarda el nombre con la razón | Sin OCR; buscable por nombre |
+| PDF, Word (`.docx`, `.doc`), Excel (`.xlsx`), PowerPoint (`.pptx`), OpenDocument (`.odt`, `.ods`, `.odp`), RTF, HTML, EPUB, CSV o TSV subidos | Descarga y lee texto | Texto de documentos y diapositivas, cada hoja Excel y filas CSV. Un archivo omitido antes por un tipo no admitido se lee en el siguiente sync |
+| PDF escaneado sin capa de texto, imagen JPEG, PNG o WebP | Lee el texto por OCR según `read_scans`, en este equipo por defecto. Un archivo de más de 20 páginas o una imagen de más de 25 MB se guarda por nombre con la razón | Texto buscable y exportable. Con `read_scans` en `off`, buscable solo por nombre. Consulta [escaneos e imágenes](#scans-and-pictures) |
 | Imágenes con `picture_search` activado | Guarda el nombre, descarga hasta 25 MB si Google lo permite, calcula un vector y no conserva el archivo | Encuentra el contenido en `pictures`; consulta [buscar imágenes](./search.md#search-images-by-what-they-show) |
-| Slides, presentaciones, `.xlsm`, imágenes, audio, vídeo, JSON o código | Guarda el nombre con la razón | Sin extracción, OCR ni transcripción; buscable por nombre |
+| Slides, `.ppt`, `.xlsm`, otras imágenes (TIFF, HEIC, con `picture_search` desactivado), audio, vídeo, JSON o código | Guarda el nombre con la razón | Sin extracción ni transcripción. Buscable por nombre |
 | Acceso directo Drive | Omite | No sigue el destino |
 | Descarga restringida por Google | Guarda el nombre con la razón | Los metadatos no garantizan acceso al contenido; buscable por nombre |
 
@@ -58,6 +58,47 @@ incluye en la búsqueda local. La búsqueda necesita importar; exportar es opcio
 imágenes y cuenta las procesadas en `pictures`. `pictures_too_large` cuenta las mayores de 25 MB,
 que siguen solo por nombre. `pictures_skipped` indica que falta el modelo: el resto del sync termina
 y otro sync procesa las imágenes cuando el modelo está preparado.
+
+## Escaneos e imágenes
+
+Un sync lee por OCR el texto de un PDF escaneado (sin capa de texto) y de una imagen JPEG, PNG o WebP. El ajuste
+`read_scans` del perfil elige quién lo lee:
+
+| `read_scans` | Quién lee el texto | Qué necesita |
+| --- | --- | --- |
+| `local` (predeterminado) | El programa `tesseract` en este equipo, en ruso e inglés. Nada sale del equipo y no se descarga nada | `tesseract` instalado, por ejemplo `sudo apt install tesseract-ocr tesseract-ocr-rus` en Debian o Ubuntu, `brew install tesseract tesseract-lang` en macOS |
+| `anthropic` u `openai` | El modelo elegido con `memo models ai set`, en la dirección propia de ese proveedor. Cada página se envía al proveedor como imagen, y el proveedor cobra cada página | `memo models ai set` con ese proveedor e imágenes permitidas (`--allow-remote`) |
+| `off` | Nadie | Los escaneos y las imágenes se guardan solo por nombre |
+
+`drive personal config set read_scans '"anthropic"'` cambia un perfil. De un archivo se leen hasta 20 páginas, y un
+sync lee como máximo 100 páginas. Las páginas que sobran esperan al siguiente sync. Un escaneo que una versión
+anterior de drive guardó por nombre se lee en el siguiente sync. Si falta `tesseract`, el sync termina igualmente, y
+la razón de cada escaneo explica cómo instalarlo. Con `picture_search` activado, una imagen recibe su texto y también
+su vector de imagen. `local` gira una página que está de lado antes de leerla, con los datos de orientación de
+`tesseract` (`sudo apt install tesseract-ocr-osd` donde no se instalan con `tesseract`). Sin esos datos, esa página se
+lee como texto ilegible, y los `warnings` del sync indican `document.scan-unturned`.
+
+## Transcripciones de Meet y notas de Gemini
+
+Google Meet guarda la transcripción de una reunión y las notas de Gemini como Google Docs en el Drive del organizador
+y las comparte con los invitados, así que la mayoría no está en ninguna carpeta tuya. `drive personal transcripts list`
+lista los Google Docs cuyo nombre contiene `Transcript`, `Notes by Gemini` o una de sus formas en ruso y español, en tu
+Drive y entre los archivos compartidos contigo, y no importa nada. `owned_by_me` es `false` para uno que está en el
+Drive de otra persona.
+
+El ajuste `transcripts` del perfil decide qué hace sync con ellos. No se importa nada hasta que lo configures:
+
+| `transcripts` | Qué hace sync |
+| --- | --- |
+| `include` | Importa cada coincidencia esté donde esté, la mantiene al día y quita la que ya no está compartida o cambió de nombre |
+| `skip` o sin valor | No las toca: solo lo que contienen las carpetas elegidas |
+| `exclude` | Deja fuera las coincidencias incluso dentro de una carpeta elegida |
+
+`drive personal config set transcripts '"include"'` lo activa. Drive no guarda ninguna marca de que un documento venga
+de Meet, así que decide el nombre. `transcript_words` sustituye las palabras (`drive personal config set transcript_words
+'["Transcript","Notes by Gemini"]'`). Las formas en ruso y español son los nombres de Google tal como se conocen y aún
+no se han visto en un Drive real. Una transcripción que también guardó una herramienta de reuniones aparece una vez en
+la búsqueda de WireCat, como la reunión.
 
 Markdown/TXT se reconoce por MIME textual o sufijos `.md`, `.markdown`, `.txt`. Google exporta
 hasta 10 MB: una Sheet mayor se omite con esa razón. Los archivos de más de 50 MB se omiten antes
@@ -102,7 +143,12 @@ puede repetir el último lote al continuar.
 El primer recorrido es recursivo; `files list --parent` solo lista hijos inmediatos.
 Si Google tiene más resultados, `page.next_cursor` contiene el token; pásalo a `files list --cursor TOKEN` para continuar.
 
-`folders list` muestra las raíces elegidas. `catalog tree` muestra su jerarquía guardada;
+`folders list` muestra las raíces elegidas por ID y nombre, sin preguntar a Google. El nombre es el que vio
+`folders add`, y cada sync lo actualiza, así que una carpeta renombrada muestra su nombre nuevo tras el siguiente sync.
+Una carpeta elegida antes de que drive guardara nombres muestra solo su ID hasta ese sync. La lista no da `path`:
+Google Drive no guarda la ruta de una carpeta, y construirla cuesta una petición por cada carpeta padre, que a menudo
+termina en una carpeta padre compartida que no puedes ver.
+`catalog tree` muestra su jerarquía guardada;
 `catalog list "parent:FOLDER_ID"` lista los hijos inmediatos sin Google. El índice de contenido
 agrupa documentos por cuenta; moverlos en Google conserva su referencia local. Los nombres
 repetidos son seguros: selecciona la fuente por ID.
@@ -171,7 +217,8 @@ drive personal documents context FOLDER_ID --offline --json
 
 Usa ID o URL de Google y referencias de proyecto de la misma base local. Las etiquetas, notas y relaciones reutilizan los registros compartidos. Las etiquetas de carpeta no pasan a los hijos ni cambian etiquetas o permisos Google. Renombrar o mover conserva la referencia. Las fuentes fuera del alcance seleccionado salen del catálogo activo; la reconciliación de metadatos conserva su identidad y anotaciones. Las tareas normales de eliminación de contenido siguen quitando texto y etiquetas de documento según las reglas del índice.
 
-El catálogo de cada cuenta está aislado. Un alcance completo admite hasta 10 000 entradas, con metadatos y salida del árbol limitados. Elige raíces más pequeñas si el recorrido supera el límite.
+El catálogo de cada cuenta está aislado, con metadatos y salida del árbol limitados. Un alcance de cualquier tamaño
+se completa en varios sync.
 
 ## Mantener el índice actualizado
 
@@ -187,9 +234,11 @@ El texto sin cambios reutiliza su identidad y vectores. Renombrar conserva el ID
 de las raíces o borrar en Google quita el documento de búsqueda al sincronizar. Los cambios
 o retiradas marcan como obsoletos los recuerdos activos.
 
-Un sync lee como máximo 10 000 entradas de las carpetas elegidas y 10 000 cambios.
-Si hay más cambios, `--rescan` ayuda mientras las carpetas no superen 10 000 entradas;
-si las superan, elige menos carpetas o raíces más pequeñas.
+Un sync lee como máximo 10 000 entradas de las carpetas elegidas y guarda dónde se detuvo. El siguiente sync sigue
+desde ahí. Un sync también se detiene a tiempo, tras 15 minutos en una terminal y 45 segundos por MCP salvo que
+`--timeout` fije otro valor, y pide sincronizar de nuevo. Una carpeta puede tener como máximo 10 000 entradas, y un
+sync lee como máximo 10 000 cambios desde el anterior. Si Google lista más cambios, `--rescan` lee las carpetas en su
+lugar. Si una carpeta tiene más, elige carpetas más pequeñas.
 
 ## Disco: indexar sin un directorio de exportaciones
 
@@ -253,6 +302,53 @@ local. Ambos escriben un archivo local, así que `--read-only` los rechaza; `--d
 sin descargar. El comando existente `documents export --output PATH` escribe una copia Markdown
 importada sin conectarse a Google.
 
+Sin `--output`, `files download FILE_ID --json` no guarda nada y responde con el texto del archivo y el `sha256` de sus
+bytes, para una edición (abajo). Un texto de más de 200 000 caracteres se corta ahí con `truncated: true` y sin
+`sha256`. Un PDF, `.docx` o `.xlsx` responde con su texto extraído, también sin `sha256`: escrito de vuelta, ese texto
+sustituiría el documento.
+
+## Editar un archivo guardado en Google Drive
+
+Estos comandos cambian un archivo que Drive guarda como archivo: Markdown, texto o CSV, y archivos Word (`.docx`) y
+Excel (`.xlsx`) subidos. Necesitan un acceso con `--grant write`.
+
+| Comando | Qué cambia |
+| --- | --- |
+| `files update FILE_ID --text <text>` (o el texto por stdin) | todo el texto de un archivo de texto plano |
+| `files sheets update FILE_ID <range> --values <json>` | celdas de un `.xlsx`, según `files sheets show`. El resto del libro queda igual |
+| `files documents update FILE_ID --payload <json>` | párrafos de un `.docx`, por los índices que da `files documents show` |
+| `files restore FILE_ID <version>` | restaura una versión que lista `files history` |
+
+Una edición sustituye un archivo solo si su contenido sigue siendo el que se leyó. Lee primero el `sha256` del archivo y
+pásalo como `--expected-fingerprint`: `files download FILE_ID --json` lo da para un archivo de texto,
+y `files sheets show` y `files documents show` lo dan para un libro o un archivo Word. Antes de subir, drive descarga el archivo, guarda
+su contenido en este equipo en la carpeta de estado del perfil y comprueba que sigue teniendo ese `sha256`. Justo antes
+de subir lo comprueba otra vez: por el `sha256` propio de Google para el archivo o, si Google no tiene ninguno o tiene
+otro, descargando los bytes de nuevo. Si el archivo cambió, la respuesta es un `conflict` que nombra el comando para
+leerlo otra vez, y no se sube nada.
+
+Google Drive no tiene subida condicional: su API no da al archivo ninguna etiqueta de versión de la que pueda depender
+una subida. Por eso no se detecta un cambio que llega en el momento entre esa última comprobación y la subida. Su
+contenido no se pierde: el contenido que drive sustituyó se guarda en este equipo, y Drive conserva sus propias
+revisiones anteriores de un archivo guardado (`revisions list FILE_ID`). El archivo conserva su ID, nombre y carpeta.
+
+`files update` escribe sobre un archivo que ya existe y no crea uno. Google Drive identifica un archivo por su ID, así
+que un archivo nuevo se sube con `files upload`. Rechaza un PDF, `.docx` o `.xlsx`, cuyo texto se extrae al leerlo.
+`sheets update` escribe un texto como texto, incluso uno que empieza por `=`, y no sobrescribe una fórmula sin
+`--replace`. `documents update` rechaza un párrafo con un cambio controlado, un campo, una imagen, un comentario, un
+enlace o una nota al pie, y explica por qué. Cada escritura sobre un archivo comprueba también el permiso
+`files.delete`: un perfil que lo pone en `ask` pregunta antes, y `deny` rechaza la edición
+([configuración](./configuration.md)).
+
+Estos comandos no cambian un Google Doc o Sheet, que no tiene archivo guardado. Lo rechazan y nombran el comando que
+sí lo hace: `documents update` para un Doc, los [comandos `sheets`](./recipes.md#read-and-change-spreadsheet-cells)
+para un Sheet.
+
+`files history FILE_ID` lista lo que sustituyeron las ediciones de este perfil, con lo más reciente al final. Cada
+`version` es el `sha256` del contenido sustituido, y `available` indica si aún se conserva. `files restore FILE_ID` sin
+versión sigue sacando un archivo de la papelera. Consulta
+[editar un archivo con tu agente](./recipes.md#edit-a-file-stored-in-drive-with-your-agent).
+
 ## Exportar o dejar de importar
 
 ```sh
@@ -282,7 +378,7 @@ sync/status en `item`. La ayuda y el autocompletado siguen siendo texto; `comman
 documento compartido de comandos con contrato `4`. `effects` describe lecturas y escrituras remotas
 y locales; `api_operation` identifica un método generado de Google. Las listas locales usan
 `page.mode: "page"` y devuelven `next_page` si quedan resultados; las listas de Google
-(`files list`, `comments list`, `permissions list`, `revisions list`, `shared-drives`, `documents history`)
+(`files list`, `comments list`, `permissions list`, `revisions list`, `shared-drives`, `activities list`)
 usan `page.mode: "cursor"` y devuelven `next_cursor`. La búsqueda y las listas de notas
 usan `--page`, no `--offset`. JSONL emite registros `{"type":"item","data":…}` seguidos de un único
 registro `{"type":"end",…}` con `complete` y metadatos de página. Los errores incluyen

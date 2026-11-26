@@ -19,9 +19,11 @@ archivo de Google. [Importación y almacenamiento](./usage.md) explica la copia 
 | Explorar y organizar el árbol guardado | No | Etiquetas/notas cuando se solicitan | No |
 | Añadir etiquetas, notas o vínculos | No | Sí | No |
 | Proponer recuerdos con IA | Envía texto local al proveedor configurado | Solo con `--yes` o confirmación | No |
+| Ver versiones anteriores y qué cambió | No | No | No |
 | Consultar comentarios o historial | Sí | Sin importación automática | No |
 | Crear o editar un Doc | Sí | Se importa al sincronizar después | Sí |
 | Leer o editar celdas de una hoja | Sí | Se importa al sincronizar después | Solo al cambiar celdas explícitamente |
+| Editar un archivo de texto, Word o Excel guardado en Drive | Sí | Conserva el contenido sustituido | Sí |
 | Organizar pestañas y formato de una hoja | Sí | Se importa al sincronizar después | Sí |
 
 ## Primera carpeta buscable sin exportaciones extra
@@ -357,10 +359,27 @@ Solo se pueden revertir decisiones aceptadas, no otros tipos de hechos. El hecho
 al documento y la cuenta seleccionados. Estas operaciones funcionan sin conexión y respetan
 `--read-only`. Usa `--dry-run` para ver la operación sin cambiar los hechos locales.
 
+## Ver versiones anteriores y qué cambió
+
+Cada sincronización guarda el texto, el título y el front matter de un documento antes de que cambie o salga de la
+copia. Estas lecturas usan solo la copia guardada:
+
+```sh
+drive personal documents history DOC_ID
+drive personal documents history DOC_ID --revision 3
+drive personal changes --since 7d
+drive personal changes --since 1d --event deleted,unavailable
+```
+
+Un archivo en la papelera de Google Drive cuenta como `deleted`. Un archivo que Google deja de mostrar, un acceso
+compartido perdido o un 404 cuentan como `unavailable`: sale de las listas y de la búsqueda pero conserva su texto,
+y vuelve tal como estaba cuando Google lo muestra de nuevo. Las versiones y el registro de cambios se conservan durante
+`keep_versions_for_days`, un año por defecto.
+
 ## Examinar revisiones o actividad opcional
 
 ```sh
-drive personal documents history DOC_ID --json
+drive personal revisions list DOC_ID --json
 drive personal comments list DOC_ID --json
 ```
 
@@ -369,7 +388,7 @@ habilita Drive Activity API y vuelve a conectar con su permiso:
 
 ```sh
 drive personal session start --client-file /path/to/desktop-client.json --grant activity
-drive personal documents history DOC_ID --activity --json
+drive personal activities list DOC_ID --json
 ```
 
 Continúa pasando `page.next_cursor` a `--cursor` en el mismo comando. Las revisiones/eventos visibles
@@ -473,6 +492,55 @@ tg personal chats documents list CHAT_ID
 La búsqueda de Drive incluye la referencia del documento, su URL de Google y la última fecha de edición
 en Google. La lista del chat muestra el título del documento importado cuando se ha establecido
 el vínculo. Un resultado vacío puede indicar que los documentos o mensajes aún no se han importado.
+
+## Editar un archivo guardado en Drive con tu agente
+
+El agente lee el archivo, lo edita y lo escribe de vuelta con el `sha256` que leyó. Si alguien cambió el archivo
+mientras tanto, la escritura se rechaza y no se sube nada: el agente lo lee otra vez y repite la edición. Lo que
+sustituyó cada edición se guarda en este equipo. Esto sirve para archivos guardados en Drive, como Markdown, texto,
+CSV, `.docx` y `.xlsx`. Un Google Doc o Sheet se cambia con `documents update` y los [comandos `sheets`](#read-and-change-spreadsheet-cells).
+
+Una nota Markdown:
+
+```text prompt
+Usa drive CLI con el perfil personal. En el archivo plan.md de mi Drive (FILE_ID), marca «enviar la factura» y añade
+«llamar al banco» bajo Viernes. Deja todo lo demás como está.
+```
+
+```sh
+drive personal files download FILE_ID --json
+drive personal files update FILE_ID --expected-fingerprint <sha256 from the download> < plan.md
+```
+
+La descarga responde con todo el texto y su `sha256`. Un texto cortado en 200 000 caracteres no tiene `sha256`, así
+que nunca se puede escribir de vuelta.
+
+Una hoja de cálculo:
+
+```text prompt
+Usa drive CLI con el perfil personal. En budget.xlsx de mi Drive (FILE_ID), pon el alquiler de marzo en 1300 y
+márcalo como pagado.
+```
+
+```sh
+drive personal files sheets show FILE_ID "Sheet1!A1:D20" --json
+drive personal files sheets update FILE_ID "Sheet1!B3:C3" --values '[[1300, "paid"]]' --expected-fingerprint <sha256>
+```
+
+Solo cambian esas celdas. El formato, las otras hojas y las fórmulas se quedan como están. Una celda con fórmula se
+rechaza salvo que el agente añada `--replace`.
+
+Un documento Word:
+
+```sh
+drive personal files documents show FILE_ID --json
+drive personal files documents update FILE_ID --payload '[{"index": 2, "text": "Revenue grew 12%."}]' --expected-fingerprint <sha256>
+```
+
+Para deshacer una edición, `files history FILE_ID` lista las versiones guardadas aquí, y `files restore FILE_ID <version>
+--expected-fingerprint <sha256 now>` restaura una. Google Drive no tiene subida condicional, así que drive comprueba
+el archivo justo antes de escribir. Un cambio en ese momento no se detecta, pero lo que la escritura sustituyó se
+conserva ([detalles](./usage.md#edit-a-file-stored-in-google-drive)).
 
 ## Leer y cambiar celdas de una hoja
 

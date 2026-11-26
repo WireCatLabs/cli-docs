@@ -101,4 +101,6 @@ este orden:
 3. Ejecuta `ydisk personal sync` si el archivo es nuevo.
 4. Busca el nombre con `catalog search`, o lista la carpeta en directo con `files list`.
 
-Un PDF escaneado no tiene capa de texto, así que solo se puede buscar por su nombre.
+Un PDF escaneado o una imagen se buscan por el texto que el OCR leyó de ellos. Con `read_scans` en `off`, o sin
+`tesseract` instalado para el `local` por defecto, solo se puede buscar por su nombre. Consulta
+[escaneos e imágenes](./usage.md#scans-and-pictures).

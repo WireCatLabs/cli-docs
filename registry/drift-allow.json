@@ -78,12 +78,6 @@
     "until": "2027-01-31"
   },
   {
-    "tool": "drive",
-    "key": "profiles.shape",
-    "why": "The catalog is right: drive-cli 0.77.0 answers session list as item.items (drive-cli src/commands/session.ts:135). The manifest says items because cli-base allows no other shape (cli-base src/wcat/manifest.ts:101). Fix drive-cli to answer a list, or let cli-base state the shape.",
-    "until": "2027-01-15"
-  },
-  {
     "tool": "gcal",
     "key": "doctor",
     "why": "Desktop main takes this key from the installed CLI's own answer (wirecat-desktop #476). The compiled value serves Desktop 0.8.0 and a CLI that gives no answer, and the command it runs still exists in the CLI's latest release (wirecat-desktop catalog-commands.test.ts checks it). Desktop 0.8.0 checks it with `session status`, which the CLI still has.",

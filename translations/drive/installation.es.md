@@ -118,7 +118,8 @@ drive session list --json
 ```
 
 Busca `personal` entre los perfiles. Esta lista muestra la configuración local sin imprimir
-tokens; no contacta con Google ni comprueba si un acceso anterior sigue vigente. La importación
+tokens; no contacta con Google ni comprueba si un acceso anterior sigue vigente. `drive personal session status --json`
+indica si ese perfil tiene un acceso guardado aquí, con qué cuenta y con qué permisos. La importación
 del paso 3 comprobará el acceso a la carpeta elegida. Sigue con el [paso 3](#check-your-first-result).
 
 Si el navegador no se abre, repite el acceso con `--no-browser` y abre el enlace mostrado en el

@@ -18,7 +18,7 @@ WireCat, como el llavero, los permisos, MCP y lo que nunca llega a un registro, 
 
 | Qué | Dónde | Cómo quitarlo |
 | --- | --- | --- |
-| El token de Yandex | El llavero del sistema, o un archivo privado donde no lo hay | `ydisk personal session end` |
+| El token de Yandex | El llavero del sistema, o un archivo privado donde no lo hay | `ydisk personal session end`. El token sigue siendo válido en Yandex hasta que lo revoques ([abajo](#revoke-the-token-at-yandex)) |
 | El texto de los archivos de las carpetas elegidas, con sus nombres, rutas, tamaños, fechas y sumas MD5 | El almacén local, `wirecat.db`, compartido con las demás herramientas de WireCat | `folders remove` con el id de la carpeta de `folders list`, y luego `sync` |
 | Tus etiquetas, notas y recuerdos sobre documentos | El almacén local | `tags remove`, `notes remove` |
 | El par de carpetas de cada espejo, su última sincronización y las versiones que una sincronización reemplazó o borró aquí | `profiles/<profile>/mirrors.json` y `profiles/<profile>/mirrors/` en la carpeta de estado, legibles solo por ti | `mirrors remove <id>` olvida el par; las versiones se quedan hasta que caducan ([espejos](./mirrors.md#earlier-versions-of-a-file)) |
@@ -28,6 +28,15 @@ WireCat, como el llavero, los permisos, MCP y lo que nunca llega a un registro, 
 Los archivos en sí se quedan en el Disk. Solo se guarda una copia de un archivo cuando ejecutas
 `files download --output`, o en una carpeta que [sincronizas con un espejo](./mirrors.md). La sincronización no guarda los enlaces públicos (`public_url`). Nada va a WireCat: no hay
 servidor de WireCat ni una cuenta con nosotros.
+
+### Revoca el token en Yandex
+
+`session end` solo quita el token de este ordenador. Yandex lo sigue aceptando hasta que caduca o lo revocas. Para
+revocarlo, inicia sesión en Yandex ID, abre el acceso a datos ([«Доступ к данным»](https://id.yandex.ru/personal/data-access))
+y quita la aplicación para la que se emitió el token. Yandex también revoca todos los tokens de la cuenta cuando
+cambias la contraseña o eliges cerrar sesión en todos los dispositivos («Выйти на всех устройствах»)
+([Yandex ID: revocar tokens](https://yandex.ru/dev/id/doc/en/tokens/token-invalidate)). Revócalo si el ordenador o
+el token pueden haberse filtrado.
 
 ## Qué sale por la red
 

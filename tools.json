@@ -55,7 +55,7 @@
     "repo": "WireCatLabs/drive-cli",
     "package": "@wirecat/drive-cli",
     "lang": "en",
-    "docsRef": "v0.65.0",
+    "docsRef": "v0.77.0",
     "summary": {
       "en": "Import selected Google folders, search documents locally and keep tags, notes and source-backed memories.",
       "ru": "Импортируйте выбранные папки Google, ищите документы локально и сохраняйте теги, заметки и записи памяти с источниками.",
@@ -68,7 +68,7 @@
     "repo": "WireCatLabs/ydisk-cli",
     "package": "@wirecat/yandex-disk-cli",
     "lang": "en",
-    "docsRef": "v0.5.0",
+    "docsRef": "v0.7.1",
     "summary": {
       "en": "Search the text of your Yandex Disk folders on your computer, and let your AI agent read, edit, file and share documents there.",
       "ru": "Ищите по тексту папок Яндекс Диска на своём компьютере и поручайте ИИ-агенту читать, править, раскладывать и отправлять документы.",

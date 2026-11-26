@@ -4,6 +4,103 @@ title: "Historial de cambios"
 
 Cambios notables en `@wirecat/yandex-disk-cli`. Una sección por versión, las más nuevas arriba.
 
+## 0.7.1 — 25.11.2026
+
+### Corregido
+
+- **Ahora se lee el escaneo de una página tumbada de lado.** El OCR local (`read_scans: local`) gira antes la página,
+  así que la búsqueda encuentra su texto en lugar de que salga ilegible. Los escaneos leídos antes se leen otra vez,
+  una sola vez, en la siguiente sincronización. Sin los datos de orientación de tesseract
+  (`apt install tesseract-ocr-osd`) un escaneo se lee como antes, y la sincronización avisa con
+  `document.scan-unturned` (cli-core 0.750.0, antes 0.742.0, consulta
+  [escaneos e imágenes](./usage.md#scans-and-pictures)).
+- **En la ejecución de un agente programado, todo el texto de una respuesta de `api` se marca como no fiable**,
+  también los ids, no solo los nombres y las rutas (cli-core 0.746.0). Un id marcado que un agente copia en su
+  siguiente comando sigue funcionando: la ejecución le quita la marca.
+
+## 0.7.0 — 24.11.2026
+
+### Añadido
+
+- **Una sincronización lee el texto de escaneos e imágenes** (cli-core 0.742.0, antes 0.739.0). Un PDF sin capa de
+  texto y una imagen JPEG, PNG o WebP se leen con OCR, elegido por el `read_scans` del perfil: `local` por defecto
+  (el programa `tesseract` en tu ordenador, ruso e inglés, sin descargar nada), `anthropic` u `openai` (el modelo de
+  `ai set` en la dirección propia de ese proveedor, con imágenes permitidas, cada página se le envía y se paga por
+  página) u `off`. Como mucho 20 páginas por archivo y 100 por sincronización. Un escaneo que un ydisk anterior
+  guardaba por su nombre se lee en la siguiente sincronización, y una sincronización sin `tesseract` dice cómo
+  instalarlo ([escaneos e imágenes](./usage.md#scans-and-pictures)).
+- **Se leen más formatos** (cli-core 0.739.0, antes 0.737.0): Word 97–2003 `.doc`, PowerPoint `.pptx`, OpenDocument
+  `.odt`, `.ods` y `.odp`, RTF, HTML y EPUB, además de PDF, `.docx`, `.xlsx`, CSV, TSV, texto plano y Markdown. Un
+  archivo que una versión anterior guardaba solo por su nombre se lee en la siguiente sincronización
+  ([el uso](./usage.md#what-the-copy-holds)).
+- **Una sincronización lista cuatro carpetas del Disk a la vez**, así que sincronizar muchas carpetas tarda menos.
+  Se mantiene dentro de las 120 peticiones por minuto que ydisk envía a Yandex.
+- **`files sheets create` crea varias hojas, fórmulas y celdas en negrita.** `--values` también acepta
+  `[{"name": "Budget", "header": true, "rows": [...]}]`, y una celda puede ser `{"formula": "SUM(B2:B3)"}` o
+  `{"value": "Total", "bold": true}`. Un texto que empieza por `=` sigue siendo texto. Las filas como antes siguen
+  funcionando ([comandos](./commands.md)).
+- **`files documents create` crea texto en negrita y cursiva y tablas.** `--payload` también acepta
+  `{"text", "bold", "italic"}`, `{"runs": [...]}` y `{"table": [["Item", "Cost"], ["Rent", "950"]], "header": true}`.
+  `[{"text", "style"}]` sigue funcionando ([comandos](./commands.md)).
+
+### Cambiado — puede romper llamadas
+
+- **Un archivo sin enlace público se reemplaza bajo la propia comprobación del Disk.** `files update`,
+  `files sheets update`, `files documents update`, `files restore <path> <version>` y el envío de un archivo cambiado
+  por un espejo suben el contenido nuevo a un archivo oculto junto a él, mueven el archivo viejo a la papelera del
+  Disk con el contenido que se leyó (el Disk lo rechaza con 409 si el archivo cambió desde entonces) y dan al archivo
+  oculto su nombre. Antes, el archivo se leía justo antes de la subida, y un cambio en ese momento se sobrescribía.
+  Ahora el archivo recibe un `resource_id` nuevo, y el historial de versiones propio del Disk para él empieza de
+  nuevo. El contenido viejo queda en la papelera del Disk, que según la ayuda de Yandex ocupa espacio durante 30 días.
+  Su copia sincronizada pasa al id nuevo, así que sus etiquetas, las notas sobre él y sus enlaces lo siguen. Si no se
+  puede llegar al almacén local, la escritura se hace igual, con un aviso. Un archivo con enlace público se sigue
+  sobrescribiendo en su sitio después de leerlo, así que su enlace se mantiene ([el uso](./usage.md#edit-a-file-on-the-disk), [espejos](./mirrors.md#how-a-file-on-the-disk-is-replaced)).
+
+### Corregido
+
+- **Un agente programado lee marcados los nombres, rutas y textos del Disk de otras personas.** En una ejecución
+  bloqueada en solo lectura con una marca (`YDISK_READ_ONLY=1` y `YDISK_UNTRUSTED_MARK`), `files list`, `files show`
+  y `files download` marcan cada nombre, ruta y texto leído, `mirrors preview` cada ruta planeada y destino de
+  renombrado, y las operaciones del grupo `api` los nombres y rutas de la respuesta en bruto. Los archivos de una
+  carpeta compartida los nombra y escribe quien la comparte. Los comandos compartidos de cli-core (`documents`,
+  `search`, `folders list|browse`, `catalog`, `files sheets|documents show`, `mirrors
+  conflicts show`) ya marcaban los suyos. Fuera de una ejecución así ninguna respuesta cambia. Una ruta marcada se
+  pasa de vuelta a un comando `files` sin las marcas. Aún sin marcar: `mirrors conflicts list` (de cli-core) y
+  `files serve`, que muestra el Disk como una carpeta y no como una respuesta.
+- Requiere `@wirecat/cli-core` 0.742.0 y `@wirecat/cli-base` 0.132.0.
+
+## 0.6.0 — 24.11.2026
+
+### Añadido
+
+- **Archivos nuevos de Excel y Word** (cli-core 0.737.0, antes 0.724.0). `files sheets create <path> --values <json rows>`
+  crea un `.xlsx` nuevo, y `files documents create <path> --payload <json paragraphs>` un `.docx` nuevo. Cada uno
+  escribe solo un archivo nuevo, rechaza una ruta que ya existe (`office.file-exists`) y responde el `sha256` que
+  `update` toma después ([edita un archivo en el Disk](./usage.md#edit-a-file-on-the-disk)).
+
+### Corregido
+
+- **`mirrors conflicts resolve` se ejecuta dentro de la ejecución del comando.** Ahora `--timeout` lo limita,
+  `--record` guarda una ejecución para él y sus peticiones al Disk están en esa ejecución. Antes llegaba al Disk
+  fuera de toda ejecución.
+- **Los archivos sincronizados y editados guardan sus versiones anteriores durante `keep_versions_for_days`.** Los
+  almacenes de versiones de los espejos, y el que usan `files update`, `history` y `restore`, borraban las versiones
+  a los 30 días, dijera lo que dijera el ajuste. Ahora las guardan durante el `keep_versions_for_days` del perfil, un
+  año por defecto, como dicen los [ajustes](./configuration.md#other-settings).
+- **Una edición de Office rechazada dice por qué.** Una celda con fórmula, un formato equivocado o una hoja que falta
+  ahora responden con su propio motivo, como `office.formula-cell`, en lugar de `input.invalid`.
+- **La documentación dice dónde revocar el token de Yandex.** `session end` quita el token solo de este ordenador, y
+  sigue siendo válido en Yandex. [La seguridad](./security.md#revoke-the-token-at-yandex), la
+  [guía de instalación](./installation.md) y [la solución de problemas](./troubleshooting.md) ahora nombran la
+  página de acceso a datos ([«Доступ к данным»](https://id.yandex.ru/personal/data-access)) de Yandex ID, donde
+  quitas la aplicación para revocarlo.
+- **`changes --since <time>` y `--until <time>` en la ayuda** (cli-core 0.724.0, antes 0.722.0, y cli-base 0.130.0,
+  antes 0.128.0). `--until` decía `<when>`. Los flags aceptan los mismos valores que antes. El vocabulario ahora
+  conoce `changes`, `--since` y `--event`, así que la revisión de comandos ya no necesita excepciones para ellos.
+- **`session end` dice dónde revocar el token.** Su ayuda decía que el token sigue siendo válido en Yandex, pero no
+  dónde revocarlo. Ahora nombra la página de acceso a datos
+  ([«Доступ к данным»](https://id.yandex.ru/personal/data-access)) de Yandex ID, donde quitas la aplicación para la que se emitió el token.
+
 ## 0.5.0 — 23.11.2026
 
 ### Añadido

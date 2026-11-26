@@ -35,7 +35,7 @@ about it. To start, you need a Google account with access to the folders.
 - **Live reading when you need it.** Browse a folder, or look at a file's permissions, comments and revisions on
   Google, without copying anything.
 - **Changes only when you allow them.** Read access is the default. Creating and editing Docs, filling in Sheets,
-  copying or moving files need a separate write grant.
+  editing an uploaded Word, Excel or text file in place, copying or moving files need a separate write grant.
 - **Your agent connected.** Install the tool's skill for a terminal agent such as Claude Code, or serve the tool over
   MCP to an app that connects to MCP servers.
 
@@ -104,16 +104,19 @@ Do not change Google files.
 | Owners and last editor that Google shows | See who worked on a document |
 | Folders and their tree | Browse the folder tree, list a folder, tag a folder and add notes to it |
 | Your tags, notes, links to people or projects, and memories | Keep context across repeated work |
+| Earlier versions of each document and a log of what changed | See what a document said before, and what was added, changed or deleted since a day |
 
 You can [browse the copied folders offline](./usage.md#browse-and-organize-the-local-catalog). Files whose content
 cannot be read stay in the copy by name and type. `catalog search` finds them by name, type and owner. Permissions,
-comments, revision history and activity are read live from Google and are not kept.
+comments, Google's own revision history and activity are read live from Google and are not kept.
 
 ## What it reads
 
-The tool indexes Google Docs and Sheets, and uploaded Markdown and plain text, PDF with a text layer, Word `.docx`,
-Excel `.xlsx`, CSV and TSV. Scanned PDFs, Slides, audio and shortcuts have no indexed text. Images are found by name,
-or by what they show when you turn on [picture search](./search.md#search-images-by-what-they-show). In Docs, images,
+The tool indexes Google Docs and Sheets, and uploaded Markdown and plain text, PDF, Word, Excel, PowerPoint,
+OpenDocument, RTF, HTML, EPUB, CSV and TSV files. It reads the text of scanned PDFs and of JPEG, PNG and WebP pictures
+by [OCR](./usage.md#scans-and-pictures), on your computer by default. Slides, audio and shortcuts have no indexed text.
+Images are also found by what they show when you turn on
+[picture search](./search.md#search-images-by-what-they-show). In Docs, images,
 headers, footers, comments and suggested edits are not indexed.
 
 ## Find a guide for your task
@@ -125,6 +128,7 @@ headers, footers, comments and suggested edits are not indexed.
 | Find a passage, a file or a picture | [Search](./search.md) |
 | Give your agent a whole task | [Recipes](./recipes.md) |
 | Edit a Doc or a Sheet | [Recipes](./recipes.md#create-a-native-doc-and-include-it-in-search) |
+| Edit an uploaded Word, Excel or text file | [Use it](./usage.md#edit-a-file-stored-in-google-drive) |
 | Keep local Markdown files in step with Google | [Mirrors](./mirrors.md) |
 | Find a command or an option | [Commands](./commands.md) |
 | Change a setting or a permission | [Settings](./configuration.md) |

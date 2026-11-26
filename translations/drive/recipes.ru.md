@@ -19,9 +19,11 @@ Google. [Импорт и хранение](./usage.md) объясняет сод
 | Просмотреть и организовать сохранённое дерево папок | Нет | Теги/заметки по запросу | Нет |
 | Добавить теги, заметки или связи для следующих действий | Нет | Да | Нет |
 | Предложить записи памяти с ИИ-провайдером | Отправляет кешированный текст настроенному провайдеру | Только с `--yes` или подтверждением | Нет |
+| Посмотреть прежние версии и что изменилось | Нет | Нет | Нет |
 | Посмотреть комментарии или историю | Да | Без автоматического импорта | Нет |
 | Создать или изменить Google Doc | Да | Импортируется при следующей синхронизации | Да |
 | Прочитать или изменить ячейки таблицы | Да | Импортируется при следующей синхронизации | Только при явном изменении ячеек |
+| Изменить текстовый файл, Word или Excel, хранящийся в Drive | Да | Сохраняет заменённое содержимое | Да |
 | Организовать листы и форматирование таблицы | Да | Импортируется при следующей синхронизации | Да |
 
 ## Первая папка для поиска без лишних экспортов
@@ -359,10 +361,27 @@ drive personal facts list DOC_ID status:reversed --json
 выбранному документу и аккаунту. Операции работают без сети и соблюдают `--read-only`.
 Параметр `--dry-run` показывает действие без изменения локальных фактов.
 
+## Посмотреть прежние версии и что изменилось
+
+Каждая синхронизация сохраняет текст, название и front matter документа до того, как они изменятся или документ
+уйдёт из копии. Эти команды читают только сохранённую копию:
+
+```sh
+drive personal documents history DOC_ID
+drive personal documents history DOC_ID --revision 3
+drive personal changes --since 7d
+drive personal changes --since 1d --event deleted,unavailable
+```
+
+Файл в корзине Google Drive считается `deleted`. Файл, который Google перестал показывать, потерянный доступ или
+ответ 404 считаются `unavailable`: такой файл уходит из списков и поиска, но сохраняет текст и возвращается
+в прежнем виде, когда Google снова его покажет. Версии и журнал изменений хранятся `keep_versions_for_days` дней,
+по умолчанию один год.
+
 ## Посмотреть версии или дополнительную историю
 
 ```sh
-drive personal documents history DOC_ID --json
+drive personal revisions list DOC_ID --json
 drive personal comments list DOC_ID --json
 ```
 
@@ -371,7 +390,7 @@ drive personal comments list DOC_ID --json
 
 ```sh
 drive personal session start --client-file /path/to/desktop-client.json --grant activity
-drive personal documents history DOC_ID --activity --json
+drive personal activities list DOC_ID --json
 ```
 
 Для продолжения передайте `page.next_cursor` в `--cursor` той же команды. Видимые Google
@@ -473,6 +492,55 @@ tg personal chats documents list CHAT_ID
 Собственный поиск Drive содержит ссылку на запись документа, Google URL и время последнего изменения
 в Google. В списке чата появляется название импортированного документа, когда связь установлена.
 Пустой результат может означать, что нужные документы или сообщения ещё не импортированы.
+
+## Изменить файл в Drive с помощью агента
+
+Агент читает файл, правит его и записывает обратно с прочитанным `sha256`. Если кто-то за это время изменил файл,
+запись отклоняется и ничего не загружается: агент читает файл заново и повторяет правку. То, что заменила каждая
+правка, хранится на этом компьютере. Это работает для файлов, хранящихся в Drive, таких как Markdown, текст, CSV,
+`.docx` и `.xlsx`. Google Doc или Sheet меняют через `documents update` и [команды `sheets`](#read-and-change-spreadsheet-cells).
+
+Заметка Markdown:
+
+```text prompt
+Используй drive CLI с профилем personal. В файле plan.md в моём Drive (FILE_ID) отметь «отправить счёт» и добавь
+«позвонить в банк» в раздел «Пятница». Остальное не меняй.
+```
+
+```sh
+drive personal files download FILE_ID --json
+drive personal files update FILE_ID --expected-fingerprint <sha256 from the download> < plan.md
+```
+
+Скачивание возвращает весь текст и его `sha256`. У текста, обрезанного на 200 000 символов, нет `sha256`, поэтому
+его нельзя записать обратно.
+
+Таблица:
+
+```text prompt
+Используй drive CLI с профилем personal. В budget.xlsx в моём Drive (FILE_ID) поставь аренду за март 1300 и отметь
+её как оплаченную.
+```
+
+```sh
+drive personal files sheets show FILE_ID "Sheet1!A1:D20" --json
+drive personal files sheets update FILE_ID "Sheet1!B3:C3" --values '[[1300, "paid"]]' --expected-fingerprint <sha256>
+```
+
+Меняются только эти ячейки. Форматирование, другие листы и формулы остаются. Ячейка с формулой отклоняется, если
+агент не добавит `--replace`.
+
+Документ Word:
+
+```sh
+drive personal files documents show FILE_ID --json
+drive personal files documents update FILE_ID --payload '[{"index": 2, "text": "Revenue grew 12%."}]' --expected-fingerprint <sha256>
+```
+
+Чтобы отменить правку, `files history FILE_ID` показывает версии, сохранённые здесь, а `files restore FILE_ID <version>
+--expected-fingerprint <sha256 now>` возвращает одну из них. У Google Drive нет условной загрузки, поэтому drive
+проверяет файл прямо перед записью. Изменение в этот момент не будет замечено, но то, что заменила запись,
+сохраняется ([подробнее](./usage.md#edit-a-file-stored-in-google-drive)).
 
 ## Читать и менять ячейки таблицы
 

@@ -5,7 +5,6 @@ title: "Comandos Drive"
 <!-- Generated from the command tree by pnpm generate. Do not edit. -->
 
 Consulta todos los comandos y opciones. Las operaciones de cuenta requieren perfil explícito: la primera palabra, como en `drive personal documents show DOC_ID`, o `DRIVE_PROFILE`; no existe `--profile`. Ayuda, escenarios, la skill del agente, descargas de modelos, descubrimiento, métodos API, esquemas, completado, `doctor` y `upgrade` no seleccionan cuenta. Consulta [recetas](./recipes.md) e [importación y almacenamiento](./usage.md). Las descripciones conservan el idioma de la ayuda.
-
 ## Opciones globales
 
 These options apply to the selected profile and current invocation.
@@ -47,9 +46,38 @@ drive doctor [options]
 |---|---|
 | `--online` | also connect once and read the account; sends nothing. |
 
-**Returns:** the state this installation is in, without connecting unless --online
-
 **Example:** `drive doctor`, `drive doctor --json`
+
+### `drive doctor reports`
+
+problem reports
+
+#### `drive doctor reports show`
+
+what a problem report holds; writes nothing
+
+```sh
+drive <profile> doctor reports show
+```
+
+**Example:** `drive doctor reports show`
+
+#### `drive doctor reports create`
+
+write a problem report to a file, and say where to send it
+
+This command changes local state.
+
+```sh
+drive <profile> doctor reports create [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--run <id>` | the run the report is about; the newest failed one if not given. |
+| `--output <file>` | where to write it; a new file in this directory if not given. |
+
+**Example:** `drive doctor reports create --output ./problem-report.json`
 
 ## `drive skill`
 
@@ -67,8 +95,6 @@ drive skill show [options]
 |---|---|
 | `--for <agents>` | print the copy installed for these agents instead of this version's. One of: `claude`, `agents`. |
 
-**Returns:** print the tool's instructions for AI agents
-
 **Example:** `drive skill show`
 
 ### `drive skill install`
@@ -85,8 +111,6 @@ drive skill install [options]
 |---|---|
 | `--for <agents>` | which agents to install for. One of: `claude`, `agents`, `hermes`, `all`. Default: `all`. |
 
-**Returns:** install the tool's instructions for AI agents
-
 **Example:** `drive skill install --for agents`
 
 ### `drive skill status`
@@ -96,8 +120,6 @@ for each place `drive skill install` writes to, and for the copy Hermes reads: t
 ```sh
 drive skill status
 ```
-
-**Returns:** whether the installed instructions for AI agents match this version
 
 **Example:** `drive skill status`, `drive skill status --json`
 
@@ -123,8 +145,6 @@ drive <profile> mcp serve [options]
 | `--port <port>` | the local port for --http (default 8765). |
 | `--public-url <url>` | the tunnel's https address the browser apps use, e.g. https://<name>.ts.net or https://<name>.ts.net/tg. |
 
-**Returns:** serve this profile's commands to an AI agent
-
 **Example:** `drive personal mcp serve`, `drive mcp serve --profiles work,personal`, `drive personal mcp serve --http --public-url https://laptop.example.ts.net`
 
 ### `drive mcp revoke`
@@ -140,8 +160,6 @@ drive <profile> mcp revoke [options]
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
-
-**Returns:** forget every login given to a browser app
 
 **Example:** `drive personal mcp revoke`, `drive mcp revoke --profiles all`
 
@@ -166,8 +184,6 @@ drive <profile> mcp server start [options]
 | `--permission <key=level>` | make a permission stricter for this server only; repeat for more keys. |
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Returns:** start the HTTP MCP server in the background
-
 **Example:** `drive personal mcp server start --public-url https://laptop.example.ts.net`
 
 #### `drive mcp server stop`
@@ -184,8 +200,6 @@ drive <profile> mcp server stop [options]
 |---|---|
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
 
-**Returns:** stop the background HTTP MCP server
-
 **Example:** `drive personal mcp server stop`
 
 #### `drive mcp server status`
@@ -199,8 +213,6 @@ drive <profile> mcp server status [options]
 | Option | What it does |
 |---|---|
 | `--profiles <names\|all>` | the server of several profiles that `mcp serve --profiles` serves: names, comma-separated, or all. |
-
-**Returns:** whether the HTTP MCP server runs, its login code and the apps logged in
 
 **Example:** `drive personal mcp server status --json`
 
@@ -216,8 +228,6 @@ drive <profile> mcp config [options]
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
 | `--profiles <names\|all>` | serve several profiles from one server instead of one: names, comma-separated, or all for every profile. |
-
-**Returns:** print the local MCP configuration of this profile, or of those --profiles names
 
 **Example:** `drive personal mcp config`, `drive mcp config --profiles all`
 
@@ -240,8 +250,6 @@ drive <profile> mcp add <client> [options]
 | `--allow-writes` | acknowledge that this profile offers writing tools. |
 | `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
 
-**Returns:** add this profile's local MCP server to Codex or Claude Code
-
 **Example:** `drive personal mcp add codex --allow-writes`
 
 ### `drive mcp check`
@@ -255,8 +263,6 @@ drive <profile> mcp check [options]
 | Option | What it does |
 |---|---|
 | `--permission <key=level>` | make a permission stricter for this server only, like files.trash=deny; it never loosens the profile; repeat for more keys. |
-
-**Returns:** check this profile's local MCP handshake and tool list
 
 **Example:** `drive personal mcp check`
 
@@ -282,9 +288,17 @@ drive <profile> session start [options]
 | `--no-browser` | print the sign-in URL instead of opening a browser. |
 | `--grant <scopes>` | also ask for these permissions, comma-separated: write (change Drive files and Docs), activity (read Drive Activity history), apps (see installed Drive apps). |
 
-**Returns:** sign in to Google in the browser; read-only unless you pass --grant write
-
 **Example:** `drive personal session start`, `drive work session start --grant write,activity`, `drive work session start --client-id 1234-abc.apps.googleusercontent.com`
+
+### `drive session status`
+
+show whether this profile is signed in here, and as which Google account
+
+```sh
+drive <profile> session status
+```
+
+**Example:** `drive personal session status`
 
 ### `drive session list`
 
@@ -311,8 +325,6 @@ This command changes local state.
 ```sh
 drive <profile> session end
 ```
-
-**Returns:** sign this profile out; imported documents stay
 
 **Example:** `drive personal session end`
 
@@ -358,8 +370,6 @@ drive <profile> folders add <folder>
 |---|---|---|
 | `folder` | required | folder id or Google Drive URL. |
 
-**Returns:** import a folder and everything under it on the next sync
-
 **Example:** `drive personal folders add FOLDER_ID`
 
 ### `drive folders list`
@@ -374,7 +384,7 @@ drive <profile> folders list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** drive selected folder — id; every field: drive commands info folders list
+**Returns:** selected folder — id, name, path; every field: drive commands info folders list
 
 **Example:** `drive personal folders list`
 
@@ -408,13 +418,11 @@ drive <profile> folders remove <folder>
 |---|---|---|
 | `folder` | required | folder id or Google Drive URL. |
 
-**Returns:** stop importing a folder; the next sync drops its documents
-
 **Example:** `drive personal folders remove FOLDER_ID`
 
 ## `drive sync`
 
-import what changed in the chosen folders, and finish an unfinished sync; one sync reads at most 10000 entries under the chosen folders, and as many changes
+import what changed in the chosen folders, and finish an unfinished sync; one sync walks about 10000 entries under the chosen folders, saves where it stopped, and the next sync goes on from there
 
 This command changes local state.
 
@@ -425,10 +433,8 @@ drive <profile> sync [options]
 | Option | What it does |
 |---|---|
 | `--limit <n>` | how many documents to read from Google in this run. Default: `200`. |
-| `--rescan` | read every chosen folder again instead of only what changed. |
+| `--rescan` | read every chosen folder again instead of only what changed; each --rescan starts the walk over, so run it once and continue with a plain sync. |
 | `--embed` | also index pending text for meaning search, with a model already downloaded. |
-
-**Returns:** import what changed in the chosen folders, and finish an unfinished sync
 
 **Example:** `drive personal sync`, `drive personal sync --rescan --limit 500`
 
@@ -440,9 +446,27 @@ show the last sync, imported documents and pending work
 drive <profile> status
 ```
 
-**Returns:** show the last sync, imported documents and pending work
-
 **Example:** `drive personal status`
+
+## `drive transcripts`
+
+meet transcripts and Gemini notes in this account's Drive or shared with it
+
+### `drive transcripts list`
+
+list the Google Docs named like Meet transcripts or Gemini notes, wherever they sit; imports nothing
+
+```sh
+drive <profile> transcripts list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** drive transcript — id, name, url, owned_by_me, modified_at; every field: drive commands info transcripts list
+
+**Example:** `drive personal transcripts list --json`, `drive personal transcripts list owned_by_me:false`
 
 ## `drive store`
 
@@ -473,8 +497,6 @@ drive <profile> store check <source> [bindings]
 | `source` | required | previous Drive database file. |
 | `bindings` | optional | optional JSON file mapping source references to destination references. |
 
-**Returns:** preview copying document context without changing either database
-
 **Example:** `drive personal store check /path/to/previous.db --offline`
 
 ### `drive store import`
@@ -495,8 +517,6 @@ drive <profile> store import <source> [bindings] [options]
 | Option | What it does |
 |---|---|
 | `--fingerprint <hash>` | refuse if the reviewed source, destination or reference decisions changed. |
-
-**Returns:** copy reviewed document context and bind this profile to the selected store
 
 **Example:** `drive personal store import /path/to/previous.db --fingerprint HASH --offline`
 
@@ -521,7 +541,7 @@ drive <profile> documents list [query] [options]
 | `--limit <n>` | how many documents to return. Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Returns:** list imported documents with their Google URLs
+**Next usually:** `drive documents show <document>`, `drive documents history <document>`, `drive documents context <document>`
 
 **Example:** `drive personal documents list`, `drive personal documents list tag:budget`, `drive personal documents list person:PERSON_UID --limit 10`
 
@@ -536,8 +556,6 @@ drive <profile> documents show <document>
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | document id, Google Docs URL, or a search hit's document: ref. |
-
-**Returns:** show an imported document's text, tabs and metadata
 
 **Example:** `drive personal documents show DOC_ID`, `drive personal documents show document:42 --offline`
 
@@ -559,9 +577,25 @@ drive <profile> documents export <document> [options]
 |---|---|
 | `--output <file>` | path of the Markdown file to write; an existing file is refused. |
 
-**Returns:** write an imported document to a new Markdown file
-
 **Example:** `drive personal documents export DOC_ID --output notes.md`
+
+### `drive documents history`
+
+list the versions of a document kept in the local copy, or show one with --revision
+
+```sh
+drive <profile> documents history <document> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `document` | required | document id, Google Docs URL, or a search hit's document: ref. |
+
+| Option | What it does |
+|---|---|
+| `--revision <n>` | show the text of this version. |
+
+**Example:** `drive personal documents history DOC_ID`, `drive personal documents history DOC_ID --revision 3`
 
 ### `drive documents add`
 
@@ -583,8 +617,6 @@ drive <profile> documents add <url> [options]
 | `--title <title>` | title to keep it under; the document's name when omitted. |
 | `--subject <ref>` | a person, organization, project, task or meeting it is about; repeat to add more. |
 
-**Returns:** keep a Drive document's text in memory, read by the first profile that opens it
-
 **Example:** `drive documents add https://docs.google.com/document/d/DOC_ID/edit --profiles work,personal`, `drive personal documents add DOC_ID --subject person:PERSON_UID`
 
 ### `drive documents context`
@@ -598,8 +630,6 @@ drive <profile> documents context <document>
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
-
-**Returns:** show a document with its tags, relationships, notes, memories and editors
 
 **Example:** `drive personal documents context DOC_ID`
 
@@ -615,8 +645,6 @@ drive <profile> documents get <document>
 |---|---|---|
 | `document` | required | document id or Google Docs URL. |
 
-**Returns:** read a document live from Google Docs, as JSON with every tab
-
 **Example:** `drive personal documents get DOC_ID --json`
 
 ### `drive documents check`
@@ -630,8 +658,6 @@ drive <profile> documents check <document>
 | Argument | | What it is |
 |---|---|---|
 | `document` | required | document id or Google Docs URL. |
-
-**Returns:** ask Google whether an imported document changed since its local copy was made
 
 **Example:** `drive personal documents check DOC_ID`
 
@@ -648,8 +674,6 @@ drive <profile> documents create [options]
 | Option | What it does |
 |---|---|
 | `--title <title>` | title of the new document. |
-
-**Returns:** create an empty Google Doc
 
 **Example:** `drive personal documents create --title "Meeting notes"`
 
@@ -671,31 +695,25 @@ drive <profile> documents update <document> [options]
 |---|---|
 | `--body <json>` | Docs batchUpdate body: requests and an optional writeControl. |
 
-**Returns:** change a Google Doc with a Docs batchUpdate request
-
 **Example:** `drive personal documents update DOC_ID --body '{"requests":[]}'`
 
-### `drive documents history`
+## `drive changes`
 
-list the revisions Google kept, or who did what with --activity
+list the documents the sync added, changed, removed or brought back, newest first
 
 ```sh
-drive <profile> documents history <document> [options]
+drive <profile> changes [options]
 ```
-
-| Argument | | What it is |
-|---|---|---|
-| `document` | required | document id or Google Docs URL. |
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | how many items one page holds. Default: `100`. |
-| `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
-| `--activity` | list activity events instead of revisions; needs session start --grant activity. |
+| `--since <time>` | from this time: an ISO 8601 time, today, yesterday, or 30m, 2h, 1d ago. Default: `1d`. |
+| `--until <time>` | up to this time, in the same forms. |
+| `--event <events>` | only these, comma separated: added, changed, restored, deleted, unavailable, unsynced. |
+| `--limit <n>` | how many changes to return. Default: `50`. |
+| `--page <n>` | which page to return. Default: `1`. |
 
-**Returns:** list the revisions Google kept, or who did what with --activity
-
-**Example:** `drive personal documents history DOC_ID`, `drive personal documents history DOC_ID --activity`
+**Example:** `drive personal changes`, `drive personal changes --since 7d --event deleted,unavailable`
 
 ## `drive search`
 
@@ -715,8 +733,6 @@ drive <profile> search <query> [options]
 | `--page <n>` | which page to return. Default: `1`. |
 | `--exact` | match the words exactly: no word forms, no meaning. |
 
-**Returns:** search imported documents by words, and by meaning when indexed
-
 **Example:** `drive personal search budget`, `drive personal search "quarterly plan" --exact --limit 5`
 
 ## `drive catalog`
@@ -733,8 +749,6 @@ This command changes local state.
 drive <profile> catalog import
 ```
 
-**Returns:** put cached file and folder metadata into the shared database
-
 **Example:** `drive personal catalog import --offline`
 
 ### `drive catalog show`
@@ -749,9 +763,7 @@ drive <profile> catalog show <file>
 |---|---|---|
 | `file` | required | Google file or folder id, or its Drive URL. |
 
-**Returns:** show stored metadata and the stable file or folder reference
-
-**Next usually:** `drive documents show <document>`, `drive documents context <document>`, `drive documents get <document>`
+**Next usually:** `drive documents show <document>`, `drive documents history <document>`, `drive documents context <document>`
 
 **Example:** `drive personal catalog show FILE_ID --offline`
 
@@ -772,9 +784,7 @@ drive <profile> catalog list [query] [options]
 | `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Returns:** list cached files and folders using metadata queries
-
-**Next usually:** `drive documents show <document>`, `drive documents context <document>`, `drive documents get <document>`
+**Next usually:** `drive documents show <document>`, `drive documents history <document>`, `drive documents context <document>`
 
 **Example:** `drive personal catalog list "parent:FOLDER_ID AND kind:file" --offline`
 
@@ -795,9 +805,7 @@ drive <profile> catalog search <query> [options]
 | `--limit <n>` | how many entries to return (at most 1000). Default: `50`. |
 | `--page <n>` | which page to return. Default: `1`. |
 
-**Returns:** search cached names, descriptions, types and observed people
-
-**Next usually:** `drive documents show <document>`, `drive documents context <document>`, `drive documents get <document>`
+**Next usually:** `drive documents show <document>`, `drive documents history <document>`, `drive documents context <document>`
 
 **Example:** `drive personal catalog search "budget AND person:Rin*" --offline`
 
@@ -816,8 +824,6 @@ drive <profile> catalog tree [folder] [options]
 | Option | What it does |
 |---|---|
 | `--depth <n>` | maximum descendant depth, from 0 to 50. Default: `5`. |
-
-**Returns:** show the cached hierarchy below a folder or all selected roots
 
 **Example:** `drive personal catalog tree --offline`, `drive personal catalog tree FOLDER_ID --depth 3 --offline`
 
@@ -838,7 +844,7 @@ drive <profile> catalog tags list <file> [query]
 | `file` | required | Google file or folder id, or its Drive URL. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** drive document tag — tag; every field: drive commands info catalog tags list
+**Returns:** document tag — tag; every field: drive commands info catalog tags list
 
 **Example:** `drive personal catalog tags list FOLDER_ID --offline`
 
@@ -857,8 +863,6 @@ drive <profile> catalog tags add <file> <tags>
 | `file` | required | Google file or folder id, or its Drive URL. |
 | `tags` | required | local tag names. |
 
-**Returns:** add local tags on a cached file or folder
-
 **Example:** `drive personal catalog tags add FOLDER_ID project --offline`
 
 #### `drive catalog tags remove`
@@ -875,8 +879,6 @@ drive <profile> catalog tags remove <file> <tags>
 |---|---|---|
 | `file` | required | Google file or folder id, or its Drive URL. |
 | `tags` | required | local tag names. |
-
-**Returns:** remove local tags on a cached file or folder
 
 **Example:** `drive personal catalog tags remove FOLDER_ID project --offline`
 
@@ -897,7 +899,7 @@ drive <profile> tags list <document> [query]
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** drive document tag — tag; every field: drive commands info tags list
+**Returns:** document tag — tag; every field: drive commands info tags list
 
 **Example:** `drive personal tags list DOC_ID`
 
@@ -916,8 +918,6 @@ drive <profile> tags add <document> <tags>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `tags` | required | one or more tags. |
 
-**Returns:** tag a document
-
 **Example:** `drive personal tags add DOC_ID budget q3`
 
 ### `drive tags remove`
@@ -934,8 +934,6 @@ drive <profile> tags remove <document> <tags>
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `tags` | required | one or more tags. |
-
-**Returns:** untag a document
 
 **Example:** `drive personal tags remove DOC_ID budget q3`
 
@@ -956,7 +954,7 @@ drive <profile> relationships list <document> [query]
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** drive document relationship — id, from, to, kind, role, confirmed, origin; every field: drive commands info relationships list
+**Returns:** document relationship — id, from, to, kind, role, confirmed, origin; every field: drive commands info relationships list
 
 **Example:** `drive personal relationships list DOC_ID`
 
@@ -981,8 +979,6 @@ drive <profile> relationships add <document> <reference> [options]
 | `--role <role>` | the part the reference plays, in a word or two. |
 | `--reason <text>` | why the two are connected. |
 
-**Returns:** connect a document to another reference
-
 **Example:** `drive personal relationships add DOC_ID project:PROJECT_ID --kind about`, `drive personal relationships add DOC_ID person:PERSON_UID --kind assigned-to --role reviewer`
 
 ### `drive relationships remove`
@@ -999,8 +995,6 @@ drive <profile> relationships remove <document> <relationship-id>
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `relationship-id` | required | id, as relationships list prints it. |
-
-**Returns:** remove one of a document's relationships
 
 **Example:** `drive personal relationships remove DOC_ID LINK_ID`
 
@@ -1117,8 +1111,6 @@ drive <profile> notes remove <document> <note>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `note` | required | note:<id> reference, as notes list prints it. |
 
-**Returns:** delete one note
-
 **Example:** `drive personal notes remove DOC_ID note:NOTE_ID`
 
 ## `drive memories`
@@ -1145,8 +1137,6 @@ drive <profile> memories add <document> <text> [options]
 | `--scope <scope>` | whose memory it is: personal or work. One of: `personal`, `work`. |
 | `--kind <kind>` | what kind of memory it is. One of: `summary`, `digest`, `preference`. Default: `summary`. |
 | `--supersedes <ref>` | a memory:<id> about the same document that this one replaces. |
-
-**Returns:** record a memory about a document
 
 **Example:** `drive personal memories add DOC_ID "The team prefers async reviews" --scope work --kind preference`
 
@@ -1184,8 +1174,6 @@ drive <profile> memories show <document> <memory>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `memory` | required | memory:<id> reference, as memories list prints it. |
 
-**Returns:** show one memory
-
 **Example:** `drive personal memories show DOC_ID memory:MEMORY_ID`
 
 ### `drive memories confirm`
@@ -1203,8 +1191,6 @@ drive <profile> memories confirm <document> <memory>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `memory` | required | memory:<id> reference, as memories list prints it. |
 
-**Returns:** confirm a proposed memory as true
-
 **Example:** `drive personal memories confirm DOC_ID memory:MEMORY_ID`
 
 ### `drive memories stale`
@@ -1221,8 +1207,6 @@ drive <profile> memories stale <document> <memory>
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `memory` | required | memory:<id> reference, as memories list prints it. |
-
-**Returns:** mark a memory as out of date
 
 **Example:** `drive personal memories stale DOC_ID memory:MEMORY_ID`
 
@@ -1263,8 +1247,6 @@ drive <profile> memories extract <document> [options]
 | `--tab <id>` | send only this tab of the document. |
 | `--yes` | save the proposals, each with its quote and the document's version. |
 
-**Returns:** send a document's text to the model and show the memories it proposes
-
 **Example:** `drive personal memories extract DOC_ID --scope work`, `drive personal memories extract DOC_ID --scope work --yes`
 
 ## `drive facts`
@@ -1292,8 +1274,6 @@ drive <profile> facts add <document> <statement> [options]
 | `--scope <scope>` | whose fact it is: personal or work. One of: `personal`, `work`. |
 | `--supersedes <ref>` | a decision only: the decision this one replaces. |
 | `--occurred-time <time>` | when it happened, as the evidence shows, ISO 8601; a time without a zone is read in this computer's zone, a date alone as its midnight. |
-
-**Returns:** record a fact a document shows
 
 **Example:** `drive personal facts add DOC_ID "Budget approved" --type decision --scope work`
 
@@ -1331,8 +1311,6 @@ drive <profile> facts show <document> <fact>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `fact` | required | fact:<id> reference, as facts list prints it. |
 
-**Returns:** show one fact
-
 **Example:** `drive personal facts show DOC_ID fact:FACT_ID`
 
 ### `drive facts confirm`
@@ -1350,8 +1328,6 @@ drive <profile> facts confirm <document> <fact>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `fact` | required | fact:<id> reference, as facts list prints it. |
 
-**Returns:** confirm a proposed fact; a decision it supersedes stops holding
-
 **Example:** `drive personal facts confirm DOC_ID fact:FACT_ID`
 
 ### `drive facts reverse`
@@ -1368,8 +1344,6 @@ drive <profile> facts reverse <document> <fact>
 |---|---|---|
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `fact` | required | fact:<id> reference, as facts list prints it. |
-
-**Returns:** an accepted decision no longer holds, and nothing replaced it
 
 **Example:** `drive personal facts reverse DOC_ID fact:FACT_ID`
 
@@ -1390,7 +1364,7 @@ drive <profile> identities list <document> [query]
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** drive document identity — google_id, role, person; every field: drive commands info identities list
+**Returns:** document identity — remote_id, provider, role, person; every field: drive commands info identities list
 
 **Example:** `drive personal identities list DOC_ID`
 
@@ -1409,8 +1383,6 @@ drive <profile> identities link <document> <google-id> <person>
 | `document` | required | Google file or folder id or URL in the local catalog, or a document:<n> ref. |
 | `google-id` | required | Google account id, as identities list prints it. |
 | `person` | required | person:<uid> reference of someone already known. |
-
-**Returns:** record that a Google account belongs to a known person
 
 **Example:** `drive personal identities link DOC_ID GOOGLE_ID person:PERSON_UID`
 
@@ -1446,8 +1418,6 @@ drive api show <method>
 |---|---|---|
 | `method` | required | Google method name, as api list prints it. |
 
-**Returns:** show one method's request schema and contract, without calling Google
-
 **Example:** `drive api show docs.documents.batchUpdate --json`
 
 ### `drive api call`
@@ -1470,8 +1440,6 @@ drive <profile> api call <method> [options]
 | `--body <json>` | request body as a JSON object. |
 | `--allow-writes` | allow a method that changes Google data. |
 | `--allow-delete` | allow a method that deletes for good or empties the trash. |
-
-**Returns:** call one Google API method by name with JSON parameters
 
 **Example:** `drive personal api call drive.files.get --params '{"fileId":"FILE_ID"}'`, `drive personal api call drive.files.update --params '{"fileId":"FILE_ID"}' --body '{"name":"New"}' --allow-writes`
 
@@ -1497,8 +1465,6 @@ drive <profile> api docs-documents-batch-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Applies one or more updates to the document. Each request is validated…
-
 **Example:** `drive personal api docs-documents-batch-update --document-id <value>`
 
 ### `drive api docs-documents-create`
@@ -1521,8 +1487,6 @@ drive <profile> api docs-documents-create [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Creates a blank document using the title given in the request. Other fields…
 
 **Example:** `drive personal api docs-documents-create`
 
@@ -1547,8 +1511,6 @@ drive <profile> api docs-documents-get [options]
 | `--include-tabs-content <value>` | Whether to populate the `Document.tabs` field instead of the text content fields like `body` and `documentStyle` on `Document`. - When `true`: Document content populates in the `Document.tabs` field instead of the text content fields in `Document`. - When `false`: The content of the document's first tab populates the content fields in `Document` excluding `Document.tabs`. If a document has only one tab, then that tab is used to populate the document content. `Document.tabs` will be empty. If you use a field mask that references the `Document.tabs` field (or any subfield), the API implicitly treats the request as if you set `include_tabs_content` to `true`. |
 | `--suggestions-view-mode <value>` | The suggestions view mode to apply to the document. This allows viewing the document with all suggestions inline, accepted or rejected. If one is not specified, DEFAULT_FOR_CURRENT_ACCESS is used. |
 
-**Returns:** Gets the latest version of the specified document. — read (GET…
-
 **Example:** `drive personal api docs-documents-get --document-id <value>`
 
 ### `drive api drive-about-get`
@@ -1567,8 +1529,6 @@ drive <profile> api drive-about-get [options]
 | `--callback <value>` | JSONP. |
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
-
-**Returns:** Gets information about the user, the user's Drive, and system capabilities.…
 
 **Example:** `drive personal api drive-about-get`
 
@@ -1591,8 +1551,6 @@ drive <profile> api drive-accessproposals-get [options]
 | `--proposal-id <value>` | Required. The ID of the access proposal to resolve. |
 | `--file-id <value>` | Required. The ID of the item the request is on. |
 
-**Returns:** Retrieves an access proposal by ID. For more information, see [Manage…
-
 **Example:** `drive personal api drive-accessproposals-get --proposal-id <value> --file-id <value>`
 
 ### `drive api drive-accessproposals-list`
@@ -1614,8 +1572,6 @@ drive <profile> api drive-accessproposals-list [options]
 | `--page-token <value>` | Optional. The continuation token on the list of access requests. |
 | `--file-id <value>` | Required. The ID of the item the request is on. |
 | `--page-size <value>` | Optional. The number of results per page. |
-
-**Returns:** List the access proposals on a file. For more information, see [Manage…
 
 **Example:** `drive personal api drive-accessproposals-list --file-id <value>`
 
@@ -1642,8 +1598,6 @@ drive <profile> api drive-accessproposals-resolve [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Approves or denies an access proposal. For more information, see [Manage…
-
 **Example:** `drive personal api drive-accessproposals-resolve --file-id <value> --proposal-id <value>`
 
 ### `drive api drive-approvals-approve`
@@ -1668,8 +1622,6 @@ drive <profile> api drive-approvals-approve [options]
 | `--approval-id <value>` | Required. The ID of the approval to approve. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Approves an approval. For more information, see [Manage…
 
 **Example:** `drive personal api drive-approvals-approve --file-id <value> --approval-id <value>`
 
@@ -1696,8 +1648,6 @@ drive <profile> api drive-approvals-cancel [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Cancels an approval. For more information, see [Manage…
-
 **Example:** `drive personal api drive-approvals-cancel --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-comment`
@@ -1722,8 +1672,6 @@ drive <profile> api drive-approvals-comment [options]
 | `--approval-id <value>` | Required. The ID of the approval to comment on. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Comments on an approval. For more information, see [Manage…
 
 **Example:** `drive personal api drive-approvals-comment --file-id <value> --approval-id <value>`
 
@@ -1750,8 +1698,6 @@ drive <profile> api drive-approvals-decline [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Declines an approval. For more information, see [Manage…
-
 **Example:** `drive personal api drive-approvals-decline --file-id <value> --approval-id <value>`
 
 ### `drive api drive-approvals-get`
@@ -1772,8 +1718,6 @@ drive <profile> api drive-approvals-get [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--file-id <value>` | Required. The ID of the file that the approval is on. |
 | `--approval-id <value>` | Required. The ID of the approval. |
-
-**Returns:** Gets an approval by ID. For more information, see [Manage…
 
 **Example:** `drive personal api drive-approvals-get --file-id <value> --approval-id <value>`
 
@@ -1796,8 +1740,6 @@ drive <profile> api drive-approvals-list [options]
 | `--file-id <value>` | Required. The ID of the file that the approval is on. |
 | `--page-size <value>` | The maximum number of approvals to return. When not set, at most 100 approvals are returned. |
 | `--page-token <value>` | The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response. |
-
-**Returns:** Lists the approvals on a file. For more information, see [Manage…
 
 **Example:** `drive personal api drive-approvals-list --file-id <value>`
 
@@ -1824,8 +1766,6 @@ drive <profile> api drive-approvals-reassign [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Reassigns the reviewers on an approval. For more information, see [Manage…
-
 **Example:** `drive personal api drive-approvals-reassign --approval-id <value> --file-id <value>`
 
 ### `drive api drive-approvals-start`
@@ -1850,8 +1790,6 @@ drive <profile> api drive-approvals-start [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Starts an approval on a file. For more information, see [Manage…
-
 **Example:** `drive personal api drive-approvals-start --file-id <value>`
 
 ### `drive api drive-apps-get`
@@ -1871,8 +1809,6 @@ drive <profile> api drive-apps-get [options]
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--app-id <value>` | The ID of the app. |
-
-**Returns:** Gets a specific app. For more information, see [Return user…
 
 **Example:** `drive personal api drive-apps-get --app-id <value>`
 
@@ -1896,8 +1832,6 @@ drive <profile> api drive-apps-list [options]
 | `--app-filter-extensions <value>` | A comma-separated list of file extensions to limit returned results. All results within the given app query scope which can open any of the given file extensions are included in the response. If `appFilterMimeTypes` are provided as well, the result is a union of the two resulting app lists. |
 | `--app-filter-mime-types <value>` | A comma-separated list of file extensions to limit returned results. All results within the given app query scope which can open any of the given MIME types will be included in the response. If `appFilterExtensions` are provided as well, the result is a union of the two resulting app lists. |
 
-**Returns:** Lists a user's installed apps. For more information, see [Return user…
-
 **Example:** `drive personal api drive-apps-list`
 
 ### `drive api drive-changes-get-start-page-token`
@@ -1920,8 +1854,6 @@ drive <profile> api drive-changes-get-start-page-token [options]
 | `--drive-id <value>` | The ID of the shared drive for which the starting pageToken for listing future changes from that shared drive will be returned. |
 | `--supports-all-drives <value>` | Whether the requesting application supports both My Drives and shared drives. |
 | `--team-drive-id <value>` | Deprecated: Use `driveId` instead. |
-
-**Returns:** Gets the starting pageToken for listing future changes. For more…
 
 **Example:** `drive personal api drive-changes-get-start-page-token`
 
@@ -1955,8 +1887,6 @@ drive <profile> api drive-changes-list [options]
 | `--include-labels <value>` | A comma-separated list of IDs of labels to include in the `labelInfo` part of the response. |
 | `--team-drive-id <value>` | Deprecated: Use `driveId` instead. |
 | `--spaces <value>` | A comma-separated list of spaces to query within the corpora. Supported values are 'drive' and 'appDataFolder'. |
-
-**Returns:** Lists the changes for a user or shared drive. For more information, see…
 
 **Example:** `drive personal api drive-changes-list --page-token <value>`
 
@@ -1995,8 +1925,6 @@ drive <profile> api drive-changes-watch [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Subscribes to changes for a user. For more information, see [Notifications…
-
 **Example:** `drive personal api drive-changes-watch --page-token <value>`
 
 ### `drive api drive-channels-stop`
@@ -2019,8 +1947,6 @@ drive <profile> api drive-channels-stop [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Stops watching resources through this channel. For more information, see…
 
 **Example:** `drive personal api drive-channels-stop`
 
@@ -2046,8 +1972,6 @@ drive <profile> api drive-comments-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Creates a comment on a file. For more information, see [Manage comments and…
-
 **Example:** `drive personal api drive-comments-create --file-id <value>`
 
 ### `drive api drive-comments-delete`
@@ -2071,8 +1995,6 @@ drive <profile> api drive-comments-delete [options]
 | `--comment-id <value>` | The ID of the comment. |
 | `--file-id <value>` | The ID of the file. |
 
-**Returns:** Deletes a comment. For more information, see [Manage comments and…
-
 **Example:** `drive personal api drive-comments-delete --comment-id <value> --file-id <value>`
 
 ### `drive api drive-comments-get`
@@ -2094,8 +2016,6 @@ drive <profile> api drive-comments-get [options]
 | `--file-id <value>` | The ID of the file. |
 | `--include-deleted <value>` | Whether to return deleted comments. Deleted comments will not include their original content. |
 | `--comment-id <value>` | The ID of the comment. |
-
-**Returns:** Gets a comment by ID. For more information, see [Manage comments and…
 
 **Example:** `drive personal api drive-comments-get --file-id <value> --comment-id <value>`
 
@@ -2120,8 +2040,6 @@ drive <profile> api drive-comments-list [options]
 | `--page-token <value>` | The token for continuing a previous list request on the next page. This should be set to the value of 'nextPageToken' from the previous response. |
 | `--file-id <value>` | The ID of the file. |
 | `--start-modified-time <value>` | The minimum value of 'modifiedTime' for the result comments (RFC 3339 date-time). |
-
-**Returns:** Lists a file's comments. For more information, see [Manage comments and…
 
 **Example:** `drive personal api drive-comments-list --file-id <value>`
 
@@ -2148,8 +2066,6 @@ drive <profile> api drive-comments-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Updates a comment with patch semantics. For more information, see [Manage…
-
 **Example:** `drive personal api drive-comments-update --comment-id <value> --file-id <value>`
 
 ### `drive api drive-drives-create`
@@ -2173,8 +2089,6 @@ drive <profile> api drive-drives-create [options]
 | `--request-id <value>` | Required. An ID, such as a random UUID, which uniquely identifies this user's request for idempotent creation of a shared drive. A repeated request by the same user and with the same request ID will avoid creating duplicates by attempting to create the same shared drive. If the shared drive already exists a 409 error will be returned. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Creates a shared drive. For more information, see [Manage shared…
 
 **Example:** `drive personal api drive-drives-create --request-id <value>`
 
@@ -2200,8 +2114,6 @@ drive <profile> api drive-drives-delete [options]
 | `--use-domain-admin-access <value>` | Issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the shared drive belongs. |
 | `--allow-item-deletion <value>` | Whether any items inside the shared drive should also be deleted. This option is only supported when `useDomainAdminAccess` is also set to `true`. |
 
-**Returns:** Permanently deletes a shared drive for which the user is an `organizer`. The…
-
 **Example:** `drive personal api drive-drives-delete --drive-id <value>`
 
 ### `drive api drive-drives-get`
@@ -2222,8 +2134,6 @@ drive <profile> api drive-drives-get [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--drive-id <value>` | The ID of the shared drive. |
 | `--use-domain-admin-access <value>` | Issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the shared drive belongs. |
-
-**Returns:** Gets a shared drive's metadata by ID. For more information, see [Manage…
 
 **Example:** `drive personal api drive-drives-get --drive-id <value>`
 
@@ -2246,8 +2156,6 @@ drive <profile> api drive-drives-hide [options]
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--drive-id <value>` | The ID of the shared drive. |
-
-**Returns:** Hides a shared drive from the default view. For more information, see…
 
 **Example:** `drive personal api drive-drives-hide --drive-id <value>`
 
@@ -2272,8 +2180,6 @@ drive <profile> api drive-drives-list [options]
 | `--page-size <value>` | The maximum number of shared drives to return. The service may return fewer than this value. If unspecified, at most 10 shared drives will be returned. The maximum value is 100; values above 100 will be coerced to 100. |
 | `--use-domain-admin-access <value>` | Issue the request as a domain administrator; if set to true, then all shared drives of the domain in which the requester is an administrator are returned. |
 
-**Returns:** Lists the user's shared drives. This method accepts the `q` parameter,…
-
 **Example:** `drive personal api drive-drives-list`
 
 ### `drive api drive-drives-unhide`
@@ -2295,8 +2201,6 @@ drive <profile> api drive-drives-unhide [options]
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--drive-id <value>` | The ID of the shared drive. |
-
-**Returns:** Restores a shared drive to the default view. For more information, see…
 
 **Example:** `drive personal api drive-drives-unhide --drive-id <value>`
 
@@ -2322,8 +2226,6 @@ drive <profile> api drive-drives-update [options]
 | `--drive-id <value>` | The ID of the shared drive. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Updates the metadata for a shared drive. For more information, see [Manage…
 
 **Example:** `drive personal api drive-drives-update --drive-id <value>`
 
@@ -2358,8 +2260,6 @@ drive <profile> api drive-files-copy [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Creates a copy of a file and applies any requested updates with patch…
-
 **Example:** `drive personal api drive-files-copy --file-id <value>`
 
 ### `drive api drive-files-create`
@@ -2392,8 +2292,6 @@ drive <profile> api drive-files-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Creates a file. For more information, see [Create and manage…
-
 **Example:** `drive personal api drive-files-create`
 
 ### `drive api drive-files-delete`
@@ -2419,8 +2317,6 @@ drive <profile> api drive-files-delete [options]
 | `--file-id <value>` | The ID of the file. |
 | `--enforce-single-parent <value>` | Deprecated: If an item isn't in a shared drive and its last parent is deleted but the item itself isn't, the item will be placed under its owner's root. |
 
-**Returns:** Permanently deletes a file owned by the user without moving it to the trash.…
-
 **Example:** `drive personal api drive-files-delete --file-id <value>`
 
 ### `drive api drive-files-download`
@@ -2442,8 +2338,6 @@ drive <profile> api drive-files-download [options]
 | `--file-id <value>` | Required. The ID of the file to download. |
 | `--mime-type <value>` | Optional. The MIME type the file should be downloaded as. This field can only be set when downloading Google Workspace documents. For a list of supported MIME types, see [Export MIME types for Google Workspace documents](https://developers.google.com/workspace/drive/api/guides/ref-export-formats). If not set, a Google Workspace document is downloaded with a default MIME type. The default MIME type might change in the future. |
 | `--revision-id <value>` | Optional. The revision ID of the file to download. This field can only be set when downloading blob files, Google Docs, and Google Sheets. Returns `INVALID_ARGUMENT` if downloading a specific revision on the file is unsupported. |
-
-**Returns:** Downloads the content of a file. For more information, see [Download and…
 
 **Example:** `drive personal api drive-files-download --file-id <value>`
 
@@ -2468,8 +2362,6 @@ drive <profile> api drive-files-empty-trash [options]
 | `--enforce-single-parent <value>` | Deprecated: If an item isn't in a shared drive and its last parent is deleted but the item itself isn't, the item will be placed under its owner's root. |
 | `--drive-id <value>` | If set, empties the trash of the provided shared drive. |
 
-**Returns:** Permanently deletes all of the user's trashed files. For more information,…
-
 **Example:** `drive personal api drive-files-empty-trash`
 
 ### `drive api drive-files-export`
@@ -2490,8 +2382,6 @@ drive <profile> api drive-files-export [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--mime-type <value>` | Required. The MIME type of the format requested for this export. For a list of supported MIME types, see [Export MIME types for Google Workspace documents](https://developers.google.com/workspace/drive/api/guides/ref-export-formats). |
 | `--file-id <value>` | The ID of the file. |
-
-**Returns:** Exports a Google Workspace document to the requested MIME type and returns…
 
 **Example:** `drive personal api drive-files-export --mime-type <value> --file-id <value>`
 
@@ -2514,8 +2404,6 @@ drive <profile> api drive-files-generate-cse-token [options]
 | `--parent <value>` | The ID of the expected parent of the file. Used when generating a JWT for a new CSE file. If specified, the parent will be fetched, and if the parent is a shared drive item, the shared drive's policy will be used to determine the KACLS that should be used. It is invalid to specify both file_id and parent in a single request. |
 | `--file-id <value>` | The ID of the file for which the JWT should be generated. If not provided, an id will be generated. |
 
-**Returns:** Generates a CSE token which can be used to create or update CSE files. —…
-
 **Example:** `drive personal api drive-files-generate-cse-token`
 
 ### `drive api drive-files-generate-ids`
@@ -2537,8 +2425,6 @@ drive <profile> api drive-files-generate-ids [options]
 | `--space <value>` | The space in which the IDs can be used to create files. Supported values are `drive` and `appDataFolder`. (Default: `drive`.) For more information, see [File organization](https://developers.google.com/workspace/drive/api/guides/about-files#file-organization). |
 | `--type <value>` | The type of items which the IDs can be used for. Supported values are `files` and `shortcuts`. Note that `shortcuts` are only supported in the `drive` `space`. (Default: `files`.) For more information, see [File organization](https://developers.google.com/workspace/drive/api/guides/about-files#file-organization). |
 | `--count <value>` | The number of IDs to return. |
-
-**Returns:** Generates a set of file IDs which can be provided in create or copy…
 
 **Example:** `drive personal api drive-files-generate-ids`
 
@@ -2564,8 +2450,6 @@ drive <profile> api drive-files-get [options]
 | `--include-permissions-for-view <value>` | Specifies which additional view's permissions to include in the response. Only `published` is supported. |
 | `--file-id <value>` | The ID of the file. |
 | `--supports-team-drives <value>` | Deprecated: Use `supportsAllDrives` instead. |
-
-**Returns:** Gets a file's metadata or content by ID. For more information, see [Search…
 
 **Example:** `drive personal api drive-files-get --file-id <value>`
 
@@ -2601,8 +2485,6 @@ drive <profile> api drive-files-list [options]
 | `--q <value>` | A query for filtering the file results. For supported syntax, see [Search for files and folders](https://developers.google.com/workspace/drive/api/guides/search-files). |
 | `--drive-id <value>` | ID of the shared drive to search. |
 
-**Returns:** Lists the user's files. For more information, see [Search for files and…
-
 **Example:** `drive personal api drive-files-list`
 
 ### `drive api drive-files-list-labels`
@@ -2624,8 +2506,6 @@ drive <profile> api drive-files-list-labels [options]
 | `--max-results <value>` | The maximum number of labels to return per page. When not set, defaults to 100. |
 | `--page-token <value>` | The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from the previous response. |
 | `--file-id <value>` | The ID for the file. |
-
-**Returns:** Lists the labels on a file. For more information, see [List labels on a…
 
 **Example:** `drive personal api drive-files-list-labels --file-id <value>`
 
@@ -2650,8 +2530,6 @@ drive <profile> api drive-files-modify-labels [options]
 | `--file-id <value>` | The ID of the file to which the labels belong. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Modifies the set of labels applied to a file. For more information, see [Set…
 
 **Example:** `drive personal api drive-files-modify-labels --file-id <value>`
 
@@ -2687,8 +2565,6 @@ drive <profile> api drive-files-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Updates a file's metadata, content, or both. When calling this method, only…
-
 **Example:** `drive personal api drive-files-update --file-id <value>`
 
 ### `drive api drive-files-watch`
@@ -2718,8 +2594,6 @@ drive <profile> api drive-files-watch [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Subscribes to changes to a file. For more information, see [Notifications…
-
 **Example:** `drive personal api drive-files-watch --file-id <value>`
 
 ### `drive api drive-operations-get`
@@ -2739,8 +2613,6 @@ drive <profile> api drive-operations-get [options]
 | `--alt <value>` | Data format for response. |
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--name <value>` | The name of the operation resource. |
-
-**Returns:** Gets the latest state of a long-running operation. Clients can use this…
 
 **Example:** `drive personal api drive-operations-get --name <value>`
 
@@ -2775,8 +2647,6 @@ drive <profile> api drive-permissions-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Creates a permission for a file or shared drive. For more information, see…
-
 **Example:** `drive personal api drive-permissions-create --file-id <value>`
 
 ### `drive api drive-permissions-delete`
@@ -2804,8 +2674,6 @@ drive <profile> api drive-permissions-delete [options]
 | `--supports-team-drives <value>` | Deprecated: Use `supportsAllDrives` instead. |
 | `--file-id <value>` | The ID of the file or shared drive. |
 
-**Returns:** Deletes a permission. For more information, see [Share files, folders, and…
-
 **Example:** `drive personal api drive-permissions-delete --permission-id <value> --file-id <value>`
 
 ### `drive api drive-permissions-get`
@@ -2829,8 +2697,6 @@ drive <profile> api drive-permissions-get [options]
 | `--use-domain-admin-access <value>` | Issue the request as a domain administrator. If set to `true`, and if the following additional conditions are met, the requester is granted access: 1. The file ID parameter refers to a shared drive. 2. The requester is an administrator of the domain to which the shared drive belongs. For more information, see [Manage shared drives as domain administrators](https://developers.google.com/workspace/drive/api/guides/manage-shareddrives#manage-administrators). |
 | `--supports-all-drives <value>` | Whether the requesting application supports both My Drives and shared drives. |
 | `--file-id <value>` | The ID of the file. |
-
-**Returns:** Gets a permission by ID. For more information, see [Share files, folders,…
 
 **Example:** `drive personal api drive-permissions-get --permission-id <value> --file-id <value>`
 
@@ -2857,8 +2723,6 @@ drive <profile> api drive-permissions-list [options]
 | `--supports-all-drives <value>` | Whether the requesting application supports both My Drives and shared drives. |
 | `--page-size <value>` | The maximum number of permissions to return. The service may return fewer than this value. If unspecified, at most 100 permissions will be returned for shared drives, and the entire list of permissions for non-shared drives. The maximum value is 100; values above 100 will be coerced to 100. |
 | `--include-permissions-for-view <value>` | Specifies which additional view's permissions to include in the response. Only `published` is supported. |
-
-**Returns:** Lists a file's or shared drive's permissions. For more information, see…
 
 **Example:** `drive personal api drive-permissions-list --file-id <value>`
 
@@ -2891,8 +2755,6 @@ drive <profile> api drive-permissions-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Updates a permission with patch semantics. For more information, see [Share…
-
 **Example:** `drive personal api drive-permissions-update --file-id <value> --permission-id <value>`
 
 ### `drive api drive-replies-create`
@@ -2918,8 +2780,6 @@ drive <profile> api drive-replies-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Creates a reply to a comment. For more information, see [Manage comments and…
-
 **Example:** `drive personal api drive-replies-create --comment-id <value> --file-id <value>`
 
 ### `drive api drive-replies-delete`
@@ -2944,8 +2804,6 @@ drive <profile> api drive-replies-delete [options]
 | `--reply-id <value>` | The ID of the reply. |
 | `--file-id <value>` | The ID of the file. |
 
-**Returns:** Deletes a reply. For more information, see [Manage comments and…
-
 **Example:** `drive personal api drive-replies-delete --comment-id <value> --reply-id <value> --file-id <value>`
 
 ### `drive api drive-replies-get`
@@ -2968,8 +2826,6 @@ drive <profile> api drive-replies-get [options]
 | `--file-id <value>` | The ID of the file. |
 | `--comment-id <value>` | The ID of the comment. |
 | `--reply-id <value>` | The ID of the reply. |
-
-**Returns:** Gets a reply by ID. For more information, see [Manage comments and…
 
 **Example:** `drive personal api drive-replies-get --file-id <value> --comment-id <value> --reply-id <value>`
 
@@ -2994,8 +2850,6 @@ drive <profile> api drive-replies-list [options]
 | `--comment-id <value>` | The ID of the comment. |
 | `--page-token <value>` | The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from the previous response. |
 | `--include-deleted <value>` | Whether to include deleted replies. Deleted replies don't include their original content. |
-
-**Returns:** Lists a comment's replies. For more information, see [Manage comments and…
 
 **Example:** `drive personal api drive-replies-list --file-id <value> --comment-id <value>`
 
@@ -3023,8 +2877,6 @@ drive <profile> api drive-replies-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Updates a reply with patch semantics. For more information, see [Manage…
-
 **Example:** `drive personal api drive-replies-update --comment-id <value> --file-id <value> --reply-id <value>`
 
 ### `drive api drive-revisions-delete`
@@ -3048,8 +2900,6 @@ drive <profile> api drive-revisions-delete [options]
 | `--file-id <value>` | The ID of the file. |
 | `--revision-id <value>` | The ID of the revision. |
 
-**Returns:** Permanently deletes a file version. You can only delete revisions for files…
-
 **Example:** `drive personal api drive-revisions-delete --file-id <value> --revision-id <value>`
 
 ### `drive api drive-revisions-get`
@@ -3072,8 +2922,6 @@ drive <profile> api drive-revisions-get [options]
 | `--file-id <value>` | The ID of the file. |
 | `--acknowledge-abuse <value>` | Whether the user is acknowledging the risk of downloading known malware or other abusive files. This is only applicable when the `alt` parameter is set to `media` and the user is the owner of the file or an organizer of the shared drive in which the file resides. |
 
-**Returns:** Gets a revision's metadata or content by ID. For more information, see…
-
 **Example:** `drive personal api drive-revisions-get --revision-id <value> --file-id <value>`
 
 ### `drive api drive-revisions-list`
@@ -3095,8 +2943,6 @@ drive <profile> api drive-revisions-list [options]
 | `--page-size <value>` | The maximum number of revisions to return. The service may return fewer than this value. If unspecified, at most 200 revisions will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000. |
 | `--file-id <value>` | The ID of the file. |
 | `--page-token <value>` | The token for continuing a previous list request on the next page. This should be set to the value of 'nextPageToken' from the previous response. |
-
-**Returns:** Lists a file's revisions. For more information, see [Manage file…
 
 **Example:** `drive personal api drive-revisions-list --file-id <value>`
 
@@ -3123,8 +2969,6 @@ drive <profile> api drive-revisions-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Updates a revision with patch semantics. For more information, see [Manage…
-
 **Example:** `drive personal api drive-revisions-update --file-id <value> --revision-id <value>`
 
 ### `drive api drive-teamdrives-create`
@@ -3149,8 +2993,6 @@ drive <profile> api drive-teamdrives-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Deprecated: Use `drives.create` instead. — write (POST teamdrives)
-
 **Example:** `drive personal api drive-teamdrives-create --request-id <value>`
 
 ### `drive api drive-teamdrives-delete`
@@ -3173,8 +3015,6 @@ drive <profile> api drive-teamdrives-delete [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--team-drive-id <value>` | The ID of the Team Drive. |
 
-**Returns:** Deprecated: Use `drives.delete` instead. — destructive (DELETE…
-
 **Example:** `drive personal api drive-teamdrives-delete --team-drive-id <value>`
 
 ### `drive api drive-teamdrives-get`
@@ -3195,8 +3035,6 @@ drive <profile> api drive-teamdrives-get [options]
 | `--quota-user <value>` | Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters. |
 | `--team-drive-id <value>` | The ID of the Team Drive. |
 | `--use-domain-admin-access <value>` | Issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the Team Drive belongs. |
-
-**Returns:** Deprecated: Use `drives.get` instead. — read (GET teamdrives/{teamDriveId})
 
 **Example:** `drive personal api drive-teamdrives-get --team-drive-id <value>`
 
@@ -3220,8 +3058,6 @@ drive <profile> api drive-teamdrives-list [options]
 | `--page-size <value>` | Maximum number of Team Drives to return. |
 | `--use-domain-admin-access <value>` | Issue the request as a domain administrator; if set to true, then all Team Drives of the domain in which the requester is an administrator are returned. |
 | `--page-token <value>` | Page token for Team Drives. |
-
-**Returns:** Deprecated: Use `drives.list` instead. — read (GET teamdrives)
 
 **Example:** `drive personal api drive-teamdrives-list`
 
@@ -3248,8 +3084,6 @@ drive <profile> api drive-teamdrives-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Deprecated: Use `drives.update` instead. — write (PATCH…
-
 **Example:** `drive personal api drive-teamdrives-update --team-drive-id <value>`
 
 ### `drive api driveactivity-activity-query`
@@ -3270,8 +3104,6 @@ drive <profile> api driveactivity-activity-query [options]
 | `--fields <value>` | Selector specifying which fields to include in a partial response. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Query past activity in Google Drive. — read (POST v2/activity:query)
 
 **Example:** `drive personal api driveactivity-activity-query`
 
@@ -3297,8 +3129,6 @@ drive <profile> api sheets-spreadsheets-batch-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Applies one or more updates to the spreadsheet. Each request is validated…
-
 **Example:** `drive personal api sheets-spreadsheets-batch-update --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-create`
@@ -3322,8 +3152,6 @@ drive <profile> api sheets-spreadsheets-create [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Creates a spreadsheet, returning the newly created spreadsheet. — write…
-
 **Example:** `drive personal api sheets-spreadsheets-create`
 
 ### `drive api sheets-spreadsheets-developer-metadata-get`
@@ -3344,8 +3172,6 @@ drive <profile> api sheets-spreadsheets-developer-metadata-get [options]
 | `--pretty-print <value>` | Returns response with indentations and line breaks. |
 | `--metadata-id <value>` | The ID of the developer metadata to retrieve. |
 | `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve metadata from. |
-
-**Returns:** Returns the developer metadata with the specified ID. The caller must…
 
 **Example:** `drive personal api sheets-spreadsheets-developer-metadata-get --metadata-id <value> --spreadsheet-id <value>`
 
@@ -3368,8 +3194,6 @@ drive <profile> api sheets-spreadsheets-developer-metadata-search [options]
 | `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve metadata from. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Returns all developer metadata matching the specified DataFilter. For more…
 
 **Example:** `drive personal api sheets-spreadsheets-developer-metadata-search --spreadsheet-id <value>`
 
@@ -3395,8 +3219,6 @@ drive <profile> api sheets-spreadsheets-get [options]
 | `--ranges <value>` | The ranges to retrieve from the spreadsheet. |
 | `--include-grid-data <value>` | True if grid data should be returned. This parameter is ignored if a field mask was set in the request. |
 
-**Returns:** Returns the spreadsheet at the given ID. The caller must specify the…
-
 **Example:** `drive personal api sheets-spreadsheets-get --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-get-by-data-filter`
@@ -3418,8 +3240,6 @@ drive <profile> api sheets-spreadsheets-get-by-data-filter [options]
 | `--spreadsheet-id <value>` | The spreadsheet to request. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Returns the spreadsheet at the given ID. The caller must specify the…
 
 **Example:** `drive personal api sheets-spreadsheets-get-by-data-filter --spreadsheet-id <value>`
 
@@ -3445,8 +3265,6 @@ drive <profile> api sheets-spreadsheets-sheets-copy-to [options]
 | `--spreadsheet-id <value>` | The ID of the spreadsheet containing the sheet to copy. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Copies a single sheet from a spreadsheet to another spreadsheet. Returns the…
 
 **Example:** `drive personal api sheets-spreadsheets-sheets-copy-to --sheet-id <value> --spreadsheet-id <value>`
 
@@ -3478,8 +3296,6 @@ drive <profile> api sheets-spreadsheets-values-append [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Appends values to a spreadsheet. The input range is used to search for…
-
 **Example:** `drive personal api sheets-spreadsheets-values-append --spreadsheet-id <value> --range <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-clear`
@@ -3503,8 +3319,6 @@ drive <profile> api sheets-spreadsheets-values-batch-clear [options]
 | `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Clears one or more ranges of values from a spreadsheet. The caller must…
 
 **Example:** `drive personal api sheets-spreadsheets-values-batch-clear --spreadsheet-id <value>`
 
@@ -3530,8 +3344,6 @@ drive <profile> api sheets-spreadsheets-values-batch-clear-by-data-filter [optio
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Clears one or more ranges of values from a spreadsheet. For more…
-
 **Example:** `drive personal api sheets-spreadsheets-values-batch-clear-by-data-filter --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-get`
@@ -3556,8 +3368,6 @@ drive <profile> api sheets-spreadsheets-values-batch-get [options]
 | `--major-dimension <value>` | The major dimension that results should use. For example, if the spreadsheet data is: `A1=1,B1=2,A2=3,B2=4`, then requesting `ranges=["A1:B2"],majorDimension=ROWS` returns `[[1,2],[3,4]]`, whereas requesting `ranges=["A1:B2"],majorDimension=COLUMNS` returns `[[1,3],[2,4]]`. |
 | `--ranges <value>` | The [A1 notation or R1C1 notation](https://developers.google.com/workspace/sheets/api/guides/concepts#cell) of the range to retrieve values from. |
 
-**Returns:** Returns one or more ranges of values from a spreadsheet. The caller must…
-
 **Example:** `drive personal api sheets-spreadsheets-values-batch-get --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-get-by-data-filter`
@@ -3579,8 +3389,6 @@ drive <profile> api sheets-spreadsheets-values-batch-get-by-data-filter [options
 | `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve data from. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Returns one or more ranges of values that match the specified data filters.…
 
 **Example:** `drive personal api sheets-spreadsheets-values-batch-get-by-data-filter --spreadsheet-id <value>`
 
@@ -3606,8 +3414,6 @@ drive <profile> api sheets-spreadsheets-values-batch-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Sets values in one or more ranges of a spreadsheet. The caller must specify…
-
 **Example:** `drive personal api sheets-spreadsheets-values-batch-update --spreadsheet-id <value>`
 
 ### `drive api sheets-spreadsheets-values-batch-update-by-data-filter`
@@ -3631,8 +3437,6 @@ drive <profile> api sheets-spreadsheets-values-batch-update-by-data-filter [opti
 | `--spreadsheet-id <value>` | The ID of the spreadsheet to update. |
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
-
-**Returns:** Sets values in one or more ranges of a spreadsheet. For more information,…
 
 **Example:** `drive personal api sheets-spreadsheets-values-batch-update-by-data-filter --spreadsheet-id <value>`
 
@@ -3659,8 +3463,6 @@ drive <profile> api sheets-spreadsheets-values-clear [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Clears values from a spreadsheet. The caller must specify the spreadsheet ID…
-
 **Example:** `drive personal api sheets-spreadsheets-values-clear --spreadsheet-id <value> --range <value>`
 
 ### `drive api sheets-spreadsheets-values-get`
@@ -3684,8 +3486,6 @@ drive <profile> api sheets-spreadsheets-values-get [options]
 | `--value-render-option <value>` | How values should be represented in the output. The default render option is FORMATTED_VALUE. |
 | `--date-time-render-option <value>` | How dates, times, and durations should be represented in the output. This is ignored if value_render_option is FORMATTED_VALUE. The default dateTime render option is SERIAL_NUMBER. |
 | `--spreadsheet-id <value>` | The ID of the spreadsheet to retrieve data from. |
-
-**Returns:** Returns a range of values from a spreadsheet. The caller must specify the…
 
 **Example:** `drive personal api sheets-spreadsheets-values-get --range <value> --spreadsheet-id <value>`
 
@@ -3716,8 +3516,6 @@ drive <profile> api sheets-spreadsheets-values-update [options]
 | `--body <json>` | the request body as JSON; - reads it from stdin. |
 | `--body-file <path>` | the request body from a JSON file; - is stdin. |
 
-**Returns:** Sets values in a range of a spreadsheet. The caller must specify the…
-
 **Example:** `drive personal api sheets-spreadsheets-values-update --spreadsheet-id <value> --range <value>`
 
 ## `drive sheets`
@@ -3739,8 +3537,6 @@ drive <profile> sheets create <spreadsheet> <title>
 | `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
 | `title` | required | name of the new tab. |
 
-**Returns:** create an empty tab inside an existing spreadsheet
-
 **Example:** `drive personal sheets create SHEET_ID "Quarter 2"`
 
 ### `drive sheets rename`
@@ -3758,8 +3554,6 @@ drive <profile> sheets rename <spreadsheet> <sheet-id> <title>
 | `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
 | `sheet-id` | required | numeric tab ID from sheets info. |
 | `title` | required | new tab name. |
-
-**Returns:** rename one tab while preserving its ID and other properties
 
 **Example:** `drive personal sheets rename SHEET_ID 0 "Quarter 2"`
 
@@ -3780,8 +3574,6 @@ drive <profile> sheets insert <spreadsheet> <sheet-id> <axis> <index> <count>
 | `axis` | required | rows or columns. |
 | `index` | required | zero-based index to insert before. |
 | `count` | required | number to insert, from 1 to 1000. |
-
-**Returns:** insert bounded rows or columns before a zero-based index
 
 **Example:** `drive personal sheets insert SHEET_ID 0 rows 1 3`
 
@@ -3805,8 +3597,6 @@ drive <profile> sheets format <spreadsheet> <sheet-id> <range> [options]
 |---|---|
 | `--body <json>` | supported CellFormat fields as JSON; values and formulas are refused. |
 
-**Returns:** change only supplied formatting fields in at most 10000 cells
-
 **Example:** `drive personal sheets format SHEET_ID 0 A1:C1 --body '{"textFormat":{"bold":true}}'`
 
 ### `drive sheets info`
@@ -3820,8 +3610,6 @@ drive <profile> sheets info <spreadsheet>
 | Argument | | What it is |
 |---|---|---|
 | `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
-
-**Returns:** list spreadsheet properties and tabs without downloading grid data
 
 **Example:** `drive personal sheets info SHEET_ID`
 
@@ -3841,8 +3629,6 @@ drive <profile> sheets show <spreadsheet> <range> [options]
 | Option | What it does |
 |---|---|
 | `--render <mode>` | how Google renders cell values. One of: `formatted`, `unformatted`, `formula`. Default: `formatted`. |
-
-**Returns:** read a live A1 range; choose formatted values, raw values or formulas
 
 **Example:** `drive personal sheets show SHEET_ID 'Budget!A1:C4'`, `drive personal sheets show SHEET_ID 'Budget!C1:C4' --render formula`
 
@@ -3866,8 +3652,6 @@ drive <profile> sheets update <spreadsheet> <range> [options]
 | `--values <json>` | JSON rows; null skips a cell and an empty string clears its value. |
 | `--input <mode>` | raw literals, or user-entered formulas/numbers using spreadsheet locale. One of: `raw`, `user-entered`. Default: `raw`. |
 
-**Returns:** set cells within a finite A1 rectangle; literal values by default
-
 **Example:** `drive personal sheets update SHEET_ID 'Budget!A1:B2' --values '[["Item",10]]'`
 
 ### `drive sheets add`
@@ -3890,8 +3674,6 @@ drive <profile> sheets add <spreadsheet> <range> [options]
 | `--values <json>` | JSON rows; null skips a cell and an empty string clears its value. |
 | `--input <mode>` | raw literals, or user-entered formulas/numbers using spreadsheet locale. One of: `raw`, `user-entered`. Default: `raw`. |
 
-**Returns:** append rows after Google's detected table within a finite A1 range
-
 **Example:** `drive personal sheets add SHEET_ID 'Budget!A1:B2' --values '[["Item",10]]'`
 
 ### `drive sheets clear`
@@ -3909,8 +3691,6 @@ drive <profile> sheets clear <spreadsheet> <range>
 | `spreadsheet` | required | spreadsheet ID or Google Sheets URL. |
 | `range` | required | tab and finite A1 rectangle, such as Budget!A1:C4. |
 
-**Returns:** clear cell values in a finite A1 rectangle; formatting remains
-
 **Example:** `drive personal sheets clear SHEET_ID 'Budget!A2:C4'`
 
 ## `drive files`
@@ -3919,7 +3699,7 @@ read and change files in Google Drive; nothing is imported
 
 ### `drive files download`
 
-download a stored file to a local file
+download a stored file to a local file, or answer its text and sha256 without --output. A text longer than 200,000 characters is cut there with truncated: true and no sha256: never write a cut text back over the file, it would lose the rest
 
 This command changes local state.
 
@@ -3933,12 +3713,10 @@ drive <profile> files download <file> [options]
 
 | Option | What it does |
 |---|---|
-| `--output <file>` | local file to write. |
+| `--output <file>` | local file to write, instead of answering the text. |
 | `--overwrite` | replace an existing output file. |
 
-**Returns:** download a stored file to a local file
-
-**Example:** `drive personal files download FILE_ID --output download.bin`
+**Example:** `drive personal files download FILE_ID --output download.bin`, `drive personal files download FILE_ID --json`
 
 ### `drive files export`
 
@@ -3957,10 +3735,8 @@ drive <profile> files export <file> [options]
 | Option | What it does |
 |---|---|
 | `--output <file>` | local file to write. |
-| `--overwrite` | replace an existing output file. |
 | `--format <format>` | format Google should export. One of: `pdf`, `docx`, `xlsx`, `csv`. |
-
-**Returns:** export a Google document to a local file
+| `--overwrite` | replace an existing output file. |
 
 **Example:** `drive personal files export DOC_ID --format pdf --output document.pdf`
 
@@ -3999,8 +3775,6 @@ drive <profile> files get <file>
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
 
-**Returns:** show one file's Google Drive metadata
-
 **Example:** `drive personal files get FILE_ID`
 
 ### `drive files copy`
@@ -4021,8 +3795,6 @@ drive <profile> files copy <file> [options]
 |---|---|
 | `--name <name>` | name of the copy; Google's default when omitted. |
 | `--parent <id>` | folder id to put the copy in. |
-
-**Returns:** copy a file in Google Drive
 
 **Example:** `drive personal files copy FILE_ID --name "Plan copy" --parent FOLDER_ID`
 
@@ -4045,31 +3817,7 @@ drive <profile> files move <file> [options]
 | `--parent <id>` | folder id to move the file into. |
 | `--old-parent <id>` | folder id to take the file out of. |
 
-**Returns:** move a file to another Google Drive folder
-
 **Example:** `drive personal files move FILE_ID --parent NEW_FOLDER_ID --old-parent OLD_FOLDER_ID`
-
-### `drive files update`
-
-change a file's Google Drive metadata
-
-This command can change Google data or send data to the configured model.
-
-```sh
-drive <profile> files update <file> [options]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `file` | required | file id or Google Drive URL. |
-
-| Option | What it does |
-|---|---|
-| `--body <json>` | the metadata fields to change, as a JSON object. |
-
-**Returns:** change a file's Google Drive metadata
-
-**Example:** `drive personal files update FILE_ID --body '{"name":"Renamed"}'`
 
 ### `drive files trash`
 
@@ -4085,27 +3833,7 @@ drive <profile> files trash <file>
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
 
-**Returns:** move a file to the Google Drive trash
-
 **Example:** `drive personal files trash FILE_ID`
-
-### `drive files restore`
-
-take a file out of the trash
-
-This command can change Google data or send data to the configured model.
-
-```sh
-drive <profile> files restore <file>
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `file` | required | file id or Google Drive URL. |
-
-**Returns:** take a file out of the trash
-
-**Example:** `drive personal files restore FILE_ID`
 
 ### `drive files mkdir`
 
@@ -4124,8 +3852,6 @@ drive <profile> files mkdir <name> [options]
 | Option | What it does |
 |---|---|
 | `--parent <id>` | folder id to create it in; My Drive when omitted. |
-
-**Returns:** create an empty folder in Google Drive
 
 **Example:** `drive personal files mkdir Reports --parent FOLDER_ID`
 
@@ -4148,9 +3874,170 @@ drive <profile> files upload <path> [options]
 | `--parent <id>` | folder id to put it in; My Drive when omitted. |
 | `--name <name>` | name in Google Drive; the local file name when omitted. |
 
-**Returns:** upload a local file to Google Drive; an interrupted upload resumes
-
 **Example:** `drive personal files upload ./backup.db.zst --parent FOLDER_ID`
+
+### `drive files sheets`
+
+the cells of an Excel workbook (.xlsx) on Google Drive, read and changed in place
+
+#### `drive files sheets show`
+
+show a workbook's stored cells, each with its value, type, formula and format, and the file's sha256 to pass as --expected-fingerprint to sheets update. Formulas show the value Excel saved last
+
+```sh
+drive <profile> files sheets show <path> [range]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .xlsx file on Google Drive. |
+| `range` | optional | the cells to show: Sheet1!A1:C10, a sheet's name, or A1:C10 on every sheet; all without it. |
+
+**Example:** `drive personal files sheets show FILE_ID "Sheet1!A1:C10"`, `drive personal files sheets show FILE_ID`
+
+#### `drive files sheets update`
+
+write values into a workbook's cells in place: the rest of the file, its formatting and its other sheets stay as they are. It needs --expected-fingerprint from sheets show and asks as files.delete does; what it replaced is kept on this computer (see history). A text is written as text, even one that starts with =. A formula cell is refused unless --replace
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> files sheets update <path> <range> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .xlsx file on Google Drive. |
+| `range` | required | where the values go: Sheet1!B2:C3, or its first cell Sheet1!B2; the sheet may be left out when there is one. |
+
+| Option | What it does |
+|---|---|
+| `--values <json>` | the cell values as JSON rows; null empties a cell. |
+| `--expected-fingerprint <hash>` | the sha256 sheets show gave for the file. |
+| `--replace` | replace a formula with the value instead of refusing it. |
+
+**Example:** `drive personal files sheets update FILE_ID "Sheet1!B2:C2" --values '[[120, "paid"]]' --expected-fingerprint 9f86d081…`
+
+### `drive files documents`
+
+the paragraphs of a Word document (.docx) on Google Drive, read and changed in place
+
+#### `drive files documents show`
+
+show a Word document's paragraphs by index, with their style, whether each can be edited and why not, and the file's sha256 to pass as --expected-fingerprint to documents update
+
+```sh
+drive <profile> files documents show <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .docx file on Google Drive. |
+
+**Example:** `drive personal files documents show FILE_ID`
+
+#### `drive files documents update`
+
+replace, insert or delete a Word document's paragraphs in place; the rest of the file stays as it is. Indexes are the ones documents show gave. It needs --expected-fingerprint from documents show and asks as files.delete does; what it replaced is kept on this computer (see history). A paragraph that is not editable is refused with its reason, and a replaced one with mixed formatting takes its first run's
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> files documents update <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the .docx file on Google Drive. |
+
+| Option | What it does |
+|---|---|
+| `--payload <json>` | the edits as JSON: {index, text}, {insert_after, text, style_from?} or {delete}. |
+| `--expected-fingerprint <hash>` | the sha256 documents show gave for the file. |
+
+**Example:** `drive personal files documents update FILE_ID --payload '[{"index": 2, "text": "Revenue grew 12%."}]' --expected-fingerprint 9f86d081…`
+
+### `drive files history`
+
+list what the writes and syncs of this profile replaced in a file, newest last. Each entry's version is the sha256 of the content it replaced, kept on this computer while available is true; files restore puts it back
+
+```sh
+drive <profile> files history <path>
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the file on Google Drive. |
+
+**Example:** `drive personal files history FILE_ID`
+
+### `drive files restore`
+
+with no version, bring a file or folder back from Google Drive's trash. With one, put back a version history lists: it is written as files update writes, so a file there needs --expected-fingerprint, asks as files.delete does, and is kept first
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> files restore <path> [version] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the file on Google Drive, or its path in the trash. |
+| `version` | optional | the version's sha256, from history. |
+
+| Option | What it does |
+|---|---|
+| `--expected-fingerprint <hash>` | the sha256 the file has now; required when it exists. |
+
+**Example:** `drive personal files restore FILE_ID 2c26b46b… --expected-fingerprint 9f86d081…`
+
+### `drive files update`
+
+replace a Google Drive file's text. A file already there is replaced only with --expected-fingerprint, the sha256 read from it; it asks as files.delete does. The file is checked just before the write, and what it replaced is kept on this computer. Write back only a whole plain-text file: a text cut with truncated: true would replace the whole file, and a .pdf, .docx or .xlsx is refused
+
+This command can change Google data or send data to the configured model.
+
+```sh
+drive <profile> files update <path> [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `path` | required | the file on Google Drive. |
+
+| Option | What it does |
+|---|---|
+| `--text <text>` | the file's new text; without it, the text is read from stdin. |
+| `--expected-fingerprint <hash>` | the sha256 the file had when it was read; required when it exists. |
+
+**Example:** `drive personal files update FILE_ID --text "# Notes" --expected-fingerprint 9f86d081…`
+
+## `drive activities`
+
+read who did what with a file in Google Drive
+
+### `drive activities list`
+
+list who did what with a file (needs session start --grant activity)
+
+```sh
+drive <profile> activities list <file> [query] [options]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `file` | required | file id or Google Drive URL. |
+| `query` | optional | field:value terms; this list filters by none yet. |
+
+| Option | What it does |
+|---|---|
+| `--limit <n>` | how many items one page holds. Default: `100`. |
+| `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
+
+**Returns:** drive remote activity — timestamp; every field: drive commands info activities list
+
+**Example:** `drive personal activities list FILE_ID`
 
 ## `drive comments`
 
@@ -4172,8 +4059,6 @@ drive <profile> comments reply <file> <comment-id> <text>
 | `comment-id` | required | comment id from comments list. |
 | `text` | required | reply text. |
 
-**Returns:** reply to a Google Drive comment
-
 **Example:** `drive personal comments reply FILE_ID COMMENT_ID "Reply text"`
 
 ### `drive comments resolve`
@@ -4191,8 +4076,6 @@ drive <profile> comments resolve <file> <comment-id>
 | `file` | required | file id or Google Drive URL. |
 | `comment-id` | required | comment id from comments list. |
 
-**Returns:** resolve a Google Drive comment
-
 **Example:** `drive personal comments resolve FILE_ID COMMENT_ID`
 
 ### `drive comments reopen`
@@ -4209,8 +4092,6 @@ drive <profile> comments reopen <file> <comment-id>
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
 | `comment-id` | required | comment id from comments list. |
-
-**Returns:** reopen a Google Drive comment
 
 **Example:** `drive personal comments reopen FILE_ID COMMENT_ID`
 
@@ -4248,8 +4129,6 @@ drive <profile> comments get <file> <comment-id>
 |---|---|---|
 | `file` | required | file id or Google Drive URL. |
 | `comment-id` | required | comment id, as comments list prints it. |
-
-**Returns:** show one comment of a file
 
 **Example:** `drive personal comments get FILE_ID COMMENT_ID`
 
@@ -4292,8 +4171,6 @@ drive <profile> permissions get <file> <permission-id>
 | `file` | required | file id or Google Drive URL. |
 | `permission-id` | required | permission id, as permissions list prints it. |
 
-**Returns:** show one permission of a file
-
 **Example:** `drive personal permissions get FILE_ID PERMISSION_ID`
 
 ## `drive revisions`
@@ -4335,8 +4212,6 @@ drive <profile> revisions get <file> <revision-id>
 | `file` | required | file id or Google Drive URL. |
 | `revision-id` | required | revision id, as revisions list prints it. |
 
-**Returns:** show one revision of a file
-
 **Example:** `drive personal revisions get FILE_ID REVISION_ID`
 
 ## `drive shared-drives`
@@ -4351,8 +4226,6 @@ drive <profile> shared-drives [options]
 |---|---|
 | `--limit <n>` | how many items one page holds. Default: `100`. |
 | `--cursor <cursor>` | continue from page.next_cursor of the previous answer. |
-
-**Returns:** list the shared drives this account can open
 
 **Example:** `drive personal shared-drives`
 
@@ -4378,8 +4251,6 @@ drive <profile> mirrors add <path> [options]
 |---|---|
 | `--parent <id>` | the Google Drive folder to write into, by id or URL. |
 
-**Returns:** mirror a local folder: Markdown to Google Docs, CSV/TSV/XLSX to Sheets
-
 **Example:** `drive personal mirrors add ./notes --parent FOLDER_ID`
 
 ### `drive mirrors list`
@@ -4394,7 +4265,7 @@ drive <profile> mirrors list [query]
 |---|---|---|
 | `query` | optional | field:value terms that narrow the list — the fields are below. |
 
-**Returns:** drive mirror — id, path, folder; every field: drive commands info mirrors list
+**Returns:** mirror — id, path, folder; every field: drive commands info mirrors list
 
 **Example:** `drive personal mirrors list`
 
@@ -4412,8 +4283,6 @@ drive <profile> mirrors remove <id>
 |---|---|---|
 | `id` | required | mirror id from mirrors list. |
 
-**Returns:** stop mirroring a folder; nothing in Google Drive is changed or deleted
-
 **Example:** `drive personal mirrors remove 1a2b3c4d`
 
 ### `drive mirrors status`
@@ -4427,8 +4296,6 @@ drive <profile> mirrors status [id]
 | Argument | | What it is |
 |---|---|---|
 | `id` | optional | mirror id; every mirror of the profile when omitted. |
-
-**Returns:** show which local files the next sync would create or send; Google is not asked
 
 **Example:** `drive personal mirrors status`
 
@@ -4451,8 +4318,6 @@ drive <profile> mirrors sync [id] [options]
 | `--keep <side>` | where a part changed on both sides, keep this side. One of: `local`, `google`, `both`. |
 | `--replace` | same as --keep local, and create again files deleted in Google. |
 
-**Returns:** sync both ways with Docs and Sheets; a part changed on both sides is reported
-
 **Example:** `drive personal mirrors sync`, `drive personal mirrors sync 1a2b3c4d --keep google`, `drive personal mirrors sync 1a2b3c4d --replace`
 
 ### `drive mirrors watch`
@@ -4473,8 +4338,6 @@ drive <profile> mirrors watch [id] [options]
 |---|---|
 | `--every <duration>` | how often to ask Google for changes. Default: `60s`. |
 
-**Returns:** keep syncing both ways until Ctrl-C or --timeout
-
 **Example:** `drive personal mirrors watch`, `drive personal mirrors watch 1a2b3c4d --every 2m --jsonl`
 
 ## `drive config`
@@ -4488,8 +4351,6 @@ show the defaults and every profile's settings
 ```sh
 drive config show
 ```
-
-**Returns:** show the defaults and every profile's settings
 
 **Example:** `drive config show`
 
@@ -4505,16 +4366,14 @@ drive <profile> config set <key> <json-value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `key` | required | max_text_chars, picture_search, google_client_id, max_add_profiles, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
+| `key` | required | max_text_chars, picture_search, transcripts, transcript_words, google_client_id, max_add_profiles, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, runs_size_limit_mb, shared AI settings, permissions.<key> or models.<purpose>.<field>. |
 | `json-value` | required | the new value, as JSON. |
 
 | Option | What it does |
 |---|---|
 | `--defaults` | change the defaults instead of this profile. |
 
-**Returns:** set one setting of this profile, or of the defaults
-
-**Example:** `drive personal config set max_text_chars 100000`, `drive personal config set permissions.files '"readonly"' --defaults`, `drive personal config set record true --defaults`
+**Example:** `drive personal config set max_text_chars 100000`, `drive personal config set permissions.files '"readonly"' --defaults`, `drive personal config set transcripts '"include"'`
 
 ### `drive config unset`
 
@@ -4534,8 +4393,6 @@ drive <profile> config unset <key> [options]
 |---|---|
 | `--defaults` | change the defaults instead of this profile. |
 
-**Returns:** remove one setting from this profile, the defaults or the top of the file
-
 **Example:** `drive personal config unset max_text_chars`, `drive personal config unset permissions.files --defaults`
 
 ### `drive config migrate`
@@ -4548,13 +4405,11 @@ This command changes local state.
 drive config migrate
 ```
 
-**Returns:** write each setting the file lacks at its default, keeping yours
-
 **Example:** `drive config migrate`
 
 ## `drive complete`
 
-print a shell completion script, or complete words
+shell completion: `drive complete zsh` prints the script to source
 
 ```sh
 drive complete [words]
@@ -4562,9 +4417,7 @@ drive complete [words]
 
 | Argument | | What it is |
 |---|---|---|
-| `words` | optional | a shell name, or after -- the words typed so far. |
-
-**Returns:** print a shell completion script, or complete words
+| `words` | optional | zsh for the shell script, or command words to complete. |
 
 **Example:** `drive complete zsh`
 
@@ -4588,8 +4441,6 @@ drive <profile> models set [options]
 | `--provider <provider>` | who runs the model, or off to use none. One of: `openai`, `anthropic`, `off`. |
 | `--model <model>` | model id at the provider. |
 | `--base-url <url>` | HTTP or HTTPS address of the model API, without credentials in it. |
-
-**Returns:** set the provider and model for one use
 
 **Example:** `drive personal models set --provider openai --model MODEL_ID`, `drive personal models set --provider off`
 
@@ -4705,8 +4556,6 @@ drive commands info [path]
 |---|---|---|
 | `path` | optional | one command path; without one, schemas, error reasons and explicit overrides. |
 
-**Returns:** one command contract, or all schemas, error reasons and explicit overrides
-
 **Example:** `drive commands info --json`
 
 ## `drive upgrade`
@@ -4722,8 +4571,6 @@ drive upgrade [options]
 | Option | What it does |
 |---|---|
 | `--check` | say whether a newer version exists, and install nothing. |
-
-**Returns:** upgrade drive with the package manager that installed it; --check only looks
 
 **Example:** `drive upgrade --check`
 
@@ -4745,8 +4592,8 @@ drive runs list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | how many to show. Default: `20`. |
-| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
 **Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: drive commands info runs list
 
@@ -4799,8 +4646,6 @@ drive guide [name]
 | Argument | | What it is |
 |---|---|---|
 | `name` | optional | one scenario; without it, the list. |
-
-**Returns:** scenarios: the commands for a common task, in order, and why each
 
 **Example:** `drive guide`, `drive guide agent-access --json`
 

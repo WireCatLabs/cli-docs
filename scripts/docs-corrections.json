@@ -2151,56 +2151,6 @@
     }
   },
   {
-    "tool": "ydisk",
-    "slug": "installation",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain. Desktop installs Yandex Disk and signs it in with a pasted Yandex OAuth token, then a folder choice (wirecat-desktop catalog/tools.json at v0.7.5, ydisk signIn and folderPicker); the buttons are those of src/features/tools/messages.tsx. The en text is also in WireCatLabs/ydisk-cli#32 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/ydisk/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Set up `ydisk` once on each computer where you or an agent use it. After these steps your Disk is connected under a\nprofile name you choose, and the first search works. Signing in means pasting a Yandex OAuth token: a key that Yandex\ngives you for your own account, which lets the tool use your Disk. Getting it takes about five minutes, once.",
-          "after": "Connect your Yandex Disk once, and from then on your AI agent finds any document on it by what it says. Yandex lets a\nprogram use your Disk only with an OAuth token, a key that Yandex gives you for your own account. Getting the token\ntakes about five minutes, once.\n\nAfter these steps your Disk is connected under a profile name you choose, and the first search works. You can do it\nall in [WireCat Desktop](https://wirecat.dev/en/docs/desktop), an app that installs the tools for you, or in a terminal with npm."
-        },
-        {
-          "before": "1. [Install the tool](#install-the-tool)\n2. [Get a Yandex token](#get-a-yandex-token)\n3. [Sign in](#sign-in)\n4. [Check that it works](#check-that-it-works)\n5. [A computer with no keyring](#a-computer-with-no-keyring)\n6. [Update](#update)\n7. [Remove](#remove)",
-          "after": "1. [In WireCat Desktop](#in-wirecat-desktop)\n2. [Install the tool](#install-the-tool)\n3. [Get a Yandex token](#get-a-yandex-token)\n4. [Sign in](#sign-in)\n5. [Check that it works](#check-that-it-works)\n6. [A computer with no keyring](#a-computer-with-no-keyring)\n7. [Update](#update)\n8. [Remove](#remove)"
-        },
-        {
-          "before": "## Install the tool\n",
-          "after": "## In WireCat Desktop\n\n1. Get a token, as [get a Yandex token](#get-a-yandex-token) shows.\n2. On the **Tools** page, click **Install** on the Yandex Disk row.\n3. Click **Manage**, type an account name, such as `personal`, and click **Sign in here**.\n4. Paste the token. Then choose the folders to copy.\n\nDesktop also gives your AI agents the tool's skill, so the terminal steps are not needed.\n\n## Install the tool\n"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Настройте `ydisk` один раз на каждом компьютере, где работаете вы или ваш агент. После этих шагов ваш Диск подключен\nпод именем профиля, которое вы выбрали, и первый поиск работает. Чтобы войти, вы вставляете токен OAuth Яндекса. Это ключ, который\nЯндекс выдает для вашего собственного аккаунта и который дает инструменту доступ к Диску. Получить его можно минут за\nпять, один раз.",
-          "after": "Подключите Яндекс Диск один раз, и дальше ИИ-агент находит на нем любой документ по тому, что в нем написано.\nЯндекс пускает программу к Диску только по токену OAuth, ключу, который Яндекс выдает для вашего собственного\nаккаунта. Получить токен можно минут за пять, один раз.\n\nПосле этих шагов ваш Диск подключен под именем профиля, которое вы выбрали, и первый поиск работает. Все это можно\nсделать в [WireCat Desktop](https://wirecat.dev/en/docs/desktop), приложении, которое устанавливает инструменты за вас, или в\nтерминале через npm."
-        },
-        {
-          "before": "1. [Установите инструмент](#install-the-tool)\n2. [Получите токен Яндекса](#get-a-yandex-token)\n3. [Войдите](#sign-in)\n4. [Проверьте, что все работает](#check-that-it-works)\n5. [Компьютер без связки ключей](#a-computer-with-no-keyring)\n6. [Обновление](#update)\n7. [Удаление](#remove)",
-          "after": "1. [В WireCat Desktop](#in-wirecat-desktop)\n2. [Установите инструмент](#install-the-tool)\n3. [Получите токен Яндекса](#get-a-yandex-token)\n4. [Войдите](#sign-in)\n5. [Проверьте, что все работает](#check-that-it-works)\n6. [Компьютер без связки ключей](#a-computer-with-no-keyring)\n7. [Обновление](#update)\n8. [Удаление](#remove)"
-        },
-        {
-          "before": "## Установите инструмент\n",
-          "after": "## В WireCat Desktop\n\n1. Получите токен, как показано в разделе [получите токен Яндекса](#get-a-yandex-token).\n2. На странице **Инструменты** нажмите **Установить** в строке Яндекс Диска.\n3. Нажмите **Управление**, введите имя аккаунта, например `personal`, и нажмите **Войти здесь**.\n4. Вставьте токен. Затем выберите папки для копирования.\n\nDesktop еще и дает вашим ИИ-агентам навык инструмента, так что шаги в терминале не нужны.\n\n## Установите инструмент\n"
-        }
-      ],
-      "es": [
-        {
-          "before": "Configura `ydisk` una vez en cada ordenador donde lo uses tú o un agente. Tras estos pasos tu Disk queda conectado con\nel nombre de perfil que elijas y la primera búsqueda funciona. Iniciar sesión significa pegar un token OAuth de\nYandex: una clave que Yandex te da para tu propia cuenta y con la que la herramienta usa tu Disk. Conseguirlo lleva\nunos cinco minutos, una sola vez.",
-          "after": "Conecta tu Yandex Disk una vez y, desde entonces, tu agente de IA encuentra cualquier documento por lo que dice.\nYandex solo deja a un programa usar tu Disk con un token OAuth, una clave que Yandex te da para tu propia cuenta.\nConseguir el token lleva unos cinco minutos, una sola vez.\n\nTras estos pasos tu Disk queda conectado con el nombre de perfil que elijas y la primera búsqueda funciona. Puedes\nhacerlo todo en [WireCat Desktop](https://wirecat.dev/en/docs/desktop), una aplicación que instala las herramientas por ti, o en un\nterminal con npm."
-        },
-        {
-          "before": "1. [Instala la herramienta](#install-the-tool)\n2. [Consigue un token de Yandex](#get-a-yandex-token)\n3. [Inicia sesión](#sign-in)\n4. [Comprueba que funciona](#check-that-it-works)\n5. [Un ordenador sin llavero](#a-computer-with-no-keyring)\n6. [Actualiza](#update)\n7. [Desinstala](#remove)",
-          "after": "1. [En WireCat Desktop](#in-wirecat-desktop)\n2. [Instala la herramienta](#install-the-tool)\n3. [Consigue un token de Yandex](#get-a-yandex-token)\n4. [Inicia sesión](#sign-in)\n5. [Comprueba que funciona](#check-that-it-works)\n6. [Un ordenador sin llavero](#a-computer-with-no-keyring)\n7. [Actualiza](#update)\n8. [Desinstala](#remove)"
-        },
-        {
-          "before": "## Instala la herramienta\n",
-          "after": "## En WireCat Desktop\n\n1. Consigue un token, como muestra [consigue un token de Yandex](#get-a-yandex-token).\n2. En la página **Herramientas**, pulsa **Instalar** en la fila de Yandex Disk.\n3. Pulsa **Gestionar**, escribe un nombre de cuenta, como `personal`, y pulsa **Iniciar sesión aquí**.\n4. Pega el token. Después elige las carpetas que se copian.\n\nDesktop también da a tus agentes de IA la skill de la herramienta, así que no necesitas los pasos del terminal.\n\n## Instala la herramienta\n"
-        }
-      ]
-    }
-  },
-  {
     "tool": "pbx",
     "slug": "installation",
     "phase": "before-translation",
@@ -2365,32 +2315,6 @@
     }
   },
   {
-    "tool": "drive",
-    "slug": "configuration",
-    "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The drive settings page did not say it. The en text is also in WireCatLabs/drive-cli#389 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/drive/configuration.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "These permissions restrict the live file/Doc command families. Local sync and local notes use\nseparate keys.",
-          "after": "These permissions restrict the live file/Doc command families. Local sync and local notes use\nseparate keys. A change set to `ask` asks first in a terminal. Over MCP nobody is there to answer, so it runs\nwithout asking: set a key to `readonly` or `deny` to stop an agent."
-        }
-      ],
-      "ru": [
-        {
-          "before": "Эти разрешения ограничивают группы команд для файлов и Google Docs. Для локальной синхронизации\nи заметок используются отдельные ключи.",
-          "after": "Эти разрешения ограничивают группы команд для файлов и Google Docs. Для локальной синхронизации\nи заметок используются отдельные ключи. Изменение с уровнем `ask` в терминале сначала спрашивает. Через MCP ответить\nнекому, поэтому оно выполняется без вопроса: чтобы остановить агента, поставьте ключу `readonly` или `deny`."
-        }
-      ],
-      "es": [
-        {
-          "before": "Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización\nlocal y las notas tienen claves separadas.",
-          "after": "Estos permisos limitan las familias de comandos de archivos y Docs en Google. La sincronización\nlocal y las notas tienen claves separadas. Un cambio en `ask` pregunta antes en una terminal. Por MCP nadie puede\nresponder, así que se ejecuta sin preguntar: pon una clave en `readonly` o `deny` para detener a un agente."
-        }
-      ]
-    }
-  },
-  {
     "tool": "zm",
     "slug": "configuration",
     "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The zm permissions table said only what ask does at a terminal. The en text is also in WireCatLabs/zoom-cli#396 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/zm/configuration.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
@@ -2514,70 +2438,6 @@
         {
           "before": "Los ajustes viven en un archivo, `config.json`, en la carpeta que muestra `notion doctor`. Cada perfil tiene su\nparte, y `defaults` se aplica a todos los perfiles. Esta página explica cómo verlos y cambiarlos.",
           "after": "Decide una vez qué puede cambiar tu agente en Notion y cuánto muestra un comando. Los ajustes están en un archivo,\n`config.json`, en la carpeta que muestra `notion doctor`. Cada perfil tiene su parte, y `defaults` se aplica a todos\nlos perfiles."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "ydisk",
-    "slug": "configuration",
-    "reason": "Docs follow-up 2026-11-23. A contents list for the settings page, and YDISK_TOKEN: cli-core src/cli/profile-token.ts reads <PREFIX>_TOKEN before the keyring for every profile, and ydisk session status names it as the token's source (ydisk src/commands/session.ts). The en text is also in WireCatLabs/ydisk-cli#32 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/ydisk/configuration.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "`ydisk doctor` shows. Each profile has its own part, and `defaults` apply to every profile.\n\n",
-          "after": "`ydisk doctor` shows. Each profile has its own part, and `defaults` apply to every profile.\n\n**On this page:**\n\n1. [Permissions](#permissions)\n2. [Run records](#run-records)\n3. [Other settings](#other-settings)\n4. [Environment variables](#environment-variables)\n\n"
-        },
-        {
-          "before": "| `YDISK_READ_ONLY` | `1` refuses every change. |",
-          "after": "| `YDISK_READ_ONLY` | `1` refuses every change. |\n| `YDISK_TOKEN` | A Yandex OAuth token that every profile uses instead of its saved one, for a CI job or a container with no keyring. `session status` then names it as the token's source. |"
-        }
-      ],
-      "ru": [
-        {
-          "before": "которую показывает `ydisk doctor`. У каждого профиля своя часть, а `defaults` действуют для всех профилей.\n\n",
-          "after": "которую показывает `ydisk doctor`. У каждого профиля своя часть, а `defaults` действуют для всех профилей.\n\n**На этой странице:**\n\n1. [Разрешения](#permissions)\n2. [Записи запусков](#run-records)\n3. [Другие настройки](#other-settings)\n4. [Переменные окружения](#environment-variables)\n\n"
-        },
-        {
-          "before": "| `YDISK_READ_ONLY` | `1` отклоняет любое изменение. |",
-          "after": "| `YDISK_READ_ONLY` | `1` отклоняет любое изменение. |\n| `YDISK_TOKEN` | OAuth-токен Яндекса, который каждый профиль берёт вместо сохранённого: для задачи CI или контейнера без связки ключей системы. `session status` тогда называет его источником токена. |"
-        }
-      ],
-      "es": [
-        {
-          "before": "`defaults` valen para\ntodos los perfiles.\n\n",
-          "after": "`defaults` valen para\ntodos los perfiles.\n\n**En esta página:**\n\n1. [Permisos](#permissions)\n2. [Registros de ejecución](#run-records)\n3. [Otros ajustes](#other-settings)\n4. [Variables de entorno](#environment-variables)\n\n"
-        },
-        {
-          "before": "| `YDISK_READ_ONLY` | `1` rechaza cualquier cambio. |",
-          "after": "| `YDISK_READ_ONLY` | `1` rechaza cualquier cambio. |\n| `YDISK_TOKEN` | Un token OAuth de Yandex que todos los perfiles usan en lugar del guardado, para un trabajo de CI o un contenedor sin llavero del sistema. `session status` lo nombra entonces como origen del token. |"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "ydisk",
-    "slug": "installation",
-    "reason": "Docs follow-up 2026-11-23. account remove, from ydisk src/commands/account.ts at v0.5.0 and cli-core src/cli/account-remove.ts: it deletes the token and the settings, needs --keep-data or --delete-data, asks first or takes --yes, takes --dry-run, and revokes nothing (only Yandex revokes the OAuth token). The en text is also in WireCatLabs/ydisk-cli#32 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/ydisk/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "`ydisk personal session end` forgets the profile's token on this computer. Then remove the tool:",
-          "after": "To forget one account on this computer, remove its profile:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nIt deletes the profile's token and its settings. Say what happens to the files it copied: `--keep-data` leaves them\nin the store, where search still finds them, and `--delete-data` deletes them, with the list of folders you chose to\ncopy. Nothing on your Disk changes. At a terminal it asks first, `--yes` answers for a script, and `--dry-run` lists\nwhat it would remove without removing it. The token stays valid at Yandex: only Yandex can revoke it, in your Yandex\nID settings.\n\n`ydisk personal session end` forgets only the token and keeps the profile. To remove the tool itself:"
-        }
-      ],
-      "ru": [
-        {
-          "before": "`ydisk personal session end` забывает токен профиля на этом компьютере. Затем удалите сам инструмент:",
-          "after": "Чтобы забыть один аккаунт на этом компьютере, удалите его профиль:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nКоманда удаляет токен профиля и его настройки. Скажите, что делать со скопированными файлами: `--keep-data`\nоставляет их в хранилище, где их по-прежнему находит поиск, а `--delete-data` удаляет их вместе со списком папок,\nкоторые вы выбрали для копирования. На Диске ничего не меняется. В терминале команда сначала спрашивает, `--yes`\nотвечает за скрипт, а `--dry-run` показывает, что будет удалено, ничего не удаляя. Токен у Яндекса остаётся\nдействительным: отозвать его может только Яндекс, в настройках Яндекс ID.\n\n`ydisk personal session end` забывает только токен и оставляет профиль. Чтобы удалить сам инструмент:"
-        }
-      ],
-      "es": [
-        {
-          "before": "`ydisk personal session end` olvida el token del perfil en este ordenador. Después quita la herramienta:",
-          "after": "Para olvidar una cuenta en este ordenador, quita su perfil:\n\n```sh\nydisk personal account remove --keep-data\n```\n\nBorra el token del perfil y sus ajustes. Di qué pasa con los archivos que copió: `--keep-data` los deja en el\nalmacén, donde la búsqueda los sigue encontrando, y `--delete-data` los borra, con la lista de carpetas que elegiste\ncopiar. En tu Disk no cambia nada. En una terminal pregunta antes, `--yes` responde por un script y `--dry-run`\nmuestra lo que quitaría sin quitar nada. El token sigue siendo válido en Yandex: solo Yandex puede revocarlo, en los\najustes de Yandex ID.\n\n`ydisk personal session end` olvida solo el token y conserva el perfil. Para quitar la herramienta:"
         }
       ]
     }
@@ -2753,6 +2613,42 @@
         {
           "before": "](https://wirecat.dev/telegram-app-login.png)",
           "after": "](/telegram-app-login.png)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "usage",
+    "phase": "before-translation",
+    "reason": "Docs review 2026-11-26. ydisk has no `ai set` command: the ydisk command contract at its pinned release has no `models ai` group, and the docs check reported `ydisk ai set` as an unknown command. The model OCR uses is the one shared WireCat AI model, kept in the shared config (cli-core src/cli/ai-model-command.ts, `models ai`), which `memo models ai set` chooses. Its option for pictures is `--allow-remote`, not `--images`. Retire once ydisk's own docs name a command it has.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The model chosen with `ydisk ai set`",
+          "after": "The model chosen with `memo models ai set`"
+        },
+        {
+          "before": "`ydisk ai set` with that provider, and pictures allowed (`ydisk ai set --images`)",
+          "after": "`memo models ai set` with that provider, and pictures allowed (`--allow-remote`)"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "drive",
+    "slug": "usage",
+    "phase": "before-translation",
+    "reason": "Docs review 2026-11-26. drive has no `ai set` command: the drive command contract at its pinned release has no `models ai` group, and the docs check reported `drive ai set` as an unknown command. The model OCR uses is the one shared WireCat AI model, kept in the shared config (cli-core src/cli/ai-model-command.ts, `models ai`), which `memo models ai set` chooses. Its option for pictures is `--allow-remote`, not `--images`. Retire once drive's own docs name a command it has.",
+    "replacements": {
+      "en": [
+        {
+          "before": "The model chosen with `drive ai set`",
+          "after": "The model chosen with `memo models ai set`"
+        },
+        {
+          "before": "`drive ai set` with that provider, and pictures allowed (`drive ai set --images`)",
+          "after": "`memo models ai set` with that provider, and pictures allowed (`--allow-remote`)"
         }
       ]
     }
