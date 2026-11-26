@@ -31,6 +31,13 @@ Las herramientas:
 - **[Cognee][cg]**: una plataforma de memoria que convierte documentos y conversaciones en un grafo de conocimiento.
 - **[basic-memory][bm]**: notas Markdown que un agente lee y escribe a través de MCP.
 
+**En esta página:**
+
+1. [Funciones](#features)
+2. [memo mail comparado con herramientas de correo](#memo-mail-compared-with-email-tools)
+3. [Instalación y licencia](#install-and-licence)
+4. [Cuándo encaja mejor otra herramienta](#when-another-tool-fits-better)
+
 ✅ sí · 🟡 en parte · ❌ no · ➖ no está en su documentación
 
 ## Funciones
@@ -78,8 +85,8 @@ Aclaraciones sobre `memo`:
 
 - **Fuentes.** Telegram, MAX, WhatsApp, las reuniones de Zoom y Google Drive llegan al almacén a través de las
   herramientas hermanas `tg`, `max`, `wa`, `zm` y `drive`. `memo` lee ese almacén. El programa
-  [mail](../mail/index.md) llena el almacén con tu buzón y `memo` busca en él. Una importación antigua a través de
-  [Himalaya](https://github.com/pimalaya/himalaya) todavía funciona y se eliminará. `search all` cubre mensajes,
+  [mail](../mail/index.md) llena el almacén con tu buzón y `memo` busca en él, así que las filas de correo cuentan lo que `mail` hace por él.
+  `search all` cubre mensajes,
   correo, notas, eventos de calendario y llamadas telefónicas, tratos y leads, y datos de negocio. Las reuniones tienen
   su propio `search meetings`.
 - **Búsqueda.** Las seis herramientas buscan por palabras y por significado. Esta página no las clasifica. En `memo`,
@@ -98,8 +105,8 @@ Aclaraciones sobre `memo`:
 - **Seguridad.** Los permisos de la configuración ponen cada comando en `deny`, `readonly`, `ask` o `allow`.
   Con `MEMO_READ_ONLY=1`, los comandos de escritura se siguen viendo, pero sus llamadas se rechazan. Los recuerdos,
   hechos y acciones que añade un agente se guardan como propuestos hasta que los confirmas. Las decisiones sobre
-  propuestas de un proyecto son la excepción: un agente puede tomarlas, con un motivo registrado, hasta que pongas
-  `agent_decisions` en `false`.
+  propuestas de un proyecto también son tuyas: un agente puede tomarlas, con un motivo registrado, solo después de que
+  pongas `agent_decisions` en `true`.
 - **Conocimiento.** `memo` guarda mensajes y los hechos y relaciones que registras tú o tu agente, cada uno con el
   mensaje, la nota o la reunión que lo muestra. Solo encuentra hechos en un texto cuando ejecutas
   `memo sources suggest` sobre una fuente, y tú confirmas cada hecho. Un hecho lleva la fecha en que ocurrió, y una
@@ -112,13 +119,12 @@ Aclaraciones sobre `memo`:
 
 ## memo mail comparado con herramientas de correo
 
-El correo es una herramienta propia dentro de `memo`. Las herramientas de memoria de arriba no hacen este trabajo,
+El correo llega a `memo` a través del programa `mail`. Las herramientas de memoria de arriba no hacen este trabajo,
 así que esta tabla pone `memo` junto a herramientas que la gente usa para el correo. `memo` busca y lee el correo,
 pero no lo cambia ni lo envía. Eso lo hace el programa [mail](../mail/index.md). Las marcas salen de la documentación
 de cada proyecto, revisada el 24 de octubre de 2026.
 
-- **[Himalaya][hm]**: una línea de comandos de correo para IMAP, SMTP, JMAP, Gmail y otros. `memo` todavía puede
-  llamarla para una importación antigua.
+- **[Himalaya][hm]**: una línea de comandos de correo para IMAP, SMTP, JMAP, Gmail y otros.
 - **[gog][gg]**: una sola línea de comandos para los servicios de Google. Sus comandos `gmail` leen, envían y
   gestionan Gmail.
 - **[Google Workspace MCP][ws]**: un servidor MCP mantenido para los servicios de Google, con herramientas de Gmail.
@@ -142,8 +148,9 @@ de cada proyecto, revisada el 24 de octubre de 2026.
 
 Aclaraciones sobre `memo`:
 
-- **Himalaya.** `memo` ya no la necesita. El correo llega al almacén a través del programa `mail`, y la importación
-  antigua con Himalaya está de salida. `memo` no cambia ningún buzón. Las reglas de correo, la limpieza de Gmail y la
+- **memo y mail.** Las marcas de la columna memo son de `memo` junto con el programa `mail`: `mail` sincroniza un
+  buzón, importa un archivo de Takeout y puntúa a los remitentes, y `memo` busca en lo que guardó. `memo` no cambia
+  ningún buzón. Las reglas de correo, la limpieza de Gmail y la
   restauración son comandos de `mail`. Los antiguos `memo mail delete` y `memo mail restore` solo indican el comando
   de `mail` que hay que ejecutar.
 - **Filtros.** `memo` no crea filtros en Gmail. Una exportación de filtros de Gmail se convierte en reglas de qué

@@ -147,8 +147,8 @@ Memo llama a un proveedor fuera de tu ordenador solo cuando `memo answers create
 
 Las rutas de comandos con puntos limitan las herramientas MCP. Una clave cubre el comando y sus subcomandos;
 gana la clave guardada más específica. `deny` marca los comandos como no disponibles, `readonly` permite leer y `ask` o `allow`
-permiten escribir. En MCP, `ask` se ejecuta sin pregunta en el terminal; la aplicación cliente determina las solicitudes de aprobación.
-Las escrituras sin un nivel guardado usan `ask`.
+permiten escribir. En MCP, una escritura con `ask` se ejecuta sin preguntarte. Solo la aplicación cliente puede preguntar,
+según su propia configuración. Las escrituras sin un nivel guardado usan `ask`, así que en MCP también se ejecutan.
 
 ```json
 {
@@ -172,7 +172,8 @@ de WireCat y `MEMO_READ_ONLY` restringen todos los permisos.
 contratos, suscripciones, productos y carteras.
 Las negociaciones y los leads siguen `deals.list` y `leads.list` del mismo modo, y `crm.list` en `deny` deja fuera toda la parte
 del CRM. `events.list` en `deny` rechaza `memo events list` y deja fuera de `search all` los eventos del calendario y las llamadas
-de teléfono.
+de teléfono. `tracker.list` en `deny` deja fuera de `search all` las incidencias, los proyectos y los comentarios de un gestor de
+incidencias (Linear).
 
 `memo show` rechaza una referencia cuyo propio comando deniega una clave: con `"invoices": "deny"` (o `invoices.show`),
 `memo show invoice:4` de un agente da `permission_error`, igual que `memo invoices show invoice:4`. Lo mismo vale para

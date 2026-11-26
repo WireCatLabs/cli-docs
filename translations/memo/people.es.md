@@ -33,8 +33,9 @@ memo people check ivan petrov             # before adding a person: who already 
 `people list` muestra un tipo cada vez. Lo decide la primera regla que se cumple, y `kind_signals` dice cuál:
 
 1. **person**: tú, las personas que añadiste a mano y cualquiera con una tarea asignada, siempre.
-2. **automated**: un bot, una dirección no-reply, un remitente cuyo correo está casi todo en la bandeja de envíos
-   masivos o a cuyo correo nunca respondes, o un nombre como «Notifications» o «Рассылка».
+2. **automated**: una persona cuyo correo está casi todo en la bandeja de envíos masivos o a cuyo correo nunca
+   respondes, o un nombre como «Notifications» o «Рассылка». Los bots no son personas, así que `people list` nunca los
+   muestra: consulta [Bots](#bots).
 3. **organization**: una cuenta que posee una organización, una dirección compartida como `info@`, o una forma
    jurídica o una palabra de empresa en el nombre (ООО, LLC, Airlines, Hotel, Team…).
 4. **person**: un nombre legible y un lazo contigo: un chat uno a uno o un grupo de 10 personas como máximo en el que
@@ -45,7 +46,7 @@ memo people check ivan petrov             # before adding a person: who already 
    sin ninguna oportunidad tuya.
 6. **unsorted**: ningún nombre legible.
 
-`kind:person` es el predeterminado, y `kind:all` lista todos los tipos. El paso `next` de la respuesta `people.kinds`
+`kind:person` es el predeterminado, y `kind:all` lista todos los tipos. En la respuesta, el paso `next` llamado `people.kinds`
 dice cuántas hay en cada uno de los otros tipos. Cada persona tiene `display_name` (el nombre sin comillas ni espacios
 alrededor. Un marcador como «Без имени» cede su lugar al usuario, el teléfono o el correo, y `name` queda como está
 guardado), `contact` (el teléfono, si no el correo, si no el usuario. `username_source` nombra el servicio de mensajería
@@ -63,6 +64,38 @@ pareja o el mensajero de tu cónyuge que lees, espera en `people review` como co
 que cualquiera cuyo teléfono o dirección también es tuyo. El teléfono de una empresa y el número de un bot no unen ni
 proponen a nadie. Un buzón compartido como `info@` no une a nadie, pero sugiere cada par de sus personas, como se
 explica abajo.
+
+## Bots
+
+Un bot es un programa que te escribe: una dirección no-reply o de avisos, el correo de un servicio, el bot de un
+mensajero. Se guarda aparte de las personas. Tiene un nombre, sus identidades y, si hace falta, una organización, y no
+tiene vínculos, tareas ni revisión de uniones. Su referencia es `sender-bot:<id>`. Los agentes son otra cosa: los
+muestra `memo agents list`.
+
+```sh
+memo bots list                            # every bot, by name
+memo bots list name:shop                  # a part of a name, address or username, 3 characters or more
+memo bots list 'organization:"organization:3"' --page 2
+memo bots show sender-bot:3               # its identities and every move to or from it
+```
+
+Cada bot tiene `name`, `display_name`, `organization`, `author` (`rules`, u `owner` cuando lo moviste tú), `reason`,
+`identities`, `messages_from` (los mensajes y el correo que envió), `last_contact`, `reach` (`direct`, `group` o
+`broadcast`) y `signals`. Las reglas deciden que algo es un bot por lo que llevan sus mensajes. Puedes corregirlas:
+
+```sh
+memo bots move noreply@shop.example --kind bot                # this address is a program
+memo bots move sender-bot:3 --kind person                     # this bot is a person after all
+memo bots move telegram:12345 --kind bot --into sender-bot:3  # this account is the same program as sender-bot:3
+```
+
+Mover un remitente se lleva toda su historia, pasada y futura. Sus mensajes y su correo se quedan donde están y cuentan
+para el bot o para la persona, y ninguna regla lo vuelve a mover. `bots show` lista cada movimiento. Moverlo en sentido
+contrario lo deshace, y una persona que vuelve conserva su `person:<uid>`. Solo tú puedes mover un remitente: un
+`bots move` de un agente se rechaza. `<who>` se escribe exactamente: `sender-bot:<id>`, `person:<uid>`, una dirección o
+`<messenger>:<id>` tal como lo muestra `memo people show`, nunca un nombre.
+
+Los comandos de bots cuentan sobre todas las cuentas, así que no se ejecutan en un grupo de cuentas.
 
 ## Todo sobre una persona
 
@@ -262,9 +295,13 @@ vuelve a proponer mientras esas identidades sigan en esa persona, y `people link
 `memo people delete person:42` muestra lo que se iría y no cambia nada. `--yes` elimina:
 
 - la persona y sus identidades;
+- las personas unidas antes a ella, para que sus nombres y alias no vuelvan como una persona nueva (`merged` en
+  `--json`);
+- tus notas sobre ella;
 - las etiquetas, los vínculos, los alias y las menciones que la nombran.
 
-Un hecho, una nota, una tarea o un registro importado que la nombra se queda y pierde el nombre. Los mensajes, el correo
+Un hecho, una tarea o un registro importado que la nombra se queda y pierde el nombre. Una nota que solo enlaza a ella
+se queda y pierde el enlace. Los mensajes, el correo
 y las reuniones pertenecen a su fuente: se quedan, y la próxima sincronización vuelve a hacer de su remitente una
 persona. Una factura, un pedido o una suscripción que nombra a la persona se cambia primero: hasta entonces la
 eliminación se rechaza y los nombra. A ti mismo (`person:me`) no te puedes eliminar. Solo tú lo haces, en un terminal o en WireCat
@@ -308,8 +345,8 @@ memo projects context HRB
 `--scope` es `personal` o `work`. `name:` no distingue mayúsculas y toma `*` como cualquier texto, así que `name:*studio*` encuentra todos los nombres
 que contienen la palabra. `organizations add` y `organizations rename` de un agente se escriben al instante, como los tuyos.
 Los ajustes `permissions` de memo son los que los limitan. `memo organizations delete organization:1` muestra lo que
-supone eliminarla y no cambia nada. `--yes` la elimina con las etiquetas, los vínculos y las menciones que la nombran.
-Sus oportunidades, leads, proyectos y notas se quedan sin ella. Solo tú eliminas una, y nunca una de tus propias
+supone eliminarla y no cambia nada. `--yes` la elimina con tus notas sobre ella y las etiquetas, los vínculos y las
+menciones que la nombran. Sus oportunidades, leads, proyectos y las notas que solo enlazan a ella se quedan sin ella. Solo tú eliminas una, y nunca una de tus propias
 empresas. `projects context` recibe una clave, un número, `project:<id>`, el nombre exacto o un alias.
 `projects context` muestra las personas enlazadas al proyecto, las notas que tratan sobre él o que enlazan a él, y sus
 etiquetas. `organizations context` muestra las personas de la organización por rol, sus clientes, proveedores y socios,
@@ -419,7 +456,7 @@ propone personas que te escriben desde el mismo dominio de empresa.
 ```sh
 memo relationships scan HRB --source all        # lists them, writes nothing
 memo relationships scan HRB --source all --yes  # proposes them for review
-memo review kind:relationship
+memo review list kind:relationship
 ```
 
 Una persona propuesta porque escribe en un grupo del proyecto dice qué grupo y cuánto: "wrote 40 messages in

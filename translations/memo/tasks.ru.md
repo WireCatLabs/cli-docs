@@ -204,8 +204,8 @@ memo people list                               # you, and the people who write t
 memo tasks update HRB-1 --agent hermes         # the agent working on it; --agent none clears it
 ```
 
-Агент — не исполнитель: `agent` называет агента, занятого работой, пока кто-то это не изменит, а захват
-(`tasks claim`) — аренда, которая истекает сама. Роль — `assignee` (по умолчанию), `reviewer` или `watcher`. ID человека берётся из его контекста
+Агент — не исполнитель: `agent` называет агента, который работает над задачей, пока его не сменят. Бронь
+(`tasks claim`) отмечает, кто занят задачей сейчас, и снимается сама через заданное время. Роль — `assignee` (по умолчанию), `reviewer` или `watcher`. ID человека берётся из его контекста
 (`memo context … --json`). Задачи, назначенные человеку, видны в
 [его контексте](./people.md#everything-about-a-person).
 

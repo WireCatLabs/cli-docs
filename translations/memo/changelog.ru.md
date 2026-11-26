@@ -8,6 +8,93 @@ title: "История изменений"
 
 Точные технические записи новых выпусков сохранены на английском; инструкции по использованию переведены в соответствующих руководствах.
 
+## 0.154.0 — 25.11.2026
+
+### Added
+
+- **`memo bots list`, `memo bots show` and `memo bots move`.** A bot, a program that writes to you, is now kept apart
+  from people (`sender-bot:<id>`), so `people list kind:automated` no longer shows it. `bots list` finds bots by a part
+  of a name, address or username (`name:`) or by the organization they send for (`organization:`), a page at a time.
+  `bots show` adds every move to or from a bot. `bots move <who> --kind bot|person` is your correction: it moves the
+  sender's whole history, past and future, no rule moves it back, and moving it the other way undoes it. Only you can
+  run it; an agent's move is refused. See [Bots](./people.md#bots).
+- **`memo domain-lists update` and `memo domain-lists list`.** They download and show WireCat's pack of bank, shop,
+  news and spam domain lists, which give more organizations a sector. Sender domains are matched on this computer
+  only. `--commercial-only` leaves out the lists a paid service may not use, and `--offline` refuses the download.
+
+### Changed — may break callers
+
+- **memo runs on cli-core 1.1.0** (was 1.0.0). The first open moves the store to version 76: bots get their own table
+  (version 75) and each email gets a type and a reach (version 76). Both are added only, so a tool still on cli-core
+  1.0 keeps opening the store, but its views list no bots: upgrade memo and WireCat Desktop together. See
+  [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+## 0.153.0 — 25.11.2026
+
+### Changed — may break callers
+
+- **memo runs on cli-core 1.0 and cli-base 1.0** (cli-core 1.0.0, was 0.749.0; cli-base 1.0.0, was 0.132.0).
+  cli-core 1.0 moves the message store to version 73 the first time it opens it: an id is never handed out twice,
+  and a JSON column holds valid JSON. After that, only tools on cli-core 1.0 open the store. Watch for: upgrade every
+  installed WireCat CLI to its 1.0 release first, and stop `serve`, `mcp` and every sync while memo migrates; the
+  migration writes a rollback copy first and refuses to run without one. See
+  [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **Over MCP, an input that names no local file is passed as the agent wrote it.** A folder id or path in
+  `memo folders remove`, `memo sync --folder`, `memo tags add|remove --folder`, a subfolder in `--subfolder`, a name
+  or glob in `memo sync --ignore`, and a command path in `memo commands` were made absolute against the client's
+  folder, so `--ignore Psychology` named a folder that does not exist.
+
+### Security
+
+- **An MCP call cannot name a credential folder, a WireCat tool's folder or the message store.** Every option and
+  argument that takes a local file or folder (`memo notes export --output-dir`, `memo notes add --text-file`,
+  `memo projects annotations export --output` and the rest) is checked by its real path before the call runs, so
+  neither a link nor `..` gets past. A refused call answers `permission_error` (`access.denied`) with the option in
+  `param`. A run in a terminal is unchanged.
+
+## 0.152.0 — 24.11.2026
+
+### Fixed
+
+- **One bad part of the morning digest no longer costs the whole digest.** A section, item or health entry the agent
+  wrote wrong is left out, and the digest ends with a line saying how many were left out. A meeting's time without an
+  offset is read as local time. Both come with `@wirecat/cli-core` 0.749.0.
+
+## 0.151.0 — 24.11.2026
+
+### Fixed
+
+- **The morning digest is kept when the agent cannot date one reply.** From 2026-11-21 one `reply` without `since` made
+  the whole digest fail its check, and WireCat Desktop showed its raw text. A reply's `since` is now optional, as the
+  morning-digest skill says.
+
+## 0.150.0 — 23.11.2026
+
+### Added
+
+- **`search all` finds a tracker's issues, projects and comments.** Issues synced by a tracker CLI such as
+  `linear` are ranked with messages, mail, notes and the rest; `--only tracker` reads them alone. An MCP client sees
+  them only while `tracker.list` is not denied, and the hits say so when it is. See
+  [Configuration](./configuration.md).
+
+### Fixed
+
+- **Deleting a person or an organization also deletes your notes about them.** Before, those notes stayed and lost
+  the name. A note that only links to them still stays. `memo people delete` also deletes the people merged into
+  that person earlier, so their name and aliases do not come back as a new person; `--json` lists them in `merged`.
+  See [Delete a person](./people.md#delete-a-person).
+- **Removing an account also removes the relationships it reported** and every fact, note or tag that points at its
+  deals and leads. A person you merged with one it imported now stays.
+
+### Security
+
+- **An agent over MCP no longer gets `schedule exec`, `templates preview --file`, `templates edit`,
+  `templates reset` or `models consents set`.** An agent runs a saved schedule with `memo schedule run <name>`.
+  `schedule exec` runs only a schedule file in memo's own schedules folder; installed schedules keep running.
+
 ## 0.149.0 — 23.11.2026
 
 ### Added
@@ -153,7 +240,7 @@ title: "История изменений"
   direction, length, the employee who took it and the start of what was said, in one list (`history` in JSON). `--limit`
   ends the page; `history.before_time` gives the time for `--before-time` to read the page before it, and `--since-time` bounds
   it (`30d`, a date). A recorded call or meeting under `meetings` has `snippet`, the start of its transcript. The texts
-  are other people's words: `untrusted` names them. See [the person-brief scenario](https://github.com/WireCatLabs/cli-memo/blob/v0.149.0/scenarios/person-brief.md).
+  are other people's words: `untrusted` names them. See [the person-brief scenario](https://github.com/WireCatLabs/cli-memo/blob/v0.154.0/scenarios/person-brief.md).
 
 ### Fixed
 

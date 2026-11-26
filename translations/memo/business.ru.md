@@ -50,7 +50,7 @@ memo contracts add 'Rental agreement' --kind service --start-date 2026-11-01 --e
 memo contracts list expires:2026-12-31
 ```
 
-Договор с суммой, который добавил агент, ждёт вас в `memo review kind:contract`.
+Договор с суммой, который добавил агент, ждёт вас в `memo review list kind:contract`.
 
 ## Подписки
 

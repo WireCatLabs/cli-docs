@@ -116,7 +116,7 @@ CLAUDE.md. Так запуск начинается примерно с 4 700 т
 | `memo mail findings list status:proposed` | Пакеты, которые ждут вас |
 | `memo mail findings show <id>` | Один пакет с доказательствами |
 
-`MEMO_READ_ONLY` отклоняет любое изменение хранилища, кроме `mail findings add` и `messages acknowledge`. `messages reset`
+`MEMO_READ_ONLY` отклоняет любое изменение хранилища, кроме `memo mail findings add` и `messages acknowledge`. `messages reset`
 доступна только вам: она отказывает агенту и запуску по расписанию, а MCP показывает её недоступной (`messages.reset` равно `deny`). Решаете вы в
 `memo review`: `memo review show <id>`, затем `memo review confirm <id>/<finding>` или `memo review reject <id>`. Ни один
 агент не может подтверждать или отклонять выводы из почты. `memo review status` показывает отметку каждого ящика и то, что ждёт.
@@ -130,13 +130,13 @@ Memo больше не читает почтовый ящик сам. Его с�
 
 | Старая команда Memo | Что запускать |
 |---|---|
-| `memo mail add <account> <address>` | `mail <profile> session start --address <address>`, затем `mail <profile> sync` |
-| `memo mail check <account>` | `mail <profile> account check` |
-| `memo mail inspect <account>` | `mail <profile> account inspect`, те же параметры, без аккаунта |
+| `memo mail add …` | `mail <profile> session start --address <address>`, затем `mail <profile> sync` |
+| `memo mail check …` | `mail <profile> account check` |
+| `memo mail inspect …` | `mail <profile> account inspect`, те же параметры, без аккаунта |
 | `memo mail rules list\|add\|remove\|apply\|export\|import <account> …` | `mail <profile> rules list\|add\|remove\|apply\|export\|import …`, те же параметры, без аккаунта |
-| `memo mail delete <account>` | `mail <profile> messages delete --rules` (план; `--yes` перемещает письма) |
-| `memo mail restore <account> --run <id>` | `mail <profile> messages restore --run <id>`; id запусков Memo там работают |
-| `memo mail runs list <account>` | `mail doctor`, который называет запуски, остановившиеся на полпути или с близкой очисткой корзины Gmail; каждый запуск — файл `<id>.jsonl` в папке состояния Memo в `mail-trash/<profile>/` |
+| `memo mail delete …` | `mail <profile> messages delete --rules` (план; `--yes` перемещает письма) |
+| `memo mail restore …` | `mail <profile> messages restore --run <id>`; id запусков Memo там работают |
+| `memo mail runs list …` | `mail doctor`, который называет запуски, остановившиеся на полпути или с близкой очисткой корзины Gmail; каждый запуск — файл `<id>.jsonl` в папке состояния Memo в `mail-trash/<profile>/` |
 
 Настройки, в которых ещё есть старые параметры `mail` из Memo, загружаются, но их никто не читает. `memo doctor` называет
 ящики из этих параметров, чтобы их синхронизировал `mail`, а `memo config unset mail` удаляет параметры. Почта, которую импортировал Memo, остаётся

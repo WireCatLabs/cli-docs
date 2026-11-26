@@ -116,7 +116,7 @@ Qué hace, en cada buzón:
 | `memo mail findings list status:proposed` | Lotes que esperan tu decisión |
 | `memo mail findings show <id>` | Un lote con su evidencia |
 
-`MEMO_READ_ONLY` rechaza todo cambio en el almacén salvo `mail findings add` y `messages acknowledge`. `messages reset`
+`MEMO_READ_ONLY` rechaza todo cambio en el almacén salvo `memo mail findings add` y `messages acknowledge`. `messages reset`
 es solo tuyo: rechaza a un agente y a una ejecución programada, y MCP lo muestra como no disponible (`messages.reset` es `deny`).
 Tú decides en `memo review`: `memo review show <id>`, luego `memo review confirm <id>/<finding>` o `memo review reject <id>`.
 Ningún agente puede confirmar ni rechazar hallazgos de correo. `memo review status` muestra la marca de cada buzón y lo que espera.
@@ -130,13 +130,13 @@ Memo ya no lee un buzón por sí mismo. Sus antiguos comandos de correo no cambi
 
 | Comando antiguo de Memo | Ejecuta en su lugar |
 |---|---|
-| `memo mail add <account> <address>` | `mail <profile> session start --address <address>`, luego `mail <profile> sync` |
-| `memo mail check <account>` | `mail <profile> account check` |
-| `memo mail inspect <account>` | `mail <profile> account inspect`, las mismas opciones, sin cuenta |
+| `memo mail add …` | `mail <profile> session start --address <address>`, luego `mail <profile> sync` |
+| `memo mail check …` | `mail <profile> account check` |
+| `memo mail inspect …` | `mail <profile> account inspect`, las mismas opciones, sin cuenta |
 | `memo mail rules list\|add\|remove\|apply\|export\|import <account> …` | `mail <profile> rules list\|add\|remove\|apply\|export\|import …`, las mismas opciones, sin cuenta |
-| `memo mail delete <account>` | `mail <profile> messages delete --rules` (una vista previa; `--yes` mueve el correo) |
-| `memo mail restore <account> --run <id>` | `mail <profile> messages restore --run <id>`; los id de ejecución de Memo sirven allí |
-| `memo mail runs list <account>` | `mail doctor`, que nombra las ejecuciones que se detuvieron a medias o cuya Papelera de Gmail se vaciará pronto; cada ejecución es un archivo `<id>.jsonl` en la carpeta de estado de Memo, en `mail-trash/<profile>/` |
+| `memo mail delete …` | `mail <profile> messages delete --rules` (una vista previa; `--yes` mueve el correo) |
+| `memo mail restore …` | `mail <profile> messages restore --run <id>`; los id de ejecución de Memo sirven allí |
+| `memo mail runs list …` | `mail doctor`, que nombra las ejecuciones que se detuvieron a medias o cuya Papelera de Gmail se vaciará pronto; cada ejecución es un archivo `<id>.jsonl` en la carpeta de estado de Memo, en `mail-trash/<profile>/` |
 
 Una configuración que aún tiene los antiguos ajustes `mail` de Memo se carga, y nada los lee: `memo doctor` nombra los buzones
 que contienen, para que `mail` los sincronice, y `memo config unset mail` los quita. El correo que importó Memo sigue en el

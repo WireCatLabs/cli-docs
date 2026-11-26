@@ -21,6 +21,13 @@ The tools:
 - **[Cognee][cg]** — a memory platform that turns documents and conversations into a knowledge graph.
 - **[basic-memory][bm]** — Markdown notes that an agent reads and writes over MCP.
 
+**On this page:**
+
+1. [Features](#features)
+2. [memo mail compared with email tools](#memo-mail-compared-with-email-tools)
+3. [Install and licence](#install-and-licence)
+4. [When another tool fits better](#when-another-tool-fits-better)
+
 ✅ yes · 🟡 partly · ❌ no · ➖ not in its documentation
 
 ## Features
@@ -68,7 +75,7 @@ Notes on `memo`:
 
 - **Sources.** Telegram, MAX, WhatsApp, Zoom meetings and Google Drive reach the store through the sister tools
   `tg`, `max`, `wa`, `zm` and `drive`. `memo` reads that store. The [mail](../mail/index.md) program fills the store with your mailbox and
-  `memo` searches it; an older import through [Himalaya](https://github.com/pimalaya/himalaya) still works and will be removed. `search all` covers messages, mail, notes, calendar events and phone calls, deals and leads, and business data.
+  `memo` searches it, so the Mail rows count what `mail` does for it. `search all` covers messages, mail, notes, calendar events and phone calls, deals and leads, and business data.
   Meetings have their own `search meetings`.
 - **Search.** All six tools search by words and by meaning. This page does not rank them. In `memo`, search by
   meaning uses a local model that `memo models download` fetches; without it, word search still works.
@@ -79,8 +86,8 @@ Notes on `memo`:
   `MEMO_READ_ONLY=1` refuses writes. Agent memories, facts and proposed actions wait for review.
 - **Safety.** Permissions in the configuration set each command to `deny`, `readonly`, `ask` or `allow`.
   `MEMO_READ_ONLY=1` keeps writing commands discoverable but refuses their calls. Memories, facts and actions an agent adds are saved as proposed
-  until you confirm them. Decisions on project proposals are the exception: an agent may make them, with a
-  recorded reason, until you set `agent_decisions` to `false`.
+  until you confirm them. Decisions on project proposals are yours too: an agent may make them, with a recorded
+  reason, only after you set `agent_decisions` to `true`.
 - **Knowledge.** `memo` stores messages and the facts and links you or your agent record, each with the message,
   note or meeting that shows it. It finds facts in a text only when you run `memo sources suggest` on a source, and
   you confirm each fact. A fact takes the date it happened, and a decision can be marked as replacing an earlier one.
@@ -91,11 +98,11 @@ Notes on `memo`:
 
 ## memo mail compared with email tools
 
-Mail is a tool of its own in `memo`. The memory tools above do not do this job, so this table puts `memo` next to
+Mail comes into `memo` through the `mail` program. The memory tools above do not do this job, so this table puts `memo` next to
 tools people use for mail. `memo` searches and reads mail; it does not change or send it. The [mail](../mail/index.md) program does that.
 The marks come from each project's documentation, checked on 24 October 2026.
 
-- **[Himalaya][hm]** — a mail command line for IMAP, SMTP, JMAP, Gmail and others. `memo` can still call it for an older import.
+- **[Himalaya][hm]** — a mail command line for IMAP, SMTP, JMAP, Gmail and others.
 - **[gog][gg]** — one command line for Google services; its `gmail` commands read, send and manage Gmail.
 - **[Google Workspace MCP][ws]** — a maintained MCP server for Google services, with Gmail tools. The best known
   Gmail MCP server is archived, so it is not compared.
@@ -118,8 +125,8 @@ The marks come from each project's documentation, checked on 24 October 2026.
 
 Notes on `memo`:
 
-- **Himalaya.** `memo` no longer needs it. Mail reaches the store through the `mail` program, and the older Himalaya
-  import is on its way out. `memo` changes no mailbox. Mail rules, Gmail cleanup and restore are commands of `mail`;
+- **memo and mail.** The memo column marks `memo` and the `mail` program together: `mail` syncs a mailbox, imports
+  a Takeout file and scores senders, and `memo` searches what it saved. `memo` changes no mailbox. Mail rules, Gmail cleanup and restore are commands of `mail`;
   the old `memo mail delete` and `memo mail restore` only name the `mail` command to run.
 - **Filters.** `memo` does not create filters in Gmail. A Gmail filter export becomes rules for what to import
   with `mail rules import`; `memo sync` follows those rules.
