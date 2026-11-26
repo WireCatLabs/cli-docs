@@ -15,7 +15,7 @@ title: "Команды"
 tg [profile] [options] <resource> <verb> [arguments]
 ```
 
-**Первое слово — профиль**, если это не команда: `tg work chats list` показывает чаты профиля `work`. `TG_PROFILE` задаёт профиль для всей сессии оболочки. **Профиль не подразумевается**, даже если он единственный: без того и другого команда, которая использует аккаунт, останавливается с кодом выхода 2 и перечисляет профили на этом компьютере. Команды, которые не используют аккаунт (`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`), работают без профиля.
+**Первое слово — профиль**, если это не команда: `tg work chats list` показывает чаты профиля `work`. `TG_PROFILE` задаёт профиль для всей сессии оболочки. **Профиль не подразумевается**, даже если он единственный: без того и другого команда, которая использует аккаунт, останавливается с кодом выхода 2 и перечисляет профили на этом компьютере. Команды, которые не используют аккаунт (`--help`, `--version`, `commands`, `skill show`, `session list`, `config show`), работают без профиля.
 
 ## Общие параметры
 
@@ -79,6 +79,36 @@ tg session end
 
 **Example:** `tg personal session end`
 
+### `tg session status`
+
+show whether this profile has a session on this computer and the account it was logged in as; --check asks the messenger whose the session is, without the phone number (`account show` has it)
+
+```sh
+tg session status [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--check` | ask the messenger whether the session still works, and whose it is. |
+
+**Example:** `tg personal session status`, `tg personal session status --check --json`
+
+### `tg session list`
+
+every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
+
+```sh
+tg session list [query]
+```
+
+| Argument | | What it is |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
+**Returns:** account profile — profile, current, account, name, signed_in, bot; every field: tg commands info session list
+
+**Example:** `tg session list`, `tg session list --json`
+
 ## `tg setup`
 
 set up Telegram and connect your agent
@@ -100,22 +130,6 @@ tg setup [options]
 ## `tg account`
 
 the logged-in account
-
-### `tg account list`
-
-every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
-
-```sh
-tg account list [query]
-```
-
-| Argument | | What it is |
-|---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
-
-**Returns:** account profile — profile, current, account, name, signed_in, bot; every field: tg commands info account list
-
-**Example:** `tg personal account list`
 
 ### `tg account show`
 

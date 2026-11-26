@@ -43,23 +43,23 @@ Sigue estos pasos con `--app browser`, o cuando `--app auto` falle. Se hace una 
 
 1. **Inicia sesión en [my.telegram.org](https://my.telegram.org/apps).** Elige tu país, escribe tu número de teléfono y pulsa **Next**.
 
-   ![La página de inicio de sesión de my.telegram.org con los campos de país y número de teléfono](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-1-sign-in.png)
+   ![La página de inicio de sesión de my.telegram.org con los campos de país y número de teléfono](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-1-sign-in.png)
 
    Telegram envía un código de confirmación como mensaje en tu aplicación de Telegram, no por SMS. Escríbelo en la página y pulsa **Sign in**. No le des este código a nadie y nunca lo escribas en un chat con el agente.
 
-   ![La página del código de confirmación de my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-2-code.png)
+   ![La página del código de confirmación de my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-2-code.png)
 
 2. **Abre Development Tools** y elige **Create new application**.
 
-   ![La página principal de my.telegram.org con la tarjeta Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-3-development-tools.png)
+   ![La página principal de my.telegram.org con la tarjeta Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-3-development-tools.png)
 
    Rellena el formulario. El título (title) necesita al menos 5 caracteres. El nombre corto (short name) solo admite letras y dígitos, de 5 a 32 caracteres. Evita la palabra "Telegram" en ambos. Elige una plataforma, por ejemplo **Desktop**. La URL y la descripción son opcionales. Después pulsa **Create application**.
 
-   ![El formulario Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-4-create-application.png)
+   ![El formulario Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-4-create-application.png)
 
 3. **Copia `api_id` y `api_hash`** de la sección Credentials. Mantén el hash en privado: quien lo tenga puede usar la cuota de tu aplicación.
 
-   ![La sección Credentials con App api_id y App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-5-credentials.png)
+   ![La sección Credentials con App api_id y App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-5-credentials.png)
 
 4. **Da ambos valores a `tg`** cuando pida `App api_id` y `App api_hash`. El hash no se muestra mientras escribes.
 
@@ -108,7 +108,7 @@ Telegram llama a esto vincular un dispositivo de escritorio. `tg` muestra un có
 2. Pulsa el botón para añadir un dispositivo (Add Device) y permite el acceso a la cámara si Telegram lo pide.
 3. Apunta la cámara al código QR de tu terminal.
 
-![Telegram para Android, Ajustes y Dispositivos, con el botón para añadir un dispositivo](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-android-add-device.png)
+![Telegram para Android, Ajustes y Dispositivos, con el botón para añadir un dispositivo](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-android-add-device.png)
 
 #### iPhone y iPad
 
@@ -120,13 +120,13 @@ Si tu cuenta tiene una contraseña de verificación en dos pasos (2FA), `tg` la 
 
 **Intentos de inicio de sesión incompletos.** Si escaneaste el código pero no introdujiste la contraseña 2FA, el intento aparece en **Dispositivos**, en la lista de intentos incompletos (Incomplete login attempts). No tiene acceso a tus mensajes. Termina el inicio de sesión en `tg` o cierra el intento en esa misma lista.
 
-![La lista de intentos de inicio de sesión incompletos en la pantalla Dispositivos de Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-android-incomplete-login.png)
+![La lista de intentos de inicio de sesión incompletos en la pantalla Dispositivos de Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-android-incomplete-login.png)
 
 ## Comprobar la cuenta y cerrar sesión
 
 ```sh
 tg personal account show     # who this profile is logged in as
-tg account list              # every profile on this computer, and the account each is logged in as
+tg session list              # every profile on this computer, and the account each is logged in as
 tg personal account sessions list  # every device and app logged in to the account; ends nothing
 tg personal session end      # log out on Telegram's side, and delete the session file here
 ```
@@ -167,7 +167,7 @@ export TG_PROFILE=work     # the same for the whole shell session
 
 **La primera palabra es el perfil si no es un comando.** Por eso un perfil no puede llamarse `chats`, `messages` ni usar otra palabra de comando; `tg personal session start` rechaza esos nombres. Los nombres admiten letras, cifras, puntos, guiones y guiones bajos, y deben empezar por una letra o cifra.
 
-El orden de prioridad, de mayor a menor, es: primera palabra, luego `TG_PROFILE`. Si no hay ninguno, un comando que usa una cuenta se detiene con el código de salida `2` y muestra la lista de perfiles de esta computadora; si todavía no hay ninguno, indica que ejecutes `tg personal setup`. `tg` nunca elige uno, ni siquiera el único que hay. Los comandos que no usan ninguna cuenta funcionan sin perfil: `--help`, `--version`, `commands`, `skill show`, `account list` y `config show`.
+El orden de prioridad, de mayor a menor, es: primera palabra, luego `TG_PROFILE`. Si no hay ninguno, un comando que usa una cuenta se detiene con el código de salida `2` y muestra la lista de perfiles de esta computadora; si todavía no hay ninguno, indica que ejecutes `tg personal setup`. `tg` nunca elige uno, ni siquiera el único que hay. Los comandos que no usan ninguna cuenta funcionan sin perfil: `--help`, `--version`, `commands`, `skill show`, `session list` y `config show`.
 
 Si una palabra no es un comando y no va seguida de ningún comando, se muestra este error:
 

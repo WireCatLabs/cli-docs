@@ -4,6 +4,23 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/tg-cli`, con una sección por versión, de la más reciente a la más antigua. Se utiliza [versionado semántico](https://semver.org); antes de `1.0.0`, la interfaz de comandos todavía puede cambiar.
 
+## 0.137.0 — 26.11.2026
+
+### Added
+
+- **`tg <profile> session status` indica si el perfil tiene la sesión iniciada y con qué cuenta**, solo con los datos
+  de este ordenador. `--check` pregunta al servicio de mensajería si la sesión sigue funcionando y omite el número de
+  teléfono (lo tiene `account show`). De cli-core 1.3.0 (antes 1.0.0).
+
+### Changed — may break callers
+
+- **`tg session list` muestra los perfiles de este ordenador, y `tg account list` desaparece** (WC-ACCT-12, WC-CMD-8).
+  Devuelve las mismas filas, acepta la misma consulta (`profile:`, `current:`) y no necesita perfil. No hay alias: un
+  script que ejecuta `tg account list` debe usar `tg session list`. `account show`, `account update`, `account sessions`
+  y el resto de `account` se mantienen.
+- **El almacén pasa a la versión 77** al abrirse por primera vez (cli-core 1.1.0 y 1.2.0). Como toda migración del
+  almacén, solo avanza.
+
 ## 0.136.0 — 25.11.2026
 
 ### Changed — may break callers

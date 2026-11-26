@@ -155,7 +155,7 @@ perfil no depende de la configuración de la cuenta.
 El catálogo incluye comandos de lectura y escritura, sujetos a los permisos del perfil y a las exclusiones siguientes. El acceso de solo lectura se configura mediante esos permisos. Unos pocos comandos no se
 ofrecen nunca, y los ejecutas en una terminal:
 
-- **Inicio de sesión y configuración**: `setup`, `session start|end`, `complete`, `mcp config|add|check|revoke`,
+- **Inicio de sesión y configuración**: `setup`, `session start|status|list|end`, `complete`, `mcp config|add|check|revoke`,
   `bot auth set|show|remove`, `bot mcp config`. El agente no puede llamarlos o necesitan que estés ante el teclado.
   `mcp` y `bot mcp` solos solo muestran su ayuda.
 - **Eliminar una cuenta**: `account remove` cierra la sesión de un perfil y lo olvida en este ordenador, así que solo

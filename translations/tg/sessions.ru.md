@@ -43,23 +43,23 @@ title: "Вход, сессии и профили"
 
 1. **Войдите на [my.telegram.org](https://my.telegram.org/apps).** Выберите страну, введите номер телефона и нажмите **Next**.
 
-   ![Страница входа my.telegram.org с полями страны и номера телефона](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-1-sign-in.png)
+   ![Страница входа my.telegram.org с полями страны и номера телефона](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-1-sign-in.png)
 
    Telegram присылает код подтверждения сообщением в приложение Telegram, а не по SMS. Введите его на странице и нажмите **Sign in**. Никому не сообщайте этот код и никогда не вводите его в чат с агентом.
 
-   ![Страница кода подтверждения my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-2-code.png)
+   ![Страница кода подтверждения my.telegram.org](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-2-code.png)
 
 2. **Откройте Development Tools** и выберите **Create new application**.
 
-   ![Главная страница my.telegram.org с карточкой Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-3-development-tools.png)
+   ![Главная страница my.telegram.org с карточкой Development Tools](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-3-development-tools.png)
 
    Заполните форму. Название (title) — не меньше 5 символов. Краткое имя (short name) — только буквы и цифры, от 5 до 32 символов. Не используйте в них слово «Telegram». Выберите платформу, например **Desktop**. URL и описание необязательны. Затем нажмите **Create application**.
 
-   ![Форма Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-4-create-application.png)
+   ![Форма Create new application](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-4-create-application.png)
 
 3. **Скопируйте `api_id` и `api_hash`** из раздела Credentials. Храните хеш в тайне: любой, у кого он есть, может расходовать квоту вашего приложения.
 
-   ![Раздел Credentials с App api_id и App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-app-5-credentials.png)
+   ![Раздел Credentials с App api_id и App api_hash](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-app-5-credentials.png)
 
 4. **Передайте оба значения `tg`**, когда он запросит `App api_id` и `App api_hash`. Хеш не отображается при вводе.
 
@@ -112,7 +112,7 @@ tg personal session start qr
 2. Нажмите **Подключить устройство** (Add Device) и разрешите доступ к камере, если Telegram спросит.
 3. Наведите камеру на QR-код в терминале.
 
-![Telegram для Android, «Настройки» и «Устройства», с кнопкой подключения устройства](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-android-add-device.png)
+![Telegram для Android, «Настройки» и «Устройства», с кнопкой подключения устройства](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-android-add-device.png)
 
 #### iPhone и iPad
 
@@ -124,13 +124,13 @@ tg personal session start qr
 
 **Незавершённые попытки входа.** Если вы отсканировали код, но не ввели пароль 2FA, попытка появится в **Устройствах** в разделе незавершённых попыток входа (Incomplete login attempts). У неё нет доступа к вашим сообщениям. Завершите вход в `tg` или завершите эту попытку в том же списке.
 
-![Список незавершённых попыток входа на экране «Устройства» в Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.136.0/docs/images/telegram-android-incomplete-login.png)
+![Список незавершённых попыток входа на экране «Устройства» в Telegram](https://raw.githubusercontent.com/WireCatLabs/tg-cli/v0.137.0/docs/images/telegram-android-incomplete-login.png)
 
 ## Проверка и выход
 
 ```sh
 tg personal account show     # who this profile is logged in as
-tg account list              # every profile on this computer, and the account each is logged in as
+tg session list              # every profile on this computer, and the account each is logged in as
 tg personal account sessions list  # every device and app logged in to the account; ends nothing
 tg personal session end      # log out on Telegram's side, and delete the session file here
 ```
@@ -171,7 +171,7 @@ export TG_PROFILE=work     # the same for the whole shell session
 
 **Первое слово считается профилем, если это не команда.** Поэтому профиль нельзя назвать `chats`, `messages` или другим словом команды; `tg personal session start` отклоняет такое имя. Разрешены буквы, цифры, точки, дефисы и подчёркивания; первый символ — буква или цифра.
 
-Приоритет: сначала первое слово команды, затем `TG_PROFILE`. Если нет ни того, ни другого, команда, которой нужен аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере; если профилей ещё нет, она предлагает запустить `tg personal setup`. `tg` никогда не выбирает профиль сам, даже единственный. Команды, которым аккаунт не нужен, работают без профиля: `--help`, `--version`, `commands`, `skill show`, `account list` и `config show`.
+Приоритет: сначала первое слово команды, затем `TG_PROFILE`. Если нет ни того, ни другого, команда, которой нужен аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере; если профилей ещё нет, она предлагает запустить `tg personal setup`. `tg` никогда не выбирает профиль сам, даже единственный. Команды, которым аккаунт не нужен, работают без профиля: `--help`, `--version`, `commands`, `skill show`, `session list` и `config show`.
 
 Слово, которое не является командой и за которым нет команды, вызывает поясняющую ошибку:
 
