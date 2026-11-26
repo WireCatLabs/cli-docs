@@ -71,8 +71,8 @@ drive personal session end
 
 Elimina las credenciales locales del perfil y conserva ajustes y documentos.
 Una ejecución con carpetas movidas (`DRIVE_CONFIG_DIR` y las demás variables `DRIVE_*_DIR`, o un `HOME` o carpeta XDG
-distintos) usa tu propio acceso pero nunca lo elimina: ahí `session end` responde `signed_out: false` y
-`kept: "owners-sign-in"`, y solo elimina un acceso hecho en esa ejecución. Quita la aplicación
+distintos) usa tu propio acceso pero nunca lo elimina: ahí `session end` responde `ended: false` con un `why`
+que lo explica, y solo elimina un acceso hecho en esa ejecución. Quita la aplicación
 de las [conexiones de Google](https://myaccount.google.com/connections) para revocar su acceso.
 Quitar una raíz y sincronizar elimina las fuentes gestionadas y sus copias; las notas, recuerdos,
 exportaciones y copias de seguridad independientes pueden permanecer.

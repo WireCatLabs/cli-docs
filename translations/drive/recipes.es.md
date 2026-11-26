@@ -458,8 +458,9 @@ visibles: `availability.available: false` incluye el motivo y la clave de permis
 de escritura permanece en la lista aunque escribir esté bloqueado. Los comandos sin las autorizaciones
 Google necesarias figuran como no disponibles: conecta con `--grant write`, `activity` o `apps` según la tarea
 y reinicia el servidor. Cambiar ajustes e instalar la habilidad requiere que el propietario permita
-`permissions.mcp.authority`; el agente no puede modificar ese control. Las exportaciones y descargas
-aceptan un nombre dentro de la carpeta de exportación de la caché del perfil. Para ChatGPT o Claude
+`permissions.mcp.authority`; el agente no puede modificar ese control. Las exportaciones
+aceptan un nombre dentro de la carpeta de exportación de la caché del perfil; `files download` responde con el
+texto del archivo y nunca lo guarda. Para ChatGPT o Claude
 en el navegador o teléfono, consulta [MCP remoto](./remote.md). Las demás operaciones están en
 [la referencia completa](./commands.md).
 

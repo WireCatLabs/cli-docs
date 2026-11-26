@@ -4,6 +4,71 @@ title: "История изменений"
 
 Технические сведения о выпусках ниже сохранены на языке исходного проекта. Практические инструкции доступны в переведённых руководствах.
 
+## 0.79.0 — 26.11.2026
+
+### Changed — may break callers
+
+- **drive runs on cli-core 1.2** (cli-core 1.2.0, was 1.0.0). cli-core 1.2 moves the message store to version 77 the
+  first time it opens it: sender bots are kept apart from people, each email has a type, and the owner's mail
+  sorting rules have their own table. Tools on cli-core 1.0 or later still open the store. See
+  [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+- **`drive <profile> session` is cli-core's shared sign-in command** (`oauthSessionCommand`), the same as every
+  WireCat CLI that signs in in the browser. Nobody signs in again: the first read copies a sign-in kept by an older
+  drive, under the bare profile name, to `oauth:google:<profile>`, and `session end` removes both. A run with moved
+  folders only reads the owner's sign-in. `--grant`, `--client-file`, `--client-id` and `--credential-storage` work
+  as before. What changes for a caller of the JSON:
+  - `session list` answers a list, `{"items":[{"profile","signed_in","state"}],"page":{…}}`, in place of
+    `{"item":{"scope":"all-configured-profiles","items":[…]}}`. A row loses `selected_folders` and `storage`, and
+    the list takes no `profile:` or `storage:` terms. WireCat Desktop reads this shape, so it shows drive's profiles
+    again.
+  - `session status` answers `profile`, `state` (`saved` or `missing`), `scopes`, `expires_at` and `verified`, and
+    loses `signed_in`, `account` and `storage`. `session status --check` asks Google whose the sign-in is and adds
+    `account`, so the command is now declared a remote read. When the keyring cannot be reached, `session list` rows
+    say `signed_in: null` and `state: "unknown"`.
+  - `session end` answers `profile`, `ended` and `removed`, with `why` when a run with moved folders keeps the
+    owner's sign-in, in place of `signed_out`, `kept` and `cached_data`. Imported documents stay, as before.
+  - `session start` answers `profile`, `signed_in`, `account` and `scopes`, and loses `storage`. It takes
+    `--answer-stdin`.
+  - The JavaScript API no longer exports `login` and `LoginOptions`. Sign in with `drive <profile> session start`.
+
+### Fixed
+
+- **`drive commands --json` marks the commands cli-core builds** (`doctor`, `mcp`, `complete`, `session` and the rest) with
+  `origin: "cli-core"`, as cli-core's own `commands` does. drive builds its own `commands` and left the mark out.
+
+## 0.78.0 — 25.11.2026
+
+### Changed — may break callers
+
+- **drive runs on cli-core 1.0 and cli-base 1.0** (cli-core 1.0.0, was 0.750.0; cli-base 1.0.0, was 0.132.0).
+  cli-core 1.0 moves the message store to version 74 the first time it opens it: an id is never handed out twice,
+  and a JSON column holds valid JSON. After that, only tools on cli-core 1.0 open the store. Watch for: upgrade every
+  installed WireCat CLI to its 1.0 release first, and stop `serve`, `mcp` and every sync while the store migrates;
+  the migration writes a rollback copy first and refuses to run without one. See
+  [cli-core's changelog](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Fixed
+
+- **A read-only run can read a stored file's text** ([#402](https://github.com/WireCatLabs/drive-cli/issues/402)).
+  `drive <profile> files download FILE_ID` without `--output` writes nothing on this computer, so `DRIVE_READ_ONLY=1`
+  and `--read-only` now let it answer the text, marked as untrusted in a scheduled agent's run.
+  Saving the file with `--output` is still refused there. As in ydisk, `--output` and `--overwrite` are now the
+  owner's alone: an agent over MCP reads the text with `drive_read` and can no longer save a download into the
+  profile's export folder. `files export` always writes a file and is unchanged
+  ([usage](./usage.md#download-or-convert-a-file-from-google)).
+- **Over MCP, a Drive file or folder is passed as the agent wrote it.** The file id or URL of `drive files get`,
+  `copy`, `move`, `trash`, `download` and `export`, of `drive comments`, `permissions`, `revisions` and
+  `activities`, the folder of `drive catalog tree`, and the command path of `drive commands` were made absolute
+  against the client's folder, as if they named a file on this computer.
+
+### Security
+
+- **An MCP call cannot name a credential folder, a WireCat tool's folder or the message store.** Every option and
+  argument that takes a local file or folder (`drive files upload <path>`, `drive files download --output`,
+  `--body-file` and the rest) is checked by its real path before the call runs, so neither a link nor `..` gets
+  past. A refused call answers `permission_error` (`access.denied`) with the option in `param`. A run in a terminal
+  is unchanged.
+
 ## 0.77.0 — 25.11.2026
 
 ### Added
