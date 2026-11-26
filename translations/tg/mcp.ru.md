@@ -155,7 +155,7 @@ tg agent config set permissions.messages.send allow
 Каталог включает команды чтения и записи с учётом разрешений профиля и исключений ниже. Доступ только для чтения настраивается в разрешениях. Несколько команд не
 предлагаются никогда, и вы запускаете их в терминале:
 
-- **Вход и настройка**: `setup`, `session start|end`, `complete`, `mcp config|add|check|revoke`,
+- **Вход и настройка**: `setup`, `session start|status|list|end`, `complete`, `mcp config|add|check|revoke`,
   `bot auth set|show|remove`, `bot mcp config`. Агент не может их вызвать, или для них нужны вы за клавиатурой.
   `mcp` и `bot mcp` сами по себе только печатают справку.
 - **Удаление аккаунта**: `account remove` завершает сессию профиля и забывает его на этом компьютере, поэтому её
