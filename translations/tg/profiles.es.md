@@ -14,7 +14,7 @@ Lea esta página cuando desee una segunda cuenta, desee que su agente de IA teng
 | Dale a tu agente menos derechos de los que tienes | Un perfil con sus propios [permisos](./permissions.md) |
 | Mantenga un agente en ese perfil | `TG_PROFILE_LOCK` ([perfiles en inicio de sesión y sesiones](./sessions.md#profiles)) |
 | Ejecute un bot de Telegram junto a su cuenta | Un perfil de bot: `tg support bot api get-me` |
-| Ver todos los perfiles en esta computadora | `tg account list` |
+| Ver todos los perfiles en esta computadora | `tg session list` |
 
 ## Elige un perfil
 
@@ -24,7 +24,7 @@ Coloque el nombre del perfil antes del comando:
 tg work config show
 ```
 
-`tg account list` muestra todos los perfiles en esta computadora y la cuenta con la que cada uno inició sesión; `tg work session end` cierra la sesión del perfil `work`.
+`tg session list` muestra todos los perfiles en esta computadora y la cuenta con la que cada uno inició sesión; `tg work session end` cierra la sesión del perfil `work`.
 
 Una configuración en `profiles.work` en el archivo de configuración se aplica a ese perfil; Los valores bajo `defaults` se aplican cuando no tiene valor propio. Las reglas para los nombres de los perfiles y el orden en el que `tg` elige un perfil se encuentran en [perfiles en inicios de sesión y sesiones](./sessions.md#profiles).
 

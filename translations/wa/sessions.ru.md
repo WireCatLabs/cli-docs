@@ -49,7 +49,7 @@ wa personal session start qr
 
 ```sh
 wa personal account show     # who this profile is linked as; the phone number shows only its last four digits
-wa account list              # every profile on this computer, and the account each is linked as
+wa session list              # every profile on this computer, and the account each is linked as
 wa personal session end      # unlink the device on WhatsApp's side, and delete its keys here
 ```
 
@@ -101,7 +101,7 @@ export WA_PROFILE=work     # the same for the whole shell session
 
 **Первое слово — это профиль, если оно не является командой.** Поэтому профиль не может называться `chats`, `messages` или каким-либо другим командным словом. Имена состоят из букв, цифр, точки, тире и подчеркивания, начинающиеся с буквы или цифры.
 
-Порядок: побеждает первое совпадение: первое слово, затем `WA_PROFILE`. В противном случае команда, использующая аккаунт, останавливается с кодом выхода `2` и выводит список профилей на этом компьютере. `wa` никогда не выбирает ни одного, даже единственного. Команды, не использующие аккаунт, выполняются без профиля: `--help`, `--version`, `commands`, `skill show`, `account list` и `config show`.
+Порядок: побеждает первое совпадение: первое слово, затем `WA_PROFILE`. В противном случае команда, использующая аккаунт, останавливается с кодом выхода `2` и выводит список профилей на этом компьютере. `wa` никогда не выбирает ни одного, даже единственного. Команды, не использующие аккаунт, выполняются без профиля: `--help`, `--version`, `commands`, `skill show`, `session list` и `config show`.
 
 **`WA_PROFILE_LOCK` прикрепляет процесс к одному профилю.** Установите его там, где запускается агент, и первое слово или `WA_PROFILE`, называющее любой другой профиль, будет отклонено (код выхода `5`). Без него агент мог бы выбрать профиль с меньшими ограничениями.
 
