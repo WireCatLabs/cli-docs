@@ -4,7 +4,7 @@ title: "Servidor MCP"
 
 
 
-Esta página le ayuda cuando desea que una aplicación de IA sin terminal funcione con tu WhatsApp, por ejemplo Claude Desktop o el chat en Cursor. También ayuda cuando quieres que la propia aplicación te pregunte antes de cada acción. Después de leerlo, puedes conectar la aplicación a tu cuenta, elegir lo que puede hacer el agente y usar indicaciones listas y menciones de chat.
+Esta página le ayuda cuando desea que una aplicación de IA sin terminal funcione con tu WhatsApp, por ejemplo Claude Desktop o el chat en Cursor. También ayuda cuando quieres que te pregunte antes de cada acción la propia aplicación, no `wa`. Después de leerlo, puedes conectar la aplicación a tu cuenta, elegir lo que puede hacer el agente y usar indicaciones listas y menciones de chat.
 
 Algunos términos primero:
 
@@ -20,10 +20,11 @@ Los permisos denegados no ocultan comandos. Los listados completos y las búsque
 
 ## ¿Lo necesitas?
 
-Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude Code, Codex, el agente de Cursor o Gemini CLI) no necesita MCP. Llama directamente a `wa`, que cuesta los mismos tokens y puede hacer las mismas cosas; aprende cómo hacerlo gracias a el skill que imprime `wa skill show`. MCP es para:
+Un agente de IA que puede ejecutar comandos en una terminal (por ejemplo, Claude Code, Codex, el agente de Cursor o Gemini CLI) no necesita MCP. Llama directamente a `wa`, que ofrece los mismos comandos; aprende cómo hacerlo gracias a el skill que imprime `wa skill show`. MCP es para:
 
 - aplicaciones sin terminal, como Claude Desktop o el chat de Cursor;
-- cualquiera que quiera que la aplicación pregunte antes de cada envío.
+- cualquiera que quiera que la aplicación pregunte antes de cada envío. Pregunta la aplicación, no `wa`: por MCP
+  una escritura configurada como `ask` se ejecuta sin preguntar.
 
 Para ChatGPT o Claude **en el navegador**, use `wa personal mcp serve --http`; consulte [ChatGPT, Codex o Claude en el navegador](./remote.md).
 
@@ -40,6 +41,13 @@ Para ChatGPT o Claude **en el navegador**, use `wa personal mcp serve --http`; c
 Las herramientas utilizan el mismo catálogo que `tg` y `max`. Los comandos que un dispositivo vinculado de WhatsApp no puede realizar, como cerrar otras sesiones o eliminar contactos, están ocultos. Un comando que WhatsApp aún no puede ejecutar se rechaza cuando se ejecuta, con el código de salida `2` y un mensaje que lo dice.
 
 Los comandos que cambian permisos o automatizaciones futuras requieren `permissions.mcp.authority` con el valor `allow`; las llamadas directas a la Cloud API requieren `permissions.bot.api` con el valor `allow`. Por MCP, ambas claves valen `deny` de forma predeterminada. Configúralas desde tu propio terminal, fuera del agente: un `config set` ejecutado por MCP o en el shell de un agente solo puede restringir un permiso, y estas dos claves quedan en manos del propietario. Las demás escrituras siguen sujetas a los permisos de su comando, las listas de destinatarios y los límites de envío.
+
+<details>
+<summary>Comandos que quedan en el terminal</summary>
+
+El servidor MCP de la cuenta personal nunca ofrece `wa session`, `wa setup`, `wa complete` ni `wa mcp` con sus subcomandos, ni los comandos de larga duración `wa watch` y `wa serve`, que nunca devuelven una respuesta al agente. Los comandos del bot comercial (`wa bot …`) los sirve su propio servidor, `wa bot mcp`. Todos los demás comandos aparecen con su disponibilidad.
+
+</details>
 
 ## Conectar
 
@@ -141,7 +149,7 @@ El `permissions` del perfil decide el acceso ([permisos](./permissions.md)). `de
 wa agent config set permissions.messages readonly
 wa agent config set permissions.messages.send allow
 ```
-Aquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos; aún no se ha verificado en un teléfono) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.
+Aquí `agent` es el nombre de un perfil. Las escrituras mantienen la lista de destinatarios, el límite por hora y el diario de envío (`wa agent sends list`). Marcar lectura es una escritura separada, en `chats.mark-read`: el otro lado lo ve. Un agente nunca elimina para todos, sea cual sea el nivel: `messages delete` a través de MCP es solo para el propietario (`wa` le pide a WhatsApp que quite los mensajes de tus dispositivos) y no tiene ningún `--for-everyone`. Al eliminar para todos, se mantiene el `wa <profile> messages delete --for-everyone` del propietario. `--permission key=level` reduce un nivel solo para este proceso de servidor; uno que afloje el perfil detiene el servidor al inicio.
 
 ## Herramientas
 

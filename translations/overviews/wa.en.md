@@ -76,7 +76,7 @@ sends ([mudslide](https://github.com/robvanderleek/mudslide)).
   arrive. [Using wa](./usage.md)
 - **Find:** search messages on your computer, export a chat to Markdown. [Search](./search.md),
   [The local store](./archive.md)
-- **Write:** replies, files, photos, voice notes, polls, reactions, edits within 20 minutes, and delete for everyone
+- **Write:** replies, files, photos, voice notes, polls, reactions, edits within 15 minutes, and delete for everyone
   yourself. [Using wa](./usage.md)
 - **Files:** save what you were sent and read the text inside it. [File attachments](./attachments.md)
 - **Groups:** members, events, activity, unanswered questions. [Groups](./groups.md)
@@ -115,7 +115,7 @@ You scan the code in WhatsApp, under Linked devices. You need Node.js 22.16 or l
 
 - `wa` is an unofficial client, and WhatsApp may ban an account that sends in bulk or writes to strangers. The default
   limits are there to prevent that. [Limits](./limits.md)
-- `wa` is early. What comes next is on the [roadmap](./roadmap.md).
+- Planned features are on the [roadmap](./roadmap.md).
 - One message carries at most a photo and a video as an album.
 
 ## Find a guide for your task

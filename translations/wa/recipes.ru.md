@@ -74,7 +74,7 @@ wa personal recipients add 100000000000001@lid   # and only to the chats on this
 
 ## Работа по расписанию
 
-- **Запланированные задачи Claude Desktop.** Задача запускается на вашем компьютере, поэтому у нее есть `wa` и ваш хранилище. См. [Запланированные задачи Claudeа](https://code.claude.com/docs/en/desktop-scheduled-tasks).
+- **Запланированные задачи Claude Desktop.** Задача запускается на вашем компьютере, поэтому у нее есть `wa` и ваше локальное хранилище. См. [Запланированные задачи Claude](https://code.claude.com/docs/en/desktop-scheduled-tasks).
 - **cron и `claude -p`.** Приложение не требуется, на любом компьютере, который включен в данный момент:
 
   
@@ -91,7 +91,7 @@ wa personal recipients add 100000000000001@lid   # and only to the chats on this
   PATH=/home/you/.nvm/versions/node/v24.0.0/bin:/usr/local/bin:/usr/bin:/bin
   ```
 
-  Запустите первое задание вручную и прочитайте журнал. См. [Безголовый режим Claudeа](https://code.claude.com/docs/en/headless).
+  Запустите первое задание вручную и прочитайте журнал. См. [Безголовый режим Claude](https://code.claude.com/docs/en/headless).
 - **cron и `codex exec`.** То же самое для Кодекса. Его песочница по умолчанию закрывает записи файлов, а `wa` записывает свои записи выполнения и сохраненную точку `--new`:
 
   
@@ -102,7 +102,7 @@ wa personal recipients add 100000000000001@lid   # and only to the chats on this
 
 - **Внутри открытого сеанса Claude Code**: `/loop` или «Напомни мне в 15:00». Это работает, пока сессия открыта.
 
-Облачные процедуры Claudeа не подходят: они запускаются на другом компьютере, где нет ни `wa`, ни вашего хранилища.
+Облачные процедуры Claude не подходят: они запускаются на другом компьютере, где нет ни `wa`, ни вашего хранилища.
 
 ## Утренний обзор
 

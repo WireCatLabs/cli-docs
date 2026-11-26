@@ -55,7 +55,7 @@ wa personal search messages 'lease chat:"Book club"'  # WhatsApp messages only, 
 wa personal search notes 'budget source:internal'  # only notes written in memo
 ```
 
-`search all` dice qué es cada visita: un mensaje (`msg:…`) o una nota (`note:…`). `wa` nunca busca correo: `memo search mail` sí. Cuando un campo no se aplica (`chat:`/`from:` para notas), `search all` omite ese recurso y explica por qué. El correo y las notas llegan a el almacén local mediante memo: `memo sync --mail` y `memo import`. Sin ellos, `search all` busca únicamente mensajes.
+`search all` dice qué es cada visita: un mensaje (`msg:…`) o una nota (`note:…`). `wa` nunca busca correo: `memo search mail` sí. Cuando un campo no se aplica (`chat:`/`from:` para notas), `search all` omite ese recurso y explica por qué. El correo y las notas llegan a el almacén local mediante memo: `memo sync --only mail` y `memo sync --only notes`. Sin ellos, `search all` busca únicamente mensajes.
 
 Las notas coinciden con cualquier parte de una palabra, en cualquier caso de letra, y también se buscan sus títulos. Una búsqueda de uno o dos caracteres se rechaza con "search needs at least three characters".
 

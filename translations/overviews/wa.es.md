@@ -79,7 +79,7 @@ solo envía ([mudslide](https://github.com/robvanderleek/mudslide)).
   llegan. [Usar wa](./usage.md)
 - **Encontrar:** busca mensajes en tu ordenador y exporta un chat a Markdown. [Búsqueda](./search.md),
   [El almacén local](./archive.md)
-- **Escribir:** respuestas, archivos, fotos, notas de voz, encuestas, reacciones, ediciones en los primeros 20 minutos,
+- **Escribir:** respuestas, archivos, fotos, notas de voz, encuestas, reacciones, ediciones en los primeros 15 minutos,
   y borrar para todos tú mismo. [Usar wa](./usage.md)
 - **Archivos:** guarda lo que te enviaron y lee el texto que contiene. [Adjuntos](./attachments.md)
 - **Grupos:** miembros, eventos, actividad, preguntas sin respuesta. [Grupos](./groups.md)
@@ -120,7 +120,7 @@ Escaneas el código en WhatsApp, en Dispositivos vinculados. Necesitas Node.js 2
 
 - `wa` es un cliente no oficial, y WhatsApp puede bloquear una cuenta que envía en masa o escribe a desconocidos. Los
   límites por defecto están para evitarlo. [Límites](./limits.md)
-- `wa` es joven. Lo que viene está en la [hoja de ruta](./roadmap.md).
+- Lo que está previsto está en la [hoja de ruta](./roadmap.md).
 - Un mensaje lleva como mucho una foto y un vídeo, como álbum.
 
 ## Encuentra la guía para tu tarea

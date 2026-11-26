@@ -14,7 +14,7 @@ title: "Все команды"
 wa [profile] [options] <resource> <verb> [arguments]
 ```
 
-**Первое слово — профиль**, если это не команда: `wa work chats list` показывает чаты профиля `work`. `WA_PROFILE` задаёт профиль для всей сессии оболочки; настройка в файле конфигурации его не выбирает. **Профиль не подразумевается**, даже если он единственный: без имени команда, которой нужен аккаунт, завершается с кодом 2 и перечисляет профили на компьютере. Команды без аккаунта (`--help`, `--version`, `commands`, `skill show`, `account list`, `config show`) работают без профиля.
+**Первое слово — профиль**, если это не команда: `wa work chats list` показывает чаты профиля `work`. `WA_PROFILE` задаёт профиль для всей сессии оболочки; настройка в файле конфигурации его не выбирает. **Профиль не подразумевается**, даже если он единственный: без имени команда, которой нужен аккаунт, завершается с кодом 2 и перечисляет профили на компьютере. Команды без аккаунта (`--help`, `--version`, `commands`, `skill show`, `session list`, `config show`) работают без профиля.
 
 ## Общие параметры
 
@@ -72,6 +72,30 @@ unlink this device on WhatsApp's side and delete its keys here
 wa session end
 ```
 
+### `wa session status`
+
+show whether this profile has a session on this computer and the account it was logged in as; --check asks the messenger whose the session is, without the phone number (`account show` has it)
+
+```sh
+wa session status [options]
+```
+
+| Параметр | Назначение |
+|---|---|
+| `--check` | ask the messenger whether the session still works, and whose it is. |
+
+### `wa session list`
+
+every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
+
+```sh
+wa session list [query]
+```
+
+| Аргумент | | Назначение |
+|---|---|---|
+| `query` | optional | field:value terms that narrow the list — the fields are below. |
+
 ## `wa setup`
 
 set up WhatsApp and connect your agent
@@ -90,18 +114,6 @@ wa setup [options]
 ## `wa account`
 
 the logged-in account
-
-### `wa account list`
-
-every account profile on this computer, and the account each is logged in as; a name that is only a bot is left out (`bot list` has it), one that is a bot too says `bot: true`; asks the messenger nothing
-
-```sh
-wa account list [query]
-```
-
-| Аргумент | | Назначение |
-|---|---|---|
-| `query` | optional | field:value terms that narrow the list — the fields are below. |
 
 ### `wa account show`
 
@@ -1797,6 +1809,36 @@ wa models keys remove <provider>
 |---|---|---|
 | `provider` | required | openai, anthropic, or a server's host. |
 
+### `wa models chats`
+
+whether chat text may go to a model off this computer: allowed, ask or denied
+
+#### `wa models chats show`
+
+whether chat text may go to a model outside this computer, and since when
+
+```sh
+wa models chats show
+```
+
+#### `wa models chats set`
+
+allowed: no yes needed; ask: --yes needed, an agent may pass it; denied: refused even with --yes. Only you make it less strict
+
+**Changes something on this computer only.**
+
+```sh
+wa models chats set <mode> [options]
+```
+
+| Аргумент | | Назначение |
+|---|---|---|
+| `mode` | required | allowed, ask or denied. |
+
+| Параметр | Назначение |
+|---|---|
+| `--from-app` | you did this in WireCat Desktop. |
+
 ### `wa models list`
 
 speech, embedding and reranker models: downloaded or not, each kind's default
@@ -2221,8 +2263,12 @@ bring the store up to this build's schema, then normalize, index and stem the me
 **Changes something on this computer only.**
 
 ```sh
-wa store migrate
+wa store migrate [options]
 ```
+
+| Параметр | Назначение |
+|---|---|
+| `--no-backup` | migrate even when no rollback copy can be written; older tools then cannot open the store again. |
 
 ### `wa store rebuild`
 
@@ -2333,7 +2379,7 @@ wa store copies delete <name>
 
 ### `wa store tables`
 
-the tables of the local archive
+the tables of the local store
 
 #### `wa store tables list`
 
@@ -2479,7 +2525,8 @@ wa conversations links rebuild [options]
 | Параметр | Назначение |
 |---|---|
 | `--chat <chat>` | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
-| `--analyze` | link batches using the configured analysis provider; requires --chat and remembers consent for this chat/provider. |
+| `--analyze` | link batches using the configured analysis provider; requires --chat. A model outside this computer follows the `models chats` setting: under ask, a yes is remembered for this chat and provider. |
+| `--yes` | send this chat's text to the analysis model outside this computer, when `models chats` is ask. |
 | `--analysis-provider <provider>` | analysis: agent, openai or anthropic. |
 | `--model <model>` | analysis model; overrides models.analysis.model. |
 | `--base-url <url>` | analysis API endpoint; overrides models.analysis.base_url. |
@@ -2621,6 +2668,7 @@ wa conversations embed [options]
 | `--threads <n>` | local: threads in all (default: min(8, cores)). |
 | `--concurrency <n>` | remote: requests at once (default: 4). |
 | `--max-tokens <n>` | remote: stop before a run that could send more tokens than this. |
+| `--yes` | remote: send the chunks to the model outside this computer, when `models chats` is ask. |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given, and no limit with --chat. |
 
@@ -2725,7 +2773,7 @@ wa attachments download <dir> [options]
 | Параметр | Назначение |
 |---|---|
 | `--chat <chat>` | only this chat; repeat for more; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). Default: ``. |
-| `--since-time <time>` | include messages from this ISO timestamp with a time zone. |
+| `--since-time <time>` | include messages from this time: ISO 8601, a date, today, yesterday, or 2h, 7d ago. |
 | `--pause <duration>` | pause between history pages. Default: `5s`. |
 
 ### `wa attachments check`
@@ -2763,7 +2811,7 @@ wa attachments jobs install <dir> [options]
 | `--at <HH:mm>` | daily start time. Default: `03:00`. |
 | `--timezone <zone>` | IANA time zone of the daily start time. Default: `UTC`. |
 | `--chat <chat>` | only this chat; repeat for more; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). Default: ``. |
-| `--since-time <time>` | include messages from this ISO timestamp with a time zone. |
+| `--since-time <time>` | include messages from this time: ISO 8601, a date, today, yesterday, or 2h, 7d ago; fixed when installed. |
 
 #### `wa attachments jobs start`
 
@@ -2836,7 +2884,7 @@ wa attachments move <dir> <archive-dir> [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--before-time <time>` | move images whose message date is before this ISO timestamp with zone. |
+| `--before-time <time>` | move images whose message date is before this time: ISO 8601, a date (its start), today, or 7d ago. |
 | `--dry-run` | show counts and bytes without moving files or creating the destination. |
 
 ## `wa tags`
@@ -2856,7 +2904,7 @@ wa tags rebuild [options]
 | Параметр | Назначение |
 |---|---|
 | `--chat <chat>` | a stored group/channel; repeat to select several. Default: ``. |
-| `--limit <n>` | process at most 1–500 chats. Default: `50`. |
+| `--limit <n>` | process at most 1–500 chats; the configured limit if not given. |
 | `--sync-first` | read current descriptions from the messenger before classifying. |
 | `--dry-run` | preview cached classification without changing the store. |
 
@@ -3051,6 +3099,25 @@ wa images embed [options]
 | `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--limit <n>` | at most this many pictures in one run; 100 if not given. |
 
+### `wa images read`
+
+give one picture of a message to the coding agent chosen in `models picture-reading` (Claude Code or Codex) and keep the text it read, so search finds it; the picture goes to that agent's provider. Refused while picture reading is never; the saved copy is used when there is one, else the messenger's download
+
+**Changes something on this computer only.**
+
+```sh
+wa images read <chat> [message] [options]
+```
+
+| Аргумент | | Назначение |
+|---|---|---|
+| `chat` | required | a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter); or a msg: locator, with no message id after it. |
+| `message` | optional | the message id. |
+
+| Параметр | Назначение |
+|---|---|
+| `--attachment <n>` | which file of the message, from 1; needed when it has more than one. |
+
 ### `wa images models`
 
 models that read pictures, for `images embed` and picture search
@@ -3111,7 +3178,7 @@ wa metadata sync [options]
 |---|---|
 | `--chat <chat>` | stored group/channel; repeat for several. Default: ``. |
 | `--only-missing` | only chats with no metadata yet; without --chat, every stored group/channel. |
-| `--limit <n>` | process at most 1–500 chats. Default: `50`. |
+| `--limit <n>` | process at most 1–500 chats; the configured limit if not given. |
 
 ## `wa stats`
 
@@ -3167,7 +3234,7 @@ wa stats messages counters show [query] [options]
 | `--timezone <zone>` | IANA timezone for query dates. |
 | `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
 | `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
-| `--limit <n>` | messages, 1–100; 20 by default. |
+| `--limit <n>` | messages, 1–100; the configured limit if not given. |
 | `--max-age <duration>` | maximum fresh observation age; 24h by default. |
 
 #### `wa stats messages counters sync`
@@ -3192,7 +3259,7 @@ wa stats messages counters sync [query] [options]
 | `--timezone <zone>` | IANA timezone for query dates. |
 | `--selection <json>` | pinned counter-targets selection from counters show; conflicts with query and scope. |
 | `--counters <names>` | distinct views,reactions,comments fields; all three by default. |
-| `--limit <n>` | messages, 1–100; 20 by default. |
+| `--limit <n>` | messages, 1–100; the configured limit if not given. |
 | `--max-messages <n>` | maximum messages to refresh, 1–100. |
 | `--sync-time <duration>` | remote refresh budget; 30s by default, maximum 5m. |
 | `--dry-run` | preview exact stored targets and counter capabilities without connecting. |
@@ -3214,7 +3281,7 @@ wa stats messages unanswered [query] [options]
 | `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 | `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
 #### `wa stats messages discussion`
@@ -3234,7 +3301,7 @@ wa stats messages discussion [query] [options]
 | `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 
 #### `wa stats messages responses`
 
@@ -3310,7 +3377,7 @@ wa stats messages evidence <message> [options]
 |---|---|
 | `--selection <json>` | the resolved ranking selection returned in drilldown. |
 | `--component <name>` | the exposed ranking component. |
-| `--limit <n>` | evidence rows, 1–100; 20 if not given. |
+| `--limit <n>` | evidence rows, 1–100; the configured limit if not given. |
 | `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
 ### `wa stats contacts`
@@ -3334,7 +3401,7 @@ wa stats contacts responses [query] [options]
 | `--source <accounts>` | every held account of this messenger; personal, bots or all. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 | `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
 #### `wa stats contacts top`
@@ -3375,7 +3442,7 @@ wa stats contacts evidence <person> [options]
 |---|---|
 | `--selection <json>` | the resolved ranking selection returned in drilldown. |
 | `--component <name>` | the exposed ranking component. |
-| `--limit <n>` | evidence rows, 1–100; 20 if not given. |
+| `--limit <n>` | evidence rows, 1–100; the configured limit if not given. |
 | `--cursor <cursor>` | continue the same component and stored-evidence fingerprint. |
 
 ### `wa stats chats`
@@ -3419,7 +3486,7 @@ wa stats chats newcomers <chat> [options]
 | `--within <duration>` | the help window after a known newcomer join. |
 | `--saved <name\|id>` | run a saved report of this kind; typed report options replace stored options. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
-| `--limit <n>` | report rows, 1–100; 20 if not given. |
+| `--limit <n>` | report rows, 1–100; the configured limit if not given. |
 | `--answerer <person>` | stored name, alias, @username, ID or person:provider/account/id; ambiguous names require a choice; repeat for more. |
 
 #### `wa stats chats retention`
@@ -3463,7 +3530,6 @@ wa stats tasks show [query] [options]
 | Параметр | Назначение |
 |---|---|
 | `--by <group>` | chat (default) or meeting: this account's tasks; project: the owner's project tasks, every project. |
-| `--chat <chat>` | only this chat; a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--type <type>` | only this type: question, request, mention or promise. |
 | `--timezone <zone>` | the IANA timezone for calendar days in the period, such as created>=today. |
 
@@ -3532,8 +3598,8 @@ wa tasks add <message> [options]
 | `--open-new` | open a task from a message the chat's task point already passed (a read again with tasks review --since-time); without it such a read only updates and closes tasks. |
 | `--title <title>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
-| `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
-| `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--due <time>` | when it must be done: an ISO 8601 time, a date (its end), today, or 2h, 3d from now; none clears it. |
+| `--remind-time <time>` | when to look at it again: an ISO 8601 time, a date (its start), today, or 2h, 3d from now; none clears it. |
 | `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
 ### `wa tasks update`
@@ -3557,8 +3623,8 @@ wa tasks update <task> [options]
 | `--parent <id>` | parent task in the same project; none clears it. |
 | `--title <title>` | one line: the action and its object — send Alex the API token. |
 | `--description <text>` | the detail, in Markdown: who owes whom, done when, next step, keywords. |
-| `--due <time>` | when it must be done: an ISO 8601 time or 2h, 3d from now; none clears it. |
-| `--remind-time <time>` | when to look at it again: an ISO 8601 time or 2h, 3d from now; none clears it. |
+| `--due <time>` | when it must be done: an ISO 8601 time, a date (its end), today, or 2h, 3d from now; none clears it. |
+| `--remind-time <time>` | when to look at it again: an ISO 8601 time, a date (its start), today, or 2h, 3d from now; none clears it. |
 | `--assignee <person...>` | who does it: sender (whoever sent the task's message) or person:<id>; none clears it. Leave it out when unsure: a task with no assignee is better than none. |
 
 ### `wa tasks link`
@@ -3736,6 +3802,7 @@ wa tasks scan <chat> [options]
 | Параметр | Назначение |
 |---|---|
 | `--last <n>` | read the newest n stored messages of each chat (default 50, at most 1000). |
+| `--yes` | open and close the tasks it lists; otherwise only list them. |
 
 ### `wa tasks status`
 
@@ -3958,6 +4025,7 @@ wa search conversations <query> [options]
 | `--dims <n>` | remote: the vector size — needed with --base-url; shortens an OpenAI model's. |
 | `--max-chats <n>` | at most this many chats in one run; 20 if not given. |
 | `--max-chunks <n>` | at most this many chunks embedded in one run; 2000 if not given. |
+| `--like <text>` | a made-up reply that would answer the query, one sentence: searched by meaning too, which finds an answer worded unlike the question. |
 | `--chat <chat>` | only this chat: a chat: its name, or its WhatsApp id (…@lid, …@g.us, …@newsletter). |
 | `--since-time <time>` | only those still going at this ISO 8601 time, or 30m / 2h / 1d ago, or later. |
 | `--filter <query>` | strict Lucene filter: any message in a conversation must match; does not change the meaning query. |
@@ -3980,8 +4048,8 @@ wa search runs [query] [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--limit <n>` | matches per page, at most 100. Default: `20`. |
-| `--page <n>` | result page. Default: `1`. |
+| `--limit <n>` | matches per page, at most 100. |
+| `--page <n>` | result page. |
 
 ## `wa searches`
 
@@ -4185,8 +4253,8 @@ wa runs list [query] [options]
 
 | Параметр | Назначение |
 |---|---|
-| `--limit <n>` | how many to show. Default: `20`. |
-| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
 ### `wa runs show`
 
@@ -4244,7 +4312,7 @@ wa config set <setting> <value> [options]
 
 | Аргумент | | Назначение |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Параметр | Назначение |
@@ -4265,7 +4333,7 @@ wa config unset <setting> [options]
 
 | Аргумент | | Назначение |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks. |
+| `setting` | required | one of: limit, timeout_ms, color, sender_colors, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, transcribe_with, speech_model, search_catch_up, history_dialog_days, history_group_days, history_group_members_max, history_muted, picture_search, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, phone_number_id, waba_id, graph_version, read_other_bots, update_check, skill_hint, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, phone_countries, task_categories.<name>, task_agent_close, task_agent_close_min, task_first_pass_per_chat, account_groups.<name>, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 
 | Параметр | Назначение |
 |---|---|
@@ -6232,7 +6300,7 @@ wa skill show [name] [options]
 
 | Аргумент | | Назначение |
 |---|---|---|
-| `name` | optional | one of the skills shipped for a task: follow-ups, link-conversations. |
+| `name` | optional | a part of this skill, or a skill shipped for a task: setup, sending, search, local-store, history, groups, connection, commands, follow-ups, link-conversations. |
 
 | Параметр | Назначение |
 |---|---|
@@ -6259,6 +6327,18 @@ for each place `wa skill install` writes to, and for the copy Hermes reads: the 
 ```sh
 wa skill status
 ```
+
+## `wa guide`
+
+scenarios: the commands for a common task, in order, and why each
+
+```sh
+wa guide [name]
+```
+
+| Аргумент | | Назначение |
+|---|---|---|
+| `name` | optional | one scenario; without it, the list. |
 
 ## Коды выхода
 

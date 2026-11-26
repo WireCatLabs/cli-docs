@@ -54,7 +54,7 @@ wa personal messages unpin "Book club" 3EB0A1B2C3D4E5F6A7B8
 wa personal chats mark-read "Book club"
 ```
 
-WhatsApp identifica un mensaje por su remitente y su ID, así que estos comandos necesitan mensajes guardados localmente; mantén `serve` en marcha. Puedes editar un mensaje propio durante los 20 minutos posteriores al envío. La eliminación afecta solo a ti por defecto: `wa` pide a WhatsApp que quite el mensaje de tu teléfono y tus otros dispositivos, lo deje a los demás y conserve las fotos y archivos que el teléfono haya guardado. Esto aún no se ha comprobado en un teléfono. `--for-everyone` lo elimina para todos. Cada mensaje fijado avisa a los miembros: WhatsApp no tiene fijación silenciosa y no hace falta un indicador. Puede durar 24 horas, 7 días o 30 días (`--expire-time 24h`, `7d`, `30d`); sin `--expire-time`, `wa` fija durante 7 días. Leer no marca mensajes como leídos. Usa `chats mark-read` para enviar explícitamente una confirmación de lectura.
+WhatsApp identifica un mensaje por su remitente y su ID, así que estos comandos necesitan mensajes guardados localmente; mantén `serve` en marcha. Puedes editar tus mensajes de texto hasta 15 minutos después de enviarlos; consulta [la ayuda de WhatsApp](https://faq.whatsapp.com/6614640168569481/). La eliminación afecta solo a ti por defecto: `wa` pide a WhatsApp que quite el mensaje de tu teléfono y tus otros dispositivos, lo deje a los demás y conserve las fotos y archivos que el teléfono haya guardado. `--for-everyone` lo elimina para todos. Cada mensaje fijado avisa a los miembros: WhatsApp no tiene fijación silenciosa y no hace falta un indicador. Puede durar 24 horas, 7 días o 30 días (`--expire-time 24h`, `7d`, `30d`); sin `--expire-time`, `wa` fija durante 7 días. Leer no marca mensajes como leídos. Usa `chats mark-read` para enviar explícitamente una confirmación de lectura.
 
 ## Destacar un mensaje
 
@@ -63,7 +63,7 @@ wa personal messages star "Book club" 3EB0A1B2C3D4E5F6A7B8
 wa personal messages unstar "Book club" 3EB0A1B2C3D4E5F6A7B8
 ```
 
-La estrella es una marca propia que WhatsApp sincroniza entre tus dispositivos; no avisa al chat. Como una edición, necesita el mensaje en el almacén local. El almacén conserva las estrellas puestas con `wa`: `wa personal messages list "Book club" starred:true` y `wa personal search messages is:starred` encuentran esos mensajes. Mientras funciona `serve` o `watch`, las estrellas que pongas o quites en el teléfono también llegan al almacén y `watch --events` muestra el evento. También se guardan las estrellas del historial que el teléfono envía tras vincular. Aún no se ha comprobado si el teléfono muestra una estrella puesta desde `wa`. Destaca las publicaciones de canales desde el teléfono.
+La estrella es una marca propia que WhatsApp sincroniza entre tus dispositivos; no avisa al chat. Como una edición, necesita el mensaje en el almacén local. El almacén conserva las estrellas puestas con `wa`: `wa personal messages list "Book club" starred:true` y `wa personal search messages is:starred` encuentran esos mensajes. Mientras funciona `serve` o `watch`, las estrellas que pongas o quites en el teléfono también llegan al almacén y `watch --events` muestra el evento. También se guardan las estrellas del historial que el teléfono envía tras vincular. Destaca las publicaciones de canales desde el teléfono.
 
 ## Silenciar un chat
 
@@ -73,7 +73,7 @@ wa personal chats mute "Book club" --until 8h   # or until a time: --until 2026-
 wa personal chats unmute "Book club"
 ```
 
-Silenciar es un ajuste propio que WhatsApp sincroniza con tus dispositivos; no avisa al chat. Aún no se ha comprobado su aplicación en el teléfono para chats individuales. Un dispositivo recién vinculado puede carecer de las claves de ajustes: deja `serve` en marcha y vuelve a intentarlo más tarde. Silencia los canales desde el teléfono.
+Silenciar es un ajuste propio que WhatsApp sincroniza con tus dispositivos; no avisa al chat. Un dispositivo recién vinculado puede carecer de las claves de ajustes: deja `serve` en marcha y vuelve a intentarlo más tarde. Silencia los canales desde el teléfono.
 
 Mientras funciona `serve` o `watch`, se guarda el silencio aplicado en el teléfono y su vencimiento; `inbox` y `review` omiten el chat hasta entonces. `chats show --offline` muestra `muted` y `muted_until` (sin vencimiento para un silencio permanente).
 
@@ -85,9 +85,9 @@ wa personal chats pin "Book club"           # at the top of the chat list; wa pe
 wa personal chats mark-unread "Book club"
 ```
 
-También son ajustes propios sincronizados entre tus dispositivos, sin avisar al chat. `chats pin` fija el chat, no un mensaje. Archivar también quita la fijación: la operación de archivado de whatsmeow hace ambas cosas. Las aplicaciones de WhatsApp permiten tres chats fijados; `wa` no los cuenta y no se ha comprobado qué hace el teléfono con un cuarto. Archivar, desarchivar y marcar como no leído utilizan el mensaje más reciente del almacén, como `chats delete`; se rechaza un chat sin mensajes guardados. Los canales se rechazan. Marcar como no leído no envía confirmación de lectura. El teléfono muestra fijación, desfijación, archivo, desarchivo y marca de no leído en el chat contigo mismo (comprobado el 2026-10-18); faltan pruebas en otros chats.
+También son ajustes propios sincronizados entre tus dispositivos, sin avisar al chat. `chats pin` fija el chat, no un mensaje. Archivar también quita la fijación: la operación de archivado de whatsmeow hace ambas cosas. Las aplicaciones de WhatsApp permiten tres chats fijados; `wa` no los cuenta. Archivar, desarchivar y marcar como no leído utilizan el mensaje más reciente del almacén, como `chats delete`; se rechaza un chat sin mensajes guardados. Los canales se rechazan. Marcar como no leído no envía confirmación de lectura.
 
-`chats mark-read` envía primero el cambio de ajuste a «leído», hasta el mensaje guardado más reciente (o `--until-id`), y después la confirmación: una confirmación por sí sola deja la marca de no leído en el teléfono. Hasta recibir las claves de ajustes de WhatsApp, se rechaza sin enviar ninguno de los dos cambios. Un canal solo recibe la confirmación. Aún no se ha comprobado que el teléfono quite la marca de esta forma.
+`chats mark-read` envía primero el cambio de ajuste a «leído», hasta el mensaje guardado más reciente (o `--until-id`), y después la confirmación: una confirmación por sí sola deja la marca de no leído en el teléfono. Hasta recibir las claves de ajustes de WhatsApp, se rechaza sin enviar ninguno de los dos cambios. Un canal solo recibe la confirmación.
 
 Mientras funciona `serve` o `watch`, leer un chat en el teléfono pone a cero el contador y quita la marca en el almacén local; `inbox` deja de mostrarlo. Cada nuevo mensaje entrante guardado por `serve` o `watch` suma uno al contador. También se guardan el archivo y la marca de no leído del teléfono (`archived`, `marked_unread`): `inbox` omite los archivados e incluye los marcados como no leídos. La fijación, eliminación y vaciado de chats desde el teléfono aún no se guardan. `watch --events` no imprime estos cambios.
 
@@ -100,7 +100,7 @@ wa personal chats clear "Book club" --allow-dangerous    # every message, starre
 wa personal chats delete "Book club" --allow-dangerous   # the chat itself
 ```
 
-Ambas acciones afectan solo a tus dispositivos: los demás conservan el chat y sus mensajes. Sin `--allow-dangerous`, preguntan en el terminal y se rechazan en scripts. WhatsApp borra hasta el mensaje que indique `wa`: el más reciente del almacén local. Mantén `serve` en marcha para actualizarlo; se rechazan chats sin mensajes guardados. `wa` pide conservar fotos y archivos guardados en el teléfono. El almacén local de `wa` sigue conservando los mensajes. Esto aún no se ha comprobado en un teléfono.
+Ambas acciones afectan solo a tus dispositivos: los demás conservan el chat y sus mensajes. Sin `--allow-dangerous`, preguntan en el terminal y se rechazan en scripts. A una aplicación por MCP no se le ofrece ninguna de las dos: las ejecutas tú. WhatsApp borra hasta el mensaje que indique `wa`: el más reciente del almacén local. Mantén `serve` en marcha para actualizarlo; se rechazan chats sin mensajes guardados. `wa` pide conservar fotos y archivos guardados en el teléfono. El almacén local de `wa` sigue conservando los mensajes.
 
 ## Dar formato a un mensaje
 
@@ -140,9 +140,9 @@ wa personal account privacy set --read-receipts off      # no read receipts sent
 
 - **`--last-seen`, `--profile-photo` y `--about-text`** aceptan everyone, contacts o nobody. «Mis contactos, excepto…» aparece como `contacts_except`; `set` no puede elegirlo porque la lista de excepciones permanece en el teléfono. Otro valor lo reemplaza.
 - **`--hide-online on`** oculta la última conexión a todos y muestra el estado en línea solo a quienes pueden verla: nadie. `--hide-online off` muestra la última conexión a tus contactos, ya que `wa` desconoce el valor anterior. `--last-seen everyone` permite elegir la audiencia explícitamente. Usa una de las dos opciones.
-- **`--read-receipts off`** funciona en ambos sentidos, como en el teléfono: nadie ve cuándo lees y tú tampoco ves sus lecturas. Entonces `chats mark-read` marca el chat como leído solo en tus dispositivos (whatsmeow envía la confirmación solo a tus dispositivos cuando están desactivadas; se ha leído en su código y no se ha probado con una cuenta real).
+- **`--read-receipts off`** funciona en ambos sentidos, como en el teléfono: nadie ve cuándo lees y tú tampoco ves sus lecturas. Entonces `chats mark-read` marca el chat como leído solo en tus dispositivos (whatsmeow envía la confirmación solo a tus dispositivos cuando están desactivadas).
 - **`--chat-invites`** acepta everyone o contacts. Según los informes, WhatsApp rechaza nobody y `wa` también. Un ajuste con excepciones guardado en el teléfono se omite en `show`.
-- **`--calls contacts`** corresponde a «silenciar llamadas de números desconocidos»: las llamadas llegan sin sonar. Aún no se ha comprobado con una cuenta real. WhatsApp no tiene `--calls nobody` y `wa` lo rechaza.
+- **`--calls contacts`** corresponde a «silenciar llamadas de números desconocidos»: las llamadas llegan sin sonar. WhatsApp no tiene `--calls nobody` y `wa` lo rechaza.
 
 WhatsApp no permite configurar quién encuentra o ve tu número; `wa` no ofrece `--find-by-phone` ni `--phone-number`.
 
@@ -217,7 +217,8 @@ Aún no está implementado:
 
 - más archivos por mensaje que una foto y un vídeo en un álbum;
 - listar grupos de una comunidad, añadir uno o quitarlo ([comunidades](./groups.md#communities));
-- crear un canal (`chats create --channel`).
+- crear un canal (`chats create --channel`);
+- descargar un archivo que WhatsApp ya no guarda: el teléfono lo sube con una clave que no comparte y la descarga termina con `media.retry-failed` sin guardar nada ([archivos adjuntos](./attachments.md)).
 
 WhatsApp no ofrece estas funciones o las conserva en el teléfono:
 
