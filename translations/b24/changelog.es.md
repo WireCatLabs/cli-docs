@@ -4,6 +4,43 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.28.0 — 25.11.2026
+
+### Añadido
+
+- **`search all` encuentra negociaciones y prospectos por el significado de sus actividades:** llamadas, correos,
+  comentarios y tareas, con otras palabras o en otro idioma, con el fragmento de la actividad en el resultado.
+  `b24 work sync --embed` crea el índice con un modelo ya descargado (`b24 models download embeddinggemma`); hasta
+  entonces `search all` avisa de que solo buscó por palabras. Necesita `activities` activado (`@wirecat/cli-core`
+  0.751.0).
+- **`sync --embed` y `search all` por significado** (cli-core 0.751.0). Con el ajuste `activities` activado,
+  `sync --embed` indexa los comentarios de la línea de tiempo, los correos, las llamadas, las reuniones y las tareas
+  copiados con un modelo ya descargado, y `search all` encuentra entonces negociaciones y prospectos por lo que
+  significan sus actividades, en ruso o en cualquier idioma, no solo por sus palabras. La skill le dice a un agente
+  que pregunte por significado antes de leer cada actividad; el detalle está en `b24 skill show reading`.
+
+### Cambios — pueden romper scripts
+
+- **`synced[].saved` en la respuesta de `sync` cuenta solo las filas que cambiaron** (nuevas, distintas, borradas o
+  que volvieron), así que una sincronización sin nada nuevo responde 0.
+- **b24 se basa en cli-core 1.0 y cli-base 1.0.** Tras su primera ejecución el almacén está en la versión 74, y solo
+  lo abren las herramientas con cli-core 1.0, así que actualiza todos los CLI de WireCat de este ordenador a la vez.
+  La migración guarda una copia para revertir y no se ejecuta si no puede escribirla (`store migrate --no-backup`
+  migra de todos modos).
+- **`sync --rescan` ya no deja que una sincronización marque como borrada la mayor parte de un tipo.** Solo vuelve a
+  listarlo todo. Cuando la protección retiene una pasada, `sync --allow-deletions <count>` deja marcar como borrados
+  como mucho ese número de registros. La opción es para el propietario en una terminal, y el servidor MCP no la
+  ofrece.
+- **MCP ya no ofrece `schedule exec`.** Es la entrada propia del temporizador y solo ejecuta un archivo de
+  programación de la carpeta de programaciones de b24. Un agente ejecuta una programación guardada con
+  `schedule run <name>`. Consulta [Seguridad](./security.md#timers).
+- **Una llamada MCP que nombra una carpeta denegada responde `permission_error`**, no `validation_error`.
+
+### Corregido
+
+- `search all` lista después del nombre que coincidió un nombre que difiere en una letra, y encuentra un nombre latino
+  escrito con letras cirílicas y un nombre ruso escrito con letras latinas, cada uno marcado `match: corrected`.
+
 ## 0.27.0 — 24.11.2026
 
 ### Añadido
@@ -439,13 +476,13 @@ Cambios destacados de `@wirecat/bitrix24-cli`. Una sección por versión, de la 
 
 ### Corregido
 
-- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.27.0/README.md)
+- **El inicio rápido copia negociaciones.** El [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.28.0/README.md)
   ahora elige de quién copiar negociaciones y prospectos antes del primer `sync`, que hasta entonces no copia nada.
   Ya no dice que un administrador copia todo el CRM, dice que por MCP un borrado con `ask` se ejecuta, y nombra
   `wcat-b24` para cuando se encuentra primero el comando `b24` de otro paquete.
   [Solución de problemas](./troubleshooting.md) incluye el error "no CRM user is chosen".
 - **Por MCP, `ask` no detiene una escritura.** El
-  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.27.0/README.md), [seguridad](./security.md) y la
+  [README](https://github.com/WireCatLabs/bitrix24-cli/blob/v0.28.0/README.md), [seguridad](./security.md) y la
   primera pantalla recomendaban poner `deals.move` en `ask` frente a los robots del portal, pero eso solo detiene un
   movimiento en una terminal. Por MCP nadie responde, así que la escritura sigue adelante. Ahora dicen que se ponga
   `readonly` o `deny`, o que se active la aprobación en el cliente del agente.

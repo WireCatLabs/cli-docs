@@ -147,7 +147,7 @@
     "repo": "WireCatLabs/bitrix24-cli",
     "package": "@wirecat/bitrix24-cli",
     "lang": "en",
-    "docsRef": "v0.27.0",
+    "docsRef": "v0.28.0",
     "tier": "extra",
     "category": "crm",
     "summary": {
@@ -162,7 +162,7 @@
     "repo": "WireCatLabs/amo-cli",
     "package": "@wirecat/amo-cli",
     "lang": "en",
-    "docsRef": "v0.4.0",
+    "docsRef": "v0.5.0",
     "tier": "extra",
     "category": "crm",
     "summary": {

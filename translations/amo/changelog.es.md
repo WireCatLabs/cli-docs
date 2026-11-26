@@ -4,6 +4,41 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/amo-cli`. Una sección por versión, la más nueva primero.
 
+## 0.5.0 — 25.11.2026
+
+### Añadido
+
+- **`search all` encuentra negociaciones y prospectos por el significado de sus notas, llamadas y tareas**, con otras
+  palabras o en otro idioma, con el fragmento de la nota en el resultado. `amo work sync --embed` crea el índice con un
+  modelo ya descargado (`amo models download embeddinggemma`); hasta entonces `search all` avisa de que solo buscó por
+  palabras (`@wirecat/cli-core` 0.751.0).
+- **`people show` y `organizations show` aceptan el `person:<id>` y el `organization:<id>` que da una negociación.**
+- **`sync --embed` y `search all` por significado** (cli-core 0.751.0). Con el ajuste `activities` activado,
+  `sync --embed` indexa los comentarios y las tareas copiados con un modelo ya descargado, y `search all` encuentra
+  entonces negociaciones por lo que significan, en ruso o en cualquier idioma, no solo por sus palabras. La skill le
+  dice a un agente que pregunte por significado antes de leer cada nota.
+
+### Cambios — pueden romper scripts
+
+- **`synced[].saved` en la respuesta de `sync` cuenta solo las filas que cambiaron** (nuevas, distintas, borradas o
+  que volvieron), así que una sincronización sin nada nuevo responde 0.
+- **amo se basa en cli-core 1.0 y cli-base 1.0.** Tras su primera ejecución el almacén está en la versión 74, y solo
+  lo abren las herramientas con cli-core 1.0, así que actualiza todos los CLI de WireCat de este ordenador a la vez.
+  La migración guarda una copia para revertir y no se ejecuta si no puede escribirla (`store migrate --no-backup`
+  migra de todos modos).
+- **`sync --rescan` ya no deja que una sincronización marque como borrada la mayor parte de un tipo.** Solo vuelve a
+  listarlo todo. Cuando la protección retiene una pasada, `sync --allow-deletions <count>` deja marcar como borrados
+  como mucho ese número de registros. La opción es para el propietario en una terminal, y el servidor MCP no la
+  ofrece.
+- **Una llamada MCP que nombra una carpeta denegada responde `permission_error`**, no `validation_error`.
+
+### Corregido
+
+- **Una negociación movida en el mismo segundo en que se fijaron las reglas de tareas de su etapa abre su tarea.**
+- `search all` lista después del nombre que coincidió un nombre que difiere en una letra, y encuentra un nombre latino
+  escrito con letras cirílicas y un nombre ruso escrito con letras latinas, cada uno marcado `match: corrected`.
+- `people show` y `organizations show` aceptan el `person:<id>` y el `organization:<id>` que da una negociación.
+
 ## 0.4.0 — 24.11.2026
 
 ### Cambios — pueden romper scripts
