@@ -5,7 +5,7 @@ title: "Compared with other tools"
 `attio` is a command line and an MCP server for the sales data of an Attio workspace: deals, people, companies, the
 deal pipeline and workspace members. This page puts it next to the other tools that let an AI agent read and change
 Attio, so you can see which one fits your job. The marks for `attio` come from its current release, its commands and its
-source, checked on 25 November 2026. Its tests run against a fake Attio built from Attio's API description, and each
+source, checked on 26 November 2026. Its tests run against a fake Attio built from Attio's API description, and each
 release also passes a check against a live workspace. The marks are checked again at each release. The marks for the
 other tools come from their own documentation and source, linked in the table, checked on 19 November 2026. Attio MCP
 and attio-mcp were also tested live in an [agent test](#how-an-agent-answers-through-each). The others were not
@@ -47,7 +47,7 @@ also take an OAuth token through a Cloudflare Worker that you host.
 | List the open deals of a stage | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L51) | [🟡](https://composio.dev/toolkits/attio) | [🟡](https://zapier.com/mcp/attio) | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L408-L431) |
 | Find a person by name or e-mail | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L49-L50) | [✅](https://composio.dev/toolkits/attio) | [✅](https://zapier.com/mcp/attio) | [🟡](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L924-L970) |
 | Read the notes and tasks on a deal | ✅ | [✅](https://docs.attio.com/mcp/overview) | [✅](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/README.md#L52-L54) | [✅](https://composio.dev/toolkits/attio) | ➖ | [✅](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/README.md#L630-L746) |
-| Search the e-mails and call recordings that Attio holds | ❌ | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
+| Search the e-mails and call recordings that Attio holds | 🟡 | [✅](https://docs.attio.com/mcp/overview) | ➖ | ➖ | ➖ | ➖ |
 | Read deals without the internet | ✅ | [❌](https://docs.attio.com/mcp/overview) | [❌](https://github.com/kesslerio/attio-mcp-server/blob/8828ecab74903c8cd85cc12a2a2f60b213f37b5b/src/api/client-config.ts#L79) | ➖ | ➖ | [❌](https://github.com/FroeMic/attio-cli/blob/d75f885ec2627c6927b7c0a6bbee9ad9547b23fc/src/utils/config.ts#L6) |
 | One search over deals and the messages and notes of your other tools | ✅ | ➖ | ➖ | ➖ | ➖ | ➖ |
 | **Change the CRM** | | | | | | |
@@ -100,7 +100,10 @@ Notes on the `attio` column:
 - **Without the internet.** `sync` copies the deals and the people and companies they name, with the stages of the
   deal pipeline. `deals`, `pipelines`, `stages`, `changes`, `fields` and `search all` read this copy, with `--offline`
   too. `people`, `organizations` and `users` always ask Attio. Attio cannot list only what changed, so each sync reads
-  every record. With the `activities` setting on, the copy also holds the notes and tasks of these records.
+  every record. With the `activities` setting on, the copy also holds the notes, tasks and meetings of these records.
+- **Calls and e-mails.** With the `activities` setting on, `sync` also copies Attio meetings with the transcripts of
+  their recorded calls, and `search all` finds a deal by a word said in a call. The e-mails that Attio holds are not
+  copied. This is why the e-mails and call recordings row is partly.
 - **One search.** `search all` finds deals beside the messages, notes and meetings that other WireCat tools on the same
   computer stored, without the internet.
 - **Stages and win rate.** `pipelines show` gives each stage's number of deals and their sum per currency, never
@@ -143,7 +146,7 @@ Composio, Zapier MCP and FroeMic/attio-cli were not part of this test.
 ## When another tool fits better
 
 - **Attio MCP**: you want Attio in Claude, ChatGPT or Cursor with nothing to install, you are not a workspace admin,
-  or the agent should read e-mails and call recordings and write with your confirmation.
+  or the agent should read the e-mails that Attio holds and write with your confirmation.
 - **Composio** or **Zapier MCP**: you want Attio beside many other apps in one hosted server.
 - **attio-mcp**: the agent should create and update deals, notes and tasks through ready tools on your computer.
 - **FroeMic/attio-cli**: a script should manage objects, attributes, lists and entries in a terminal, with no

@@ -2644,5 +2644,92 @@
         }
       ]
     }
+  },
+  {
+    "tool": "attio",
+    "slug": "index",
+    "reason": "attio 0.8.0 copies Attio meetings with the transcripts of their recorded calls (CHANGELOG 0.8.0, docs/usage.md \"Notes and tasks on a deal\"), but the upstream opening and \"What you get\" do not say what the reader gains from it. At the next attio pin bump, ask attio-cli to carry the en text, move this entry's es/ru replacements into translations/attio/index.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
+    "replacements": {
+      "en": [
+        {
+          "before": "answers with the deal, its amount, its company and its owner. You need an Attio workspace",
+          "after": "answers with the deal, its amount, its company and its owner. With notes and meetings turned on, it also finds the\ndeal where a client asked for a discount on a call. You need an Attio workspace"
+        },
+        {
+          "before": "  company and people, read from your computer, with no clicking through Attio.\n",
+          "after": "  company and people, read from your computer, with no clicking through Attio.\n- **What was said on a call.** With the `activities` setting on, the copy also holds your Attio meetings with the\n  transcripts of their recorded calls. The agent finds a deal by something a client said on a call, even when nobody\n  wrote it down ([turn it on](./usage.md#notes-and-tasks-on-a-deal)).\n"
+        }
+      ],
+      "ru": [
+        {
+          "before": "ее суммой, компанией и ответственным. Нужно пространство Attio",
+          "after": "ее суммой, компанией и ответственным. С включенными заметками и встречами он найдет и сделку, в которой\nклиент попросил скидку на звонке. Нужно пространство Attio"
+        },
+        {
+          "before": "  прочитав ее с вашего компьютера, без переходов по Attio.\n",
+          "after": "  прочитав ее с вашего компьютера, без переходов по Attio.\n- **Что сказали на звонке.** С включенной настройкой `activities` в копии лежат и ваши встречи Attio с\n  расшифровками их записанных звонков. Агент найдет сделку по словам клиента на звонке, даже если их никто не записал\n  ([как включить](./usage.md#notes-and-tasks-on-a-deal)).\n"
+        }
+      ],
+      "es": [
+        {
+          "before": "su importe, su empresa y su responsable. Necesitas un espacio de",
+          "after": "su importe, su empresa y su responsable. Con las notas y las reuniones activadas, también encuentra la\nnegociación en la que un cliente pidió un descuento en una llamada. Necesitas un espacio de"
+        },
+        {
+          "before": "  su etapa, su importe, su empresa y sus personas, leída de tu ordenador, sin ir haciendo clic por Attio.\n",
+          "after": "  su etapa, su importe, su empresa y sus personas, leída de tu ordenador, sin ir haciendo clic por Attio.\n- **Lo que se dijo en una llamada.** Con el ajuste `activities` activado, la copia guarda también tus reuniones de\n  Attio con las transcripciones de sus llamadas grabadas. El agente encuentra una negociación por algo que un cliente\n  dijo en una llamada, aunque nadie lo apuntara ([cómo activarlo](./usage.md#notes-and-tasks-on-a-deal)).\n"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "attio",
+    "slug": "installation",
+    "reason": "attio 0.7.0 moves the shared store to version 73, which only tools on cli-core 1.0 open (CHANGELOG 0.7.0: upgrade every WireCat CLI on this computer together). The upstream install steps do not say so. At the next attio pin bump, ask attio-cli to carry the en text, move this entry's es/ru replacements into translations/attio/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Install `attio` once on each computer where you or an agent use it.",
+          "after": "Install `attio` once on each computer where you or an agent use it. If other WireCat tools are on this computer,\nupdate them together with `attio`. Once `attio` has opened the shared store, older tools cannot open it."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Установите `attio` один раз на каждом компьютере, где с ним работаете вы или агент.",
+          "after": "Установите `attio` один раз на каждом компьютере, где с ним работаете вы или агент. Если на этом компьютере есть\nдругие инструменты WireCat, обновите их вместе с `attio`. Когда `attio` откроет общее хранилище, старые инструменты\nего уже не откроют."
+        }
+      ],
+      "es": [
+        {
+          "before": "Instala `attio` una vez en cada ordenador donde lo uses tú o un agente.",
+          "after": "Instala `attio` una vez en cada ordenador donde lo uses tú o un agente. Si hay otras herramientas de WireCat en\neste ordenador, actualízalas junto con `attio`. Cuando `attio` abre el almacén compartido, las herramientas antiguas\nya no pueden abrirlo."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "attio",
+    "slug": "usage",
+    "reason": "attio 0.7.0 holds a sync that would mark most of a kind deleted and adds `sync --allow-deletions <count>` (CHANGELOG 0.7.0, cli-core 1.0.0 dist/crm/sync.js: more than half of a kind of at least 10 stored). The upstream Sync section does not say what to do when it happens. At the next attio pin bump, ask attio-cli to carry the en text, move this entry's es/ru replacements into translations/attio/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Records deleted in Attio leave the copy.",
+          "after": "Records deleted in Attio leave the copy. When a sync\nwould mark more than half of the deals deleted at once, it marks none and says how many. Check the token's rights in\nAttio, then let them through yourself in a terminal with `attio work sync --allow-deletions 12`, the number the sync\nprinted."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Записи, удаленные в Attio, уходят из копии.",
+          "after": "Записи, удаленные в Attio, уходят из копии. Если\nсинхронизация за раз отметила бы удаленными больше половины сделок, она не отмечает ни одной и говорит, сколько их.\nПроверьте права токена в Attio, а потом пропустите их сами в терминале командой\n`attio work sync --allow-deletions 12` с тем числом, которое напечатала синхронизация."
+        }
+      ],
+      "es": [
+        {
+          "before": "Los registros borrados en Attio salen de la copia.",
+          "after": "Los registros borrados en Attio salen de la copia. Cuando\nuna sincronización marcaría como borradas más de la mitad de las negociaciones a la vez, no marca ninguna y dice\ncuántas son. Revisa los permisos del token en Attio y luego déjalas pasar tú en una terminal con\n`attio work sync --allow-deletions 12`, el número que imprimió la sincronización."
+        }
+      ]
+    }
   }
 ]

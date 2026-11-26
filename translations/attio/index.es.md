@@ -140,8 +140,8 @@ crear el token.
 
 - Las empresas se leen, no se escriben: una empresa de Attio no tiene atributo de correo ni de teléfono que escribir.
   Cambia una por `api`.
-- Las notas y las tareas se listan y se muestran en una negociación cuando activas el ajuste `activities`. Las listas
-  y los objetos personalizados todavía no tienen comandos propios. `attio work api` llega a ellos.
+- Las notas, las tareas y las reuniones se listan y se muestran en una negociación cuando activas el ajuste
+  `activities`. Una llamada grabada se guarda hasta sus primeros 20.000 caracteres. Las listas y los objetos personalizados todavía no tienen comandos propios. `attio work api` llega a ellos.
 - Las personas, las empresas y los miembros del espacio de trabajo se leen de Attio cada vez, así que necesitan
   internet.
 - Attio no puede listar solo lo que cambió desde un momento dado, así que cada sincronización vuelve a listar todas

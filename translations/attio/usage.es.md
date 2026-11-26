@@ -103,6 +103,13 @@ cada sincronización las vuelve a leer todas, y una nota o tarea borrada en Atti
 dos ámbitos más, `note:read` y `task:read`. Sin uno de ellos, la sincronización copia el resto, no quita nada y dice
 qué lista no pudo leer.
 
+El mismo ajuste copia tus reuniones de Attio, con lo que se dijo en sus llamadas grabadas, así que `search all`
+encuentra una negociación por una palabra dicha en una llamada. Attio vincula una reunión a las personas y empresas
+que participaron, y a una negociación solo cuando alguien la vincula, así que una reunión va también a las
+negociaciones de esas personas y empresas. Esto necesita dos ámbitos más, `meeting:read` y `call_recording:read`. Un
+token sin `meeting:read` no copia reuniones y sigue copiando el resto. Una llamada de más de unos 20 minutos se corta:
+la copia guarda sus primeros 20.000 caracteres. Attio marca su API de reuniones como beta.
+
 `activities list` las lista desde la copia, primero las tareas abiertas. `activities create` añade una nota o una
 tarea a una negociación, una persona o una empresa, y `activities close` marca una tarea como hecha. Cada uno pregunta
 antes, como todo cambio:

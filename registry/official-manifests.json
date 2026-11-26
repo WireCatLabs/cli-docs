@@ -1,7 +1,7 @@
 {
   "amo": {
-    "version": "0.4.0",
-    "manifestSha256": "4dd97f7842bea89267f556350fe8851c8fdbe01f1a26f6598e2bbc38d0303022",
+    "version": "0.5.0",
+    "manifestSha256": "1cef8d1bca9985c11306a242c966489a580702e62638b1d174cedd9a51a10c69",
     "bin": "wcat-amo",
     "bins": ["amo", "wcat-amo"],
     "desktop": {
@@ -19,7 +19,8 @@
       "setup": ["{profile}", "setup"],
       "signIn": {
         "gives": "Lets your agent read and change the account's CRM with the rights of the administrator who made the token, or of the user who signed in through your own integration.",
-        "asks": "The account's address and a long-lived token from a private integration's Keys and scopes tab, or that integration's ID and secret key."
+        "asks": "The account's address and a long-lived token from a private integration's Keys and scopes tab, or that integration's ID and secret key.",
+        "setupFrom": "0.0.0"
       },
       "skill": {
         "status": ["skill", "status", "--no-record", "--json"],
@@ -69,7 +70,7 @@
     }
   },
   "attio": {
-    "version": "0.7.0",
+    "version": "0.8.0",
     "manifestSha256": "7596342a1761a2d5c6dd5ec26267edc0b7402e64ab3849cf1002af7ccea125cf",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
@@ -215,7 +216,7 @@
     }
   },
   "drive": {
-    "version": "0.77.0",
+    "version": "0.78.0",
     "manifestSha256": "ed0bb76b580cb6f14b72a8394a1b218d673cf71fd1dbd151594a5d5791a1c385",
     "bin": "wcat-drive",
     "bins": ["drive", "wcat-drive"],
@@ -606,8 +607,8 @@
     }
   },
   "memo": {
-    "version": "0.153.0",
-    "manifestSha256": "1df1588ac9c96fc388e042b89c5295307ca6370540cc43d1ba7f55b25bfc1760",
+    "version": "0.154.0",
+    "manifestSha256": "80ba01048131d59723bdb8beadcd8bfdde1ca1f87219e666eba91714ca218ff9",
     "bin": "wcat-memo",
     "bins": ["memo", "wcat-memo"],
     "desktop": {
@@ -726,7 +727,7 @@
     }
   },
   "pbx": {
-    "version": "0.10.0",
+    "version": "0.11.0",
     "manifestSha256": "ce5445e382e320d44494729f0665cb3209f6c70447d30a33694cfa2297c26dd8",
     "bin": "wcat-pbx",
     "bins": ["pbx", "wcat-pbx"],
