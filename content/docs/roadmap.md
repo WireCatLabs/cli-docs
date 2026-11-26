@@ -45,6 +45,10 @@ what comes next.
   unread in one answer.
 - **[Google Meet](./google-meet.mdx)**: your Meet calls with who joined and the transcript, linked to the calendar
   event and kept on your computer after Google deletes them.
+- **[Clients in WireCat Desktop](./desktop/clients.mdx)**: the people and companies you work with and your deals with them,
+  with the chats, mail and meetings about each one.
+- **Backups in WireCat Desktop**: **Back up now** saves a copy of everything WireCat keeps on your computer, and you can
+  restore it from the app.
 
 Everything that works today is in [features](./features.mdx).
 
@@ -52,10 +56,7 @@ Everything that works today is in [features](./features.mdx).
 
 ### In WireCat Desktop
 
-- **Clients**: a page for the people and companies you work with and your deals with them, with the chats, mail
-  and meetings about each one.
 - **Notes**: read and write your notes in the app and link them to people and messages.
-- **Backup in one click**: save a copy of everything WireCat keeps on your computer and restore it from the app.
 - **Community tools**: the first tool made by someone outside WireCat, listed in the app next to ours.
 
 ### Search and memory
@@ -78,10 +79,6 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 - **Memory that keeps up**: memories your agent proposes already wait for your review. Next a memory is marked when
   the source behind it changes, with an update for you to confirm.
 
-### New sources
-
-- **Notion**: your pages and databases next to your notes and documents.
-
 ### Trust
 
 - **Verified apps**: WireCat's sign-in apps for Google, Microsoft and Zoom pass each company's review. Google stops
@@ -96,7 +93,7 @@ search. See [how search works](./search-architecture.mdx). Next it gets better a
 
 - **Code in GitHub**: search by meaning over the code itself and, separately, over what each change was for.
 - **Confluence.**
-- **Task trackers**: Jira, Linear, Todoist and TickTick.
+- **Task trackers**: Jira, Todoist and TickTick.
 
 ## Each tool's plans
 

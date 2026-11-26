@@ -193,8 +193,8 @@ timezone when “tomorrow” or “at nine” could be misunderstood; the agent 
 the CLI and report it back in your requested timezone.
 
 Telegram can deliver scheduled messages while your computer is off. If scheduling has an uncertain
-outcome, the agent should inspect the scheduled list rather than create a second reminder. Cancel
-or change Telegram scheduled messages in the Telegram app.
+outcome, the agent should inspect the scheduled list rather than create a second reminder. Your
+agent can also change a scheduled message, cancel it or send it now with `tg messages scheduled`.
 [Scheduled sends](./tg/usage.md#sending-later).
 
 ## Work offline
@@ -254,6 +254,8 @@ question needs complete coverage. The agent should choose among them based on
 available data, your scope and your limits. [Worked example](./first-tasks.mdx#find-a-decision-in-older-history).
 
 If a command fails, ask for its error and the next safe step rather than a repeated blind attempt.
-[Diagnostics](./tg/diagnostics.md) can record operation names, IDs, counts and timings, but native
-CLI records deliberately exclude message text and sensitive arguments. They are useful for a bug
-report, not a full transcript of what the agent read or decided. Review any report before sharing it.
+[Diagnostics](./tg/diagnostics.md) records each run: the command as typed, the chats it read, counts
+and timings. The command can include what you typed, such as a message you sent, unless you turn
+`record_input` off. Secrets are always hidden, and the messages a command read are not kept. A record
+helps with a bug report, but it is not a transcript of what the agent read or decided. Review any
+report before you share it.

@@ -326,14 +326,18 @@ npx skills add WireCatLabs/tg-cli --skill tg-cli
 
 ### Маркетплейс плагинов Claude Code
 
-**Скоро.** Маркетплейс WireCat для Claude Code: по плагину на инструмент, и в каждом только его
-навык. Когда он будет опубликован, добавьте его в Claude Code командой:
+У WireCat есть маркетплейс для Claude Code с плагинами для Telegram, MAX, WhatsApp, Zoom, Google Drive, Google
+Calendar, Memo и почты. В каждом плагине только навык инструмента, поэтому сначала установите сам инструмент.
+Добавьте маркетплейс один раз, а затем установите плагин своего инструмента:
 
-```text
-/plugin marketplace add WireCatLabs/claude-plugins
+```sh
+claude plugin marketplace add WireCatLabs/claude-plugins
+claude plugin install wirecat-tg@wirecat
 ```
 
-А пока навык для Claude Code ставит `tg skill install --for claude`.
+Остальные плагины: `wirecat-max`, `wirecat-whatsapp`, `wirecat-zoom`, `wirecat-drive`, `wirecat-gcal`,
+`wirecat-memo` и `wirecat-mail`. Для инструмента без плагина навык ставит его команда `skill install --for claude`,
+например `b24 skill install --for claude`.
 [Инструкция по плагинам Claude Code](https://code.claude.com/docs/en/plugins).
 
 ### Проверьте результат

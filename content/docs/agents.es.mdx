@@ -327,14 +327,18 @@ herramienta. Igual que una fuente de repositorio de Hermes, lee la rama principa
 
 ### Marketplace de plugins de Claude Code
 
-**Próximamente.** Un marketplace de WireCat para Claude Code, con un plugin por herramienta que solo
-contiene su skill. Cuando esté publicado, añádelo en Claude Code con:
+WireCat tiene un marketplace para Claude Code con plugins para Telegram, MAX, WhatsApp, Zoom, Google Drive, Google
+Calendar, Memo y el correo. Cada plugin contiene solo el skill de la herramienta, así que instala antes la propia
+herramienta. Añade el marketplace una vez y luego instala el plugin de tu herramienta:
 
-```text
-/plugin marketplace add WireCatLabs/claude-plugins
+```sh
+claude plugin marketplace add WireCatLabs/claude-plugins
+claude plugin install wirecat-tg@wirecat
 ```
 
-Mientras tanto, `tg skill install --for claude` instala el skill para Claude Code.
+Los demás plugins son `wirecat-max`, `wirecat-whatsapp`, `wirecat-zoom`, `wirecat-drive`, `wirecat-gcal`,
+`wirecat-memo` y `wirecat-mail`. Para una herramienta sin plugin, su comando `skill install --for claude` instala el
+skill, por ejemplo `b24 skill install --for claude`.
 [Guía de plugins de Claude Code](https://code.claude.com/docs/en/plugins).
 
 ### Comprueba el resultado

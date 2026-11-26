@@ -6,7 +6,15 @@ description: Find why a tool failed, how often it happens and which command, pro
 
 A tool failed, or an agent says a command did not work, and you want to know why. The **Logs** page in WireCat Desktop shows what each command-line tool recorded about its own runs. A **run** is one start of a tool, such as `tg personal messages send`, from start to exit. Here you find how often a failure happens and which command, profile, agent or error it involves. Then you can open one run and copy its record for a bug report or for your agent.
 
-**On this page:** [Why most runs are failures](#why-most-runs-are-failures) · [Search runs](#search-runs) · [Facets](#filter-with-facets) · [Group runs](#group-runs) · [Open a run](#open-a-run) · [Logs in a terminal](#logs-in-a-terminal) · [Privacy](#privacy)
+**On this page:**
+
+1. [Why most runs are failures](#why-most-runs-are-failures)
+2. [Search runs](#search-runs)
+3. [Facets](#filter-with-facets)
+4. [Group runs](#group-runs)
+5. [Open a run](#open-a-run)
+6. [Logs in a terminal](#logs-in-a-terminal)
+7. [Privacy](#privacy)
 
 <DesktopShot
   shot="logs"
@@ -151,7 +159,7 @@ profile: `zm runs list`, `memo runs list`. What to do with the error you find is
 
 ## Privacy
 
-Run records never contain message text, names of people, chat titles or login secrets such as passwords and session keys. The [Telegram diagnostics guide](../tg/diagnostics.md) lists what a tool records and what it never records.
+Run records do not keep the messages a command read, or login secrets such as passwords and session keys. They do keep the command as you typed it, which can include a chat title or a message you sent, unless the tool's `record_input` setting is off. The [Telegram diagnostics guide](../tg/diagnostics.md) lists what a tool records and what it never records.
 
 Before the app shows a run, it also masks personal data: values of fields such as tokens, passwords, phone numbers, email addresses, account names and user IDs become `•••`. In text, the app replaces email addresses with `[email]`, phone numbers with `[number]` and bot tokens with `[bot token]`. The same masking applies to what you copy.
 
