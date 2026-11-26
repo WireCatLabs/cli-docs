@@ -24,7 +24,7 @@ que la nombras.
 
 Los archivos solo van a estos dos proveedores, que no pertenecen a ninguna sincronización. Cualquier otra cuenta, como
 la de un mensajero o la de Drive, se rechaza (`record.provider-not-imported`): es de su propia sincronización. Usa una
-cuenta por fuente, y así `memo search --source import:handbook` encuentra solo sus documentos.
+cuenta por fuente, y así `memo search notes budget --source import:handbook` encuentra solo sus documentos.
 
 ## Qué lee la importación de una carpeta
 

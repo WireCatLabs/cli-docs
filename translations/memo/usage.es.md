@@ -136,7 +136,7 @@ memo payments allocate payment:9 invoice:4 25000.00
 memo projects status HRB
 ```
 
-Lo que añades tú se confirma al instante. Lo que añade tu agente espera en `memo review kind:invoice,payment`, y solo
+Lo que añades tú se confirma al instante. Lo que añade tu agente espera en `memo review list kind:invoice,payment`, y solo
 tú confirmas el dinero. Un pago que el agente lee en un chat se convierte en un pago o una factura cuando confirmas la conclusión.
 `projects status` muestra lo facturado, lo pagado y lo que aún se debe, solo a partir de filas confirmadas.
 
@@ -271,7 +271,7 @@ tú (tus notas, proyectos, tareas, facturas, recuerdos y hechos) no pertenece a 
 grupos lo muestran.
 
 `memo groups list` muestra cada grupo guardado y luego `all`, con sus cuentas, los nombres de perfil de cada app para
-cada una (`tg work`, `b24 work`) y los otros grupos que también tienen esa cuenta. Una cuenta puede estar en varios, y
+cada una (`tg work …`, `b24 work …`) y los otros grupos que también tienen esa cuenta. Una cuenta puede estar en varios, y
 la lista nombra esos duplicados. Un perfil que se llama como un grupo es solo una sugerencia y nunca pone una cuenta en
 un grupo. `personal` es un grupo como cualquier otro, vacío hasta que lo guardes. `--source personal` no es ese
 grupo: son tus propias cuentas de mensajería, no los bots.

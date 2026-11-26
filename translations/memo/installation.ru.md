@@ -132,7 +132,7 @@ node dist/bin/memo.js --help
 | Состояние | `~/.local/share/cli-memo/` | `%LOCALAPPDATA%\cli-memo\Data\` |
 | Кэш, который называет `memo doctor`; Memo пока ничего там не хранит | `~/.cache/cli-memo/` | `%LOCALAPPDATA%\cli-memo\Cache\` |
 | Общее хранилище с tg и max | `~/.local/share/WireCat/wirecat.db` | `%LOCALAPPDATA%\WireCat\Data\wirecat.db` |
-| Модели поиска, скачанные tg или max | `~/.local/share/WireCat/models/` | `%LOCALAPPDATA%\WireCat\Data\models\` |
+| Общие модели поиска | `~/.local/share/WireCat/models/` | `%LOCALAPPDATA%\WireCat\Data\models\` |
 | Таймер после `memo jobs start` | `~/.config/systemd/user/memo-import.timer` и `.service` | — |
 
 - **Настройки**: `config.json` ([справочник](./configuration.md)): папки и таймер.

@@ -36,7 +36,7 @@ Guarda los permisos en la configuración; la búsqueda y la siguiente llamada le
 Los permisos y el límite compartido de WireCat de solo lectura se comprueban en cada llamada.
 
 `search all` devuelve fragmentos de reuniones de todas las cuentas de reuniones, personales y de trabajo, junto a
-mensajes, correo, notas, eventos y CRM. El paso `next` de un resultado de una transcripción lo abre con
+mensajes, correo, notas, eventos, CRM, datos de negocio e incidencias de un gestor de incidencias. El paso `next` de un resultado de una transcripción lo abre con
 `meetings passage`. Cuando `search.meetings` o `meetings.passage` está en `deny` o `ask`, search all deja fuera las
 reuniones y lo dice en `missing`: un resultado que el agente no puede abrir sin preguntar no se le entrega.
 
