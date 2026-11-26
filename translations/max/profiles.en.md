@@ -14,7 +14,7 @@ Use this page when you need a second account, want your AI agent to have fewer p
 | Give an agent fewer permissions than you | A profile with its own [permissions](./permissions.md) |
 | Keep the agent in this profile | `MAX_PROFILE_LOCK` ([session profiles](./sessions.md#профили)) |
 | Run a MAX bot alongside your account | A bot profile: `max support bot api get-my-info` |
-| See all profiles on this computer | `max session list` |
+| See all profiles on this computer | `max account list` |
 
 ## Choose a profile
 
@@ -24,7 +24,7 @@ Put the profile name before the command:
 max work config show
 ```
 
-`max session list` shows every profile on this computer and its account; `max work session end` logs the `work` profile out of MAX.
+`max account list` shows every profile on this computer and its account; `max work session end` logs the `work` profile out of MAX.
 
 An entry in `profiles.work` in the configuration file applies to that profile; `defaults` supplies values that the profile does not override. See [session profiles](./sessions.md#профили) for profile-name rules and how `max` selects a profile.
 

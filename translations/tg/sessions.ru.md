@@ -130,7 +130,7 @@ tg personal session start qr
 
 ```sh
 tg personal account show     # who this profile is logged in as
-tg session list              # every profile on this computer, and the account each is logged in as
+tg account list              # every profile on this computer, and the account each is logged in as
 tg personal account sessions list  # every device and app logged in to the account; ends nothing
 tg personal session end      # log out on Telegram's side, and delete the session file here
 ```
@@ -171,7 +171,7 @@ export TG_PROFILE=work     # the same for the whole shell session
 
 **Первое слово считается профилем, если это не команда.** Поэтому профиль нельзя назвать `chats`, `messages` или другим словом команды; `tg personal session start` отклоняет такое имя. Разрешены буквы, цифры, точки, дефисы и подчёркивания; первый символ — буква или цифра.
 
-Приоритет: сначала первое слово команды, затем `TG_PROFILE`. Если нет ни того, ни другого, команда, которой нужен аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере; если профилей ещё нет, она предлагает запустить `tg personal setup`. `tg` никогда не выбирает профиль сам, даже единственный. Команды, которым аккаунт не нужен, работают без профиля: `--help`, `--version`, `commands`, `skill show`, `session list` и `config show`.
+Приоритет: сначала первое слово команды, затем `TG_PROFILE`. Если нет ни того, ни другого, команда, которой нужен аккаунт, останавливается с кодом выхода `2` и перечисляет профили на этом компьютере; если профилей ещё нет, она предлагает запустить `tg personal setup`. `tg` никогда не выбирает профиль сам, даже единственный. Команды, которым аккаунт не нужен, работают без профиля: `--help`, `--version`, `commands`, `skill show`, `account list` и `config show`.
 
 Слово, которое не является командой и за которым нет команды, вызывает поясняющую ошибку:
 
