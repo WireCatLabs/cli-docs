@@ -147,8 +147,8 @@
     }
   },
   "b24": {
-    "version": "0.27.0",
-    "manifestSha256": "f54f89ca26e6b9fda5cdee5df76ec1a6809ac26d721d39026165ed5f8a5fc928",
+    "version": "0.28.0",
+    "manifestSha256": "07880c9985d61018465a068b8312505cfe373cc3ccb3f9c09dd6b290b011bf6c",
     "bin": "wcat-b24",
     "bins": ["b24", "wcat-b24"],
     "desktop": {
@@ -166,7 +166,8 @@
       "setup": ["{profile}", "setup"],
       "signIn": {
         "gives": "Lets your agent read and change the portal's CRM with the rights of the employee who made the webhook, or who signed in through a local application.",
-        "asks": "An inbound webhook address, from Developer resources → Common use cases → Other → Inbound webhook, with the crm, user_basic and department scopes, task for tasks, telephony for calls, disk and documentgenerator for files; or a local application's code and key."
+        "asks": "An inbound webhook address, from Developer resources → Common use cases → Other → Inbound webhook, with the crm, user_basic and department scopes, task for tasks, telephony for calls, disk and documentgenerator for files; or a local application's code and key.",
+        "setupFrom": "0.0.0"
       },
       "skill": {
         "status": ["skill", "status", "--no-record", "--json"],
@@ -216,8 +217,8 @@
     }
   },
   "drive": {
-    "version": "0.78.0",
-    "manifestSha256": "ed0bb76b580cb6f14b72a8394a1b218d673cf71fd1dbd151594a5d5791a1c385",
+    "version": "0.79.0",
+    "manifestSha256": "af77eb7dd9c9803b554f1407d07074ea409d88b43203b4ec75b78392bf3581a4",
     "bin": "wcat-drive",
     "bins": ["drive", "wcat-drive"],
     "desktop": {
@@ -861,14 +862,14 @@
     }
   },
   "tg": {
-    "version": "0.136.0",
-    "manifestSha256": "833a6bd2111100ebbbc3f512ac3598715916609ab10e0dfdea2a94c77f16d248",
+    "version": "0.137.0",
+    "manifestSha256": "feee8c13b38f8850804a23eee70b3391fb03aed7c58976fd2a4ace9cd53831c0",
     "bin": "wcat-tg",
     "bins": ["tg", "wcat-tg"],
     "desktop": {
       "tagline": "Your Telegram account, searchable on your computer",
       "profiles": {
-        "args": ["account", "list", "--no-record", "--json"],
+        "args": ["session", "list", "--no-record", "--json"],
         "shape": "items"
       },
       "doctor": ["{profile}", "doctor", "--record", "--json"],
@@ -924,14 +925,14 @@
     }
   },
   "wa": {
-    "version": "0.47.0",
-    "manifestSha256": "7441f2a52c51e0012caf89e41f5ddf39cf435736fcdc367e7a04d64e9c50e80d",
+    "version": "0.48.0",
+    "manifestSha256": "0ad63c1d3d3c86128be265203c8982e80f0daa148d4b7d25094bdcd2a62b0672",
     "bin": "wcat-wa",
     "bins": ["wa", "wcat-wa"],
     "desktop": {
       "tagline": "Your WhatsApp account, searchable on your computer",
       "profiles": {
-        "args": ["account", "list", "--no-record", "--json"],
+        "args": ["session", "list", "--no-record", "--json"],
         "shape": "items"
       },
       "doctor": ["{profile}", "doctor", "--record", "--json"],
@@ -987,7 +988,7 @@
     }
   },
   "wordpress": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "manifestSha256": "370cbbc937f9f2194273dd4c1ecdb56be87eaef073197aa80dd1450b06cf8a00",
     "bin": "wcat-wordpress",
     "bins": ["wcat-wordpress", "wordpress"],
