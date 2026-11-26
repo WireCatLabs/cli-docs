@@ -193,7 +193,7 @@ memo projects annotations check harbour-annotations.json --target-store ./trial/
 назначения. Например:
 
 ```json
-{"project:1":"project:2","bot:3":"bot:7","document:4":"document:9"}
+{"project:1":"project:2","agent:3":"agent:7","document:4":"document:9"}
 ```
 
 Эти ID приведены для примера. Прочитанная ссылка не доказывает личность: выбирайте соответствия по
