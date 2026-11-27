@@ -1,6 +1,6 @@
 ---
 title: "People"
-description: "Recall who someone is and what you discussed before replying, using your own Telegram or MAX history."
+description: "Recall who someone is and what you discussed before replying, from your chats, mail and CRM, and keep one person's accounts together."
 ---
 
 Recall who a person is and what you discussed before replying. Ask your agent how you know them, what you agreed and which account signals are available, with the messages behind each answer. You can also keep one person’s Telegram and MAX accounts together.
@@ -56,7 +56,7 @@ tg personal mentions list
 tg personal mentions confirm 1 person:7
 ```
 
-`mentions confirm` records that the value belongs to the person (or to an organization with `organization:`). After that, a search such as `mentions:"person:7"` finds those messages. A wrong value can be dismissed with `mentions reject`. More: [Phones, links and names](./people.md#phones-links-names-and-addresses) and [How things are linked](./how-things-are-linked.md#mentions).
+`mentions confirm` records that the value belongs to the person (or to an organization with `organization:`). After that, a search such as `mentions:"person:7"` finds those messages. A wrong value can be dismissed with `mentions reject`. More: [Phones, links and names](#phones-links-names-and-addresses) and [How things are linked](./how-things-are-linked.md#mentions).
 
 ## Ask your agent
 
@@ -85,7 +85,7 @@ sent to the person, and nothing is marked as read.
 The available profile fields depend on what the messenger shares with your account:
 
 - **Phone number:** shown in full, in the command line and over MCP, when the messenger gives it to your account.
-  `--hide-phone` leaves it out. Older releases masked it and had `--show-phone`; that flag is gone.
+  `--hide-phone` leaves it out.
 - **Registration date:** always says where it came from. Telegram sends the month when someone
   writes to you for the first time; otherwise `tg` estimates it from the account ID and marks it
   `estimate`. The estimate covers accounts created up to August 2026; newer accounts get no date
@@ -106,7 +106,7 @@ tg personal reactions list "Book club" 101 reaction:🔥 --limit 20
 
 `reactions list` shows who reacted to one message, newest first, with the reaction and the time. Add `reaction:`
 and an emoji to keep one reaction. Where a chat hides the list, such as a channel, the command says so instead of
-showing an empty list. WhatsApp does not offer this command yet.
+showing an empty list. WhatsApp has the same `reactions list` in `wa`. MAX has none.
 
 ## What they wrote
 
@@ -605,7 +605,7 @@ tg personal mentions show 12
 `list` gives each mention an ID, the date, the kind (`phone`, `email`, `url`, `document`, `person-name`, `place`), the value,
 its status and
 the message. `show` adds the text around it and how many other places hold the same value. `list` in tg and max shows mentions
-in messages only; `memo mentions list --source email:<name>` lists those in mail, and `--source notes` or `--source documents` those in notes and documents.
+in messages only; `memo mentions list --source mail` lists those in mail, and `--source notes` or `--source documents` those in notes and documents.
 
 To see only what was found since you last looked:
 
@@ -715,7 +715,7 @@ tg personal mentions places
 
 `confirm` keeps the address as a place of its own, with everything written there. Every mention of the same
 address follows, and later ones are linked without you. `mentions places` lists the places, most mentioned first.
-Most addresses are in email signatures; [memo](./mail/email.md) lists mentions in mail with `memo mentions list --source email:<name>`.
+Most addresses are in email signatures; [memo](./mail/email.md) lists mentions in mail with `memo mentions list --source mail`.
 
 ### Messages saved earlier
 
@@ -734,13 +734,15 @@ decision you made. You can run it again at any time.
 Phone numbers are kept in the local store as digits, as they already are in the saved messages. They do not go to
 logs, error messages or run records. A link is never opened and a site is never contacted.
 
-### What is not there yet
+<a id="what-is-not-there-yet" />
 
-- A list of the mentions in [notes and documents](./memo/notes.md) and in [email](./mail/email.md): they are found and
-  searchable, but `mentions list` does not show them.
+### Limits
+
+- `mentions list` in `tg` and `max` shows mentions in messages only. Those in [notes and documents](./memo/notes.md)
+  and in [mail](./mail/email.md) are listed by `memo mentions list`.
 - A link to an ordinary website tied to anything. Such a link can only be dismissed.
 - Places other than street addresses: a city alone, a building's name, a place described in words.
 - Addresses outside Europe, the United Kingdom and the United States: they may be found with only part of the
   address.
 
-Once you know where a number, a site or a name came up, [recall the context with that person](./people.md) before you reply.
+Once you know where a number, a site or a name came up, [recall the context with that person](#ask-your-agent) before you reply.

@@ -3,10 +3,9 @@ title: Modelo de datos
 description: Las entidades que las herramientas de WireCat guardan en su almacén local compartido, cómo se conectan y cómo un agente acota el contexto adecuado antes de comparar significados.
 ---
 
-Cada herramienta de WireCat — `tg`, `max`, `memo`, `zm` — guarda lo que lee en un único archivo
-SQLite local, `wirecat.db`. Esta página es para desarrolladores y autores de agentes que quieren
-consultar ese archivo o entender qué puede encontrar un agente en él. Explica primero las
-entidades, después cómo se conectan, después cómo una búsqueda encuentra contexto y solo al final
+Todas las herramientas de WireCat guardan sus datos en un único archivo en tu ordenador, `wirecat.db`,
+una base SQLite. Consulta ese archivo o construye un agente sobre él sabiendo qué puede encontrar el agente:
+primero las entidades, después cómo se conectan, después cómo una búsqueda encuentra contexto y al final
 las columnas por las que vale la pena consultar. Cómo se abre, migra y bloquea el almacén está en
 [el almacén local](./architecture.mdx#el-almacén-local).
 

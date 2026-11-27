@@ -3,7 +3,7 @@ title: "How things are linked"
 description: "Which records the tools connect (messages, people, chats, files, mentions, notes, tasks, facts, Drive documents, tags), who creates each link, and what to run when one is missing."
 ---
 
-You can ask your agent for everything about one person, or for the messages behind a decision, because the tools keep links between records. This page explains which links exist, who creates each one (the tool, you or your agent) and how to follow them. After it, you can tell why a link is missing and which command adds it. Search and links work on what is already in the local store, so download the history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first).
+You can ask your agent for everything about one person, or for the messages behind a decision, because the tools keep links between records. You will see which links exist, who creates each one (the tool, you or your agent) and how to follow them, so you can tell why a link is missing and which command adds it. Search and links work on what is already in the local store, so download the history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first).
 
 **On this page:**
 
@@ -24,7 +24,7 @@ You can ask your agent for everything about one person, or for the messages behi
 
 ## The idea
 
-`tg`, `max`, `memo` and `drive` can share records when explicitly configured to use the same compatible local database. Drive uses the shared database by default (see [where the files live](./drive/configuration.md#where-the-files-live)), so its records can be linked to the other tools unless you moved it. A link is one of two things:
+Every WireCat tool keeps its data in one file on your computer, `wirecat.db`, so records from different tools can be linked. A link is one of two things:
 
 - **Part of the record.** A message has a chat and a sender.
 - **A stored link between two records.** A note is about a person. A fact is backed by messages.
@@ -80,7 +80,7 @@ Every message can point at the earlier message it answers. Each pointer says whe
 - **A rule of the tool.** A message that mentions someone, or that continues the same sender.
 - **Your agent.** An answer it stored after reading the chat. Storing it needs the profile permission `conversations.links`.
 
-`conversations rebuild` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbours in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
+`conversations rebuild` joins these pointers into conversations for one chat. `messages context` with `--thread` follows the chain from a message instead of showing its neighbors in time. A link that went out of date after an edit or a deletion is shown but never followed. A rebuild gives conversations new ids, so keep the `msg:` reference of the message, not the conversation id. How the graph is built: [How search works](./search-architecture.mdx#3-reconstruct-discussions-with-a-message-graph).
 
 ## Files, voice notes and pictures
 
@@ -283,7 +283,7 @@ Use memo. Which task came from the message about the invoice, and which message 
 | Symptom | Likely cause | What to do |
 | --- | --- | --- |
 | A person's timeline shows one messenger only | The identities are not linked | `contacts link`, then ask again |
-| `--thread` shows only neighbours in time | No conversations built for the chat | `conversations rebuild --chat "Book club"` |
+| `--thread` shows only neighbors in time | No conversations built for the chat | `conversations rebuild --chat "Book club"` |
 | A phone or email in an old message is not found | The message was stored before mentions existed | `mentions rebuild` |
 | A name of a new contact is not found | Mentions were built before the person existed | `mentions rebuild person-name` |
 | Words inside a file are not found | The file text was not extracted | `attachments extract` |

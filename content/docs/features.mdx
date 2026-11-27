@@ -4,17 +4,19 @@ sidebarTitle: "Features"
 description: "Give your AI agent context from messages, people, notes and files, and choose what it may do."
 ---
 
-WireCat connects your messages and other sources to the AI agent you choose. Ask it to find an agreement, catch up on a chat or prepare a reply using your own history, with sources you can check. Messages are the starting point; notes, files and email can add context through Memo.
+Ask your AI agent about your own work and get an answer you can check. "What did we agree with Acme?", "Who is waiting for my reply?", "What was decided on Tuesday's call?" The agent answers from your chats, mail, calls and documents, and shows the message or passage behind each part of the answer.
 
-The key capabilities:
+You connect the sources you use, one tool for each, and keep the agent you already like: Claude Code, Codex, ChatGPT or another. Everything the tools copy stays on your computer, in one local store. Memo, the notes tool, searches your messages, mail, notes, meetings and deals there at once. Start with one tool, for the source you use most: [Installation](./installation.mdx).
 
-- **Your sources, your agent:** use command-line tools or MCP with an agent that supports them.
+What you can do:
+
 - **Messages with context:** find what was said, what changed and who needs an answer.
-- **Search with evidence:** return matching sources and the surrounding messages.
-- **People across accounts:** link identities you know belong to the same person.
-- **Notes and files:** bring selected folders and your own notes into the same local context.
-- **Bots and groups:** answer through a bot or help administer a community.
-- **Control over access:** choose sources, permissions and how the tools run.
+- **Search with evidence:** get the matching message and what was said around it.
+- **Meetings, calls and deals:** recall a decision from a call or check where a deal stands.
+- **People across accounts:** keep the accounts of one person together, once you confirm they match.
+- **Notes, files and tasks:** bring chosen folders, your own notes and your to-dos into the same search.
+- **Bots and groups:** answer through a bot or help run a community.
+- **Control over access:** choose the sources and what the tools may change or send.
 
 **On this page:**
 
@@ -22,11 +24,14 @@ The key capabilities:
 2. [Messages](#messages)
 3. [Search and sources](#search-and-sources)
 4. [People across accounts](#people-across-accounts)
-5. [Notes, files and email](#notes-files-and-email)
-6. [Bots](#bots)
-7. [Groups and channels](#groups-and-channels)
-8. [Your data and permissions](#your-data-and-permissions)
-9. [Tool details](#tool-details)
+5. [Meetings and calls](#meetings-and-calls)
+6. [Clients and deals](#clients-and-deals)
+7. [Notes, files and email](#notes-files-and-email)
+8. [Tasks and memory](#tasks-and-memory)
+9. [Bots](#bots)
+10. [Groups and channels](#groups-and-channels)
+11. [Your data and permissions](#your-data-and-permissions)
+12. [Tool details](#tool-details)
 
 <a id="a-fuller-overview" />
 
@@ -68,13 +73,31 @@ The answer depends on stored history and confirmed links; ask for evidence when 
 
 [People and linked accounts](./people.md)
 
+## Meetings and calls
+
+Find what was decided on a call and who took which task, next to the chats and mail on the same subject. Zoom meetings, Google Meet calls from your calendar and calls from your phone system are kept on your computer as meetings, with their transcripts. A phone call recording is turned into text on your computer, unless you choose a cloud speech service for it.
+
+[Zoom meetings](./zm/meetings.md) · [Google Meet](./google-meet.mdx) · [Bitrix24 calls](./b24/calls.md) · [Asterisk](./pbx/index.md)
+
+## Clients and deals
+
+Ask where a deal stands, who is responsible for it and what the client was told last. The CRM tools copy your deals, contacts and companies from Bitrix24, amoCRM, HubSpot or Attio into the same local store, so the agent sees them beside your chats and calls. When you ask for a change, such as moving a deal to the next stage, it goes to the CRM itself.
+
+[Bitrix24](./b24/index.md) · [amoCRM and Kommo](./amo/index.md) · [HubSpot](./hubspot/index.md) · [Attio](./attio/index.md)
+
 ## Notes, files and email
 
 Use Memo to import selected folders, including Obsidian notes, search readable file contents and keep notes linked to people or messages. Imported files retain source references; notes you create can be edited and exported. Tags help you collect related sources without changing the originals.
 
-Memo can also import mail from configured accounts. It reads already-downloaded messenger history; it does not connect to a messenger or download that history itself. Some document formats need optional readers, and scanned pages need text recognition first.
+The mail tool, `mail`, copies your mail into the same local store, and Memo searches it next to your notes and messages. Memo reads the messenger history other tools already downloaded; it does not connect to a messenger itself. Some document formats need optional readers, and scanned pages need text recognition first.
 
 [Notes and files](./memo/index.md) · [Email](./mail/email.md)
+
+## Tasks and memory
+
+Keep the questions you have not answered and the promises others made you as tasks, so they do not get lost in your chats. Ask for today's agenda, turn a message into a task and close it when it is done. The agent can also remember what it learned, such as a preference or a decision, with the sources that show it, and you choose what is kept.
+
+[Tasks](./tasks.md) · [Memories and facts](./memo/memories.md)
 
 ## Bots
 
@@ -117,6 +140,7 @@ Exact messenger operations, supported differences and command syntax belong in t
 - **Notion:** [start here](./notion/index.md), [daily use](./notion/usage.md), [settings and permissions](./notion/configuration.md) and [commands](./notion/commands.md).
 - **Yandex Disk:** [start here](./ydisk/index.md), [connect your agent](./ydisk/mcp.md), [work with files on the Disk](./ydisk/usage.md) and [reference](./ydisk/commands.md).
 - **Google Calendar:** [daily use](./gcal/usage.md), [Google Meet](./google-meet.mdx), [scenarios](./gcal/scenarios.md) and [commands](./gcal/commands.md).
+- **WhatsApp:** [start here](./wa/index.md), [daily use](./wa/usage.md), [search](./wa/search.md) and [commands](./wa/commands.md).
 - **Mail:** [daily use](./mail/usage.md), [preparing the mailbox](./mail/providers.md) and [commands](./mail/commands.md).
 - **Bitrix24:** [daily use](./b24/usage.md), [settings and permissions](./b24/configuration.md) and [commands](./b24/commands.md).
 - **amoCRM and Kommo:** [start here](./amo/index.md), [daily use](./amo/usage.md), [settings and permissions](./amo/configuration.md) and [commands](./amo/commands.md).

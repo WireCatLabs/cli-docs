@@ -1,10 +1,12 @@
 ---
-title: "Connect Claude Code, Codex or Cursor to your messenger"
+title: "Connect Claude Code, Codex or Cursor to the tools"
 sidebarTitle: "Connect your AI agent"
-description: "Choose how Claude Code, Codex, Cursor or a browser chat reaches your messenger through the CLI or an MCP server, connect it and check it with your own chats."
+description: "Choose how Claude Code, Codex, Cursor or a browser chat reaches your chats, mail and documents through a command-line tool or an MCP server, connect it and check it."
 ---
 
-Connect your AI agent to your messenger so it can find messages, gather context and prepare replies. This page is for anyone connecting a terminal agent, a browser or phone chat, or an MCP app. It explains which connection to choose, how to set it up, where to get skills and how to check the result. By the end, you can ask your agent for your first useful task.
+Once your AI agent is connected, you ask in your own words, "who is waiting for my reply?" or "what did we agree with Acme?", and it runs the right tool and answers with the messages behind it. You do not need to learn any commands.
+
+An agent with a terminal, such as Claude Code, Codex or Cursor, runs the tools itself, and a skill, a short instruction file, teaches it their commands. A chat in a browser or a phone app cannot run programs, so it reaches the tools through MCP, a standard way to plug tools into an AI app. Install a tool and sign in first: [Installation](./installation.mdx).
 
 **On this page:**
 
@@ -23,7 +25,7 @@ Connect your AI agent to your messenger so it can find messages, gather context 
 
 An **AI agent** is a program that can use tools to carry out your request. For example, it can find messages and turn them into a summary. You describe the task; the agent chooses the actions.
 
-A **CLI** is a command-line tool: a program controlled with text commands. An agent with terminal access runs it on your computer or server, the same way you would in a terminal. A **skill** teaches the agent the commands, so you do not need to memorise them. Apps that cannot run programs have their own route at [the end of this page](#chat-apps-and-remote-agents).
+A **CLI** is a command-line tool: a program controlled with text commands. An agent with terminal access runs it on your computer or server, the same way you would in a terminal. A **skill** teaches the agent the commands, so you do not need to memorize them. Apps that cannot run programs have their own route at [the end of this page](#chat-apps-and-remote-agents).
 
 ## Choose where you want to use it
 
@@ -73,7 +75,7 @@ A phone-number login, a two-step verification password and the first registratio
 
 ### Account already connected
 
-`tg personal setup` with an agent chosen has already installed the skill. If your agent already sees `tg-cli`, you can skip this step. A global npm install of `tg`, `max` or `memo` adds the skill only when `TG_INSTALL_AGENT`, `MAX_INSTALL_AGENT` or `MEMO_INSTALL_AGENT` names an agent (`all`, `claude`, `codex`, `cursor` or `gemini`). The one-command Windows installer for `tg` and `max` adds it unless you pass `-Agent none`. `zm` and `drive` install a skill only when asked: run `zm skill install` or `drive skill install` after `npm install -g`. To add or update the instructions without repeating login:
+`tg personal setup` with an agent chosen has already installed the skill. If your agent already sees `tg-cli`, you can skip this step. A global npm install of `tg`, `max`, `wa` or `memo` adds the skill only when the tool's variable names an agent. The variables are `TG_INSTALL_AGENT`, `MAX_INSTALL_AGENT`, `WA_INSTALL_AGENT` and `MEMO_INSTALL_AGENT`, and each takes `all`, `claude`, `codex`, `cursor` or `gemini`. The one-command Windows installer for `tg` and `max` adds it unless you pass `-Agent none`. `zm` and `drive` install a skill only when asked: run `zm skill install` or `drive skill install` after `npm install -g`. To add or update the instructions without repeating login:
 
 ```sh
 tg skill install
@@ -221,15 +223,12 @@ The examples above are not a closed list. Any agent with command-line access can
 
 A cloud agent runs on another computer. Install the tool and log in there; your local login is not available to it.
 
-Ready-made installation choices cover specific clients; other agents use their own instruction or tool settings.
-
 ## Where to get WireCat skills
 
 A **skill** is an instruction file, `SKILL.md`, that teaches your AI agent the commands of one WireCat
 tool. Each tool installs its own skill with `skill install` (see [Connect the instructions](#connect-instructions)).
 This section lists the skill directories that offer the same skills, for when you prefer to install and
-update skills the way your agent does. By the end, your agent has the skill it needs, from the
-source you chose.
+update skills the way your agent does.
 
 A skill only teaches. The tool itself must still be installed and logged in on the computer where
 your agent runs: see [Installation](./installation.mdx).
@@ -386,7 +385,7 @@ ChatGPT, Claude and other web chats connect through a public HTTPS address: foll
 
 ### What the MCP server does
 
-Our MCP server gives your agent access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the agent calls the server, which performs the action through the messenger tool.
+The MCP server gives your agent access to the connected messenger: chats, messages, shared files, searches and reports. You ask for a result; the agent calls the server, which performs the action through the messenger tool.
 
 The server is included in the command-line tool and **must be running while the agent uses it**. A local client can start it on your computer. For a browser or mobile chat, keep it running on a computer or server and connect through a public HTTPS address with authentication. Follow the [browser/mobile setup guide](./browser-apps.mdx) for that connection.
 
@@ -492,10 +491,13 @@ Hermes uses `mcp_servers` in `~/.hermes/config.yaml`. Add `tg` or `max` there wi
 YAML; do not paste the whole `mcpServers` JSON object into it. Restart Hermes to load the server.
 [Official Hermes quickstart](https://hermes-agent.nousresearch.com/docs/getting-started/quickstart/).
 
-### Zoom, Google Drive and Memo
+<a id="zoom-google-drive-and-memo" />
+
+### Other tools
 
 Each tool starts its own server. Connect it with the command your client uses for MCP servers:
 
+- **WhatsApp:** `wa personal mcp serve`.
 - **Zoom:** `zm personal mcp serve`.
 - **Google Drive:** `drive personal --read-only mcp serve`.
 - **Notion:** `notion personal mcp serve`.

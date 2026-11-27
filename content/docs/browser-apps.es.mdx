@@ -6,7 +6,7 @@ description: "Conecta Telegram y MAX a un chat de IA como ChatGPT, Claude o Gemi
 
 Usa Telegram y MAX desde un chat de IA en el navegador o la aplicación móvil: encuentra mensajes, reúne contexto y prepara respuestas. Se configura con unos comandos y una dirección en los ajustes del chat. No necesitas instalar ChatGPT o Claude en el ordenador. La aplicación debe admitir MCP remoto por HTTP y un acceso OAuth compatible con este servidor; elige tu aplicación abajo.
 
-Esta guía conecta el servicio de mensajería que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al servicio de mensajería; tu chat de IA llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al agente. A continuación obtendremos la dirección y la añadiremos a la aplicación. Mantén el ordenador encendido y el servidor MCP de la herramienta de línea de comandos y el túnel HTTPS en ejecución mientras uses la conexión. No necesitas la aplicación de escritorio del servicio de mensajería.
+Esta guía conecta el servicio de mensajería que elijas y lo comprueba con una petición sobre tus chats. Un programa en tu ordenador accede al servicio de mensajería; tu chat de IA llega a ese programa <DocTerm term="public-address" lang="es" label="mediante una dirección pública" />. <DocTerm term="mcp" lang="es" label="MCP" /> es el modo de conectar estas herramientas al agente. Mantén el ordenador encendido y el servidor MCP de la herramienta de línea de comandos y el túnel HTTPS en ejecución mientras uses la conexión. No necesitas la aplicación de escritorio del servicio de mensajería.
 
 **En esta página:**
 
@@ -137,6 +137,9 @@ El perfil precede al comando: `tg work mcp serve` o, en Windows, `tg.cmd work mc
 
 Solo el servidor con `--http` tiene este acceso. Nunca dirijas un túnel a `tg <perfil> mcp serve` o `max <perfil> mcp serve` iniciado sin `--http`: esa conexión no tiene ningún acceso protegido.
 
+Los mismos pasos sirven para cualquier herramienta de WireCat, como `mail`, `b24` o `slk`. Pon su nombre en lugar de
+`tg`, por ejemplo `mail personal mcp serve --http --port 8766`, y añade una conexión aparte para cada herramienta.
+
 <a id="conectar-codex--chatgpt-web-o-claude" />
 
 <a id="3-añadir-la-conexión-a-chatgpt-o-claude" />
@@ -204,7 +207,7 @@ Muéstrame mis cinco chats recientes de Telegram y sus recuentos de mensajes sin
 ```
 
 Después pide un borrador o, cuando quieras enviar, indica el destinatario y el texto exacto.
-[Cómo escribir peticiones](./prompting.mdx) explica cómo pedir una revisión antes de enviar.
+[Cómo pedirle algo a tu agente de IA](./prompting.mdx) explica cómo pedir una revisión antes de enviar.
 
 <a id="elegir-qué-puede-hacer-el-asistente" />
 

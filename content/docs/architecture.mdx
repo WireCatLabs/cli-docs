@@ -1,10 +1,10 @@
 ---
 title: Architecture
-description: How tg and max are built — the packages, the layers, the adapter contract, the local store and the patterns that hold them together.
+description: "How the WireCat tools are built: the packages, the layers, the adapter contract, the local store and the patterns that hold them together."
 ---
 
-`tg` and `max` are two command line tools on one shared core. This page shows how that core is
-put together: which package owns what, how a command travels from your terminal to a messenger and
+Every WireCat tool, from `tg` and `max` to `mail` and `b24`, is a command line tool on one shared core. Here you see
+how that core is put together: which package owns what, how a command travels from your terminal to a messenger and
 back, how a new messenger plugs in, and where the design has limits. It is written for people who
 want to know what they are running and for anyone who wants to contribute.
 
@@ -41,18 +41,18 @@ Four packages of our own, plus two pinned builds, all published to npm under `@w
 | Package | What it owns |
 | --- | --- |
 | [`@wirecat/cli-base`](https://github.com/WireCatLabs/cli-base/tree/8648e39) | What any command line tool needs and no messenger: output modes, the terminal renderer, the closed list of errors and their exit codes, keyring access, config files, clocks, retry, an HTTP client, a code generator for HTTP APIs, self-update. Also used by `braze-cli`, which has nothing to do with messaging. |
-| [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-core/tree/c7cd479) | Everything about messaging that is not one messenger: the domain model, name resolution, the local SQLite store, the send guard, the services (use cases), the command tree, the MCP server, speech recognition, background processes. |
-| `@wirecat/cli-messaging-sqlite` | SQLite 3.53 builds, loaded only where the runtime's own SQLite is too old (Bun on macOS, a Linux distribution's Node). |
-| `@wirecat/cli-messaging-onnx` | ONNX Runtime as WebAssembly, for the local embedding models. Speech recognition uses `sherpa-onnx`. |
-| [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | The Telegram adapter over [mtcute](https://github.com/mtcute/mtcute), the Telegram session, guided setup. Almost every `tg` command comes from cli-messaging. |
+| [`@wirecat/cli-core`](https://github.com/WireCatLabs/cli-core/tree/c7cd479) | Everything about messaging that is not one messenger: the domain model, name resolution, the local SQLite store, the send guard, the services (use cases), the command tree, the MCP server, speech recognition, background processes. |
+| `@wirecat/cli-core-sqlite` | SQLite 3.53 builds, loaded only where the runtime's own SQLite is too old (Bun on macOS, a Linux distribution's Node). |
+| `@wirecat/cli-core-onnx` | ONNX Runtime as WebAssembly, for the local embedding models. Speech recognition uses `sherpa-onnx`. |
+| [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | The Telegram adapter over [mtcute](https://github.com/mtcute/mtcute), the Telegram session, guided setup. Almost every `tg` command comes from cli-core. |
 | [`@wirecat/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | The MAX protocol (WebSocket, binary frames), the MAX session, the `max serve` background connection, its own MCP server over the shared services, and a separate slice for MAX's official Bot API. |
 
-Each tool pins an exact version of cli-messaging and cli-base. A change in the shared code reaches
+Each tool pins an exact version of cli-core and cli-base. A change in the shared code reaches
 users through a release of the shared package and then a release of each tool; the two tools usually
 ship the same day.
 
 **The one rule of the shared package: nothing in it knows a messenger.** A lint rule refuses any
-import of `@mtcute/*`, `ws` or an adapter directory under cli-messaging's `src/`
+import of `@mtcute/*`, `ws` or an adapter directory under cli-core's `src/`
 ([the lint configuration](https://github.com/WireCatLabs/cli-core/blob/c7cd479/biome.json)). What only one
 messenger has travels in a `providerMetadata` field on the shared types.
 
@@ -89,7 +89,7 @@ A one-shot command that prints its result and keeps running is treated as a defe
 Five layers, each calling only the ones below it:
 
 - **Domain** ([models.ts](https://github.com/WireCatLabs/cli-core/blob/c7cd479/src/domain/models.ts)) —
-  `Chat`, `Message`, `Person`, `Page` and the rest. Types only, no behaviour, no messenger.
+  `Chat`, `Message`, `Person`, `Page` and the rest. Types only, no behavior, no messenger.
 - **Adapters** — one per messenger, in its own repository:
   [TelegramAdapter](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/src/telegram/adapter.ts) in tg,
   [maxAdapter](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/adapter/max-adapter.ts) in max.
@@ -124,7 +124,7 @@ services: (base) => ({
 
 A messenger joins by writing two things: an **adapter**, which speaks to the messenger, and a
 **`Messenger`** description, which tells the shared commands about it — the app name, the provider
-name in the store, how to connect, how to page history. It does not edit cli-messaging. The full
+name in the store, how to connect, how to page history. It does not edit cli-core. The full
 guide is the [adapter guide](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md).
 
 **A required core and optional groups.** `MessengerCore` — `self`, `me`, `resolve`, `chat`, `send`,
@@ -177,7 +177,7 @@ that add MAX's own options.
 
 ## The local store
 
-One SQLite file, `~/.local/share/cli-messaging/wirecat.db` on Linux (`MESSAGING_STORE` points elsewhere), holds every messenger and account —
+One SQLite file, `~/.local/share/WireCat/wirecat.db` on Linux (`MESSAGING_STORE` points elsewhere), holds every messenger and account —
 tg's profiles, max's account and its bots — keyed by provider and account.
 
 - **Two runtimes.** It opens `node:sqlite` under Node and `bun:sqlite` under Bun, each by dynamic
@@ -214,7 +214,7 @@ reported, never searched as messages ([architecture rules](https://github.com/Wi
 
 ## Patterns that hold it together
 
-- **stdout carries data and nothing else** in machine mode: no spinner, no colour, no warning. Agents
+- **stdout carries data and nothing else** in machine mode: no spinner, no color, no warning. Agents
   and scripts depend on that, and tests check it.
 - **One-shot means the process exits.** Whatever opens a socket, a timer or a listener closes it on
   every exit path.
@@ -259,7 +259,7 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
 
 - **Tests never touch your data.** Config, state, cache and the temporary folder all live in a
   sandbox for the run ([sandbox.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/testing/sandbox.ts)).
-- **Contract cases for adapters.** cli-messaging ships a fixed seed, a fake adapter and contract cases
+- **Contract cases for adapters.** cli-core ships a fixed seed, a fake adapter and contract cases
   ([src/kit](https://github.com/WireCatLabs/cli-core/tree/c7cd479/src/kit)). A messenger's adapter
   runs the same cases over its own fake client; no case talks to a live service.
 - **Commands are tested end to end** through `run(argv, environment)`, with a scripted messenger, an
@@ -291,7 +291,7 @@ MAX publishes no API for personal accounts, so max carries more of its own code 
 - A new messenger: the [adapter guide](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md),
   then the contract cases.
 - The shared code: the
-  [cli-messaging architecture notes](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ARCHITECTURE.md).
+  [cli-core architecture notes](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ARCHITECTURE.md).
 - Telegram: the [tg architecture notes](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
 - MAX: the [max architecture notes](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
   and the [protocol notes](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/protocol.md).
@@ -305,7 +305,7 @@ CLI/MCP observations. Its six contexts contain 38 assessed outcomes; shared task
 outcomes correlated, and they do not establish live adapter or general agent conformance.
 The original exact model identity was not captured and MCP used a shell proxy.
 
-[Reproduction tooling](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) belongs to cli-messaging. Record the model ID, runner and SDK
+[Reproduction tooling](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) belongs to cli-core. Record the model ID, runner and SDK
 versions, fixture clock/seed, prompts and first failures when comparing a new run. Deterministic
 transport/fixture tests and independent model trials are separate evidence. The [security guide](./security.mdx)
 explains what readers should check before trusting an agent's statistics answer.

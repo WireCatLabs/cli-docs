@@ -29,7 +29,8 @@ for (const lang of ["en", "ru", "es"] as const) {
           if (route === "installation")
             await expect(main.locator("pre").filter({ hasText: "node --version" }).first()).toBeVisible()
           else {
-            const title = { en: "Start here", ru: "Начните здесь", es: "Empieza aquí" }[lang]
+            // The group is "Start here"; its first page has its own name so the two labels differ.
+            const title = { en: "Overview", ru: "Обзор", es: "Resumen" }[lang]
             const heading = {
               en: "Connect your AI agent to your chats, mail and documents",
               ru: "Подключите ИИ-агента к чатам, почте и документам",

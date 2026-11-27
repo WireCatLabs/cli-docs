@@ -1,9 +1,9 @@
 ---
 title: "Personas"
-description: "Recuerda quién te escribió y qué hablasteis antes de responder, usando tu historial de Telegram o MAX."
+description: "Recuerda quién te escribió y qué hablasteis antes de responder, a partir de tus chats, tu correo y tu CRM, y mantén juntas las cuentas de una persona."
 ---
 
-Recuerda quién te escribió y qué hablasteis antes de responder. Pide a tu agente que explique de qué conoces a esa persona, qué acordasteis y qué datos de la cuenta están disponibles, con los mensajes que respaldan cada respuesta. También puedes unir las cuentas de Telegram y MAX de una misma persona.
+Recuerda quién te escribió y qué hablasteis antes de responder. Pide a tu agente que explique de qué conoces a esa persona, qué acordasteis y qué datos de la cuenta están disponibles, con los mensajes que respaldan cada respuesta. También puedes vincular las cuentas de Telegram y MAX de una misma persona.
 
 **En esta página:**
 
@@ -57,7 +57,7 @@ tg personal mentions list
 tg personal mentions confirm 1 person:7
 ```
 
-`mentions confirm` registra que el valor pertenece a la persona (o a una organización con `organization:`). Después, una búsqueda como `mentions:"person:7"` encuentra esos mensajes. Un valor equivocado se descarta con `mentions reject`. Más: [Teléfonos, enlaces y nombres](./people.md#teléfonos-enlaces-nombres-y-direcciones) y [Cómo se vincula todo](./how-things-are-linked.md#menciones).
+`mentions confirm` registra que el valor pertenece a la persona (o a una organización con `organization:`). Después, una búsqueda como `mentions:"person:7"` encuentra esos mensajes. Un valor equivocado se descarta con `mentions reject`. Más: [Teléfonos, enlaces y nombres](#teléfonos-enlaces-nombres-y-direcciones) y [Cómo se vincula todo](./how-things-are-linked.md#menciones).
 
 ## Pide al agente
 
@@ -86,7 +86,7 @@ ordenador. No se envía nada a la persona y nada se marca como leído.
 Los campos del perfil dependen de lo que el mensajero comparte con tu cuenta:
 
 - **Teléfono:** se muestra entero, en la línea de comandos y por MCP, si el mensajero se lo da a tu cuenta.
-  `--hide-phone` lo omite. Las versiones anteriores lo ocultaban y tenían `--show-phone`; ese indicador ya no existe.
+  `--hide-phone` lo omite.
 - **Fecha de registro:** siempre indica su origen. Telegram envía el mes cuando alguien te escribe
   por primera vez; si no, `tg` la calcula a partir del ID de la cuenta y la marca como `estimate`.
   El cálculo cubre cuentas creadas hasta agosto de 2026; las más nuevas no reciben fecha antes que
@@ -108,7 +108,7 @@ tg personal reactions list "Book club" 101 reaction:🔥 --limit 20
 
 `reactions list` muestra quién reaccionó a un mensaje, del más nuevo al más antiguo, con la reacción y la hora.
 `reaction:` con un emoji deja una sola reacción. Si el chat oculta la lista, como un canal, el comando lo dice en
-lugar de mostrar una lista vacía. WhatsApp aún no ofrece este comando.
+lugar de mostrar una lista vacía. WhatsApp tiene el mismo `reactions list` en `wa`. MAX no lo tiene.
 
 ## Qué escribió
 
@@ -628,7 +628,7 @@ tg personal mentions show 12
 
 `list` da a cada mención un ID, la fecha, el tipo (`phone`, `email`, `url`, `document`, `person-name`, `place`), el valor, su
 estado y el mensaje. `show` añade el texto alrededor y en cuántos otros lugares aparece el mismo valor. `list` en tg y max solo
-muestra menciones en mensajes; `memo mentions list --source email:<nombre>` lista las del correo, y `--source notes` o `--source documents` las de notas y documentos.
+muestra menciones en mensajes; `memo mentions list --source mail` lista las del correo, y `--source notes` o `--source documents` las de notas y documentos.
 
 Para ver solo lo encontrado desde la última vez que miraste:
 
@@ -741,7 +741,7 @@ tg personal mentions places
 `confirm` guarda la dirección como un lugar propio, con todo lo que estaba escrito. Todas las menciones de la misma
 dirección lo siguen, y las nuevas se vinculan sin ti. `mentions places` lista los lugares, los más mencionados
 primero. La mayoría de las direcciones están en firmas de correo; [memo](./mail/email.md) lista las menciones del
-correo con `memo mentions list --source email:<nombre>`.
+correo con `memo mentions list --source mail`.
 
 ### Mensajes guardados antes
 
@@ -760,13 +760,15 @@ muestra su progreso y conserva todas tus decisiones. Puedes ejecutarlo de nuevo 
 Los números se guardan en el almacén local como dígitos, igual que ya están en los mensajes guardados. No van a
 registros, mensajes de error ni registros de ejecución. Nunca se abre un enlace ni se contacta con un sitio.
 
-### Lo que aún no existe
+<a id="lo-que-aún-no-existe" />
 
-- Una lista de las menciones en [notas y documentos](./memo/notes.md) y en el [correo](./mail/email.md): se encuentran y
-  se pueden buscar, pero `mentions list` no las muestra.
+### Límites
+
+- `mentions list` de `tg` y `max` muestra solo las menciones en mensajes. Las de [notas y documentos](./memo/notes.md)
+  y del [correo](./mail/email.md) las lista `memo mentions list`.
 - Vincular un enlace a un sitio web corriente con algo. Ese enlace solo se puede descartar.
 - Lugares que no son direcciones postales: una ciudad sola, el nombre de un edificio, un lugar descrito con palabras.
 - Direcciones fuera de Europa, el Reino Unido y Estados Unidos: puede que se encuentren solo en parte.
 
-Cuando sepas dónde apareció un número, un sitio o un nombre, [recupera el contexto con esa persona](./people.md) antes de
+Cuando sepas dónde apareció un número, un sitio o un nombre, [recupera el contexto con esa persona](#pide-al-agente) antes de
 responder.

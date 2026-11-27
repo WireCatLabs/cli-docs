@@ -4,12 +4,24 @@ description: "Cómo llevar una herramienta de línea de comandos que hiciste al 
 ---
 
 Hiciste una herramienta de línea de comandos y quieres que la gente la encuentre junto a las herramientas de WireCat.
-Esta página es para autores fuera de WireCatLabs. Muestra qué necesita tu herramienta, cómo pedir que la incluyamos,
+Si haces herramientas fuera de WireCatLabs, verás qué necesita tu herramienta, cómo pedir que la incluyamos,
 qué comprobamos y qué pasa después de fusionarla. Una herramienta incluida aparece en wirecat.dev, en el grupo
 «Herramientas de la comunidad», y en WireCat Desktop para quien active las herramientas de la comunidad.
 
 Estar en la lista no convierte tu herramienta en parte de WireCat. Conserva tu nombre, tu ámbito de npm y tu
 repositorio. Tú sigues haciéndola y publicándola.
+
+**En esta página:**
+
+1. [Quién puede incluir una herramienta](#quién-puede-incluir-una-herramienta)
+2. [Qué necesita tu herramienta](#qué-necesita-tu-herramienta)
+3. [Pide que la incluyamos](#pide-que-la-incluyamos)
+4. [Qué comprobamos](#qué-comprobamos)
+5. [Después de fusionarla](#después-de-fusionarla)
+6. [Actualizaciones](#actualizaciones)
+7. [Retirada](#retirada)
+8. [Prueba tu herramienta antes de pedir la inclusión](#prueba-tu-herramienta-antes-de-pedir-la-inclusión)
+9. [Siguientes pasos](#siguientes-pasos)
 
 ## Quién puede incluir una herramienta
 

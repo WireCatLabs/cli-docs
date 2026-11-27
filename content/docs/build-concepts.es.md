@@ -4,9 +4,9 @@ description: "El modelo del almacén compartido, cómo añadir los registros de 
 ---
 
 Estás creando una herramienta de línea de comandos, o una integración para un agente, que lee o escribe el almacén
-compartido de WireCat. Esta página te da el modelo en cinco minutos: qué tipos de registro existen, cómo se conectan y
-qué reglas evitan que tu herramienta rompa las demás. Más abajo se muestra cómo añadir una fuente y guardar
-tus propios datos. Después: [iniciar sesión y cumplir los estándares](./build-sign-in.md).
+compartido de WireCat. En cinco minutos tienes el modelo: qué tipos de registro existen, cómo se conectan y
+qué reglas evitan que tu herramienta rompa las demás. También verás cómo añadir una fuente y guardar
+tus propios datos. Las reglas de inicio de sesión están en [iniciar sesión y cumplir los estándares](./build-sign-in.md).
 
 **En esta página:**
 

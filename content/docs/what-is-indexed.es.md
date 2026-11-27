@@ -20,7 +20,7 @@ Averigua antes de buscar si lo que recuerdas se puede encontrar: una frase, un P
 
 ## Antes de empezar
 
-La búsqueda lee el archivo local, no el servicio de mensajería. Descarga primero el historial del chat: [Búsqueda](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes). Un resultado vacío no prueba que no se enviara nada.
+La mayor parte de la búsqueda lee el archivo local. La búsqueda de palabras de `tg` y `max` consulta también por defecto el servidor del servicio de mensajería, y con `--backend archive` se queda en tu ordenador. Todo lo demás de esta página solo se encuentra cuando está guardado. Descarga primero el historial del chat: [Búsqueda](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes). Un resultado vacío no prueba que no se enviara nada.
 
 ## Qué necesita cada tipo
 

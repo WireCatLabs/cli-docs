@@ -3,10 +3,9 @@ title: Data model
 description: The entities WireCat tools keep in their shared local store, how they connect, and how an agent narrows to the right context before it compares meaning.
 ---
 
-Every WireCat tool — `tg`, `max`, `memo`, `zm` — keeps what it reads in one local SQLite file,
-`wirecat.db`. This page is for developers and agent authors who want to query that file or
-understand what an agent can find in it. It explains the entities first, then how they connect,
-then how a search finds context, and only at the end the columns worth querying by. How the
+Every WireCat tool keeps its data in one file on your computer, `wirecat.db`, a SQLite database.
+Query that file or build an agent on it, and know what the agent can find there: the entities first,
+then how they connect, then how a search finds context, and at the end the columns worth querying by. How the
 store is opened, migrated and locked is in [the local store](./architecture.mdx#the-local-store).
 
 It describes the schema as read on 16 October 2026, at a fixed commit of cli-core, the
@@ -60,7 +59,7 @@ In words: a person has identities; identities send messages and emails and take 
 meetings. An organization holds accounts and projects. Each account brings its chats, emails,
 documents and meetings; chats hold messages, and messages group into conversations. A meeting
 belongs to an event. A project holds tasks and decisions. A memory and a tag can sit on any entity, so their dotted lines say "any entity"; the line
-to Account stands for all of them. Colours group the cards: people, chats and mail, the account
+to Account stands for all of them. Colors group the cards: people, chats and mail, the account
 they came through, documents and meetings, work, and the two that attach to anything.
 
 ### Entities and source records
@@ -1270,7 +1269,7 @@ Rows of transcript rows, meeting chat and summaries waiting to be indexed: trigg
 
 ### Tasks
 
-A task and ticket system for people and agents: projects with keys, typed and prioritised tasks, assignees that are people or bots, and the facts recorded along the way (`facts`). A promise is a task of type `promise`; a question is a task of type `question` whose answer is linked.
+A task and ticket system for people and agents: projects with keys, typed and prioritized tasks, assignees that are people or bots, and the facts recorded along the way (`facts`). A promise is a task of type `promise`; a question is a task of type `question` whose answer is linked.
 
 #### `reminders`
 
@@ -1400,7 +1399,7 @@ The history of a task: created, status changed, assigned, due date moved.
 
 #### `task_pairs`
 
-Two tasks that may be one job, and what was decided about them: the review list the duplicate check leaves, and every merge, rejection, `--into` and `--new` as a labelled pair. A merge never deletes; `tasks unmerge` undoes one.
+Two tasks that may be one job, and what was decided about them: the review list the duplicate check leaves, and every merge, rejection, `--into` and `--new` as a labeled pair. A merge never deletes; `tasks unmerge` undoes one.
 
 | Column | Type | Meaning |
 | --- | --- | --- |
