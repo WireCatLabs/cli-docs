@@ -192,7 +192,7 @@ coincidir. `project:2` es una referencia de destino inventada: usa la real de `M
 referencia de destino explícita. Por ejemplo:
 
 ```json
-{"project:1":"project:2","bot:3":"bot:7","document:4":"document:9"}
+{"project:1":"project:2","agent:3":"agent:7","document:4":"document:9"}
 ```
 
 Estos ID son ilustrativos. Leer una referencia no establece identidad: elige correspondencias entre
