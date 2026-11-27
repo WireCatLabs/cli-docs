@@ -10155,6 +10155,7 @@ linear sync [options]
 | Option | What it does |
 |---|---|
 | `--rescan` | list everything again, issues and documents, dropping a round in progress; a rescan of the documents starts their walk over each time, so run it once and continue with a plain sync. |
+| `--allow-deletions <count>` | let this run mark deleted up to this many of what its full list no longer has, when the guard holds it. |
 | `--max-pages <pages>` | at most this many requests for the issues in this run, and as many for the documents. |
 | `--embed` | also index new issues, projects and comments and the documents' pending text for meaning search, with a model already downloaded. |
 
@@ -10185,7 +10186,7 @@ linear issues list [query] [options]
 
 **Returns:** tracker issue — kind, external_id, deleted; every field: linear commands info issues list
 
-**Example:** `linear work issues list type:started`, `linear work issues list assignee:none --json`
+**Example:** `linear work issues list type:started`, `linear work issues list label:Bug assignee:none --json`
 
 ### `linear issues show`
 
@@ -10205,7 +10206,7 @@ linear issues show <issue>
 
 ### `linear issues search`
 
-find issues, projects and comments in the copy by their words
+find issues, projects and comments in the copy by their words, and by meaning once sync --embed built their vectors
 
 ```sh
 linear issues search <words> [options]
@@ -10213,7 +10214,7 @@ linear issues search <words> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `words` | required | every word must match, in any form; a word of four letters or more finds the words it begins. |
+| `words` | required | every word must match, in any form and any order; a word of four letters or more finds the words it begins; "a phrase" in quote marks inside the query keeps its words together; a question finds what holds some of its words. |
 
 | Option | What it does |
 |---|---|
@@ -10222,7 +10223,7 @@ linear issues search <words> [options]
 
 **Returns:** tracker hit — kind, external_id, deleted; every field: linear commands info issues search
 
-**Example:** `linear work issues search "invoice currency"`
+**Example:** `linear work issues search invoice currency`, `linear work issues search "why do refunds round wrong?"`
 
 ### `linear issues assign`
 

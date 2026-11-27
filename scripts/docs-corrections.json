@@ -1406,31 +1406,6 @@
     }
   },
   {
-    "tool": "linear",
-    "slug": "commands",
-    "reason": "In linear 0.4.x quoted words are matched as one phrase, so the generated example `issues search \"invoice currency\"` finds less than the reader means. Unquoted words must all match, in any order. linear-cli PR #24 fixes the README; the example comes from the command tree, so it stays here until a linear release carries an unquoted example. Drop this entry at that pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "**Example:** `linear work issues search \"invoice currency\"`",
-          "after": "**Example:** `linear work issues search invoice currency`"
-        }
-      ],
-      "ru": [
-        {
-          "before": "**Example:** `linear work issues search \"invoice currency\"`",
-          "after": "**Example:** `linear work issues search invoice currency`"
-        }
-      ],
-      "es": [
-        {
-          "before": "**Example:** `linear work issues search \"invoice currency\"`",
-          "after": "**Example:** `linear work issues search invoice currency`"
-        }
-      ]
-    }
-  },
-  {
     "tool": "attio",
     "slug": "index",
     "reason": "attio 0.8.0 copies Attio meetings with the transcripts of their recorded calls (CHANGELOG 0.8.0, docs/usage.md \"Notes and tasks on a deal\"), but the upstream opening and \"What you get\" do not say what the reader gains from it. At the next attio pin bump, ask attio-cli to carry the en text, move this entry's es/ru replacements into translations/attio/index.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
