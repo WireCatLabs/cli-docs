@@ -4,6 +4,49 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/asterisk-cli`. Una sección por versión, la más reciente primero.
 
+## 0.11.0 — 25.11.2026
+
+### Corregido
+
+- **Una lectura con `PBX_READ_ONLY` no crea ningún almacén.** Antes de cualquier sincronización, una lectura como
+  `meetings list` abría el almacén compartido para escribir y creaba `wirecat.db`. Ahora responde desde un almacén
+  vacío en una carpeta temporal, como hace beeline. Un almacén que necesita una migración se rechaza bajo ese bloqueo,
+  no se migra.
+- **El almacén se abre con `openAppStore` de cli-core.** pbx tenía su propia copia. Nada cambia para el usuario: el
+  almacén, su entrada de proveedor y la apertura de solo lectura funcionan como antes.
+
+## 0.10.0 — 25.11.2026
+
+### Cambios — pueden romper scripts
+
+- **Basado en cli-core 1.0.0 y cli-base 1.0.0.** El almacén migra a la versión 73 al abrirse por primera vez: cuando
+  una herramienta 1.0 lo abre, una herramienta 0.x lo rechaza, así que actualiza todos los CLI de WireCat a la vez. La
+  excepción de lint para el comando corto `pbx` desaparece: cli-base 1.0 lo acepta junto a `wcat-pbx`.
+
+## 0.9.0 — 19.11.2026
+
+### Añadido
+
+- **`pbx <profile> account remove` cierra la sesión de un perfil y lo olvida en este ordenador.** Olvida la contraseña
+  guardada de la base de datos o de SFTP y los ajustes del perfil. `--keep-data` deja sus llamadas en el almacén, donde
+  la búsqueda las sigue encontrando, y `--delete-data` las borra. Pregunta antes o acepta `--yes`, y `--dry-run` muestra
+  lo que quitaría. Por qué: WireCat Desktop elimina una cuenta con este comando, y pbx solo podía cerrar la sesión con
+  `session end`. La contraseña sigue siendo válida en el servidor: solo el dueño del servidor la cambia.
+
+### Cambios — pueden romper scripts
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Antes iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del ordenador sin que el dueño las
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: una CLI nunca elige una cuenta por el dueño
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)). Ten en cuenta: un cliente configurado con la entrada antigua mantiene `--profiles all` hasta que lo
+  configures de nuevo. Un servidor añadido a mano o con `mcp config` no cambia.
+
+### Corregido
+
+- **WireCat Desktop puede eliminar una cuenta de pbx.** El manifiesto que lee Desktop (`contracts/wirecat.json`) ahora
+  nombra `account remove` y `session end`.
+
 ## 0.8.0 — 17.11.2026
 
 ### Cambios — pueden romper scripts
@@ -257,7 +300,7 @@ Cambios destacados de `@wirecat/asterisk-cli`. Una sección por versión, la má
   de cli-core: reintentos si se corta la conexión, tiempos de espera y cada petición en la traza de la ejecución. La
   clave del servidor se fija con `sftp_host_key` antes de enviar ninguna contraseña o clave, y el primer
   `session start` muestra la huella para comprobarla. Consulta
-  [conecta tu Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp).
+  [conecta tu Asterisk](https://github.com/WireCatLabs/asterisk-cli/blob/v0.11.0/docs/asterisk.md#files-on-the-pbx-over-sftp).
 
 ### Corregido
 

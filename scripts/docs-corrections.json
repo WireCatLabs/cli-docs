@@ -1249,19 +1249,19 @@
     "replacements": {
       "en": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.11.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ],
       "ru": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.11.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ],
       "es": [
         {
-          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.8.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
+          "before": "https://github.com/WireCatLabs/asterisk-cli/blob/v0.11.0/docs/asterisk.md#files-on-the-pbx-over-sftp",
           "after": "./installation.md#files-on-the-pbx-over-sftp"
         }
       ]
@@ -1356,70 +1356,6 @@
     }
   },
   {
-    "tool": "pbx",
-    "slug": "installation",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. The opening leads with the reader's gain before how Asterisk keeps calls. Asterisk's files are owned by the asterisk user and group on stock Asterisk and FreePBX; asterisk-cli has no pbx group. The en text is also in WireCatLabs/asterisk-cli#54 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/pbx/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Asterisk writes a line about every call to its call log and keeps each recording as a sound file, but it gives your AI\nagent no way to read them.",
-          "after": "Find any call your phone system recorded and read what was said in it, without listening to the recording. Asterisk\nwrites a line about every call to its call log and keeps each recording as a sound file, but it gives your AI agent\nno way to read them."
-        },
-        {
-          "before": "example one in the `pbx` group, then:",
-          "after": "example one in the `asterisk` group, which owns those folders on most systems, then:"
-        }
-      ],
-      "ru": [
-        {
-          "before": "Asterisk пишет строку о каждом звонке в журнал звонков",
-          "after": "Находите любой звонок, который записала ваша АТС, и читайте, о чем в нем говорили, не слушая запись. Asterisk\nпишет строку о каждом звонке в журнал звонков"
-        },
-        {
-          "before": "например в\nгруппе `pbx`.",
-          "after": "например в\nгруппе `asterisk`, которой эти папки принадлежат в большинстве систем."
-        }
-      ],
-      "es": [
-        {
-          "before": "Asterisk escribe una línea sobre cada llamada en su registro de llamadas y guarda cada grabación como un archivo de\nsonido.",
-          "after": "Encuentra cualquier llamada que grabó tu centralita y lee lo que se dijo en ella, sin escuchar la grabación.\nAsterisk escribe una línea sobre cada llamada en su registro de llamadas y guarda cada grabación como un archivo de\nsonido."
-        },
-        {
-          "before": "por ejemplo uno del grupo `pbx`.",
-          "after": "por ejemplo uno del grupo `asterisk`, dueño de esas carpetas en la mayoría de los sistemas."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "pbx",
-    "slug": "index",
-    "phase": "before-translation",
-    "reason": "Docs audit 2026-11-23. ffmpeg is needed only to turn WAV, GSM or M4A recordings into text (asterisk-cli src/commands/transcribe.ts:113 at v0.9.0); the install page says the same. The en text is also in WireCatLabs/asterisk-cli#54 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/pbx/index.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "or Node.js 24 or later, and `ffmpeg`.",
-          "after": "or Node.js 24 or later. To turn WAV, GSM or M4A recordings into text, you also need `ffmpeg`."
-        }
-      ],
-      "ru": [
-        {
-          "before": "либо Node.js 24 и новее, и `ffmpeg`.",
-          "after": "либо Node.js 24 и новее. Чтобы превращать в текст записи WAV, GSM или M4A, нужен еще `ffmpeg`."
-        }
-      ],
-      "es": [
-        {
-          "before": "o Node.js 24 o posterior, y `ffmpeg`.",
-          "after": "o Node.js 24 o posterior. Para convertir en texto grabaciones WAV, GSM o M4A, necesitas también `ffmpeg`."
-        }
-      ]
-    }
-  },
-  {
     "tool": "max",
     "slug": "permissions",
     "reason": "Docs follow-up 2026-11-23. Owner's decision NEED-2899 B (SEC-207): every permissions page says plainly that over MCP a write set to ask runs without asking (cli-base standards WC-MCP-7; cli-core src/mcp/mcp.test.ts). The ru text is also in WireCatLabs/max-cli#990 (2026-11-23). At the next pin bump, move this entry's en/es replacements into translations/max/permissions.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old en/es text back.",
@@ -1465,44 +1401,6 @@
         {
           "before": "Mediante MCP, `ask` no exige un formulario de confirmación del servidor: la aplicación gestiona sus propias confirmaciones y puede permitir una llamada sin volver a preguntar.",
           "after": "Por MCP, un cambio en `ask` se ejecuta sin preguntarte: nadie está en un terminal para responder y el servidor no muestra ningún formulario. Solo la aplicación del agente puede preguntarte, si no apruebas antes su herramienta de escritura."
-        }
-      ]
-    }
-  },
-  {
-    "tool": "pbx",
-    "slug": "installation",
-    "reason": "Docs follow-up 2026-11-23. Steps for an SSH user that may only forward to the database: pbx opens only a direct-tcpip channel (cli-core src/sftp/ssh2.ts forwardOut), never a shell or a command. What a CDR database on another computer must accept (MySQL bind-address, PostgreSQL listen_addresses and pg_hba.conf, the firewall, db_tls). The en text is also in WireCatLabs/asterisk-cli#54 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/pbx/installation.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "phase": "before-translation",
-    "replacements": {
-      "en": [
-        {
-          "before": "`cdr_source postgres` reads PostgreSQL.",
-          "after": "`10.0.0.%` stands for the address of the computer that runs `pbx`. When the database is on another computer, it must\nalso accept that address:\n\n1. On MySQL or MariaDB, set `bind-address` in the server's settings to an address your computer reaches, not\n   `127.0.0.1`, and restart the database. On PostgreSQL, add that address to `listen_addresses` in `postgresql.conf`,\n   and a line for the user to `pg_hba.conf`, such as `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.\n2. Let your computer's address through the firewall to the database port, and no other address.\n3. Turn on `db_tls true` when the connection crosses a network you do not control.\n\nNot ready to open the database to the network? Reach it\n[through the phone system's SSH](#a-database-behind-the-phone-systems-ssh) instead.\n\n`cdr_source postgres` reads PostgreSQL."
-        },
-        {
-          "before": "`db_ssh_port` changes the SSH port (22).",
-          "after": "The SSH user needs no shell. Make one before the first `session start`, on the phone system, as root:\n\n1. Create the user with no shell, and give it your public key:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Let it forward only to the database. Add this to the end of `/etc/ssh/sshd_config`, with the `db_host` and\n   `db_port` you set (`127.0.0.1:5432` for PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Check the file with `sshd -t`, then reload the SSH server with `systemctl reload sshd`.\n\n`pbx` asks the SSH server only to forward to the database, so this user can do nothing else on the phone system.\n\n`db_ssh_port` changes the SSH port (22)."
-        }
-      ],
-      "ru": [
-        {
-          "before": "`cdr_source postgres` читает PostgreSQL.",
-          "after": "`10.0.0.%` здесь означает адрес компьютера, на котором работает `pbx`. Если база стоит на другом компьютере, она тоже\nдолжна принимать этот адрес:\n\n1. В MySQL или MariaDB задайте в настройках сервера `bind-address`: адрес, до которого доходит ваш компьютер, а не\n   `127.0.0.1`. Затем перезапустите базу. В PostgreSQL добавьте этот адрес в `listen_addresses` в `postgresql.conf`, а\n   для пользователя добавьте строку в `pg_hba.conf`, например `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.\n2. Откройте порт базы в сетевом экране только для адреса вашего компьютера.\n3. Включите `db_tls true`, если соединение идет через сеть, которую вы не контролируете.\n\nНе хотите открывать базу в сеть? Подключайтесь к ней\n[через SSH самой АТС](#a-database-behind-the-phone-systems-ssh).\n\n`cdr_source postgres` читает PostgreSQL."
-        },
-        {
-          "before": "`db_ssh_port` меняет порт SSH (22).",
-          "after": "Пользователю SSH не нужна командная оболочка. Создайте его до первого `session start`, на АТС, от имени root:\n\n1. Создайте пользователя без оболочки и дайте ему ваш открытый ключ:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Разрешите ему пробрасывать соединение только до базы. Добавьте эти строки в конец `/etc/ssh/sshd_config`, с теми\n   `db_host` и `db_port`, что вы задали (`127.0.0.1:5432` для PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Проверьте файл командой `sshd -t`, затем перезагрузите SSH-сервер командой `systemctl reload sshd`.\n\n`pbx` просит SSH-сервер только пробросить соединение до базы, поэтому этот пользователь больше ничего не может\nсделать на АТС.\n\n`db_ssh_port` меняет порт SSH (22)."
-        }
-      ],
-      "es": [
-        {
-          "before": "`cdr_source postgres` lee PostgreSQL.",
-          "after": "`10.0.0.%` es la dirección del ordenador donde funciona `pbx`. Si la base de datos está en otro ordenador, también\ndebe aceptar esa dirección:\n\n1. En MySQL o MariaDB, pon en los ajustes del servidor `bind-address`: una dirección a la que llega tu ordenador, no\n   `127.0.0.1`. Después reinicia la base de datos. En PostgreSQL, añade esa dirección a `listen_addresses` en\n   `postgresql.conf`, y una línea para el usuario en `pg_hba.conf`, como `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.\n2. Deja pasar por el cortafuegos hasta el puerto de la base de datos la dirección de tu ordenador y ninguna otra.\n3. Activa `db_tls true` cuando la conexión cruce una red que no controlas.\n\n¿Prefieres no abrir la base de datos a la red? Llega a ella\n[por el SSH de la propia centralita](#a-database-behind-the-phone-systems-ssh).\n\n`cdr_source postgres` lee PostgreSQL."
-        },
-        {
-          "before": "`db_ssh_port` cambia el puerto SSH (22).",
-          "after": "El usuario SSH no necesita un intérprete de comandos. Créalo antes del primer `session start`, en la centralita,\ncomo root:\n\n1. Crea el usuario sin intérprete y dale tu clave pública:\n\n   ```sh\n   useradd --create-home --shell /usr/sbin/nologin wirecat\n   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh\n   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys\n   ```\n\n2. Déjale reenviar solo hasta la base de datos. Añade esto al final de `/etc/ssh/sshd_config`, con el `db_host` y el\n   `db_port` que pusiste (`127.0.0.1:5432` para PostgreSQL):\n\n   ```text\n   Match User wirecat\n       AllowTcpForwarding local\n       PermitOpen 127.0.0.1:3306\n       PermitTTY no\n       X11Forwarding no\n       AllowAgentForwarding no\n   ```\n\n3. Comprueba el archivo con `sshd -t` y recarga el servidor SSH con `systemctl reload sshd`.\n\n`pbx` solo pide al servidor SSH que reenvíe hasta la base de datos, así que este usuario no puede hacer nada más en la\ncentralita.\n\n`db_ssh_port` cambia el puerto SSH (22)."
         }
       ]
     }

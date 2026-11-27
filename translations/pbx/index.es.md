@@ -134,7 +134,7 @@ pbx models download gigaam-v3     # the local Russian speech model, once
 pbx office meetings transcribe    # up to 20 recorded calls
 ```
 
-Necesitas Node.js 22.16 o una versión 22.x posterior, o Node.js 24 o posterior, y `ffmpeg`. Una conexión a una base de datos
+Necesitas Node.js 22.16 o una versión 22.x posterior, o Node.js 24 o posterior. Para convertir en texto grabaciones WAV, GSM o M4A, necesitas también `ffmpeg`. Una conexión a una base de datos
 o por SFTP en lugar de archivos locales: [instalar y conectar](./installation.md).
 
 ## Límites

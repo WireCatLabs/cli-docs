@@ -2,6 +2,7 @@
 title: "Instalar y conectar"
 ---
 
+Encuentra cualquier llamada que grabó tu centralita y lee lo que se dijo en ella, sin escuchar la grabación.
 Asterisk escribe una línea sobre cada llamada en su registro de llamadas y guarda cada grabación como un archivo de
 sonido. Pero no le da a tu agente de IA ninguna forma de leerlos. Los servicios que convierten grabaciones en texto
 suelen enviarlas a la nube. `pbx` es una herramienta de línea de comandos de WireCat. Lee el registro de llamadas y
@@ -32,6 +33,7 @@ WireCat Desktop y `pbx office setup` en una terminal hacen las mismas preguntas.
 7. [Importa el historial y mantenlo al día](#import-the-history-then-keep-it-current)
 8. [Transcribir](#transcribe)
 9. [Busca las llamadas junto con todo lo demás](#search-the-calls-with-everything-else)
+10. [Quitar una centralita](#remove-a-phone-system)
 
 <a id="how-asterisk-keeps-calls"></a>
 
@@ -221,6 +223,18 @@ pbx office config set cdr_timezone Europe/Moscow
 pbx office session start
 ```
 
+`10.0.0.%` es la dirección del ordenador donde funciona `pbx`. Si la base de datos está en otro ordenador, también
+debe aceptar esa dirección:
+
+1. En MySQL o MariaDB, pon en los ajustes del servidor `bind-address`: una dirección a la que llega tu ordenador, no
+   `127.0.0.1`. Después reinicia la base de datos. En PostgreSQL, añade esa dirección a `listen_addresses` en
+   `postgresql.conf`, y una línea para el usuario en `pg_hba.conf`, como `host asteriskcdrdb wirecat_reader 10.0.0.0/24 scram-sha-256`.
+2. Deja pasar por el cortafuegos hasta el puerto de la base de datos la dirección de tu ordenador y ninguna otra.
+3. Activa `db_tls true` cuando la conexión cruce una red que no controlas.
+
+¿Prefieres no abrir la base de datos a la red? Llega a ella
+[por el SSH de la propia centralita](#a-database-behind-the-phone-systems-ssh).
+
 `cdr_source postgres` lee PostgreSQL. `db_port` cambia el puerto (3306 para MySQL, 5432 para PostgreSQL), `db_table`
 la tabla (`cdr`). `db_tls true` pide una conexión cifrada con el certificado comprobado. La sesión con la base de
 datos se abre en solo lectura. La única consulta que se envía es un `SELECT` de los registros que empezaron después
@@ -255,6 +269,34 @@ pbx office config set db_ssh_user wirecat
 pbx office config set db_ssh_key_path ~/.ssh/wirecat_pbx     # or leave it out to sign in with a password
 pbx office session start
 ```
+
+El usuario SSH no necesita un intérprete de comandos. Créalo antes del primer `session start`, en la centralita,
+como root:
+
+1. Crea el usuario sin intérprete y dale tu clave pública:
+
+   ```sh
+   useradd --create-home --shell /usr/sbin/nologin wirecat
+   install -d -m 700 -o wirecat -g wirecat /home/wirecat/.ssh
+   install -m 600 -o wirecat -g wirecat wirecat_pbx.pub /home/wirecat/.ssh/authorized_keys
+   ```
+
+2. Déjale reenviar solo hasta la base de datos. Añade esto al final de `/etc/ssh/sshd_config`, con el `db_host` y el
+   `db_port` que pusiste (`127.0.0.1:5432` para PostgreSQL):
+
+   ```text
+   Match User wirecat
+       AllowTcpForwarding local
+       PermitOpen 127.0.0.1:3306
+       PermitTTY no
+       X11Forwarding no
+       AllowAgentForwarding no
+   ```
+
+3. Comprueba el archivo con `sshd -t` y recarga el servidor SSH con `systemctl reload sshd`.
+
+`pbx` solo pide al servidor SSH que reenvíe hasta la base de datos, así que este usuario no puede hacer nada más en la
+centralita.
 
 `db_ssh_port` cambia el puerto SSH (22). El usuario SSH no necesita un intérprete de comandos. Basta una cuenta que
 solo pueda reenviar un puerto. El primer `session start` se conecta solo lo justo para ver la clave del servidor SSH
@@ -305,7 +347,7 @@ sincronización. Una llamada sin grabación se importa igualmente. Si la carpeta
 
 `files_from sftp` lee `Master.csv` y las grabaciones en la propia centralita, a través de su servidor SSH. No se copia
 nada a una carpeta propia y no se escribe nada en la centralita. Crea un usuario que solo pueda leer esas carpetas,
-por ejemplo uno del grupo `pbx`. Después configura el perfil:
+por ejemplo uno del grupo `asterisk`, dueño de esas carpetas en la mayoría de los sistemas. Después configura el perfil:
 
 ```sh
 pbx office config set files_from sftp
@@ -471,3 +513,18 @@ personas que participan; consulta [seguridad](./security.md#recordings-and-conse
 Las llamadas están en el almacén de WireCat que lee cada herramienta de WireCat. Un agente con `memo` pregunta por una
 persona en llamadas, chats y correo a la vez. `search all` en cualquier CLI de WireCat busca en todo junto. Siguiente
 paso: [úsalo](./usage.md), cómo se construyen los comandos y cómo lee un agente las llamadas.
+
+<a id="remove-a-phone-system"></a>
+
+## Quitar una centralita
+
+Para olvidar una centralita en este ordenador, elimina su perfil:
+
+```sh
+pbx office account remove --keep-data
+```
+
+Borra los ajustes del perfil y sus contraseñas guardadas. Los usuarios de la base de datos, SFTP y SSH conservan sus
+contraseñas en la centralita: cámbialas o bórralas allí. `--keep-data` deja las llamadas y su texto en el almacén,
+donde la búsqueda las sigue encontrando, y `--delete-data` las borra. En una terminal pregunta antes, `--yes` responde
+por un script, y `--dry-run` muestra lo que quitaría sin quitar nada.
