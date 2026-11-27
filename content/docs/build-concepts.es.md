@@ -8,6 +8,18 @@ compartido de WireCat. Esta página te da el modelo en cinco minutos: qué tipos
 qué reglas evitan que tu herramienta rompa las demás. Más abajo se muestra cómo añadir una fuente y guardar
 tus propios datos. Después: [iniciar sesión y cumplir los estándares](./build-sign-in.md).
 
+**En esta página:**
+
+1. [El almacén compartido](#el-almacén-compartido)
+2. [Entidades y registros de origen](#entidades-y-registros-de-origen)
+3. [externalid](#externalid)
+4. [Vínculos](#vínculos)
+5. [Entidades compartidas y tus propias tablas](#entidades-compartidas-y-tus-propias-tablas)
+6. [Más en el almacén](#más-en-el-almacén)
+7. [Qué se rompe si lo omites](#qué-se-rompe-si-lo-omites)
+8. [Añadir una fuente](#añadir-una-fuente)
+9. [Guardar tus propios datos](#guardar-tus-propios-datos)
+
 ## El almacén compartido
 
 Cada herramienta de WireCat guarda sus datos en un único archivo SQLite en el ordenador del propietario, `wirecat.db`.

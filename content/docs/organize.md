@@ -7,6 +7,13 @@ Keep a project decision connected to the document, message and person that expla
 helps you choose what to save and what to link, without copying every source into a new note.
 The records you connect must be in the same deliberately chosen local store.
 
+**On this page:**
+
+1. [Choose the right record](#choose-the-right-record)
+2. [Try one project decision](#try-one-project-decision)
+3. [Folders and navigation](#folders-and-navigation)
+4. [Put each action in its tool](#put-each-action-in-its-tool)
+
 ## Choose the right record
 
 | Use this | When you want to | Example |

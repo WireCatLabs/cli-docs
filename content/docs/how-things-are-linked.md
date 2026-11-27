@@ -5,6 +5,23 @@ description: "Which records the tools connect (messages, people, chats, files, m
 
 You can ask your agent for everything about one person, or for the messages behind a decision, because the tools keep links between records. This page explains which links exist, who creates each one (the tool, you or your agent) and how to follow them. After it, you can tell why a link is missing and which command adds it. Search and links work on what is already in the local store, so download the history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first).
 
+**On this page:**
+
+1. [The idea](#the-idea)
+2. [A reference names any record](#a-reference-names-any-record)
+3. [Messages, chats and people](#messages-chats-and-people)
+4. [Replies and conversations](#replies-and-conversations)
+5. [Files, voice notes and pictures](#files-voice-notes-and-pictures)
+6. [Meeting transcripts](#meeting-transcripts)
+7. [Mentions](#mentions)
+8. [Notes, tasks, facts and memories](#notes-tasks-facts-and-memories)
+9. [Tags](#tags)
+10. [Drive documents](#drive-documents)
+11. [Business relationships](#business-relationships)
+12. [Who makes a link](#who-makes-a-link)
+13. [Use links in a question](#use-links-in-a-question)
+14. [If a link is missing](#if-a-link-is-missing)
+
 ## The idea
 
 `tg`, `max`, `memo` and `drive` can share records when explicitly configured to use the same compatible local database. Drive uses the shared database by default (see [where the files live](./drive/configuration.md#where-the-files-live)), so its records can be linked to the other tools unless you moved it. A link is one of two things:

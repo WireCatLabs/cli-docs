@@ -31,10 +31,10 @@ gcal personal session start
 ```
 
 Сделать общее приложение Google открытым для Календаря сложно, поэтому Google может не пустить вас через приложение
-WireCat. Тогда используйте своё приложение, как описано ниже. Иначе разрешите чтение Календаря, когда Google спросит.
+WireCat. Тогда используйте свое приложение, как описано ниже. Иначе разрешите чтение Календаря, когда Google спросит.
 
-**Своё приложение.** Оно нужно, если Google не пускает через приложение WireCat или если вы не хотите входить через
-него. [Создайте своё приложение Google](#make-your-own-google-app) один раз, это займёт около десяти минут, затем
+**Свое приложение.** Оно нужно, если Google не пускает через приложение WireCat или если вы не хотите входить через
+него. [Создайте свое приложение Google](#make-your-own-google-app) один раз, это займет около десяти минут, затем
 передайте его файл:
 
 ```sh
@@ -45,7 +45,7 @@ gcal personal session start --client-file ~/client_secret.json
 `GCAL_GOOGLE_CLIENT_ID` и `GCAL_GOOGLE_CLIENT_SECRET` или сохраните ID в настройке `google_client_id`
 ([порядок](./configuration.md#your-own-google-client)).
 
-## Создайте своё приложение Google
+## Создайте свое приложение Google
 
 Это делается один раз в [Google Cloud Console](https://console.cloud.google.com/), под тем аккаунтом Google, с которым
 вы будете работать в `gcal`. Это бесплатно. Приложение только ваше: через него больше никто не входит. Если какой-то
@@ -60,17 +60,17 @@ gcal personal session start --client-file ~/client_secret.json
 ### 2. Включите Google Calendar API
 
 Откройте [страницу Google Calendar API](https://console.cloud.google.com/apis/library/calendar-json.googleapis.com) и
-нажмите **Enable**. Если пропустить этот шаг, вход всё равно пройдёт, но первая команда, которая читает Календарь,
+нажмите **Enable**. Если пропустить этот шаг, вход все равно пройдет, но первая команда, которая читает Календарь,
 завершится ошибкой «the Google Calendar API is turned off for this OAuth project».
 
-Для `--grant meetings` откройте ещё [страницу Google Meet API](https://console.cloud.google.com/apis/library/meet.googleapis.com)
+Для `--grant meetings` откройте еще [страницу Google Meet API](https://console.cloud.google.com/apis/library/meet.googleapis.com)
 и нажмите **Enable**. Без этого `meetings sync` завершится ошибкой «the Google Meet API is turned off for this OAuth
 project».
 
 ### 3. Branding
 
 Откройте **Google Auth platform → [Branding](https://console.cloud.google.com/auth/branding)**. Если на странице есть
-кнопка **Get started**, нажмите её. Для себя достаточно заполнить только эти поля:
+кнопка **Get started**, нажмите ее. Для себя достаточно заполнить только эти поля:
 
 - **App name**: любое понятное вам имя, например `My gcal`. Google показывает его при входе.
 - **User support email**: ваш адрес.
@@ -95,10 +95,10 @@ project».
 | Статус публикации | Что происходит |
 | --- | --- |
 | **Testing** | Вход заканчивается через 7 дней после согласия. После этого команды завершаются ошибкой, и вы снова запускаете `session start`. Входить могут только тестовые пользователи, не больше 100. |
-| **In production** | Ограничения в 7 дней нет. При каждом входе Google может показать страницу «unverified app», и вы проходите её. У непроверенного приложения может быть не больше 100 пользователей, и вы один из них. |
+| **In production** | Ограничения в 7 дней нет. При каждом входе Google может показать страницу «unverified app», и вы проходите ее. У непроверенного приложения может быть не больше 100 пользователей, и вы один из них. |
 
 Для приложения, которым пользуетесь только вы, мы советуем **In production**. Нажмите **Publish app**, подтвердите и
-после этого войдите. Проверка Google не нужна: Google не требует её для приложения для личного использования, у
+после этого войдите. Проверка Google не нужна: Google не требует ее для приложения для личного использования, у
 которого меньше 100 пользователей, и разрешает этим пользователям пройти предупреждение. Оставайтесь в **Testing**, если
 не хотите видеть предупреждение и готовы входить заново каждую неделю.
 
@@ -118,21 +118,21 @@ project».
 Откройте **Google Auth platform → [Data Access](https://console.cloud.google.com/auth/scopes)**. Для своего приложения
 этот шаг необязателен: `gcal` в любом случае запрашивает свои области доступа при входе. Google пишет, что область, не
 добавленная здесь, приводит к странице непроверенного приложения
-([доступ приложения к данным](https://support.google.com/cloud/answer/15549135)), а ваше приложение и так её
+([доступ приложения к данным](https://support.google.com/cloud/answer/15549135)), а ваше приложение и так ее
 показывает. Если добавить области, они будут перечислены на странице согласия, и вы увидите, что разрешаете.
 
 Чтобы добавить их, нажмите **Add or remove scopes**, вставьте области в **Manually add scopes**, нажмите **Add to
 table**, **Update**, затем **Save**:
 
-| Область | Когда `gcal` её запрашивает |
+| Область | Когда `gcal` ее запрашивает |
 | --- | --- |
-| `openid`, `email` | Всегда: `gcal` узнаёт, какой аккаунт вошёл. |
+| `openid`, `email` | Всегда: `gcal` узнает, какой аккаунт вошел. |
 | `https://www.googleapis.com/auth/calendar.readonly` | Всегда: чтение ваших календарей и событий. |
 | `https://www.googleapis.com/auth/calendar.events` | С `--grant write`: создание, изменение и удаление событий и ответы на приглашения. |
 | `https://www.googleapis.com/auth/calendar.acls` | С `--grant sharing`: просмотр и изменение того, кто видит календарь. |
-| `https://www.googleapis.com/auth/meetings.space.readonly` | С `--grant meetings`: чтение ваших звонков Google Meet, кто подключился, расшифровка и её файлы на Диске. |
+| `https://www.googleapis.com/auth/meetings.space.readonly` | С `--grant meetings`: чтение ваших звонков Google Meet, кто подключился, расшифровка и ее файлы на Диске. |
 
-`--grant` добавляет области к области чтения и никогда её не заменяет.
+`--grant` добавляет области к области чтения и никогда ее не заменяет.
 
 ### 6. Создайте клиент и скачайте его файл
 
@@ -154,7 +154,7 @@ chmod 600 ~/client_secret.json
 
 Не создавайте клиент **Web application**: `gcal` входит через локальный адрес на вашем компьютере, а его разрешает
 только клиент Desktop app. См.
-[руководство Google по учётным данным Desktop app](https://developers.google.com/workspace/guides/create-credentials#desktop-app).
+[руководство Google по учетным данным Desktop app](https://developers.google.com/workspace/guides/create-credentials#desktop-app).
 
 ### 7. Войдите
 
@@ -164,7 +164,7 @@ chmod 600 ~/client_secret.json
 gcal personal session start --client-file ~/client_secret.json
 ```
 
-Так `gcal` получает доступ на чтение. Чтобы он мог ещё создавать, изменять и удалять события, попросите об этом при
+Так `gcal` получает доступ на чтение. Чтобы он мог еще создавать, изменять и удалять события, попросите об этом при
 входе:
 
 ```sh
@@ -183,7 +183,7 @@ gcal config set --defaults google_client_id 1234-abc.apps.googleusercontent.com
 Секрет никогда не попадает в файл настроек: задайте `GCAL_GOOGLE_CLIENT_SECRET`, когда входите.
 
 `gcal` хранит клиент вместе со входом, в системном хранилище ключей. Следующие команды и каждое обновление входа файл
-больше не читают, поэтому его можно убрать в надёжное место. Он нужен только для нового `session start`.
+больше не читают, поэтому его можно убрать в надежное место. Он нужен только для нового `session start`.
 
 ### 8. Что Google показывает в браузере
 
@@ -198,6 +198,6 @@ gcal config set --defaults google_client_id 1234-abc.apps.googleusercontent.com
 4. Нажмите **Continue**. Браузер напишет «Sign-in received; you can close this tab», а `gcal` выведет аккаунт, под
    которым вы вошли.
 
-`gcal` ждёт 5 минут, пока вы закончите в браузере. Результат можно проверить командой `gcal personal session status`.
+`gcal` ждет 5 минут, пока вы закончите в браузере. Результат можно проверить командой `gcal personal session status`.
 
 Дальше: [работа с инструментом](./usage.md).

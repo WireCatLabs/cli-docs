@@ -7,6 +7,15 @@ Tu herramienta habla con un servicio que necesita iniciar sesión, como Google o
 las claves y los tokens, cómo elige el propietario la cuenta y qué no debe hacer nunca un inicio de sesión. También muestra
 el módulo de inicio de sesión compartido de cli-core.
 
+**En esta página:**
+
+1. [Las reglas](#las-reglas)
+2. [Pasos](#pasos)
+3. [Ejemplo](#ejemplo)
+4. [Inicio de sesión en el navegador con el módulo compartido](#inicio-de-sesión-en-el-navegador-con-el-módulo-compartido)
+5. [Qué se rompe si lo omites](#qué-se-rompe-si-lo-omites)
+6. [Cumplir los estándares y mantenerse al día](#cumplir-los-estándares-y-mantenerse-al-día)
+
 ## Las reglas
 
 - **El perfil siempre es explícito.** El propietario nombra el perfil en cada comando, como `acme work sync`. Una

@@ -6,7 +6,7 @@ title: "Сравнение с другими инструментами"
 <a id="when-another-tool-fits-better" />
 
 `mail` — это командная строка и MCP-сервер, который копирует ваш почтовый ящик по IMAP в общее хранилище WireCat на
-вашем компьютере, ищет в нём и наводит порядок в ящике на сервере. Здесь он стоит рядом с другими командными строками
+вашем компьютере, ищет в нем и наводит порядок в ящике на сервере. Здесь он стоит рядом с другими командными строками
 и MCP-серверами для почты, чтобы вы могли выбрать подходящий для вашей работы. Оценки для `mail` взяты из его
 документации и исходного кода для выпуска 0.17.0, проверенных 6 ноября 2026 года. Оценки для остальных инструментов
 взяты из их собственных README и документации, проверенных 28 октября 2026 года. Вход, синхронизация и отправка
@@ -20,7 +20,7 @@ title: "Сравнение с другими инструментами"
   [memo](../memo/mail.md) ищет по той же почте вместе с вашими чатами и заметками.
 - **[Himalaya](https://github.com/pimalaya/himalaya)** — командная строка на Rust для почты по IMAP, SMTP, JMAP, Gmail,
   Microsoft Graph, Maildir и mbox (v2.2.1, 2 октября 2026).
-- **[mu](https://github.com/djcb/mu)** — индексирует Maildir в поисковую базу и даёт быструю командную строку поиска
+- **[mu](https://github.com/djcb/mu)** — индексирует Maildir в поисковую базу и дает быструю командную строку поиска
   (v1.14.4, 14 октября 2026).
 - **[gog](https://github.com/openclaw/gogcli)** — одна командная строка для Gmail, Календаря, Диска и другого, созданная
   для агентов, с MCP-сервером (v0.47.1, 27 октября 2026).
@@ -29,7 +29,7 @@ title: "Сравнение с другими инструментами"
 - **[Microsoft 365 MCP](https://github.com/Softeria/ms-365-mcp-server)** — MCP-сервер для Microsoft Graph, где почта
   Outlook — один из 300 с лишним инструментов (v0.176.0, 28 октября 2026).
 
-[NeoMutt](https://github.com/neomutt/neomutt) в таблице нет: это почтовая программа для человека в терминале, а её
+[NeoMutt](https://github.com/neomutt/neomutt) в таблице нет: это почтовая программа для человека в терминале, а ее
 страницы мало говорят об агентах. Он назван ниже.
 
 ✅ да · 🟡 частично · ❌ нет · ➖ нет в его документации · n/a не применимо
@@ -41,7 +41,7 @@ title: "Сравнение с другими инструментами"
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
 | **Чтение и поиск** | | | | | | |
 | Искать по отправителю, дате и словам в одном запросе | ✅ | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-query.7.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | ➖ |
-| Искать на почтовом сервере письма, которых ещё нет в копии | ✅¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [❌](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | ➖ |
+| Искать на почтовом сервере письма, которых еще нет в копии | ✅¹ | [✅](https://github.com/pimalaya/himalaya#usage) | [❌](https://github.com/djcb/mu#readme) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | ➖ |
 | Прочитать всю переписку сразу | ✅ | ➖ | [✅](https://github.com/djcb/mu/blob/master/man/mu-find.1.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | ➖ |
 | Читать и искать без интернета | ✅ | [🟡](https://github.com/pimalaya/himalaya#features) | [✅](https://github.com/djcb/mu#readme) | ➖ | ➖ | ➖ |
 | Найти письмо с вложением и сохранить файл | ✅² | [✅](https://github.com/pimalaya/himalaya#usage) | [✅](https://github.com/djcb/mu/blob/master/man/mu-extract.1.org) | [✅](https://github.com/openclaw/gogcli/blob/main/docs/gmail-workflows.md) | [✅](https://workspacemcp.com/gmail) | [✅](https://github.com/Softeria/ms-365-mcp-server/blob/main/src/endpoints.json) |
@@ -62,7 +62,7 @@ title: "Сравнение с другими инструментами"
 | Outlook и Microsoft 365 | ✅⁹ | [🟡](https://github.com/pimalaya/himalaya#outlook) | ➖ | n/a | n/a | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Использовать JMAP или Microsoft Graph вместо IMAP | ❌¹² | [✅](https://github.com/pimalaya/himalaya#features) | ➖ | n/a | n/a | n/a |
 | **Агенты и безопасность** | | | | | | |
-| Агент может читать почту, но не отправлять и не менять её | ✅¹⁰ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/safety-profiles.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
+| Агент может читать почту, но не отправлять и не менять ее | ✅¹⁰ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli/blob/main/docs/safety-profiles.md) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Разрешать или запрещать агенту отдельные команды | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | [✅](https://github.com/taylorwilsdon/google_workspace_mcp#readme) | [✅](https://github.com/Softeria/ms-365-mcp-server#readme) |
 | Показать, что заденет удаление или крупное изменение, и спросить перед выполнением | ✅¹¹ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ |
 | Сообщить агенту, что текст письма — это данные, а не указания | ✅ | ➖ | ➖ | [✅](https://github.com/openclaw/gogcli#readme) | ➖ | ➖ |
@@ -84,7 +84,7 @@ title: "Сравнение с другими инструментами"
 ² `attachments list` и `attachments download` читают файлы одного письма с сервера и сохраняют их с доступом только
 для вас. `mail` также находит письма по тексту внутри вложений.
 
-³ Хранилище общее с другими инструментами WireCat. `mail` ищет в своём ящике; [memo](../memo/mail.md) ищет по всем
+³ Хранилище общее с другими инструментами WireCat. `mail` ищет в своем ящике; [memo](../memo/mail.md) ищет по всем
 ящикам вместе с чатами и заметками.
 
 ⁴ Флаги, перемещения, копирование и папки меняют ящик на сервере. Удаление переносит письма в корзину и никогда не
@@ -93,16 +93,16 @@ title: "Сравнение с другими инструментами"
 запуска и оставляет остальные. Удаление, изменение по запросу и изменение более чем 20 писем сначала показываются
 как предпросмотр и выполняются только с `--yes`.
 
-⁵ `mail` ставит на сохранённые письма и переписки ваши собственные теги. Они остаются в локальном хранилище и никогда
+⁵ `mail` ставит на сохраненные письма и переписки ваши собственные теги. Они остаются в локальном хранилище и никогда
 не попадают на сервер. Флаги и ключевые слова на сервере меняются через `messages update --flag`, а метки Gmail — через
 `messages move` и `copy`.
 
 ⁶ Черновики сохраняются в собственной папке «Черновики» ящика, поэтому вы можете проверить и отправить черновик из
-любой почтовой программы. Шаблонов нет. `drafts send` отправляет сохранённый черновик.
+любой почтовой программы. Шаблонов нет. `drafts send` отправляет сохраненный черновик.
 
 ⁷ `messages send`, `messages forward` и `--reply-to` отправляют через SMTP-сервер провайдера с тем же входом. Письмо
-кому-либо, кроме вас, сначала спрашивает разрешение, каждый получатель идёт в почасовой лимит (по умолчанию 30), а копия
-попадает в «Отправленные» и в хранилище. `--file` отказывается брать папки с учётными данными и папки WireCat, если
+кому-либо, кроме вас, сначала спрашивает разрешение, каждый получатель идет в почасовой лимит (по умолчанию 30), а копия
+попадает в «Отправленные» и в хранилище. `--file` отказывается брать папки с учетными данными и папки WireCat, если
 владелец не передаст `--allow-any-file`.
 
 ⁸ `mail` читает в Gmail «Всю почту». С версии 0.22.0 `session start --method oauth` подключает новый профиль Gmail
@@ -115,8 +115,8 @@ title: "Сравнение с другими инструментами"
 ⁹ Outlook.com и Microsoft 365 принимают для IMAP и SMTP только OAuth. `mail session start` открывает браузер, вы
 входите и разрешаете доступ, пароль не вводится. Приложение Microsoft от WireCat встроено, регистрировать ничего не
 нужно ([шаги](./outlook.md)). Вход, синхронизация и отправка
-проверены на настоящем ящике Outlook.com. Рабочую учётную запись Microsoft 365 не пробовали: её администратору, возможно,
-придётся разрешить приложение, а для отправки нужна включённая «Authenticated SMTP» для ящика. Для Outlook.com ещё нужно
+проверены на настоящем ящике Outlook.com. Рабочую учетную запись Microsoft 365 не пробовали: ее администратору, возможно,
+придется разрешить приложение, а для отправки нужна включенная «Authenticated SMTP» для ящика. Для Outlook.com еще нужно
 включить IMAP в его настройках. Для Gmail через OAuth может понадобиться собственное приложение Google (сноска 8).
 
 ¹⁰ Через MCP `mail` меняет ящик, только если сервер запущен с `--allow-writes`, и то лишь в рамках прав профиля. Агент
@@ -131,8 +131,8 @@ title: "Сравнение с другими инструментами"
 
 Заметки о столбце Himalaya: его оценки взяты из README и из `--help` только для чтения версии v2.2.1. Ничего не
 запускалось на ящике. Собственного входа через OAuth у него нет: README говорит, что v2 «ships no OAuth flow», и отсылает
-к отдельному помощнику токенов (ortie), который выдаёт токен для Outlook, Microsoft Graph и Gmail, поэтому эти оценки —
-🟡. Его страницы не называют ни режима только для чтения, ни списка разрешённых команд, ни MCP-сервера. Поддержка mbox
+к отдельному помощнику токенов (ortie), который выдает токен для Outlook, Microsoft Graph и Gmail, поэтому эти оценки —
+🟡. Его страницы не называют ни режима только для чтения, ни списка разрешенных команд, ни MCP-сервера. Поддержка mbox
 и Maildir — это бэкенд; его страницы не называют команды, которая выгружала бы ящик в них.
 
 Заметки о столбце `mail`:
@@ -143,7 +143,7 @@ title: "Сравнение с другими инструментами"
   системы. `sync` по умолчанию читает INBOX и Sent.
 - **Экспорт.** `messages export` записывает оригиналы писем, подходящих под запрос, в файлы mbox или в дерево Maildir —
   для резервной копии или для mu и notmuch.
-- **Права.** Каждый профиль задаёт `allow`, `ask`, `readonly` или `deny` для каждой команды. `--permission` у
+- **Права.** Каждый профиль задает `allow`, `ask`, `readonly` или `deny` для каждой команды. `--permission` у
   `mcp serve` может только ужесточить профиль. См. [настройки](./configuration.md#permissions).
 - **Скорость и стоимость по сравнению с браузерным агентом.** `mail` читает почтовый сервер по IMAP и не открывает
   браузер. Измерений против браузерного агента не опубликовано, поэтому страница ничего об этом не утверждает.

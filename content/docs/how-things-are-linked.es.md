@@ -5,6 +5,23 @@ description: "Qué registros conectan las herramientas (mensajes, personas, chat
 
 Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan una decisión, porque las herramientas guardan vínculos entre registros. Esta página explica qué vínculos existen, quién crea cada uno (la herramienta, tú o tu agente) y cómo seguirlos. Después podrás saber por qué falta un vínculo y qué comando lo añade. La búsqueda y los vínculos trabajan con lo que ya está en el almacén local, así que descarga antes el historial: [Buscar](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes).
 
+**En esta página:**
+
+1. [La idea](#la-idea)
+2. [Una referencia nombra cualquier registro](#una-referencia-nombra-cualquier-registro)
+3. [Mensajes, chats y personas](#mensajes-chats-y-personas)
+4. [Respuestas y conversaciones](#respuestas-y-conversaciones)
+5. [Archivos, notas de voz e imágenes](#archivos-notas-de-voz-e-imágenes)
+6. [Transcripciones de reuniones](#transcripciones-de-reuniones)
+7. [Menciones](#menciones)
+8. [Notas, tareas, hechos y recuerdos](#notas-tareas-hechos-y-recuerdos)
+9. [Etiquetas](#etiquetas)
+10. [Documentos de Drive](#documentos-de-drive)
+11. [Relaciones de negocio](#relaciones-de-negocio)
+12. [Quién crea un vínculo](#quién-crea-un-vínculo)
+13. [Usar los vínculos en una pregunta](#usar-los-vínculos-en-una-pregunta)
+14. [Si falta un vínculo](#si-falta-un-vínculo)
+
 ## La idea
 
 `tg`, `max`, `memo` y `drive` pueden compartir registros cuando se configuran explícitamente para usar la misma base local compatible. Drive usa por defecto la base compartida (consulta [dónde están los archivos](./drive/configuration.md#where-the-files-live)), así que sus registros se pueden vincular con las demás herramientas salvo que la hayas movido. Un vínculo es una de dos cosas:

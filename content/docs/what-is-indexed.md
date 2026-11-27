@@ -5,6 +5,19 @@ description: "Which kinds of content the tools make searchable (text, files, web
 
 Find out before you search whether the thing you remember can be found at all: a sentence, a PDF, a voice note, a web page or a photo. Each kind of content becomes searchable in its own way. Some kinds work at once, some need one command, and a few stay off until you turn them on. Indexing runs on your computer and the index lives in the local archive. The exceptions are named where they apply.
 
+**On this page:**
+
+1. [Before you start](#before-you-start)
+2. [What each kind needs](#what-each-kind-needs)
+3. [Message text](#message-text)
+4. [Files and documents](#files-and-documents)
+5. [Voice notes](#voice-notes)
+6. [Phones, emails and links](#phones-emails-and-links)
+7. [Pictures](#pictures)
+8. [Where the tools differ](#where-the-tools-differ)
+9. [Limits](#limits)
+10. [Check the result](#check-the-result)
+
 ## Before you start
 
 Search reads the local archive, not the messenger. Download the chat history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first). An empty result does not prove that nothing was sent.
@@ -22,7 +35,7 @@ Search reads the local archive, not the messenger. Download the chat history fir
 | Pictures, by what they show | English words, such as "dog on a beach" | A setting, a model download and `images embed` |
 | Scans and photos with text | Words in the text | An agent reads the image and saves the text |
 
-Two things are true for every row. Files and pictures are read on your computer and are not changed. They go to an outside service only if you choose one: a model service for bulk scan recognition (described below) or a remote model for meaning search.
+Two things are true for every row. Files and pictures are read on your computer and are not changed. They go to an outside service only if you choose one: a model service for bulk scan recognition or a remote model for meaning search.
 
 ## Message text
 

@@ -5,6 +5,22 @@ description: "Recall who someone is and what you discussed before replying, usin
 
 Recall who a person is and what you discussed before replying. Ask your agent how you know them, what you agreed and which account signals are available, with the messages behind each answer. You can also keep one person’s Telegram and MAX accounts together.
 
+**On this page:**
+
+1. [What a person is here](#what-a-person-is-here)
+2. [Phones and emails in messages](#phones-and-emails-in-messages)
+3. [Ask your agent](#ask-your-agent)
+4. [Who they are](#who-they-are)
+5. [Who reacted](#who-reacted)
+6. [What they wrote](#what-they-wrote)
+7. [Does the account look like a bot](#does-the-account-look-like-a-bot)
+8. [The same person in both messengers](#the-same-person-in-both-messengers)
+9. [What differs in MAX](#what-differs-in-max)
+10. [When an agent reads these answers](#when-an-agent-reads-these-answers)
+11. [Auto-replies by your rules](#auto-replies-by-your-rules)
+12. [Clients, colleagues and deals](#clients-colleagues-and-deals)
+13. [Phones, links, names and addresses](#phones-links-names-and-addresses)
+
 ## What a person is here
 
 A person is someone your account has seen in a chat: in a one-to-one chat or in a group you share.
@@ -248,7 +264,7 @@ To keep work accounts apart from personal ones: [Search CRM deals and keep work 
 
 ### Examples
 
-The examples below use a sample store. Your own company is Northstar Consulting, its CRM is Bitrix24 at
+The examples on this page use a sample store. Your own company is Northstar Consulting, its CRM is Bitrix24 at
 `example.bitrix24.com`, and Acme Ltd is a client. Alice and Bob are Acme's contacts, and Emma and Dana work at
 Northstar. Your numbers and names will differ.
 
@@ -463,7 +479,7 @@ memo deals move deal:5 stage:3
 - `memo deals move` and `memo leads move` take a base stage's `stage:<id>` and move your own deal to the one stage
   of its pipeline that is mapped there. When several stages are, the answer is `stage.choice-required` with the
   candidates: move again to one of them by its `stage:<id>`. When none is, the answer is `stage.unmapped`: map a
-  stage first. A deal copied from a CRM moves on the CRM, with the tool its `writes_with` names (see below).
+  stage first. A deal copied from a CRM moves on the CRM, with the tool its `writes_with` names.
 - In `--json`, each row of `memo deals list` and `memo leads list` has `base_stage`. It stays `null` until you
   confirm the mapping of the row's stage.
 

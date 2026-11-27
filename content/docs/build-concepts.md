@@ -7,6 +7,18 @@ You are building a command-line tool, or an agent integration, that reads or wri
 gives you the model in five minutes: what kinds of record exist, how they connect, and which rules keep your tool from
 breaking other tools. Below it also shows how to add a source and keep your own data. [Sign in and stay compliant](./build-sign-in.md) comes next.
 
+**On this page:**
+
+1. [The shared store](#the-shared-store)
+2. [Entities and source records](#entities-and-source-records)
+3. [externalid](#externalid)
+4. [Links](#links)
+5. [Core entities and your own tables](#core-entities-and-your-own-tables)
+6. [More in the store](#more-in-the-store)
+7. [What breaks if you skip this](#what-breaks-if-you-skip-this)
+8. [Add a source](#add-a-source)
+9. [Keep your own data](#keep-your-own-data)
+
 ## The shared store
 
 Every WireCat tool keeps its data in one SQLite file on the owner's computer, `wirecat.db`. The `@wirecat/cli-core`

@@ -7,6 +7,13 @@ Conecta una decisión del proyecto con el documento, mensaje y persona que la ex
 te ayuda a elegir qué guardar y qué vincular sin copiar cada fuente en una nota nueva.
 Los registros conectados deben estar en la misma base local elegida expresamente.
 
+**En esta página:**
+
+1. [Elegir el registro adecuado](#elegir-el-registro-adecuado)
+2. [Probar con una decisión](#probar-con-una-decisión)
+3. [Carpetas y navegación](#carpetas-y-navegación)
+4. [Usar cada herramienta para su acción](#usar-cada-herramienta-para-su-acción)
+
 ## Elegir el registro adecuado
 
 | Usa esto | Para | Ejemplo |

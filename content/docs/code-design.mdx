@@ -30,6 +30,17 @@ The page describes the code as read on 14 October 2026, at
 Counts of files and lines are from those commits. The store, the tg adapter and the limits at the end were
 read again on 17 October 2026, at [cli-core 9be2271](https://github.com/WireCatLabs/cli-core/tree/9be227198793fabf506ee946b10aaad94d84d519), [tg-cli 868b433](https://github.com/WireCatLabs/tg-cli/tree/868b43356065170eeb923c648082e8ee03b0f349) and [max-cli 606bba4](https://github.com/WireCatLabs/max-cli/tree/606bba4a4fadd989e1b9300f273789487b8a9063).
 
+**On this page:**
+
+1. [Packages](#packages)
+2. [Layers](#layers)
+3. [How a module talks to the rest](#how-a-module-talks-to-the-rest)
+4. [One write, end to end](#one-write-end-to-end)
+5. [Patterns in use](#patterns-in-use)
+6. [What can be replaced, and at what cost](#what-can-be-replaced-and-at-what-cost)
+7. [Keeping the shape](#keeping-the-shape)
+8. [Limits of the current design](#limits-of-the-current-design)
+
 ## Packages
 
 ```mermaid Who depends on whom between the packages

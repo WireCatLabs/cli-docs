@@ -21,6 +21,25 @@ sincronización no abre tareas de tu historial, y las tareas de un chat se crean
 debe hacer una tarea encontrada en un mensaje.
 [Cómo funcionan las tareas](./tasks-architecture.mdx) da el detalle técnico.
 
+**En esta página:**
+
+1. [De dónde salen las tareas](#de-dónde-salen-las-tareas)
+2. [Pídeselo a tu agente](#pídeselo-a-tu-agente)
+3. [Una tarea, muchos mensajes](#una-tarea-muchos-mensajes)
+4. [Lo que otros te deben](#lo-que-otros-te-deben)
+5. [Todas las preguntas de un grupo](#todas-las-preguntas-de-un-grupo)
+6. [Usar las tareas de forma fiable](#usar-las-tareas-de-forma-fiable)
+7. [Comandos](#comandos)
+8. [Vínculos entre tareas](#vínculos-entre-tareas)
+9. [Cómo trabaja tu agente con las tareas después de sincronizar](#cómo-trabaja-tu-agente-con-las-tareas-después-de-sincronizar)
+10. [Tareas del historial de un chat](#tareas-del-historial-de-un-chat)
+11. [Cuando un agente cierra una tarea](#cuando-un-agente-cierra-una-tarea)
+12. [Sin tareas duplicadas](#sin-tareas-duplicadas)
+13. [Categorías, etiquetas y claves](#categorías-etiquetas-y-claves)
+14. [Reservar una tarea](#reservar-una-tarea)
+15. [Aún no está hecho](#aún-no-está-hecho)
+16. [Páginas relacionadas](#páginas-relacionadas)
+
 ## De dónde salen las tareas
 
 - **Las reglas las encuentran en los mensajes, donde se te pide algo.** En `tg` y `max` decide el tipo de chat:

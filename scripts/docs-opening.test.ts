@@ -87,8 +87,12 @@ describe("wording", () => {
     ])
   })
 
+  it("flags «ё» in Russian text", () => {
+    expect(found("content/docs/a.ru.md", "Всё готово, ещё раз.\n")).toEqual(["1:«Всё»", "1:«ещё»"])
+  })
+
   it("keeps «данные» as data, «следует» as follows, and «ниже» as lower", () => {
-    const page = "Данные хранятся локально. Из этого следует, что всё готово. Цена ниже нуля. Вам следует обновить.\n"
+    const page = "Данные хранятся локально. Из этого следует, что все готово. Цена ниже нуля. Вам следует обновить.\n"
     expect(found("content/docs/a.ru.md", page)).toEqual(["1:«следует обновить»"])
   })
 

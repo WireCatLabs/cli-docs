@@ -150,6 +150,9 @@ executable fences exactly; `text prompt` fences contain reader requests
 and may be translated while retaining their marker and position. Other text fences retain exact contents.
 Diagram translations retain their structure rather than disabling executable-example checks.
 
+Russian pages write «е», never «ё» («все», «еще», «ее»), as the owner writes. The opening check flags a «ё» on
+a new or changed Russian page. A Russian source page in a tool repository (max) keeps its own spelling.
+
 Every public page has a readable Markdown twin. Prompts, prerequisites, alternatives, diagram
 meaning and expected results must survive export. JSX that renders in HTML is not proof that
 agents can read it. Keep technical reference discoverable through `/llms.txt` and the tool skill.
