@@ -2,7 +2,7 @@
 title: "Как пользоваться"
 ---
 
-Знайте, где стоит каждая сделка и что изменилось за ночь, не открывая HubSpot. `hubspot` приносит CRM аккаунта в ваш
+Вы всегда знаете, на какой стадии каждая сделка и что изменилось за ночь, и не открываете HubSpot. `hubspot` приносит CRM аккаунта в ваш
 терминал и к вашему ИИ-агенту: какие сделки стоят на стадии, какие задачи просрочены, и утреннюю сводку того, что
 изменилось.
 
@@ -118,14 +118,15 @@ hubspot work sync
 hubspot work activities list overdue:true
 ```
 
-Заметку или задачу можно поставить на сделку по ссылке на источник, а на контакт или компанию по id в HubSpot, по
-одному `--subject` на каждую запись. Она записывается в HubSpot, включена настройка активностей или нет, а в
+Заметку или задачу привязывают к сделке, контакту или компании по обозначению записи, как его дает
+`deals show`, по одному `--subject` на каждую запись. Контакт или компания по id в HubSpot, как его печатает
+`people list`, записывается как `person:crm:<id>`. Заметка записывается в HubSpot, включена настройка активностей или нет, а в
 локальном хранилище сохраняется, только когда настройка включена. Чтобы закрыть задачу, нужен ее id из
 `activities list`:
 
 ```sh
 hubspot work activities create comment --subject deal:12 --text "Agreed on the price"
-hubspot work activities create task --subject deal:12 --subject person:4021 --title "Send the contract" --due 2026-12-01
+hubspot work activities create task --subject deal:12 --subject person:crm:4021 --title "Send the contract" --due 2026-12-01
 hubspot work activities close tasks:5501
 ```
 
@@ -171,6 +172,6 @@ hubspot work config set permissions.api deny
 
 ## Агенты
 
-`hubspot skill install` учит команды Claude Code, Codex, Gemini CLI и OpenClaw.
+`hubspot skill install` учит Claude Code, Codex, Gemini CLI и OpenClaw командам этого инструмента.
 `hubspot work mcp add claude-code --allow-writes` подключает профиль к приложению, которое работает через MCP.
 Остальное, включая ChatGPT и Claude в браузере, показывает страница [MCP](./mcp.md).

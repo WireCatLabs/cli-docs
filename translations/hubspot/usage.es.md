@@ -117,13 +117,14 @@ hubspot work sync
 hubspot work activities list overdue:true
 ```
 
-Una nota o una tarea se pone en una negociación por su referencia, y en un contacto o una empresa por el id de
-HubSpot, con un `--subject` para cada uno. Se escribe en HubSpot tanto si el ajuste de actividades está activado como
+Una nota o una tarea se pone en una negociación, un contacto o una empresa por su referencia, tal como la da
+`deals show`, con un `--subject` para cada uno. Un contacto o una empresa por el id de HubSpot, tal como lo imprime
+`people list`, es `person:crm:<id>`. Se escribe en HubSpot tanto si el ajuste de actividades está activado como
 si no, y se guarda en el almacén local solo cuando lo está. Para cerrar una tarea hace falta su id de `activities list`:
 
 ```sh
 hubspot work activities create comment --subject deal:12 --text "Agreed on the price"
-hubspot work activities create task --subject deal:12 --subject person:4021 --title "Send the contract" --due 2026-12-01
+hubspot work activities create task --subject deal:12 --subject person:crm:4021 --title "Send the contract" --due 2026-12-01
 hubspot work activities close tasks:5501
 ```
 
