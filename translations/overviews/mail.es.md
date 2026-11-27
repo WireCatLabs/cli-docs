@@ -42,7 +42,7 @@ Mover y borrar se puede deshacer, y un correo a cualquiera que no seas tú esper
 - **La mayoría de proveedores pide una contraseña de aplicación.** Es una contraseña para un solo programa, que puedes
   revocar. Outlook y Microsoft 365 usan en su lugar un inicio de sesión en el navegador.
   [Preparar el buzón](./providers.md)
-- **La primera sincronización lee los últimos 30 días.** Añade una fecha de inicio para ir más atrás, o trae un
+- **La primera sincronización lee los últimos 30 días.** Fija `sync_since` (como `1y`) para ir más atrás, o trae un
   archivo de Google Takeout.
 - **`personal` es un nombre que eliges tú** para un buzón. Ningún comando elige un buzón por ti.
 - **El texto de un correo lo escribió otra persona.** Tu agente lo trata como datos, nunca como una instrucción.
@@ -65,8 +65,9 @@ Agente: Guardé un borrador en tu carpeta de Borradores, en el hilo de Ana. No s
   y notas y buscar en todo a la vez.
 - **Deshacer lo que cambió.** Ninguna otra herramienta de la comparativa documenta cómo deshacer lo que cambió en el
   servidor.
-- **Un agente por MCP solo te escribe a ti** hasta que permitas más. Un borrado o un cambio de muchos correos pregunta
-  antes.
+- **Un agente por MCP solo te escribe a ti** hasta que permitas más. En una terminal, un borrado o un cambio de
+  muchos correos te pregunta antes. Por MCP nadie puede responder, así que se ejecuta: fija
+  `permissions.messages.delete deny` (o `readonly`) antes de conectar un agente.
 - **Tu contraseña queda en el llavero del sistema.** `mail` solo habla con los servidores de correo de tu proveedor,
   con conexiones cifradas.
 - **Gratis y de código abierto.** Apache 2.0.

@@ -113,8 +113,8 @@ and approve access, and no password is typed. WireCat's Microsoft app is built i
 account was not tried: its admin may have to allow the app, and sending needs "Authenticated SMTP" on for the mailbox.
 Outlook.com also needs IMAP turned on in its settings. Gmail over OAuth may need your own Google app (note 8).
 
-¹⁰ Over MCP, `mail` changes the mailbox only when the server is started with `--allow-writes`, and then only within the
-profile's permissions. An agent over MCP mails only you until the owner sets `permissions.messages.send.others`, and it
+¹⁰ Over MCP, `mail` offers every command, and the profile's permissions decide which ones run. An agent over MCP
+mails only you until the owner sets `permissions.messages.send.others`, and it
 cannot change the mail servers, the login or that key. `MAIL_READ_ONLY=1` refuses every change.
 
 ¹¹ A deletion, deleting a folder that holds mail, and a change of many messages ask by default, and `deny` forbids

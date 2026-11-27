@@ -76,7 +76,7 @@ mail session start [options]
 | `--host <host>` | skip discovery and use this IMAP host. |
 | `--port <port>` | IMAP port (default 993). |
 | `--security <mode>` | tls or starttls (default tls). |
-| `--login <login>` | the login name, when it is not the full address. |
+| `--login <name>` | the login name, when it is not the full address. |
 | `--folder <folder>` | sync only this folder; repeat it for more. Default: ``. |
 | `--no-browser` | OAuth: print the sign-in link instead of opening the browser. |
 | `--answer-stdin` | with --json and no terminal: print each question as a `needs` line on stderr and read its answer, one line, from stdin. |
@@ -274,7 +274,7 @@ mail sync [options]
 
 | Option | What it does |
 |---|---|
-| `--since-time <time>` | only mail received since this date or time; a date alone starts at local midnight, a time without a zone is local (default: 30 days). |
+| `--since-time <time>` | only mail received since this date or time; a date alone starts at local midnight, a time without a zone is local (default: the profile's sync_since, else 30d). |
 | `--max-messages <n>` | save at most this many new emails in this run, newest first. |
 | `--max-pages <pages>` | at most this many requests to the mail server in this run; as many as fit the deadline if not given. |
 | `--folder <folder>` | a folder to read; repeat it for more (default: the profile's folders, else INBOX and Sent; All Mail on Gmail). Default: ``. |
@@ -924,6 +924,26 @@ mail conversations show <conversation>
 
 **Example:** `mail personal conversations show 'chat:email/me%40example.com/thread-1'`, `mail personal conversations show 'msg:email/me%40example.com/thread-1/%3Cid%40example.com%3E'`
 
+## `mail inbox`
+
+send the threads that changed since the last run to the AI model the owner chose (`models ai`), which sorts each into needs an answer, to read or can wait with a one-line reason; then list every sorted thread, those that need an answer first. Mail sent to many is not sent. A model outside this computer follows `models chats` and local only. --offline lists what is sorted and sends nothing
+
+**Reads from an outside service.**
+
+```sh
+mail inbox [options]
+```
+
+| Option | What it does |
+|---|---|
+| `--max-messages <n>` | send at most this many emails in this run; the rest wait for the next (default: 40). |
+| `--max-tokens <n>` | stop before a request that would make the run send more tokens than this (default: 60000). |
+| `--yes` | send the mail to a model outside this computer when `models chats` is ask. |
+
+**Returns:** mail inbox thread — ref, title, bucket, reason, last_email_at, sorted_at, by, sender, and 1 more; every field: mail commands info inbox
+
+**Example:** `mail personal inbox`, `mail personal inbox --max-messages 20`, `mail personal inbox --offline --json`
+
 ## `mail attachments`
 
 ### `mail attachments list`
@@ -1479,7 +1499,7 @@ mail config set <setting> <value> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, aliases, read_attachments, max_attachment_mb, sync_since, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 | `value` | required | a number, true or false; for a group tg:work,max:Alice,email:me@x. |
 
 | Option | What it does |
@@ -1500,7 +1520,7 @@ mail config unset <setting> [options]
 
 | Argument | | What it is |
 |---|---|---|
-| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, read_attachments, max_attachment_mb, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities. |
+| `setting` | required | one of: limit, timeout_ms, color, record, record_input, keep_runs_for_days, keep_successful_runs_for_days, keep_store_runs_for_days, runs_size_limit_mb, permissions, sends_per_hour, requests_per_minute, search_reranker, embedding_provider, embedding_model, embedding_base_url, embedding_dims, models, address, login, imap_host, imap_port, imap_security, smtp_host, smtp_port, smtp_security, auth, google_client_id, microsoft_client_id, folders, aliases, read_attachments, max_attachment_mb, sync_since, update_check, skill_hint, schedule_max_cost_per_day, schedule_model_claude, schedule_model_codex, schedule_lean_start, search_stemmers.cyrillic, search_stemmers.latin, owner_languages, crm.<provider>:<account>.links, crm.<provider>:<account>.company-types, crm.<provider>:<account>.scope, crm.<provider>:<account>.unassigned, crm.<provider>:<account>.self, crm.<provider>:<account>.stage-tasks, crm.<provider>:<account>.activities, crm.<provider>:<account>.files.max_files, crm.<provider>:<account>.files.max_file_mb, crm.<provider>:<account>.files.max_run_mb, crm.<provider>:<account>.files.run_minutes, crm.<provider>:<account>.files.days, crm.<provider>:<account>.files.max_total_mb. |
 
 | Option | What it does |
 |---|---|
@@ -1554,8 +1574,8 @@ mail runs list [query] [options]
 
 | Option | What it does |
 |---|---|
-| `--limit <n>` | how many to show. Default: `20`. |
-| `--page <n>` | which page, starting at 1. Default: `1`. |
+| `--limit <n>` | how many to show. |
+| `--page <n>` | which page, starting at 1. |
 
 **Returns:** run — run_id, command, started_at, status, cli_version, profile, completed_at, requests, and 23 more; every field: mail commands info runs list
 
@@ -1603,7 +1623,7 @@ run a mail command or an agent later or on a timer (systemd, launchd, Task Sched
 
 ### `mail schedule command`
 
-run mail <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+run mail <args…> on a timer — reads save what they read, so this is how the store stays current
 
 **Changes something on this computer only.**
 
@@ -1614,7 +1634,7 @@ mail schedule command <name> <args> [options]
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
-| `args` | required | the mail command after its name, e.g. -- messages list <chat> --limit 50. |
+| `args` | required | the mail command after its name, e.g. -- doctor. |
 
 | Option | What it does |
 |---|---|
@@ -1640,7 +1660,7 @@ mail schedule agent <name> <harness> <prompt> [options]
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
 | `harness` | required | the agent to start. One of: `claude`, `codex`, `gemini`, `cursor`, `opencode`, `openclaw`, `hermes`, `grok`, `kimi`. |
-| `prompt` | required | what to do, e.g. "summarize what came in during the last day: mail personal search messages 'date>1d' --newest --limit 20". |
+| `prompt` | required | what to do, e.g. "say what needs attention in this installation: mail doctor". |
 
 | Option | What it does |
 |---|---|
