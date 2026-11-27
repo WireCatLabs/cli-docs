@@ -48,7 +48,7 @@ skills and opens each tool's sign-in. [What the app does](./desktop/index.mdx).
 
 | You want to use | Installation and connection |
 |---|---|
-| Notes, local files or email | [Install Memo](./memo/installation.md); a folder is enough to begin: see [Markdown and Obsidian](./markdown.mdx) |
+| Notes or local files | [Install Memo](./memo/installation.md); a folder is enough to begin: see [Markdown and Obsidian](./markdown.mdx) |
 | Telegram chats | [Install Telegram](./tg/installation.md); for a bot, use [bot setup](./tg/bot.md) |
 | WhatsApp chats | [Install WhatsApp](./wa/installation.md); business numbers use [Cloud API bot setup](./wa/bot.md) |
 | A Slack workspace | [Install Slack](./slk/installation.md) from npm, then make your own Slack app from a link and sign in with its User OAuth Token |
@@ -68,10 +68,7 @@ skills and opens each tool's sign-in. [What the app does](./desktop/index.mdx).
 | A self-hosted WordPress site | [Install WordPress](./wordpress/installation.md) with WireCat Desktop or from npm, then make an application password in your WordPress profile and sign in with it |
 | A Linear workspace | [Install Linear](./linear/installation.md) with WireCat Desktop or from npm, then make a personal API key in Linear's settings and sign in with it |
 
-Each guide supplies its exact commands, account steps, supported platforms and repairs. A Zoom
-app uses a Public Client ID; Google Drive's optional custom app can use a client JSON file; Google Calendar
-signs in through WireCat's Google app, or a client JSON file of your own Google app. Follow
-the chosen guide rather than looking for one credentials file shared by every tool.
+Each guide has its own commands, sign-in and fixes. Tools do not share one credentials file.
 
 <a id="ask-your-agent-to-help" />
 
@@ -138,7 +135,7 @@ restart an already-running agent if it cannot find the new command.
 
 ### npm's warning about install scripts
 
-npm 11.17 and later warn after a fresh global install of `tg`, `max` or `memo`:
+npm 11.17 and later warn after a fresh global install of `tg`, `max`, `wa` or `memo`:
 `install scripts not yet covered by allowScripts`. It names the tool's own setup script and its
 database driver. With npm 11 both scripts still run and the tool works, so you can ignore the
 warning. npm 12 blocks them instead. Run the `npm install -g --allow-scripts=…` command that npm
@@ -150,8 +147,7 @@ prints under the warning: it allows only the packages it names, once.
 
 If PowerShell blocks `npm.ps1`, use `npm.cmd`. A tool's `.cmd` launcher may also be needed; see
 the Windows steps in its guide. Telegram and MAX also provide an installer that can configure
-PATH and agent instructions. Do not assume that installer supports every tool. Use the exact
-steps for [Telegram](./tg/installation.md), [MAX](./max/installation.md),
+PATH and agent instructions. Use the exact steps for [Telegram](./tg/installation.md), [MAX](./max/installation.md),
 [Drive](./drive/installation.md) or [Zoom](./zm/installation.md).
 
 <a id="connecting-is-not-importing" />
@@ -171,6 +167,9 @@ small folder, and answer one question with a source:
   [First Drive import](./drive/usage.md).
 - **Meetings:** retrieve or import one transcript and read a cited passage.
   [First Zoom result](./zm/installation.md#check-your-first-result).
+- **CRM, Slack, Notion, Linear or WordPress:** run the tool's `sync`, then ask about one deal, thread, page, issue or
+  post you know. [Bitrix24](./b24/usage.md#sync) · [Slack](./slk/index.md) · [Notion](./notion/index.md) ·
+  [Linear](./linear/index.md) · [WordPress](./wordpress/usage.md#sync).
 
 Success means the command is available, the intended source is connected, useful data is saved
 and the agent can cite it. Check dates and unreadable or missing files before interpreting an empty

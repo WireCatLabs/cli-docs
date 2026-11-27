@@ -1,14 +1,14 @@
 ---
-title: "How to write prompts for your AI agent"
-sidebarTitle: "How to phrase requests"
-description: "Write prompts that give your AI agent a goal, a search scope and limits, for searches, meeting context, people, files, drafts and reminders you can check."
+title: "How to ask your AI agent"
+sidebarTitle: "How to ask your agent"
+description: "Write requests that give your AI agent a goal, a search scope and limits, for searches, meeting context, people, files, drafts and reminders you can check."
 ---
 
 Ask your agent to find messages, gather context, work with documents and draft replies. Learn to give it a clear task and check the result: what it found, which messages support the answer and what remains unknown.
 
 Start with what you want, such as “What did Anna ask me to do yesterday?” A simple task can be that short. The agent chooses the commands. If you have not tried your messenger connection yet, start with [First tasks](./first-tasks.mdx).
 
-The examples use Telegram. For MAX, write “Use max CLI” instead of “Use tg CLI”. In an AI chat
+The examples use Telegram. For MAX, write “Use max CLI” instead of “Use tg CLI”. In an agent chat
 connected through MCP, ask it to use the connected Telegram or MAX tool.
 
 **On this page:**
@@ -19,7 +19,7 @@ connected through MCP, ask it to use the connected Telegram or MAX tool.
 4. [Find recommendations for a professional](#find-recommendations-for-a-professional)
 5. [Find the right files](#find-the-right-files)
 6. [Draft a reply, then decide whether to send](#draft-a-reply-then-decide-whether-to-send)
-7. [Summarise voice messages](#summarise-voice-messages)
+7. [Summarize voice messages](#summarize-voice-messages)
 8. [Repeat a useful task](#repeat-a-useful-task)
 9. [Schedule reminders](#schedule-reminders)
 10. [Work offline](#work-offline)
@@ -72,14 +72,17 @@ result in a partial archive means “not found in the available data”, not “
 
 ```text prompt
 Use tg CLI. Prepare a 20-minute agenda for the Atlas call with Anna and Tom. Check the project
-and design groups plus my direct chats with those participants over the past week. Summarise decisions,
+and design groups plus my direct chats with those participants over the past week. Summarize decisions,
 current risks and open questions with sources. Check whether later messages resolved old blockers.
 Read only.
 ```
 
 Specify participants when important decisions may be in direct chats. A duration helps the agent
-prioritise the agenda. For a narrow meeting, add its purpose: “Focus on launch readiness; leave
+prioritize the agenda. For a narrow meeting, add its purpose: “Focus on launch readiness; leave
 budget discussion out.” If a relevant chat is unavailable, the answer should name that gap.
+
+Meetings also live in your calendar and calls. With Google Calendar or Zoom connected, add a line such as “Also check
+the calendar event and the transcript of our last Zoom call with Anna.”
 
 <a id="find-a-recommended-contact" />
 
@@ -134,7 +137,7 @@ Use tg CLI. Check what Tom has already sent about the design and what he is wait
 a concise reply grounded in our conversation. Don't invent a deadline and don't send it.
 ```
 
-Review the wording before authorising a send:
+Review the wording before allowing a send:
 
 ```text prompt
 Send exactly the draft above to Tom's direct chat that you just identified. Don't send it to
@@ -149,13 +152,15 @@ confirmation or prohibit sending; a request does not bypass those settings.
 For more draft requests, and for replies that a rule sends without asking you, see
 [Drafts and templates](./drafts-and-templates.mdx).
 
-## Summarise voice messages
+<a id="summarise-voice-messages" />
+
+## Summarize voice messages
 
 ```text prompt
-Use tg CLI. Summarise Anna’s voice messages from today: decisions, dates and questions for me. Include the source for each point. If recognition is unclear, flag it rather than guessing.
+Use tg CLI. Summarize Anna’s voice messages from today: decisions, dates and questions for me. Include the source for each point. If recognition is unclear, flag it rather than guessing.
 ```
 
-The agent first obtains a transcript, then summarises it. Telegram can use its own transcription service or <DocTerm term="speech-model" lang="en" label="a local speech model" />; MAX uses a local model. The first local run needs a separately downloaded model. Ask the agent to explain the download before starting it. This can take longer than reading text.
+The agent first obtains a transcript, then summarizes it. Telegram can use its own transcription service or <DocTerm term="speech-model" lang="en" label="a local speech model" />; MAX uses a local model. The first local run needs a separately downloaded model. Ask the agent to explain the download before starting it. This can take longer than reading text.
 
 Check names, amounts and dates against the recording when they matter. A summary should identify messages it could not transcribe. Setup: [Telegram voice messages](./tg/usage.md#voice-messages) and [MAX speech recognition](./max/audio-recognition.md).
 
@@ -163,7 +168,7 @@ Check names, amounts and dates against the recording when they matter. A summary
 
 ## Repeat a useful task
 
-An automatic morning digest runs the whole task again: read new messages, analyse them and produce a new result. First try it once:
+An automatic morning digest runs the whole task again: read new messages, analyze them and produce a new result. First try it once:
 
 ```text prompt
 Use tg CLI. Read yesterday’s messages in my work chats. Give me five important items with sources and unanswered questions. Only read; show the result here.
@@ -177,7 +182,7 @@ Help me repeat this digest on weekdays at 09:00, Madrid time. Keep the same chat
 
 The agent or a separate scheduler must start each run. A chat request alone does not create a schedule. If it runs on your computer, that computer must be awake and able to access the messenger. Inspect the first run and check the covered dates before relying on it. Follow the recipes for [Telegram](./tg/recipes.md) or [MAX](./max/recipes.md) for your setup.
 
-Sending a fixed reminder later is simpler: it queues the message on the messenger’s server. It does not search new messages or generate a new digest. The next section covers that case.
+Sending a fixed reminder later is simpler: it queues the message on the messenger’s server. It does not search new messages or generate a new digest.
 
 ## Schedule reminders
 
@@ -200,7 +205,7 @@ agent can also change a scheduled message, cancel it or send it now with `tg mes
 ## Work offline
 
 ```text prompt
-Use tg CLI. Use only the local archive for my work profile: summarise Atlas decisions from
+Use tg CLI. Use only the local archive for my work profile: summarize Atlas decisions from
 September 2026 with source messages. Make no network requests. State what history is available and what
 you cannot verify. Don't send anything or start a background service.
 ```

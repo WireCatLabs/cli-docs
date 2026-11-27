@@ -4,17 +4,19 @@ sidebarTitle: "Funciones"
 description: "Da a tu agente de IA contexto de mensajes, personas, notas y archivos, y decide qué puede hacer."
 ---
 
-WireCat conecta tus mensajes y otras fuentes con el agente de IA que elijas. Pídele que encuentre un acuerdo, resuma un chat o prepare una respuesta usando tu historial, con fuentes que puedas comprobar. Los mensajes son el punto de partida; Memo puede añadir contexto de notas, archivos y correo.
+Pregunta a tu agente de IA por tu propio trabajo y recibe una respuesta que puedes comprobar. "¿Qué acordamos con Acme?", "¿Quién espera mi respuesta?", "¿Qué se decidió en la llamada del martes?" El agente responde a partir de tus chats, tu correo, tus llamadas y tus documentos, y muestra el mensaje o el fragmento en que se apoya cada parte de la respuesta.
 
-Funciones principales:
+Conectas las fuentes que usas, una herramienta para cada una, y sigues con el agente que ya te gusta: Claude Code, Codex, ChatGPT u otro. Todo lo que copian las herramientas se queda en tu ordenador, en un único almacén local. Memo, la herramienta de notas, busca ahí a la vez en tus mensajes, correo, notas, reuniones y negociaciones. Empieza con una herramienta, la de la fuente que más usas: [Instalación](./installation.mdx).
 
-- **Tus fuentes y tu agente:** herramientas de línea de comandos o MCP para un agente compatible.
+Qué puedes hacer:
+
 - **Mensajes con contexto:** qué se dijo, qué cambió y quién espera una respuesta.
-- **Búsqueda con fuentes:** resultados y mensajes cercanos para comprobarlos.
-- **Personas entre cuentas:** vincula las identidades que sabes que pertenecen a la misma persona.
-- **Notas y archivos:** carpetas elegidas y notas propias en el mismo contexto local.
-- **Bots y grupos:** respuestas desde un bot y ayuda para administrar una comunidad.
-- **Control del acceso:** elige las fuentes, los permisos y dónde ejecutar las herramientas.
+- **Búsqueda con fuentes:** el mensaje encontrado y lo que se dijo alrededor.
+- **Reuniones, llamadas y negociaciones:** qué se decidió en una llamada y en qué etapa está una negociación.
+- **Personas entre cuentas:** las cuentas de una misma persona juntas, cuando confirmas que coinciden.
+- **Notas, archivos y tareas:** carpetas elegidas, tus notas y tus pendientes en la misma búsqueda.
+- **Bots y grupos:** respuestas desde un bot y ayuda para llevar una comunidad.
+- **Control del acceso:** qué fuentes compartes y qué pueden cambiar o enviar las herramientas.
 
 **En esta página:**
 
@@ -22,11 +24,14 @@ Funciones principales:
 2. [Mensajes](#mensajes)
 3. [Búsqueda y fuentes](#búsqueda-y-fuentes)
 4. [Personas entre cuentas](#personas-entre-cuentas)
-5. [Notas, archivos y correo](#notas-archivos-y-correo)
-6. [Bots](#bots)
-7. [Grupos y canales](#grupos-y-canales)
-8. [Tus datos y permisos](#tus-datos-y-permisos)
-9. [Detalles de las herramientas](#detalles-de-las-herramientas)
+5. [Reuniones y llamadas](#reuniones-y-llamadas)
+6. [Clientes y negociaciones](#clientes-y-negociaciones)
+7. [Notas, archivos y correo](#notas-archivos-y-correo)
+8. [Tareas y memoria](#tareas-y-memoria)
+9. [Bots](#bots)
+10. [Grupos y canales](#grupos-y-canales)
+11. [Tus datos y permisos](#tus-datos-y-permisos)
+12. [Detalles de las herramientas](#detalles-de-las-herramientas)
 
 <a id="un-resumen-más-completo" />
 
@@ -68,13 +73,31 @@ La respuesta depende del historial guardado y los vínculos confirmados; pide fu
 
 [Personas y cuentas vinculadas](./people.md)
 
+## Reuniones y llamadas
+
+Encuentra qué se decidió en una llamada y quién se encargó de cada tarea, junto a los chats y el correo sobre el mismo tema. Las reuniones de Zoom, las llamadas de Google Meet de tu calendario y las llamadas de tu centralita se guardan en tu ordenador como reuniones, con sus transcripciones. La grabación de una llamada telefónica se convierte en texto en tu ordenador, salvo que elijas para ella un servicio de voz en la nube.
+
+[Reuniones de Zoom](./zm/meetings.md) · [Google Meet](./google-meet.mdx) · [Llamadas de Bitrix24](./b24/calls.md) · [Asterisk](./pbx/index.md)
+
+## Clientes y negociaciones
+
+Pregunta en qué etapa está una negociación, quién se encarga y qué se le dijo al cliente la última vez. Las herramientas de CRM copian tus negociaciones, contactos y empresas de Bitrix24, amoCRM, HubSpot o Attio al mismo almacén local, y el agente los ve junto a tus chats y llamadas. Cuando pides un cambio, como pasar una negociación a la etapa siguiente, se hace en el propio CRM.
+
+[Bitrix24](./b24/index.md) · [amoCRM y Kommo](./amo/index.md) · [HubSpot](./hubspot/index.md) · [Attio](./attio/index.md)
+
 ## Notas, archivos y correo
 
 Memo importa carpetas elegidas, incluidas notas de Obsidian, busca en el contenido legible de archivos y guarda notas vinculadas a personas o mensajes. Los archivos importados conservan referencias a las fuentes; puedes editar y exportar tus propias notas. Las etiquetas reúnen fuentes relacionadas sin cambiar los originales.
 
-Memo también importa correo de cuentas configuradas. Lee el historial de mensajería ya descargado; no conecta el servicio ni descarga su historial. Algunos formatos necesitan lectores opcionales y las páginas escaneadas requieren reconocimiento de texto previo.
+La herramienta de correo, `mail`, copia tu correo al mismo almacén local, y Memo lo busca junto a tus notas y mensajes. Memo lee el historial de mensajería que ya descargaron otras herramientas y no se conecta él mismo al servicio de mensajería. Algunos formatos necesitan lectores opcionales y las páginas escaneadas requieren reconocimiento de texto previo.
 
 [Notas y archivos](./memo/index.md) · [Correo](./mail/email.md)
+
+## Tareas y memoria
+
+Guarda como tareas las preguntas que aún no respondiste y las promesas que te hicieron, para que no se pierdan en los chats. Pide la agenda de hoy, convierte un mensaje en una tarea y ciérrala cuando esté hecha. El agente también puede recordar lo que aprendió, como una preferencia o una decisión, con las fuentes que lo muestran, y tú eliges qué se guarda.
+
+[Tareas](./tasks.md) · [Recuerdos y hechos](./memo/memories.md)
 
 ## Bots
 
@@ -117,7 +140,8 @@ Las operaciones de cada servicio, diferencias de compatibilidad y sintaxis exact
 - **Notion:** [empieza aquí](./notion/index.md), [uso diario](./notion/usage.md), [ajustes y permisos](./notion/configuration.md) y [comandos](./notion/commands.md).
 - **Yandex Disk:** [empieza aquí](./ydisk/index.md), [conecta tu agente](./ydisk/mcp.md), [trabaja con archivos en el Disk](./ydisk/usage.md) y [referencia](./ydisk/commands.md).
 - **Google Calendar:** [uso diario](./gcal/usage.md), [Google Meet](./google-meet.mdx), [escenarios](./gcal/scenarios.md) y [comandos](./gcal/commands.md).
-- **Mail:** [uso diario](./mail/usage.md), [preparar el buzón](./mail/providers.md) y [comandos](./mail/commands.md).
+- **WhatsApp:** [empieza aquí](./wa/index.md), [uso diario](./wa/usage.md), [búsqueda](./wa/search.md) y [comandos](./wa/commands.md).
+- **Correo:** [uso diario](./mail/usage.md), [preparar el buzón](./mail/providers.md) y [comandos](./mail/commands.md).
 - **Bitrix24:** [uso diario](./b24/usage.md), [ajustes y permisos](./b24/configuration.md) y [comandos](./b24/commands.md).
 - **amoCRM y Kommo:** [empieza aquí](./amo/index.md), [uso diario](./amo/usage.md), [ajustes y permisos](./amo/configuration.md) y [comandos](./amo/commands.md).
 - **Attio:** [empieza aquí](./attio/index.md), [uso diario](./attio/usage.md), [ajustes y permisos](./attio/configuration.md) y [comandos](./attio/commands.md).

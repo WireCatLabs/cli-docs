@@ -5,13 +5,27 @@ description: "One JSON format brings customers, deals, contracts, orders, invoic
 
 You have business data in another system: an ERP, a CRM export, a bank statement, a spreadsheet or a phone backup. You
 want it in the owner's local store, so their AI agent can answer "what does this customer owe, under which contract,
-and was it paid" with references instead of guesses. This page gives you the one format every import uses, the rules
+and was it paid" with references instead of guesses. You get the one format every import uses, the rules
 it follows, and one complete example from the file to the agent's answers.
 
 A few words first. The **records envelope** is that format: a JSON document, or JSONL with one record per line. Each
 item in it is a **source record**, what your source says about one thing. cli-core turns a source record into an
 **entity** (a person, a deal, a contract) or into a **proposal**: money that counts only after the owner confirms it.
 The [concepts page](./build-concepts.md) explains entities and source records in more detail.
+
+**On this page:**
+
+1. [Who this page is for](#who-this-page-is-for)
+2. [One format, three ways in](#one-format-three-ways-in)
+3. [Choose a type](#choose-a-type)
+4. [The types](#the-types)
+5. [Relations](#relations)
+6. [How people, organizations and projects are matched](#how-people-organizations-and-projects-are-matched)
+7. [Revisions, repeats and deletes](#revisions-repeats-and-deletes)
+8. [The receipt and errors](#the-receipt-and-errors)
+9. [Phone data: SMS, calls and contacts](#phone-data-sms-calls-and-contacts)
+10. [A complete example](#a-complete-example)
+11. [Next](#next)
 
 ## Who this page is for
 
@@ -80,7 +94,7 @@ confirms or rejects it in memo's review list. The rest is written directly.
 | `person` | a person, matched or made (see [matching](#how-people-organizations-and-projects-are-matched)) | no |
 | `organization` | an organization, matched or made | no |
 | `project` | a project, matched by its key or made | no |
-| `product` | a product or service with its price, in the catalogue | no |
+| `product` | a product or service with its price, in the catalog | no |
 | `pipeline` | a sales pipeline with its `stages` | no |
 | `deal`, `lead` | a deal or lead, the same row a CRM sync writes | no |
 | `contract` | a contract, with dates, renewal and notice terms | yes, when it has a value. Without one, written |

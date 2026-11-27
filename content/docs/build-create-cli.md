@@ -7,7 +7,7 @@ description: "Connect a service WireCat does not support yet: build your own too
 You can build your own command-line tool for any service or API — quickly, with our template and your AI agent. Use a
 CRM, a task tracker or a notes app that WireCat does not support yet? Add it yourself.
 
-This page shows what it takes, what you get, and where to start. The guides after it walk you through each part.
+Here you see what it takes, what you get and where to start. The guides after it walk you through each part.
 
 **On this page:**
 

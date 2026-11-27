@@ -20,7 +20,7 @@ Find out before you search whether the thing you remember can be found at all: a
 
 ## Before you start
 
-Search reads the local archive, not the messenger. Download the chat history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first). An empty result does not prove that nothing was sent.
+Most search reads the local archive. Word search in `tg` and `max` also asks the messenger's server by default, and `--backend archive` keeps it on your computer. Everything else on this page is found only once it is saved. Download the chat history first: [Searching](./search.mdx#fetch-the-relevant-chat-history-first). An empty result does not prove that nothing was sent.
 
 ## What each kind needs
 

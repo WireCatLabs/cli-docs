@@ -17,8 +17,7 @@ If you still need setup, start with [installation](./installation.mdx) or
 />
 
 You describe the task to your AI agent, for example Claude Code, Codex, OpenClaw or Hermes. The agent runs
-WireCat's command-line tools (`tg`, `max`, `memo`, `zm`, `drive`) on your computer, and they read your messages,
-mail, notes, meetings and files. Your agent's own settings determine where it processes the messages.
+WireCat's command-line tools on your computer, and they read your messages, mail, notes, meetings and files. Your agent's own settings determine where it processes the messages.
 [WireCat Desktop](./desktop/index.mdx) is optional: it shows the same tasks, searches and memory in a window.
 
 **On this page:**
@@ -45,7 +44,7 @@ Use tg CLI. Check my unread messages in Telegram. Tell me which questions need m
 **What happened today?**
 
 ```text prompt
-Use tg CLI. Summarise today's messages in five of my active chats. One line per chat, with important questions separately. Say which chats you checked. Read only.
+Use tg CLI. Summarize today's messages in five of my active chats. One line per chat, with important questions separately. Say which chats you checked. Read only.
 ```
 
 **Find something**
@@ -55,6 +54,17 @@ Use tg CLI. Find the last link someone sent me in my five most recent chats. Sho
 ```
 
 You get a short answer with messages you can open or identify. Start with a few chats so you can check the result.
+
+**Other sources.** The same kind of first request works with every tool you connected. Name the tool in the
+request:
+
+| Source | A first request |
+|---|---|
+| Mail | `Use mail CLI. Find the last email from Anna and tell me what she asks. Read only.` |
+| Calls | `Use zm CLI. What was decided on my last Zoom call, and who took which task? Quote the transcript.` |
+| CRM | `Use b24 CLI. Show my open deals by stage, with the amount and the manager. Read only.` |
+| Documents | `Use drive CLI. Find the latest Atlas proposal and quote its pricing section.` |
+| Notes and files | `Use memo CLI. Find my notes about the Atlas launch and list the open questions.` |
 
 **Behind the scenes.** For the first request, the agent runs commands like `tg personal inbox --limit 5` and
 `tg personal chats list --limit 5`, then reads more messages where it needs context. Reading does not mark
@@ -110,10 +120,8 @@ tell me what remains.
 >
 > Sources: “Atlas · team”, messages 4312 and 4315. Nothing was sent.
 
-The fee is supported by the estimate and confirmation, but a partial archive cannot establish
-that it remained unchanged for the rest of the month. Another bounded fetch can resume later.
-A fetch from September also reads newer history on its way back, while the search filters narrow
-the result to September.
+The fee is backed by the estimate and the confirmation. The archive still has gaps, so the agent cannot say it
+stayed the same all month. You can ask it to fetch more later.
 
 <details>
 <summary>Commands the agent runs</summary>
@@ -137,8 +145,7 @@ tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 
 </details>
 
-**Why these commands:** `messages list` reads a window of messages and stores them locally;
-`messages sync` fills a larger stretch of history. `search messages` also asks Telegram's own search
+**Why these commands:** `messages sync` fills a stretch of history in the local archive. `search messages` also asks Telegram's own search
 by default; `--backend archive` keeps it to the saved history. Telegram's search matches words
 only, so reading the discussion around a match and checking a whole month need the saved history.
 `messages context` checks what was said around a match. Neither the latest 20 messages nor an empty
@@ -210,12 +217,12 @@ tg personal messages context 100200300 201 --before-n 2 --after-n 5
 
 `review` supplies messages for the agent to interpret. Its unanswered-question filter is a
 heuristic, not a complete account of everyone's obligations. The agent should report incomplete
-review windows and check later messages before labelling an old promise outstanding.
+review windows and check later messages before calling an old promise outstanding.
 [Review and unanswered questions](./tg/usage.md#who-owes-what-review).
 
-Sending is a separate step that you authorise after reading the draft.
-[Writing requests](./prompting.mdx#draft-a-reply-then-decide-whether-to-send) explains how to supply
-context and authorise sending separately.
+Sending is a separate step that you allow after reading the draft.
+[How to ask your AI agent](./prompting.mdx#draft-a-reply-then-decide-whether-to-send) explains how to give
+context and allow sending separately.
 
 ## Prepare for a meeting
 
@@ -277,7 +284,7 @@ tg personal messages list 100200300 'date>"2026-10-02T12:00:00+02:00"' --limit 5
 
 </details>
 
-The sample time is the fictional design's delivery time. If a read window is truncated, the agent
+If a read window is truncated, the agent
 must follow the message cursor or report the missing part before claiming to have checked the
 whole week. It should ask about ambiguous participant names rather than choose a direct chat
 without evidence. [Message windows and cursors](./tg/usage.md#pages).
@@ -291,13 +298,13 @@ Look for the checked chats and period, source messages for important conclusions
 | Task | What to specify | Next guide |
 |---|---|---|
 | Morning brief | Chats or channels, period, topics and what deserves attention | [Inbox](./tg/usage.md#what-needs-an-answer) |
-| Recommended contact | Service, country, currencies and comparison criteria | [Prompt examples](./prompting.mdx#find-a-recommended-contact) |
+| Recommended contact | Service, country, currencies and comparison criteria | [Request examples](./prompting.mdx#find-a-recommended-contact) |
 | Project documents | Chats, file types, approved versions and whether downloading is allowed | [Files](./prompting.mdx#find-the-right-files) |
 | Reminders | Exact dates, times, timezone, recipients and message text | [Scheduling](./prompting.mdx#schedule-reminders) |
 | Voice message | The message or sender and whether you need a transcript or action list | [Voice messages](./tg/usage.md#voice-messages) |
 | Offline export | Chat, period, destination and no network access | [Offline work](./prompting.mdx#work-offline) |
 
-For prompts you can adapt, continue to [How to phrase requests](./prompting.mdx).
+For requests you can adapt, continue to [How to ask your AI agent](./prompting.mdx).
 For command syntax, use [Telegram commands](./tg/commands.md) or [MAX commands](./max/commands.md).
 
 [Telegram help](./tg/troubleshooting.md) · [MAX help](./max/troubleshooting.md)

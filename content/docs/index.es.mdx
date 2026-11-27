@@ -1,6 +1,6 @@
 ---
 title: "Conecta tu agente de IA a tus chats, correo y documentos"
-sidebarTitle: "Empieza aquí"
+sidebarTitle: "Resumen"
 description: "Documentación de WireCat: da a Claude Code, Codex u otro agente de IA acceso a tus chats, correo, documentos y reuniones con servidores MCP locales, y recibe respuestas con fuentes."
 ---
 
@@ -29,7 +29,7 @@ todas las herramientas.
 
 ## Qué herramienta necesito
 
-Elige la fila que coincide con tu objetivo. Puedes combinar herramientas más adelante: empieza con una.
+Elige la fila que coincide con tu objetivo.
 
 | Tu objetivo | Herramienta | Guía |
 |---|---|---|
@@ -65,13 +65,13 @@ puedes recuperar. Compara las tareas en [las funciones de WireCat](./features.md
 
 1. **[Elige dónde instalar](./installation.mdx).** Usa el ordenador o servidor donde tu agente
    pueda ejecutar las herramientas desde una terminal (<DocTerm term="cli" lang="es" label="CLI" />). El agente puede ayudarte; la guía de cada
-   herramienta también ofrece pasos manuales. El inicio de sesión y la aplicación dependen de la fuente.
+   herramienta también ofrece pasos manuales.
 2. **[Conecta tu agente](./agents.mdx).** Un <DocTerm term="skill" lang="es" label="skill" /> enseña los comandos a un agente con terminal.
    <DocTerm term="mcp" lang="es" label="MCP" /> permite usar herramientas desde un agente compatible. Ninguno importa el historial ni
    autoriza una cuenta por sí solo.
 3. **Prepara pocos datos.** Sigue la guía de la fuente para recuperar un periodo de chat, importar
    una carpeta o guardar una transcripción. Comprueba la cuenta, la carpeta y las fechas elegidas.
-4. **Haz una pregunta y comprueba la fuente.** Prueba una petición de abajo. Si faltan datos,
+4. **Haz una pregunta y comprueba la fuente.** Prueba [una petición](#prueba-una-petición). Si faltan datos,
    la respuesta debe decirlo: una búsqueda vacía no demuestra que nunca se tratara el tema.
 
 Si tu agente funciona solo en un navegador o teléfono, consulta [el acceso web y móvil](./browser-apps.mdx).
@@ -91,7 +91,7 @@ Muestra el mensaje que la respalda y su contexto. Indica si falta ese periodo de
 Para una transcripción de reunión que ya has guardado:
 
 ```text prompt compact
-Use zm CLI: busca la última reunión sobre Research Example.
+Use zm CLI: busca la última reunión sobre el arranque de Atlas.
 Muestra una decisión respaldada por una fuente y su fragmento citado. Indica qué información falta.
 ```
 

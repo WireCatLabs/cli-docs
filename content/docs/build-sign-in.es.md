@@ -3,8 +3,8 @@ title: "Inicio de sesión y cumplimiento de estándares"
 description: "Cómo inicia sesión una herramienta en un proveedor y mantiene los secretos fuera del almacén y de la pantalla, además de los estándares, las comprobaciones y las versiones de cli-core que debe seguir."
 ---
 
-Tu herramienta habla con un servicio que necesita iniciar sesión, como Google o Zoom. Esta página muestra dónde viven
-las claves y los tokens, cómo elige el propietario la cuenta y qué no debe hacer nunca un inicio de sesión. También muestra
+Tu herramienta habla con un servicio que necesita iniciar sesión, como Google o Zoom. Verás dónde viven
+las claves y los tokens, cómo elige el propietario la cuenta y qué no debe hacer nunca un inicio de sesión, y conocerás
 el módulo de inicio de sesión compartido de cli-core.
 
 **En esta página:**

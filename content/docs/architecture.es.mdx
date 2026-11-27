@@ -1,9 +1,9 @@
 ---
 title: Arquitectura
-description: Cómo están construidos tg y max — los paquetes, las capas, el contrato del adaptador, el almacén local y los patrones que lo sostienen.
+description: "Cómo están construidas las herramientas de WireCat: los paquetes, las capas, el contrato del adaptador, el almacén local y los patrones que lo sostienen."
 ---
 
-`tg` y `max` son dos herramientas de línea de comandos sobre un núcleo común. Esta página muestra
+Todas las herramientas de WireCat, de `tg` y `max` a `mail` y `b24`, funcionan sobre un núcleo común. Aquí verás
 cómo está montado ese núcleo: qué paquete se ocupa de qué, cómo viaja un comando desde tu terminal
 hasta un mensajero y de vuelta, cómo se conecta un mensajero nuevo y dónde tiene límites el diseño.
 Está escrita para quien quiere saber qué está ejecutando y para quien quiere contribuir.
@@ -43,18 +43,18 @@ Cuatro paquetes propios y dos builds fijados, todos publicados en npm bajo `@wir
 | Paquete | De qué se ocupa |
 | --- | --- |
 | [`@wirecat/cli-base`](https://github.com/WireCatLabs/cli-base/tree/8648e39) | Lo que necesita cualquier herramienta de línea de comandos y ningún mensajero: modos de salida, el renderizado en terminal, la lista cerrada de errores y sus códigos de salida, el llavero, archivos de configuración, relojes, reintentos, un cliente HTTP, un generador de código para APIs HTTP, la autoactualización. También lo usa `braze-cli`, que no tiene nada que ver con mensajería. |
-| [`@wirecat/cli-messaging`](https://github.com/WireCatLabs/cli-core/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
-| `@wirecat/cli-messaging-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
-| `@wirecat/cli-messaging-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de embeddings. El reconocimiento de voz usa `sherpa-onnx`. |
-| [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-messaging. |
+| [`@wirecat/cli-core`](https://github.com/WireCatLabs/cli-core/tree/c7cd479) | Todo lo de mensajería que no es de un mensajero concreto: el modelo de dominio, la resolución de nombres, el almacén local SQLite, la protección de envíos, los servicios (casos de uso), el árbol de comandos, el servidor MCP, el reconocimiento de voz, los procesos en segundo plano. |
+| `@wirecat/cli-core-sqlite` | Builds de SQLite 3.53, cargados solo donde el SQLite del entorno es demasiado antiguo (Bun en macOS, el Node de una distribución Linux). |
+| `@wirecat/cli-core-onnx` | ONNX Runtime como WebAssembly, para los modelos locales de embeddings. El reconocimiento de voz usa `sherpa-onnx`. |
+| [`@wirecat/tg-cli`](https://github.com/WireCatLabs/tg-cli/tree/4a36e85) | El adaptador de Telegram sobre [mtcute](https://github.com/mtcute/mtcute), la sesión de Telegram, la configuración guiada. Casi todos los comandos de `tg` vienen de cli-core. |
 | [`@wirecat/max-cli`](https://github.com/WireCatLabs/max-cli/tree/fff19ff) | El protocolo MAX (WebSocket, tramas binarias), la sesión de MAX, la conexión en segundo plano `max serve`, su propio servidor MCP sobre los servicios comunes y una parte aparte para la Bot API oficial de MAX. |
 
-Cada herramienta fija una versión exacta de cli-messaging y cli-base. Un cambio en el código común
+Cada herramienta fija una versión exacta de cli-core y cli-base. Un cambio en el código común
 llega a los usuarios con una versión del paquete común y después una versión de cada herramienta; las
 dos suelen salir el mismo día.
 
 **La regla del paquete común: nada en él conoce un mensajero.** Una regla del linter rechaza cualquier
-import de `@mtcute/*`, `ws` o de una carpeta de adaptador dentro de `src/` de cli-messaging
+import de `@mtcute/*`, `ws` o de una carpeta de adaptador dentro de `src/` de cli-core
 ([la configuración del linter](https://github.com/WireCatLabs/cli-core/blob/c7cd479/biome.json)). Lo que solo tiene un
 mensajero viaja en un campo `providerMetadata` de los tipos comunes.
 
@@ -130,7 +130,7 @@ services: (base) => ({
 Un mensajero se incorpora escribiendo dos cosas: un **adaptador**, que habla con el mensajero, y una
 descripción **`Messenger`**, que se lo presenta a los comandos comunes — el nombre de la aplicación,
 el nombre del proveedor en el almacén, cómo conectar, cómo paginar el historial. No se modifica
-cli-messaging. La guía completa es la [guía de adaptadores](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md).
+cli-core. La guía completa es la [guía de adaptadores](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md).
 
 **Un núcleo obligatorio y grupos opcionales.** `MessengerCore` — `self`, `me`, `resolve`, `chat`,
 `send`, `logout`, `close` — es obligatorio. Todo lo demás va en grupos: `ServerReads`,
@@ -184,7 +184,7 @@ comunes que añaden las opciones propias de MAX.
 
 ## El almacén local
 
-Un archivo SQLite, `~/.local/share/cli-messaging/wirecat.db` en Linux (`MESSAGING_STORE` indica otra ruta), guarda todos los mensajeros y cuentas —
+Un archivo SQLite, `~/.local/share/WireCat/wirecat.db` en Linux (`MESSAGING_STORE` indica otra ruta), guarda todos los mensajeros y cuentas —
 los perfiles de tg, la cuenta de max y sus bots — con clave por proveedor y cuenta.
 
 - **Dos entornos.** Abre `node:sqlite` en Node y `bun:sqlite` en Bun, cada uno con import dinámico,
@@ -272,7 +272,7 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
 
 - **Los tests nunca tocan tus datos.** Configuración, estado, caché y la carpeta temporal viven en un
   sandbox durante la ejecución ([sandbox.ts](https://github.com/WireCatLabs/max-cli/blob/fff19ff/src/testing/sandbox.ts)).
-- **Casos de contrato para adaptadores.** cli-messaging incluye una semilla fija, un adaptador falso y
+- **Casos de contrato para adaptadores.** cli-core incluye una semilla fija, un adaptador falso y
   los casos de contrato ([src/kit](https://github.com/WireCatLabs/cli-core/tree/c7cd479/src/kit)). El
   adaptador de un mensajero ejecuta los mismos casos sobre su propio cliente falso; ningún caso habla
   con un servicio real.
@@ -306,7 +306,7 @@ MAX no publica una API para cuentas personales, así que max lleva más código 
 - Una herramienta nueva sobre el almacén compartido: [Construir sobre WireCat](./build-concepts.md), de los conceptos al cumplimiento de los estándares.
 - Un mensajero nuevo: la [guía de adaptadores](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ADAPTERS.md),
   y después los casos de contrato.
-- El código común: las [notas de arquitectura de cli-messaging](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ARCHITECTURE.md).
+- El código común: las [notas de arquitectura de cli-core](https://github.com/WireCatLabs/cli-core/blob/c7cd479/docs/dev/ARCHITECTURE.md).
 - Telegram: las [notas de arquitectura de tg](https://github.com/WireCatLabs/tg-cli/blob/4a36e85/docs/dev/ARCHITECTURE.md).
 - MAX: las [notas de arquitectura de max](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/ARCHITECTURE.md)
   y las [notas del protocolo](https://github.com/WireCatLabs/max-cli/blob/fff19ff/docs/dev/protocol.md).
@@ -320,7 +320,7 @@ observaciones CLI/MCP. Seis contextos contienen 38 resultados evaluados; las tar
 hacen que estén correlacionados. No demuestran conformidad general del agente ni del adaptador
 real de red. No se registró el modelo exacto original y MCP se accedió mediante un proxy de shell.
 
-Las [herramientas de reproducción](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) pertenecen a cli-messaging. Para comparar otra ejecución,
+Las [herramientas de reproducción](https://github.com/WireCatLabs/cli-core/tree/main/scripts/evals) pertenecen a cli-core. Para comparar otra ejecución,
 registra el modelo, runner, SDK, reloj/semilla, prompts y primeros fallos. Las pruebas deterministas
 del transporte y los fixtures se distinguen de las pruebas independientes del modelo. La [guía de seguridad](./security.mdx)
 explica qué comprobar antes de confiar en una respuesta estadística del agente.

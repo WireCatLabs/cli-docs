@@ -1,6 +1,6 @@
 ---
 title: "Connect your AI agent to your chats, mail and documents"
-sidebarTitle: "Start here"
+sidebarTitle: "Overview"
 description: "WireCat docs: give Claude Code, Codex or another AI agent your chats, mail, documents and meetings through local MCP servers, and get answers with sources."
 ---
 
@@ -26,7 +26,7 @@ behind its answer. Start with one source; you do not need every tool.
 
 ## Which tool do I need
 
-Pick the row that matches your goal. Tools can be combined later; start with one.
+Pick the row that matches your goal.
 
 | Your goal | Tool | Guide |
 |---|---|---|
@@ -60,13 +60,13 @@ For a wider comparison of tasks, see [what WireCat can do](./features.mdx).
 
 1. **[Choose where to install](./installation.mdx).** Use the computer or server where your agent
    can run the tools from a terminal (<DocTerm term="cli" lang="en" label="CLI" />). An agent can help with setup; the tool's guide also
-   has manual steps. Login and app setup differ by source.
+   has manual steps.
 2. **[Connect your agent](./agents.mdx).** A <DocTerm term="skill" lang="en" label="skill" /> teaches a terminal agent the commands. <DocTerm term="mcp" lang="en" label="MCP" /> gives
    a compatible agent access to tools. Neither step imports history or authorizes an account.
 3. **Prepare a small amount of data.** Follow the source guide to retrieve a chat period, import
    a folder or save one transcript. Confirm the account, folder and dates are the ones you chose.
-4. **Ask one question and check its source.** Try a request below. If data is missing, the answer
-   should say so; an empty search does not prove something was never discussed.
+4. **Ask one question and check its source.** Try [a request](#try-a-request). If data is missing, the answer
+   should say so. An empty search does not prove something was never discussed.
 
 If you use an agent only in a browser or on a phone, follow [web and mobile access](./browser-apps.mdx).
 The tool still runs on a computer you control.
@@ -85,7 +85,7 @@ Show the supporting message and its surrounding context. Tell me if that period 
 For a meeting transcript you have already saved:
 
 ```text prompt compact
-Use zm CLI to find the latest meeting about Research Example.
+Use zm CLI to find the latest meeting about the Atlas kickoff.
 Show one supported decision and its cited passage, and list the information that is missing.
 ```
 

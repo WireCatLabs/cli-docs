@@ -3,7 +3,7 @@ title: "Cómo se vincula todo"
 description: "Qué registros conectan las herramientas (mensajes, personas, chats, archivos, menciones, notas, tareas, hechos, documentos de Drive, etiquetas), quién crea cada vínculo y qué ejecutar cuando falta uno."
 ---
 
-Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan una decisión, porque las herramientas guardan vínculos entre registros. Esta página explica qué vínculos existen, quién crea cada uno (la herramienta, tú o tu agente) y cómo seguirlos. Después podrás saber por qué falta un vínculo y qué comando lo añade. La búsqueda y los vínculos trabajan con lo que ya está en el almacén local, así que descarga antes el historial: [Buscar](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes).
+Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan una decisión, porque las herramientas guardan vínculos entre registros. Verás qué vínculos existen, quién crea cada uno (la herramienta, tú o tu agente) y cómo seguirlos, para saber por qué falta un vínculo y qué comando lo añade. La búsqueda y los vínculos trabajan con lo que ya está en el almacén local, así que descarga antes el historial: [Buscar](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes).
 
 **En esta página:**
 
@@ -24,7 +24,7 @@ Puedes pedirle a tu agente todo sobre una persona, o los mensajes que respaldan 
 
 ## La idea
 
-`tg`, `max`, `memo` y `drive` pueden compartir registros cuando se configuran explícitamente para usar la misma base local compatible. Drive usa por defecto la base compartida (consulta [dónde están los archivos](./drive/configuration.md#where-the-files-live)), así que sus registros se pueden vincular con las demás herramientas salvo que la hayas movido. Un vínculo es una de dos cosas:
+Todas las herramientas de WireCat guardan sus datos en un único archivo en tu ordenador, `wirecat.db`, así que los registros de distintas herramientas se pueden vincular. Un vínculo es una de dos cosas:
 
 - **Parte del propio registro.** Un mensaje tiene un chat y un remitente.
 - **Un vínculo guardado entre dos registros.** Una nota trata de una persona. Un hecho se respalda con mensajes.

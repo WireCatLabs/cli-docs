@@ -17,7 +17,7 @@ Si aún falta configurar algo, empieza por [instalación](./installation.mdx) o
 />
 
 Describes la tarea a tu agente de IA, por ejemplo Claude Code, Codex, OpenClaw o Hermes. El agente ejecuta las
-herramientas de línea de comandos de WireCat (`tg`, `max`, `memo`, `zm`, `drive`) en tu ordenador, y estas leen
+herramientas de línea de comandos de WireCat en tu ordenador, y estas leen
 tus mensajes, correo, notas, reuniones y archivos. La configuración de tu agente determina dónde procesa los
 mensajes. [WireCat Desktop](./desktop/index.mdx) es opcional: muestra las mismas tareas, búsquedas y memoria en una ventana.
 
@@ -33,7 +33,7 @@ mensajes. [WireCat Desktop](./desktop/index.mdx) es opcional: muestra las mismas
 ## Tus primeros cinco minutos
 
 Elige una petición. Estas tareas solo leen, así que nada cambia en tu cuenta. Para MAX, cambia
-«tg CLI» por «max CLI» y Telegram por MAX. En un chat de IA con MCP, pide usar la conexión de
+«tg CLI» por «max CLI» y Telegram por MAX. En un chat con el agente conectado por MCP, pide usar la conexión de
 Telegram o MAX.
 
 **¿Quién espera mi respuesta?**
@@ -55,6 +55,17 @@ Usa tg CLI. Encuentra el último enlace que me enviaron en mis cinco chats más 
 ```
 
 Obtendrás una respuesta breve con mensajes que puedes abrir o identificar. Empieza por unos pocos chats para comprobar fácilmente el resultado.
+
+**Otras fuentes.** El mismo tipo de primera petición sirve con cualquier herramienta que hayas conectado. Nombra la
+herramienta en la petición:
+
+| Fuente | Una primera petición |
+|---|---|
+| Correo | `Usa mail CLI. Busca el último correo de Anna y dime qué me pide. Solo lee.` |
+| Llamadas | `Usa zm CLI. ¿Qué se decidió en mi última llamada de Zoom y quién se quedó con cada tarea? Cita la transcripción.` |
+| CRM | `Usa b24 CLI. Muestra mis negociaciones abiertas por etapa, con el importe y el responsable. Solo lee.` |
+| Documentos | `Usa drive CLI. Busca la última propuesta de Atlas y cita su sección de precios.` |
+| Notas y archivos | `Usa memo CLI. Busca mis notas sobre el lanzamiento de Atlas y enumera las preguntas abiertas.` |
 
 **Qué pasa por dentro.** Para la primera petición, el agente ejecuta comandos como
 `tg personal inbox --limit 5` y `tg personal chats list --limit 5`, y después lee más mensajes donde necesita
@@ -117,10 +128,8 @@ dime qué queda.
 >
 > Fuentes: «Atlas · equipo», mensajes 4312 y 4315. No he enviado nada.
 
-La propuesta y la confirmación respaldan el importe, pero un archivo parcial no puede demostrar
-que no cambiara durante el resto del mes. Otra descarga limitada puede continuar más tarde.
-Una descarga desde septiembre también lee el historial más reciente por el camino, y los filtros
-de la búsqueda reducen el resultado a septiembre.
+La propuesta y la confirmación respaldan el importe. El archivo aún tiene huecos, así que el agente no puede
+afirmar que no cambiara en todo el mes. Puedes pedirle que descargue más después.
 
 <details>
 <summary>Comandos que ejecuta el agente</summary>
@@ -146,8 +155,7 @@ tg personal messages context -1001001001001 4312 --before-n 2 --after-n 4
 
 </details>
 
-**Por qué estos comandos:** `messages list` lee una ventana de mensajes y la guarda en local;
-`messages sync` carga un tramo de historial más largo. `search messages` también consulta por
+**Por qué estos comandos:** `messages sync` carga un tramo de historial en el archivo local. `search messages` también consulta por
 defecto la búsqueda propia de Telegram; `--backend archive` la limita al historial guardado. La
 búsqueda de Telegram solo encuentra palabras, así que leer la conversación alrededor de un
 resultado y revisar un mes entero necesitan el historial guardado. `messages context` comprueba qué
@@ -231,9 +239,9 @@ las ventanas de revisión incompletas y revisar los mensajes posteriores antes d
 promesa antigua como pendiente.
 [Revisión y preguntas sin respuesta](./tg/usage.md#who-owes-what-review).
 
-Enviar es un paso aparte que autorizas después de leer el borrador.
-[Cómo formular peticiones](./prompting.mdx#preparar-una-respuesta-y-decidir-si-enviarla) explica
-cómo aportar contexto y autorizar el envío aparte.
+Enviar es un paso aparte que permites después de leer el borrador.
+[Cómo pedirle algo a tu agente de IA](./prompting.mdx#preparar-una-respuesta-y-decidir-si-enviarla) explica
+cómo aportar contexto y permitir el envío aparte.
 
 <a id="preparar-una-reunión" />
 
@@ -302,7 +310,7 @@ tg personal messages list 100200300 'date>"2026-10-02T12:00:00+02:00"' --limit 5
 
 </details>
 
-La hora del ejemplo es la hora de entrega del diseño ficticio. Si una ventana de lectura está
+Si una ventana de lectura está
 truncada, el agente debe seguir el cursor de mensajes o indicar la parte que falta antes de afirmar
 que ha revisado toda la semana. Si el nombre de un participante es ambiguo, debe preguntar en vez
 de elegir un chat privado sin pruebas. [Ventanas de mensajes y cursores](./tg/usage.md#pages).
@@ -324,7 +332,7 @@ La respuesta debe indicar los chats y el periodo revisados, los mensajes que res
 | Mensaje de voz | El mensaje o el remitente, y si necesitas una transcripción o una lista de acciones | [Mensajes de voz](./tg/usage.md#voice-messages) |
 | Exportación sin conexión | Chat, periodo, destino y sin acceso a la red | [Trabajo sin conexión](./prompting.mdx#trabajar-sin-conexión) |
 
-Para ver peticiones que puedes adaptar, sigue con [Cómo formular peticiones](./prompting.mdx).
+Para ver peticiones que puedes adaptar, sigue con [Cómo pedirle algo a tu agente de IA](./prompting.mdx).
 Para la sintaxis de los comandos, usa [los comandos de Telegram](./tg/commands.md) o
 [los comandos de MAX](./max/commands.md).
 

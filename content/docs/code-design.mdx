@@ -3,11 +3,11 @@ title: Code design
 description: The layers of the shared core and the messenger tools, the rules that keep them apart, the patterns they use, which parts can be replaced and at what cost.
 ---
 
-This page explains how the code behind `tg`, `max` and the other WireCat tools is organised: which
+Know how the code behind `tg`, `max` and the other WireCat tools is organized: which
 layer may call which, how a module talks to the rest through an interface, and what has to change to
 replace one part. Read it before changing the shared core, writing a new messenger adapter or
 judging whether a change fits the design. [Architecture](./architecture.mdx) covers the packages and
-the runtime path of a command in more detail; this page is about the structure of the code and how it
+the runtime path of a command in more detail. Here you find the structure of the code and how it
 is kept.
 
 Two terms come up throughout.
@@ -100,7 +100,7 @@ graph TB
 
 | Layer | Its job | Size | What it may not import |
 | --- | --- | --- | --- |
-| `domain/` | Messenger-neutral types and values: `Chat`, `Message`, `Person`, locators, formatting spans, the fact, memory and task value sets. No behaviour that needs a network or a file. It sits almost at the bottom: it reads two types from `search/` and the task kinds from `tasks/`. | 29 files | `cli/`, any messenger library or adapter. |
+| `domain/` | Messenger-neutral types and values: `Chat`, `Message`, `Person`, locators, formatting spans, the fact, memory and task value sets. No behavior that needs a network or a file. It sits almost at the bottom: it reads two types from `search/` and the task kinds from `tasks/`. | 29 files | `cli/`, any messenger library or adapter. |
 | `ports/` | The contract every messenger implements (`messenger.ts`), what a service reads of the messenger (`traits.ts`) and who the app is (`app.ts`). | 3 files | Same as above. |
 | `store/` | The local archive: `MessageStore`, opened by `openStore`, is 31 areas such as `messages`, `chats`, `people` and `mail`, each its own file built on first use, over SQLite table modules, migrations and the search indexes. | 150 files (17 October) | A command, a service, a send or an MCP tool may not import a table module under `store/sqlite/`; it goes through `store.ts`. |
 | `services/` | Use cases: messages, chats, people, search, embeddings, mentions, moderation. | 87 files | Commander, anything under `cli/`, a SQLite module. The same holds for `replies/`, `attachments/`, `moderation/`, `models/` and `analysis/`. |

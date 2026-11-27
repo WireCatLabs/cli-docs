@@ -62,7 +62,7 @@ The pipeline:
 3. Resolve the account scope, stored names and calendar boundaries in the chosen IANA time zone. `topic:` needs exactly one chat, because topic numbers are local to a chat.
 4. Compile the tree into parameterized SQLite. Words and phrases use an FTS5 word index over the normalized text; metadata predicates narrow the candidates.
 5. Expand wildcards and `text:` regular expressions through the word vocabulary. Full-text patterns and presets run bounded checks over candidates. Regular expressions run as a non-backtracking automaton.
-6. Rank or order only messages that match, then optionally fetch neighbours in each hit's own account and chat. Ranking never widens the result.
+6. Rank or order only messages that match, then optionally fetch neighbors in each hit's own account and chat. Ranking never widens the result.
 
 <ArchitectureDiagram name="strictSearch" lang="en" />
 
@@ -181,7 +181,7 @@ The two ranked lists are combined by reciprocal rank fusion: each list adds `1 /
 
 With no local model downloaded, search answers by words alone and reports `"meaning": "unavailable"`; it never downloads a model or switches to a remote one. A chat embedded only with another model is left out of the meaning branch and named in `embeddedOnlyElsewhere`. A chat that was never built returns nothing here.
 
-Vectors are SQLite blobs scanned in pages and scored in JavaScript. There is no approximate-nearest-neighbour index and no separate vector database: total work grows with the pieces in scope. Nearest neighbours appear even when the archive holds no answer, so verify the original messages.
+Vectors are SQLite blobs scanned in pages and scored in JavaScript. There is no approximate-nearest-neighbor index and no separate vector database: total work grows with the pieces in scope. Nearest neighbors appear even when the archive holds no answer, so verify the original messages.
 
 `conversations related` uses the mean of a conversation's current vectors as the query and searches every built chat. No model runs, so it needs no download.
 
@@ -216,7 +216,7 @@ See [testing](./testing.mdx) for functional checks, ranking metrics, performance
 
 ## Source map
 
-Engine source in [`cli-messaging`](https://github.com/WireCatLabs/cli-core/tree/v0.211.0), the shared library behind both tg and max. These references describe an inspected implementation snapshot, not the installed version or a performance promise.
+Engine source in [`cli-core`](https://github.com/WireCatLabs/cli-core/tree/v0.211.0), the shared library behind every WireCat tool. These references describe an inspected implementation snapshot, not the installed version or a performance promise.
 
 | Responsibility | Implementation |
 | --- | --- |

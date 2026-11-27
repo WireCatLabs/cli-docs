@@ -8,7 +8,7 @@ Puedes crear tu propia herramienta de línea de comandos para cualquier servicio
 plantilla y tu agente de IA. ¿Usas un CRM, un gestor de tareas o una app de notas que WireCat aún no admite? Añádelo
 tú.
 
-Esta página muestra lo que hace falta, lo que obtienes y por dónde empezar. Las guías siguientes te acompañan en cada
+Aquí ves lo que hace falta, lo que obtienes y por dónde empezar. Las guías siguientes te acompañan en cada
 parte.
 
 **En esta página:**

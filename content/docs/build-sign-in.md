@@ -3,8 +3,8 @@ title: "Sign in and stay compliant"
 description: "How a tool signs in to a provider and keeps secrets out of the store and the screen, plus the standards, checks and cli-core releases it must follow."
 ---
 
-Your tool talks to a service that needs a sign-in, such as Google or Zoom. This page shows where the keys and tokens
-live, how the owner chooses the account, and what a sign-in must never do. It also shows the shared sign-in module in
+Your tool talks to a service that needs a sign-in, such as Google or Zoom. You learn where the keys and tokens
+live, how the owner chooses the account, and what a sign-in must never do, and you meet the shared sign-in module in
 cli-core.
 
 **On this page:**

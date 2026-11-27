@@ -5,7 +5,7 @@ description: "Un solo formato JSON lleva al almacén clientes, negociaciones, co
 
 Tienes datos de negocio en otro sistema: un ERP, una exportación de un CRM, un extracto bancario, una hoja de cálculo o
 una copia del teléfono. Quieres llevarlos al almacén local del propietario, para que su agente de IA responda «cuánto
-debe este cliente, bajo qué contrato, y si está pagado» con referencias y no con suposiciones. Esta página te da el
+debe este cliente, bajo qué contrato, y si está pagado» con referencias y no con suposiciones. Aquí tienes el
 único formato que usa cualquier importación, sus reglas y un ejemplo completo, del archivo a las respuestas del agente.
 
 Primero unas palabras. El **sobre de registros** es ese formato: un documento JSON, o JSONL con un registro por línea.
@@ -13,6 +13,20 @@ Cada elemento es un **registro de origen**, lo que tu fuente dice de una cosa. c
 en una **entidad** (una persona, una negociación, un contrato) o en una **propuesta**, dinero que solo cuenta cuando el
 propietario lo confirma. La página de [conceptos](./build-concepts.md) explica las entidades y los registros de origen
 con más detalle.
+
+**En esta página:**
+
+1. [Para quién es esta página](#para-quién-es-esta-página)
+2. [Un formato, tres entradas](#un-formato-tres-entradas)
+3. [Elige un tipo](#elige-un-tipo)
+4. [Los tipos](#los-tipos)
+5. [Vínculos](#vínculos)
+6. [Cómo se encuentran personas, organizaciones y proyectos](#cómo-se-encuentran-personas-organizaciones-y-proyectos)
+7. [Revisiones, repeticiones y borrados](#revisiones-repeticiones-y-borrados)
+8. [El recibo y los errores](#el-recibo-y-los-errores)
+9. [Datos del teléfono: SMS, llamadas y contactos](#datos-del-teléfono-sms-llamadas-y-contactos)
+10. [Un ejemplo completo](#un-ejemplo-completo)
+11. [Siguiente](#siguiente)
 
 ## Para quién es esta página
 

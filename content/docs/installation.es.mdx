@@ -49,7 +49,7 @@ las herramientas y abre el inicio de sesión de cada una. [Qué hace la aplicaci
 
 | Quieres usar | Instalación y conexión |
 |---|---|
-| Notas, archivos locales o correo | [Instalar Memo](./memo/installation.md); basta una carpeta para empezar: consulta [Markdown y Obsidian](./markdown.mdx) |
+| Notas o archivos locales | [Instalar Memo](./memo/installation.md); basta una carpeta para empezar: consulta [Markdown y Obsidian](./markdown.mdx) |
 | Chats de Telegram | [Instalar Telegram](./tg/installation.md); para un bot, usa [su configuración](./tg/bot.md) |
 | Chats de WhatsApp | [Instalar WhatsApp](./wa/installation.md); los números empresariales usan [Cloud API](./wa/bot.md) |
 | Un espacio de trabajo de Slack | [Instalar Slack](./slk/installation.md) desde npm, crear tu propia app de Slack desde un enlace e iniciar sesión con su User OAuth Token |
@@ -69,11 +69,8 @@ las herramientas y abre el inicio de sesión de cada una. [Qué hace la aplicaci
 | Un sitio WordPress autoalojado | [Instalar WordPress](./wordpress/installation.md) con WireCat Desktop o desde npm, crear una contraseña de aplicación en tu perfil de WordPress e iniciar sesión con ella |
 | Un espacio de trabajo de Linear | [Instalar Linear](./linear/installation.md) con WireCat Desktop o desde npm, crear una clave de API personal en los ajustes de Linear e iniciar sesión con ella |
 
-Cada guía incluye los comandos exactos, los pasos de acceso, las plataformas compatibles y la
-resolución de errores. Una aplicación de Zoom usa un Public Client ID; una aplicación propia de
-Google Drive puede usar un archivo JSON del cliente; Google Calendar inicia sesión con la aplicación
-de Google de WireCat, o con el archivo JSON del cliente de tu propia aplicación de Google. Sigue la guía elegida: no hay un archivo
-de credenciales común para todas las herramientas.
+Cada guía tiene sus propios comandos, su inicio de sesión y sus soluciones. Las herramientas no comparten un único
+archivo de credenciales.
 
 <a id="ask-your-agent-to-help" />
 
@@ -145,7 +142,7 @@ Abre de nuevo la terminal o reinicia un agente que ya estuviera ejecutándose si
 
 ### El aviso de npm sobre scripts de instalación
 
-npm 11.17 y posteriores avisan tras la primera instalación global de `tg`, `max` o `memo`:
+npm 11.17 y posteriores avisan tras la primera instalación global de `tg`, `max`, `wa` o `memo`:
 `install scripts not yet covered by allowScripts`. El aviso nombra el script de configuración de la
 herramienta y su controlador de base de datos. Con npm 11 ambos scripts se ejecutan igualmente y la
 herramienta funciona, así que puedes ignorar el aviso. npm 12, en cambio, los bloquea. Ejecuta el
@@ -160,7 +157,7 @@ que nombra, una vez.
 
 Si PowerShell bloquea `npm.ps1`, usa `npm.cmd`. Quizá también necesites el lanzador `.cmd` de la
 herramienta; consulta sus pasos para Windows. Telegram y MAX ofrecen además un instalador que
-configura PATH y las instrucciones del agente. No supongas que sirve para todas las herramientas.
+configura PATH y las instrucciones del agente.
 Usa los pasos de [Telegram](./tg/installation.md), [MAX](./max/installation.md),
 [Drive](./drive/installation.md) o [Zoom](./zm/installation.md).
 
@@ -182,6 +179,9 @@ una carpeta pequeña y responda una pregunta con una fuente:
   [Primera importación de Drive](./drive/usage.md).
 - **Reuniones:** recuperar o importar una transcripción y leer un fragmento citado.
   [Primer resultado de Zoom](./zm/installation.md#check-your-first-result).
+- **CRM, Slack, Notion, Linear o WordPress:** ejecutar el `sync` de la herramienta y preguntar por una negociación, un hilo,
+  una página, una incidencia o una entrada que conozcas. [Bitrix24](./b24/usage.md#sync) · [Slack](./slk/index.md) ·
+  [Notion](./notion/index.md) · [Linear](./linear/index.md) · [WordPress](./wordpress/usage.md#sync).
 
 El resultado funciona cuando el comando está disponible, la fuente correcta está conectada, hay
 datos útiles guardados y el agente puede citarlos. Comprueba fechas y archivos ausentes o ilegibles

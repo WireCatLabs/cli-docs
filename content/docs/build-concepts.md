@@ -3,9 +3,10 @@ title: "Concepts, sources and your own data"
 description: "The shared store model, how to bring a provider's records in as source records and where a tool keeps tables of its own."
 ---
 
-You are building a command-line tool, or an agent integration, that reads or writes the shared WireCat store. This page
-gives you the model in five minutes: what kinds of record exist, how they connect, and which rules keep your tool from
-breaking other tools. Below it also shows how to add a source and keep your own data. [Sign in and stay compliant](./build-sign-in.md) comes next.
+You are building a command-line tool, or an agent integration, that reads or writes the shared WireCat store. In five
+minutes you get the model: what kinds of record exist, how they connect, and which rules keep your tool from
+breaking other tools. You also see how to add a source and keep your own data. For the sign-in rules, read
+[Sign in and stay compliant](./build-sign-in.md).
 
 **On this page:**
 

@@ -3,13 +3,25 @@ title: "List your tool in WireCat"
 description: "Put a command-line tool you made into the Community tools group on wirecat.dev and into WireCat Desktop: what it needs, the pull request, the review, updates and removal."
 ---
 
-You built a command-line tool, and you want other people to find it next to the WireCat tools. This page is for
-makers outside WireCatLabs. It shows what your tool needs, how to ask for a listing, what we check, and what happens
+You built a command-line tool, and you want other people to find it next to the WireCat tools. If you make tools outside
+WireCatLabs, you learn what your tool needs, how to ask for a listing, what we check, and what happens
 after we merge it. A listed tool appears on wirecat.dev in the "Community tools" group, and in WireCat Desktop for
 people who turn community tools on.
 
 A listing does not make your tool part of WireCat. It keeps your own name, your npm scope and your repository. You
 keep making and releasing it.
+
+**On this page:**
+
+1. [Who can list a tool](#who-can-list-a-tool)
+2. [What your tool needs](#what-your-tool-needs)
+3. [Ask for a listing](#ask-for-a-listing)
+4. [What we check](#what-we-check)
+5. [After we merge it](#after-we-merge-it)
+6. [Updates](#updates)
+7. [Removal](#removal)
+8. [Try it before listing](#try-it-before-listing)
+9. [Where to go next](#where-to-go-next)
 
 ## Who can list a tool
 
