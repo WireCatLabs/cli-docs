@@ -15,7 +15,7 @@ gcal personal config unset limit
 
 ## Свой клиент Google
 
-`session start` входит через приложение Google от WireCat, если вы не назвали своё. Побеждает первое из этого списка:
+`session start` входит через приложение Google от WireCat, если вы не назвали свое. Побеждает первое из этого списка:
 
 1. `--client-file <file>`, файл вашего клиента Desktop app, или `--client-id <id>`, его ID клиента;
 2. `GCAL_GOOGLE_CLIENT_ID`;
@@ -23,16 +23,16 @@ gcal personal config unset limit
    `gcal config set --defaults google_client_id 1234-abc.apps.googleusercontent.com`;
 4. приложение WireCat.
 
-В случаях 1–3 секрет берётся из `GCAL_GOOGLE_CLIENT_SECRET`, никогда из файла настроек. Google не пускает приложение
-Desktop app без секрета, поэтому `session start` предупреждает ещё до открытия браузера, если секрета нет. Менять
-`google_client_id` можете только вы: агенту `config set` его не даёт. `gcal doctor` показывает в `oauth_client`
+В случаях 1–3 секрет берется из `GCAL_GOOGLE_CLIENT_SECRET`, никогда из файла настроек. Google не пускает приложение
+Desktop app без секрета, поэтому `session start` предупреждает еще до открытия браузера, если секрета нет. Менять
+`google_client_id` можете только вы: агенту `config set` его не дает. `gcal doctor` показывает в `oauth_client`
 приложение, которое использовал бы профиль без своей настройки, с `source` `flag`, `env`, `config` или `constants`.
 
 `gcal` отказывается работать с файлом клиента, который могут читать другие пользователи компьютера. Клиент нужен
 только при входе: `gcal` хранит его вместе со входом, поэтому следующие команды и обновления входа используют то же
 приложение, даже после того как вы изменили настройку.
 
-[Создайте своё приложение Google](./installation.md#make-your-own-google-app) — пошаговое описание работы в Google Cloud
+[Создайте свое приложение Google](./installation.md#make-your-own-google-app) — пошаговое описание работы в Google Cloud
 Console.
 
 ## Разрешения
@@ -70,7 +70,7 @@ gcal personal config set permissions.api.calendar.events.insert ask      # be as
 - `events.notify`, разрешение Google отправить письмо остальным участникам (`--notify`), — `deny`. Через MCP `ask`
   разрешает команде выполниться, так что иначе агент мог бы рассылать людям письма.
 - `events.delete.series`, удаление всех повторений повторяющегося события (`events delete --series`), — `deny`. Он
-  нужен и изменению серии, чьё новое правило `--repeat` заканчивает её раньше (новый `COUNT` или более ранний `UNTIL`).
+  нужен и изменению серии, чье новое правило `--repeat` заканчивает ее раньше (новый `COUNT` или более ранний `UNTIL`).
 
 Запись события подчиняется и ключу метода Google, который она вызывает, как только вы этот ключ зададите:
 `api.calendar.events.insert` для `create`, `api.calendar.events.patch` для `respond`, `api.calendar.events.patch` и
@@ -80,15 +80,15 @@ gcal personal config set permissions.api.calendar.events.insert ask      # be as
 `events create` спрашивать. Встроенное значение `ask` у `api.calendar.events.delete` действует только для команд
 `api`: `events delete` спрашивает по своему ключу. Один вопрос покрывает все ключи одной записи.
 
-Команды `api` подчиняются тем же ключам. Методу событий нужен ещё и ключ команды `events`, которая делает ту же
+Команды `api` подчиняются тем же ключам. Методу событий нужен еще и ключ команды `events`, которая делает ту же
 работу, даже для чтения: `events.list` для `calendar.events.list` и `instances`, `events.show` для `get`,
 `events.create` для `insert` и `quickAdd`, `events.import` для `import` (поэтому он спрашивает, как `events import`),
 `events.update` для `patch` и `update`, `events.delete` для `delete` и для изменения на `cancelled`, `events.move` для
 `move`. `gcal api show <method>` перечисляет их в `also_checks`. Методу, после которого Google рассылает письма участникам (`--send-updates`
-со значением кроме `none` или `--send-notifications true`), нужен ещё и `events.notify`. Удалению события или его
-изменению на `cancelled` нужен ещё и `events.delete.series`, если событие повторяется: чтобы это узнать, `gcal`
+со значением кроме `none` или `--send-notifications true`), нужен еще и `events.notify`. Удалению события или его
+изменению на `cancelled` нужен еще и `events.delete.series`, если событие повторяется: чтобы это узнать, `gcal`
 сначала читает событие из Google. Предоставлению доступа к календарю (`calendar.acl.insert`, `patch`, `update`) нужен
-ещё и `sharing.notify`, если вызов не передаёт `--send-notifications false` (`"sendNotifications": false` в
+еще и `sharing.notify`, если вызов не передает `--send-notifications false` (`"sendNotifications": false` в
 `api call --params`); `gcal` никогда не добавляет его за вас. Отзыв доступа (`calendar.acl.delete`) писем не
 отправляет, поэтому дополнительный ключ ему не нужен. `--dry-run` выводит все ключи, которые проверяет вызов, с их
 уровнями, и ничего не вызывает.
@@ -108,5 +108,5 @@ gcal personal config set permissions.events.create ask       # be asked before e
 ## Записи запусков
 
 Команда, которая завершилась ошибкой, сохраняется как запуск для `gcal runs list` и `runs show`. `record_input`
-определяет, хранит ли запуск введённые вами слова; это `true`, пока вы не зададите `false`. Секреты скрываются в любом
+определяет, хранит ли запуск введенные вами слова; это `true`, пока вы не зададите `false`. Секреты скрываются в любом
 случае; см. [Безопасность](./security.md).

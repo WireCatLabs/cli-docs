@@ -37,7 +37,7 @@ WireCat. `mail doctor` показывает, какое из них исполь
 селекторе проектов. Дайте ему имя, например `mail for me`, и держите его выбранным на всех шагах ниже.
 
 Создайте новый проект, даже если у вас уже есть проект для `drive` или `gcal`. Когда вход отзывают, Google снимает все
-разрешения, выданные этому проекту, для каждого приложения в нём
+разрешения, выданные этому проекту, для каждого приложения в нем
 ([установленные приложения](https://developers.google.com/identity/protocols/oauth2/native-app)): общий проект
 разлогинил бы и `drive`, и `gcal`.
 
@@ -51,7 +51,7 @@ WireCat. `mail doctor` показывает, какое из них исполь
 
 Откройте **Google Auth platform → Data Access** ([прямая ссылка](https://console.cloud.google.com/auth/scopes)),
 выберите **Add or Remove Scopes** и вручную добавьте `https://mail.google.com/` в поле ручного ввода. Сохраните. Это
-единственная область доступа (scope), которую Gmail даёт для IMAP и SMTP
+единственная область доступа (scope), которую Gmail дает для IMAP и SMTP
 ([XOAUTH2](https://developers.google.com/workspace/gmail/imap/xoauth2-protocol)). Также `mail` запрашивает `openid` и
 `email`, чтобы проверить, что вы вошли под нужным аккаунтом.
 
@@ -84,7 +84,7 @@ app»: выберите **Advanced**, затем **Go to mail for me (unsafe)**.
 chmod 600 ~/Downloads/client_secret_*.json
 ```
 
-Этот файл называет приложение, но не даёт доступа к вашей почте. `mail` читает его один раз, при входе, и хранит
+Этот файл называет приложение, но не дает доступа к вашей почте. `mail` читает его один раз, при входе, и хранит
 идентификатор и секрет приложения вместе с токенами в связке ключей.
 
 ## 6. Вход
@@ -103,8 +103,8 @@ mail gm config set auth oauth
 mail gm session start --client-file ~/Downloads/client_secret_XXXX.json
 ```
 
-Браузер откроет страницу Google. Выберите аккаунт, разрешите доступ, и `mail` проверит адрес и войдёт по IMAP, прежде
-чем что-либо сохранит. Для профиля, уже переключённого на OAuth, `MAIL_GOOGLE_CLIENT_ID` и
+Браузер откроет страницу Google. Выберите аккаунт, разрешите доступ, и `mail` проверит адрес и войдет по IMAP, прежде
+чем что-либо сохранит. Для профиля, уже переключенного на OAuth, `MAIL_GOOGLE_CLIENT_ID` и
 `MAIL_GOOGLE_CLIENT_SECRET` могут заменить `--client-file`; если нет ни того, ни другого, `mail gm session start` входит
 через приложение WireCat.
 

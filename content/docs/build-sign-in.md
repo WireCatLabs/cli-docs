@@ -7,6 +7,15 @@ Your tool talks to a service that needs a sign-in, such as Google or Zoom. This 
 live, how the owner chooses the account, and what a sign-in must never do. It also shows the shared sign-in module in
 cli-core.
 
+**On this page:**
+
+1. [The rules](#the-rules)
+2. [Steps](#steps)
+3. [Worked example](#worked-example)
+4. [Browser sign-in with the shared module](#browser-sign-in-with-the-shared-module)
+5. [What breaks if you skip this](#what-breaks-if-you-skip-this)
+6. [Stay compliant and current](#stay-compliant-and-current)
+
 ## The rules
 
 - **The profile is always explicit.** The owner names the profile in every command, such as `acme work sync`. A tool

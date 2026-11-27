@@ -5,6 +5,22 @@ description: "Recuerda quién te escribió y qué hablasteis antes de responder,
 
 Recuerda quién te escribió y qué hablasteis antes de responder. Pide a tu agente que explique de qué conoces a esa persona, qué acordasteis y qué datos de la cuenta están disponibles, con los mensajes que respaldan cada respuesta. También puedes unir las cuentas de Telegram y MAX de una misma persona.
 
+**En esta página:**
+
+1. [Qué es una persona aquí](#qué-es-una-persona-aquí)
+2. [Teléfonos y correos en mensajes](#teléfonos-y-correos-en-mensajes)
+3. [Pide al agente](#pide-al-agente)
+4. [Quién es](#quién-es)
+5. [Quién reaccionó](#quién-reaccionó)
+6. [Qué escribió](#qué-escribió)
+7. [Parece un bot](#parece-un-bot)
+8. [La misma persona en los dos mensajeros](#la-misma-persona-en-los-dos-mensajeros)
+9. [Qué cambia en MAX](#qué-cambia-en-max)
+10. [Cuando un agente lee estas respuestas](#cuando-un-agente-lee-estas-respuestas)
+11. [Respuestas automáticas por tus reglas](#respuestas-automáticas-por-tus-reglas)
+12. [Clientes, colegas y negociaciones](#clientes-colegas-y-negociaciones)
+13. [Teléfonos, enlaces, nombres y direcciones](#teléfonos-enlaces-nombres-y-direcciones)
+
 ## Qué es una persona aquí
 
 Una persona es alguien que tu cuenta ha visto en un chat: en un chat privado o en un grupo que

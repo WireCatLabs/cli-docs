@@ -20,6 +20,25 @@ opening tasks from your history, and build a chat's tasks when you ask (`tasks s
 in a group just for what is asked of you, and record who should do a task found in a message.
 [How tasks work](./tasks-architecture.mdx) gives the technical detail.
 
+**On this page:**
+
+1. [Where tasks come from](#where-tasks-come-from)
+2. [Ask your agent](#ask-your-agent)
+3. [One task, many messages](#one-task-many-messages)
+4. [What others owe you](#what-others-owe-you)
+5. [Watch every question in a group](#watch-every-question-in-a-group)
+6. [Use tasks reliably](#use-tasks-reliably)
+7. [Commands](#commands)
+8. [Relations between tasks](#relations-between-tasks)
+9. [How your agent works with tasks after a sync](#how-your-agent-works-with-tasks-after-a-sync)
+10. [Tasks from a chat's history](#tasks-from-a-chats-history)
+11. [When an agent closes a task](#when-an-agent-closes-a-task)
+12. [No duplicate tasks](#no-duplicate-tasks)
+13. [Categories, tags and keys](#categories-tags-and-keys)
+14. [Claiming a task](#claiming-a-task)
+15. [Not built yet](#not-built-yet)
+16. [Related pages](#related-pages)
+
 ## Where tasks come from
 
 - **Rules find them in messages, where something is asked of you.** In `tg` and `max`, the kind of chat decides:
@@ -280,7 +299,7 @@ while working on another.
 2. It reads the agenda and checks each new task against its messages.
 3. It sets a title, a due date and the right category, links the messages that belong together, and
    closes what is done. When it is not sure that a task is done, its close waits for you.
-4. It goes through the review list of possible duplicates (see below).
+4. It goes through the review list of possible duplicates.
 5. It shows you what it changed and asks before anything leaves your computer.
 
 ## Tasks from a chat's history

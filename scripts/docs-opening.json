@@ -25,6 +25,7 @@
       { "pattern": "необходимо", "fix": "write «нужно» or give the step" },
       { "pattern": "следует(?:\\s+не)?\\s+\\p{L}+(?:ть|ти|чь)(?:ся)?", "fix": "write «нужно» or give the step" },
       { "pattern": "важно отметить", "fix": "state the fact itself" },
+      { "pattern": "\\p{L}*[ёЁ]\\p{L}*", "fix": "write «е»: the docs do not use «ё»" },
       { "pattern": "(?:см\\.|смотрите)\\s+(?:ниже|далее)", "fix": "link the section instead" },
       {
         "pattern": "(?:шаг|раздел|пример|инструкци|таблиц|списк|список)\\p{L}*\\s+ниже",

@@ -5,6 +5,19 @@ description: "Qué tipos de contenido permiten buscar las herramientas (texto, a
 
 Averigua antes de buscar si lo que recuerdas se puede encontrar: una frase, un PDF, una nota de voz, una página web o una foto. Cada tipo de contenido se puede buscar a su manera. Algunos funcionan de inmediato, otros necesitan un comando y unos pocos siguen apagados hasta que los activas. La indexación se hace en tu ordenador y el índice vive en el archivo local. Las excepciones se indican donde aplican.
 
+**En esta página:**
+
+1. [Antes de empezar](#antes-de-empezar)
+2. [Qué necesita cada tipo](#qué-necesita-cada-tipo)
+3. [Texto de mensajes](#texto-de-mensajes)
+4. [Archivos y documentos](#archivos-y-documentos)
+5. [Notas de voz](#notas-de-voz)
+6. [Teléfonos, correos y enlaces](#teléfonos-correos-y-enlaces)
+7. [Imágenes](#imágenes)
+8. [En qué se diferencian las herramientas](#en-qué-se-diferencian-las-herramientas)
+9. [Límites](#límites)
+10. [Comprueba el resultado](#comprueba-el-resultado)
+
 ## Antes de empezar
 
 La búsqueda lee el archivo local, no el servicio de mensajería. Descarga primero el historial del chat: [Búsqueda](./search.mdx#descarga-primero-el-historial-de-los-chats-pertinentes). Un resultado vacío no prueba que no se enviara nada.

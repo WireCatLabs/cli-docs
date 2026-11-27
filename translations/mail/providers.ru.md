@@ -4,7 +4,7 @@ title: "Подготовка почтового ящика"
 
 <!-- Generated from src/providers.ts by pnpm generate. Do not edit. -->
 
-Эта страница нужна перед `mail <profile> session start`, который запрашивает пароль приложения, а для Outlook.com и Microsoft 365 открывает в браузере страницу входа Microsoft. Каждому провайдеру нужен включённый IMAP и, в большинстве случаев, пароль приложения:
+Эта страница нужна перед `mail <profile> session start`, который запрашивает пароль приложения, а для Outlook.com и Microsoft 365 открывает в браузере страницу входа Microsoft. Каждому провайдеру нужен включенный IMAP и, в большинстве случаев, пароль приложения:
 пароль, созданный только для этой программы. В конце у вас будет пароль приложения, готовый к вводу, когда `session start` его спросит.
 
 `mail <profile> session start` печатает те же шаги и повторяет
@@ -14,37 +14,37 @@ title: "Подготовка почтового ящика"
 
 ## Gmail
 
-1. Личный аккаунт Google: IMAP всегда включён, переключать ничего не нужно. Google Workspace: им управляет администратор, а вкладки "Forwarding and POP/IMAP" в настройках Gmail, "See all settings", может не быть.
+1. Личный аккаунт Google: IMAP всегда включен, переключать ничего не нужно. Google Workspace: им управляет администратор, а вкладки "Forwarding and POP/IMAP" в настройках Gmail, "See all settings", может не быть.
 2. Включите двухэтапную аутентификацию для аккаунта Google.
 3. Откройте <https://myaccount.google.com/apppasswords> и создайте пароль приложения. Страница справки Google не перечисляет названия элементов этого экрана, поэтому здесь они не приводятся.
 4. Скопируйте пароль из 16 букв и используйте его вместо пароля от аккаунта.
 
-- Пароли приложений недоступны, если двухэтапная аутентификация настроена только для ключей безопасности, на рабочем или учебном аккаунте, а также при включённой расширенной защите (Advanced Protection).
+- Пароли приложений недоступны, если двухэтапная аутентификация настроена только для ключей безопасности, на рабочем или учебном аккаунте, а также при включенной расширенной защите (Advanced Protection).
 
 Прочитано здесь: <https://support.google.com/mail/answer/7126229>, <https://support.google.com/accounts/answer/185833>
 
-Отправка: `smtp.gmail.com`, порт 465, TLS, с тем же паролем приложения. Провайдер сам кладёт отправленные письма в «Отправленные». Прочитано здесь: <https://knowledge.workspace.google.com/admin/gmail/send-email-from-a-printer-scanner-or-app>, <https://support.google.com/mail/answer/78892>
+Отправка: `smtp.gmail.com`, порт 465, TLS, с тем же паролем приложения. Провайдер сам кладет отправленные письма в «Отправленные». Прочитано здесь: <https://knowledge.workspace.google.com/admin/gmail/send-email-from-a-printer-scanner-or-app>, <https://support.google.com/mail/answer/78892>
 
 ## Outlook
 
-1. Outlook.com: откройте Settings (шестерёнка), "Mail", "Forwarding and IMAP", включите "Let devices and apps use IMAP" и сохраните.
+1. Outlook.com: откройте Settings (шестеренка), "Mail", "Forwarding and IMAP", включите "Let devices and apps use IMAP" и сохраните.
 2. Затем `mail` открывает в браузере страницу входа Microsoft: войдите и разрешите доступ. Outlook.com принимает для IMAP и SMTP только OAuth, пароль приложения не подходит.
 
 Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>, <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>
 
-Отправка: `smtp-mail.outlook.com`, порт 587, STARTTLS, с тем же входом через OAuth. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
+Отправка: `smtp-mail.outlook.com`, порт 587, STARTTLS, с тем же входом через OAuth. Справка не говорит, что он сам кладет письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если ее там еще нет. Прочитано здесь: <https://support.microsoft.com/en-us/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040>
 
 ## Microsoft 365
 
 1. В ящике готовить ничего не нужно: `mail` открывает в браузере страницу входа Microsoft; войдите рабочим или учебным аккаунтом и разрешите доступ.
 
 - Ваша организация может разрешать новое приложение только администратору. Если Microsoft пишет, что приложение должен одобрить администратор, попросите его дать согласие или зарегистрировать собственное приложение организации и сообщить вам его id.
-- Для отправки в ящике должен быть включён "Authenticated SMTP"; в организациях с настройками безопасности по умолчанию и созданных после января 2020 года он выключен, пока администратор его не включит. Чтение работает и без него.
+- Для отправки в ящике должен быть включен "Authenticated SMTP"; в организациях с настройками безопасности по умолчанию и созданных после января 2020 года он выключен, пока администратор его не включит. Чтение работает и без него.
 - IMAP-сервер Microsoft 365 не назван ни на одной официальной странице: outlook.office365.com — тот, что использует Outlook.com.
 
 Прочитано здесь: <https://learn.microsoft.com/en-us/exchange/client-developer/legacy-protocols/how-to-authenticate-an-imap-pop-smtp-application-by-using-oauth>, <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>, <https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission>, <https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent>
 
-Отправка: `smtp.office365.com`, порт 587, STARTTLS, с тем же входом через OAuth. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
+Отправка: `smtp.office365.com`, порт 587, STARTTLS, с тем же входом через OAuth. Справка не говорит, что он сам кладет письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если ее там еще нет. Прочитано здесь: <https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
 
 ## iCloud
 
@@ -58,7 +58,7 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://support.apple.com/en-us/102654>, <https://support.apple.com/en-us/102525>
 
-Отправка: `smtp.mail.me.com`, порт 587, STARTTLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://support.apple.com/en-us/102525>
+Отправка: `smtp.mail.me.com`, порт 587, STARTTLS, с тем же паролем приложения. Справка не говорит, что он сам кладет письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если ее там еще нет. Прочитано здесь: <https://support.apple.com/en-us/102525>
 
 ## Fastmail
 
@@ -72,11 +72,11 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://www.fastmail.help/hc/en-us/articles/360058752854-App-passwords>
 
-Отправка: `smtp.fastmail.com`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
+Отправка: `smtp.fastmail.com`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладет письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если ее там еще нет. Прочитано здесь: <https://www.fastmail.help/hc/en-us/articles/1500000278342-Server-names-and-ports>
 
 ## Яндекс
 
-1. Откройте <https://mail.yandex.ru/#setup/client> (или шестерёнка, «Все настройки», «Почтовые программы»).
+1. Откройте <https://mail.yandex.ru/#setup/client> (или шестеренка, «Все настройки», «Почтовые программы»).
 2. В разделе «Разрешить доступ к почтовому ящику с помощью почтовых клиентов» включите «С сервера imap.yandex.ru по протоколу IMAP».
 3. Убедитесь, что включено «Пароли приложений и OAuth токены», затем сохраните.
 4. Откройте <https://id.yandex.ru/security>, вкладка «Безопасность», раздел «Доступ к вашим данным», «Пароли приложений».
@@ -84,11 +84,11 @@ title: "Подготовка почтового ящика"
 6. Сразу скопируйте пароль: Яндекс показывает его только один раз.
 
 - Новый пароль приложения начинает работать через 2–3 часа после создания (справка Яндекс ID).
-- На бизнес-домене Яндекс 360 настройка администратора может блокировать пароли приложений. Страницы справки этого не подтверждают; если вход по-прежнему не удаётся, спросите администратора домена.
+- На бизнес-домене Яндекс 360 настройка администратора может блокировать пароли приложений. Страницы справки этого не подтверждают; если вход по-прежнему не удается, спросите администратора домена.
 
 Прочитано здесь: <https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others>, <https://yandex.ru/support/id/ru/authorization/app-passwords>
 
-Отправка: `smtp.yandex.ru`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://yandex.ru/support/mail/mail-clients/others.html>
+Отправка: `smtp.yandex.ru`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладет письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если ее там еще нет. Прочитано здесь: <https://yandex.ru/support/mail/mail-clients/others.html>
 
 <!-- translation-only -->
 ## Mail.ru
@@ -103,12 +103,12 @@ title: "Подготовка почтового ящика"
 
 Прочитано здесь: <https://help.mail.ru/mail/login/mailer/>
 
-Отправка: `smtp.mail.ru`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладёт письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если её там ещё нет. Прочитано здесь: <https://help.mail.ru/mail/login/mailer/>
+Отправка: `smtp.mail.ru`, порт 465, TLS, с тем же паролем приложения. Справка не говорит, что он сам кладет письма, отправленные по SMTP, в «Отправленные», поэтому `mail` добавляет копию, если ее там еще нет. Прочитано здесь: <https://help.mail.ru/mail/login/mailer/>
 <!-- /translation-only -->
 
 ## Любой другой провайдер
 
-Убедитесь, что для ящика включён IMAP и, если провайдер предлагает пароли приложений, создайте такой пароль: обычный пароль часто отклоняется.
+Убедитесь, что для ящика включен IMAP и, если провайдер предлагает пароли приложений, создайте такой пароль: обычный пароль часто отклоняется.
 
 `session start` находит сервер нового профиля по записи MX, по ISPDB Thunderbird и по файлу autoconfig домена. Если он ничего
 не находит, передайте `--host`, `--port` и `--security` сами, а для отправки задайте `smtp_host`, `smtp_port` и `smtp_security` через `config set`. См. [работу с инструментом](./usage.md). Эти запросы отправляют домен адреса, но никогда не сам

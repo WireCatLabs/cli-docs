@@ -15,6 +15,7 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     mcp: "Connect an MCP client to your WhatsApp profile and choose permissions for reads and writes.",
     remote: "Connect a browser AI app to your WhatsApp CLI with a private tunnel and configured access.",
     bot: "Use a WhatsApp Business test number through Meta's Cloud API, separately from personal device linking.",
+    scenarios: "Common WhatsApp CLI tasks step by step: the commands to run, why each runs and what to check.",
     recipes: "Give your agent WhatsApp tasks for catch-up, questions, context and scheduled local checks.",
     commands: "Find every WhatsApp CLI command, option and exit code in the generated reference.",
     configuration: "Change WhatsApp CLI settings for one profile or common defaults and inspect effective values.",
@@ -44,6 +45,7 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     mcp: "Подключите MCP-клиент к профилю WhatsApp и выберите разрешения на чтение и изменения.",
     remote: "Подключите браузерное ИИ-приложение к WhatsApp CLI через туннель с настроенным доступом.",
     bot: "Используйте тестовый бизнес-номер WhatsApp через Cloud API Meta отдельно от личного аккаунта.",
+    scenarios: "Частые задачи CLI WhatsApp по шагам: какие команды запускать, зачем и что проверить в ответе.",
     recipes: "Поручайте агенту задачи WhatsApp: обзор переписки, вопросы, контекст и локальные проверки по расписанию.",
     commands: "Все команды, параметры и коды выхода WhatsApp CLI в справочнике, созданном из программы.",
     configuration: "Меняйте настройки WhatsApp CLI для профиля или всех профилей и проверяйте действующие значения.",
@@ -74,6 +76,7 @@ export const whatsappDescriptions: Record<string, Record<string, string>> = {
     mcp: "Conecta un cliente MCP al perfil de WhatsApp y elige permisos de lectura y escritura.",
     remote: "Conecta una aplicación de IA del navegador a la CLI de WhatsApp mediante un túnel con acceso configurado.",
     bot: "Usa un número de prueba de WhatsApp Business con la Cloud API de Meta, separado de tu cuenta personal.",
+    scenarios: "Tareas comunes de la CLI de WhatsApp paso a paso: qué comandos ejecutar, por qué y qué revisar.",
     recipes:
       "Encarga tareas de WhatsApp al agente: resúmenes, preguntas, contexto y comprobaciones locales periódicas.",
     commands: "Todos los comandos, opciones y códigos de salida de la CLI de WhatsApp en la referencia generada.",

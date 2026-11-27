@@ -27,7 +27,7 @@ mail personal account check
 
 ## Поиск по почте
 
-После `sync` почта лежит в общем хранилище, и `mail` ищет в нём:
+После `sync` почта лежит в общем хранилище, и `mail` ищет в нем:
 
 ```sh
 mail personal search messages invoice
