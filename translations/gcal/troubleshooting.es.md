@@ -23,7 +23,7 @@ con ella. Una fila que dice «en el navegador» es la página de Google; los dem
 
 | Síntoma | Causa y solución |
 | --- | --- |
-| `doctor` muestra `oauth_client.client: null` | `doctor` da el motivo: normalmente `GCAL_GOOGLE_CLIENT_SECRET` está definido sin `GCAL_GOOGLE_CLIENT_ID`. Define también el ID, o quita el secreto para usar la aplicación de WireCat. Un perfil que ya inició sesión sigue funcionando: su sesión guarda su aplicación. |
+| `doctor` muestra `oauth_client.client: null` | `doctor` da el motivo: normalmente `GCAL_GOOGLE_CLIENT_SECRET` está definido sin `GCAL_GOOGLE_CLIENT_ID`. Define también el ID, o quita el secreto para que `gcal` inicie sesión con la aplicación de WireCat. Un perfil que ya inició sesión sigue funcionando: su sesión guarda su aplicación. |
 | "your Google app has no secret here" | Indicaste tu propia aplicación con `--client-id`, `GCAL_GOOGLE_CLIENT_ID` o `google_client_id`, pero `GCAL_GOOGLE_CLIENT_SECRET` no está definido. Google rechaza una aplicación Desktop app sin su secreto: defínelo o pasa `--client-file`. |
 | "the client file can be read by other users of this computer" | Ejecuta el `chmod 600` que indica el mensaje y luego `session start` otra vez. |
 | "could not read a Desktop app OAuth client JSON from the client file" | El archivo no es de un cliente Desktop app. El archivo de un cliente **Web application** tiene otra forma. En Google Cloud Console, crea un cliente del tipo **Desktop app** ([paso 6](./installation.md#6-make-the-client-and-download-its-file)) y pasa su archivo. |

@@ -1078,31 +1078,6 @@
     }
   },
   {
-    "tool": "gcal",
-    "slug": "usage",
-    "reason": "gcal v0.17.0 docs/usage.md names the words before a scheduled command as `gcal personal`, which the checker reads as a command with an unknown subcommand; mark it as the start of a command line. The en text is also in WireCatLabs/gcal-cli#195 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/gcal/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
-    "replacements": {
-      "en": [
-        {
-          "before": "as you would type them after `gcal personal`;",
-          "after": "as you would type them after `gcal personal …`;"
-        }
-      ],
-      "ru": [
-        {
-          "before": "так, как вы набрали бы их после `gcal personal`;",
-          "after": "так, как вы набрали бы их после `gcal personal …`;"
-        }
-      ],
-      "es": [
-        {
-          "before": "como las escribirías después de\n`gcal personal`;",
-          "after": "como las escribirías después de\n`gcal personal …`;"
-        }
-      ]
-    }
-  },
-  {
     "tool": "mail",
     "slug": "usage",
     "reason": "mail v0.10.0 docs/usage.md names memo's old `memo mail delete` in code, which the checker reads as an unknown subcommand; the prose names it without code. The en text is also in WireCatLabs/mail-cli#199 (2026-11-23). At the next pin bump, move this entry's es/ru replacements into translations/mail/usage.<lang>.md and refresh sources.json, then drop the entry; dropping it alone brings the old es/ru text back.",
@@ -1198,20 +1173,6 @@
         {
           "before": "Ahora es `google.usage-limit`, no se repite,",
           "after": "Ahora es `provider.usage-limit`, no se repite,"
-        }
-      ]
-    }
-  },
-  {
-    "tool": "gcal",
-    "slug": "troubleshooting",
-    "source": "https://github.com/WireCatLabs/gcal-cli/blob/v0.21.0/docs/troubleshooting.md",
-    "reason": "gcal v0.21.0 docs/troubleshooting.md says \"unset the secret to use WireCat's app\", which scripts/check-doc-versions.mjs reads as the editorial phrase \"Use WireCat\". Same meaning, worded so the check passes. The en text is also in WireCatLabs/gcal-cli#195 (2026-11-23). Drop the entry at the next pin bump.",
-    "replacements": {
-      "en": [
-        {
-          "before": "Set the ID too, or unset the secret to use WireCat's app.",
-          "after": "Set the ID too, or unset the secret so that `gcal` signs in through WireCat's app."
         }
       ]
     }

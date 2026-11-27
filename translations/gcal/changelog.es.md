@@ -4,6 +4,38 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/gcal-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.36.0 — 25.11.2026
+
+### Añadido
+
+- **`gcal <profile> sync --allow-deletions <count>`** deja que una pasada retenida marque como borrados hasta ese
+  número de eventos. Una pasada completa se retiene ahora cuando marcaría como borrada la mayor parte de un
+  calendario: una lista vacía, o más de la mitad de diez o más eventos guardados. La pasada termina igualmente, y
+  `held` dice por qué. `--rescan` vuelve a listarlo todo, pero no levanta la retención. La opción es del propietario:
+  un servidor MCP no la ofrece.
+
+### Cambios — pueden romper scripts
+
+- **gcal funciona con cli-core 1.0 y cli-base 1.0** (cli-core 1.0.0, antes 0.691.0; cli-base 1.0.0, antes 0.109.0).
+  cli-core 1.0 pasa el almacén de mensajes a la versión 74 la primera vez que lo abre: un id nunca se entrega dos
+  veces, y una columna JSON contiene JSON válido. A partir de ahí, solo las herramientas con cli-core 1.0 abren el
+  almacén. Ten en cuenta: actualiza primero cada WireCat CLI instalado a su versión 1.0, y detén `serve`, `mcp` y
+  cada sincronización mientras el almacén migra; la migración escribe primero una copia para revertir y no se ejecuta
+  sin ella. Consulta el [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Una pasada de calendario ya no se atasca en una serie borrada entre su listado y su llamada de franjas**, y un
+  evento de un feed ICS que deja de poder leerse ya no se marca como borrado: el feed todavía lo tiene.
+
+### Seguridad
+
+- **Una llamada MCP no puede nombrar una carpeta de credenciales, la carpeta de una herramienta de WireCat ni el
+  almacén de mensajes.** Cada opción y argumento que recibe un archivo o una carpeta local
+  (`gcal events import <file>`, `gcal events export --output`, `--body-file` y los demás) se comprueba por su ruta
+  real antes de ejecutar la llamada, así que no pasan ni un enlace ni `..`. Una llamada rechazada responde
+  `permission_error` (`access.denied`) con la opción en `param`. Una ejecución en una terminal no cambia.
+
 ## 0.35.0 — 18.11.2026
 
 ### Cambios — pueden romper scripts

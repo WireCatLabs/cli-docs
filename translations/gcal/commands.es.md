@@ -271,6 +271,7 @@ gcal sync [options]
 | Option | What it does |
 |---|---|
 | `--rescan` | list every synced calendar's window again, dropping a round in progress. |
+| `--allow-deletions <count>` | let this run mark deleted up to this many of what its full list no longer has, when the guard holds it. |
 | `--max-pages <pages>` | at most this many requests to the provider in this run; as many as fit the deadline if not given. |
 | `--embed` | also index new events for meaning search, with a model already downloaded. |
 
@@ -595,7 +596,7 @@ gcal search all <query> [options]
 | `--exact` | bare words and quotes match their exact form only, as exact:word does. |
 | `--timezone <zone>` | the IANA timezone for calendar date boundaries. |
 
-**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 18 more; every field: gcal commands info search all
+**Returns:** hit — kind, ref, provider, account, title, timestamp, excerpt, url, and 19 more; every field: gcal commands info search all
 
 **Example:** `gcal personal search all roadmap`, `gcal personal search all "quarterly review" --source telegram,gcal --json`
 
@@ -2277,7 +2278,7 @@ run a gcal command or an agent later or on a timer (systemd, launchd, Task Sched
 
 ### `gcal schedule command`
 
-run gcal <args…> on a timer — reads save what they read, so this is how a chat's history fills the store
+run gcal <args…> on a timer — reads save what they read, so this is how the store stays current
 
 **Changes something on this computer only.**
 
@@ -2288,7 +2289,7 @@ gcal schedule command <name> <args> [options]
 | Argument | | What it is |
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
-| `args` | required | the gcal command after its name, e.g. -- messages list <chat> --limit 50. |
+| `args` | required | the gcal command after its name, e.g. -- doctor. |
 
 | Option | What it does |
 |---|---|
@@ -2314,7 +2315,7 @@ gcal schedule agent <name> <harness> <prompt> [options]
 |---|---|---|
 | `name` | required | lowercase letters, digits and dashes. |
 | `harness` | required | the agent to start. One of: `claude`, `codex`, `gemini`, `cursor`, `opencode`, `openclaw`, `hermes`, `grok`, `kimi`. |
-| `prompt` | required | what to do, e.g. "summarize what came in during the last day: gcal personal search messages 'date>1d' --newest --limit 20". |
+| `prompt` | required | what to do, e.g. "say what needs attention in this installation: gcal doctor". |
 
 | Option | What it does |
 |---|---|

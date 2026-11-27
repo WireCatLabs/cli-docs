@@ -7,13 +7,13 @@ title: "Если что-то пошло не так"
 
 | Симптом | Что делать |
 | --- | --- |
-| Непонятно, что настроено | Запустите `gcal doctor`. Он не читает хранилище ключей и не обращается к сети. |
+| Непонятно, что настроено | Запустите `gcal doctor`. Он не читает связку ключей и не обращается к сети. |
 | `gcal` не найден | Откройте новый терминал и проверьте, что глобальная папка npm есть в `PATH`. |
 | «name a profile» | Поставьте профиль первым словом, как в `gcal personal config show`, или задайте `GCAL_PROFILE`. |
 | Файл настроек не читается | `doctor` перечисляет все проблемы файла в `config.issues`. Выполните `config unset`, который предлагается для каждой, или исправьте файл вручную. |
 | `doctor` показывает `files.problems` | Другие пользователи компьютера могут читать `config.json` или заходить в его папку. Выполните каждую команду `chmod`, которую `doctor` выводит после «to make it private:». Сам `doctor` права файлов не меняет. |
 | `profile.wrong-account` или `profile.same-account` | У каждого аккаунта Google один профиль. Используйте профиль, который уже есть у этого аккаунта, или новое имя профиля для нового аккаунта. |
-| `oauth.not-saved` | Файл со входом (`credentials.json` в папке настроек; его используют `--credential-storage file` и любой запуск, когда хранилище ключей не работает) существует, но не читается как файл со входом. Уберите его в сторону и войдите снова. |
+| `oauth.not-saved` | Файл со входом (`credentials.json` в папке настроек; его используют `--credential-storage file` и любой запуск, когда связка ключей не работает) существует, но не читается как файл со входом. Уберите его в сторону и войдите снова. |
 | Запись отклонена | Ее запрещают разрешения профиля или `GCAL_READ_ONLY`; см. [настройки](./configuration.md#permissions). |
 
 ## Проблемы со входом
@@ -23,7 +23,7 @@ title: "Если что-то пошло не так"
 
 | Симптом | Причина и решение |
 | --- | --- |
-| `doctor` показывает `oauth_client.client: null` | `doctor` называет причину: обычно задан `GCAL_GOOGLE_CLIENT_SECRET` без `GCAL_GOOGLE_CLIENT_ID`. Задайте и ID или уберите секрет, чтобы входить через приложение WireCat. Профиль, который уже вошел, продолжает работать: его вход хранит свое приложение. |
+| `doctor` показывает `oauth_client.client: null` | `doctor` называет причину: обычно задан `GCAL_GOOGLE_CLIENT_SECRET` без `GCAL_GOOGLE_CLIENT_ID`. Задайте и ID или уберите секрет, чтобы `gcal` входил через приложение WireCat. Профиль, который уже вошел, продолжает работать: его вход хранит свое приложение. |
 | «your Google app has no secret here» | Вы назвали свое приложение через `--client-id`, `GCAL_GOOGLE_CLIENT_ID` или `google_client_id`, но `GCAL_GOOGLE_CLIENT_SECRET` не задан. Google не пускает приложение Desktop app без секрета: задайте его или передайте `--client-file`. |
 | «the client file can be read by other users of this computer» | Выполните `chmod 600` из сообщения, затем снова `session start`. |
 | «could not read a Desktop app OAuth client JSON from the client file» | Это не файл клиента Desktop app. У файла клиента **Web application** другое устройство. Создайте в Google Cloud Console клиент типа **Desktop app** ([шаг 6](./installation.md#6-make-the-client-and-download-its-file)) и передайте его файл. |
