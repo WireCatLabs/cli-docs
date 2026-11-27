@@ -84,6 +84,8 @@ mail config set --defaults microsoft_client_id 11111111-2222-3333-4444-555555555
   ([SMTP AUTH](https://learn.microsoft.com/en-us/exchange/clients-and-mobile-in-exchange-online/authenticated-client-smtp-submission)).
   Чтение работает в любом случае.
 
+<a id="о-чём-просит-вход" />
+
 ## О чем просит вход
 
 | Scope | Что `mail` с ним делает |

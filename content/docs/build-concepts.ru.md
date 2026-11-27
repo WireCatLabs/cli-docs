@@ -12,7 +12,7 @@ description: "Модель общего хранилища, как добави�
 
 1. [Общее хранилище](#общее-хранилище)
 2. [Сущности и записи источников](#сущности-и-записи-источников)
-3. [externalid](#externalid)
+3. [`external_id`](#external_id)
 4. [Связи](#связи)
 5. [Общие сущности и ваши таблицы](#общие-сущности-и-ваши-таблицы)
 6. [Еще в хранилище](#еще-в-хранилище)
@@ -60,6 +60,8 @@ Id, который провайдер дал записи, хранится в `
 инструмента, и другие инструменты ее не читают
 ([WC-DATA-1](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/data-model.md#wc-data-1--a-record-more-than-one-tool-needs-is-a-core-entity-in-cli-core-a-clis-own-tables-stay-private)).
 Подробнее — [Хранить свои данные](./build-concepts.md#хранить-свои-данные).
+
+<a id="ещё-в-хранилище" />
 
 ## Еще в хранилище
 

@@ -1568,5 +1568,18 @@
         }
       ]
     }
+  },
+  {
+    "tool": "max",
+    "slug": "sessions",
+    "reason": "The site's Russian pages write «е» (2026-11-26), so the max installation heading «Куда все ложится» now has the anchor #куда-все-ложится. max-cli's Russian source still links #куда-всё-ложится; the page keeps an alias for HTML, but the Markdown copy for agents drops aliases. Drop this entry when max-cli writes the link without «ё».",
+    "replacements": {
+      "ru": [
+        {
+          "before": "(./installation.md#куда-всё-ложится)",
+          "after": "(./installation.md#куда-все-ложится)"
+        }
+      ]
+    }
   }
 ]

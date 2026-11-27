@@ -45,6 +45,8 @@ gcal personal session start --client-file ~/client_secret.json
 `GCAL_GOOGLE_CLIENT_ID` и `GCAL_GOOGLE_CLIENT_SECRET` или сохраните ID в настройке `google_client_id`
 ([порядок](./configuration.md#your-own-google-client)).
 
+<a id="создайте-своё-приложение-google" />
+
 ## Создайте свое приложение Google
 
 Это делается один раз в [Google Cloud Console](https://console.cloud.google.com/), под тем аккаунтом Google, с которым

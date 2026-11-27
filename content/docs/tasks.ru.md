@@ -169,6 +169,8 @@ tg personal tags remove --chat "Renovation" watch-tasks
 Ставьте тег только группам, за ответы в которых отвечаете вы. Оживленная группа с тегом даст много
 задач.
 
+<a id="как-пользоваться-задачами-надёжно" />
+
 ## Как пользоваться задачами надежно
 
 **Чтобы лишних задач было мало:**
@@ -514,6 +516,8 @@ tasks agenda claimed:any
 `tasks_release`, `tasks_categories`, `tasks_related`, `tasks_duplicates`, `tasks_merge` и `tasks_unmerge`.
 В `tg` и `max` `tasks_close` требует `certainty`, как и `tasks close` от агента. `tasks_scan`
 строит задачи чата из его истории.
+
+<a id="ещё-не-сделано" />
 
 ## Еще не сделано
 
