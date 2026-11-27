@@ -57,6 +57,8 @@ Google Cloud. Собственный Desktop клиент остается ал�
 [что делать](./installation.md#google-shows-an-unverified-app-warning).
 Правила Workspace тоже могут ограничивать доступные аккаунты и разрешения.
 
+<a id="google-api-отключён" />
+
 ## Google API отключен
 
 Подключение может быть действительным, пока API отключен в Google Cloud проекте приложения.

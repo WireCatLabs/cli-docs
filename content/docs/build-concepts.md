@@ -12,7 +12,7 @@ breaking other tools. You also see how to add a source and keep your own data. F
 
 1. [The shared store](#the-shared-store)
 2. [Entities and source records](#entities-and-source-records)
-3. [externalid](#externalid)
+3. [`external_id`](#external_id)
 4. [Links](#links)
 5. [Core entities and your own tables](#core-entities-and-your-own-tables)
 6. [More in the store](#more-in-the-store)

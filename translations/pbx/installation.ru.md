@@ -411,6 +411,8 @@ pbx office session start
 
 <a id="import-the-history-then-keep-it-current"></a>
 
+<a id="загрузите-историю-и-держите-её-свежей" />
+
 ## Загрузите историю и держите ее свежей
 
 ```sh

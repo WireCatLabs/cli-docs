@@ -12,7 +12,7 @@ tus propios datos. Las reglas de inicio de sesión están en [iniciar sesión y 
 
 1. [El almacén compartido](#el-almacén-compartido)
 2. [Entidades y registros de origen](#entidades-y-registros-de-origen)
-3. [externalid](#externalid)
+3. [`external_id`](#external_id)
 4. [Vínculos](#vínculos)
 5. [Entidades compartidas y tus propias tablas](#entidades-compartidas-y-tus-propias-tablas)
 6. [Más en el almacén](#más-en-el-almacén)

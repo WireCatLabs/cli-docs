@@ -25,6 +25,8 @@ drive без вопроса сохраняет их в `credentials.json` (пр�
 `--credential-storage file` при входе сразу выбирает этот файл. База по умолчанию в Linux — `~/.local/share/WireCat/wirecat.db`; снимки и контрольные точки находятся в `profiles/PROFILE_NAME/`. Перед переносом
 или удалением прочитайте о [локальном хранении](./usage.md#disk-use-index-without-an-export-directory).
 
+<a id="сохранённые-настройки" />
+
 ## Сохраненные настройки
 
 | Ключ | Что регулирует | Область |
