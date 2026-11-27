@@ -141,6 +141,33 @@ database driver. With npm 11 both scripts still run and the tool works, so you c
 warning. npm 12 blocks them instead. Run the `npm install -g --allow-scripts=…` command that npm
 prints under the warning: it allows only the packages it names, once.
 
+<a id="several-tools" />
+
+### Three tools or more without Desktop
+
+Installing several tools from the terminal? Save disk space with pnpm, another package manager for
+Node.js. npm gives each tool its own copy of the shared files, about 340 MB per tool. pnpm keeps
+identical files once: Telegram, WhatsApp and MAX together take about 480 MB. WireCat Desktop
+installs tools this way by itself and needs no separate pnpm.
+
+Install pnpm once, then open a new terminal:
+
+```sh
+npm install -g pnpm
+pnpm setup
+```
+
+Then install the tools:
+
+```sh
+pnpm add -g @wirecat/tg-cli @wirecat/whatsapp-cli @wirecat/max-cli --allow-build=better-sqlite3
+```
+
+The `--allow-build=better-sqlite3` flag lets pnpm build the database driver Telegram needs. Without
+it, pnpm skips the build and says nothing. Forgot the flag? Run the same command with it. Update all
+tools with `pnpm update -g`. Remove a tool you installed with npm first, with
+`npm uninstall -g @wirecat/tg-cli`, or the terminal finds two copies.
+
 <a id="what-the-windows-installer-changes" />
 
 ### Windows and command visibility
