@@ -1542,5 +1542,57 @@
         }
       ]
     }
+  },
+  {
+    "tool": "hubspot",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/hubspot-cli/blob/v0.8.0/docs/index.md",
+    "reason": "Docs review 2026-11-26 (CR-7). The limits say notes and tasks are written through `api`, but `activities create comment|task` and `activities close` exist since 0.6.0 (usage, changelog). Only tickets lack a command. Retire once hubspot-cli's index says it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- Tickets, notes and tasks are written through `api`, and tickets are not copied.",
+          "after": "- Tickets have no command of their own: write them through `api`, such as `api tickets-create`. Tickets are not copied."
+        }
+      ],
+      "ru": [
+        {
+          "before": "- Тикеты, заметки и задачи записываются через `api`, а тикеты не копируются.",
+          "after": "- У тикетов нет своей команды: их пишут через `api`, например `api tickets-create`. Тикеты не копируются."
+        }
+      ],
+      "es": [
+        {
+          "before": "- Los tickets, las notas y las tareas se escriben con `api`, y los tickets no se copian.",
+          "after": "- Los tickets no tienen comando propio: se escriben con `api`, como `api tickets-create`. Los tickets no se copian."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "mail",
+    "slug": "oauth-google",
+    "source": "https://github.com/WireCatLabs/mail-cli/blob/v0.37.0/docs/oauth-google.md",
+    "reason": "Docs review 2026-11-26 (MD-3). The page calls Google sign-in the recommended way into Gmail, while the roadmap says it has not been tried on a real Google account and the default for Gmail is still the app password. Neutral wording until mail-cli decides. Retire once mail-cli's page changes.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Signing in with Google (OAuth) is the recommended way into Gmail.",
+          "after": "You can sign in to Gmail with Google (OAuth) instead of an app password."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Вход через Google (OAuth) это рекомендуемый способ подключить Gmail.",
+          "after": "В Gmail можно войти через Google (OAuth) вместо пароля приложения."
+        }
+      ],
+      "es": [
+        {
+          "before": "Iniciar sesión con Google (OAuth) es la forma recomendada de entrar en Gmail.",
+          "after": "Puedes entrar en Gmail con Google (OAuth) en lugar de una contraseña de aplicación."
+        }
+      ]
+    }
   }
 ]
