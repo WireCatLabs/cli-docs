@@ -8,8 +8,6 @@ ChatGPT, Claude y otras aplicaciones de IA en el navegador funcionan en los serv
 
 Configuras Funnel una sola vez. Después, **Iniciar** en WireCat Desktop da al servidor su dirección pública con un clic. Necesitas una cuenta de Tailscale (el paso de inicio de sesión crea una si no tienes) y, para la aplicación de Tailscale, la contraseña de tu ordenador una vez para instalarla. [Sin la aplicación de Tailscale](#sin-la-aplicación-de-tailscale), WireCat se conecta a Tailscale por sí sola y no necesita contraseña.
 
-**Ve a tu sistema:** [Sin la aplicación de Tailscale](#sin-la-aplicación-de-tailscale) · [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Solución de problemas](#solución-de-problemas)
-
 **En esta página:**
 
 1. [Qué hace WireCat Desktop por ti](#qué-hace-wirecat-desktop-por-ti)
@@ -266,7 +264,7 @@ Usa en lugar de `443` el puerto que muestra `tailscale funnel status`. No ejecut
 
 **«Este ordenador no tiene nombre de Tailscale».** Activa MagicDNS en la página DNS de la consola de administración.
 
-**«Otro programa ya responde en el puerto…».** Abre **Usar otro puerto**, elige otro y vuelve a iniciar, o detén ese programa.
+**«Otro programa usa este puerto».** Vuelve atrás, abre **Usar otro puerto**, elige otro puerto y vuelve a empezar, o detén ese programa.
 
 **«Todas las direcciones públicas de Funnel de este ordenador las usan otros servidores».** Desactiva un Funnel que configuraste tú (`tailscale funnel status` los lista). WireCat nunca desactiva un Funnel que no activó él.
 

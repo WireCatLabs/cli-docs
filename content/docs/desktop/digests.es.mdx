@@ -12,8 +12,8 @@ En WireCat Desktop lees todos tus resúmenes en un solo sitio, con el día más 
 tarea del resumen se abre con un clic, así que pasas de «Anna espera respuesta» directamente al mensaje de Anna. Cada
 resumen lo configuras una vez: cuándo se ejecuta, qué lee, adónde se envía y qué agente lo escribe.
 
-**Resúmenes** tiene su propia página en la barra lateral, después de **Tareas**, con dos pestañas: **Resúmenes** para
-leerlos y **Ajustes** para su configuración. Necesita Memo, la herramienta que guarda tus chats, correo y reuniones
+**Resúmenes** tiene su propia página en la barra lateral, después de **Tareas**, con tres pestañas: **Resúmenes** para
+leerlos, **Bandeja** con tu correo ordenado por el modelo de IA, y **Ajustes** para configurar los resúmenes. Necesita Memo, la herramienta que guarda tus chats, correo y reuniones
 en este ordenador, y un agente de programación aquí mismo, como Claude Code, Gemini CLI u OpenCode. Resúmenes está
 marcada como beta: una β junto a su nombre significa que la sección es nueva y está poco probada.
 
@@ -22,12 +22,13 @@ marcada como beta: una β junto a su nombre significa que la sección es nueva y
 1. [Antes de empezar](#antes-de-empezar)
 2. [Leer tus resúmenes](#leer-tus-resúmenes)
 3. [Qué abre un enlace de un resumen](#qué-abre-un-enlace-de-un-resumen)
-4. [Crear un resumen](#crear-un-resumen)
-5. [La tabla](#la-tabla)
-6. [Los ajustes de un resumen](#los-ajustes-de-un-resumen)
-7. [Cuando un resumen está listo](#cuando-un-resumen-está-listo)
-8. [Si un resumen no llega](#si-un-resumen-no-llega)
-9. [Siguiente paso](#siguiente-paso)
+4. [Bandeja: tu correo, ordenado](#inbox)
+5. [Crear un resumen](#crear-un-resumen)
+6. [La tabla](#la-tabla)
+7. [Los ajustes de un resumen](#los-ajustes-de-un-resumen)
+8. [Cuando un resumen está listo](#cuando-un-resumen-está-listo)
+9. [Si un resumen no llega](#si-un-resumen-no-llega)
+10. [Siguiente paso](#siguiente-paso)
 
 ## Antes de empezar
 
@@ -79,6 +80,24 @@ Las personas, chats, tareas y reuniones de un informe son enlaces. Cada uno abre
 | Una negociación o un prospecto | Su ficha en **Clientes** |
 
 Todo lo demás del informe queda como texto sin enlace.
+
+<a id="inbox" />
+
+## Bandeja: tu correo, ordenado
+
+Mira de un vistazo qué correos nuevos necesitan tu respuesta, cuáles vale la pena leer y cuáles pueden esperar. La
+pestaña **Bandeja** reúne el correo de todas tus cuentas en tres grupos, **Necesita respuesta**, **Para leer** y
+**Puede esperar**, y cada conversación dice por qué está ahí. Haz clic en una para leerla en una pantalla de solo
+lectura.
+
+**Ordenar ahora** envía el correo que llegó desde la última vez al modelo de IA que elegiste en los
+[ajustes del modelo de IA](./ai-model.mdx). Si ese modelo funciona fuera de este ordenador, la aplicación dice primero
+cuántos correos enviaría y cuánto cuesta más o menos, y no envía nada hasta que pulsas **Enviar y ordenar**. Con
+[Solo este ordenador](./ai-model.mdx#solo-este-ordenador) activado, el correo nunca va a un modelo de otro ordenador.
+
+La pestaña necesita Email con la sesión iniciada en la página **Herramientas** y un modelo de IA. Si falta algo, dice
+qué falta y da un botón para arreglarlo. El campo de búsqueda sobre la lista encuentra una conversación por palabras
+de su asunto o de su motivo.
 
 ## Crear un resumen
 

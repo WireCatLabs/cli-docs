@@ -52,8 +52,8 @@ sidebar opens it again at the step you reached.
    the app installs it and runs its own commands. **Get started** begins.
 2. **Your computer:** the app checks the system, Node.js and npm. **Check again** repeats the check after
    you fix something.
-3. **Choose tools:** pick the services your agent should reach: Telegram, MAX, WhatsApp, Zoom,
-   Google Drive, Google Calendar, Memo, Email, Bitrix24, HubSpot or WordPress. You can add or remove tools later on the **Tools** page.
+3. **Choose tools:** tick the services your agent should reach, such as Telegram, your mail or your CRM. You can add
+   or remove tools later on the [**Tools**](#tools) page.
 4. **Install:** each tool is installed from npm and checked that it starts. One install runs at a time.
    A bar shows the progress: looking up packages, downloading, unpacking, setting up and checking that the
    tool starts, with the time so far and an estimate of what is left. A tool usually takes a minute or
@@ -112,6 +112,7 @@ The ways in, by tool:
 | amoCRM, Kommo | The account's address and a long-lived token from a private integration. See [amoCRM: a private integration](#amocrm-a-private-integration) |
 | HubSpot | A service key, or the token of a private app you already have, with read scopes, pasted in the window. The window lists the scopes and where to click. See [HubSpot: make a key](../hubspot/installation.md#make-a-key) |
 | Attio | An access token that a workspace admin makes in Attio, under Workspace settings → Developers, with read access to records, object configuration and user management. See [make an access token in Attio](../attio/installation.md#make-an-access-token-in-attio) |
+| Slack | The User OAuth Token (`xoxp-`) of a Slack app that you make in your workspace from the manifest `slk` gives. See [Install and connect Slack](../slk/installation.md) |
 | Linear | A personal API key from Linear's Settings → Account → Security & access. Read is enough to copy; your agent needs Write to change issues. See [make a personal API key](../linear/installation.md#make-a-personal-api-key) |
 | Asterisk | Where your calls are: the path of Master.csv, or the address of a MySQL or PostgreSQL call database and a read-only user's password. Then the countries of your phone lines, so a caller without a country code is linked to the right contact |
 | Notion | A Notion token that you paste in the window. Then choose the pages and databases to copy. Until you choose one, Notion copies everything the token sees |
@@ -153,8 +154,9 @@ Some Bitrix24 plans give applications no access: the window then says so, and th
 
 ### amoCRM: a private integration
 
-amoCRM and Kommo let a program in only through a private integration that an account administrator makes once. The
-window asks for the account's address first, such as `mycompany.amocrm.ru`, then lists what to do in amoCRM: where to
+In WireCat Desktop, amoCRM and Kommo sign in with a private integration that an account administrator makes once.
+From a terminal, an amoCRM administrator can also sign in with one click and nothing to create, as
+[Sign in with amoCRM](../amo/installation.md#sign-in-with-amocrm) shows. The window asks for the account's address first, such as `mycompany.amocrm.ru`, then lists what to do in amoCRM: where to
 create the integration, the redirect address to copy and the access to tick. On a Kommo account, open **On Kommo**.
 
 <DesktopShot
@@ -173,8 +175,8 @@ in full, and the browser sign-in through the same integration.
 
 The sidebar lists the pages in this order: **Tools**, **Tasks**, **Digests**, **Clients**, **Contacts**, **Meetings**,
 **Documents**, **Memory**, **Guides**, **Analytics** and **Search**. **Logs** and **Settings** sit below, apart,
-because they are about the app itself. Some pages have tabs: **Agents** is a tab of **Tools**, **Storage** is a tab
-of **Analytics**, and **Digests** has a **Settings** tab. Tasks, Digests, Clients, Contacts, Meetings, Documents and
+because they are about the app itself. Some pages have tabs. **Tools** has **Agents**, **Analytics** has **Data** and **Storage**,
+**Digests** has **Inbox** and **Settings**, and **Settings** has **WireCat** and **Tool settings**. Tasks, Digests, Clients, Contacts, Meetings, Documents and
 Memory are marked beta: a β beside the name means the section is new and lightly tested.
 
 When a page needs a tool that is missing, too old or signed out, it says so in the same words everywhere, with one
@@ -259,7 +261,7 @@ such as Zoom, is left out of the check.
 **Remove account** in an account's menu removes one account and keeps the tool. Choose **Remove, keep its data
 (search still finds it)** or **Remove and delete its data**. The dialog then lists what goes and what stays, and
 nothing happens until you confirm. **Keep the account** cancels. This works for every tool
-with accounts: Telegram, MAX, WhatsApp, Email, Google Drive, Zoom, Google Calendar and Bitrix24.
+with accounts.
 
 <DesktopShot
   shot="account-remove"
@@ -344,7 +346,8 @@ note beside each says why. On the board, drop it on Done or Dismissed to close i
 
 One short summary of your chats, mail, meetings and tasks every morning or every week, in the app, in Telegram or by
 mail. A coding agent you choose, such as Claude Code, writes it. The **Digests** tab shows what each digest wrote, and
-a name, chat or task in it opens in one click. The **Settings** tab is where you set digests up.
+a name, chat or task in it opens in one click. **Inbox** shows your new mail sorted by the AI model into what needs an
+answer, what to read and what can wait. The **Settings** tab is where you set digests up.
 [Digests](./digests.mdx) shows how.
 
 ### Clients
@@ -479,7 +482,7 @@ From the top, the page has:
   sends data now. See [Only this computer](./ai-model.mdx#only-this-computer).
 - **Reading pictures:** whether your coding agent may read the text of a picture you choose. See
   [Reading pictures](./ai-model.mdx#reading-pictures).
-- **Tools:** the settings of each tool and of WireCat itself, as a list or as **JSON**. The app reads them from the
+- **Tool settings**, the page's second tab: the settings of each tool and of WireCat itself, as a list or as **JSON**. The app reads them from the
   tool and saves them through the tool's own `config` command, so the tool checks every value before it is written.
 - **Account groups:** a board that sorts your accounts into groups, such as personal and work. Drag an account to a
   group; hold Alt or Ctrl while you drop to copy it there. **New group** adds one. Each account also has a
@@ -576,7 +579,7 @@ WireCat on its own, copy the address or code the browser shows and paste it into
 
 ### Check health reports a broken settings file
 
-A missing or extra comma, a comment, single quotes or an unclosed bracket in a tool's settings file stops the tool from reading its settings. Under **Manage**, **Check health** names the problem; select **Repair the file**. The tool keeps the file as it was, says what it changed, and changes nothing it cannot fix safely. If it refuses, the message points at the line to correct by hand in a text editor.
+A missing or extra comma, a comment, single quotes or an unclosed bracket in a tool's settings file stops the tool from reading its settings. Under **Manage**, **Check** in the account's menu names the problem; select **Repair the file**. The tool keeps the file as it was, says what it changed, and changes nothing it cannot fix safely. If it refuses, the message points at the line to correct by hand in a text editor.
 
 ### A tool "can't read storage"
 

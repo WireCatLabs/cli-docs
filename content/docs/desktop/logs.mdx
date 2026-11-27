@@ -8,13 +8,15 @@ A tool failed, or an agent says a command did not work, and you want to know why
 
 **On this page:**
 
-1. [Why most runs are failures](#why-most-runs-are-failures)
-2. [Search runs](#search-runs)
-3. [Facets](#filter-with-facets)
-4. [Group runs](#group-runs)
-5. [Open a run](#open-a-run)
-6. [Logs in a terminal](#logs-in-a-terminal)
-7. [Privacy](#privacy)
+1. [What the page shows](#what-the-page-shows)
+2. [Why most runs are failures](#why-most-runs-are-failures)
+3. [Search runs](#search-runs)
+4. [Facets](#filter-with-facets)
+5. [Group runs](#group-runs)
+6. [Choose a time range](#choose-a-time-range)
+7. [Open a run](#open-a-run)
+8. [Logs in a terminal](#logs-in-a-terminal)
+9. [Privacy](#privacy)
 
 <DesktopShot
   shot="logs"
@@ -26,13 +28,13 @@ A tool failed, or an agent says a command did not work, and you want to know why
 
 ## What the page shows
 
-Every WireCat tool keeps run logs: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`), Memo (`memo`), Email (`mail`), Google Calendar (`gcal`) and Bitrix24 (`b24`). The app reads them with each tool's own `runs list` and `runs show` commands. An older Zoom, Google Drive or Memo has no run logs; update it to see them. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
+Every WireCat tool keeps a record of its runs, and the app reads them with the tool's own `runs list` and `runs show` commands. The row above the search shows each tool and how many runs the app read from it. The app reads the newest 500 runs of each tool; **Load older** reads the next 500.
 
 ## Why most runs are failures
 
-A tool keeps every run: successful runs for 7 days, failed runs for 30. A tool set to keep only failed runs, or an older tool version, lists mostly failures. This is expected. It does not mean that everything is broken.
+A tool keeps every run: successful runs for 7 days, failed runs for 30. A tool set to keep only failed runs lists mostly failures, and that is expected.
 
-To keep every run of Telegram, MAX, WhatsApp or Email, open **Log settings** at the top of the Logs page and choose **Every run** for the tool, or set it yourself:
+To keep every run of a tool that offers it, open **Log settings** at the top of the Logs page and choose **Every run** for the tool, or set it yourself:
 
 ```sh
 tg config set record true --defaults
@@ -131,7 +133,7 @@ Choose **Last 1h**, **Last 24h**, **Last 7d**, **Last 30d** or **All**. The rang
 
 Click a run to open it. You see:
 
-- **Events**: the requests that the tool made to the service and the important steps of the run, with the time, the result and how long each one took. Click an event to see all its fields.
+- **Steps**: the requests that the tool made to the service and the important steps of the run, with the time, the result and how long each one took. Click a step to see all its fields.
 - **Run record**: everything the tool kept about the run, as a tree that you can expand. Most values have buttons to filter by it, exclude it, group by its field and copy it.
 - **Copy JSON**: copies the full run record. Attach it to a bug report or give it to your agent.
 

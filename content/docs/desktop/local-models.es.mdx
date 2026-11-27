@@ -12,23 +12,17 @@ Ajustes comprueba que nada va a otro ordenador. Necesitas un ordenador que pueda
 gráfica. Algunas partes de WireCat aún envían datos fuera cuando se ejecutan, y
 [el final de la página](#lo-que-aún-sale-de-tu-ordenador) las enumera.
 
-**Pasos:** [1. Pon un modelo](#1-pon-un-modelo-en-tu-ordenador) · [2. Ya local](#2-lo-que-ya-es-local) ·
-[3. El modelo de IA](#3-el-modelo-de-ia-en-ajustes) · [4. Lectura de hechos](#4-lectura-de-hechos) ·
-[5. Ayudas de búsqueda](#5-buscar-a-fondo-y-reescribir-registros-para-buscar) · [6. Voz](#6-mensajes-de-voz) ·
-[7. Tu agente](#7-tu-agente-con-un-modelo-local) · [8. Resúmenes](#8-resúmenes-y-el-agente-de-correo) ·
-[9. Solo este ordenador](#9-activa-solo-este-ordenador) · [Lista](#lista-todo-local)
-
 **En esta página:**
 
-1. [1. Pon un modelo en tu ordenador](#1-pon-un-modelo-en-tu-ordenador)
-2. [2. Lo que ya es local](#2-lo-que-ya-es-local)
-3. [3. El modelo de IA en Ajustes](#3-el-modelo-de-ia-en-ajustes)
-4. [4. Lectura de hechos](#4-lectura-de-hechos)
-5. [5. Buscar a fondo y reescribir registros para buscar](#5-buscar-a-fondo-y-reescribir-registros-para-buscar)
-6. [6. Mensajes de voz](#6-mensajes-de-voz)
-7. [7. Tu agente con un modelo local](#7-tu-agente-con-un-modelo-local)
-8. [8. Resúmenes y el agente de correo](#8-resúmenes-y-el-agente-de-correo)
-9. [9. Activa Solo este ordenador](#9-activa-solo-este-ordenador)
+1. [Pon un modelo en tu ordenador](#1-pon-un-modelo-en-tu-ordenador)
+2. [Lo que ya es local](#2-lo-que-ya-es-local)
+3. [El modelo de IA en Ajustes](#3-el-modelo-de-ia-en-ajustes)
+4. [Lectura de hechos](#4-lectura-de-hechos)
+5. [Buscar a fondo y reescribir registros para buscar](#5-buscar-a-fondo-y-reescribir-registros-para-buscar)
+6. [Mensajes de voz](#6-mensajes-de-voz)
+7. [Tu agente con un modelo local](#7-tu-agente-con-un-modelo-local)
+8. [Resúmenes y el agente de correo](#8-resúmenes-y-el-agente-de-correo)
+9. [Activa Solo este ordenador](#9-activa-solo-este-ordenador)
 10. [Lista: todo local](#lista-todo-local)
 11. [Lo que aún sale de tu ordenador](#lo-que-aún-sale-de-tu-ordenador)
 12. [Siguiente paso](#siguiente-paso)
@@ -37,7 +31,7 @@ gráfica. Algunas partes de WireCat aún envían datos fuera cuando se ejecutan,
 
 [Ollama](https://docs.ollama.com/quickstart) es lo más fácil para empezar, y WireCat Desktop lo conoce por su nombre.
 
-1. Instala Ollama y descarga un modelo con `ollama pull <model>`. Para leer imágenes, elige un modelo que las vea, como
+1. Instala Ollama y descarga un modelo con `ollama pull llama3.1:8b`. Para leer imágenes, elige un modelo que las vea, como
    `llava`.
 2. Ollama escucha en `127.0.0.1:11434`, que es lo que espera WireCat. Deja esa dirección.
 3. Desactiva los modelos en la nube de Ollama. Un modelo cuyo nombre termina en `cloud` funciona en los servidores de
@@ -132,13 +126,13 @@ elige **Otro modelo en una dirección**. Escribe el nombre del modelo como lo no
 **Qué se envía al activarlo** dice entonces que el texto se queda en este ordenador. Lo mismo desde una terminal:
 
 ```sh
-memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+memo models consents set openai --model llama3.1:8b --base-url http://127.0.0.1:11434/v1 --yes
 ```
 
 Buscar a fondo acepta la misma dirección desde una terminal:
 
 ```sh
-memo models search-consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+memo models search-consents set openai --model llama3.1:8b --base-url http://127.0.0.1:11434/v1 --yes
 ```
 
 ## 6. Mensajes de voz
@@ -148,7 +142,7 @@ partir de su propia copia del mensaje, cuando tiene servicio de voz, como Telegr
 ordenador, añade `--local`:
 
 ```sh
-tg <profile> messages transcribe <chat> <message> --local
+tg personal messages transcribe Anna 4512 --local
 ```
 
 Cuando tu agente pide una transcripción, puede que no añada `--local`. Pídeselo, o usa el comando tú mismo.
@@ -160,7 +154,7 @@ envía a su propio modelo. Para que eso se quede en tu ordenador, usa el agente 
 funciona con Claude Code, Codex, Cursor, Gemini CLI, OpenCode, Hermes y OpenClaw.
 [Conectar tu agente de IA](../agents.mdx) muestra cómo conectar uno.
 
-Ollama abre cinco de ellos con un modelo local con un solo comando, `ollama launch <agent>`, donde el agente es `codex`, `claude`,
+Ollama abre cinco de ellos con un modelo local con un solo comando: `ollama launch` y el nombre del agente, `codex`, `claude`,
 `opencode`, `hermes` u `openclaw`. Lo describen las páginas
 de Ollama para [Codex](https://docs.ollama.com/integrations/codex),
 [Claude Code](https://docs.ollama.com/integrations/claude-code), [OpenCode](https://docs.ollama.com/integrations/opencode),
@@ -175,10 +169,10 @@ Sin `ollama launch`:
 
 - **Codex.** La [configuración avanzada de Codex](https://learn.chatgpt.com/docs/config-file/config-advanced) describe
   `--oss` para un Ollama o LM Studio local, y `oss_provider` en `~/.codex/config.toml` para elegir uno por defecto. La
-  página de Ollama da `codex --oss -m <model>`.
+  página de Ollama da `codex --oss -m llama3.1:8b`.
 - **Claude Code.** La [página de Ollama sobre Claude Code](https://docs.ollama.com/integrations/claude-code) pone
   `ANTHROPIC_BASE_URL=http://localhost:11434`, `ANTHROPIC_AUTH_TOKEN=ollama` y un `ANTHROPIC_API_KEY` vacío, y después
-  ejecuta `claude --model <model>`. Los ajustes de Claude Code pueden pisar estas variables, así que compruébalo con
+  ejecuta `claude --model llama3.1:8b`. Los ajustes de Claude Code pueden pisar estas variables, así que compruébalo con
   `/status`. [LM Studio](https://lmstudio.ai/docs/developer/anthropic-compat) describe lo mismo con su propia
   dirección. Anthropic [no da soporte](https://code.claude.com/docs/en/llm-gateway) a Claude Code con modelos que no
   son Claude.
