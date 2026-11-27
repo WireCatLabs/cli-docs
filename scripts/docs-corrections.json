@@ -1577,5 +1577,109 @@
         }
       ]
     }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "index",
+    "source": "https://github.com/WireCatLabs/ydisk-cli/blob/v0.9.0/docs/index.md",
+    "reason": "Docs review 2026-11-26 (MD-301). The bullet says the tool asks before it deletes, overwrites or shares, but over MCP the `ask` level runs the change without a question (ydisk configuration.md, mcp.md, mirrors.md say so). Retire once ydisk-cli's index says it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "- **Safe to give to an agent.** At a terminal the tool asks before it deletes, overwrites or makes a public link. For\n  an agent you can turn each of those off, or allow reading only.",
+          "after": "- **You decide what an agent may change.** At a terminal the tool asks before it deletes, overwrites or makes a\n  public link. Over MCP nobody can answer, so an agent does these without asking until you set them to `deny` or\n  allow reading only. See [connect your agent](./mcp.md#decide-what-the-agent-may-change)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "- **Агенту можно доверить.** В терминале инструмент спрашивает перед удалением, перезаписью и созданием публичной\n  ссылки. Для агента каждый такой вопрос можно отключить или разрешить только чтение.",
+          "after": "- **Что агенту можно менять, решаете вы.** В терминале инструмент спрашивает перед удалением, перезаписью и\n  созданием публичной ссылки. По MCP ответить некому, поэтому агент делает это без вопроса, пока вы не поставите\n  `deny` или не разрешите только чтение. См. [подключение агента](./mcp.md#decide-what-the-agent-may-change)."
+        }
+      ],
+      "es": [
+        {
+          "before": "- **Seguro para dárselo a un agente.** En un terminal, la herramienta pregunta antes de borrar, sobrescribir o crear\n  un enlace público. Para un agente puedes desactivar cada una de esas preguntas o permitir solo la lectura.",
+          "after": "- **Tú decides qué puede cambiar un agente.** En una terminal la herramienta pregunta antes de borrar, sobrescribir\n  o crear un enlace público. Por MCP nadie puede responder, así que un agente lo hace sin preguntar hasta que lo fijes\n  en `deny` o permitas solo la lectura. Mira [conexión del agente](./mcp.md#decide-what-the-agent-may-change)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "recipes",
+    "source": "https://github.com/WireCatLabs/ydisk-cli/blob/v0.9.0/docs/recipes.md",
+    "reason": "Docs review 2026-11-26 (MD-301). \"Over MCP it follows the files.share permission\" hides that the default `ask` makes the link without a question over MCP. Retire once ydisk-cli's recipes say it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Anyone who has a public link can open the file. At a terminal the tool asks first. Over MCP it follows the\n`files.share` permission, see [connect your agent](./mcp.md#decide-what-the-agent-may-change).",
+          "after": "Anyone who has a public link can open the file. At a terminal the tool asks first. Over MCP the link is made without\nasking unless `files.share` is `deny`, see [connect your agent](./mcp.md#decide-what-the-agent-may-change)."
+        }
+      ],
+      "ru": [
+        {
+          "before": "Файл откроет любой, у кого есть публичная ссылка. В терминале инструмент сначала спрашивает. Через MCP он учитывает\nразрешение `files.share`, см. [подключение агента](./mcp.md#decide-what-the-agent-may-change).",
+          "after": "Файл откроет любой, у кого есть публичная ссылка. В терминале инструмент сначала спрашивает. Через MCP ссылка\nсоздается без вопроса, если `files.share` не стоит в `deny`, см. [подключение агента](./mcp.md#decide-what-the-agent-may-change)."
+        }
+      ],
+      "es": [
+        {
+          "before": "Cualquiera que tenga un enlace público puede abrir el archivo. En un terminal la herramienta pregunta antes. Por MCP\nsigue el permiso `files.share`, mira [conexión del agente](./mcp.md#decide-what-the-agent-may-change).",
+          "after": "Cualquiera que tenga un enlace público puede abrir el archivo. En una terminal la herramienta pregunta antes. Por MCP\nel enlace se crea sin preguntar salvo que `files.share` sea `deny`, mira [conexión del agente](./mcp.md#decide-what-the-agent-may-change)."
+        }
+      ]
+    }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "configuration",
+    "source": "https://github.com/WireCatLabs/ydisk-cli/blob/v0.9.0/docs/configuration.md",
+    "reason": "Docs review 2026-11-26 (MD-300). ydisk has no `ai set` command (its command contract has no `models ai` group); the OCR model is the shared WireCat AI model that `memo models ai set` chooses, as the usage correction says. Retire once ydisk's own docs name a command it has.",
+    "replacements": {
+      "en": [
+        {
+          "before": "at the model chosen with `ai set`, and cost per page",
+          "after": "at the model chosen with `memo models ai set`, and cost per page"
+        }
+      ],
+      "ru": [
+        {
+          "before": "модели, выбранной через `ai set`,",
+          "after": "модели, выбранной через `memo models ai set`,"
+        }
+      ],
+      "es": [
+        {
+          "before": "al modelo elegido con `ai set`,",
+          "after": "al modelo elegido con `memo models ai set`,"
+        }
+      ]
+    }
+  },
+  {
+    "tool": "ydisk",
+    "slug": "mirrors",
+    "source": "https://github.com/WireCatLabs/ydisk-cli/blob/v0.9.0/docs/mirrors.md",
+    "reason": "Docs review 2026-11-26 (MD-303). The sentence announces two things and three bullets follow (Free space, Size, Time). Retire once ydisk-cli fixes it.",
+    "replacements": {
+      "en": [
+        {
+          "before": "Two things matter more on a big Disk:",
+          "after": "On a big Disk, watch three things:"
+        }
+      ],
+      "ru": [
+        {
+          "before": "На большом Диске важнее две вещи:",
+          "after": "На большом Диске следите за тремя вещами:"
+        }
+      ],
+      "es": [
+        {
+          "before": "En un Disk\ngrande pesan más dos cosas:",
+          "after": "En un Disk\ngrande, vigila tres cosas:"
+        }
+      ]
+    }
   }
 ]

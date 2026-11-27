@@ -4,6 +4,46 @@ title: "Historial de cambios"
 
 Cambios notables en `@wirecat/yandex-disk-cli`. Una sección por versión, las más nuevas arriba.
 
+## 0.9.0 — 26.11.2026
+
+### Añadido
+
+- **`session start` muestra cómo conseguir un token OAuth de Yandex** antes de pedirlo en una terminal, y su
+  `--help` termina con los mismos pasos.
+- **Una lectura se envía de nuevo tras un fallo que admite reintento** (HTTP 5xx, 429, una conexión cortada), al ritmo
+  del perfil y con 60 s de espera como mucho en total, mediante `retrying` de cli-base. Una escritura se envía de nuevo
+  solo después de un 429, que la rechazó. Cualquier otro fallo de una escritura sigue siendo `outcome_unknown`.
+
+### Cambiado — puede romper llamadas
+
+- **`session` y `mirrors` son ahora comandos propios de cli-core (cli-core 1.3.0).** ydisk monta
+  `tokenSessionCommand` y `fileMirrorsCommand` en lugar de sus propias copias, así que `commands --json` les da
+  `origin: "cli-core"`. Un token guardado por una versión anterior sigue iniciando la sesión del perfil: la entrada del
+  llavero es la misma, así que nadie vuelve a iniciar sesión. Los espejos conservan su `mirrors.json`, su estado y sus
+  versiones donde estaban.
+- **`session start --json` y `session status --check --json` dan la cuenta en el nivel superior.** El objeto `user`
+  desaparece: `item.user.id`, `item.user.login` y `item.user.name` son ahora `item.id`, `item.login` y `item.name`,
+  como en los otros WireCat CLI que inician sesión con un token. `doctor --online` conserva su `user`.
+- **Las filas de `session list` tienen `state`** (`saved`, `missing`, o `unknown` con `signed_in: null` cuando no se
+  puede leer el llavero), junto a `signed_in` y `token_from`.
+- **`mirrors preview` marca una ruta planificada con la fuente `plan.path`** en la ejecución de un agente programado,
+  no `path`. También marca las rutas de subidas, descargas, fusiones, cambios de nombre, conflictos y errores.
+
+## 0.8.0 — 26.11.2026
+
+### Cambiado — puede romper llamadas
+
+- **Basado en cli-core 1.0.0 y cli-base 1.0.0.** Los archivos de API generados leen sus tipos de
+  `@wirecat/cli-base/codegen/runtime`. La versión 73 del almacén llega con cli-core 1.0: cuando una herramienta 1.0
+  abre el almacén, una herramienta 0.x lo rechaza, así que actualiza todos los CLI de WireCat a la vez.
+
+### Corregido
+
+- **Por MCP, una ruta del Disco sigue siendo una ruta del Disco.** Las rutas de `files` y `--folder`, la carpeta del
+  Disco de `mirrors add`, `--ignore` y la ruta de `mirrors versions` se marcan como no locales, así que el servidor ya
+  no las hace absolutas respecto a la carpeta del cliente ni las comprueba como archivos de este ordenador. Un archivo
+  local, como `files upload <file>` o `files download --output`, se sigue comprobando.
+
 ## 0.7.1 — 25.11.2026
 
 ### Corregido

@@ -68,7 +68,7 @@
     "repo": "WireCatLabs/ydisk-cli",
     "package": "@wirecat/yandex-disk-cli",
     "lang": "en",
-    "docsRef": "v0.7.1",
+    "docsRef": "v0.9.0",
     "summary": {
       "en": "Search the text of your Yandex Disk folders on your computer, and let your AI agent read, edit, file and share documents there.",
       "ru": "Ищите по тексту папок Яндекс Диска на своём компьютере и поручайте ИИ-агенту читать, править, раскладывать и отправлять документы.",

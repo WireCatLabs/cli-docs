@@ -60,11 +60,11 @@ ydisk commands info [path]
 
 ## `ydisk session`
 
-keep this profile's Yandex Disk token in the OS keyring
+keep this profile's Yandex Disk OAuth token in the OS keyring
 
 ### `ydisk session start`
 
-sign this profile in: the Yandex Disk API token is asked hidden or read from stdin, never taken as an argument, checked against the service, and only then kept in the keyring, or in a private file
+sign this profile in: the Yandex Disk OAuth token is asked hidden or read from stdin, never taken as an argument, checked with Yandex Disk, and only then kept in the keyring, or in a private file
 
 **Changes something on this computer only.**
 
@@ -74,9 +74,9 @@ ydisk session start [options]
 
 | Option | What it does |
 |---|---|
-| `--credential-storage <storage>` | where the token is kept: keyring, which falls back to a private file by itself when no keyring works; file skips the keyring, so keep it for a computer that has none. Default: `keyring`. |
+| `--credential-storage <storage>` | where the token is kept: keyring, which falls back to a private file by itself, or file. Default: `keyring`. |
 
-**Example:** `ydisk personal session start`
+**Example:** `ydisk personal session start`, `ydisk personal session start --credential-storage file`
 
 ### `ydisk session status`
 
@@ -94,7 +94,7 @@ ydisk session status [options]
 
 ### `ydisk session end`
 
-forget this profile's token on this computer; the token itself stays valid in Yandex Disk until you remove the app in Yandex ID's Data access: https://id.yandex.ru/personal/data-access
+forget this profile's token on this computer; the token itself stays valid in Yandex Disk. Remove the app in Yandex ID's Data access to revoke it there: https://id.yandex.ru/personal/data-access
 
 **Changes something on this computer only.**
 
@@ -1402,7 +1402,7 @@ ydisk files update <path> [options]
 
 ## `ydisk mirrors`
 
-keep local folders and Yandex Disk folders the same, both ways, file by file
+keep local folders and Disk folders the same, both ways, file by file
 
 ### `ydisk mirrors add`
 
@@ -1437,7 +1437,7 @@ ydisk mirrors list
 
 ### `ydisk mirrors status`
 
-show which local files the next sync would send or delete on Yandex Disk; the Disk is not asked
+show which local files the next sync would send or delete on Yandex Disk; Yandex Disk is not asked
 
 ```sh
 ydisk mirrors status [id]
@@ -1451,7 +1451,7 @@ ydisk mirrors status [id]
 
 ### `ydisk mirrors preview`
 
-list the Disk and show what mirrors sync would do: each upload, download, merge, rename, trash and conflict; nothing is changed on either side
+list Yandex Disk and show what mirrors sync would do: each upload, download, merge, rename, trash and conflict; nothing is changed on either side
 
 ```sh
 ydisk mirrors preview [id] [options]
@@ -1463,7 +1463,7 @@ ydisk mirrors preview [id] [options]
 
 | Option | What it does |
 |---|---|
-| `--keep <side>` | settle each conflict: keep the local file, the Disk's, or both. One of: `local`, `disk`, `both`. |
+| `--keep <side>` | settle each conflict: keep the local file, the Yandex Disk one, or both. One of: `local`, `disk`, `both`. |
 
 **Example:** `ydisk personal mirrors preview --json`, `ydisk personal mirrors preview 1a2b3c4d --keep disk`
 
@@ -1483,17 +1483,17 @@ ydisk mirrors sync [id] [options]
 
 | Option | What it does |
 |---|---|
-| `--keep <side>` | settle each conflict: keep the local file, the Disk's, or both. One of: `local`, `disk`, `both`. |
+| `--keep <side>` | settle each conflict: keep the local file, the Yandex Disk one, or both. One of: `local`, `disk`, `both`. |
 | `--allow-deletions <count>` | let this run delete up to this many files when the guard stops it. |
 | `--allow-replacements <count>` | let this run overwrite up to this many existing files when the guard stops it; each is kept as a version first. |
 | `--replace` | let this run overwrite any number of existing files when the guard stops it; each is kept as a version first. |
-| `--repin` | the Disk or local folder was replaced and the new one is right: record it and sync. |
+| `--repin` | the Yandex Disk or local folder was replaced and the new one is right: record it and sync. |
 
 **Example:** `ydisk personal mirrors sync`, `ydisk personal mirrors sync 1a2b3c4d --keep disk`
 
 ### `ydisk mirrors watch`
 
-keep syncing both ways until Ctrl-C or --timeout: on each local save, and when the Disk's revision moves; a file changed on both sides that cannot be merged is reported for mirrors conflicts
+keep syncing both ways until Ctrl-C or --timeout: on each local save, and when Yandex Disk changes; a file changed on both sides that cannot be merged is reported for mirrors conflicts
 
 **Changes something in the service.**
 
@@ -1569,7 +1569,7 @@ ydisk mirrors versions list <id> <path>
 
 #### `ydisk mirrors versions restore`
 
-put a kept version back into the local folder; the file there now is kept first, and the next mirrors sync sends the restored one to the Disk
+put a kept version back into the local folder; the file there now is kept first, and the next mirrors sync sends the restored one to Yandex Disk
 
 **Changes something on this computer only.**
 
