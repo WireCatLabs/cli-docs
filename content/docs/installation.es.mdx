@@ -149,6 +149,35 @@ herramienta funciona, así que puedes ignorar el aviso. npm 12, en cambio, los b
 comando `npm install -g --allow-scripts=…` que npm muestra bajo el aviso: permite solo los paquetes
 que nombra, una vez.
 
+<a id="several-tools" />
+
+### Tres herramientas o más sin Desktop
+
+¿Instalas varias herramientas desde el terminal? Ahorra espacio en disco con pnpm, otro gestor de
+paquetes para Node.js. npm da a cada herramienta su propia copia de los archivos comunes, unos
+340 MB por herramienta. pnpm guarda una sola vez los archivos iguales: Telegram, WhatsApp y MAX
+juntos ocupan unos 480 MB. WireCat Desktop instala las herramientas así por su cuenta y no necesita
+un pnpm aparte.
+
+Instala pnpm una vez y abre un terminal nuevo:
+
+```sh
+npm install -g pnpm
+pnpm setup
+```
+
+Después instala las herramientas:
+
+```sh
+pnpm add -g @wirecat/tg-cli @wirecat/whatsapp-cli @wirecat/max-cli --allow-build=better-sqlite3
+```
+
+La opción `--allow-build=better-sqlite3` permite a pnpm compilar el controlador de base de datos que
+necesita Telegram. Sin ella, pnpm omite la compilación sin avisar. ¿Olvidaste la opción? Ejecuta el
+mismo comando con ella. Actualiza todas las herramientas con `pnpm update -g`. Si ya instalaste una
+herramienta con npm, ejecuta antes `npm uninstall -g @wirecat/tg-cli`, o el terminal encontrará
+dos copias.
+
 <a id="what-the-windows-installer-changes" />
 
 <a id="windows-y-acceso-al-comando" />
