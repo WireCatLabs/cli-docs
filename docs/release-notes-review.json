@@ -54,10 +54,10 @@
     "conclusion": "Reviewed b24 0.28.0 from its changelog and the docs diff since v0.27.0: `search all` by meaning of deal and lead activities after `sync --embed`, `synced[].saved` counting only changed rows, cli-core 1.0 with store version 74, `sync --rescan` and `--allow-deletions`, MCP no longer offering `schedule exec`, and `permission_error` for a refused folder; the roadmap is unchanged since v0.27.0 and neither Next item (contacts and companies from the local store, their custom fields kept locally) has shipped, and the RU/ES changelog and commands were updated and accepted."
   },
   "pbx": {
-    "version": "v0.8.0",
+    "version": "v0.11.0",
     "roadmapSha256": "25591a315aae916afedbf430578dd007223487120a9656ec55bb9c834203577d",
-    "reviewedAt": "2026-11-17",
-    "conclusion": "Reviewed pbx 0.8.0 from its changelog and the docs diff since v0.7.2. May break callers: `meetings transcribe` answers the report the other phone CLIs give (`audio_ms` instead of `audio_seconds`, a `ref` on each failed call, a call without a recording under `failed` with `recording.missing`, no `without_recording`). The overview (index) is rewritten as a sales page: the reader's gain, the ideas a newcomer would not guess, an example from the bundled sample call log, why pbx against the tools on its comparison page, a start and plain limits. RU/ES index retranslated, changelog and commands updated and accepted, and the changelog link correction moved to v0.8.0. The roadmap did not change."
+    "reviewedAt": "2026-11-27",
+    "conclusion": "Reviewed asterisk-cli v0.8.0 to v0.11.0 from the changelog and the docs diff. 0.9.0 adds `account remove` (with `--keep-data`, `--delete-data`, `--dry-run`) and a \"Remove a phone system\" section on the install page, makes the MCP Registry entry ask which profiles to serve, and lets Desktop remove a pbx account. 0.10.0 moves to cli-core 1.0 and cli-base 1.0 (store version 73). 0.11.0 stops a read under `PBX_READ_ONLY` from creating a store. Upstream now carries the installation opening, the `asterisk` group, the remote-database and SSH-user steps and the ffmpeg line, so the three before-translation corrections for them are retired (their RU/ES text moved into the translations first); the changelog link correction now matches the v0.11.0 link. RU/ES changelog (0.9.0 to 0.11.0), commands, index and installation updated; the RU installation opening loses its long dash. Roadmap unchanged: the `meetings list` direction filter and the CEL log did not ship and stay under Later."
   },
   "wordpress": {
     "version": "v0.3.0",
