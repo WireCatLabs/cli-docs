@@ -5,6 +5,7 @@ export const serviceLogos: Record<string, string> = {
   tg: "telegram.svg",
   max: "max.png",
   wa: "whatsapp.svg",
+  slk: "slack.svg",
   drive: "google-drive.svg",
   gcal: "google-calendar.svg",
   "google-meet": "google-meet.svg",
