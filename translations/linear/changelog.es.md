@@ -4,6 +4,19 @@ title: "Registro de cambios"
 
 Cambios destacados de `@wirecat/linear-cli`. Una sección por versión, la más reciente primero.
 
+## 0.5.0 — 25.11.2026
+
+### Cambios — pueden romper scripts
+
+- **linear se basa en cli-core 1.0.0 y cli-base 1.0.0.** Tras su primera ejecución el almacén está en la versión 73,
+  y solo lo abren las herramientas con cli-core 1.0, así que actualiza todos los CLI de WireCat de este ordenador a la
+  vez. La migración guarda una copia para revertir y no se ejecuta si no puede escribirla.
+- **`sync --rescan` ya no deja que una sincronización marque como borradas la mayor parte de las incidencias o los
+  documentos.** Solo vuelve a listarlo todo. Cuando la protección retiene una pasada, `sync --allow-deletions <count>`
+  deja marcar como borrados como mucho ese número. La opción es para el propietario en una terminal, y el servidor MCP
+  no la ofrece.
+- **Una llamada MCP que nombra una carpeta denegada responde `permission_error`**, no `validation_error`.
+
 ## 0.4.1 — 25.11.2026
 
 ### Corregido

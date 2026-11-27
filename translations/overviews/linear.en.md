@@ -27,7 +27,7 @@ You need a Linear personal API key, which you make once in Linear's settings.
 ## What you get
 
 - **Issues without the internet.** List issues by team, project, sprint, state, assignee or label, open one with its
-  comments, and find issues, projects and comments by their words. Sprints are what Linear calls cycles.
+  comments, and find issues, projects and comments by their words, or by meaning after `sync --embed`. Sprints are what Linear calls cycles.
 - **Your issues become your tasks.** After each sync, every open issue assigned to you is a task, titled with its key
   and title. The task closes when the issue is done, canceled or goes to someone else. `issues assign ENG-12` makes
   any other issue your task too. Nothing is written back to Linear.
@@ -103,8 +103,6 @@ An app that connects to MCP servers gets the server, as described in [use it](./
 
 ## What it does not do yet
 
-- `issues search` finds issues by their words, not by meaning. To find them by meaning, run `sync --embed` and search
-  with memo's `search all`, next to your notes and other documents.
 - It signs in only with a personal API key, not through the browser.
 
 ## Find a guide for your task

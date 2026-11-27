@@ -27,7 +27,7 @@ Desktop, y para ChatGPT a través de un túnel que ejecutas tú. Necesitas una c
 ## Qué obtienes
 
 - **Incidencias sin conexión.** Lista incidencias por equipo, proyecto, sprint, estado, responsable o etiqueta, abre
-  una con sus comentarios y encuentra incidencias, proyectos y comentarios por sus palabras. Los sprints son lo que
+  una con sus comentarios y encuentra incidencias, proyectos y comentarios por sus palabras, o por significado después de `sync --embed`. Los sprints son lo que
   Linear llama ciclos.
 - **Tus incidencias se vuelven tus tareas.** Después de cada sincronización, cada incidencia abierta asignada a ti es
   una tarea, con su clave y su título. La tarea se cierra cuando la incidencia se completa, se cancela o pasa a otra
@@ -110,8 +110,6 @@ Una aplicación que se conecta a servidores MCP recibe el servidor, como se expl
 
 ## Qué no hace todavía
 
-- `issues search` encuentra incidencias por sus palabras, no por significado. Para encontrarlas por significado,
-  ejecuta `sync --embed` y busca con `search all` de memo, junto a tus notas y otros documentos.
 - Solo inicia sesión con una clave de API personal, no a través del navegador.
 
 ## Encuentra la guía para tu tarea
