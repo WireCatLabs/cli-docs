@@ -190,7 +190,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(main).toContainText(
       {
         en: "There is no credentials file to download",
-        ru: "Файл учётных данных не нужен",
+        ru: "Файл учетных данных не нужен",
         es: "No hay archivo de credenciales",
       }[lang],
     )
@@ -223,7 +223,7 @@ for (const lang of ["en", "ru", "es"] as const) {
     await expect(choices.locator("a")).toHaveText(
       {
         en: ["Use an app you already created", "Create your own app"],
-        ru: ["Используйте уже созданное приложение", "Создайте своё приложение"],
+        ru: ["Используйте уже созданное приложение", "Создайте свое приложение"],
         es: ["Usa una app que ya creaste", "Crea tu propia app"],
       }[lang],
     )

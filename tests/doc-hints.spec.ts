@@ -126,7 +126,7 @@ for (const lang of languages) {
         page: "agents",
       },
       { label: "CLI", page: "installation" },
-      { label: "skill", page: "agents" },
+      { label: { en: "skill", ru: "Навык", es: "skill" }[lang], page: "agents" },
       { label: "MCP", page: `agents#${{ en: "mcp-and-skills", ru: "mcp-и-навыки", es: "mcp-y-skills" }[lang]}` },
     ]
     await expect(page.locator(".docs-term-trigger")).toHaveCount(4)
