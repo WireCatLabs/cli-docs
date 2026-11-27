@@ -28,7 +28,7 @@ en el mismo ordenador. El historial de mensajería es opcional, pero debe descar
 
 ## Añade correo
 
-Elige un nombre de perfil para el buzón (aquí `ya`), inicia sesión y lee el correo. Pide ayuda a tu agente:
+Elige un nombre de perfil para el buzón, aquí `personal`, inicia sesión y lee el correo. Pide ayuda a tu agente:
 
 ```text prompt
 Ayúdame a conectar la cuenta de correo que elija con la herramienta mail.
@@ -131,7 +131,7 @@ Que falten resultados fuera del periodo importado no demuestra que no exista cor
 
 ## Detecta spam y remitentes que se hacen pasar por otros
 
-Gmail filtra la mayor parte del spam, pero algunas estafas y envíos automáticos llegan igualmente. Memo da a
+Tu proveedor filtra la mayor parte del spam, pero algunas estafas y envíos automáticos llegan igualmente. Memo da a
 cada remitente una puntuación según señales de su correo, para que tu agente señale a quien solo finge ser
 una marca conocida.
 

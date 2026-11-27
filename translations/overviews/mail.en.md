@@ -42,7 +42,7 @@ you. Moves and deletions can be undone, and mail to anyone but you waits for you
 
 - **Most providers want an app password.** It is a password made for one program, which you can revoke. Outlook and
   Microsoft 365 use a browser sign-in instead. [Prepare the mailbox](./providers.md)
-- **The first sync reads the last 30 days.** Add a start date to go further back, or bring in a Google Takeout file.
+- **The first sync reads the last 30 days.** Set `sync_since` (such as `1y`) to go further back, or bring in a Google Takeout file.
 - **`personal` is a name you choose** for one mailbox. No command picks a mailbox for you.
 - **Text in an email is someone else's.** Your agent treats it as data, never as an instruction.
 
@@ -63,7 +63,9 @@ Agent:  Saved a draft in your Drafts folder, in Ann's thread. Nothing is sent.
   Workspace MCP, Microsoft 365 MCP), none documents keeping mail in one store with chats, meetings and notes and
   searching them together.
 - **Undo for what it changed.** No other tool on the comparison documents an undo for what it changed on the server.
-- **An agent over MCP mails only you** until you allow more. A deletion or a change of many emails asks first.
+- **An agent over MCP mails only you** until you allow more. At a terminal, a deletion or a change of many emails
+  asks you first. Over MCP nobody can answer, so it runs: set `permissions.messages.delete deny` (or `readonly`) before
+  you connect an agent.
 - **Your password stays in the system keyring.** `mail` talks only to your provider's mail servers, over encrypted
   connections.
 - **Free and open source.** Apache 2.0.

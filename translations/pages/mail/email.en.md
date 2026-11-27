@@ -28,7 +28,7 @@ same computer. Messenger history is optional, but must already be downloaded if 
 
 ## Add email
 
-Choose a profile name for the mailbox (here `ya`), then sign in and read the mail. Ask your agent to help:
+Choose a profile name for the mailbox, here `personal`, then sign in and read the mail. Ask your agent to help:
 
 ```text prompt
 Help me connect the mail account I choose with the mail tool.
@@ -128,7 +128,7 @@ Missing hits outside the imported date window do not establish that no email exi
 
 ## Spot spam and look-alike senders
 
-Gmail filters most spam, but some scams and automated senders still reach your mail. Memo gives each sender
+Your provider filters most spam, but some scams and automated senders still reach your mail. Memo gives each sender
 a score from signs in its mail, so your agent can point out a sender that only pretends to be a known brand.
 
 ```text prompt

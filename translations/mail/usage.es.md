@@ -47,7 +47,8 @@ contraseña, lee la que dejó Himalaya (`secret-tool`, servicio `himalaya`, cuen
 existente de Himalaya no necesita una contraseña nueva.
 
 `sync` lee INBOX y la carpeta Sent; en Gmail lee All Mail, porque el correo archivado sale de INBOX. `--folder` o el
-ajuste `folders` del perfil indican otras carpetas. Lee primero el correo más nuevo. `--max-messages` limita el correo nuevo de
+ajuste `folders` del perfil indican otras carpetas. Lee los últimos 30 días: el ajuste `sync_since` del perfil lo cambia
+(`mail personal config set sync_since 1y`), y `--since-time` lo cambia para una ejecución. Lee primero el correo más nuevo. `--max-messages` limita el correo nuevo de
 una ejecución. `--rescan` lista de nuevo toda la ventana. Guarda el texto y las cabeceras, y el texto de cada adjunto que
 puede leer, no los archivos. Lee adjuntos de hasta 10 MB cada uno: los ajustes del perfil `read_attachments` (`false` no
 lee ninguno) y `max_attachment_mb` lo cambian, y `--no-attachments`, `--attachments` y `--max-attachment-mb <n>` lo
@@ -137,6 +138,28 @@ mail personal status                                    # how far each holder go
 La marca solo avanza. El correo enviado a muchos, los sobres y los borradores se saltan y se cuentan; un correo que aún
 se está leyendo entero (parcial) se retiene hasta que lo esté, como máximo 7 días. Un titular nuevo empieza por el correo
 guardado ahora.
+
+## Bandeja de entrada: el correo nuevo ordenado por un modelo de IA
+
+`inbox` envía los hilos que cambiaron desde su última ejecución al modelo de IA que elegiste, y pone cada uno en
+necesita respuesta, para leer o puede esperar, con un motivo de una línea. Llama al modelo por su API, sin agente, así
+que también sirve un Ollama local. El modelo se elige una vez para todas las herramientas de WireCat, en WireCat Desktop
+o con `memo models ai set`.
+
+```sh
+mail personal inbox                       # sort what is new, then list every sorted thread, answer first
+mail personal inbox --max-messages 20     # send at most 20 emails in this run; the rest wait for the next
+mail personal inbox --offline --json      # list what is sorted and send nothing
+mail personal schedule command mail-inbox --every 1h -- inbox --yes   # sort new mail every hour
+```
+
+De cada hilo envía el asunto, los remitentes y sus 3 correos más nuevos sin el correo citado ni la firma, como mucho
+1500 caracteres cada uno. El correo enviado a muchos no se envía. Una ejecución envía como mucho 40 correos y unos
+60000 tokens (`--max-messages`, `--max-tokens`). Si el modelo está fuera de este ordenador, los ajustes de solo local y
+`memo models chats` deciden si el correo puede ir a él. Cuando piden preguntar antes, una ejecución en una terminal te
+pregunta, y una programada necesita `--yes`. A un agente se le rechaza: lee `review --new` y ordena el correo él mismo.
+Un hilo que respondiste sale de la lista en la siguiente ejecución. `review` también muestra el veredicto, como
+`email.inbox`.
 
 ## Buscar en tu correo
 

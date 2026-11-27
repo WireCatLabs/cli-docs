@@ -19,13 +19,28 @@ sesión con una contraseña de aplicación) y `folders` (las carpetas que lee `s
 un ajuste: vive en el llavero, o en `MAIL_PASSWORD` para una ejecución sin llavero. Tampoco lo es un inicio de sesión con
 OAuth: sus tokens también viven en el llavero.
 
+`aliases` lista tus otras direcciones en este buzón, desde las que también envías (`config set aliases
+me@work.example.com,me.alias@example.com`). El correo de una de ellas es tuyo, como el de `address`, y el correo a una
+de ellas va dirigido a ti: `review --unanswered` y `tasks agenda` lo cuentan como pendiente de respuesta. Una dirección
+compartida, como la de un equipo, no es un alias: el correo que tus compañeros envían desde ella contaría como tuyo. El
+correo de la carpeta Enviados es tuyo sea cual sea la dirección de la que salió, y sus remitentes se suman solos a tus
+direcciones en el almacén; fija `aliases` para una dirección que aún no tiene correo en Enviados. El correo guardado
+antes se marca en el siguiente `sync`. El almacén conserva una dirección una vez que es tuya: `config unset aliases` no
+la retira.
+
 `read_attachments` (por defecto `true`) y `max_attachment_mb` (por defecto 10) deciden si `sync` lee el texto de los adjuntos en el
 índice de búsqueda y el archivo más grande que lee. No se guarda ningún archivo. `sync --no-attachments`, `--attachments` y
 `--max-attachment-mb` los reemplazan en una ejecución; `messages show` lee los adjuntos de un correo sea lo que sea que digan.
 
+`sync_since` (por defecto `30d`) es hasta dónde lee `sync` hacia atrás cuando una ejecución no da `--since-time`:
+una ventana desde ahora en días, semanas o años (`90d`, `12w`, `1y`), o una fecha (`2025-01-01`, desde la medianoche
+local). Amplíala y el siguiente `sync` lee también el correo más antiguo; no hace falta `--rescan`.
+`config set sync_since 1y` lo fija para un perfil, `--defaults` para todos los perfiles. WireCat Desktop lo muestra en
+los ajustes de correo.
+
 `microsoft_client_id` es la aplicación de Microsoft con la que se inicia sesión en Outlook.com y Microsoft 365, cuando usas la
 tuya en lugar de la de WireCat. Fíjalo una vez para todos los perfiles con `config set --defaults microsoft_client_id` y el id de la aplicación.
-Cómo conseguir un id está en [registrar una aplicación de Microsoft](./oauth-microsoft.md). Un perfil que ya inició sesión sigue
+Cómo conseguir un id está en [registrar una aplicación de Microsoft](./oauth-microsoft.md).
 `google_client_id` hace lo mismo para Gmail con OAuth; su secreto sale de `MAIL_GOOGLE_CLIENT_SECRET`, nunca del archivo.
 `MAIL_MICROSOFT_CLIENT_ID` y `MAIL_GOOGLE_CLIENT_ID` prevalecen sobre ambos ajustes en una ejecución, y `--client-file`
 prevalece sobre todo para Gmail. Un perfil que ya inició sesión sigue renovando con la aplicación con la que lo hizo.
@@ -37,7 +52,7 @@ prevalece sobre todo para Gmail. Un perfil que ya inició sesión sigue renovand
 otros). Todas las CLI de WireCat comparten esa lista. `mail` los ignora.
 
 Un agente por MCP que tenga `mcp.authority` puede cambiar ajustes con `config set`, pero nunca estos: los ajustes del
-buzón de arriba, que deciden adónde va la contraseña de aplicación, `microsoft_client_id` y `google_client_id`, que deciden en qué
+buzón de arriba, que deciden adónde va la contraseña de aplicación, `aliases`, que decide qué direcciones son tuyas, `microsoft_client_id` y `google_client_id`, que deciden en qué
 aplicación inicias sesión, y `permissions.messages.send.others`, que permite a un agente escribir a otras personas. Solo tú los cambias, en una terminal.
 
 ## Permisos

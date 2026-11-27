@@ -121,8 +121,7 @@ Microsoft 365: su administrador puede tener que permitir la aplicación, y para 
 activado en el buzón. Outlook.com además necesita IMAP activado en su configuración. Gmail con OAuth puede
 necesitar tu propia aplicación de Google (nota 8).
 
-¹⁰ Por MCP, `mail` cambia el buzón solo si el servidor se inicia con `--allow-writes`, y entonces solo dentro de los
-permisos del perfil. Un agente por MCP escribe solo a ti hasta que el propietario fije `permissions.messages.send.others`,
+¹⁰ Por MCP, `mail` ofrece todos los comandos, y los permisos del perfil deciden cuáles se ejecutan. Un agente por MCP escribe solo a ti hasta que el propietario fije `permissions.messages.send.others`,
 y no puede cambiar los servidores de correo, el inicio de sesión ni esa clave. `MAIL_READ_ONLY=1` rechaza todo cambio.
 
 ¹¹ Una eliminación, borrar una carpeta con correo y un cambio de muchos mensajes preguntan por defecto, y `deny` los

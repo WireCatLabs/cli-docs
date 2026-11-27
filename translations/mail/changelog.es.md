@@ -4,6 +4,121 @@ title: "Historial de cambios"
 
 Cambios destacados de `@wirecat/mail-cli`. Una sección por versión, de la más reciente a la más antigua.
 
+## 0.37.0 — 25.11.2026
+
+### Añadido
+
+- **`aliases`: las otras direcciones del dueño en un buzón.** `mail personal config set aliases
+  me@work.example.com,me.alias@example.com` nombra las direcciones desde las que también envías. El correo de una es
+  tuyo, así que las personas a las que escribiste desde ella obtienen un vínculo de correo, y el correo a una va
+  dirigido a ti, así que `review --unanswered` y `tasks agenda` lo cuentan como pendiente. Solo lo fijas tú, en una
+  terminal: un agente no puede ([configuración](./configuration.md); cli-core 0.753.0).
+
+### Cambiado — puede romper a quien llama
+
+- **mail se construye sobre cli-core 1.0.0 y cli-base 1.0.0.** El almacén pasa a la versión 73 al abrirse por primera
+  vez: un id nunca se entrega dos veces, y a partir de ahí solo las herramientas con cli-core 1.0 abren el almacén.
+  Actualiza cada WireCat CLI instalado antes de ejecutar esta versión. La migración escribe primero una copia para
+  revertir y no se ejecuta sin ella.
+- **Una llamada por MCP que indica un lugar no permitido responde `permission_error`**, no `validation_error`. Antes
+  de ejecutar cualquier llamada por MCP, cada opción y argumento que recibe un archivo o una carpeta local se
+  comprueba por su ruta real: una llamada no puede indicar una carpeta de credenciales, la carpeta de una herramienta
+  de WireCat ni el almacén de mensajes. Una ejecución en la shell no cambia.
+- **`schedule exec` ya no se ofrece por MCP.** Solo ejecuta un archivo de programación de la carpeta de
+  programaciones de la propia herramienta. Un agente ejecuta una programación guardada con `schedule run <name>`.
+- **Un archivo de configuración ilegible responde ahora `config.unreadable`**, no `mail.config-unreadable`: el único
+  nombre que usa la familia WireCat para ello.
+
+### Corregido
+
+- **El correo en Enviados es tuyo sea cual sea su From.** `sync` ahora le dice a cli-core qué carpeta marca el servidor
+  como `\Sent`, así que el correo que enviaste desde otra dirección y guardaste en Enviados cuenta como saliente, y su
+  remitente se suma a tus direcciones.
+- **Una sincronización ya no marca como borrado el correo que la búsqueda del servidor encontró y su listado omitió.**
+  Cuando el listado de una carpeta devuelve menos mensajes que su búsqueda, la ejecución se salta la comprobación de
+  borrados y dice por qué en `deletionsSkipped`.
+- **Una carpeta del buzón nombrada por MCP sigue siendo el nombre del servidor.** `--folder` de `sync`,
+  `session start`, `account inspect`, `messages move`, `messages copy` y `messages export`, y la carpeta de
+  `folders create`, `folders rename` y `folders delete`, nombran una carpeta en el servidor de correo, no en este
+  ordenador, así que `serve` las pasa tal cual.
+
+## 0.36.0 — 19.11.2026
+
+### Añadido
+
+- **`inbox` nombra al remitente de cada hilo e informa de su ejecución.** Cada hilo ordenado en `inbox --json` lleva
+  `sender: { name, address }`, el remitente del correo más nuevo que no eres tú. `meta.model_run` dice qué hizo la
+  ejecución: hilos enviados, ordenados y dejados para la siguiente, los tokens contados, el coste cuando se conoce el
+  precio del modelo, y el modelo y su dirección. Cuando `inbox` debe preguntar antes de que el correo vaya a un modelo
+  fuera de este ordenador, los detalles del rechazo llevan los correos, hilos, tokens, host, modelo y coste estimado,
+  para que WireCat Desktop pueda preguntar en tu idioma (cli-core 0.713.0, cli-base 0.125.0).
+
+### Corregido
+
+- **`inbox` escribe su motivo de una línea en tu idioma.** Usaba el idioma de cada hilo; ahora usa el primero de
+  `owner_languages` (`mail config set owner_languages ru,en`).
+- **`session start --login` muestra su valor como `<name>`**, como cada WireCat CLI con un nombre de usuario para
+  iniciar sesión. Solo cambió el texto de ayuda.
+- **Dos primeros inicios de sesión en el mismo momento conservan ambos su registro.** El segundo podía fallar con
+  `ENOENT` en `sign-ins.json.lock`, porque la carpeta de estado se creaba solo después de tomar el bloqueo.
+
+## 0.35.0 — 19.11.2026
+
+### Añadido
+
+- **`sync_since`: hasta dónde lee `sync` hacia atrás, como ajuste.** Antes, `sync` leía los últimos 30 días salvo que
+  una ejecución diera `--since-time`, y WireCat Desktop no tenía forma de leer más atrás. El ajuste del perfil acepta
+  una ventana desde ahora (`90d`, `12w`, `1y`) o una fecha (`2025-01-01`). El valor por defecto sigue siendo `30d`.
+  `--since-time` sigue mandando en una ejecución. Amplía la ventana y el siguiente `sync` lee también el correo más
+  antiguo, sin `--rescan`. `config show` lo lista, y `config set sync_since 2x` se rechaza con las formas que acepta.
+  Consulta [Configuración](./configuration.md).
+- **`inbox` ordena el correo nuevo con el modelo de IA que elegiste**, sin agente: cada hilo que cambió desde la última
+  ejecución va a necesita respuesta, para leer o puede esperar, con un motivo de una línea. Sirve un Ollama local.
+  Sigue los ajustes de solo local y `memo models chats`, envía como mucho 40 correos por ejecución y funciona de forma
+  programada. `review` muestra el veredicto como `email.inbox`. Consulta
+  [úsalo](./usage.md#inbox-new-mail-sorted-by-an-ai-model).
+
+### Cambiado — puede romper a quien llama
+
+- **La entrada del MCP Registry pregunta qué perfiles servir.** Antes iniciaba `mcp serve --profiles all`, así que un
+  cliente que instalaba el servidor desde el registro llegaba a todas las cuentas del ordenador sin que el dueño las
+  eligiera. Ahora `--profiles` es un argumento obligatorio con el ejemplo `personal`: el cliente pide un perfil, una
+  lista separada por comas o `all`. Por qué: una CLI nunca elige una cuenta por el dueño
+  ([WC-MCP-9](https://github.com/WireCatLabs/cli-base/blob/main/docs/standards/mcp.md#wc-mcp-9--a-server-serves-the-profiles-it-is-told-with-one-connection-for-each)). Ten en cuenta: un cliente configurado con la entrada antigua mantiene `--profiles all` hasta que lo
+  configures de nuevo. Un servidor añadido a mano o con `mcp config` no cambia.
+
+## 0.34.0 — 16.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Basado en cli-core 0.674.0** (antes 0.663.0) y cli-base 0.103.0 (antes 0.100.0). El almacén compartido pasa a la
+  versión 67, así que actualiza también los otros WireCat CLI que lo comparten. Un comando ejecutado sin un perfil que
+  necesita lleva ahora el motivo `profile.missing`. Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **Los textos de WireCat Desktop para mail dicen lo que hace.** La tarjeta de inicio de sesión decía que mail lee,
+  organiza y envía tu correo. Ahora dice que el agente ordena y envía correo hasta donde lo permiten tus ajustes
+  (borrar y escribir a otros preguntan por defecto), y que un inicio de sesión de Microsoft puede no conceder el envío.
+  La etiqueta de la sincronización es "mail", una palabra, como espera Desktop.
+
+## 0.33.0 — 14.11.2026
+
+### Cambiado — puede romper a quien llama
+
+- **Basado en cli-core 0.663.0** (antes 0.662.0) y cli-base 0.100.0 (antes 0.99.0). Consulta el
+  [historial de cambios de cli-core](https://github.com/WireCatLabs/cli-core/blob/main/CHANGELOG.md).
+
+### Corregido
+
+- **`rules apply` y `messages delete --rules` conocen a un remitente al que el dueño escribió antes de la ventana.**
+  Juzgaban "le escribiste a este remitente" solo con el correo de la ventana de esa ejecución, así que un remitente al
+  que se respondió hace meses podía recibir una regla de sobre o ser propuesto para la Papelera. Ahora leen el correo
+  saliente guardado del dueño (`store.mail.writtenTo` de cli-core), de todas las cuentas y con el remitente en To o Cc.
+  El motivo "respondido" de la limpieza lee el mismo correo, así que ya no pasa por alto a un remitente respondido
+  desde otra cuenta.
+
 ## 0.32.0 — 14.11.2026
 
 ### Cambiado — puede romper a quien llama
