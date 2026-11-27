@@ -465,7 +465,7 @@ gcal personal schedule command reminders --every 5m -- events remind --due-withi
 ```
 
 Las palabras después del primer `--` son lo que ejecuta el temporizador, como las escribirías después de
-`gcal personal`; tu programa va después del segundo `--`. Nombra el programa por su ruta completa o por un nombre de tu
+`gcal personal …`; tu programa va después del segundo `--`. Nombra el programa por su ruta completa o por un nombre de tu
 `PATH`: el temporizador conserva tu `PATH`, pero se ejecuta desde la carpeta propia de la programación.
 
 - `gcal personal schedule list` muestra la programación y cómo fue su última ejecución. Mientras siga fallando, cada
