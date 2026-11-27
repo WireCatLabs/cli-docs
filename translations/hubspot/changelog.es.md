@@ -4,6 +4,45 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/hubspot-cli`. Una sección por versión, la más nueva primero.
 
+## 0.8.0 — 25.11.2026
+
+### Cambios — pueden romper scripts
+
+- **hubspot se basa en cli-core 1.0.0 y cli-base 1.0.0.** Tras su primera ejecución el almacén está en la versión 73,
+  y solo lo abren las herramientas con cli-core 1.0, así que actualiza todos los CLI de WireCat de este ordenador a la
+  vez. La migración guarda una copia para revertir y no se ejecuta si no puede escribirla (`store migrate --no-backup`
+  migra de todos modos).
+- **`sync --rescan` ya no deja que una sincronización marque como borrada la mayor parte de un tipo.** Solo vuelve a
+  listarlo todo. Cuando la protección retiene una pasada, `sync --allow-deletions <count>` deja marcar como borrados
+  como mucho ese número de registros. La opción es para el propietario en una terminal, y el servidor MCP no la
+  ofrece.
+- **Una sincronización ya no marca registros como borrados cuando HubSpot no pudo listar un tipo entero.** La pasada
+  de ids espera hasta que llega una lista completa.
+- **Una llamada MCP que nombra una carpeta denegada responde `permission_error`**, no `validation_error`.
+
+## 0.7.0 — 24.11.2026
+
+### Añadido
+
+- `sync --embed` indexa las notas, llamadas, reuniones y tareas copiadas con un modelo ya descargado, y `search all`
+  encuentra entonces negociaciones y prospectos por lo que significan sus actividades, no solo por sus palabras
+  (cli-core 0.743.0). La skill le dice a un agente que pregunte por significado antes de leer cada nota.
+
+### Cambios — pueden romper scripts
+
+- **`activities create --subject person:<n>` y `organization:<n>` nombran el registro por su referencia, tal como la
+  da `deals show`.** Un contacto o una empresa por el id de HubSpot, tal como lo imprime `people list`, es ahora
+  `person:crm:<id>`. Antes la misma forma significaba el id de HubSpot, así que una referencia copiada de `deals show`
+  ponía la nota en el contacto de otra persona.
+
+### Corregido
+
+- `search all` lista después del nombre que coincidió un nombre que difiere en una letra (Ferrara, luego Ferraro), y
+  encuentra un nombre latino escrito en cirílico (`феррара`), cada uno marcado `match: corrected`.
+- El día de cierre de una negociación ganada o perdida es la fecha de cierre de HubSpot (`closedate`), no el día en que
+  la copia vio cambiar la negociación por última vez. Una negociación ganada hace meses ya no cuenta como ganada en el
+  mes de la primera sincronización, y `deals show` da el mismo día en `close_date` y `closed_date`.
+
 ## 0.6.0 — 23.11.2026
 
 ### Añadido
