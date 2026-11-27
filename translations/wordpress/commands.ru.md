@@ -2785,6 +2785,7 @@ wordpress sync [options]
 | Option | What it does |
 |---|---|
 | `--rescan` | list everything again, every id too, dropping a round in progress. |
+| `--allow-deletions <count>` | let this run mark deleted up to this many of what its full list no longer has, when the guard holds it. |
 | `--max-pages <pages>` | at most this many requests to the source in this run. |
 
 **Returns:** content sync — provider, account, state, complete, channels, due, metrics, synced, and 1 more; every field: wordpress commands info sync

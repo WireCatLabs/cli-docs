@@ -103,7 +103,8 @@ Agent:  (runs wordpress blog posts publish 63 --at-time 2026-11-23T09:00:00Z)
 
 ## Начните за несколько минут
 
-Вставьте это своему агенту:
+В WireCat Desktop установите WordPress на странице **Инструменты** и войдите в разделе **Управление**, как
+показано в [установке](./installation.md#in-wirecat-desktop). Или вставьте это своему агенту:
 
 ```text prompt
 Установи wordpress командой npm install -g @wirecat/wordpress-cli. Помоги мне создать пароль приложения в WordPress и выполнить wordpress blog session start --site blog.example.com --login anna, чтобы подключить мой сайт, затем синхронизируй и покажи мои черновики.

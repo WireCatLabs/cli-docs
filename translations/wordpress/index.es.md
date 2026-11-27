@@ -106,7 +106,8 @@ Agent:  (runs wordpress blog posts publish 63 --at-time 2026-11-23T09:00:00Z)
 
 ## Empieza en unos minutos
 
-Pega esto en tu agente:
+En WireCat Desktop, instala WordPress en la página **Herramientas** e inicia sesión en **Gestionar**, como
+muestra [la instalación](./installation.md#in-wirecat-desktop). O pega esto en tu agente:
 
 ```text prompt
 Instala wordpress con npm install -g @wirecat/wordpress-cli. Ayúdame a crear una contraseña de aplicación de WordPress y a ejecutar wordpress blog session start --site blog.example.com --login anna para conectar mi sitio, después sincroniza y muéstrame mis borradores.

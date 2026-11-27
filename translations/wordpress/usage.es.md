@@ -65,6 +65,12 @@ Inicia sesión como Administrador para tener una copia completa.
 
 `--max-pages` limita las peticiones de una ejecución. La siguiente sincronización sigue donde se detuvo.
 
+Una sincronización que marcaría como borrada la mayor parte de la copia de una vez no marca nada y dice por qué:
+WordPress listó muchas menos entradas de las que tiene la copia, casi siempre porque el inicio de sesión perdió
+permisos. Comprueba primero el inicio de sesión. Si las entradas de verdad ya no están, ejecuta
+`wordpress blog sync --allow-deletions <count>` con el número que da el mensaje. `--rescan` vuelve a listarlo todo,
+pero no levanta esta retención. Solo tú puedes pasar `--allow-deletions`: a un cliente MCP no se le ofrece.
+
 ## Lee entradas y páginas
 
 ```sh
