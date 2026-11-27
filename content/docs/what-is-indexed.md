@@ -163,9 +163,9 @@ Drive leaves scanned PDFs, Slides, audio and video as names only: a word from th
 
 ## Limits
 
-- A file over 50 MiB is not read for text. Set `MESSAGING_ATTACHMENT_MAX_MIB` to change it.
+- A file over 10 GiB is not read for text. Set `MESSAGING_ATTACHMENT_MAX_MIB` (in MiB) to change it. A file is read whole into memory, so a large one needs as much free memory.
 - At most 2,000,000 characters of text are read from one file.
-- Office archives (`.odt`, `.ods`, `.xlsx`, `.pptx`, `.epub`) are limited to 1,000 parts and 50 MiB unpacked. A file over a limit is reported as too large.
+- Office archives (`.odt`, `.ods`, `.xlsx`, `.pptx`, `.epub`) are limited to 1,000 parts and 50 MiB of unpacked text. Pictures inside them count only against the file limit. A file over a limit is reported as too large.
 - Scanned PDFs sent to a model service: 20 pages per document.
 - Picture content search understands English only.
 - Memo keeps at most 200,000 characters of each note file or mail attachment.

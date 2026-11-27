@@ -163,9 +163,9 @@ Drive deja solo por nombre los PDF escaneados, Slides, audio y vídeo: una palab
 
 ## Límites
 
-- Un archivo de más de 50 MiB no se lee como texto. Cámbialo con `MESSAGING_ATTACHMENT_MAX_MIB`.
+- Un archivo de más de 10 GiB no se lee como texto. Cámbialo con `MESSAGING_ATTACHMENT_MAX_MIB` (en MiB). El archivo se lee entero en memoria, así que uno grande necesita la misma memoria libre.
 - De un archivo se leen como máximo 2 000 000 de caracteres de texto.
-- Los archivos de Office (`.odt`, `.ods`, `.xlsx`, `.pptx`, `.epub`) están limitados a 1000 partes y 50 MiB descomprimidos. Un archivo que supera un límite se señala como demasiado grande.
+- Los archivos de Office (`.odt`, `.ods`, `.xlsx`, `.pptx`, `.epub`) están limitados a 1000 partes y 50 MiB de texto descomprimido. Las imágenes que contienen solo cuentan para el límite del archivo. Un archivo que supera un límite se señala como demasiado grande.
 - PDF escaneados enviados a un servicio de modelos: 20 páginas por documento.
 - La búsqueda por contenido de imágenes solo entiende inglés.
 - Memo conserva como máximo 200 000 caracteres de cada archivo de notas o adjunto de correo.
