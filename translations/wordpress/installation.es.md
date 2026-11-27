@@ -2,8 +2,9 @@
 title: "Instala"
 ---
 
-Pon `wordpress` en marcha en tu ordenador y conéctalo a tu sitio WordPress en unos cinco minutos. WordPress deja
-entrar a un programa con una contraseña de aplicación que creas en tu propio perfil, y esta guía te lleva paso a paso.
+Conecta tu sitio WordPress una vez y, desde entonces, tu agente de IA lee tus entradas y escribe borradores nuevos
+sin que abras wp-admin. WordPress solo deja entrar a un programa con una contraseña de aplicación que creas en tu
+propio perfil. Crear la contraseña, instalar `wordpress` e iniciar sesión lleva unos cinco minutos.
 
 Cuando termines, un agente en este ordenador lee tus entradas y páginas cuando se lo pides, y escribe borradores
 hasta donde lo permiten tus permisos.
@@ -11,11 +12,12 @@ hasta donde lo permiten tus permisos.
 **En esta página:**
 
 1. [Lo que necesitas](#what-you-need)
-2. [Instala la herramienta](#install-the-tool)
-3. [Crea una contraseña de aplicación en WordPress](#make-an-application-password-in-wordpress)
-4. [Inicia sesión](#sign-in)
-5. [Comprueba que funciona](#check-it-works)
-6. [Cierra la sesión o cambia la contraseña](#sign-out-or-change-the-password)
+2. [En WireCat Desktop](#in-wirecat-desktop)
+3. [Instala la herramienta](#install-the-tool)
+4. [Crea una contraseña de aplicación en WordPress](#make-an-application-password-in-wordpress)
+5. [Inicia sesión](#sign-in)
+6. [Comprueba que funciona](#check-it-works)
+7. [Cierra la sesión o cambia la contraseña](#sign-out-or-change-the-password)
 
 ## Lo que necesitas
 
@@ -27,6 +29,17 @@ hasta donde lo permiten tus permisos.
   WordPress les niega la lista de páginas. Un Colaborador obtiene solo sus borradores y sus entradas pendientes de
   revisión.
 - Para la línea de comandos: Node.js 22.16 o un 22.x posterior, o Node.js 24 o posterior. Node 23 no es compatible.
+
+## En WireCat Desktop
+
+1. Crea una contraseña de aplicación, como muestra
+   [crea una contraseña de aplicación en WordPress](#make-an-application-password-in-wordpress).
+2. En la página **Herramientas**, pulsa **Instalar** en la fila de WordPress.
+3. Pulsa **Gestionar**, escribe un nombre de cuenta, como `blog`, y pulsa **Iniciar sesión aquí**.
+4. Rellena **Dirección del sitio**, **Nombre de usuario** y **Contraseña de aplicación**. Desktop los comprueba con
+   tu sitio antes de guardarlos.
+
+Desktop también da a tus agentes de IA la skill de la herramienta, así que no necesitas los pasos del terminal.
 
 ## Instala la herramienta
 
@@ -52,7 +65,7 @@ WordPress describe estos pasos en su
 [guía de contraseñas de aplicación](https://make.wordpress.org/core/2020/11/05/application-passwords-integration-guide/).
 
 1. Accede a wp-admin de tu sitio.
-2. Abre **Usuarios → Perfil**.
+2. Abre **Usuarios → Perfil**, o **Perfil** si no eres administrador.
 3. Baja hasta **Contraseñas de aplicación**.
 4. Escribe un nombre para la nueva contraseña, como `WireCat`, y haz clic en
    **Añadir nueva contraseña de aplicación**.

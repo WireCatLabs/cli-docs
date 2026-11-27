@@ -4,6 +4,20 @@ title: "Historial de cambios"
 
 Cambios destacados en `@wirecat/wordpress-cli`. Una sección por versión, la más nueva primero.
 
+## 0.4.0 — 26.11.2026
+
+### Cambios — pueden romper scripts
+
+- **`sync --rescan` ya no deja que una sincronización marque como borrada la mayor parte de la copia.** Solo vuelve a
+  listarlo todo; una sincronización que marcaría como borradas la mayoría de las entradas sigue retenida. La única
+  forma de pasar es la nueva opción solo para el propietario `sync --allow-deletions
+  <count>`, con el número que da el mensaje de retención. A un cliente MCP no se le ofrece la opción. Mira
+  [úsalo](./usage.md#sync).
+- **Basado en cli-core 1.0.0 y cli-base 1.0.0.** Los archivos de API generados leen sus tipos de
+  `@wirecat/cli-base/codegen/runtime`, y `scripts/spec-model.ts` usa `ModelOverride`. La versión 73 del almacén llega
+  con cli-core 1.0: cuando una herramienta 1.0 abre el almacén, una herramienta 0.x lo rechaza, así que actualiza todos
+  los CLI de WireCat a la vez.
+
 ## 0.3.0 — 21.11.2026
 
 ### Añadido
