@@ -8,13 +8,15 @@ Una herramienta falló, o un agente dice que un comando no funcionó, y quieres 
 
 **En esta página:**
 
-1. [Por qué casi todo son fallos](#por-qué-casi-todo-son-fallos)
-2. [Buscar ejecuciones](#buscar-ejecuciones)
-3. [Facetas](#filtrar-con-facetas)
-4. [Agrupar ejecuciones](#agrupar-ejecuciones)
-5. [Abrir una ejecución](#abrir-una-ejecución)
-6. [Logs en el terminal](#logs-en-el-terminal)
-7. [Privacidad](#privacidad)
+1. [Qué muestra la página](#qué-muestra-la-página)
+2. [Por qué casi todo son fallos](#por-qué-casi-todo-son-fallos)
+3. [Buscar ejecuciones](#buscar-ejecuciones)
+4. [Facetas](#filtrar-con-facetas)
+5. [Agrupar ejecuciones](#agrupar-ejecuciones)
+6. [Elegir un periodo](#elegir-un-periodo)
+7. [Abrir una ejecución](#abrir-una-ejecución)
+8. [Logs en el terminal](#logs-en-el-terminal)
+9. [Privacidad](#privacidad)
 
 <DesktopShot
   shot="logs"
@@ -26,13 +28,13 @@ Una herramienta falló, o un agente dice que un comando no funcionó, y quieres 
 
 ## Qué muestra la página
 
-Todas las herramientas de WireCat guardan logs de ejecución: Telegram (`tg`), MAX (`max`), WhatsApp (`wa`), Zoom (`zm`), Google Drive (`drive`), Memo (`memo`), Correo (`mail`), Google Calendar (`gcal`) y Bitrix24 (`b24`). La aplicación los lee con los comandos `runs list` y `runs show` de cada herramienta. Un Zoom, Google Drive o Memo más antiguo no tiene logs de ejecución; actualízalo para verlos. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Load older** lee las 500 siguientes.
+Cada herramienta de WireCat guarda un registro de sus ejecuciones, y la aplicación los lee con los comandos `runs list` y `runs show` de la propia herramienta. La fila sobre la búsqueda muestra cada herramienta y cuántas ejecuciones leyó la aplicación. La aplicación lee las 500 ejecuciones más recientes de cada herramienta; **Cargar anteriores** lee las 500 siguientes.
 
 ## Por qué casi todo son fallos
 
-Una herramienta guarda cada ejecución: las correctas durante 7 días y las fallidas durante 30. Si una herramienta está configurada para guardar solo las fallidas, o su versión es más antigua, la lista muestra sobre todo fallos. Es lo esperado. No significa que todo esté roto.
+Una herramienta guarda cada ejecución: las correctas durante 7 días y las fallidas durante 30. Si una herramienta está configurada para guardar solo las fallidas, la lista muestra sobre todo fallos, y es lo esperado.
 
-Para guardar todas las ejecuciones de Telegram, MAX, WhatsApp o Correo, abre **Ajustes de registros** en la parte superior de la página Registros y elige **Todas** para la herramienta, o cambia el ajuste tú mismo:
+Para guardar todas las ejecuciones de una herramienta que lo permita, abre **Ajustes de registros** en la parte superior de la página Registros y elige **Todas** para la herramienta, o cambia el ajuste tú mismo:
 
 ```sh
 tg config set record true --defaults

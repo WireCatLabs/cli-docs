@@ -18,10 +18,12 @@ needs so WireCat can add it and show it well.
 4. [Additional WireCat tools](#additional-wirecat-tools)
 5. [Add by npm name](#add-a-tool-by-its-npm-name)
 6. [The review screen](#the-review-screen)
-7. [Update](#update-it)
-8. [Remove](#remove-it)
-9. [If it does not work](#if-it-does-not-work)
-10. [For tool authors](#for-tool-authors)
+7. [Use it with your AI agent](#use-it-with-your-ai-agent)
+8. [Update](#update-it)
+9. [Remove](#remove-it)
+10. [Without the internet](#without-the-internet)
+11. [If it does not work](#if-it-does-not-work)
+12. [For tool authors](#for-tool-authors)
 
 <a id="three-kinds-of-tool" />
 
@@ -279,7 +281,7 @@ WireCat's library for command-line tools, written in TypeScript. The quickest st
 Start from the [template](https://github.com/WireCatLabs/cli-template):
 
 ```sh
-npx @wirecat/cli-template new <name>-cli --command <word> --package <npm name> --owner <github owner>
+npx @wirecat/cli-template new weather-cli --command weather --package @acme/weather-cli --owner acme-labs
 ```
 
 It gives a working tool with local storage, search, the skill for AI agents and an MCP server, and it passes every

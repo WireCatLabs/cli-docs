@@ -12,8 +12,8 @@ In WireCat Desktop you read all your digests in one place, newest day first. A n
 in one click, so you go from "Anna waits for an answer" straight to Anna's message. You set each digest up once: when
 it runs, what it reads, where it is sent and which agent writes it.
 
-**Digests** has its own page in the sidebar, after **Tasks**, with two tabs: **Digests** to read them and **Settings**
-to set them up. It needs Memo, the tool that keeps your chats, mail and meetings on this computer, and one coding agent
+**Digests** has its own page in the sidebar, after **Tasks**, with three tabs: **Digests** to read them, **Inbox**
+for your mail sorted by the AI model, and **Settings** to set digests up. It needs Memo, the tool that keeps your chats, mail and meetings on this computer, and one coding agent
 here, such as Claude Code, Gemini CLI or OpenCode. Digests is marked beta: a β beside its name means the section is
 new and lightly tested.
 
@@ -22,12 +22,13 @@ new and lightly tested.
 1. [Before you start](#before-you-start)
 2. [Read your digests](#read-your-digests)
 3. [What a link in a digest opens](#what-a-link-in-a-digest-opens)
-4. [Create a digest](#create-a-digest)
-5. [The table](#the-table)
-6. [One digest's settings](#one-digests-settings)
-7. [When a digest is ready](#when-a-digest-is-ready)
-8. [If a digest does not arrive](#if-a-digest-does-not-arrive)
-9. [Next](#next)
+4. [Inbox: your mail, sorted](#inbox)
+5. [Create a digest](#create-a-digest)
+6. [The table](#the-table)
+7. [One digest's settings](#one-digests-settings)
+8. [When a digest is ready](#when-a-digest-is-ready)
+9. [If a digest does not arrive](#if-a-digest-does-not-arrive)
+10. [Next](#next)
 
 ## Before you start
 
@@ -77,6 +78,22 @@ Names, chats, tasks and meetings in a report are links. Each opens its item here
 | A deal or a lead | Its card on **Clients** |
 
 Anything else in a report stays plain text.
+
+<a id="inbox" />
+
+## Inbox: your mail, sorted
+
+See at a glance which new emails need your answer, which are worth reading and which can wait. The **Inbox** tab puts
+the mail of all your accounts together in these three groups, **Needs an answer**, **To read** and **Can wait**, and
+each thread says why it landed there. Click a thread to read it on a read-only screen.
+
+**Sort now** sends the mail that came in since the last run to the AI model you chose in
+[AI model settings](./ai-model.mdx). When that model runs outside this computer, the app first says how many emails it
+would send and roughly what it costs, and sends nothing until you click **Send and sort**. With
+[Only this computer](./ai-model.mdx#only-this-computer) on, mail never goes to a model elsewhere.
+
+The tab needs Email signed in on the **Tools** page and an AI model. Without either, it says what is missing and gives
+one button to fix it. The search field above the list finds a thread by words from its subject or its reason.
 
 ## Create a digest
 

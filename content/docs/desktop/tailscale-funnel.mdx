@@ -8,8 +8,6 @@ ChatGPT, Claude and other AI apps in the browser run on their provider's servers
 
 You set Funnel up once. Afterwards, **Start** in WireCat Desktop gives the server its public address in one click. You need a Tailscale account (the login step creates one if you have none) and, for the Tailscale app, your computer password once to install it. [Without the Tailscale app](#without-the-tailscale-app), WireCat connects to Tailscale by itself and needs no password.
 
-**Jump to your system:** [Without the Tailscale app](#without-the-tailscale-app) · [macOS](#macos) · [Windows](#windows) · [Linux](#linux) · [Troubleshooting](#troubleshooting)
-
 **On this page:**
 
 1. [How WireCat Desktop helps](#how-wirecat-desktop-helps)
@@ -266,7 +264,7 @@ Use the port that `tailscale funnel status` shows in place of `443`. Do not run 
 
 **"This computer has no Tailscale name."** Turn on MagicDNS on the DNS page of the admin console.
 
-**"Another program already answers on port…"** Open **Use another port**, choose another port and start again, or stop that program.
+**"Another program uses this port."** Go back, open **Use another port**, choose another port and start again, or stop that program.
 
 **"All of Funnel's public addresses on this computer are in use."** Turn off a Funnel you set up yourself (`tailscale funnel status` lists them). WireCat never turns off Funnels it did not set up.
 

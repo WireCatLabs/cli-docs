@@ -55,9 +55,8 @@ configuración; **Terminar la configuración** en la barra lateral la abre de nu
    comandos. **Empezar** inicia la configuración.
 2. **Tu ordenador:** la aplicación comprueba el sistema, Node.js y npm. **Comprobar de nuevo** repite la
    comprobación cuando arreglas algo.
-3. **Herramientas:** marca los servicios a los que debe llegar tu agente: Telegram, MAX, WhatsApp,
-   Zoom, Google Drive, Google Calendar, Memo, el correo, Bitrix24, HubSpot o WordPress. Puedes añadir o quitar herramientas más tarde en la página
-   **Herramientas**.
+3. **Herramientas:** marca los servicios a los que debe llegar tu agente, como Telegram, tu correo o tu CRM. Puedes
+   añadir o quitar herramientas más tarde en la página [**Herramientas**](#herramientas).
 4. **Instalación:** cada herramienta se instala desde npm y se comprueba que arranca. Las instalaciones van de
    una en una. Una barra muestra el avance: buscar paquetes, descargar, desempaquetar, preparar en el ordenador
    y comprobar que arranca, con el tiempo transcurrido y una estimación de lo que falta. Una herramienta suele
@@ -121,6 +120,7 @@ Cómo entra cada herramienta:
 | amoCRM, Kommo | La dirección de la cuenta y un token de larga duración de una integración privada. Mira [amoCRM: una integración privada](#amocrm-una-integración-privada) |
 | HubSpot | Una clave de servicio, o el token de una app privada que ya tengas, con scopes de lectura, que pegas en la ventana. La ventana lista los scopes y dónde hacer clic. Mira [HubSpot: crear una clave](../hubspot/installation.md#make-a-key) |
 | Attio | Un token de acceso que un administrador del espacio crea en Attio, en Workspace settings → Developers, con lectura de registros, configuración de objetos y gestión de usuarios. Mira [crea un token de acceso en Attio](../attio/installation.md#make-an-access-token-in-attio) |
+| Slack | El User OAuth Token (`xoxp-`) de una app de Slack que creas en tu espacio de trabajo con el manifiesto que da `slk`. Mira [Instala y conecta Slack](../slk/installation.md) |
 | Linear | Una clave de API personal de Settings → Account → Security & access en Linear. Read basta para copiar; tu agente necesita Write para cambiar incidencias. Mira [crea una clave de API personal](../linear/installation.md#make-a-personal-api-key) |
 | Asterisk | Dónde están tus llamadas: la ruta de Master.csv, o la dirección de una base de llamadas MySQL o PostgreSQL y la contraseña de un usuario de solo lectura. Después, los países de tus líneas, para que quien llama sin prefijo de país se enlace con el contacto correcto |
 | Notion | Un token de Notion que pegas en la ventana. Después eliges las páginas y bases de datos que se copian. Mientras no eliges ninguna, Notion copia todo lo que ve el token |
@@ -165,8 +165,9 @@ funcionando.
 
 ### amoCRM: una integración privada
 
-amoCRM y Kommo dejan entrar a un programa solo a través de una integración privada que un administrador de la cuenta
-crea una vez. La ventana pide primero la dirección de la cuenta, como `mycompany.amocrm.ru`, y después muestra qué
+En WireCat Desktop, amoCRM y Kommo inician sesión con una integración privada que un administrador de la cuenta crea
+una vez. Desde un terminal, un administrador de amoCRM también puede entrar con un clic y sin crear nada, como muestra
+[Inicia sesión con amoCRM](../amo/installation.md#sign-in-with-amocrm). La ventana pide primero la dirección de la cuenta, como `mycompany.amocrm.ru`, y después muestra qué
 hacer en amoCRM: dónde crear la integración, la dirección de redirección que copiar y el acceso que marcar. En una
 cuenta de Kommo, abre **En Kommo**.
 
@@ -186,9 +187,9 @@ tiene todos los pasos, y el inicio de sesión en el navegador con la misma integ
 
 La barra lateral enumera las páginas en este orden: **Herramientas**, **Tareas**, **Resúmenes**, **Clientes**,
 **Contactos**, **Reuniones**, **Documentos**, **Memoria**, **Guías**, **Analítica** y **Buscar**. Debajo, aparte,
-están **Registros** y **Ajustes**, que tratan de la propia aplicación. Algunas páginas tienen pestañas: **Agentes** es
-una pestaña de **Herramientas**, **Almacenamiento** es una pestaña de **Analítica**, y **Resúmenes** tiene una pestaña
-**Ajustes**. Tareas, Resúmenes, Clientes, Contactos, Reuniones, Documentos y Memoria están marcadas como beta: una β
+están **Registros** y **Ajustes**, que tratan de la propia aplicación. Algunas páginas tienen pestañas. **Herramientas** tiene
+**Agentes**, **Analítica** tiene **Datos** y **Almacenamiento**, **Resúmenes** tiene **Bandeja** y **Ajustes**, y
+**Ajustes** tiene **WireCat** y **Ajustes de las herramientas**. Tareas, Resúmenes, Clientes, Contactos, Reuniones, Documentos y Memoria están marcadas como beta: una β
 junto al nombre significa que la sección es nueva y está poco probada.
 
 Cuando una página necesita una herramienta que falta, es demasiado antigua o no tiene la sesión iniciada, lo dice con
@@ -280,7 +281,7 @@ formato lee, como Zoom, queda fuera de la comprobación.
 **Quitar cuenta**, en el menú de una cuenta, quita una cuenta y conserva la herramienta. Elige **Quitar y conservar
 sus datos (la búsqueda los sigue encontrando)** o **Quitar y borrar sus datos**. Después el diálogo lista qué se va y
 qué se queda, y no pasa nada hasta que confirmas. **Conservar la cuenta** cancela. Funciona para toda herramienta con
-cuentas: Telegram, MAX, WhatsApp, Email, Google Drive, Zoom, Google Calendar y Bitrix24.
+cuentas.
 
 <DesktopShot
   shot="account-remove"
@@ -365,8 +366,9 @@ proyecto: una nota junto a cada uno dice por qué. En el tablero, suéltala en H
 
 Un resumen breve de tus chats, correo, reuniones y tareas cada mañana o cada semana, en la aplicación, en Telegram o
 por correo. Lo escribe un agente de programación que eliges, como Claude Code. La pestaña **Resúmenes** muestra lo que
-escribió cada resumen, y una persona, un chat o una tarea que nombra se abre con un clic. En la pestaña **Ajustes** se
-configuran. [Resúmenes](./digests.mdx) muestra cómo.
+escribió cada resumen, y una persona, un chat o una tarea que nombra se abre con un clic. **Bandeja** muestra tu correo nuevo
+que el modelo de IA ordenó en lo que necesita respuesta, lo que leer y lo que puede esperar. En la pestaña **Ajustes**
+se configuran. [Resúmenes](./digests.mdx) muestra cómo.
 
 ### Clientes
 
@@ -505,7 +507,7 @@ comandos y lo que imprimen las herramientas no se traducen. De arriba abajo, la 
   adónde envía datos cada función ahora. Mira [Solo este ordenador](./ai-model.mdx#solo-este-ordenador).
 - **Leer imágenes:** si tu agente de programación puede leer el texto de una imagen que eliges. Mira
   [Leer imágenes](./ai-model.mdx#leer-imágenes).
-- **Herramientas:** los ajustes de cada herramienta y de WireCat, como lista o como **JSON**. La aplicación los lee
+- **Ajustes de las herramientas**, la segunda pestaña de la página: los ajustes de cada herramienta y de WireCat, como lista o como **JSON**. La aplicación los lee
   de la herramienta y los guarda con el comando `config` de la propia herramienta, así que la herramienta comprueba
   cada valor antes de escribirlo.
 - **Grupos de cuentas:** un tablero que reparte tus cuentas en grupos, como personal y trabajo. Arrastra una cuenta a
@@ -612,7 +614,7 @@ WireCat, copia la dirección o el código que muestra el navegador y pégalo en 
 
 ### Comprobar estado muestra un archivo de ajustes roto
 
-Una coma que falta o sobra, un comentario, comillas simples o un corchete sin cerrar en el archivo de ajustes de una herramienta le impiden leer sus ajustes. En **Gestionar**, **Comprobar estado** nombra el problema; pulsa **Reparar el archivo**. La herramienta conserva el archivo como estaba, dice qué cambió y no cambia nada que no pueda arreglar con seguridad. Si se niega, el mensaje señala la línea que debes corregir a mano en un editor de texto.
+Una coma que falta o sobra, un comentario, comillas simples o un corchete sin cerrar en el archivo de ajustes de una herramienta le impiden leer sus ajustes. En **Gestionar**, **Comprobar** en el menú de la cuenta nombra el problema; pulsa **Reparar el archivo**. La herramienta conserva el archivo como estaba, dice qué cambió y no cambia nada que no pueda arreglar con seguridad. Si se niega, el mensaje señala la línea que debes corregir a mano en un editor de texto.
 
 ### Una herramienta «no puede leer el almacenamiento»
 

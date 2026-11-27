@@ -11,23 +11,17 @@ your agent at it, so that what they read stays with you. At the end, one switch 
 to another computer. You need a computer that can run a model, ideally with a graphics card. A few parts of WireCat
 still send data out when they run, and [the end of the page](#what-still-leaves-your-computer-today) lists them.
 
-**Steps:** [1. Run a model](#1-run-a-model-on-your-computer) · [2. Already local](#2-what-is-already-local) ·
-[3. The AI model](#3-the-ai-model-in-settings) · [4. Reading for facts](#4-reading-for-facts) ·
-[5. Search helpers](#5-search-harder-and-rewriting-records-for-search) · [6. Voice](#6-voice-messages) ·
-[7. Your agent](#7-your-coding-agent-on-a-local-model) · [8. Digests](#8-digests-and-the-mail-agent) ·
-[9. Only this computer](#9-turn-on-only-this-computer) · [Checklist](#checklist-everything-local)
-
 **On this page:**
 
-1. [1. Run a model on your computer](#1-run-a-model-on-your-computer)
-2. [2. What is already local](#2-what-is-already-local)
-3. [3. The AI model in Settings](#3-the-ai-model-in-settings)
-4. [4. Reading for facts](#4-reading-for-facts)
-5. [5. Search harder and rewriting records for search](#5-search-harder-and-rewriting-records-for-search)
-6. [6. Voice messages](#6-voice-messages)
-7. [7. Your coding agent on a local model](#7-your-coding-agent-on-a-local-model)
-8. [8. Digests and the mail agent](#8-digests-and-the-mail-agent)
-9. [9. Turn on Only this computer](#9-turn-on-only-this-computer)
+1. [Run a model on your computer](#1-run-a-model-on-your-computer)
+2. [What is already local](#2-what-is-already-local)
+3. [The AI model in Settings](#3-the-ai-model-in-settings)
+4. [Reading for facts](#4-reading-for-facts)
+5. [Search harder and rewriting records for search](#5-search-harder-and-rewriting-records-for-search)
+6. [Voice messages](#6-voice-messages)
+7. [Your coding agent on a local model](#7-your-coding-agent-on-a-local-model)
+8. [Digests and the mail agent](#8-digests-and-the-mail-agent)
+9. [Turn on Only this computer](#9-turn-on-only-this-computer)
 10. [Checklist: everything local](#checklist-everything-local)
 11. [What still leaves your computer today](#what-still-leaves-your-computer-today)
 12. [Next](#next)
@@ -36,7 +30,7 @@ still send data out when they run, and [the end of the page](#what-still-leaves-
 
 [Ollama](https://docs.ollama.com/quickstart) is the easiest start, and WireCat Desktop knows it by name.
 
-1. Install Ollama and download a model with `ollama pull <model>`. For reading pictures, pick a model that can see
+1. Install Ollama and download a model with `ollama pull llama3.1:8b`. For reading pictures, pick a model that can see
    them, such as `llava`.
 2. Ollama listens on `127.0.0.1:11434`, which WireCat expects. Keep that address.
 3. Turn off Ollama's cloud models. A model whose name ends in `cloud` runs on Ollama's servers, and its web search goes
@@ -124,13 +118,13 @@ in **Address (base URL)** enter your server's address, such as `http://localhost
 sends** then says that the text stays on this computer. The same from a terminal:
 
 ```sh
-memo models consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+memo models consents set openai --model llama3.1:8b --base-url http://127.0.0.1:11434/v1 --yes
 ```
 
 Search harder takes the same address from a terminal:
 
 ```sh
-memo models search-consents set openai --model <model> --base-url http://127.0.0.1:11434/v1 --yes
+memo models search-consents set openai --model llama3.1:8b --base-url http://127.0.0.1:11434/v1 --yes
 ```
 
 ## 6. Voice messages
@@ -140,7 +134,7 @@ copy of the message, when it has a speech service, such as Telegram Premium. To 
 `--local`:
 
 ```sh
-tg <profile> messages transcribe <chat> <message> --local
+tg personal messages transcribe Anna 4512 --local
 ```
 
 When your agent asks for a transcription, it may not add `--local`. Ask it to, or use the command yourself.
@@ -152,7 +146,7 @@ them to its own model. To keep that local, run the agent on your local model. Wi
 Codex, Cursor, Gemini CLI, OpenCode, Hermes and OpenClaw. [Connect your AI agent](../agents.mdx) shows how to connect
 one.
 
-Ollama starts five of them on a local model with one command, `ollama launch <agent>`, where the agent is `codex`, `claude`, `opencode`,
+Ollama starts five of them on a local model with one command, `ollama launch` and the agent's name: `codex`, `claude`, `opencode`,
 `hermes` or `openclaw`. Ollama's pages for
 [Codex](https://docs.ollama.com/integrations/codex), [Claude Code](https://docs.ollama.com/integrations/claude-code),
 [OpenCode](https://docs.ollama.com/integrations/opencode), [Hermes](https://docs.ollama.com/integrations/hermes) and
@@ -167,10 +161,10 @@ Without `ollama launch`:
 
 - **Codex.** [Codex's advanced configuration](https://learn.chatgpt.com/docs/config-file/config-advanced) describes `--oss`
   for a local Ollama or LM Studio, and `oss_provider` in `~/.codex/config.toml` to choose one by default. Ollama's page
-  gives `codex --oss -m <model>`.
+  gives `codex --oss -m llama3.1:8b`.
 - **Claude Code.** Ollama's [Claude Code page](https://docs.ollama.com/integrations/claude-code) sets
   `ANTHROPIC_BASE_URL=http://localhost:11434`, `ANTHROPIC_AUTH_TOKEN=ollama` and an empty `ANTHROPIC_API_KEY`, then
-  runs `claude --model <model>`. Claude Code's settings can override these variables, so check with `/status`.
+  runs `claude --model llama3.1:8b`. Claude Code's settings can override these variables, so check with `/status`.
   [LM Studio](https://lmstudio.ai/docs/developer/anthropic-compat) describes the same with its own address. Anthropic
   [does not support](https://code.claude.com/docs/en/llm-gateway) Claude Code on models other than Claude.
 - **OpenCode.** [OpenCode's providers page](https://opencode.ai/docs/providers/) says it finds Ollama, LM Studio and
