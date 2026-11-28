@@ -1,6 +1,6 @@
 {
   "amo": {
-    "version": "0.5.0",
+    "version": "0.6.0",
     "manifestSha256": "1cef8d1bca9985c11306a242c966489a580702e62638b1d174cedd9a51a10c69",
     "bin": "wcat-amo",
     "bins": ["amo", "wcat-amo"],
@@ -70,7 +70,7 @@
     }
   },
   "attio": {
-    "version": "0.8.0",
+    "version": "0.9.0",
     "manifestSha256": "7596342a1761a2d5c6dd5ec26267edc0b7402e64ab3849cf1002af7ccea125cf",
     "bin": "wcat-attio",
     "bins": ["attio", "wcat-attio"],
@@ -217,7 +217,7 @@
     }
   },
   "drive": {
-    "version": "0.79.0",
+    "version": "0.80.0",
     "manifestSha256": "af77eb7dd9c9803b554f1407d07074ea409d88b43203b4ec75b78392bf3581a4",
     "bin": "wcat-drive",
     "bins": ["drive", "wcat-drive"],
@@ -286,8 +286,8 @@
     }
   },
   "gcal": {
-    "version": "0.35.0",
-    "manifestSha256": "68f06a1e479c5230009ed6659ac1a14d3567a5400f913947a89512489f06d477",
+    "version": "0.37.0",
+    "manifestSha256": "ec0f257c9d69f68779c159d45c9be40f32cb768928118158d5f56020a2cbdf4e",
     "bin": "wcat-gcal",
     "bins": ["gcal", "wcat-gcal"],
     "desktop": {
@@ -339,12 +339,24 @@
         "app": "gcal-cli",
         "env": "GCAL"
       },
-      "settings": null
+      "settings": null,
+      "accountRemove": {
+        "signOut": ["{profile}", "session", "end", "--record", "--json"],
+        "remove": {
+          "minVersion": "0.0.0",
+          "keepData": ["{profile}", "account", "remove", "--keep-data", "--record", "--json"],
+          "deleteData": ["{profile}", "account", "remove", "--delete-data", "--record", "--json"],
+          "dryRun": "--dry-run",
+          "confirm": "--yes"
+        },
+        "removes": ["signIn"],
+        "keeps": ["settings", "data", "listed"]
+      }
     }
   },
   "hubspot": {
-    "version": "0.8.0",
-    "manifestSha256": "ced19f53297e5c7f2a2f30ec9158f8d72dd346d51dad5f32159c0da0009a1626",
+    "version": "0.9.0",
+    "manifestSha256": "c6601ee1bf1836ae243f87f09deb3957b36a8b2d077de96f28468b18ec96a574",
     "bin": "wcat-hubspot",
     "bins": ["hubspot", "wcat-hubspot"],
     "desktop": {
@@ -413,7 +425,7 @@
     }
   },
   "linear": {
-    "version": "0.5.0",
+    "version": "0.6.0",
     "manifestSha256": "6e0c75e1fe9a5cd38b2510f91477441e0363fa333a40f758d845a943c14c694f",
     "bin": "wcat-linear",
     "bins": ["linear", "wcat-linear"],
@@ -476,8 +488,8 @@
     }
   },
   "mail": {
-    "version": "0.37.0",
-    "manifestSha256": "9011aaf419624a2b53f121e25f20afe65a89b87577a0b1c34619ce578019b449",
+    "version": "0.38.0",
+    "manifestSha256": "0082b785c9e6ef64706225fcf016f76c8f9823d628de612d882d5e0eec5dd287",
     "bin": "wcat-mail",
     "bins": ["mail", "wcat-mail"],
     "desktop": {
@@ -545,14 +557,14 @@
     }
   },
   "max": {
-    "version": "0.119.0",
-    "manifestSha256": "cbcf4e7bc7075f1ee99344f8dd617e3cf02f7968a1ff65c1c9c652815d98942e",
+    "version": "0.123.0",
+    "manifestSha256": "778735f810c8e66e676896cfed90db6453f70ff73e07a8a1257f85b554fb0974",
     "bin": "wcat-max",
     "bins": ["max", "wcat-max"],
     "desktop": {
       "tagline": "Your MAX account, searchable on your computer",
       "profiles": {
-        "args": ["account", "list", "--no-record", "--json"],
+        "args": ["session", "list", "--no-record", "--json"],
         "shape": "items"
       },
       "doctor": ["{profile}", "doctor", "--record", "--json"],
@@ -608,8 +620,8 @@
     }
   },
   "memo": {
-    "version": "0.154.0",
-    "manifestSha256": "80ba01048131d59723bdb8beadcd8bfdde1ca1f87219e666eba91714ca218ff9",
+    "version": "0.156.0",
+    "manifestSha256": "04bf4b8032cbfc68c5d4b5a55bc721885ea70e87bc2762698905a2f30a48aa76",
     "bin": "wcat-memo",
     "bins": ["memo", "wcat-memo"],
     "desktop": {
@@ -659,8 +671,8 @@
     }
   },
   "notion": {
-    "version": "0.9.0",
-    "manifestSha256": "4e59f7411f6ae6ca2d3632aa585846db7395ab89421b5eb8a63d390c30de12d9",
+    "version": "0.11.0",
+    "manifestSha256": "75eddf4fc0d9a390df313d409a9aa173296defd57d0d33c4b2c47843d9c23351",
     "bin": "wcat-notion",
     "bins": ["notion", "wcat-notion"],
     "desktop": {
@@ -728,7 +740,7 @@
     }
   },
   "pbx": {
-    "version": "0.11.0",
+    "version": "0.12.0",
     "manifestSha256": "ce5445e382e320d44494729f0665cb3209f6c70447d30a33694cfa2297c26dd8",
     "bin": "wcat-pbx",
     "bins": ["pbx", "wcat-pbx"],
@@ -798,14 +810,14 @@
     }
   },
   "slk": {
-    "version": "0.3.0",
-    "manifestSha256": "04e0955ca837633856f6fedc12e6c41462602c94c18ea079b02a426f3a0f4cb0",
+    "version": "0.4.0",
+    "manifestSha256": "564cb7ac8d9b6390c3b2d51be6fba533ee7373eeed2b44f5e1e579978014140e",
     "bin": "wcat-slk",
     "bins": ["slk", "wcat-slk"],
     "desktop": {
       "tagline": "Read and search your Slack channels, DMs and threads",
       "profiles": {
-        "args": ["account", "list", "--no-record", "--json"],
+        "args": ["session", "list", "--no-record", "--json"],
         "shape": "items"
       },
       "doctor": ["{profile}", "doctor", "--record", "--json"],
@@ -862,7 +874,7 @@
     }
   },
   "tg": {
-    "version": "0.137.0",
+    "version": "0.138.0",
     "manifestSha256": "feee8c13b38f8850804a23eee70b3391fb03aed7c58976fd2a4ace9cd53831c0",
     "bin": "wcat-tg",
     "bins": ["tg", "wcat-tg"],
@@ -925,7 +937,7 @@
     }
   },
   "wa": {
-    "version": "0.48.0",
+    "version": "0.49.0",
     "manifestSha256": "0ad63c1d3d3c86128be265203c8982e80f0daa148d4b7d25094bdcd2a62b0672",
     "bin": "wcat-wa",
     "bins": ["wa", "wcat-wa"],
@@ -988,7 +1000,7 @@
     }
   },
   "wordpress": {
-    "version": "0.4.0",
+    "version": "0.5.0",
     "manifestSha256": "370cbbc937f9f2194273dd4c1ecdb56be87eaef073197aa80dd1450b06cf8a00",
     "bin": "wcat-wordpress",
     "bins": ["wcat-wordpress", "wordpress"],
@@ -1061,8 +1073,8 @@
     }
   },
   "ydisk": {
-    "version": "0.7.1",
-    "manifestSha256": "da93fb68c9c08fbdf2a29f9b70d851d5711db57f4f56e6d5a5acfd200b72f4ba",
+    "version": "0.10.0",
+    "manifestSha256": "0058410dbafd909111d317515639eeea56b05c9104c6e3a3b5e3d799f633cc57",
     "bin": "wcat-ydisk",
     "bins": ["wcat-ydisk", "ydisk"],
     "desktop": {
@@ -1130,8 +1142,8 @@
     }
   },
   "zm": {
-    "version": "0.82.0",
-    "manifestSha256": "917653b6e25d98605a350eeec7df7df701ebc6a6bf06fe92e5919596df11095a",
+    "version": "0.83.0",
+    "manifestSha256": "59ab3dcbd74bce65028d0a1430602abfe5e03f231561fbd1dc0cf8392036845b",
     "bin": "wcat-zm",
     "bins": ["wcat-zm", "zm"],
     "desktop": {
