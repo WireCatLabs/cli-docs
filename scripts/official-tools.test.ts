@@ -9,6 +9,7 @@ import {
   driftProblems,
   type Manifest,
   type Manifests,
+  manifestPortProblems,
   missingCommands,
   type Overlays,
   officialEntries,
@@ -196,6 +197,26 @@ describe("the drift check", () => {
     expect(portProblems({ beeline: { mcpPort: 8765 } }, { tools: [{ id: "tg", mcpServer: { port: 8765 } }] })).toEqual([
       "registry/official.json beeline: the MCP port 8765 is Desktop's tg",
     ])
+  })
+
+  it("fails when two manifests, or a manifest and the list or Desktop's catalog, name one MCP port", () => {
+    const sms: Tool = { ...beeline, name: "sms", package: "@wirecat/sms-cli", repo: "WireCatLabs/sms-cli" }
+    const all = [...tools, beeline, sms]
+    const server = (port: number) => manifest({ mcpServer: { port, start: ["mcp", "server", "start"] } })
+    const catalog = { tools: [{ id: "tg", mcpServer: { port: 8765 } }] }
+    const check = (m: Manifests, o: Overlays = {}) => manifestPortProblems(all, o, m, catalog)
+
+    expect(check({ beeline: server(8752), sms: server(8753) })).toEqual([])
+    expect(check({ beeline: server(8752), sms: server(8752) })).toEqual([
+      "sms: the MCP port 8752 in @wirecat/sms-cli's manifest is beeline's too",
+    ])
+    expect(check({ beeline: server(8765) })).toEqual(["tg: the MCP port 8765 in Desktop's catalog is beeline's too"])
+    expect(check({ beeline: server(8752) }, { sms: { mcpPort: 8752 } })).toEqual([
+      "sms: the MCP port 8752 in registry/official.json is beeline's too",
+    ])
+    expect(check({ beeline: server(8770) }).join()).toContain("it is from 8700 to 8769")
+    expect(check({ tg: server(8765) }), "a tool's own catalog port is its own").toEqual([])
+    expect(manifestPortProblems(tools, overlays, manifests, catalog)).toEqual([])
   })
 
   it("notices a release that changed its manifest or stopped shipping one", () => {

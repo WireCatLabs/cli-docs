@@ -184,10 +184,13 @@ release. The design is in wirecat-desktop
   command the CLI's latest release no longer has. Each known difference is a line in `registry/drift-allow.json`
   with why, and with an `until` date or an `issue` link. "Not checked" is not a reason, and a line past its date
   fails. A line that no longer differs fails too. A CLI release that changes its manifest turns the check red until
-  someone runs `pnpm registry:official` and commits the result.
+  someone runs `pnpm registry:official` and commits the result. It also fails when a CLI's manifest names an MCP
+  port (`desktop.mcpServer.port`, cli-base's `mcpPort`) outside 8700 to 8769, or one that another manifest, the list's
+  `mcpPort` or Desktop's catalog gives another tool.
 
 To add a new official CLI: list it in `tools.json` like any of our tools, give it an entry in
-`registry/official.json` (at least `mcpPort` when it has an MCP server, and the Russian and Spanish texts), run
+`registry/official.json` (the Russian and Spanish texts, and `mcpPort` when it has an MCP server whose manifest
+names no port), run
 `pnpm registry:official`, and merge. The next deploy signs the list, and each Desktop picks it up at its next start
 after the daily fetch.
 

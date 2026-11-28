@@ -401,7 +401,8 @@ export function driftProblems(
     const id = overlays[tool.name]?.id ?? tool.name
     const entry = catalog.tools.find((t) => t.id === id)
     if (!entry) {
-      if (record(m.desktop.mcpServer) && overlays[tool.name]?.mcpPort === undefined)
+      const named = typeof record(m.desktop.mcpServer)?.port === "number"
+      if (record(m.desktop.mcpServer) && !named && overlays[tool.name]?.mcpPort === undefined)
         problems.push(`${id}: Desktop has no port for its MCP server yet; give it an "mcpPort" in ${OVERLAY_FILE}`)
       continue
     }
@@ -439,6 +440,46 @@ export function portProblems(overlays: Overlays, catalog: { tools: Record<string
   })
 }
 
+/**
+ * The MCP port a CLI names in its own manifest (`desktop.mcpServer.port`) is Desktop's from that release on, so two
+ * tools naming one port would collide on every computer. Each must be in Desktop's range for WireCat's tools and no
+ * other tool's: in another manifest, the list or Desktop's catalog.
+ */
+export function manifestPortProblems(
+  tools: readonly Tool[],
+  overlays: Overlays,
+  manifests: Manifests,
+  catalog: { tools: Record<string, unknown>[] },
+): string[] {
+  const problems: string[] = []
+  const owners = new Map<number, string>()
+  const claim = (port: number, id: string, where: string) => {
+    const other = owners.get(port)
+    if (other && other !== id) problems.push(`${id}: the MCP port ${port} ${where} is ${other}'s too`)
+    else owners.set(port, id)
+  }
+  const named = ours(tools).flatMap((tool) => {
+    const port = record(manifests[tool.name]?.desktop.mcpServer)?.port
+    return typeof port === "number" ? [{ id: overlays[tool.name]?.id ?? tool.name, tool, port }] : []
+  })
+  for (const { id, tool, port } of named) {
+    if (!Number.isInteger(port) || port < PORTS[0] || port > PORTS[1])
+      problems.push(`${id}: ${tool.package} names the MCP port ${port}; it is from ${PORTS[0]} to ${PORTS[1]}`)
+    claim(port, id, `in ${tool.package}'s manifest`)
+  }
+  const manifestIds = new Set(named.map((n) => n.id))
+  for (const [name, o] of Object.entries(overlays)) {
+    const id = o.id ?? name
+    if (o.mcpPort !== undefined && !manifestIds.has(id)) claim(o.mcpPort, id, `in ${OVERLAY_FILE}`)
+  }
+  for (const t of catalog.tools) {
+    const port = at(t, "mcpServer.port")
+    const id = String(t.id)
+    if (typeof port === "number" && !manifestIds.has(id)) claim(port, id, "in Desktop's catalog")
+  }
+  return problems
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const root = join(dirname(fileURLToPath(import.meta.url)), "..")
   const read = <T>(file: string) => JSON.parse(readFileSync(join(root, file), "utf8")) as T
@@ -469,6 +510,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const drift = [
       ...overlayProblems(tools, overlays),
       ...portProblems(overlays, catalog),
+      ...manifestPortProblems(tools, overlays, live, catalog),
       ...allowProblems(allowed, new Date().toISOString().slice(0, 10)),
       ...driftProblems(tools, overlays, live, catalog, allowed),
       ...missingCommands(tools, overlays, live, catalog, "main"),

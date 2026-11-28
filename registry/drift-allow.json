@@ -114,12 +114,6 @@
     "until": "2027-01-31"
   },
   {
-    "tool": "gcal",
-    "key": "accountRemove",
-    "why": "gcal-cli 0.35.0 is built with cli-base 0.109.0, whose manifest has no accountRemove yet. The cli-core 1.0 update brings it.",
-    "issue": "https://github.com/WireCatLabs/gcal-cli/pull/199"
-  },
-  {
     "tool": "email",
     "key": "sync.last",
     "why": "The catalog passes the query as one argument, the manifest as two. Both forms ask the same thing: cli-core's runs list joins its query words before it reads them (cli-core src/cli/list-query.ts:134).",
