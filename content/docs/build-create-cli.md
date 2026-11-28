@@ -252,6 +252,19 @@ file, **replace** takes the template's file, **skip** keeps yours, and **diff** 
 leaves the usual git markers; resolve them and run `upgrade` again. Files the template only seeded, such as your
 source code and your pages, are never touched. `--dry-run` lists what would change and writes nothing.
 
+### Type checking against cli-core
+
+Your users install a lean cli-core, without its TypeScript type files. Your own checkout still needs them, and gets
+them from the `-dev` release that each cli-core version has: the same code, plus the types and the source they point
+to. The template sets this up: `package.json` pins cli-core, and `pnpm-workspace.yaml` lists cli-core under
+`overrides:` at that same version with `-dev` at the end. Only your checkout reads that file, so the people who
+install your tool still get the lean package.
+
+When the line is missing, `pnpm typecheck` fails with TS7016, "Could not find a declaration file for module
+'@wirecat/cli-core'". Add the line, with the version from `package.json` followed by `-dev`, and run `pnpm install`.
+When you move to a newer cli-core, `cli-dev adopt` with the new version changes both lines, and `pnpm version:check`
+fails when they name different versions.
+
 ## Template details
 
 For when you or your agent need the exact options.
