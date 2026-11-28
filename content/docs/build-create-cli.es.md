@@ -269,6 +269,19 @@ archivo, **replace** toma el archivo de la plantilla, **skip** conserva el tuyo 
 conflicto deja las marcas habituales de git; resuelve el conflicto y vuelve a ejecutar `upgrade`. Los archivos que la plantilla
 solo puso una vez, como tu código y tus páginas, nunca se tocan. `--dry-run` lista lo que cambiaría y no escribe nada.
 
+### Comprobación de tipos con cli-core
+
+Quien instala tu herramienta recibe un cli-core ligero, sin los archivos de tipos de TypeScript. Tu copia de trabajo sí
+los necesita, y los recibe de la versión `-dev` que tiene cada versión de cli-core: el mismo código, más los tipos y el
+código fuente al que apuntan. La plantilla ya lo prepara: `package.json` fija la versión de cli-core y
+`pnpm-workspace.yaml` indica cli-core en `overrides:` con esa misma versión y `-dev` al final. Solo tu copia de
+trabajo lee ese archivo, así que quien instala tu herramienta sigue recibiendo el paquete ligero.
+
+Si falta la línea, `pnpm typecheck` falla con el error TS7016, "Could not find a declaration file for module
+'@wirecat/cli-core'". Añade la línea con la versión de `package.json` y `-dev` al final, y ejecuta `pnpm install`. Al
+pasar a un cli-core más nuevo, `cli-dev adopt` con la nueva versión cambia las dos líneas, y `pnpm version:check`
+falla si indican versiones distintas.
+
 ## Detalles de la plantilla
 
 Para cuando tú o tu agente necesitéis las opciones exactas.
